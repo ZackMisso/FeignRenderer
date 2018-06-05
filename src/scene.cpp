@@ -1,3 +1,9 @@
 #include <feign/scene.h>
 
-// TODO
+Scene::Scene() {
+    sceneObjects = vector<SceneNode*>();
+}
+
+Scene::~Scene() {
+    // TODO
+}
