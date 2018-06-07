@@ -1,3 +1,9 @@
 #include <feign/samplers/sampler.h>
 
-// TODO
+Sampler::Sampler() {
+    // TODO
+}
+
+Sampler::~Sampler() {
+    // TODO
+}

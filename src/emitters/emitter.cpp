@@ -1,3 +1,9 @@
 #include <feign/emitters/emitter.h>
 
-// TODO
+Emitter::Emitter() {
+    // TODO
+}
+
+Emitter::~Emitter() {
+    // TODO
+}

@@ -1,3 +1,9 @@
 #include <feign/phase/phase.h>
 
-// TODO
+PhaseFunction::PhaseFunction() {
+    // TODO
+}
+
+PhaseFunction::~PhaseFunction() {
+    // TODO
+}

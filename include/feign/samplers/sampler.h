@@ -1,5 +1,11 @@
 #pragma once
 
-#include <feign/common.h>
+#include <feign/node.h>
 
-// TODO
+class Sampler : public SceneNode {
+public:
+    Sampler();
+    virtual ~Sampler();
+
+    // TODO
+};

@@ -1,3 +1,9 @@
 #include <feign/shapes/shape.h>
 
-// TODO
+Shape::Shape() {
+    // TODO
+}
+
+Shape::~Shape() {
+    // TODO
+}

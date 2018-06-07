@@ -15,5 +15,21 @@ enum NodeType {
 
 class SceneNode {
 public:
-    // TODO
+    SceneNode();
+    SceneNode(SceneNode* parent);
+    virtual ~SceneNode();
+
+    virtual NodeType getNodeType() const = 0;
+
+    virtual void addChild(SceneNode* node);
+    virtual void setParent(SceneNode* node);
+    virtual bool hasChild(SceneNode* node);
+    virtual void removeChild(SceneNode* node);
+
+    int getTag() const;
+
+protected:
+    SceneNode* parent;
+    vector<SceneNode*> children;
+    int tag;
 };

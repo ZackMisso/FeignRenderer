@@ -1,3 +1,9 @@
 #include <feign/integrators/integrator.h>
 
-// TODO
+Integrator::Integrator() {
+    // TODO
+}
+
+Integrator::~Integrator() {
+    // TODO
+}

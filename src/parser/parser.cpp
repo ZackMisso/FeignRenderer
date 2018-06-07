@@ -1,3 +1,7 @@
 #include <feign/parser/parser.h>
 
-// TODO
+SceneNode* Parser::parse(string filename) {
+    // TODO
+
+    return nullptr;
+}

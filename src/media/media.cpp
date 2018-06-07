@@ -1,3 +1,9 @@
 #include <feign/media/media.h>
 
-// TODO
+Media::Media() {
+    // TODO
+}
+
+Media::~Media() {
+    // TODO
+}
