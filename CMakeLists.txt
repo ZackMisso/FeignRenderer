@@ -108,6 +108,7 @@ add_executable(feign
     include/feign/common.h
     include/feign/scene.h
     include/feign/node.h
+    include/feign/exceptions.h
 
     # BSDF header files
     include/feign/bsdfs/brdf.h
@@ -123,6 +124,7 @@ add_executable(feign
 
     # Parser header files
     include/feign/parser/parser.h
+    include/feign/parser/token.h
 
     # Phase Function header files
     include/feign/phase/phase.h
@@ -159,6 +161,7 @@ add_executable(feign
 
     # Parser implementation files
     src/parser/parser.cpp
+    src/parser/token.cpp
 
     # Phase Function implementation files
     src/phase/phase.cpp
