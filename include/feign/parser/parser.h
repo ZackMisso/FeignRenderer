@@ -6,4 +6,6 @@
 class Parser {
     static SceneNode* parse(string filename);
     static Token* tokenize(const string& data, int startPos, int endPos, Token* currentToken);
+
+    static vector<TokenValue> getTokens();
 };

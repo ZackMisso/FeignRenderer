@@ -29,3 +29,17 @@ public:
     GenericException() : std::runtime_error("General Error") { }
     GenericException(string str) : std::runtime_error("General Error : " + str) { }
 };
+
+class FirstTokenException : public std::runtime_error {
+public:
+    FirstTokenException() : std::runtime_error("First Token Expected to be Object Token") { }
+    FirstTokenException(string str) : std::runtime_error("First Token Expected to be Object Token : " + str) { }
+    // maybe add line numbers inside exception handling
+};
+
+class MultipleObjectTokenException : public std::runtime_error {
+public:
+    MultipleObjectTokenException() : std::runtime_error("Multiple Objects Declared in One Tag") { }
+    MultipleObjectTokenException(string str) : std::runtime_error("Multiple Objects Declared in One Tag : " + str) { }
+    // maybe add line numbers inside exception handling
+}
