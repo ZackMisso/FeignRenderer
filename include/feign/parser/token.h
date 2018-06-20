@@ -16,7 +16,8 @@ enum TokenType {
     TT_VALUE,
     TT_TARGET,
     TT_UP,
-    TT_ORIGIN
+    TT_ORIGIN,
+    TT_TYPE
 };
 
 struct TokenValue {

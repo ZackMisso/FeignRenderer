@@ -42,4 +42,4 @@ public:
     MultipleObjectTokenException() : std::runtime_error("Multiple Objects Declared in One Tag") { }
     MultipleObjectTokenException(string str) : std::runtime_error("Multiple Objects Declared in One Tag : " + str) { }
     // maybe add line numbers inside exception handling
-}
+};

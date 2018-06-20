@@ -1,27 +1,27 @@
 #include <feign/parser/parser.h>
 #include <feign/exceptions.h>
+#include <fstream>
+#include <sstream>
 
 SceneNode* Parser::parse(string filename) {
+    ifstream file;
+    file.open(filename);
+    stringstream fileStream;
+    fileStream << file.rdbuf();
+    string data = fileStream.str();
+
+    Token* tokens = tokenize(data, 0, data.length(), nullptr);
+
+    // debug //
+    tokens->print("");
+    ///////////
+
     // TODO
 
     return nullptr;
 }
 
 Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* currentToken) {
-    // bool foundNextToken = false;
-    // int pos = startPos;
-    //
-    // while (!foundNextToken) {
-    //     if (data[pos] == '<') foundNextToken = true;
-    // }
-    //
-    // bool foundPrevToken = false;
-    // int prevPos = endPos;
-    //
-    // while(!foundPrevToken) {
-    //     if (data[prevPos == ">"])
-    // }
-
     bool foundNextToken = false;
     int pos = startPos;
 
@@ -53,7 +53,7 @@ Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* cur
             string tokObject = "";
             Token* newToken = nullptr;
 
-            while (data[pos] != ' ' || data[pos] != '>' || data[pos] != '/' || data[pos] != "\n") {
+            while (data[pos] != ' ' || data[pos] != '>' || data[pos] != '/' || data[pos] != '\n') {
                 tokObject = tokObject + data[pos++];
             }
 
@@ -137,6 +137,12 @@ Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* cur
                     } else {
                         // TODO
                     }
+                } else if (tokObject == "scene") {
+                    if (!newToken) {
+                        throw FirstTokenException(tokObject);
+                    } else {
+                        // TODO
+                    }
                 } else {
                     throw InvalidTokenException(tokObject);
                 }
@@ -150,7 +156,7 @@ Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* cur
                 // TODO
             }
 
-            else if (data[pos] == "=") {
+            else if (data[pos] == '=') {
                 // TODO
             }
 
@@ -167,7 +173,7 @@ Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* cur
 
 // maybe use this
 vector<TokenValue> Parser::getTokens() {
-    vector<TokenValue> tokens = vector<TokenValue>()
+    vector<TokenValue> tokens = vector<TokenValue>();
 
     tokens.push_back(TokenValue("emitter", TT_EMITTER));
     tokens.push_back(TokenValue("sampler", TT_SAMPLER));
