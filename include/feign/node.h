@@ -2,7 +2,8 @@
 
 #include <feign/common.h>
 
-enum NodeType {
+enum NodeType
+{
     NT_Emitter,
     NT_Mesh,
     NT_BSDF,
@@ -10,16 +11,19 @@ enum NodeType {
     NT_Integrator,
     NT_Media,
     NT_Sampler,
-    NT_Texture
+    NT_Texture,
+    NT_Scene
 };
 
-class SceneNode {
+class SceneNode
+{
 public:
     SceneNode();
     SceneNode(SceneNode* parent);
     virtual ~SceneNode();
 
     virtual NodeType getNodeType() const = 0;
+    virtual bool isPrimitive() const = 0;
 
     virtual void addChild(SceneNode* node);
     virtual void setParent(SceneNode* node);

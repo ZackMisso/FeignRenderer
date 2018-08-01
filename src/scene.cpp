@@ -1,17 +1,31 @@
 #include <feign/scene.h>
 
-Scene::Scene() {
+Scene::Scene() : SceneNode()
+{
     sceneObjects = vector<SceneNode*>();
     root = nullptr;
 }
 
-Scene::~Scene() {
+Scene::Scene(SceneNode* parent) : SceneNode(parent)
+{
+    sceneObjects = vector<SceneNode*>();
+    root = nullptr;
+}
+
+Scene::~Scene()
+{
     delete root;
     sceneObjects.clear();
 }
 
-void Scene::addNode(SceneNode* node) {
-    sceneObjects.push_back(node);
+NodeType Scene::getNodeType() const
+{
+    return NT_Scene;
+}
+
+bool Scene::isPrimitive() const
+{
+    return false;
 }
 
 SceneNode* Scene::getRoot() const { return root; }

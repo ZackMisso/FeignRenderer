@@ -9,12 +9,15 @@
 #include <feign/textures/texture.h>
 
 // TODO: make this a scene node
-class Scene {
+class Scene : public SceneNode
+{
 public:
     Scene();
+    Scene(SceneNode* parent);
     ~Scene();
 
-    void addNode(SceneNode* node); // TODO: remove this
+    virtual NodeType getNodeType() const;
+    virtual bool isPrimitive() const;
 
     SceneNode* getRoot() const;
     vector<SceneNode*> getSceneObjects() const;

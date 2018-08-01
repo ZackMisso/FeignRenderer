@@ -1,5 +1,10 @@
 #include <feign/parser/parser.h>
+#include <feign/bsdfs/brdf.h>
+#include <feign/emitters/emitter.h>
+#include <feign/integrators/integrator.h>
+#include <feign/samplers/sampler.h>
 #include <feign/exceptions.h>
+#include <feign/scene.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -44,6 +49,19 @@ bool Parser::getNextToken(const vector<string>& tokens, string& token, int index
     return true;
 }
 
+void Parser::possiblyAddChild(vector<SceneNode*>& nodes, SceneNode* node)
+{
+    if (nodes.size() > 0)
+    {
+        nodes[nodes.size() - 1]->addChild(node);
+    }
+
+    if (!node->isPrimitive())
+    {
+        nodes.push_back(node);
+    }
+}
+
 SceneNode* Parser::generateScene(const vector<string>& tokens)
 {
     // initializes counters, and node stack
@@ -60,11 +78,19 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            // TODO
+            Scene* scene = new Scene();
+
+            possiblyAddChild(nodes, scene);
+
+            // TODO - add scene specific variables
         }
         else if (token == "sampler")
         {
             nodeTokens.push_back(token);
+
+            Sampler* sampler = new Sampler();
+
+            possiblyAddChild(nodes, scene);
 
             // TODO
         }
@@ -72,11 +98,19 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
+            Integrator* integrator = new Integrator();
+
+            possiblyAddChild(nodes, integrator);
+
             // TODO
         }
         else if (token == "camera")
         {
             nodeTokens.push_back(token);
+
+            Camera* camera = new Camera();
+
+            possiblyAddChild(nodes, camera);
 
             // TODO
         }
@@ -84,18 +118,30 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
+            Transform* transform = new Transform();
+
+            possiblyAddChild(nodes, transform);
+
             // TODO
         }
         else if (token == "mesh")
         {
             nodeTokens.push_back(token);
 
+            Mesh* mesh = new Mest(mesh);
+
+            possiblyAddChild(nodes, mesh);
+
             // TODO
         }
         else if (token == "bsdf")
         {
             nodeTokens.push_back(token);
-            
+
+            BRDF* brdf = new BRDF();
+
+            possiblyAddChild(nodes, brdf);
+
             // TODO
         }
     }
