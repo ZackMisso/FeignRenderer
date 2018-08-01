@@ -3,9 +3,15 @@
 #include <feign/node.h>
 #include <feign/parser/token.h>
 
-class Parser {
+class Parser
+{
+public:
     static SceneNode* parse(string filename);
-    static Token* tokenize(const string& data, int startPos, int endPos, Token* currentToken);
+    static SceneNode* generateScene(const vector<string>& tokens);
 
-    static vector<TokenValue> getTokens();
+    static bool checkBalance(string filename);
+
+    // static Token* tokenize(const string& data, int startPos, int endPos, Token* currentToken);
+
+    // static vector<TokenValue> getTokens();
 };

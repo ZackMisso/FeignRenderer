@@ -1,0 +1,41 @@
+scene
+    sampler independent
+        sampleCount 32
+    /sampler
+
+    integrator normals /integrator
+
+    camera perspective
+        transform
+            name toWorld
+            lookat
+                target -64.8161 47.2211 23.8576
+                origin -65.6055 47.5762 24.3583
+                up 0.299858 0.934836 -0.190177
+            /lookat
+        /transform
+
+        float
+            name fov
+            value 30
+
+        int
+            name width
+            value 768
+
+        int
+            name height
+            value 768
+    /camera
+
+    mesh obj
+        filename ../scenes/assignment-0/meshes/plane.obj
+
+        bsdf diffuse /bsdf
+
+        transform toWorld
+            scale 100 1 100
+        /transform
+    /mesh
+
+/scene

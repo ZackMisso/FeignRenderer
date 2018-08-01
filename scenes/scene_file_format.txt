@@ -1,0 +1,42 @@
+Scenes files are broken down into descriptions of major scene nodes
+where the beginning and end of every major node is specified, and the
+properties of every node are defined in the middle. It is very similar
+to xml except with specific rules and the lack of '<' or '>' characters.
+
+Nodes which require all of their attributes to be specified do not need
+to have an end token. Where as nodes which have a dynamic set of
+attributes must always have an end token. End tokens are specified by
+a '/' character followed by the name of the node.
+
+camera ... /camera
+
+Indentations, spaces, and new lines have no effect on the file format
+and can be set to the users discretion.
+
+Comments are specified by the use of the '<' and '>' characters.
+
+----------------------------------------
+Currently supported Nodes and their uses
+-----------------------------------------
+
+scene [nodes] /scene
+
+camera [camera type] [... dynamic list of attributes] /camera
+
+mesh [mesh type] [dynamic attribute list] /mesh
+
+bsdf [bsdf type] [dynamic attribute list] /bsdf
+
+--------------------
+Explanation of types
+--------------------
+
+[camera types] -
+    perspective - defines the use of our default perspective camera
+    orthographic - defines the use of our default orthographic camera
+
+perspective [dynamic attribute list]:
+    // TODO
+
+orthographic [dynamic attribute list]:
+    // TODO
