@@ -1,8 +1,13 @@
 #include <feign/parser/parser.h>
 #include <feign/bsdfs/brdf.h>
+#include <feign/cameras/camera.h>
+#include <feign/cameras/perspective.h>
 #include <feign/emitters/emitter.h>
 #include <feign/integrators/integrator.h>
+#include <feign/math/transform.h>
 #include <feign/samplers/sampler.h>
+#include <feign/samplers/independent.h>
+#include <feign/shapes/mesh.h>
 #include <feign/exceptions.h>
 #include <feign/scene.h>
 #include <fstream>
@@ -81,18 +86,27 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
             Scene* scene = new Scene();
 
             possiblyAddChild(nodes, scene);
-
-            // TODO - add scene specific variables
         }
         else if (token == "sampler")
         {
             nodeTokens.push_back(token);
 
-            Sampler* sampler = new Sampler();
+            Sampler* sampler = nullptr;
 
-            possiblyAddChild(nodes, scene);
+            string typeToken;
+            getNextToken(tokens, typeToken, index++);
 
-            // TODO
+            if (typeToken.empty())
+            {
+                // TODO - throw exception
+            }
+
+            if (typeToken == "independent")
+            {
+                sampler = new Independent();
+            }
+
+            possiblyAddChild(nodes, sampler);
         }
         else if (token == "integrator")
         {
@@ -128,7 +142,7 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            Mesh* mesh = new Mest(mesh);
+            Mesh* mesh = new Mesh(mesh);
 
             possiblyAddChild(nodes, mesh);
 

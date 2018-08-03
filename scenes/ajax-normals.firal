@@ -1,6 +1,8 @@
 scene
     sampler independent
-        sampleCount 32
+        int
+            name sampleCount
+            value 32
     /sampler
 
     integrator normals /integrator

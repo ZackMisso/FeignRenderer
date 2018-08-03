@@ -12,7 +12,9 @@ enum NodeType
     NT_Media,
     NT_Sampler,
     NT_Texture,
-    NT_Scene
+    NT_Scene,
+    NT_Transform,
+    NT_Camera
 };
 
 class SceneNode

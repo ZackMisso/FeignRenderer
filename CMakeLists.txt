@@ -113,11 +113,18 @@ add_executable(feign
     # BSDF header files
     include/feign/bsdfs/brdf.h
 
+    # Camera header files
+    include/feign/cameras/camera.h
+    include/feign/cameras/perspective.h
+
     # Emitter header files
     include/feign/emitters/emitter.h
 
     # Integrator header files
     include/feign/integrators/integrator.h
+
+    # Math header files
+    include/feign/math/transform.h
 
     # Media header files
     include/feign/media/media.h
@@ -131,9 +138,11 @@ add_executable(feign
 
     # Sampler header files
     include/feign/samplers/sampler.h
+    include/feign/samplers/independent.h
 
     # Shapes header files
     include/feign/shapes/shape.h
+    include/feign/shapes/mesh.h
 
     # Texture header files
     include/feign/textures/texture.h
@@ -150,11 +159,18 @@ add_executable(feign
     # BSDF implementation files
     src/bsdfs/brdf.cpp
 
+    # Camera implementation files
+    src/cameras/camera.cpp
+    src/cameras/perspective.cpp
+
     # Emitter implementation files
     src/emitters/emitter.cpp
 
     # Integrator implementation files
     src/integrators/integrator.cpp
+
+    # Math implementation files
+    src/math/transform.cpp
 
     # Media implementation files
     src/media/media.cpp
@@ -168,9 +184,11 @@ add_executable(feign
 
     # Sampler implementation files
     src/samplers/sampler.cpp
+    src/samplers/independent.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp
+    src/shapes/mesh.cpp
 
     # Texture implementation files
     src/textures/texture.cpp
