@@ -14,7 +14,8 @@ enum NodeType
     NT_Texture,
     NT_Scene,
     NT_Transform,
-    NT_Camera
+    NT_Camera,
+    NT_Primitive
 };
 
 class SceneNode
