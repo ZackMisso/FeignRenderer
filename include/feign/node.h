@@ -37,6 +37,7 @@ public:
 
 protected:
     SceneNode* parent;
+    // PrimitiveList* primitives;
     vector<SceneNode*> children;
     int tag;
 };

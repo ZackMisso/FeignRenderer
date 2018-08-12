@@ -130,9 +130,8 @@ add_executable(feign
     include/feign/media/media.h
 
     # Misc header files
-    include/feign/misc/intprim.h
-    include/feign/misc/floatprim.h
-    include/feign/misc/stringprim.h
+    include/feign/misc/prim.h
+    include/feign/misc/primlist.h
 
     # Parser header files
     include/feign/parser/parser.h
@@ -181,9 +180,8 @@ add_executable(feign
     src/media/media.cpp
 
     # Misc implementation files
-    src/misc/intprim.cpp
-    src/misc/floatprim.cpp
-    src/misc/stringprim.cpp
+    src/misc/prim.cpp
+    src/misc/primlist.cpp
 
     # Parser implementation files
     src/parser/parser.cpp
