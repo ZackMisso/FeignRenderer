@@ -12,8 +12,4 @@ public:
     static void possiblyAddChild(vector<SceneNode*>& nodes, SceneNode* node);
 
     static bool checkBalance(string filename);
-
-    // static Token* tokenize(const string& data, int startPos, int endPos, Token* currentToken);
-
-    // static vector<TokenValue> getTokens();
 };

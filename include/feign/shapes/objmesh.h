@@ -2,11 +2,11 @@
 
 #include <feign/shapes/shape.h>
 
-class Mesh : public Shape
+class ObjMesh : public Shape
 {
 public:
-    Mesh();
-    Mesh(SceneNode* parent);
+    ObjMesh();
+    ObjMesh(SceneNode* parent);
 
     // virtual NodeType getNodeType() const;
     // bool isPrimitive() const;

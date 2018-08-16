@@ -4,10 +4,11 @@
 #include <feign/cameras/perspective.h>
 #include <feign/emitters/emitter.h>
 #include <feign/integrators/integrator.h>
+#include <feign/integrators/normal.h>
 #include <feign/math/transform.h>
 #include <feign/samplers/sampler.h>
 #include <feign/samplers/independent.h>
-#include <feign/shapes/mesh.h>
+#include <feign/shapes/objmesh.h>
 #include <feign/exceptions.h>
 #include <feign/scene.h>
 #include <fstream>
@@ -98,13 +99,19 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
 
             if (typeToken.empty())
             {
-                // TODO - throw exception
+                throw MissingExpectedTokenException("sampType");
             }
 
             if (typeToken == "independent")
             {
                 sampler = new Independent();
             }
+            else
+            {
+                throw UnsupportedTypeException("sampType: " + typeToken);
+            }
+
+            // TODO - more ???
 
             possiblyAddChild(nodes, sampler);
         }
@@ -112,24 +119,59 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            Integrator* integrator = new Integrator();
+            Integrator* integrator = nullptr;
+
+            string typeToken;
+            getNextToken(tokens, typeToken, index++);
+
+            if (typeToken.empty())
+            {
+                throw MissingExpectedTokenException("sampType");
+            }
+
+            if (typeToken == "normals")
+            {
+                integrator = new NormalIntegrator();
+            }
+            else
+            {
+                throw UnsupportedTypeException("sampType: " + typeToken);
+            }
+
+            // TODO - more ???
 
             possiblyAddChild(nodes, integrator);
-
-            // TODO
         }
         else if (token == "camera")
         {
             nodeTokens.push_back(token);
 
-            Camera* camera = new Camera();
+            Camera* camera = nullptr;
+
+            string typeToken;
+            getNextToken(tokens, typeToken, index++);
+
+            if (typeToken.empty())
+            {
+                throw MissingExpectedTokenException("camType");
+            }
+
+            if (typeToken == "perspective")
+            {
+                camera = new Perspective();
+            }
+            else
+            {
+                throw UnsupportedTypeException("camType: " + typeToken);
+            }
+
+            // TODO - more ???
 
             possiblyAddChild(nodes, camera);
-
-            // TODO
         }
         else if (token == "transform")
         {
+            // meh one
             nodeTokens.push_back(token);
 
             Transform* transform = new Transform();
@@ -142,11 +184,28 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            Mesh* mesh = new Mesh(mesh);
+            Shape* mesh = nullptr;
+
+            string typeToken;
+            getNextToken(tokens, typeToken, index++);
+
+            if (typeToken.empty())
+            {
+                throw MissingExpectedTokenException("meshType");
+            }
+
+            if (typeToken == "obj")
+            {
+                mesh = new ObjMesh();
+            }
+            else
+            {
+                throw UnsupportedTypeException("meshType: " + typeToken);
+            }
+
+            // TODO - more ???
 
             possiblyAddChild(nodes, mesh);
-
-            // TODO
         }
         else if (token == "bsdf")
         {
@@ -260,175 +319,3 @@ bool Parser::checkBalance(string filename)
 
     return majorNodes.empty();
 }
-
-// Token* Parser::tokenize(const string& data, int startPos, int endPos, Token* currentToken)
-// {
-//     bool foundNextToken = false;
-//     int pos = startPos;
-//
-//     while(!foundNextToken) {
-//         if (data[pos++] == '<') {
-//             foundNextToken = true;
-//             break;
-//         }
-//
-//         if (pos > endPos) break;
-//     }
-//
-//     if (data[pos] == '/') {
-//         pos++;
-//         string tokObject = "";
-//
-//         while(data[pos] != '>') {
-//             tokObject = tokObject + data[pos++];
-//         }
-//
-//         if (tokObject != currentToken->tokenName) {
-//             throw MissingTokenEndException(tokObject);
-//         }
-//
-//         currentToken->closed = true;
-//         return currentToken;
-//     } else {
-//         while (data[pos] != '>') {
-//             string tokObject = "";
-//             Token* newToken = nullptr;
-//
-//             while (data[pos] != ' ' || data[pos] != '>' || data[pos] != '/' || data[pos] != '\n') {
-//                 tokObject = tokObject + data[pos++];
-//             }
-//
-//             if (data[pos] == ' ') {
-//
-//                 if (tokObject == "emitter") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "media") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "sampler") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "integrator") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "int") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "float") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "long") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "double") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "texture") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "string") {
-//                     if (!newToken) {
-//                         // TODO
-//                     } else {
-//                         throw MultipleObjectTokenException(tokObject);
-//                     }
-//                 } else if (tokObject == "name") {
-//                     if (!newToken) {
-//                         throw FirstTokenException(tokObject);
-//                     } else {
-//                         // TODO
-//                     }
-//                 } else if (tokObject == "type") {
-//                     if (!newToken) {
-//                         throw FirstTokenException(tokObject);
-//                     } else {
-//                         // TODO
-//                     }
-//                 } else if (tokObject == "name") {
-//                     if (!newToken) {
-//                         throw FirstTokenException(tokObject);
-//                     } else {
-//                         // TODO
-//                     }
-//                 } else if (tokObject == "scene") {
-//                     if (!newToken) {
-//                         throw FirstTokenException(tokObject);
-//                     } else {
-//                         // TODO
-//                     }
-//                 } else {
-//                     throw InvalidTokenException(tokObject);
-//                 }
-//             }
-//
-//             else if (data[pos] == '/') {
-//                 // TODO
-//             }
-//
-//             else if (data[pos] == '>') {
-//                 // TODO
-//             }
-//
-//             else if (data[pos] == '=') {
-//                 // TODO
-//             }
-//
-//             else {
-//                 // TODO
-//             }
-//         }
-//     }
-//
-//     // TODO
-//
-//     return nullptr;
-// }
-
-// maybe use this
-// vector<TokenValue> Parser::getTokens() {
-//     vector<TokenValue> tokens = vector<TokenValue>();
-//
-//     tokens.push_back(TokenValue("emitter", TT_EMITTER));
-//     tokens.push_back(TokenValue("sampler", TT_SAMPLER));
-//     tokens.push_back(TokenValue("int", TT_INT));
-//     tokens.push_back(TokenValue("long", TT_LONG));
-//     tokens.push_back(TokenValue("float", TT_FLOAT));
-//     tokens.push_back(TokenValue("double", TT_DOUBLE));
-//     tokens.push_back(TokenValue("string", TT_STRING));
-//     tokens.push_back(TokenValue("name", TT_NAME));
-//     tokens.push_back(TokenValue("type", TT_TYPE));
-//     tokens.push_back(TokenValue("value", TT_VALUE));
-//     tokens.push_back(TokenValue("up", TT_UP));
-//     tokens.push_back(TokenValue("target", TT_TARGET));
-//     tokens.push_back(TokenValue("origin", TT_ORIGIN));
-//
-//     return tokens;
-// }

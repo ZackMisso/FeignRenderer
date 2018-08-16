@@ -122,6 +122,7 @@ add_executable(feign
 
     # Integrator header files
     include/feign/integrators/integrator.h
+    include/feign/integrators/normal.h
 
     # Math header files
     include/feign/math/transform.h
@@ -146,7 +147,7 @@ add_executable(feign
 
     # Shapes header files
     include/feign/shapes/shape.h
-    include/feign/shapes/mesh.h
+    include/feign/shapes/objmesh.h
 
     # Texture header files
     include/feign/textures/texture.h
@@ -172,6 +173,7 @@ add_executable(feign
 
     # Integrator implementation files
     src/integrators/integrator.cpp
+    src/integrators/normal.cpp
 
     # Math implementation files
     src/math/transform.cpp
@@ -196,7 +198,7 @@ add_executable(feign
 
     # Shapes implementation files
     src/shapes/shape.cpp
-    src/shapes/mesh.cpp
+    src/shapes/objmesh.cpp
 
     # Texture implementation files
     src/textures/texture.cpp
