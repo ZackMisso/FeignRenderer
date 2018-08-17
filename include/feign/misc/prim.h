@@ -1,26 +1,38 @@
 #pragma once
 
-#include <feign/node.h>
+#include <feign/common.h>
 
 template <class T>
-class Primitive : public SceneNode
+class Primitive
 {
 public:
-    Primitive();
-    Primitive(SceneNode* parent);
-    virtual ~Primitive();
-
-    // scene node methods
-    virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
+    Primitive(string str, T val)
+    {
+        name = str;
+        value = val;
+    }
 
     // getter methods
-    T getValue() const;
-    string getName() const;
+    T getValue() const
+    {
+        return value;
+    }
+
+    string getName() const
+    {
+        return name;
+    }
 
     // setter methods
-    void setValue(T param);
-    void setName(string param);
+    void setValue(T param)
+    {
+        value = param;
+    }
+
+    void setName(string param)
+    {
+        name = param;
+    }
 protected:
     string name;
     T value;

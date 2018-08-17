@@ -3,16 +3,19 @@
 SceneNode::SceneNode()
 {
     children = vector<SceneNode*>();
+    primitives = new PrimitiveList();
     parent = nullptr;
 }
 
 SceneNode::SceneNode(SceneNode* parent) : parent(parent)
 {
     children = vector<SceneNode*>();
+    primitives = new PrimitiveList();
 }
 
 SceneNode::~SceneNode()
 {
+    delete primitives;
     for (int i = 0; i < children.size(); ++i) {
         delete children[i];
     }
@@ -66,4 +69,9 @@ void SceneNode::removeChild(SceneNode* node)
 int SceneNode::getTag() const
 {
     return tag;
+}
+
+PrimitiveList* SceneNode::getPrimList() const
+{
+    return primitives;
 }

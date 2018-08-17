@@ -3,7 +3,7 @@
 PrimitiveList::PrimitiveList()
 {
     intPrimitives = vector<Primitive<int>*>();
-    floatPrimitives = vector<Primitive<float>*>();
+    floatPrimitives = vector<Primitive<Float>*>();
     stringPrimitives = vector<Primitive<string>*>();
 }
 
@@ -17,7 +17,7 @@ void PrimitiveList::addIntPrimitive(Primitive<int>* prim)
     intPrimitives.push_back(prim);
 }
 
-void PrimitiveList::addFloatPrimitive(Primitive<float>* prim)
+void PrimitiveList::addFloatPrimitive(Primitive<Float>* prim)
 {
     floatPrimitives.push_back(prim);
 }
@@ -41,7 +41,7 @@ bool PrimitiveList::findInt(string name, int& val) const
     return false;
 }
 
-bool PrimitiveList::findFloat(string name, float& val) const
+bool PrimitiveList::findFloat(string name, Float& val) const
 {
     for (int i = 0; i < floatPrimitives.size(); ++i)
     {

@@ -2,12 +2,12 @@
 
 #include <feign/node.h>
 
-class BRDF : public SceneNode
+class BSDF : public SceneNode
 {
 public:
-    BRDF();
-    BRDF(SceneNode* parent);
-    virtual ~BRDF();
+    BSDF();
+    BSDF(SceneNode* parent);
+    virtual ~BSDF();
 
     virtual NodeType getNodeType() const;
     virtual bool isPrimitive() const;

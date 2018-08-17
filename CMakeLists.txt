@@ -111,7 +111,8 @@ add_executable(feign
     include/feign/exceptions.h
 
     # BSDF header files
-    include/feign/bsdfs/brdf.h
+    include/feign/bsdfs/bsdf.h
+    include/feign/bsdfs/diffuse.h
 
     # Camera header files
     include/feign/cameras/camera.h
@@ -162,7 +163,8 @@ add_executable(feign
     src/node.cpp
 
     # BSDF implementation files
-    src/bsdfs/brdf.cpp
+    src/bsdfs/bsdf.cpp
+    src/bsdfs/diffuse.cpp
 
     # Camera implementation files
     src/cameras/camera.cpp

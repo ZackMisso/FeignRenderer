@@ -11,17 +11,17 @@ public:
     ~PrimitiveList();
 
     void addIntPrimitive(Primitive<int>* prim);
-    void addFloatPrimitive(Primitive<float>* prim);
+    void addFloatPrimitive(Primitive<Float>* prim);
     void addStringPrimitive(Primitive<string>* prim);
 
     bool findInt(string name, int& val) const;
-    bool findFloat(string name, float& val) const;
+    bool findFloat(string name, Float& val) const;
     bool findString(string name, string& val) const;
 
     void clearPrimitiveList();
 
 protected:
     vector<Primitive<int>*> intPrimitives;
-    vector<Primitive<float>*> floatPrimitives;
+    vector<Primitive<Float>*> floatPrimitives;
     vector<Primitive<string>*> stringPrimitives;
 };

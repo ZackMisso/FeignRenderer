@@ -1,6 +1,7 @@
 #pragma once
 
 #include <feign/common.h>
+#include <feign/misc/primlist.h>
 
 enum NodeType
 {
@@ -35,9 +36,11 @@ public:
 
     int getTag() const;
 
+    PrimitiveList* getPrimList() const;
+
 protected:
     SceneNode* parent;
-    // PrimitiveList* primitives;
+    PrimitiveList* primitives;
     vector<SceneNode*> children;
     int tag;
 };

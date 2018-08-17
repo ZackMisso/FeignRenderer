@@ -1,11 +1,13 @@
 #include <feign/parser/parser.h>
-#include <feign/bsdfs/brdf.h>
+#include <feign/bsdfs/bsdf.h>
+#include <feign/bsdfs/diffuse.h>
 #include <feign/cameras/camera.h>
 #include <feign/cameras/perspective.h>
 #include <feign/emitters/emitter.h>
 #include <feign/integrators/integrator.h>
 #include <feign/integrators/normal.h>
 #include <feign/math/transform.h>
+#include <feign/misc/prim.h>
 #include <feign/samplers/sampler.h>
 #include <feign/samplers/independent.h>
 #include <feign/shapes/objmesh.h>
@@ -211,17 +213,186 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            BRDF* brdf = new BRDF();
+            BSDF* bsdf = nullptr;
 
-            possiblyAddChild(nodes, brdf);
+            string typeToken;
+            getNextToken(tokens, typeToken, index++);
 
-            // TODO
+            if (typeToken.empty())
+            {
+                throw MissingExpectedTokenException("bsdfType");
+            }
+
+            if (typeToken == "diffuse")
+            {
+                bsdf = new Diffuse();
+            }
+            else
+            {
+                throw UnsupportedTypeException("bsdfType: " + typeToken);
+            }
+
+            // TODO - more ???
+
+            possiblyAddChild(nodes, bsdf);
+        }
+        else if (token == "int")
+        {
+            string nameToken;
+            getNextToken(tokens, nameToken, index++);
+
+            if (nameToken != "name")
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string nameValue;
+            getNextToken(tokens, nameValue, index++);
+
+            if (nameValue.empty())
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string valueToken;
+            getNextToken(tokens, valueToken, index++);
+
+            if (valueToken != "value")
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            string valueValue;
+            getNextToken(tokens, valueValue, index++);
+
+            if (valueValue.empty())
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            int val = 0; // TODO: convert the string to an int
+            Primitive<int>* intPrim = new Primitive<int>(nameValue, val);
+
+            nodes[nodes.size() - 1]->getPrimList()->addIntPrimitive(intPrim);
+        }
+        else if (token == "float")
+        {
+            string nameToken;
+            getNextToken(tokens, nameToken, index++);
+
+            if (nameToken != "name")
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string nameValue;
+            getNextToken(tokens, nameValue, index++);
+
+            if (nameValue.empty())
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string valueToken;
+            getNextToken(tokens, valueToken, index++);
+
+            if (valueToken != "value")
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            string valueValue;
+            getNextToken(tokens, valueValue, index++);
+
+            if (valueValue.empty())
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            Float val = 0; // TODO: convert the string to a float
+            Primitive<Float>* floatPrim = new Primitive<Float>(nameValue, val);
+
+            nodes[nodes.size() - 1]->getPrimList()->addFloatPrimitive(floatPrim);
+        }
+        else if (token == "string")
+        {
+            string nameToken;
+            getNextToken(tokens, nameToken, index++);
+
+            if (nameToken != "name")
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string nameValue;
+            getNextToken(tokens, nameValue, index++);
+
+            if (nameValue.empty())
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string valueToken;
+            getNextToken(tokens, valueToken, index++);
+
+            if (valueToken != "value")
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            string valueValue;
+            getNextToken(tokens, valueValue, index++);
+
+            if (valueValue.empty())
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            int val = 0; // TODO: convert the string to an int
+            Primitive<int>* intPrim = new Primitive<int>(nameValue, val);
+
+            nodes[nodes.size() - 1]->getPrimList()->addIntPrimitive(intPrim);
+        }
+        else if (token == "float")
+        {
+            string nameToken;
+            getNextToken(tokens, nameToken, index++);
+
+            if (nameToken != "name")
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string nameValue;
+            getNextToken(tokens, nameValue, index++);
+
+            if (nameValue.empty())
+            {
+                throw MissingExpectedTokenException("name");
+            }
+
+            string valueToken;
+            getNextToken(tokens, valueToken, index++);
+
+            if (valueToken != "value")
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            string valueValue;
+            getNextToken(tokens, valueValue, index++);
+
+            if (valueValue.empty())
+            {
+                throw MissingExpectedTokenException("value");
+            }
+
+            Primitive<string>* stringPrim = new Primitive<string>(nameValue, valueValue);
+
+            nodes[nodes.size() - 1]->getPrimList()->addStringPrimitive(stringPrim);
         }
     }
 
-
-
-    // TODO
     return nullptr;
 }
 
