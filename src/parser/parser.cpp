@@ -8,6 +8,7 @@
 #include <feign/integrators/normal.h>
 #include <feign/math/transform.h>
 #include <feign/misc/prim.h>
+#include <feign/misc/world.h>
 #include <feign/samplers/sampler.h>
 #include <feign/samplers/independent.h>
 #include <feign/shapes/objmesh.h>
@@ -20,14 +21,9 @@
 SceneNode* Parser::parse(string filename)
 {
     // check to make sure all required nodes have an end tag
-    bool validFile = checkBalance(filename);
+    checkBalance(filename);
 
-    // TODO: create an exceptions system for this
-    if (!validFile)
-    {
-        cout << "Invalid File format. Make sure all nodes have end tags" << endl;
-        return nullptr;
-    }
+    cout << "balenced out" << endl;
 
     // tokenize the file
     ifstream file;
@@ -79,6 +75,9 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
     string token;
     int index = 0;
 
+    WorldNode* world = new WorldNode();
+    nodes.push_back(world);
+
     // main parse loop
     while (getNextToken(tokens, token, index++))
     {
@@ -89,6 +88,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
             Scene* scene = new Scene();
 
             possiblyAddChild(nodes, scene);
+        }
+        else if (token == "/scene")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Scene)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
         }
         else if (token == "sampler")
         {
@@ -117,6 +127,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
 
             possiblyAddChild(nodes, sampler);
         }
+        else if (token == "/sampler")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Sampler)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
+        }
         else if (token == "integrator")
         {
             nodeTokens.push_back(token);
@@ -143,6 +164,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
             // TODO - more ???
 
             possiblyAddChild(nodes, integrator);
+        }
+        else if (token == "/integrator")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Integrator)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
         }
         else if (token == "camera")
         {
@@ -171,6 +203,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
 
             possiblyAddChild(nodes, camera);
         }
+        else if (token == "/camera")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Camera)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
+        }
         else if (token == "transform")
         {
             // meh one
@@ -181,6 +224,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
             possiblyAddChild(nodes, transform);
 
             // TODO
+        }
+        else if (token == "/transform")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Transform)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
         }
         else if (token == "mesh")
         {
@@ -209,6 +263,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
 
             possiblyAddChild(nodes, mesh);
         }
+        else if (token == "/mesh")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_Mesh)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
+        }
         else if (token == "bsdf")
         {
             nodeTokens.push_back(token);
@@ -235,6 +300,17 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
             // TODO - more ???
 
             possiblyAddChild(nodes, bsdf);
+        }
+        else if (token == "/bsdf")
+        {
+            if (nodes[nodes.size() - 1]->getNodeType() == NT_BSDF)
+            {
+                nodes.pop_back();
+            }
+            else
+            {
+                throw new InvalidEndTokenException();
+            }
         }
         else if (token == "int")
         {
@@ -348,55 +424,21 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            int val = 0; // TODO: convert the string to an int
-            Primitive<int>* intPrim = new Primitive<int>(nameValue, val);
-
-            nodes[nodes.size() - 1]->getPrimList()->addIntPrimitive(intPrim);
-        }
-        else if (token == "float")
-        {
-            string nameToken;
-            getNextToken(tokens, nameToken, index++);
-
-            if (nameToken != "name")
-            {
-                throw MissingExpectedTokenException("name");
-            }
-
-            string nameValue;
-            getNextToken(tokens, nameValue, index++);
-
-            if (nameValue.empty())
-            {
-                throw MissingExpectedTokenException("name");
-            }
-
-            string valueToken;
-            getNextToken(tokens, valueToken, index++);
-
-            if (valueToken != "value")
-            {
-                throw MissingExpectedTokenException("value");
-            }
-
-            string valueValue;
-            getNextToken(tokens, valueValue, index++);
-
-            if (valueValue.empty())
-            {
-                throw MissingExpectedTokenException("value");
-            }
-
             Primitive<string>* stringPrim = new Primitive<string>(nameValue, valueValue);
 
             nodes[nodes.size() - 1]->getPrimList()->addStringPrimitive(stringPrim);
         }
     }
 
+    if (nodes.size() != 1)
+    {
+        throw new GlobalTagMisMatch();
+    }
+
     return nullptr;
 }
 
-bool Parser::checkBalance(string filename)
+void Parser::checkBalance(string filename)
 {
     ifstream file;
     file.open(filename);
@@ -423,7 +465,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/sampler")
@@ -433,7 +475,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/integrator")
@@ -443,7 +485,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/camera")
@@ -453,7 +495,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/transform")
@@ -463,7 +505,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/mesh")
@@ -473,7 +515,7 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
         else if (buf == "/bsdf")
@@ -483,10 +525,10 @@ bool Parser::checkBalance(string filename)
             else
             {
                 file.close();
-                return false;
+                throw new TagMisMatch(buf);
             }
         }
     }
 
-    return majorNodes.empty();
+    if (!majorNodes.empty()) throw new GlobalTagMisMatch();
 }

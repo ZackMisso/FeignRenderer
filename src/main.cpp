@@ -4,6 +4,15 @@
 int main(int argc, char* argv[]) {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    Parser::parse("/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/ajax-normals.firal");
+    SceneNode* worldNode = Parser::parse("/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/ajax-normals.firal");
+
+    if (!worldNode)
+    {
+        // TODO: debug
+        cout << "MAJOR ERROR" << endl;
+    }
+
+    // TODO: render
+
     return 0;
 }

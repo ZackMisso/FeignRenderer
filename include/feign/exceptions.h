@@ -21,3 +21,27 @@ public:
     UnsupportedTypeException() : runtime_error("Exception: Unsupported Type") { }
     UnsupportedTypeException(string str) : runtime_error("Exception: Unsupported Type: " + str) { }
 };
+
+class InvalidEndTokenException : public runtime_error {
+public:
+    InvalidEndTokenException() : runtime_error("Exception: Invalid End Token") { }
+    InvalidEndTokenException(string str) : runtime_error("Exception: Invalid End Token: " + str) { }
+};
+
+class TagMisMatch : public runtime_error {
+public:
+    TagMisMatch() : runtime_error("Exception: Tag Mismatch") { }
+    TagMisMatch(string str) : runtime_error("Exception: Tag Mismatch: " + str) { }
+};
+
+class GlobalTagMisMatch : public runtime_error {
+public:
+    GlobalTagMisMatch() : runtime_error("Exception: Global Tag Mismatch") { }
+    GlobalTagMisMatch(string str) : runtime_error("Exception: Global Tag Mismatch: " + str) { }
+};
+
+class SceneParseFailedException : public runtime_error {
+public:
+    SceneParseFailedException() : runtime_error("Exception: Scene Parse Failed") { }
+    SceneParseFailedException(string str) : runtime_error("Exception: Scene Parse Failed: " + str) { }
+};

@@ -1,5 +1,8 @@
 #pragma once
 
+// TODO: rename this class - this node can be used for more than one
+// scene
+
 #include <feign/common.h>
 #include <feign/misc/primlist.h>
 

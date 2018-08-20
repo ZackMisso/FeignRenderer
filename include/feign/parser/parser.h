@@ -11,5 +11,5 @@ public:
     static bool getNextToken(const vector<string>& tokens, string& token, int index);
     static void possiblyAddChild(vector<SceneNode*>& nodes, SceneNode* node);
 
-    static bool checkBalance(string filename);
+    static void checkBalance(string filename);
 };
