@@ -4,7 +4,7 @@ NormalIntegrator::NormalIntegrator() : Integrator() {
     // TODO
 }
 
-NormalIntegrator::NormalIntegrator(SceneNode* parent) : Integrator(parent) {
+NormalIntegrator::NormalIntegrator(Node* parent) : Integrator(parent) {
     // TODO
 }
 

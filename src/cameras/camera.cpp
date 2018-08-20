@@ -1,11 +1,11 @@
 #include <feign/cameras/camera.h>
 
-Camera::Camera() : SceneNode()
+Camera::Camera() : Node()
 {
     // TODO
 }
 
-Camera::Camera(SceneNode* parent) : SceneNode(parent)
+Camera::Camera(Node* parent) : Node(parent)
 {
     // TODO
 }

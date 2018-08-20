@@ -5,7 +5,7 @@ Diffuse::Diffuse() : BSDF()
     // TODO
 }
 
-Diffuse::Diffuse(SceneNode* parent) : BSDF(parent)
+Diffuse::Diffuse(Node* parent) : BSDF(parent)
 {
     // TODO
 }

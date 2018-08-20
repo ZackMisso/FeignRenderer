@@ -1,11 +1,11 @@
 #include <feign/misc/world.h>
 
-WorldNode::WorldNode() : SceneNode()
+WorldNode::WorldNode() : Node()
 {
     // does nothing for now
 }
 
-WorldNode::WorldNode(SceneNode* parent) : SceneNode(parent)
+WorldNode::WorldNode(Node* parent) : Node(parent)
 {
     // does nothing for now
 }

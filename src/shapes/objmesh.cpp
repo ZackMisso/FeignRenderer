@@ -5,7 +5,7 @@ ObjMesh::ObjMesh() : Shape()
     // TODO
 }
 
-ObjMesh::ObjMesh(SceneNode* parent) : Shape(parent)
+ObjMesh::ObjMesh(Node* parent) : Shape(parent)
 {
     // TODO
 }

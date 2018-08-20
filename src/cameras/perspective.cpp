@@ -5,7 +5,7 @@ Perspective::Perspective() : Camera()
     // TODO
 }
 
-Perspective::Perspective(SceneNode* parent) : Camera(parent)
+Perspective::Perspective(Node* parent) : Camera(parent)
 {
     // TODO
 }

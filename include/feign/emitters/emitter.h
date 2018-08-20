@@ -2,11 +2,11 @@
 
 #include <feign/node.h>
 
-class Emitter : public SceneNode
+class Emitter : public Node
 {
 public:
     Emitter();
-    Emitter(SceneNode* parent);
+    Emitter(Node* parent);
     virtual ~Emitter();
 
     virtual NodeType getNodeType() const;

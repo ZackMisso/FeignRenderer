@@ -1,11 +1,11 @@
 #include <feign/shapes/shape.h>
 
-Shape::Shape() : SceneNode()
+Shape::Shape() : Node()
 {
     // TODO
 }
 
-Shape::Shape(SceneNode* parent) : SceneNode(parent)
+Shape::Shape(Node* parent) : Node(parent)
 {
     // TODO
 }

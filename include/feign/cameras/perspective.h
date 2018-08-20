@@ -6,7 +6,7 @@ class Perspective : public Camera
 {
 public:
     Perspective();
-    Perspective(SceneNode* parent);
+    Perspective(Node* parent);
 
-    // TODO    
+    // TODO
 };

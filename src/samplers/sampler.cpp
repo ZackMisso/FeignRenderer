@@ -1,11 +1,11 @@
 #include <feign/samplers/sampler.h>
 
-Sampler::Sampler() : SceneNode()
+Sampler::Sampler() : Node()
 {
     // TODO
 }
 
-Sampler::Sampler(SceneNode* parent) : SceneNode(parent)
+Sampler::Sampler(Node* parent) : Node(parent)
 {
     // TODO
 }

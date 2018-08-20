@@ -1,11 +1,11 @@
 #include <feign/bsdfs/bsdf.h>
 
-BSDF::BSDF() : SceneNode()
+BSDF::BSDF() : Node()
 {
     // TODO
 }
 
-BSDF::BSDF(SceneNode* parent) : SceneNode(parent)
+BSDF::BSDF(Node* parent) : Node(parent)
 {
     // TODO
 }

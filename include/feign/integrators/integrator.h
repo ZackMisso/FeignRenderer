@@ -2,11 +2,11 @@
 
 #include <feign/node.h>
 
-class Integrator : public SceneNode
+class Integrator : public Node
 {
 public:
     Integrator();
-    Integrator(SceneNode* parent);
+    Integrator(Node* parent);
     virtual ~Integrator();
 
     // TODO

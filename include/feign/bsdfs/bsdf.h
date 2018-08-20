@@ -2,11 +2,11 @@
 
 #include <feign/node.h>
 
-class BSDF : public SceneNode
+class BSDF : public Node
 {
 public:
     BSDF();
-    BSDF(SceneNode* parent);
+    BSDF(Node* parent);
     virtual ~BSDF();
 
     virtual NodeType getNodeType() const;

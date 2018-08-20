@@ -2,13 +2,13 @@
 
 #include <feign/node.h>
 
-class Shape : public SceneNode
+class Shape : public Node
 {
 public:
     Shape();
-    Shape(SceneNode* parent);
+    Shape(Node* parent);
     virtual ~Shape();
 
     virtual NodeType getNodeType() const;
-    bool isPrimitive() const;  
+    bool isPrimitive() const;
 };

@@ -2,7 +2,8 @@
 
 #include <feign/node.h>
 
-class Media : public SceneNode {
+class Media : public Node
+{
     Media();
     virtual ~Media();
 

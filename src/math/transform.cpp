@@ -1,6 +1,11 @@
 #include <feign/math/transform.h>
 
-Transform::Transform()
+Transform::Transform() : Node()
+{
+    // TODO
+}
+
+Transform::Transform(Node* parent) : Node(parent)
 {
     // TODO
 }

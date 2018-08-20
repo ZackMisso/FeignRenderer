@@ -2,7 +2,8 @@
 
 #include <feign/node.h>
 
-class PhaseFunction : public SceneNode {
+class PhaseFunction : public Node
+{
 public:
     PhaseFunction();
     virtual ~PhaseFunction();

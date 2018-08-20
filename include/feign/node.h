@@ -22,28 +22,30 @@ enum NodeType
     NT_Primitive
 };
 
-class SceneNode
+class Node
 {
 public:
-    SceneNode();
-    SceneNode(SceneNode* parent);
-    virtual ~SceneNode();
+    Node();
+    Node(Node* parent);
+    virtual ~Node();
 
     virtual NodeType getNodeType() const = 0;
     virtual bool isPrimitive() const = 0;
 
-    virtual void addChild(SceneNode* node);
-    virtual void setParent(SceneNode* node);
-    virtual bool hasChild(SceneNode* node);
-    virtual void removeChild(SceneNode* node);
+    virtual void addChild(Node* node);
+    virtual void setParent(Node* node);
+    virtual bool hasChild(Node* node);
+    virtual void removeChild(Node* node);
+
+    void printGraph() const;
 
     int getTag() const;
 
     PrimitiveList* getPrimList() const;
 
 protected:
-    SceneNode* parent;
+    Node* parent;
     PrimitiveList* primitives;
-    vector<SceneNode*> children;
+    vector<Node*> children;
     int tag;
 };

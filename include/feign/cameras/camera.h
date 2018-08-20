@@ -2,11 +2,11 @@
 
 #include <feign/node.h>
 
-class Camera : public SceneNode
+class Camera : public Node
 {
 public:
     Camera();
-    Camera(SceneNode* parent);
+    Camera(Node* parent);
     virtual ~Camera();
 
     virtual NodeType getNodeType() const;

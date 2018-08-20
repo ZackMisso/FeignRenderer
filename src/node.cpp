@@ -1,19 +1,20 @@
 #include <feign/node.h>
+#include <feign/exceptions.h>
 
-SceneNode::SceneNode()
+Node::Node()
 {
-    children = vector<SceneNode*>();
+    children = vector<Node*>();
     primitives = new PrimitiveList();
     parent = nullptr;
 }
 
-SceneNode::SceneNode(SceneNode* parent) : parent(parent)
+Node::Node(Node* parent) : parent(parent)
 {
-    children = vector<SceneNode*>();
+    children = vector<Node*>();
     primitives = new PrimitiveList();
 }
 
-SceneNode::~SceneNode()
+Node::~Node()
 {
     delete primitives;
     for (int i = 0; i < children.size(); ++i) {
@@ -23,12 +24,12 @@ SceneNode::~SceneNode()
     parent = nullptr;
 }
 
-void SceneNode::addChild(SceneNode* node)
+void Node::addChild(Node* node)
 {
     children.push_back(node);
 }
 
-void SceneNode::setParent(SceneNode* node)
+void Node::setParent(Node* node)
 {
     if (parent) parent->removeChild(this);
     parent = node;
@@ -36,7 +37,7 @@ void SceneNode::setParent(SceneNode* node)
     if (!node->hasChild(this)) node->addChild(this);
 }
 
-bool SceneNode::hasChild(SceneNode* node)
+bool Node::hasChild(Node* node)
 {
     for (int i = 0; i < children.size(); i++)
     {
@@ -46,7 +47,7 @@ bool SceneNode::hasChild(SceneNode* node)
     return false;
 }
 
-void SceneNode::removeChild(SceneNode* node)
+void Node::removeChild(Node* node)
 {
     for (int i = 0; i < children.size(); i++)
     {
@@ -55,7 +56,7 @@ void SceneNode::removeChild(SceneNode* node)
             int lastIndex = children.size() - 1;
 
             // swap for O(1) remove
-            SceneNode* tmp = children[lastIndex];
+            Node* tmp = children[lastIndex];
             children[lastIndex] = node;
             children[i] = tmp;
 
@@ -66,12 +67,19 @@ void SceneNode::removeChild(SceneNode* node)
     }
 }
 
-int SceneNode::getTag() const
+void Node::printGraph() const
+{
+    throw new NotImplementedException("SceneNode::printGraph");
+
+    // TODO
+}
+
+int Node::getTag() const
 {
     return tag;
 }
 
-PrimitiveList* SceneNode::getPrimList() const
+PrimitiveList* Node::getPrimList() const
 {
     return primitives;
 }

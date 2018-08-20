@@ -8,19 +8,18 @@
 #include <feign/samplers/sampler.h>
 #include <feign/textures/texture.h>
 
-// TODO: make this a scene node
-class Scene : public SceneNode
+class Scene : public Node
 {
 public:
     Scene();
-    Scene(SceneNode* parent);
+    Scene(Node* parent);
     ~Scene();
 
     virtual NodeType getNodeType() const;
     virtual bool isPrimitive() const;
 
-    SceneNode* getRoot() const;
-    vector<SceneNode*> getSceneObjects() const;
+    Node* getRoot() const;
+    vector<Node*> getSceneObjects() const;
     vector<Emitter*> getEmitters() const;
     Texture* getEnvMap() const;
     Integrator* getIntegrator() const;
@@ -28,8 +27,8 @@ public:
     Sampler* getSampler() const;
 
 protected:
-    SceneNode* root;
-    vector<SceneNode*> sceneObjects; // keeping this for debugging purposes
+    Node* root;
+    vector<Node*> sceneObjects; // keeping this for debugging purposes
     vector<Emitter*> emitters;
     Texture* envMap;
     Integrator* integrator;

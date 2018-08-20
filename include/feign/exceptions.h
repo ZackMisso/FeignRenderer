@@ -45,3 +45,9 @@ public:
     SceneParseFailedException() : runtime_error("Exception: Scene Parse Failed") { }
     SceneParseFailedException(string str) : runtime_error("Exception: Scene Parse Failed: " + str) { }
 };
+
+class NotImplementedException : public runtime_error {
+public:
+    NotImplementedException() : runtime_error("Exception: Method Not Implemented") { }
+    NotImplementedException(string str) : runtime_error("Exception: Method Not Implemented: " + str) { }
+};

@@ -5,7 +5,7 @@ Independent::Independent() : Sampler()
     // TODO
 }
 
-Independent::Independent(SceneNode* parent) : Sampler(parent)
+Independent::Independent(Node* parent) : Sampler(parent)
 {
     // TODO
 }

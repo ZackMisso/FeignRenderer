@@ -2,7 +2,8 @@
 
 #include <feign/node.h>
 
-class Texture : public SceneNode {
+class Texture : public Node
+{
 public:
     Texture();
     virtual ~Texture();

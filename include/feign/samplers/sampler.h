@@ -2,11 +2,11 @@
 
 #include <feign/node.h>
 
-class Sampler : public SceneNode
+class Sampler : public Node
 {
 public:
     Sampler();
-    Sampler(SceneNode* parent);
+    Sampler(Node* parent);
     virtual ~Sampler();
 
     virtual NodeType getNodeType() const;

@@ -1,6 +1,7 @@
 #include <feign/media/media.h>
 
-Media::Media() {
+Media::Media() : Node()
+{
     // TODO
 }
 

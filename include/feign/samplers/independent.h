@@ -6,7 +6,7 @@ class Independent : public Sampler
 {
 public:
     Independent();
-    Independent(SceneNode* parent);
+    Independent(Node* parent);
 
-    // TODO    
+    // TODO
 };

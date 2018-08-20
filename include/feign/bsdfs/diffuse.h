@@ -6,7 +6,7 @@ class Diffuse : public BSDF
 {
 public:
     Diffuse();
-    Diffuse(SceneNode* parent);
+    Diffuse(Node* parent);
 
     // TODO
 };

@@ -1,11 +1,11 @@
 #include <feign/emitters/emitter.h>
 
-Emitter::Emitter() : SceneNode()
+Emitter::Emitter() : Node()
 {
     // TODO
 }
 
-Emitter::Emitter(SceneNode* parent) : SceneNode(parent)
+Emitter::Emitter(Node* parent) : Node(parent)
 {
     // TODO
 }

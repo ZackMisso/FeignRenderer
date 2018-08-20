@@ -4,11 +4,11 @@
 
 #include <feign/node.h>
 
-class WorldNode : public SceneNode
+class WorldNode : public Node
 {
 public:
     WorldNode();
-    WorldNode(SceneNode* parent);
+    WorldNode(Node* parent);
     virtual ~WorldNode();
 
     virtual NodeType getNodeType() const;

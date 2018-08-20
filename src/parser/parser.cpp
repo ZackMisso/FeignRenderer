@@ -18,7 +18,7 @@
 #include <sstream>
 #include <iostream>
 
-SceneNode* Parser::parse(string filename)
+Node* Parser::parse(string filename)
 {
     // check to make sure all required nodes have an end tag
     checkBalance(filename);
@@ -53,7 +53,7 @@ bool Parser::getNextToken(const vector<string>& tokens, string& token, int index
     return true;
 }
 
-void Parser::possiblyAddChild(vector<SceneNode*>& nodes, SceneNode* node)
+void Parser::possiblyAddChild(vector<Node*>& nodes, Node* node)
 {
     if (nodes.size() > 0)
     {
@@ -66,10 +66,10 @@ void Parser::possiblyAddChild(vector<SceneNode*>& nodes, SceneNode* node)
     }
 }
 
-SceneNode* Parser::generateScene(const vector<string>& tokens)
+Node* Parser::generateScene(const vector<string>& tokens)
 {
     // initializes counters, and node stack
-    vector<SceneNode*> nodes = vector<SceneNode*>();
+    vector<Node*> nodes = vector<Node*>();
     vector<string> nodeTokens = vector<string>();
 
     string token;
@@ -435,7 +435,7 @@ SceneNode* Parser::generateScene(const vector<string>& tokens)
         throw new GlobalTagMisMatch();
     }
 
-    return nullptr;
+    return nodes[0];
 }
 
 void Parser::checkBalance(string filename)

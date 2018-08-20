@@ -1,14 +1,14 @@
 #include <feign/scene.h>
 
-Scene::Scene() : SceneNode()
+Scene::Scene() : Node()
 {
-    sceneObjects = vector<SceneNode*>();
+    sceneObjects = vector<Node*>();
     root = nullptr;
 }
 
-Scene::Scene(SceneNode* parent) : SceneNode(parent)
+Scene::Scene(Node* parent) : Node(parent)
 {
-    sceneObjects = vector<SceneNode*>();
+    sceneObjects = vector<Node*>();
     root = nullptr;
 }
 
@@ -28,8 +28,8 @@ bool Scene::isPrimitive() const
     return false;
 }
 
-SceneNode* Scene::getRoot() const { return root; }
-vector<SceneNode*> Scene::getSceneObjects() const { return sceneObjects; }
+Node* Scene::getRoot() const { return root; }
+vector<Node*> Scene::getSceneObjects() const { return sceneObjects; }
 vector<Emitter*> Scene::getEmitters() const { return emitters; }
 Texture* Scene::getEnvMap() const { return envMap; }
 Integrator* Scene::getIntegrator() const { return integrator; }

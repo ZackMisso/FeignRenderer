@@ -6,8 +6,7 @@ class ObjMesh : public Shape
 {
 public:
     ObjMesh();
-    ObjMesh(SceneNode* parent);
+    ObjMesh(Node* parent);
 
-    // virtual NodeType getNodeType() const;
-    // bool isPrimitive() const;
+    // TODO
 };

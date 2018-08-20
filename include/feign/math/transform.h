@@ -2,10 +2,11 @@
 
 #include <feign/node.h>
 
-class Transform : public SceneNode
+class Transform : public Node
 {
 public:
     Transform();
+    Transform(Node* parent);
     ~Transform();
 
     virtual NodeType getNodeType() const;

@@ -6,7 +6,7 @@ class NormalIntegrator : public Integrator
 {
 public:
     NormalIntegrator();
-    NormalIntegrator(SceneNode* parent);
+    NormalIntegrator(Node* parent);
 
     virtual void tempMethod();
 };

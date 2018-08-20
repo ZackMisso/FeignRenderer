@@ -1,11 +1,11 @@
 #include <feign/integrators/integrator.h>
 
-Integrator::Integrator() : SceneNode()
+Integrator::Integrator() : Node()
 {
     // TODO
 }
 
-Integrator::Integrator(SceneNode* parent) : SceneNode(parent)
+Integrator::Integrator(Node* parent) : Node(parent)
 {
     // TODO
 }
