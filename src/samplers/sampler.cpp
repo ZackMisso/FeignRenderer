@@ -15,12 +15,12 @@ Sampler::~Sampler()
     // TODO
 }
 
+string Sampler::getName() const
+{
+    return "sampler: ";
+}
+
 NodeType Sampler::getNodeType() const
 {
     return NT_Sampler;
-}
-
-bool Sampler::isPrimitive() const
-{
-    return false;
 }

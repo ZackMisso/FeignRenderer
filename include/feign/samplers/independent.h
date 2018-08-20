@@ -8,5 +8,7 @@ public:
     Independent();
     Independent(Node* parent);
 
+    virtual string getName() const;
+
     // TODO
 };

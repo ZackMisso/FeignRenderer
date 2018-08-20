@@ -8,5 +8,7 @@ public:
     NormalIntegrator();
     NormalIntegrator(Node* parent);
 
+    virtual string getName() const;
+
     virtual void tempMethod();
 };

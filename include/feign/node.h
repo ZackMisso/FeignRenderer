@@ -30,14 +30,15 @@ public:
     virtual ~Node();
 
     virtual NodeType getNodeType() const = 0;
-    virtual bool isPrimitive() const = 0;
 
     virtual void addChild(Node* node);
     virtual void setParent(Node* node);
     virtual bool hasChild(Node* node);
     virtual void removeChild(Node* node);
 
-    void printGraph() const;
+    void printGraph(string indent = "") const;
+
+    virtual string getName() const = 0;
 
     int getTag() const;
 

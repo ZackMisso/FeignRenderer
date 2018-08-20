@@ -15,13 +15,13 @@ WorldNode::~WorldNode()
     // does nothing for now
 }
 
+string WorldNode::getName() const
+{
+    return "world";
+}
+
 NodeType WorldNode::getNodeType() const
 {
     // uhhh i guess
     return NT_Primitive;
-}
-
-bool WorldNode::isPrimitive() const
-{
-    return false;
 }

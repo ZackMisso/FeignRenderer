@@ -59,11 +59,8 @@ void Parser::possiblyAddChild(vector<Node*>& nodes, Node* node)
     {
         nodes[nodes.size() - 1]->addChild(node);
     }
-
-    if (!node->isPrimitive())
-    {
-        nodes.push_back(node);
-    }
+    
+    nodes.push_back(node);
 }
 
 Node* Parser::generateScene(const vector<string>& tokens)

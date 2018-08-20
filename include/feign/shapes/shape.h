@@ -9,6 +9,7 @@ public:
     Shape(Node* parent);
     virtual ~Shape();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    bool isPrimitive() const;
 };

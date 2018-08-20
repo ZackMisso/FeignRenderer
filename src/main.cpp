@@ -12,7 +12,13 @@ int main(int argc, char* argv[]) {
         cout << "MAJOR ERROR" << endl;
     }
 
+    // NOTE: calling it world graph because i want to support multiple scenes
+    //       from one scene file -> actually render animations
+    cout << endl;
+    cout << "World Graph:" << endl;
+    cout << endl;
     worldNode->printGraph();
+    cout << endl;
 
     // TODO: render
 

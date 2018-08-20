@@ -11,6 +11,7 @@ public:
     WorldNode(Node* parent);
     virtual ~WorldNode();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 };

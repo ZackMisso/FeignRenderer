@@ -18,14 +18,14 @@ Scene::~Scene()
     sceneObjects.clear();
 }
 
+string Scene::getName() const
+{
+    return "scene";
+}
+
 NodeType Scene::getNodeType() const
 {
     return NT_Scene;
-}
-
-bool Scene::isPrimitive() const
-{
-    return false;
 }
 
 Node* Scene::getRoot() const { return root; }

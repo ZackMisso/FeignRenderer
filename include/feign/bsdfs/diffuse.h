@@ -8,5 +8,7 @@ public:
     Diffuse();
     Diffuse(Node* parent);
 
+    virtual string getName() const;
+
     // TODO
 };

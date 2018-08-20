@@ -9,8 +9,9 @@ public:
     Sampler(Node* parent);
     virtual ~Sampler();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 
     // TODO
 };

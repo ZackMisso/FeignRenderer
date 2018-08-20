@@ -8,5 +8,7 @@ public:
     Perspective();
     Perspective(Node* parent);
 
+    virtual string getName() const;
+
     // TODO
 };

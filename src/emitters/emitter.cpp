@@ -15,12 +15,12 @@ Emitter::~Emitter()
     // TODO
 }
 
+string Emitter::getName() const
+{
+    return "emitter: ";
+}
+
 NodeType Emitter::getNodeType() const
 {
     return NT_Emitter;
-}
-
-bool Emitter::isPrimitive() const
-{
-    return false;
 }

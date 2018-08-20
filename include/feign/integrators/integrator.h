@@ -12,6 +12,7 @@ public:
     // TODO
     virtual void tempMethod() = 0;
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 };

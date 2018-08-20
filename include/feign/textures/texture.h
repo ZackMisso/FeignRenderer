@@ -8,5 +8,7 @@ public:
     Texture();
     virtual ~Texture();
 
+    virtual string getName() const;
+
     // TODO
 };

@@ -67,11 +67,17 @@ void Node::removeChild(Node* node)
     }
 }
 
-void Node::printGraph() const
+void Node::printGraph(string indent) const
 {
-    throw new NotImplementedException("SceneNode::printGraph");
+    // throw new NotImplementedException("SceneNode::printGraph");
 
-    // TODO
+    cout << indent << getName() << endl;
+    string newIndent = indent + "  ";
+
+    for (int i = 0; i < children.size(); ++i)
+    {
+        children[i]->printGraph(newIndent);
+    }
 }
 
 int Node::getTag() const

@@ -15,12 +15,12 @@ BSDF::~BSDF()
     // does nothing
 }
 
+string BSDF::getName() const
+{
+    return "bsdf: ";
+}
+
 NodeType BSDF::getNodeType() const
 {
     return NT_BSDF;
-}
-
-bool BSDF::isPrimitive() const
-{
-    return false;
 }

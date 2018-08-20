@@ -9,8 +9,9 @@ public:
     BSDF(Node* parent);
     virtual ~BSDF();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 
     // TODO
 };

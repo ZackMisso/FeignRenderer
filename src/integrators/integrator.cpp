@@ -15,12 +15,12 @@ Integrator::~Integrator()
     // TODO
 }
 
+string Integrator::getName() const
+{
+    return "integrator: ";
+}
+
 NodeType Integrator::getNodeType() const
 {
     return NT_Integrator;
-}
-
-bool Integrator::isPrimitive() const
-{
-    return false;
 }

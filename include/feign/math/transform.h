@@ -9,8 +9,9 @@ public:
     Transform(Node* parent);
     ~Transform();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 
     // TODO
 };

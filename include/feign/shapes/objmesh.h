@@ -8,5 +8,7 @@ public:
     ObjMesh();
     ObjMesh(Node* parent);
 
+    virtual string getName() const;
+
     // TODO
 };

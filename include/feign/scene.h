@@ -16,7 +16,8 @@ public:
     ~Scene();
 
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
+
+    virtual string getName() const;
 
     Node* getRoot() const;
     vector<Node*> getSceneObjects() const;
@@ -27,7 +28,7 @@ public:
     Sampler* getSampler() const;
 
 protected:
-    Node* root;
+    Node* root; // is this needed???
     vector<Node*> sceneObjects; // keeping this for debugging purposes
     vector<Emitter*> emitters;
     Texture* envMap;

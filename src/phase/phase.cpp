@@ -1,9 +1,16 @@
 #include <feign/phase/phase.h>
 
-PhaseFunction::PhaseFunction() {
+PhaseFunction::PhaseFunction()
+{
     // TODO
 }
 
-PhaseFunction::~PhaseFunction() {
+PhaseFunction::~PhaseFunction()
+{
     // TODO
+}
+
+string PhaseFunction::getName() const
+{
+    return "phase: ";
 }

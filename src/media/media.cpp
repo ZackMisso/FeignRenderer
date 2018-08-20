@@ -5,6 +5,12 @@ Media::Media() : Node()
     // TODO
 }
 
-Media::~Media() {
+Media::~Media()
+{
     // TODO
+}
+
+string Media::getName() const
+{
+    return "media: ";
 }

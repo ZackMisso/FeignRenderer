@@ -9,8 +9,9 @@ public:
     Emitter(Node* parent);
     virtual ~Emitter();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 
     // TODO
 };

@@ -9,8 +9,9 @@ public:
     Camera(Node* parent);
     virtual ~Camera();
 
+    virtual string getName() const;
+
     virtual NodeType getNodeType() const;
-    virtual bool isPrimitive() const;
 
     // TODO
 };

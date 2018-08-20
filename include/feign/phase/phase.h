@@ -8,5 +8,7 @@ public:
     PhaseFunction();
     virtual ~PhaseFunction();
 
+    virtual string getName() const;
+
     // TODO
 };

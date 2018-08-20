@@ -15,12 +15,13 @@ Camera::~Camera()
     // TODO
 }
 
+string Camera::getName() const
+{
+    return "camera: ";
+}
+
+
 NodeType Camera::getNodeType() const
 {
     return NT_Camera;
-}
-
-bool Camera::isPrimitive() const
-{
-    return false;
 }

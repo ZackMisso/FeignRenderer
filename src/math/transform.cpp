@@ -15,12 +15,12 @@ Transform::~Transform()
     // TODO
 }
 
+string Transform::getName() const
+{
+    return "transform";
+}
+
 NodeType Transform::getNodeType() const
 {
     return NT_Transform;
-}
-
-bool Transform::isPrimitive() const
-{
-    return false;
 }
