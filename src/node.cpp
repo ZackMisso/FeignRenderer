@@ -69,8 +69,6 @@ void Node::removeChild(Node* node)
 
 void Node::printGraph(string indent) const
 {
-    // throw new NotImplementedException("SceneNode::printGraph");
-
     cout << indent << getName() << endl;
     string newIndent = indent + "  ";
 

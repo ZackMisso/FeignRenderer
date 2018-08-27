@@ -1,17 +1,49 @@
 #pragma once
 
+#include <feign/common.h>
 #include <feign/node.h>
+#include <feign/math/ray.h>
+#include <feign/math/vector.h>
 
-class Transform : public Node
+// having transform also be a node is kinda sketchy,
+// maybe separate this into a node class and a math
+// class
+
+class Transform
 {
 public:
     Transform();
-    Transform(Node* parent);
-    ~Transform();
+    Transform(const Eigen::Matrix4f& matrix);
+    Transform(const Eigen::Matrix4f& matrix,
+              const Eigen::Matrix4f& inverse);
+
+    // operators
+    Transform operator*(const Transform& other) const;
+    Vector3f operator*(const Vector3f& other) const;
+    Normal3f operator*(const Normal3f& other) const;
+    Point3f operator*(const Point3f& other) const;
+    Ray3f operator*(const Ray3f& other)const;
+
+    // methods
+    Transform inverse() const;
+
+    const Eigen::Matrix4f& getMatrix() const;
+    const Eigen::Matrix4f& getInverse() const;
+
+protected:
+    Eigen::Matrix4f mat;
+    Eigen::Matrix4f inv;
+};
+
+class TransformNode : public Node
+{
+public:
+    TransformNode();
+    TransformNode(Node* parent);
+    ~TransformNode();
 
     virtual string getName() const;
-
     virtual NodeType getNodeType() const;
-
-    // TODO
+protected:
+    Transform transform;
 };

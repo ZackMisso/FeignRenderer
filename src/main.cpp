@@ -4,7 +4,7 @@
 int main(int argc, char* argv[]) {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    Node* worldNode = Parser::parse("/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/ajax-normals.firal");
+    Node* worldNode = Parser::parse("/Users/corneria/Documents/Projects/FeignRenderer/scenes/ajax-normals.firal");
 
     if (!worldNode)
     {

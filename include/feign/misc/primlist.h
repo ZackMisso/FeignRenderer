@@ -1,5 +1,6 @@
 #pragma once
 
+#include <feign/common.h>
 #include <feign/misc/prim.h>
 #include <vector>
 #include <string>

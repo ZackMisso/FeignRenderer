@@ -31,6 +31,7 @@ Node* Parser::parse(string filename)
     stringstream fileStream;
     fileStream << file.rdbuf();
     vector<string> tokens = vector<string>();
+    cout << tokens.size() << endl;
     string str;
 
     while (fileStream >> str)
@@ -59,7 +60,7 @@ void Parser::possiblyAddChild(vector<Node*>& nodes, Node* node)
     {
         nodes[nodes.size() - 1]->addChild(node);
     }
-    
+
     nodes.push_back(node);
 }
 
@@ -216,7 +217,7 @@ Node* Parser::generateScene(const vector<string>& tokens)
             // meh one
             nodeTokens.push_back(token);
 
-            Transform* transform = new Transform();
+            TransformNode* transform = new TransformNode();
 
             possiblyAddChild(nodes, transform);
 
