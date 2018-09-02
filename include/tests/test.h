@@ -24,5 +24,5 @@ struct UnitTestData {
 
 class UnitTest {
 public:
-    bool evaluateTest(UnitTestData& testLog) const = 0;
+    virtual bool evaluateTest(UnitTestData& testLog) const = 0;
 };

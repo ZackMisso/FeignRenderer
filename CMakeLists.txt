@@ -183,7 +183,6 @@ add_executable(feign
     # Math implementation files
     src/math/transform.cpp
     src/math/ray.cpp
-    src/math/vector.cpp
 
     # Media implementation files
     src/media/media.cpp
