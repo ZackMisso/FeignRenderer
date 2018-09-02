@@ -8,6 +8,114 @@
 #include <feign/common.h>
 #include <nanogui/glutil.h>
 
+template <typename T>
+struct Vec2
+{
+    Vec2(T c) { }
+    Vec2(T x, T y) { }
+
+};
+
+template <typename T>
+struct Vec3
+{
+    Vec3(T c)
+    {
+        xyz[0] = c;
+        xyz[1] = c;
+        xyz[2] = c;
+    }
+
+    Vec3(T x, T y, T z)
+    {
+        xyz[0] = x;
+        xyz[1] = y;
+        xyz[2] = z;
+    }
+
+    Vec3(Vec2<T> xy, T z)
+    {
+        xyz[0] = xy[0];
+        xyz[1] = xy[1];
+        xyz[z] = z;
+    }
+
+    Vec3<T> operator+(const Vec3<T>& other) const
+    {
+        Vec3<T> vec;
+        vec[0] = xyz[0] + other[0];
+        vec[1] = xyz[1] + other[1];
+        vec[2] = xyz[2] + other[2];
+        return vec;
+    }
+
+    Vec3<T> operator-(const Vec3<T>& other) const
+    {
+        Vec3<T> vec;
+        vec[0] = xyz[0] - other[0];
+        vec[1] = xyz[1] - other[1];
+        vec[2] = xyz[2] - other[2];
+        return vec;
+    }
+
+    Vec3<T> operator*(T c) const
+    {
+        Vec3<T> vec;
+        vec[0] = xyz[0] * c;
+        vec[1] = xyz[1] * c;
+        vec[2] = xyz[2] * c;
+        return vec;
+    }
+
+    Vec3<T> operator/(T c) const
+    {
+        Vec3<T> vec;
+        vec[0] = xyz[0] / c;
+        vec[1] = xyz[1] / c;
+        vec[2] = xyz[2] / c;
+        return vec;
+    }
+
+    void operator+=(const Vec3<T>& other)
+    {
+        xyz[0] += other[0];
+        xyz[1] += other[1];
+        xyz[2] += other[2];
+    }
+
+    void operator-=(const Vec3<T>& other)
+    {
+        xyz[0] -= other[0];
+        xyz[1] -= other[1];
+        xyz[2] -= other[2];
+    }
+
+    void operator*=(const Vec3<T>& other)
+    {
+        xyz[0] *= other[0];
+        xyz[1] *= other[1];
+        xyz[2] *= other[2];
+    }
+
+    void operator/=(const Vec3<T>& other)
+    {
+        xyz[0] /= other[0];
+        xyz[1] /= other[1];
+        xyz[2] /= other[2];
+    }
+
+    Vec3<T> operator~()
+    {
+        Vec3<T> vec;
+        vec[0] = -xyz[0];
+        vec[1] = -xyz[1];
+        vec[2] = -xyz[2];
+        return vec;
+    }
+
+    T xyz[3];
+};
+
 // fuck eigen. Im going to write my own as a challenge
 
 // // gross shit
