@@ -6,12 +6,22 @@
 // of improving code readability and debugging
 
 #include <feign/common.h>
-#include <feign/exceptions.h>
-// #include <nanogui/glutil.h>
 
 template <typename T>
 struct Vec2
 {
+    Vec2()
+    {
+        xy[0] = 0x0;
+        xy[1] = 0x0;
+    }
+
+    Vec2(const Vec2<T>& other)
+    {
+        xy[0] = other(0);
+        xy[1] = other(1);
+    }
+
     Vec2(T c)
     {
         xy[0] = c;
@@ -120,6 +130,20 @@ struct Vec2
 template <typename T>
 struct Vec3
 {
+    Vec3()
+    {
+        xyz[0] = 0x0;
+        xyz[1] = 0x0;
+        xyz[2] = 0x0;
+    }
+
+    Vec3(const Vec3<T>& other)
+    {
+        xyz[0] = other(0);
+        xyz[1] = other(1);
+        xyz[2] = other(2);
+    }
+
     Vec3(T c)
     {
         xyz[0] = c;
@@ -251,6 +275,22 @@ struct Vec3
 template <typename T>
 struct Vec4
 {
+    Vec4()
+    {
+        xyzw[0] = 0x0;
+        xyzw[1] = 0x0;
+        xyzw[2] = 0x0;
+        xyzw[3] = 0x0;
+    }
+
+    Vec4(const Vec4<T>& other)
+    {
+        xyzw[0] = other(0);
+        xyzw[1] = other(1);
+        xyzw[2] = other(2);
+        xyzw[3] = other(3);
+    }
+
     Vec4(T c)
     {
         xyzw[0] = c;
@@ -281,6 +321,19 @@ struct Vec4
         xyzw[1] = xy(1);
         xyzw[2] = zw(0);
         xyzw[3] = zw(1);
+    }
+
+    Vec4(Vec3<T> xyz, T w)
+    {
+        xyzw[0] = xyz(0);
+        xyzw[1] = xyz(1);
+        xyzw[2] = xyz(2);
+        xyzw[3] = w;
+    }
+
+    Vec3<T> head() const
+    {
+        return Vec3<T>(xyzw[0], xyzw[1], xyzw[2]);
     }
 
     Vec4<T> operator+(const Vec4<T>& other) const
@@ -438,6 +491,17 @@ struct Matrix3
         return mat;
     }
 
+    Vec3<T> operator*(const Vec3<T> other)
+    {
+        Vec3<T> vec;
+
+        vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2);
+        vec[1] = n[3]*other(0) + n[4]*other(1) + n[5]*other(2);
+        vec[2] = n[6]*other(0) + n[7]*other(1) + n[8]*other(2);
+
+        return vec;
+    }
+
     Matrix3<T> operator+(const Matrix3<T>& other)
     {
         Matrix3<T> mat;
@@ -459,7 +523,7 @@ struct Matrix3
     }
 
     // transpose
-    Matrix3<T> operator!()
+    Matrix3<T> operator!() const
     {
         Matrix3<T> mat;
 
@@ -469,7 +533,7 @@ struct Matrix3
     }
 
     // inverse
-    Matrix3<T> operator~()
+    Matrix3<T> operator~() const
     {
         Matrix3<T> mat;
 
@@ -515,7 +579,16 @@ struct Matrix4
         n[12] = n30; n[13] = n31; n[14] = n32; n[15] = n33;
     }
 
-    Matrix4<T> operator*(const Matrix4<T>& other)
+    Matrix3<T> topLeftCorner() const
+    {
+        Matrix3<T> mat;
+
+        throw new NotImplementedException();
+
+        return mat;
+    }
+
+    Matrix4<T> operator*(const Matrix4<T>& other) const
     {
         Matrix4<T> mat;
 
@@ -542,6 +615,18 @@ struct Matrix4
         return mat;
     }
 
+    Vec4<T> operator*(const Vec4<T> other) const
+    {
+        Vec4<T> vec;
+
+        vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2) + n[3]*other(3);
+        vec[1] = n[4]*other(0) + n[5]*other(1) + n[6]*other(2) + n[7]*other(3);
+        vec[2] = n[8]*other(0) + n[9]*other(1) + n[10]*other(2) + n[11]*other(3);
+        vec[3] = n[12]*other(0) + n[13]*other(4) + n[14]*other(8) + n[15]*other(12);
+
+        return vec;
+    }
+
     Matrix4<T> operator+(const Matrix4<T>& other)
     {
         Matrix4<T> mat;
@@ -563,7 +648,7 @@ struct Matrix4
     }
 
     // transpose
-    Matrix4<T> operator!()
+    Matrix4<T> operator!() const
     {
         Matrix4<T> mat;
 
@@ -573,7 +658,7 @@ struct Matrix4
     }
 
     // inverse
-    Matrix4<T> operator~()
+    Matrix4<T> operator~() const
     {
         Matrix4<T> mat;
 
@@ -598,149 +683,31 @@ struct Matrix4
 };
 
 template <typename T>
-struct Vector3 : Vec3<T>
+struct Vector3 : public Vec3<T>
 {
-    Vector3(T c) : Vec3(c) { }
-    Vector3(T x, T y, T z) : Vec3(x, y, z) { }
-    Vector3(Vec2<T> xy, T z) : Vec3(xy, z) { }
+    Vector3() : Vec3<T>() { }
+    Vector3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Vector3(T c) : Vec3<T>(c) { }
+    Vector3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Vector3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
 };
 
 template <typename T>
-struct Point3 : Vec3<T>
+struct Point3 : public Vec3<T>
 {
-    Point3(T c) : Vec3(c) { }
-    Point3(T x, T y, T z) : Vec3(x, y, z) { }
-    Point3(Vec2<T> xy, T z) : Vec3(xy, z) { }
+    Point3() : Vec3<T>() { }
+    Point3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Point3(T c) : Vec3<T>(c) { }
+    Point3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Point3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
 };
 
 template <typename T>
-struct Normal3 : Vec3<T>
+struct Normal3 : public Vec3<T>
 {
-    Normal3(T c) : Vec3(c) { }
-    Normal3(T x, T y, T z) : Vec3(x, y, z) { }
-    Normal3(Vec2<T> xy, T z) : Vec3(xy, z) { }
+    Normal3() : Vec3<T>() { }
+    Normal3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Normal3(T c) : Vec3<T>(c) { }
+    Normal3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
 };
-
-// fuck eigen. Im going to write my own as a challenge
-
-// // gross shit
-// template <typename Scalar, int Dimension>
-// struct ZVector : public Eigen::Matrix<Scalar, Dimension, 1> {
-// public:
-//
-//     typedef Eigen::Matrix<Scalar, Dimension, 1> Parent;
-//     typedef ZVector<Scalar, Dimension>          VectorType;
-//     typedef ZVector<Scalar, Dimension>          PointType;
-//
-//     ZVector()
-//     {
-//         Parent::setConstant(0);
-//     }
-//
-//     ZVector(Scalar x)
-//     {
-//         Parent::setConstant(x);
-//     }
-//
-//     ZVector(Scalar x, Scalar y) : Parent(x, y)
-//     {
-//         // nothing
-//     }
-//
-//     ZVector(Scalar x, Scalar y, Scalar z) : Parent(x, y, z)
-//     {
-//         // nothing
-//     }
-//
-//     ZVector(Scalar x, Scalar y, Scalar z, Scalar w) : Parent(x, y, z, w)
-//     {
-//         // nothing
-//     }
-// };
-
-// template <typename T>
-// struct Vector2
-// {
-//     Vector2();
-//     Vector2(T c);
-//     Vector2(T x, T y);
-//
-//     T x;
-//     T y;
-// };
-//
-// template <typename T>
-// struct Vector3
-// {
-//     Vector3();
-//     Vector3(T c);
-//     Vector3(T x, T y);
-//     Vector3(T x, T y, T z);
-//     Vector3(Vector2<T> xy);
-//     Vector3(Vector2<T> xy, T z);
-//
-//     T x;
-//     T y;
-//     T z;
-// };
-//
-// template <typename T>
-// struct Vector4
-// {
-//     Vector4();
-//     Vector4(T c);
-//     Vector4(T x, T y);
-//     Vector4(T x, T y, T z);
-//     Vector4(T x, T y, T z, T w);
-//     Vector4(Vector2<T> xy);
-//     Vector4(Vector2<T> xy, Vector2<T> zw);
-//     Vector4(Vector3<T> xyz, T w);
-//
-//     T x;
-//     T y;
-//     T z;
-//     T w;
-// };
-
-// struct Matrix3
-// {
-//     // TODO
-// };
-//
-// struct Matrix4
-// {
-//     // TODO
-// };
-
-// struct Vector3f
-// {
-//     Vector3f();
-//     Vector3f(Float c);
-//     Vector3f(Float x, Float y, Float z);
-//
-//     Float x;
-//     Float y;
-//     Float z;
-// };
-//
-// struct Point3f
-// {
-//     Point3f();
-//     Point3f(Float c);
-//     Point3f(Float x, Float y, Float z);
-//
-//     Float x;
-//     Float y;
-//     Float z;
-// };
-//
-// struct Normal3f
-// {
-//     Normal3f();
-//     Normal3f(Float c);
-//     Normal3f(Float x, Float y, Float z);
-//
-//     Float x;
-//     Float y;
-//     Float z;
-// };

@@ -1,8 +1,10 @@
 #pragma once
 
-#include <feign/common.h>
 #include <stdexcept>
 #include <stdio.h>
+#include <string>
+
+using namespace std;
 
 class UnrecognizedTokenException : public runtime_error {
 public:
