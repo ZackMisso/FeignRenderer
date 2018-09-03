@@ -4,10 +4,13 @@
 #include <vector>
 #include <iostream>
 
+// TODO: remove nanogui
+
 // #include <nanogui/glutil.h>
 
 #include <feign/exceptions.h>
 #include <feign/math/vector.h>
+#include <feign/math/bbox.h>
 
 using namespace std;
 
@@ -39,6 +42,9 @@ typedef Matrix3<float> Matrix3f;
 typedef Matrix3<double> Matrix3d;
 typedef Matrix4<float> Matrix4f;
 typedef Matrix4<double> Matrix4d;
+
+typedef BBox3<float> BBox3f;
+typedef BBox3<double> BBox3d;
 
 typedef float Float;
 

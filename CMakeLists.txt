@@ -129,6 +129,7 @@ add_executable(feign
     include/feign/math/transform.h
     include/feign/math/ray.h
     include/feign/math/vector.h
+    include/feign/math/bbox.h
 
     # Media header files
     include/feign/media/media.h
@@ -159,6 +160,7 @@ add_executable(feign
     include/tests/test.h
     include/tests/tester.h
     include/tests/vector_test.h
+    include/tests/transform_test.h
 
     # Implementation files
     src/main.cpp
@@ -212,6 +214,7 @@ add_executable(feign
     # Test implementation files
     src/tests/tester.cpp
     src/tests/vector_test.cpp
+    src/tests/transform_test.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

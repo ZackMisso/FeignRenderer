@@ -3,6 +3,7 @@
 #include <feign/common.h>
 #include <feign/math/vector.h>
 
+// TODO: maybe template this
 struct Ray3f
 {
     Ray3f();

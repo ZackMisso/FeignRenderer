@@ -1,5 +1,10 @@
 #include <tests/vector_test.h>
 
+VectorTestData::VectorTestData()
+{
+    // TODO
+}
+
 VectorTest::VectorTest()
 {
     // TODO

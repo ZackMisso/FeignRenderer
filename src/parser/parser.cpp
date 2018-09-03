@@ -23,8 +23,6 @@ Node* Parser::parse(string filename)
     // check to make sure all required nodes have an end tag
     checkBalance(filename);
 
-    cout << "balenced out" << endl;
-
     // tokenize the file
     ifstream file;
     file.open(filename);
@@ -251,6 +249,8 @@ Node* Parser::generateScene(const vector<string>& tokens)
             if (typeToken == "obj")
             {
                 mesh = new ObjMesh();
+
+                // TODO
             }
             else
             {
