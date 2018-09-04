@@ -24,13 +24,21 @@ using namespace std;
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 // vector and matrix types
-typedef Vec2<int> Vector2i;
-typedef Vec2<uint32_t> Vector2u;
-typedef Vec2<float> Vector2f;
-typedef Vec2<double> Vector2d;
-typedef Vec4<float> Vector4f;
-typedef Vec4<double> Vector4d;
+// these have no geometric meaning
+typedef Vec2<int> Vec2i;
+typedef Vec2<uint32_t> Vec2u;
+typedef Vec2<float> Vec2f;
+typedef Vec2<double> Vec2d;
+typedef Vec3<float> Vec3f;
+typedef Vec3<double> Vec3d;
+typedef Vec3<int> Vec3i;
+typedef Vec3<uint32_t> Vec3u;
+typedef Vec4<float> Vec4f;
+typedef Vec4<double> Vec4d;
+typedef Vec4<int> Vec4i;
+typedef Vec4<uint32_t> Vec4u;
 
+// these represent actual geometric primitives
 typedef Vector3<float> Vector3f;
 typedef Vector3<double> Vector3d;
 typedef Point3<float> Point3f;

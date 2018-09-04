@@ -53,3 +53,10 @@ public:
     NotImplementedException() : runtime_error("Exception: Method Not Implemented") { }
     NotImplementedException(string str) : runtime_error("Exception: Method Not Implemented: " + str) { }
 };
+
+class OBJUnopenableException : public runtime_error
+{
+public:
+    OBJUnopenableException() : runtime_error("Exception: OBJ file could not be opened") { }
+    OBJUnopenableException(string str) : runtime_error("Exception: OBJ file could not be opened: " + str) { }
+};

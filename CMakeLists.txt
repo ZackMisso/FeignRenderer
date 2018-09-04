@@ -117,6 +117,7 @@ add_executable(feign
     # Camera header files
     include/feign/cameras/camera.h
     include/feign/cameras/perspective.h
+    include/feign/cameras/ortho.h
 
     # Emitter header files
     include/feign/emitters/emitter.h
@@ -174,6 +175,7 @@ add_executable(feign
     # Camera implementation files
     src/cameras/camera.cpp
     src/cameras/perspective.cpp
+    src/cameras/ortho.cpp
 
     # Emitter implementation files
     src/emitters/emitter.cpp

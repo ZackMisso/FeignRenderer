@@ -76,7 +76,7 @@ Normal3f Transform::operator*(const Normal3f& other) const
 
 Point3f Transform::operator*(const Point3f& other) const
 {
-    Vector4f hom = mat * Vector4f(other, 1.f);
+    Vec4f hom = mat * Vec4f(other, 1.f);
     Vector3f hom3 = hom.head() / hom(3);
     return Point3f(hom3(0), hom3(1), hom3(2));
 }
