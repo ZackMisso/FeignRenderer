@@ -1,6 +1,7 @@
 #pragma once
 
 #include <feign/shapes/shape.h>
+#include <feign/math/transform.h>
 
 class ObjMesh : public Shape
 {
@@ -19,20 +20,22 @@ public:
 
     void parseFromFile(const string& filename);
 
+    virtual void preProcess();
+
     // TODO
     // bool intersectTri(uint32_t index, const Ray& ray, *intersectionData*) const;
 
     const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
-    const vector<Vec3f>& getVerts() const;
-    const vector<Vec3f>& getNorms() const;
+    const vector<Point3f>& getVerts() const;
+    const vector<Normal3f>& getNorms() const;
     const vector<Vec3u>& getFaces() const;
     const vector<Vec2f>& getUVs() const;
 
 protected:
     // note: this assumes a triangle mesh
-    vector<Vec3f> vs;
-    vector<Vec3f> ns;
+    vector<Point3f> vs;
+    vector<Normal3f> ns;
     vector<Vec2f> uvs;
     vector<Vec3u> fs;
 

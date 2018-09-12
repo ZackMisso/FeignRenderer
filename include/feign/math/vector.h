@@ -116,6 +116,12 @@ struct Vec2
         return xy[index];
     }
 
+    // TODO: finish adding norms
+    // T norm() const
+    // {
+    //     return xy[0] * xy[0] +
+    // }
+
     Vec2<T> operator~()
     {
         Vec2<T> vec;

@@ -41,6 +41,8 @@ typedef Vec4<uint32_t> Vec4u;
 // these represent actual geometric primitives
 typedef Vector3<float> Vector3f;
 typedef Vector3<double> Vector3d;
+// typedef Point2<float> Point2f;
+// typedef Point2<double> Point2d;
 typedef Point3<float> Point3f;
 typedef Point3<double> Point3d;
 typedef Normal3<float> Normal3f;

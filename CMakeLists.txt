@@ -110,6 +110,9 @@ add_executable(feign
     include/feign/node.h
     include/feign/exceptions.h
 
+    # Accel header files
+    include/feign/accel/bbh.h
+
     # BSDF header files
     include/feign/bsdfs/bsdf.h
     include/feign/bsdfs/diffuse.h
@@ -167,6 +170,9 @@ add_executable(feign
     src/main.cpp
     src/scene.cpp
     src/node.cpp
+
+    # Accel implementation files
+    src/accel/bbh.cpp
 
     # BSDF implementation files
     src/bsdfs/bsdf.cpp
