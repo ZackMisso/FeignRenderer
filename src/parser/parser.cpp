@@ -36,7 +36,7 @@ Node* Parser::parse(string filename)
         tokens.push_back(str);
 
     // generate the scene using the tokens
-    return generateScene(tokens);
+    return generateWorld(tokens);
 }
 
 bool Parser::getNextToken(const vector<string>& tokens, string& token, int index) {
@@ -62,7 +62,7 @@ void Parser::possiblyAddChild(vector<Node*>& nodes, Node* node)
     nodes.push_back(node);
 }
 
-Node* Parser::generateScene(const vector<string>& tokens)
+Node* Parser::generateWorld(const vector<string>& tokens)
 {
     // initializes counters, and node stack
     vector<Node*> nodes = vector<Node*>();
@@ -77,6 +77,8 @@ Node* Parser::generateScene(const vector<string>& tokens)
     // main parse loop
     while (getNextToken(tokens, token, index++))
     {
+        // cout << "CURRENT TOKEN: " << token << endl;
+
         if (token == "scene")
         {
             nodeTokens.push_back(token);
@@ -248,7 +250,9 @@ Node* Parser::generateScene(const vector<string>& tokens)
 
             if (typeToken == "obj")
             {
+                cout << "Pre Contructor" << endl;
                 mesh = new ObjMesh();
+                cout << "Post Contructor" << endl;
 
                 // TODO
             }

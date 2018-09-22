@@ -3,16 +3,18 @@
 
 ObjMesh::ObjMesh() : Shape()
 {
-    vs = vector<Vec3f>();
-    ns = vector<Vec3f>();
+    // cout << "OBJ MESH Constructor" << endl;
+    vs = vector<Point3f>();
+    ns = vector<Normal3f>();
     uvs = vector<Vec2f>();
     fs = vector<Vec3u>();
+    // cout << "POST OBJ MESH Constructor" << endl;
 }
 
 ObjMesh::ObjMesh(Node* parent) : Shape(parent)
 {
-    vs = vector<Vec3f>();
-    ns = vector<Vec3f>();
+    vs = vector<Point3f>();
+    ns = vector<Normal3f>();
     uvs = vector<Vec2f>();
     fs = vector<Vec3u>();
 }
@@ -34,21 +36,21 @@ uint32_t ObjMesh::verts() const
 
 float ObjMesh::surfaceArea() const
 {
-    throw new NotImplementedException();
+    throw new NotImplementedException("objmesh");
 
     return 0.f;
 }
 
 float ObjMesh::surfaceArea(uint32_t index) const
 {
-    throw new NotImplementedException();
+    throw new NotImplementedException("objmesh");
 
     return 0.f;
 }
 
 float ObjMesh::pdf(uint32_t index) const
 {
-    throw new NotImplementedException();
+    throw new NotImplementedException("objmesh");
 
     return 0.f;
 }
@@ -63,9 +65,9 @@ void ObjMesh::parseFromFile(const string& filename)
 
     Transform transform; // this is just a place holder
 
-    throw new NotImplementedException();
+    throw new NotImplementedException("OBJ MESH READ");
 
-    ifstream ifs (filename);
+    ifstream ifs (filename.c_str());
 
     if (ifs.fail())
     {

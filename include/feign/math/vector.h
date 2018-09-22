@@ -6,6 +6,7 @@
 // of improving code readability and debugging
 
 #include <feign/common.h>
+#include <tgmath.h>
 
 template <typename T>
 struct Vec2
@@ -116,11 +117,24 @@ struct Vec2
         return xy[index];
     }
 
-    // TODO: finish adding norms
-    // T norm() const
-    // {
-    //     return xy[0] * xy[0] +
-    // }
+    T sqrNorm() const
+    {
+        return xy[0] * xy[0] + xy[1] * xy[1];
+    }
+
+    T norm() const
+    {
+        return sqrt(xy[0] * xy[0] + xy[1] * xy[1]);
+    }
+
+    Vec2<T> normalized() const
+    {
+        T n = norm();
+        Vec2<T> vec;
+        vec[0] = xy[0] / n;
+        vec[1] = xy[1] / n;
+        return vec;
+    }
 
     Vec2<T> operator~()
     {
@@ -251,6 +265,30 @@ struct Vec3
         vec[0] = xyz[2] * other[3] - xyz[3] * other[2];
         vec[1] = xyz[3] * other[1] - xyz[1] * other[3];
         vec[2] = xyz[1] * other[2] - xyz[2] * other[1];
+        return vec;
+    }
+
+    T sqrNorm() const
+    {
+        return xyz[0] * xyz[0] +
+               xyz[1] * xyz[1] +
+               xyz[2] * xyz[2];
+    }
+
+    T norm() const
+    {
+        return sqrt(xyz[0] * xyz[0] +
+                    xyz[1] * xyz[1] +
+                    xyz[2] * xyz[2]);
+    }
+
+    Vec3<T> normalized() const
+    {
+        T n = norm();
+        Vec3<T> vec;
+        vec[0] = xyz[0] / n;
+        vec[1] = xyz[1] / n;
+        vec[2] = xyz[2] / n;
         return vec;
     }
 
@@ -433,6 +471,33 @@ struct Vec4
     //     return vec;
     // }
 
+    T sqrNorm() const
+    {
+        return xyzw[0] * xyzw[0] +
+               xyzw[1] * xyzw[1] +
+               xyzw[2] * xyzw[2] +
+               xyzw[3] * xyzw[3];
+    }
+
+    T norm() const
+    {
+        return sqrt(xyzw[0] * xyzw[0] +
+                    xyzw[1] * xyzw[1] +
+                    xyzw[2] * xyzw[2] +
+                    xyzw[3] * xyzw[3]);
+    }
+
+    Vec4<T> normalized() const
+    {
+        T n = norm();
+        Vec4<T> vec;
+        vec[0] = xyzw[0] / n;
+        vec[1] = xyzw[1] / n;
+        vec[2] = xyzw[2] / n;
+        vec[3] = xyzw[3] / n;
+        return vec;
+    }
+
     // returns a reference
     T& operator[](int index)
     {
@@ -533,7 +598,7 @@ struct Matrix3
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Matrix3 transpose");
 
         return mat;
     }
@@ -543,7 +608,7 @@ struct Matrix3
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Matrix3 inverse");
 
         return mat;
     }
@@ -589,7 +654,7 @@ struct Matrix4
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Matrix4 TopleftCorner");
 
         return mat;
     }
@@ -658,7 +723,7 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Matrix4 Transpose");
 
         return mat;
     }
@@ -668,7 +733,7 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("Matrix4 Inverse");
 
         return mat;
     }

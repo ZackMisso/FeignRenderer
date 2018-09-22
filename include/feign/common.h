@@ -14,6 +14,10 @@
 
 using namespace std;
 
+// TODO: remove this
+// #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+#define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
+
 #define Epsilon 1e-4f
 
 #define PI           3.14159265358979323846f

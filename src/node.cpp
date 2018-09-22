@@ -4,8 +4,10 @@
 Node::Node()
 {
     children = vector<Node*>();
+    cout << "START NODE CONSTRUCTOR" << endl;
     primitives = new PrimitiveList();
     parent = nullptr;
+    cout << "END NODE CONSTRUCTOR" << endl;
 }
 
 Node::Node(Node* parent) : parent(parent)
@@ -76,6 +78,11 @@ void Node::printGraph(string indent) const
     {
         children[i]->printGraph(newIndent);
     }
+}
+
+int Node::numChildren() const
+{
+    return children.size();
 }
 
 int Node::getTag() const

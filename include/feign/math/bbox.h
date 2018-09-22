@@ -7,18 +7,22 @@ struct BBox3
 {
     BBox3()
     {
-        throw new NotImplementedException();
+        min = Vec3<T>(0.0);
+        max = Vec3<T>(0.0);
     }
 
     BBox3(Vec3<T> tlc, T w, T h, T d)
     {
-        throw new NotImplementedException();
+        min = tlc;
+        max = tlc + Vec3<T>(w, h, d);
     }
 
     BBox3(Vec3<T> tlc, Vec3<T> blc)
     {
-        throw new NotImplementedException();
+        min = tlc;
+        max = blc;
     }
 
-    // TODO
+    Vec3<T> min;
+    Vec3<T> max;
 };

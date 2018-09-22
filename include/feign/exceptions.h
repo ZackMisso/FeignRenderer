@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -50,8 +51,8 @@ public:
 
 class NotImplementedException : public runtime_error {
 public:
-    NotImplementedException() : runtime_error("Exception: Method Not Implemented") { }
-    NotImplementedException(string str) : runtime_error("Exception: Method Not Implemented: " + str) { }
+    NotImplementedException() : runtime_error("Exception: Method Not Implemented") {}
+    NotImplementedException(string str) : runtime_error("Exception: Method Not Implemented: " + str) { cout << str << endl; }
 };
 
 class OBJUnopenableException : public runtime_error

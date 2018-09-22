@@ -38,7 +38,5 @@ protected:
     vector<Normal3f> ns;
     vector<Vec2f> uvs;
     vector<Vec3u> fs;
-
     BBox3f bbox;
-    // TODO
 };

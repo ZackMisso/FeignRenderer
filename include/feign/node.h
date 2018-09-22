@@ -19,7 +19,8 @@ enum NodeType
     NT_Scene,
     NT_Transform,
     NT_Camera,
-    NT_Primitive
+    NT_Primitive,
+    NT_World
 };
 
 class Node
@@ -35,6 +36,8 @@ public:
     virtual void setParent(Node* node);
     virtual bool hasChild(Node* node);
     virtual void removeChild(Node* node);
+
+    int numChildren() const;
 
     void printGraph(string indent = "") const;
 
