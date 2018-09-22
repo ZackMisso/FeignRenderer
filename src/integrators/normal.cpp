@@ -10,6 +10,11 @@ NormalIntegrator::NormalIntegrator(Node* parent) : Integrator(parent)
     // TODO
 }
 
+void NormalIntegrator::preProcess()
+{
+    preProcessChildren();
+}
+
 void NormalIntegrator::tempMethod()
 {
     // TODO

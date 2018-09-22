@@ -2,9 +2,9 @@
 
 Shape::Shape() : Node()
 {
-    cout << "SHAPE Constructor" << endl;
+    // cout << "SHAPE Constructor" << endl;
     // TODO
-    cout << "END SHAPE" << endl;
+    // cout << "END SHAPE" << endl;
 }
 
 Shape::Shape(Node* parent) : Node(parent)

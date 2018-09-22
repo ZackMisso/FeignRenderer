@@ -4,10 +4,8 @@
 Node::Node()
 {
     children = vector<Node*>();
-    cout << "START NODE CONSTRUCTOR" << endl;
     primitives = new PrimitiveList();
     parent = nullptr;
-    cout << "END NODE CONSTRUCTOR" << endl;
 }
 
 Node::Node(Node* parent) : parent(parent)
@@ -66,6 +64,14 @@ void Node::removeChild(Node* node)
 
             if (node->parent) node->parent = nullptr;
         }
+    }
+}
+
+void Node::preProcessChildren()
+{
+    for (int i = 0; i < children.size(); ++i)
+    {
+        children[i]->preProcess();
     }
 }
 

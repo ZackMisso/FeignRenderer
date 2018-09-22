@@ -250,9 +250,9 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             if (typeToken == "obj")
             {
-                cout << "Pre Contructor" << endl;
+                // cout << "Pre Contructor" << endl;
                 mesh = new ObjMesh();
-                cout << "Post Contructor" << endl;
+                // cout << "Post Contructor" << endl;
 
                 // TODO
             }
@@ -348,7 +348,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            int val = 0; // TODO: convert the string to an int
+            int val = stoi(valueValue);
             Primitive<int>* intPrim = new Primitive<int>(nameValue, val);
 
             nodes[nodes.size() - 1]->getPrimList()->addIntPrimitive(intPrim);
@@ -387,7 +387,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            Float val = 0; // TODO: convert the string to a float
+            Float val = stof(valueValue);
             Primitive<Float>* floatPrim = new Primitive<Float>(nameValue, val);
 
             nodes[nodes.size() - 1]->getPrimList()->addFloatPrimitive(floatPrim);

@@ -21,6 +21,8 @@ public:
 
     void clearPrimitiveList();
 
+    int size() const;
+
 protected:
     vector<Primitive<int>*> intPrimitives;
     vector<Primitive<Float>*> floatPrimitives;

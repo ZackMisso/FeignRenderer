@@ -8,6 +8,8 @@ public:
     Perspective();
     Perspective(Node* parent);
 
+    virtual void preProcess();
+
     virtual string getName() const;
 
     // TODO

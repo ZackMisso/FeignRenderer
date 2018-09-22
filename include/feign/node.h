@@ -39,6 +39,9 @@ public:
 
     int numChildren() const;
 
+    virtual void preProcess() = 0;
+    void preProcessChildren();
+
     void printGraph(string indent = "") const;
 
     virtual string getName() const = 0;

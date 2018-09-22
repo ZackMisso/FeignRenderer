@@ -24,7 +24,6 @@ void WorldNode::renderAllScenes()
     for (int i = 0; i < scenes.size(); ++i)
     {
         Scene* scene = scenes[i];
-        scene->preProcess();
         cout << "Scene Children: " << scene->numChildren() << endl;
 
         Integrator* integrator = scene->getIntegrator();
@@ -39,6 +38,11 @@ void WorldNode::renderAllScenes()
     }
 
     cout << "Rendering Complete" << endl;
+}
+
+void WorldNode::preProcess()
+{
+    preProcessChildren();
 }
 
 vector<Scene*> WorldNode::collectScenes() const

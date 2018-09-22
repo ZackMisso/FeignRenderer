@@ -34,6 +34,7 @@ bool PrimitiveList::findInt(string name, int& val) const
         if (intPrimitives[i]->getName() == name)
         {
             val = intPrimitives[i]->getValue();
+            // cout << "val: " << val << endl;
             return true;
         }
     }
@@ -48,6 +49,7 @@ bool PrimitiveList::findFloat(string name, Float& val) const
         if (floatPrimitives[i]->getName() == name)
         {
             val = floatPrimitives[i]->getValue();
+            // cout << "val: " << val << endl;
             return true;
         }
     }
@@ -85,4 +87,11 @@ void PrimitiveList::clearPrimitiveList()
     {
         delete stringPrimitives[i];
     }
+}
+
+int PrimitiveList::size() const
+{
+    return intPrimitives.size() +
+           floatPrimitives.size() +
+           stringPrimitives.size();
 }

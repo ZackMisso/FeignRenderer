@@ -42,6 +42,8 @@ public:
     TransformNode(Node* parent);
     ~TransformNode();
 
+    virtual void preProcess();
+
     virtual string getName() const;
     virtual NodeType getNodeType() const;
 protected:

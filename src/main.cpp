@@ -24,6 +24,10 @@ int main(int argc, char* argv[]) {
     worldNode->printGraph();
     cout << endl;
 
+    // preprocess the world
+    cout << "Pre Processing" << endl;
+    worldNode->preProcess();
+
     // render
     worldNode->renderAllScenes();
 

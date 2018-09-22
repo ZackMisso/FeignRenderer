@@ -7,5 +7,5 @@ BBH::BBH()
 
 BBH::~BBH()
 {
-    throw new NotImplementedException();
+    // TODO
 }

@@ -8,6 +8,8 @@ public:
     Orthographic();
     Orthographic(Node* parent);
 
+    virtual void preProcess();
+
     virtual string getName() const;
 
     // TODO

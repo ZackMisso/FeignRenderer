@@ -129,6 +129,9 @@ add_executable(feign
     include/feign/integrators/integrator.h
     include/feign/integrators/normal.h
 
+    # Logger header files
+    include/feign/log/logger.h
+
     # Math header files
     include/feign/math/transform.h
     include/feign/math/ray.h
@@ -189,6 +192,9 @@ add_executable(feign
     # Integrator implementation files
     src/integrators/integrator.cpp
     src/integrators/normal.cpp
+
+    # Logger implementation files
+    src/log/logger.cpp
 
     # Math implementation files
     src/math/transform.cpp

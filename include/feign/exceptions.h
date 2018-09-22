@@ -61,3 +61,9 @@ public:
     OBJUnopenableException() : runtime_error("Exception: OBJ file could not be opened") { }
     OBJUnopenableException(string str) : runtime_error("Exception: OBJ file could not be opened: " + str) { }
 };
+
+class MissingPrimitiveException : public runtime_error {
+public:
+    MissingPrimitiveException() : runtime_error("Missing Primitive Exception") { cout << "Missing Primitive" << endl; }
+    MissingPrimitiveException(string str) : runtime_error("Missing Primitive Exception") { cout << "Missing Primitive: " << str << endl; }
+};

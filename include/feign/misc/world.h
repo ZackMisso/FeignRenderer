@@ -14,6 +14,8 @@ public:
 
     void renderAllScenes();
 
+    virtual void preProcess();
+
     vector<Scene*> collectScenes() const;
 
     virtual string getName() const;

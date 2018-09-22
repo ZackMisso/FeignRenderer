@@ -20,7 +20,7 @@ public:
 
     virtual string getName() const;
 
-    void preProcess();
+    virtual void preProcess();
 
     Node* getRoot() const;
     vector<Node*> getSceneObjects() const;

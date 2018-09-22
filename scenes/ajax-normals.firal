@@ -31,7 +31,7 @@ scene
     /camera
 
     mesh obj
-        filename ../scenes/assignment-0/meshes/plane.obj
+        filename ../scenes/meshes/plane.obj
 
         bsdf diffuse /bsdf
 

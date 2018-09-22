@@ -138,6 +138,8 @@ void ObjMesh::parseFromFile(const string& filename)
 
 void ObjMesh::preProcess()
 {
+    preProcessChildren();
+
     throw new NotImplementedException("obj mesh pre process");
 }
 

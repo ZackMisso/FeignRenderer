@@ -17,6 +17,13 @@ TransformNode::~TransformNode()
     // TODO
 }
 
+void TransformNode::preProcess()
+{
+    throw new NotImplementedException("preprocess transf");
+
+    preProcessChildren();
+}
+
 string TransformNode::getName() const
 {
     return "transform";

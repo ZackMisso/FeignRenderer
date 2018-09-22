@@ -11,12 +11,13 @@
 #include <feign/exceptions.h>
 #include <feign/math/vector.h>
 #include <feign/math/bbox.h>
+#include <feign/log/logger.h>
 
 using namespace std;
 
 // TODO: remove this
-// #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
-#define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
+#define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+// #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
 
 #define Epsilon 1e-4f
 

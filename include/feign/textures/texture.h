@@ -8,6 +8,8 @@ public:
     Texture();
     virtual ~Texture();
 
+    virtual void preProcess();
+
     virtual string getName() const;
 
     // TODO
