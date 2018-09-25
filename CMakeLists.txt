@@ -145,6 +145,7 @@ add_executable(feign
     include/feign/misc/prim.h
     include/feign/misc/primlist.h
     include/feign/misc/world.h
+    include/feign/misc/transformnode.h
 
     # Parser header files
     include/feign/parser/parser.h
@@ -207,6 +208,7 @@ add_executable(feign
     src/misc/prim.cpp
     src/misc/primlist.cpp
     src/misc/world.cpp
+    src/misc/transformnode.cpp
 
     # Parser implementation files
     src/parser/parser.cpp

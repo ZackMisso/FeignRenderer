@@ -1,13 +1,8 @@
 #pragma once
 
 #include <feign/common.h>
-#include <feign/node.h>
 #include <feign/math/ray.h>
 #include <feign/math/vector.h>
-
-// having transform also be a node is kinda sketchy,
-// maybe separate this into a node class and a math
-// class
 
 class Transform
 {
@@ -35,19 +30,4 @@ public:
 protected:
     Matrix4f mat;
     Matrix4f inv;
-};
-
-class TransformNode : public Node
-{
-public:
-    TransformNode();
-    TransformNode(Node* parent);
-    ~TransformNode();
-
-    virtual void preProcess();
-
-    virtual string getName() const;
-    virtual NodeType getNodeType() const;
-protected:
-    Transform transform;
 };

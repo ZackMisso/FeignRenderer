@@ -9,6 +9,7 @@
 #include <feign/math/transform.h>
 #include <feign/misc/prim.h>
 #include <feign/misc/world.h>
+#include <feign/misc/transformnode.h>
 #include <feign/samplers/sampler.h>
 #include <feign/samplers/independent.h>
 #include <feign/shapes/objmesh.h>
@@ -74,7 +75,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
     WorldNode* world = new WorldNode();
     nodes.push_back(world);
-    transforms.push_back(Transform()));
+    transforms.push_back(Transform());
 
     // main parse loop
     while (getNextToken(tokens, token, index++))
