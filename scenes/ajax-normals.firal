@@ -35,7 +35,8 @@ scene
 
         bsdf diffuse /bsdf
 
-        transform toWorld
+        transform
+            name toWorld
             scale 100 1 100
         /transform
     /mesh

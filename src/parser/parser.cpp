@@ -67,16 +67,19 @@ Node* Parser::generateWorld(const vector<string>& tokens)
     // initializes counters, and node stack
     vector<Node*> nodes = vector<Node*>();
     vector<string> nodeTokens = vector<string>();
+    vector<Transform> transforms = vector<Transform>();
 
     string token;
     int index = 0;
 
     WorldNode* world = new WorldNode();
     nodes.push_back(world);
+    transforms.push_back(Transform()));
 
     // main parse loop
     while (getNextToken(tokens, token, index++))
     {
+        Transform lastTransform = transforms[transforms.size() - 1];
         // cout << "CURRENT TOKEN: " << token << endl;
 
         if (token == "scene")

@@ -30,6 +30,8 @@ public:
     const Matrix4f& getMatrix() const;
     const Matrix4f& getInverse() const;
 
+    // static Transform identity();
+
 protected:
     Matrix4f mat;
     Matrix4f inv;
