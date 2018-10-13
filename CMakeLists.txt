@@ -35,65 +35,35 @@ if (APPLE)
   list(APPEND LIBNANOGUI_EXTRA_SOURCE src/darwin.mm)
  endif()
 
-# Disable building extras we won't need (pure C++ project)
-set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
-set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
-set(NANOGUI_INSTALL       OFF CACHE BOOL " " FORCE)
-
-add_subdirectory(ext/nanogui)
-
-#set(ILMBASE_BUILD_SHARED_LIBS OFF CACHE BOOL " " FORCE)
-#set(OPENEXR_BUILD_SHARED_LIBS OFF CACHE BOOL " " FORCE)
-#set(ILMBASE_NAMESPACE_VERSIONING OFF CACHE BOOL " " FORCE)
-#set(OPENEXR_NAMESPACE_VERSIONING OFF CACHE BOOL " " FORCE)
-
-#add_subdirectory(ext/openexr)
-#set_property(TARGET IexMath eLut toFloat b44ExpLogTable dwaLookups CopyIlmBaseLibs IlmThread Half Iex Imath IlmImf PROPERTY FOLDER "dependencies")
-
-#set(OPENEXR_INCLUDE_DIRS
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/IlmBase/Imath
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/IlmBase/Iex
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/IlmBase/Half
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/OpenEXR/IlmImf
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/OpenEXR/config
-#${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr/IlmBase/config)
-
-set(GLFW_INCLUDE_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui/ext/glfw/include)
-set(GLEW_INCLUDE_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui/ext/glew/include)
-set(NANOVG_INCLUDE_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui/ext/nanovg/src)
-set(NANOGUI_INCLUDE_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui/include)
-set(EIGEN_INCLUDE_DIR
-  ${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui/ext/eigen)
+#add_subdirectory(ext/ImageEditLib)
 
 set(PCG32_INCLUDE_DIR
    ${CMAKE_CURRENT_SOURCE_DIR}/ext/pcg32)
 
+set(IMGLIB_INCLUDE_DIR
+   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/include
+
+set(IMGLIB_NEEDED_DIR
+   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/))
+
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
-# target_link_libraries(<your exe or lib> ${PYTHON_LIBRARIES})
 
-# On top of adding the path to nanogui/include, you may need extras
 include_directories(
     # Include directory
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
+
     # Random number generator
     ${PCG32_INCLUDE_DIR}/
-    # GLFW library for OpenGL context creation
-    ${GLFW_INCLUDE_DIR}
-    # GLEW library for accessing OpenGL functions
-    ${GLEW_INCLUDE_DIR}
-    # NanoVG drawing library
-    ${NANOVG_INCLUDE_DIR}
-    # NanoGUI user interface library
-    ${NANOGUI_INCLUDE_DIR}
-    ${NANOGUI_EXTRA_INCS}
-    # OpenEXR high dynamic range bitmap library
-    ${OPENEXR_INCLUDE_DIRS}
-    ext
+
+    # Programatical image editing library
+    ${IMGLIB_INCLUDE_DIR}/
+
+    ${IMGLIB_NEEDED_DIR}/
+
+    ext/
+
+    ext/ImageEditLib/ext/
 )
 
 if(APPLE)
@@ -124,6 +94,11 @@ add_executable(feign
 
     # Emitter header files
     include/feign/emitters/emitter.h
+
+    # Filter header files
+    include/feign/filters/recon_filter.h
+    include/feign/filters/box_filter.h
+    include/feign/filters/gauss_filter.h
 
     # Integrator header files
     include/feign/integrators/integrator.h
@@ -190,6 +165,11 @@ add_executable(feign
     # Emitter implementation files
     src/emitters/emitter.cpp
 
+    # Filter implementation files
+    src/filters/recon_filter.cpp
+    src/filters/box_filter.cpp
+    src/filters/gauss_filter.cpp
+
     # Integrator implementation files
     src/integrators/integrator.cpp
     src/integrators/normal.cpp
@@ -205,7 +185,6 @@ add_executable(feign
     src/media/media.cpp
 
     # Misc implementation files
-    src/misc/prim.cpp
     src/misc/primlist.cpp
     src/misc/world.cpp
     src/misc/transformnode.cpp
@@ -240,13 +219,11 @@ set(CompilerFlags
       CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL
       CMAKE_C_FLAGS_RELWITHDEBINFO COMPILE_DEFINITIONS U_CMAKE_BUILD_TYPE
       CMAKE_MACOSX_RPATH
-       PCG32_INCLUDE_DIR
-      GLFW_INCLUDE_DIR GLEW_INCLUDE_DIR
-      NANOVG_INCLUDE_DIR NANOGUI_INCLUDE_DIR EIGEN_INCLUDE_DIR
-      NANOGUI_EXTRA_LIBS
+      PCG32_INCLUDE_DIR
+      IMGLIB_INCLUDE_DIR
 )
 
 # Lastly, additional libraries may have been built for you.  In addition to linking
 # against NanoGUI, we need to link against those as well.
-#target_link_libraries(feign IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
-target_link_libraries(feign nanogui ${NANOGUI_EXTRA_LIBS} ${PYTHON_LIBRARIES})
+#target_link_libraries(feign)
+target_link_libraries(feign ${PYTHON_LIBRARIES})

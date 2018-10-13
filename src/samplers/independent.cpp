@@ -19,6 +19,7 @@ void Independent::preProcess()
     {
         throw new MissingPrimitiveException("sampleCount");
     }
+    
     sampleCnt = samples;
     currentSample = 0;
 }

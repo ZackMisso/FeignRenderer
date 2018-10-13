@@ -5,6 +5,7 @@ PrimitiveList::PrimitiveList()
     intPrimitives = vector<Primitive<int>*>();
     floatPrimitives = vector<Primitive<Float>*>();
     stringPrimitives = vector<Primitive<string>*>();
+    transformPrimitives = vector<Primitive<Transform>*>();
 }
 
 PrimitiveList::~PrimitiveList()
@@ -27,6 +28,11 @@ void PrimitiveList::addStringPrimitive(Primitive<string>* prim)
     stringPrimitives.push_back(prim);
 }
 
+void PrimitiveList::addTransformPrimitive(Primitive<Transform>* prim)
+{
+    transformPrimitives.push_back(prim);
+}
+
 bool PrimitiveList::findInt(string name, int& val) const
 {
     for (int i = 0; i < intPrimitives.size(); ++i)
@@ -34,7 +40,6 @@ bool PrimitiveList::findInt(string name, int& val) const
         if (intPrimitives[i]->getName() == name)
         {
             val = intPrimitives[i]->getValue();
-            // cout << "val: " << val << endl;
             return true;
         }
     }
@@ -49,7 +54,6 @@ bool PrimitiveList::findFloat(string name, Float& val) const
         if (floatPrimitives[i]->getName() == name)
         {
             val = floatPrimitives[i]->getValue();
-            // cout << "val: " << val << endl;
             return true;
         }
     }
@@ -64,6 +68,20 @@ bool PrimitiveList::findString(string name, string& val) const
         if (stringPrimitives[i]->getName() == name)
         {
             val = stringPrimitives[i]->getValue();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool PrimitiveList::findTransform(string name, Transform& val) const
+{
+    for (int i = 0; i < transformPrimitives.size(); ++i)
+    {
+        if (transformPrimitives[i]->getName() == name)
+        {
+            val = transformPrimitives[i]->getValue();
             return true;
         }
     }
@@ -87,11 +105,17 @@ void PrimitiveList::clearPrimitiveList()
     {
         delete stringPrimitives[i];
     }
+
+    for (int i = 0; i < transformPrimitives.size(); ++i)
+    {
+        delete transformPrimitives[i];
+    }
 }
 
 int PrimitiveList::size() const
 {
     return intPrimitives.size() +
            floatPrimitives.size() +
-           stringPrimitives.size();
+           stringPrimitives.size() +
+           transformPrimitives.size();
 }

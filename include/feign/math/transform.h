@@ -21,6 +21,7 @@ public:
 
     // methods
     Transform inverse() const;
+    void print() const;
 
     const Matrix4f& getMatrix() const;
     const Matrix4f& getInverse() const;

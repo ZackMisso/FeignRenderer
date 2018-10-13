@@ -53,7 +53,8 @@ bool Parser::getNextToken(const vector<string>& tokens, string& token, int index
     return true;
 }
 
-void Parser::possiblyAddChild(vector<Node*>& nodes, Node* node)
+void Parser::possiblyAddChild(vector<Node*>& nodes,
+                              Node* node)
 {
     if (nodes.size() > 0)
     {
@@ -68,24 +69,22 @@ Node* Parser::generateWorld(const vector<string>& tokens)
     // initializes counters, and node stack
     vector<Node*> nodes = vector<Node*>();
     vector<string> nodeTokens = vector<string>();
-    vector<Transform> transforms = vector<Transform>();
+    vector<Transform> transformStack = vector<Transform>();
 
     string token;
     int index = 0;
 
     WorldNode* world = new WorldNode();
     nodes.push_back(world);
-    transforms.push_back(Transform());
+    transformStack.push_back(Transform());
 
     // main parse loop
     while (getNextToken(tokens, token, index++))
     {
-        Transform lastTransform = transforms[transforms.size() - 1];
-        // cout << "CURRENT TOKEN: " << token << endl;
-
         if (token == "scene")
         {
             nodeTokens.push_back(token);
+            transformStack.push_back(Transform());
 
             Scene* scene = new Scene();
 
@@ -95,6 +94,16 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         {
             if (nodes[nodes.size() - 1]->getNodeType() == NT_Scene)
             {
+                Node* node = nodes.back();
+
+                Transform lastTransform = transformStack.back();
+                Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
+                node->getPrimList()->addTransformPrimitive(transformPrim);
+                cout << node->getName() << endl;
+                lastTransform.print();
+
+                transformStack.pop_back();
+
                 nodes.pop_back();
             }
             else
@@ -182,6 +191,9 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
+            Transform lastTransform = transformStack.back();
+            transformStack.push_back(lastTransform);
+
             Camera* camera = nullptr;
 
             string typeToken;
@@ -209,6 +221,16 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         {
             if (nodes[nodes.size() - 1]->getNodeType() == NT_Camera)
             {
+                Node* node = nodes.back();
+
+                Transform lastTransform = transformStack.back();
+                Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
+                node->getPrimList()->addTransformPrimitive(transformPrim);
+                cout << node->getName() << endl;
+                lastTransform.print();
+
+                transformStack.pop_back();
+
                 nodes.pop_back();
             }
             else
@@ -218,14 +240,141 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         }
         else if (token == "transform")
         {
-            // meh one
             nodeTokens.push_back(token);
 
-            TransformNode* transform = new TransformNode();
+            string nameToken;
+            getNextToken(tokens, nameToken, index++);
 
-            possiblyAddChild(nodes, transform);
+            if (nameToken != "name")
+            {
+                throw MissingExpectedTokenException("transform name");
+            }
 
-            // TODO
+            string transformName;
+            getNextToken(tokens, nameToken, index++);
+
+            Transform transform = Transform();
+
+            while(tokens[index] != "/transform")
+            {
+                string matType;
+                getNextToken(tokens, matType, index++);
+
+                if (matType == "lookat")
+                {
+                    string targetText;
+                    getNextToken(tokens, targetText, index++);
+
+                    if (targetText != "target")
+                    {
+                        throw MissingExpectedTokenException("lookat target");
+                    }
+
+                    float targetX;
+                    float targetY;
+                    float targetZ;
+
+                    string valText;
+                    getNextToken(tokens, valText, index++);
+                    targetX = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    targetY = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    targetZ = stof(valText);
+
+                    string originText;
+                    getNextToken(tokens, originText, index++);
+
+                    if (originText != "origin")
+                    {
+                        throw MissingExpectedTokenException("lookat origin");
+                    }
+
+                    float originX;
+                    float originY;
+                    float originZ;
+
+                    getNextToken(tokens, valText, index++);
+                    originX = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    originY = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    originZ = stof(valText);
+
+                    string upText;
+                    getNextToken(tokens, upText, index++);
+
+                    if (upText != "up")
+                    {
+                        throw MissingExpectedTokenException("lookat up");
+                    }
+
+                    float upX;
+                    float upY;
+                    float upZ;
+
+                    getNextToken(tokens, valText, index++);
+                    upX = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    upY = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    upZ = stof(valText);
+
+                    Vec3f origin = Vec3f(originX, originY, originZ);
+                    Vec3f target = Vec3f(targetX, targetY, targetZ);
+                    Vec3f up = Vec3f(upX, upY, upZ);
+
+                    Vec3f zaxis = (target - origin).normalized();
+                    Vec3f xaxis = ((up.normalized()) ^ zaxis).normalized();
+                    Vec3f yaxis = (zaxis ^ xaxis).normalized();
+
+                    Matrix4f lookAtMatrix = Matrix4f();
+
+                    lookAtMatrix.setRow(0, Vec4f(xaxis, 0.f));
+                    lookAtMatrix.setRow(1, Vec4f(yaxis, 0.f));
+                    lookAtMatrix.setRow(2, Vec4f(zaxis, 0.f));
+                    lookAtMatrix.setRow(3, Vec4f(origin, 1.f));
+
+                    Transform trans = Transform(lookAtMatrix);
+
+                    transform = transform * trans;
+                }
+                else if (matType == "translate")
+                {
+                    throw new NotImplementedException("translate parse");
+                }
+                else if (matType == "rotate")
+                {
+                    throw new NotImplementedException("rotate parse");
+                }
+                else if (matType == "scale")
+                {
+                    throw new NotImplementedException("scale parse");
+                }
+                else
+                {
+                    throw new InvalidEndTokenException("transform");
+                }
+            }
+
+            if (transformName == "toWorld")
+            {
+                Transform lastTransform = transformStack.back();
+                transformStack.pop_back();
+                transform = lastTransform * transform;
+
+                transformStack.push_back(transform);
+            }
+            else
+            {
+                throw new NotImplementedException("non to world transforms");
+            }
         }
         else if (token == "/transform")
         {
@@ -241,6 +390,9 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         else if (token == "mesh")
         {
             nodeTokens.push_back(token);
+
+            Transform lastTransform = transformStack.back();
+            transformStack.push_back(lastTransform);
 
             Shape* mesh = nullptr;
 
@@ -273,6 +425,16 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         {
             if (nodes[nodes.size() - 1]->getNodeType() == NT_Mesh)
             {
+                Node* node = nodes.back();
+
+                Transform lastTransform = transformStack.back();
+                Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
+                node->getPrimList()->addTransformPrimitive(transformPrim);
+                cout << node->getName() << endl;
+                lastTransform.print();
+
+                transformStack.pop_back();
+
                 nodes.pop_back();
             }
             else

@@ -180,26 +180,26 @@ struct Vec3
 
     Vec3(Vec2<T> xy, T z)
     {
-        xyz[0] = xy(0);
-        xyz[1] = xy(1);
+        xyz[0] = xy[0];
+        xyz[1] = xy[1];
         xyz[2] = z;
     }
 
     Vec3<T> operator+(const Vec3<T>& other) const
     {
         Vec3<T> vec;
-        vec[0] = xyz[0] + other[0];
-        vec[1] = xyz[1] + other[1];
-        vec[2] = xyz[2] + other[2];
+        vec[0] = xyz[0] + other(0);
+        vec[1] = xyz[1] + other(1);
+        vec[2] = xyz[2] + other(2);
         return vec;
     }
 
     Vec3<T> operator-(const Vec3<T>& other) const
     {
         Vec3<T> vec;
-        vec[0] = xyz[0] - other[0];
-        vec[1] = xyz[1] - other[1];
-        vec[2] = xyz[2] - other[2];
+        vec[0] = xyz[0] - other(0);
+        vec[1] = xyz[1] - other(1);
+        vec[2] = xyz[2] - other(2);
         return vec;
     }
 
@@ -223,48 +223,48 @@ struct Vec3
 
     void operator+=(const Vec3<T>& other)
     {
-        xyz[0] += other[0];
-        xyz[1] += other[1];
-        xyz[2] += other[2];
+        xyz[0] += other(0);
+        xyz[1] += other(1);
+        xyz[2] += other(2);
     }
 
     void operator-=(const Vec3<T>& other)
     {
-        xyz[0] -= other[0];
-        xyz[1] -= other[1];
-        xyz[2] -= other[2];
+        xyz[0] -= other(0);
+        xyz[1] -= other(1);
+        xyz[2] -= other(2);
     }
 
     // component wise multiplication
     void operator*=(const Vec3<T>& other)
     {
-        xyz[0] *= other[0];
-        xyz[1] *= other[1];
-        xyz[2] *= other[2];
+        xyz[0] *= other(0);
+        xyz[1] *= other(1);
+        xyz[2] *= other(2);
     }
 
     void operator/=(const Vec3<T>& other)
     {
-        xyz[0] /= other[0];
-        xyz[1] /= other[1];
-        xyz[2] /= other[2];
+        xyz[0] /= other(0);
+        xyz[1] /= other(1);
+        xyz[2] /= other(2);
     }
 
     // dot product
     T operator%(Vec3<T>& other)
     {
-        return other[0] * xyz[0] +
-               other[1] * xyz[1] +
-               other[2] * xyz[2];
+        return other(0) * xyz(0) +
+               other(1) * xyz(1) +
+               other(2) * xyz(2);
     }
 
     // cross product
     Vec3<T> operator^(const Vec3<T>& other)
     {
         Vec3<T> vec;
-        vec[0] = xyz[2] * other[3] - xyz[3] * other[2];
-        vec[1] = xyz[3] * other[1] - xyz[1] * other[3];
-        vec[2] = xyz[1] * other[2] - xyz[2] * other[1];
+        vec[0] = xyz[1] * other(2) - xyz[2] * other(1);
+        vec[1] = xyz[2] * other(0) - xyz[0] * other(2);
+        vec[2] = xyz[0] * other(1) - xyz[1] * other(0);
         return vec;
     }
 
@@ -383,39 +383,39 @@ struct Vec4
     Vec4<T> operator+(const Vec4<T>& other) const
     {
         Vec4<T> vec;
-        vec[0] = xyzw[0] + other(0);
-        vec[1] = xyzw[1] + other(1);
-        vec[2] = xyzw[2] + other(2);
-        vec[3] = xyzw[3] + other(3);
+        vec[0] = xyzw(0) + other(0);
+        vec[1] = xyzw(1) + other(1);
+        vec[2] = xyzw(2) + other(2);
+        vec[3] = xyzw(3) + other(3);
         return vec;
     }
 
     Vec4<T> operator-(const Vec4<T>& other) const
     {
         Vec4<T> vec;
-        vec[0] = xyzw[0] - other(0);
-        vec[1] = xyzw[1] - other(1);
-        vec[2] = xyzw[2] - other(2);
-        vec[3] = xyzw[3] - other(3);
+        vec[0] = xyzw(0) - other(0);
+        vec[1] = xyzw(1) - other(1);
+        vec[2] = xyzw(2) - other(2);
+        vec[3] = xyzw(3) - other(3);
         return vec;
     }
 
     Vec4<T> operator*(T c) const
     {
         Vec4<T> vec;
-        vec[0] = xyzw[0] * c;
-        vec[1] = xyzw[1] * c;
-        vec[2] = xyzw[2] * c;
-        vec[3] = xyzw[3] * c;
+        vec[0] = xyzw(0) * c;
+        vec[1] = xyzw(1) * c;
+        vec[2] = xyzw(2) * c;
+        vec[3] = xyzw(3) * c;
         return vec;
     }
 
     Vec3<T> operator/(T c) const
     {
         Vec3<T> vec;
-        vec[0] = xyzw[0] / c;
-        vec[1] = xyzw[1] / c;
-        vec[2] = xyzw[2] / c;
+        vec[0] = xyzw(0) / c;
+        vec[1] = xyzw(1) / c;
+        vec[2] = xyzw(2) / c;
         return vec;
     }
 
@@ -455,10 +455,10 @@ struct Vec4
     // dot product
     T operator%(Vec4<T>& other)
     {
-        return other(0) * xyzw[0] +
-               other(1) * xyzw[1] +
-               other(2) * xyzw[2] +
-               other(3) * xyzw[3];
+        return other(0) * xyzw(0) +
+               other(1) * xyzw(1) +
+               other(2) * xyzw(2) +
+               other(3) * xyzw(3);
     }
 
     // cross product - not supported/needed for Vec4s
@@ -473,28 +473,28 @@ struct Vec4
 
     T sqrNorm() const
     {
-        return xyzw[0] * xyzw[0] +
-               xyzw[1] * xyzw[1] +
-               xyzw[2] * xyzw[2] +
-               xyzw[3] * xyzw[3];
+        return xyzw(0) * xyzw(0) +
+               xyzw(1) * xyzw(1) +
+               xyzw(2) * xyzw(2) +
+               xyzw(3) * xyzw(3);
     }
 
     T norm() const
     {
-        return sqrt(xyzw[0] * xyzw[0] +
-                    xyzw[1] * xyzw[1] +
-                    xyzw[2] * xyzw[2] +
-                    xyzw[3] * xyzw[3]);
+        return sqrt(xyzw(0) * xyzw(0) +
+                    xyzw(1) * xyzw(1) +
+                    xyzw(2) * xyzw(2) +
+                    xyzw(3) * xyzw(3));
     }
 
     Vec4<T> normalized() const
     {
         T n = norm();
         Vec4<T> vec;
-        vec[0] = xyzw[0] / n;
-        vec[1] = xyzw[1] / n;
-        vec[2] = xyzw[2] / n;
-        vec[3] = xyzw[3] / n;
+        vec[0] = xyzw(0) / n;
+        vec[1] = xyzw(1) / n;
+        vec[2] = xyzw(2) / n;
+        vec[3] = xyzw(3) / n;
         return vec;
     }
 
@@ -513,10 +513,10 @@ struct Vec4
     Vec4<T> operator~()
     {
         Vec4<T> vec;
-        vec[0] = -xyzw[0];
-        vec[1] = -xyzw[1];
-        vec[2] = -xyzw[2];
-        vec[3] = -xyzw[3];
+        vec[0] = -xyzw(0);
+        vec[1] = -xyzw(1);
+        vec[2] = -xyzw(2);
+        vec[3] = -xyzw(3);
         return vec;
     }
 
@@ -654,7 +654,9 @@ struct Matrix4
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException("Matrix4 TopleftCorner");
+        mat[0] = n[0]; mat[1] = n[1]; mat[2] = n[2];
+        mat[3] = n[4]; mat[4] = n[5]; mat[5] = n[6];
+        mat[6] = n[8]; mat[7] = n[9]; mat[8] = n[10];
 
         return mat;
     }
@@ -723,7 +725,10 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
-        throw new NotImplementedException("Matrix4 Transpose");
+        mat[0] = n[0]; mat[1] = n[4]; mat[2] = n[8]; mat[3] = n[12];
+        mat[4] = n[1]; mat[5] = n[5]; mat[6] = n[9]; mat[7] = n[13];
+        mat[8] = n[2]; mat[9] = n[6]; mat[10] = n[10]; mat[11] = n[14];
+        mat[12] = n[3]; mat[13] = n[7]; mat[14] = n[11]; mat[15] = n[15];
 
         return mat;
     }
@@ -733,9 +738,37 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
+        T det = 0;
+
+        det += n[0] * (n[5] * n[10] * n[15] + n[6] * n[11] * n[13] +
+                       n[7] * n[9] * n[14] - n[7] * n[10] * n[13] -
+                       n[6] * n[9] * n[15] - n[5] * n[11] * n[14]);
+
+        det -= n[4] * (n[1] * n[10] * n[15] + n[2] * n[11] * n[13] +
+                       n[3] * n[9] * n[14] - n[3] * n[10] * n[13] -
+                       n[2] * n[5] * n[15] - n[1] * n[7] * n[14]);
+
+        // TODO: continue from here
+
         throw new NotImplementedException("Matrix4 Inverse");
 
         return mat;
+    }
+
+    void setCol(int index, const Vec4<T>& vals)
+    {
+        operator()(index, 0) = vals(0);
+        operator()(index, 1) = vals(1);
+        operator()(index, 2) = vals(2);
+        operator()(index, 3) = vals(3);
+    }
+
+    void setRow(int index, const Vec4<T>& vals)
+    {
+        operator()(0, index) = vals(0);
+        operator()(1, index) = vals(1);
+        operator()(2, index) = vals(2);
+        operator()(3, index) = vals(3);
     }
 
     // returns a reference
@@ -750,7 +783,21 @@ struct Matrix4
         return n[index];
     }
 
+    T& operator()(int x, int y)
+    {
+        return n[4 * y + x];
+    }
+
     T n[16];
+};
+
+template <typename T>
+struct Point2 : public Vec2<T>
+{
+    Point2() : Vec2<T>() { }
+    Point2(const Vec2<T>& other) : Vec2<T>(other) { }
+    Point2(T c) : Vec2<T>(c) { }
+    Point2(T x, T y) : Vec2<T>(x, y) { }
 };
 
 template <typename T>
@@ -781,4 +828,14 @@ struct Normal3 : public Vec3<T>
     Normal3(T c) : Vec3<T>(c) { }
     Normal3(T x, T y, T z) : Vec3<T>(x, y, z) { }
     Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Color3 : public Vec3<T>
+{
+    Color3() : Vec3<T>() { }
+    Color3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Color3(T c) : Vec3<T>(c) { }
+    Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
 };

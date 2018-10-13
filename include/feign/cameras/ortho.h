@@ -10,7 +10,9 @@ public:
 
     virtual void preProcess();
 
-    virtual string getName() const;
+    virtual Color3f sampleRay(Ray3f ray,
+                              Point2f filmSamp,
+                              Point2f appSamp) const;
 
-    // TODO
+    virtual string getName() const;
 };

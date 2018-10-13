@@ -62,6 +62,21 @@ Ray3f Transform::operator*(const Ray3f& other) const
                  other.maxt);
 }
 
+void Transform::print() const
+{
+    cout << "Transform: " << endl;
+    cout << mat(0) << " " << mat(1) << " " << mat(2) << " " << mat(3) << endl;
+    cout << mat(4) << " " << mat(5) << " " << mat(6) << " " << mat(7) << endl;
+    cout << mat(8) << " " << mat(9) << " " << mat(10) << " " << mat(11) << endl;
+    cout << mat(12) << " " << mat(13) << " " << mat(14) << " " << mat(15) << endl;
+    cout << "Transform Inverse: " << endl;
+    cout << inv(0) << " " << inv(1) << " " << inv(2) << " " << inv(3) << endl;
+    cout << inv(4) << " " << inv(5) << " " << inv(6) << " " << inv(7) << endl;
+    cout << inv(8) << " " << inv(9) << " " << inv(10) << " " << inv(11) << endl;
+    cout << inv(12) << " " << inv(13) << " " << inv(14) << " " << inv(15) << endl;
+    cout << endl;
+}
+
 const Matrix4f& Transform::getMatrix() const
 {
     return mat;

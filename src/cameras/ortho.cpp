@@ -17,6 +17,15 @@ void Orthographic::preProcess()
     preProcessChildren();
 }
 
+Color3f Orthographic::sampleRay(Ray3f ray,
+                                Point2f filmSamp,
+                                Point2f appSamp) const
+{
+    throw new NotImplementedException("ortho sampleRay");
+
+    return Color3f(1.0);
+}
+
 string Orthographic::getName() const
 {
     return Camera::getName() + " orthographic";

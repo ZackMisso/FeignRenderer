@@ -14,7 +14,6 @@ scene
                 target -64.8161 47.2211 23.8576
                 origin -65.6055 47.5762 24.3583
                 up 0.299858 0.934836 -0.190177
-            /lookat
         /transform
 
         float
