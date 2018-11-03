@@ -10,6 +10,10 @@ public:
 
     virtual float evaluate(const Point2f& p) const = 0;
 
+    virtual NodeType getNodeType() const;
+
+    virtual string getName() const;
+
 protected:
     Vec2f size;
 };

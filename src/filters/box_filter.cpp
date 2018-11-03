@@ -10,7 +10,18 @@ BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size)
     // does nothing
 }
 
-float BoxFilter::evaluate(const Point2f p) const
+void BoxFilter::preProcess()
 {
+    throw new NotImplementedException("box_filter preProcess");
+}
+
+float BoxFilter::evaluate(const Point2f& p) const
+{
+    throw new NotImplementedException("box_filter evaluate");
     return 1.f;
+}
+
+string BoxFilter::getName() const
+{
+    return ReconstructionFilter::getName() + "box";
 }

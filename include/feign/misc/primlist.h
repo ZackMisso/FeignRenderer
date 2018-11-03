@@ -17,16 +17,21 @@ public:
     void addStringPrimitive(Primitive<string>* prim);
     void addTransformPrimitive(Primitive<Transform>* prim);
 
-    bool findInt(string name, int& val) const;
-    bool findFloat(string name, Float& val) const;
-    bool findString(string name, string& val) const;
-    bool findTransform(string name, Transform& val) const;
+    void findInt(string name, int& val, int base) const;
+    void findFloat(string name, Float& val, Float base) const;
+    void findString(string name, string& val, string base) const;
+    void findTransform(string name, Transform& val, Transform base) const;
 
     void clearPrimitiveList();
 
     int size() const;
 
 protected:
+    bool findInt(string name, int& val) const;
+    bool findFloat(string name, Float& val) const;
+    bool findString(string name, string& val) const;
+    bool findTransform(string name, Transform& val) const;
+
     vector<Primitive<int>*> intPrimitives;
     vector<Primitive<Float>*> floatPrimitives;
     vector<Primitive<string>*> stringPrimitives;

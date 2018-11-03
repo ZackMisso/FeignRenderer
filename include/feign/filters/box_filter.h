@@ -8,5 +8,9 @@ public:
     BoxFilter();
     BoxFilter(Vec2f size);
 
-    virtual float evaluate(const Point2f p) const;
+    virtual void preProcess();
+
+    virtual float evaluate(const Point2f& p) const;
+
+    virtual string getName() const;
 };

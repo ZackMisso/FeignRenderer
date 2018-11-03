@@ -20,7 +20,8 @@ enum NodeType
     NT_Transform,
     NT_Camera,
     NT_Primitive,
-    NT_World
+    NT_World,
+    NT_Recon_Filter
 };
 
 class Node

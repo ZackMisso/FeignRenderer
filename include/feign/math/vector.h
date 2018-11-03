@@ -661,6 +661,33 @@ struct Matrix4
         return mat;
     }
 
+    static Matrix4<T> scale(const Vec3<T>& vec)
+    {
+        Matrix4<T> mat = Matrix4<T>();
+
+        mat[0] = vec(0);
+        mat[5] = vec(1);
+        mat[10] = vec(2);
+        mat[15] = 1.0;
+
+        return mat;
+    }
+
+    static Matrix4<T> translate(const Vec3<T>& vec)
+    {
+        Matrix4<T> mat = Matrix4<T>();
+
+        mat[0] = 1.0;
+        mat[5] = 1.0;
+        mat[10] = 1.0;
+        mat[15] = 1.0;
+        mat[3] = vec(0);
+        mat[7] = vec(1);
+        mat[11] = vec(2);
+
+        return mat;
+    }
+
     Matrix4<T> operator*(const Matrix4<T>& other) const
     {
         Matrix4<T> mat;

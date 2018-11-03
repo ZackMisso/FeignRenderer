@@ -82,3 +82,5 @@ static Matrix3f Matrix3f_identity()
 
     return mat;
 }
+
+inline float degToRad(float value) { return value * (M_PI / 180.0f); }

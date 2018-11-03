@@ -89,6 +89,42 @@ bool PrimitiveList::findTransform(string name, Transform& val) const
     return false;
 }
 
+void PrimitiveList::findInt(string name, int& val, int base) const
+{
+    bool found = findInt(name, val);
+    if (!found)
+    {
+        val = base;
+    }
+}
+
+void PrimitiveList::findFloat(string name, Float& val, Float base) const
+{
+    bool found = findFloat(name, val);
+    if (!found)
+    {
+        val = base;
+    }
+}
+
+void PrimitiveList::findString(string name, string& val, string base) const
+{
+    bool found = findString(name, val);
+    if (!found)
+    {
+        val = base;
+    }
+}
+
+void PrimitiveList::findTransform(string name, Transform& val, Transform base) const
+{
+    bool found = findTransform(name, val);
+    if (!found)
+    {
+        val = base;
+    }
+}
+
 void PrimitiveList::clearPrimitiveList()
 {
     for (int i = 0; i < intPrimitives.size(); ++i)

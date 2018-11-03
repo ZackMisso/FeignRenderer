@@ -17,6 +17,7 @@ public:
     virtual string getName() const;
 
 protected:
+    Transform sampleToCamera;
     float aperatureRadius;
     float focalDistance;
     float fov;

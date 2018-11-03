@@ -10,7 +10,9 @@ public:
 
     virtual void preProcess();
 
-    virtual float evaluate(const Point2f p) const;
+    virtual float evaluate(const Point2f& p) const;
+
+    virtual string getName() const;
 
 protected:
     Vec2f expCoeff;

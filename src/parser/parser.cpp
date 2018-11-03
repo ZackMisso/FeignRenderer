@@ -226,7 +226,6 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 Transform lastTransform = transformStack.back();
                 Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
                 node->getPrimList()->addTransformPrimitive(transformPrim);
-                cout << node->getName() << endl;
                 lastTransform.print();
 
                 transformStack.pop_back();
@@ -251,7 +250,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
             }
 
             string transformName;
-            getNextToken(tokens, nameToken, index++);
+            getNextToken(tokens, transformName, index++);
 
             Transform transform = Transform();
 
@@ -347,7 +346,23 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 }
                 else if (matType == "translate")
                 {
-                    throw new NotImplementedException("translate parse");
+                    Vec3f translate;
+
+                    string valText;
+                    getNextToken(tokens, valText, index++);
+                    translate[0] = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    translate[1] = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    translate[2] = stof(valText);
+
+                    Matrix4f translateMatrix = Matrix4f::translate(translate);
+
+                    Transform trans = Transform(translateMatrix);
+
+                    transform = transform * trans;
                 }
                 else if (matType == "rotate")
                 {
@@ -355,13 +370,31 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 }
                 else if (matType == "scale")
                 {
-                    throw new NotImplementedException("scale parse");
+                    Vec3f scale;
+
+                    string valText;
+                    getNextToken(tokens, valText, index++);
+                    scale[0] = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    scale[1] = stof(valText);
+
+                    getNextToken(tokens, valText, index++);
+                    scale[2] = stof(valText);
+
+                    Matrix4f scaleMatrix = Matrix4f::scale(scale);
+
+                    Transform trans = Transform(scaleMatrix);
+
+                    transform = transform * trans;
                 }
                 else
                 {
                     throw new InvalidEndTokenException("transform");
                 }
             }
+
+            // cout << "Transform Name: " << transformName << endl;
 
             if (transformName == "toWorld")
             {
@@ -378,14 +411,18 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         }
         else if (token == "/transform")
         {
-            if (nodes[nodes.size() - 1]->getNodeType() == NT_Transform)
-            {
-                nodes.pop_back();
-            }
-            else
-            {
-                throw new InvalidEndTokenException();
-            }
+            // does nothing
+
+            // cout << "Woop" << endl;
+            // if (nodes[nodes.size() - 1]->getNodeType() == NT_Transform)
+            // {
+            //     nodes.pop_back();
+            // }
+            // else
+            // {
+            //     throw new InvalidEndTokenException();
+            // }
+            // cout << "Waap" << endl;
         }
         else if (token == "mesh")
         {

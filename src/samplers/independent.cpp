@@ -15,12 +15,9 @@ void Independent::preProcess()
     preProcessChildren();
 
     int samples = 0;
-    if (!primitives->findInt("sampleCount", samples))
-    {
-        throw new MissingPrimitiveException("sampleCount");
-    }
-    
+    primitives->findInt("sampleCount", samples, 16);
     sampleCnt = samples;
+    
     currentSample = 0;
 }
 
