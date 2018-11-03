@@ -13,6 +13,8 @@ struct UnitTestData {
         numberFailed = 0;
     }
 
+    virtual void logReport() const = 0;
+
     string logInfo;
     string errInfo;
     string timeInfo; // maybe use this later ??

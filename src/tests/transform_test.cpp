@@ -1,6 +1,11 @@
 #include <tests/transform_test.h>
 
-TransformTestData::TransformTestData()
+TransformTestData::TransformTestData() : UnitTestData()
+{
+    // TODO
+}
+
+void TransformTestData::logReport() const
 {
     // TODO
 }
@@ -10,8 +15,8 @@ TransformTest::TransformTest()
     // TODO
 }
 
-bool TransformTest::evaluateTest(TransformTestData& testLog) const
+bool TransformTest::evaluateTest(UnitTestData& testLog) const
 {
     // TODO
-    return false;
+    return true;
 }

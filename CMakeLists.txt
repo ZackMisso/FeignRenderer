@@ -144,6 +144,7 @@ add_executable(feign
     include/tests/tester.h
     include/tests/vector_test.h
     include/tests/transform_test.h
+    include/tests/matrix_test.h
 
     # Implementation files
     src/main.cpp
@@ -210,6 +211,7 @@ add_executable(feign
     src/tests/tester.cpp
     src/tests/vector_test.cpp
     src/tests/transform_test.cpp
+    src/tests/matrix_test.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

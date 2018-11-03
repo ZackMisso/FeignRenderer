@@ -742,34 +742,34 @@ struct Matrix4
 
         det += n[0] * (n[5] * n[10] * n[15] + n[6] * n[11] * n[13] +
                        n[7] * n[9] * n[14] - n[7] * n[10] * n[13] -
-                       n[6] * n[9] * n[15] - n[5] * n[11] * n[14]);
+                       n[6] * n[9] * n[15] - n[5] * n[11] * n[14]); // correct
 
         det -= n[4] * (n[1] * n[10] * n[15] + n[2] * n[11] * n[13] +
                        n[3] * n[9] * n[14] - n[3] * n[10] * n[13] -
-                       n[2] * n[5] * n[15] - n[1] * n[7] * n[14]);
+                       n[2] * n[9] * n[15] - n[1] * n[11] * n[14]); // correct
 
-        det += n[8] * (n[1] * n[10] * n[15] + n[2] * n[11] * n[13] +
+        det += n[8] * (n[1] * n[6] * n[15] + n[2] * n[7] * n[13] + // correct
                        n[3] * n[5] * n[14] - n[3] * n[6] * n[13] -
                        n[2] * n[5] * n[15] - n[1] * n[7] * n[14]);
 
-        det -= n[12] * (n[1] * n[6] * n[11] + n[2] * n[7] * n[9] +
+        det -= n[12] * (n[1] * n[6] * n[11] + n[2] * n[7] * n[9] + // correct
                         n[3] * n[5] * n[10] - n[3] * n[6] * n[9] -
                         n[2] * n[5] * n[11] - n[1] * n[7] * n[10]);
 
-        T m11 = n[5] * n[10] * n[15] + n[6] * n[11] * n[13] +
-                n[7] * n[9] * n[14] - n[7] * n[10] * n[12] -
+        T m11 = n[5] * n[10] * n[15] + n[6] * n[11] * n[13] + // correct
+                n[7] * n[9] * n[14] - n[7] * n[10] * n[13] -
                 n[6] * n[9] * n[15] - n[5] * n[11] * n[14];
 
-        T m12 = n[4] * n[10] * n[15] + n[6] * n[11] * n[12] +
-                n[7] * n[8] * n[14] - n[7] * n[10] * n[11] -
+        T m12 = n[4] * n[10] * n[15] + n[6] * n[11] * n[12] + // correct
+                n[7] * n[8] * n[14] - n[7] * n[10] * n[12] -
                 n[6] * n[8] * n[15] - n[4] * n[11] * n[14];
 
-        T m13 = n[4] * n[9] * n[15] + n[5] * n[11] * n[12] +
-                n[7] * n[8] * n[13] - n[7] * n[9] * n[11] -
+        T m13 = n[4] * n[9] * n[15] + n[5] * n[11] * n[12] + // correct
+                n[7] * n[8] * n[13] - n[7] * n[9] * n[12] -
                 n[5] * n[8] * n[15] - n[4] * n[11] * n[13];
 
-        T m14 = n[4] * n[9] * n[14] + n[5] * n[10] * n[12] +
-                n[6] * n[8] * n[13] - n[7] * n[9] * n[10] -
+        T m14 = n[4] * n[9] * n[14] + n[5] * n[10] * n[12] + // correct
+                n[6] * n[8] * n[13] - n[6] * n[9] * n[12] -
                 n[5] * n[8] * n[14] - n[4] * n[10] * n[13];
 
         T m21 = n[1] * n[10] * n[15] + n[2] * n[11] * n[13] +
@@ -821,21 +821,39 @@ struct Matrix4
                 n[1] * n[4] * n[10] - n[0] * n[6] * n[9];
 
         mat.n[0] = m11 / det;
-        mat.n[1] = -m12 / det;
-        mat.n[2] = m13 / det;
-        mat.n[3] = -m14 / det;
-        mat.n[4] = -m21 / det;
+        mat.n[1] = -m21 / det;
+        mat.n[2] = m31 / det;
+        mat.n[3] = -m41 / det;
+        mat.n[4] = -m12 / det;
         mat.n[5] = m22 / det;
-        mat.n[6] = -m23 / det;
-        mat.n[7] = m24 / det;
-        mat.n[8] = m31 / det;
-        mat.n[9] = -m32 / det;
+        mat.n[6] = -m32 / det;
+        mat.n[7] = m42 / det;
+        mat.n[8] = m13 / det;
+        mat.n[9] = -m23 / det;
         mat.n[10] = m33 / det;
-        mat.n[11] = -m34 / det;
-        mat.n[12] = -m41 / det;
-        mat.n[13] = m42 / det;
-        mat.n[14] = -m43 / det;
+        mat.n[11] = -m43 / det;
+        mat.n[12] = -m14 / det;
+        mat.n[13] = m24 / det;
+        mat.n[14] = -m34 / det;
         mat.n[15] = m44 / det;
+
+        // cout << "DET: " << det << endl << endl;;
+        // cout << "m11: " << m11 << endl;
+        // cout << "m12: " << m12 << endl;
+        // cout << "m13: " << m13 << endl;
+        // cout << "m14: " << m14 << endl;
+        // cout << "m21: " << m21 << endl;
+        // cout << "m22: " << m22 << endl;
+        // cout << "m23: " << m23 << endl;
+        // cout << "m24: " << m24 << endl;
+        // cout << "m31: " << m31 << endl;
+        // cout << "m32: " << m32 << endl;
+        // cout << "m33: " << m33 << endl;
+        // cout << "m34: " << m34 << endl;
+        // cout << "m41: " << m41 << endl;
+        // cout << "m42: " << m42 << endl;
+        // cout << "m43: " << m43 << endl;
+        // cout << "m44: " << m44 << endl;
 
         return mat;
     }
@@ -871,6 +889,18 @@ struct Matrix4
     T& operator()(int x, int y)
     {
         return n[4 * y + x];
+    }
+
+    bool operator==(const Matrix4<T> other) const
+    {
+        for (int i = 0; i < 16; ++i)
+        {
+            if (n[i] != other.n[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     T n[16];

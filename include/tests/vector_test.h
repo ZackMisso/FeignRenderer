@@ -2,17 +2,17 @@
 
 #include <tests/test.h>
 
-struct VectorTestData
+struct VectorTestData : public UnitTestData
 {
     VectorTestData();
 
-    // TODO
+    virtual void logReport() const;
 };
 
-class VectorTest
+class VectorTest : public UnitTest
 {
 public:
     VectorTest();
 
-    bool evaluateTest(VectorTestData& testLog) const;
+    virtual bool evaluateTest(UnitTestData& testLog) const;
 };

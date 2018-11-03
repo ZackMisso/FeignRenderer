@@ -2,17 +2,17 @@
 
 #include <tests/test.h>
 
-struct TransformTestData
+struct TransformTestData : public UnitTestData
 {
     TransformTestData();
 
-    // TODO
+    virtual void logReport() const;
 };
 
-class TransformTest
+class TransformTest : public UnitTest
 {
 public:
     TransformTest();
 
-    bool evaluateTest(TransformTestData& testLog) const;
+    virtual bool evaluateTest(UnitTestData& testLog) const;
 };

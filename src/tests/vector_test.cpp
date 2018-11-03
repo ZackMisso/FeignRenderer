@@ -1,6 +1,11 @@
 #include <tests/vector_test.h>
 
-VectorTestData::VectorTestData()
+VectorTestData::VectorTestData() : UnitTestData()
+{
+    // TODO
+}
+
+void VectorTestData::logReport() const
 {
     // TODO
 }
@@ -10,8 +15,8 @@ VectorTest::VectorTest()
     // TODO
 }
 
-bool VectorTest::evaluateTest(VectorTestData& testLog) const
+bool VectorTest::evaluateTest(UnitTestData& testLog) const
 {
     // TODO
-    return false;
+    return true;
 }
