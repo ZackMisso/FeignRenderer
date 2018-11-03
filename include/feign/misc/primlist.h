@@ -16,11 +16,13 @@ public:
     void addFloatPrimitive(Primitive<Float>* prim);
     void addStringPrimitive(Primitive<string>* prim);
     void addTransformPrimitive(Primitive<Transform>* prim);
+    void addColorPrimitive(Primitive<Color3f>* prim);
 
     void findInt(string name, int& val, int base) const;
     void findFloat(string name, Float& val, Float base) const;
     void findString(string name, string& val, string base) const;
     void findTransform(string name, Transform& val, Transform base) const;
+    void findColor(string name, Color3f& val, Color3f base) const;
 
     void clearPrimitiveList();
 
@@ -31,9 +33,11 @@ protected:
     bool findFloat(string name, Float& val) const;
     bool findString(string name, string& val) const;
     bool findTransform(string name, Transform& val) const;
+    bool findColor(string name, Color3f& val) const;
 
     vector<Primitive<int>*> intPrimitives;
     vector<Primitive<Float>*> floatPrimitives;
     vector<Primitive<string>*> stringPrimitives;
     vector<Primitive<Transform>*> transformPrimitives;
+    vector<Primitive<Color3f>*> colorPrimitives;
 };

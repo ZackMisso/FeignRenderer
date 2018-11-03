@@ -6,6 +6,7 @@ PrimitiveList::PrimitiveList()
     floatPrimitives = vector<Primitive<Float>*>();
     stringPrimitives = vector<Primitive<string>*>();
     transformPrimitives = vector<Primitive<Transform>*>();
+    colorPrimitives = vector<Primitive<Color3f>*>();
 }
 
 PrimitiveList::~PrimitiveList()
@@ -31,6 +32,11 @@ void PrimitiveList::addStringPrimitive(Primitive<string>* prim)
 void PrimitiveList::addTransformPrimitive(Primitive<Transform>* prim)
 {
     transformPrimitives.push_back(prim);
+}
+
+void PrimitiveList::addColorPrimitive(Primitive<Color3f>* prim)
+{
+    colorPrimitives.push_back(prim);
 }
 
 bool PrimitiveList::findInt(string name, int& val) const
@@ -89,6 +95,20 @@ bool PrimitiveList::findTransform(string name, Transform& val) const
     return false;
 }
 
+bool PrimitiveList::findColor(string name, Color3f& val) const
+{
+    for (int i = 0; i < colorPrimitives.size(); ++i)
+    {
+        if (colorPrimitives[i]->getName() == name)
+        {
+            val = colorPrimitives[i]->getValue();
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void PrimitiveList::findInt(string name, int& val, int base) const
 {
     bool found = findInt(name, val);
@@ -125,6 +145,15 @@ void PrimitiveList::findTransform(string name, Transform& val, Transform base) c
     }
 }
 
+void PrimitiveList::findColor(string name, Color3f& val, Color3f base) const
+{
+    bool found = findColor(name, val);
+    if (!found)
+    {
+        val = base;
+    }
+}
+
 void PrimitiveList::clearPrimitiveList()
 {
     for (int i = 0; i < intPrimitives.size(); ++i)
@@ -146,6 +175,17 @@ void PrimitiveList::clearPrimitiveList()
     {
         delete transformPrimitives[i];
     }
+
+    for (int i = 0; i < colorPrimitives.size(); ++i)
+    {
+        delete colorPrimitives[i];
+    }
+
+    intPrimitives.clear();
+    floatPrimitives.clear();
+    stringPrimitives.clear();
+    transformPrimitives.clear();
+    colorPrimitives.clear();
 }
 
 int PrimitiveList::size() const
@@ -153,5 +193,6 @@ int PrimitiveList::size() const
     return intPrimitives.size() +
            floatPrimitives.size() +
            stringPrimitives.size() +
-           transformPrimitives.size();
+           transformPrimitives.size() +
+           colorPrimitives.size();
 }

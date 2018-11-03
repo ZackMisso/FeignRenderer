@@ -112,6 +112,7 @@ add_executable(feign
     include/feign/math/ray.h
     include/feign/math/vector.h
     include/feign/math/bbox.h
+    include/feign/math/warp.h
 
     # Media header files
     include/feign/media/media.h
@@ -181,6 +182,7 @@ add_executable(feign
     # Math implementation files
     src/math/transform.cpp
     src/math/ray.cpp
+    src/math/warp.cpp
 
     # Media implementation files
     src/media/media.cpp

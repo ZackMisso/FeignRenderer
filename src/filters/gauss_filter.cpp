@@ -23,8 +23,6 @@ void GaussFilter::preProcess()
 
     expCoeff[0] = std::exp(-alpha * xrad * xrad);
     expCoeff[1] = std::exp(-alpha * yrad * yrad);
-    
-    // throw new NotImplementedException("gauss_filter preprocess");
 }
 
 float GaussFilter::evaluate(const Point2f& p) const
