@@ -92,15 +92,23 @@ struct Vec2
         xy[1] /= other(1);
     }
 
+    Vec2<T> operator-() const
+    {
+        Vec2<T> vec;
+        vec[0] = -xy[0];
+        vec[1] = -xy[1];
+        return vec;
+    }
+
     // dot product
-    T operator%(Vec2<T>& other)
+    T operator%(const Vec2<T>& other) const
     {
         return other(0) * xy[0] +
                other(1) * xy[1];
     }
 
     // cross product
-    T operator^(const Vec2<T>& other)
+    T operator^(const Vec2<T>& other) const
     {
         return xy[0] * other(1) - xy[1] * other(0);
     }
@@ -136,7 +144,7 @@ struct Vec2
         return vec;
     }
 
-    Vec2<T> operator~()
+    Vec2<T> operator~() const
     {
         Vec2<T> vec;
         vec[0] = -xy[0];
@@ -251,20 +259,29 @@ struct Vec3
     }
 
     // dot product
-    T operator%(Vec3<T>& other)
+    T operator%(const Vec3<T>& other) const
     {
-        return other(0) * xyz(0) +
-               other(1) * xyz(1) +
-               other(2) * xyz(2);
+        return other(0) * xyz[0] +
+               other(1) * xyz[1] +
+               other(2) * xyz[2];
     }
 
     // cross product
-    Vec3<T> operator^(const Vec3<T>& other)
+    Vec3<T> operator^(const Vec3<T>& other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[1] * other(2) - xyz[2] * other(1);
         vec[1] = xyz[2] * other(0) - xyz[0] * other(2);
         vec[2] = xyz[0] * other(1) - xyz[1] * other(0);
+        return vec;
+    }
+
+    Vec3<T> operator-() const
+    {
+        Vec3<T> vec;
+        vec[0] = -xyz[0];
+        vec[1] = -xyz[1];
+        vec[2] = -xyz[2];
         return vec;
     }
 
@@ -304,7 +321,7 @@ struct Vec3
         return xyz[index];
     }
 
-    Vec3<T> operator~()
+    Vec3<T> operator~() const
     {
         Vec3<T> vec;
         vec[0] = -xyz[0];
@@ -453,7 +470,7 @@ struct Vec4
     }
 
     // dot product
-    T operator%(Vec4<T>& other)
+    T operator%(const Vec4<T>& other) const
     {
         return other(0) * xyzw(0) +
                other(1) * xyzw(1) +

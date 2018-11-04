@@ -1,17 +1,17 @@
 #include <feign/math/warp.h>
 #include <tgmath.h>
 
-Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& northPole)
+Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& pole)
 {
     // Naive implementation using rejection sampling
     Vector3f v;
     do {
-        v.x() = 1.f - 2.f * sampler->next1D();
-        v.y() = 1.f - 2.f * sampler->next1D();
-        v.z() = 1.f - 2.f * sampler->next1D();
-    } while (v.squaredNorm() > 1.f);
+        v[0] = 1.f - 2.f * sampler->next1D();
+        v[1] = 1.f - 2.f * sampler->next1D();
+        v[2] = 1.f - 2.f * sampler->next1D();
+    } while (v.sqrNorm() > 1.f);
 
-    if (v.dot(pole) < 0.f)
+    if (v % pole < 0.f)
         v = -v;
     v /= v.norm();
 
@@ -20,16 +20,16 @@ Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& no
 
 Point2f WarpSpace::squareToUniformDisk(const Point2f &sample)
 {
-    float r = std::sqrt(1-sample.y());
+    float r = std::sqrt(1-sample(1));
     float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample.x(), &sinPhi, &cosPhi);
+    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Point2f(cosPhi * r, sinPhi * r);
 }
 
 float WarpSpace::squareToUniformDiskPdf(const Point2f &p)
 {
-    return p.squaredNorm() <= 1 ? INV_PI : 0.0f;
+    return p.sqrNorm() <= 1 ? INV_PI : 0.0f;
 }
 
 Vector3f WarpSpace::squareToUniformSphere(const Point2f &sample)

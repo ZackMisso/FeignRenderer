@@ -84,3 +84,11 @@ static Matrix3f Matrix3f_identity()
 }
 
 inline float degToRad(float value) { return value * (M_PI / 180.0f); }
+
+#if !defined(_GNU_SOURCE)
+    /// Emulate sincosf using sinf() and cosf()
+    inline void sincosf(float theta, float *_sin, float *_cos) {
+        *_sin = sinf(theta);
+        *_cos = cosf(theta);
+    }
+#endif
