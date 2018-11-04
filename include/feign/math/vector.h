@@ -147,8 +147,13 @@ struct Vec2
     Vec2<T> operator~() const
     {
         Vec2<T> vec;
-        vec[0] = -xy[0];
-        vec[1] = -xy[1];
+
+        if (xy[0] < 0.0) vec[0] = -xy[0];
+        else vec[0] = xy[0];
+
+        if (xy[1] < 0.0) vec[1] = -xy[1];
+        else vec[1] = xy[1];
+
         return vec;
     }
 
@@ -324,9 +329,16 @@ struct Vec3
     Vec3<T> operator~() const
     {
         Vec3<T> vec;
-        vec[0] = -xyz[0];
-        vec[1] = -xyz[1];
-        vec[2] = -xyz[2];
+
+        if (xyz[0] < 0.0) vec[0] = -xyz[0];
+        else vec[0] = xyz[0];
+
+        if (xyz[1] < 0.0) vec[1] = -xyz[1];
+        else vec[1] = xyz[1];
+
+        if (xyz[2] < 0.0) vec[2] = -xyz[2];
+        else vec[2] = xyz[2];
+
         return vec;
     }
 
@@ -530,10 +542,20 @@ struct Vec4
     Vec4<T> operator~()
     {
         Vec4<T> vec;
-        vec[0] = -xyzw(0);
-        vec[1] = -xyzw(1);
-        vec[2] = -xyzw(2);
-        vec[3] = -xyzw(3);
+
+        if (xyzw[0] < 0.0) vec[0] = -xyzw[0];
+        else vec[0] = xyzw[0];
+
+        if (xyzw[1] < 0.0) vec[1] = -xyzw[1];
+        else vec[1] = xyzw[1];
+
+        if (xyzw[2] < 0.0) vec[2] = -xyzw[2];
+        else vec[2] = xyzw[2];
+
+        if (xyzw[3] < 0.0) vec[3] = -xyzw[3];
+        else vec[3] = xyzw[3];
+
+
         return vec;
     }
 

@@ -1,4 +1,5 @@
 #include <feign/integrators/normal.h>
+#include <feign/scene.h>
 
 NormalIntegrator::NormalIntegrator() : Integrator() { }
 
@@ -13,9 +14,13 @@ Color3f NormalIntegrator::Li(const Scene* scene,
                              Sampler* sampler,
                              const Ray3f ray) const
 {
-    throw new NotImplementedException("normal integrator Li");
+    Intersection its;
 
-    return Color3f(0.f);
+    if (!scene->intersect(ray, its))
+        return Color3f(0.f);
+
+    Normal3f n = ~(its.shadingFrame.n);
+    return Color3f(n(0), n(1), n(2));
 }
 
 string NormalIntegrator::getName() const

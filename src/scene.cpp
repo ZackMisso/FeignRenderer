@@ -45,6 +45,11 @@ void Scene::preProcess()
     primitives->findString("sceneName", sceneName, "test.png");
 }
 
+bool Scene::intersect(const Ray3f& ray, Intersection& its) const
+{
+    return acceleration->intersect(ray, its);
+}
+
 string Scene::getName() const
 {
     return "scene";

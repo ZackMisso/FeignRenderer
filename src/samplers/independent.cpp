@@ -12,29 +12,37 @@ void Independent::preProcess()
     primitives->findInt("sampleCount", samples, 16);
     sampleCnt = samples;
 
+    int seed = 0;
+    primitives->findInt("seed", seed, 0x9486a5);
+
     currentSample = 0;
+
+    reseed(seed);
 }
 
 void Independent::reseed()
 {
-    throw new NotImplementedException("independent reseed");
+    srand(sample_seed);
+    uint64_t r1 = rand();
+    uint64_t r2 = rand();
+    rng = pcg32(r1, r2);
 }
 
 void Independent::reseed(uint32_t seed)
 {
-    throw new NotImplementedException("independent reseed");
+    sample_seed = seed;
+    reseed();
 }
 
 void Independent::reset()
 {
-    throw new NotImplementedException("independent reset");
+    currentSample = 0;
+    reseed();
 }
 
 Float Independent::next1D()
 {
-    throw new NotImplementedException("independent next1D");
-
-    return 0;
+    return rng.nextFloat();
 }
 
 Vec2<Float> Independent::next2D()
@@ -54,16 +62,18 @@ Vec4<Float> Independent::next4D()
 
 Sampler* Independent::copy()
 {
-    throw new NotImplementedException("independent copy");
+    Independent* newSamp = new Independent();
+    newSamp->reseed(sample_seed);
 
-    return this;
+    return newSamp;
 }
 
 Sampler* Independent::copy(uint32_t seed)
 {
-    throw new NotImplementedException("independent copy seed");
+    Independent* newSamp = new Independent();
+    newSamp->reseed(seed);
 
-    return this;
+    return newSamp;
 }
 
 void Independent::nextSample()

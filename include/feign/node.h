@@ -21,7 +21,8 @@ enum NodeType
     NT_Camera,
     NT_Primitive,
     NT_World,
-    NT_Recon_Filter
+    NT_Recon_Filter,
+    NT_Accel
 };
 
 class Node

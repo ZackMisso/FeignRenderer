@@ -79,6 +79,7 @@ add_executable(feign
     include/feign/exceptions.h
 
     # Accel header files
+    include/feign/accel/accel.h
     include/feign/accel/bbh.h
 
     # BSDF header files
@@ -111,6 +112,7 @@ add_executable(feign
     include/feign/math/vector.h
     include/feign/math/bbox.h
     include/feign/math/warp.h
+    include/feign/math/coord_frame.h
 
     # Media header files
     include/feign/media/media.h
@@ -120,6 +122,7 @@ add_executable(feign
     include/feign/misc/primlist.h
     include/feign/misc/world.h
     include/feign/misc/transformnode.h
+    include/feign/misc/intersection.h
 
     # Parser header files
     include/feign/parser/parser.h
@@ -151,6 +154,7 @@ add_executable(feign
     src/node.cpp
 
     # Accel implementation files
+    src/accel/accel.cpp
     src/accel/bbh.cpp
 
     # BSDF implementation files
@@ -181,6 +185,7 @@ add_executable(feign
     src/math/transform.cpp
     src/math/ray.cpp
     src/math/warp.cpp
+    src/math/coord_frame.cpp
 
     # Media implementation files
     src/media/media.cpp
@@ -189,6 +194,7 @@ add_executable(feign
     src/misc/primlist.cpp
     src/misc/world.cpp
     src/misc/transformnode.cpp
+    src/misc/intersection.cpp
 
     # Parser implementation files
     src/parser/parser.cpp

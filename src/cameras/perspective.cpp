@@ -1,15 +1,10 @@
 #include <feign/cameras/perspective.h>
 #include <feign/filters/gauss_filter.h>
+#include <feign/math/warp.h>
 
-Perspective::Perspective() : Camera()
-{
-    // should not do anything
-}
+Perspective::Perspective() : Camera() { }
 
-Perspective::Perspective(Node* parent) : Camera(parent)
-{
-    // should not do anything
-}
+Perspective::Perspective(Node* parent) : Camera(parent) { }
 
 void Perspective::preProcess()
 {
@@ -54,9 +49,31 @@ Color3f Perspective::sampleRay(Ray3f ray,
                                Point2f filmSamp,
                                Point2f appSamp) const
 {
-    throw new NotImplementedException("ortho sampleRay");
+    Point3f nearP = sampleToCamera * Point3f(
+                            filmSamp(0) * 1.0 / filmSize(0),
+                            filmSamp(1) * 1.0 / filmSize(1),
+                            0.f);
 
-    return Color3f(1.0);
+    Vector3f d = nearP.normalized();
+    float invZ = 1.f / d(2);
+
+    Point2f apPos = WarpSpace::squareToUniformDisk(appSamp) * aperatureRadius;
+    float t = focalDistance / d(2);
+
+    Vector3f od = d * t;
+    od = od - Vector3f(apPos(0), apPos(1), 0);
+    od = od.normalized();
+
+    ray.origin = cameraToWorld * Point3f(apPos(0), apPos(1), 0);
+    ray.dir = cameraToWorld * od;
+
+    ray.mint = near * invZ;
+    ray.maxt = far * invZ;
+
+    // maybe make rays keep track of recipricals
+    // ray.update();
+
+    return Color3f(1.f);
 }
 
 string Perspective::getName() const

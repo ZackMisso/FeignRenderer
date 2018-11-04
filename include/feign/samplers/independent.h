@@ -31,5 +31,5 @@ public:
 
 public:
     pcg32 rng;
-    uint32_t seed;
+    uint32_t sample_seed;
 };

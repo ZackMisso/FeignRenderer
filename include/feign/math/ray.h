@@ -7,7 +7,6 @@
 struct Ray3f
 {
     Ray3f();
-    // Ray3f(Point3f o);
     Ray3f(Vector3f d);
     Ray3f(Point3f o, Vector3f d);
     Ray3f(Point3f o, Vector3f d, Float mint, Float maxt);
