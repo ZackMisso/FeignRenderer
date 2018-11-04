@@ -18,7 +18,7 @@ public:
     float surfaceArea(uint32_t index) const;
     float pdf(uint32_t index) const;
 
-    void parseFromFile(const string& filename);
+    void parseFromFile(const string& filename, Transform transform, bool flipNorms);
 
     virtual void preProcess();
 

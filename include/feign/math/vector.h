@@ -615,7 +615,15 @@ struct Matrix3
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException("Matrix3 transpose");
+        mat.n[0] = n[0];
+        mat.n[1] = n[3];
+        mat.n[2] = n[6];
+        mat.n[3] = n[1];
+        mat.n[4] = n[4];
+        mat.n[5] = n[7];
+        mat.n[6] = n[2];
+        mat.n[7] = n[5];
+        mat.n[8] = n[8];
 
         return mat;
     }

@@ -9,6 +9,8 @@
 #include <feign/math/bbox.h>
 #include <feign/log/logger.h>
 
+#include <imedit/image.h>
+
 using namespace std;
 
 // TODO: remove this
@@ -54,6 +56,10 @@ typedef Matrix3<float> Matrix3f;
 typedef Matrix3<double> Matrix3d;
 typedef Matrix4<float> Matrix4f;
 typedef Matrix4<double> Matrix4d;
+
+typedef Image<float> Imagef;
+typedef Image<int> Imagei;
+typedef Image<double> Imaged;
 
 typedef BBox3<float> BBox3f;
 typedef BBox3<double> BBox3d;

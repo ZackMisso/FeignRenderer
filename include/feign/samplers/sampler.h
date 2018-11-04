@@ -26,8 +26,9 @@ public:
     virtual void nextSample() = 0;
 
     virtual string getName() const;
-
     virtual NodeType getNodeType() const;
+
+    uint32_t getSampleCnt() const;
 
 protected:
     uint32_t sampleCnt;

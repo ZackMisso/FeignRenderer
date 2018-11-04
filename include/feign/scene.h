@@ -22,6 +22,7 @@ public:
 
     virtual void preProcess();
 
+    string getSceneName() const;
     Node* getRoot() const;
     vector<Node*> getSceneObjects() const;
     vector<Emitter*> getEmitters() const;
@@ -32,6 +33,7 @@ public:
     Camera* getCamera() const;
 
 protected:
+    string sceneName;
     Node* root; // is this needed???
     vector<Node*> sceneObjects; // keeping this for debugging purposes
     vector<Emitter*> emitters;

@@ -22,6 +22,8 @@ public:
     virtual string getName() const;
     virtual NodeType getNodeType() const;
 
+    Vec2i getFilmSize() const;
+
 protected:
     Transform cameraToWorld;
     ReconstructionFilter* filter;

@@ -1,25 +1,20 @@
 #include <feign/cameras/camera.h>
 
-Camera::Camera() : Node()
-{
-    // TODO
-}
+Camera::Camera() : Node() { }
 
-Camera::Camera(Node* parent) : Node(parent)
-{
-    // TODO
-}
+Camera::Camera(Node* parent) : Node(parent) { }
 
-Camera::~Camera()
+Camera::~Camera() { }
+
+Vec2i Camera::getFilmSize() const
 {
-    // TODO
+    return filmSize;
 }
 
 string Camera::getName() const
 {
     return "camera: ";
 }
-
 
 NodeType Camera::getNodeType() const
 {

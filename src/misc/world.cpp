@@ -17,24 +17,45 @@ WorldNode::~WorldNode()
 
 void WorldNode::renderAllScenes()
 {
-    cout << "Starting the render" << endl;
+    cout << "Starting Rendering Process" << endl;
 
     vector<Scene*> scenes = collectScenes();
 
     for (int i = 0; i < scenes.size(); ++i)
     {
+        cout << "scene: " << i << endl;
         Scene* scene = scenes[i];
-        cout << "Scene Children: " << scene->numChildren() << endl;
 
         Integrator* integrator = scene->getIntegrator();
         Camera* camera = scene->getCamera();
         Sampler* sampler = scene->getSampler();
 
-        if (!integrator) cout << "NO INTEGRATOR" << endl;
-        if (!camera) cout << "NO CAMERA" << endl;
-        if (!sampler) cout << "NO SAMPLER" << endl;
+        if (!integrator)
+        {
+            throw new MissingPrimitiveException("no specified integrator");
+        }
+        if (!camera)
+        {
+            throw new MissingPrimitiveException("no specified camera");
+        }
+        if (!sampler)
+        {
+            throw new MissingPrimitiveException("no specified sampler");
+        }
 
-        // TODO
+        // TODO: this will need to be changed for parallelization
+        Imagef image = Imagef(camera->getFilmSize()[0],
+                              camera->getFilmSize()[1],
+                              3);
+
+        cout << "pre Render" << endl;
+        integrator->render(scene,
+                           camera,
+                           sampler,
+                           image);
+        cout << "post Render" << endl;
+
+        image.write(scene->getSceneName());
     }
 
     cout << "Rendering Complete" << endl;

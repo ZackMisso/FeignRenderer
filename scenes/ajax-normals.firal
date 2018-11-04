@@ -30,7 +30,9 @@ scene
     /camera
 
     mesh obj
-        filename ../scenes/meshes/plane.obj
+        string
+            name filename
+            value ../scenes/meshes/plane.obj
 
         bsdf diffuse /bsdf
 

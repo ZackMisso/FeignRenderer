@@ -41,10 +41,10 @@ set(PCG32_INCLUDE_DIR
    ${CMAKE_CURRENT_SOURCE_DIR}/ext/pcg32)
 
 set(IMGLIB_INCLUDE_DIR
-   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/include
+   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/include)
 
 set(IMGLIB_NEEDED_DIR
-   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/))
+   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext)
 
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -61,9 +61,7 @@ include_directories(
 
     ${IMGLIB_NEEDED_DIR}/
 
-    ext/
-
-    ext/ImageEditLib/ext/
+    #ext/
 )
 
 if(APPLE)

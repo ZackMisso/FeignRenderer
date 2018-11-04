@@ -12,5 +12,7 @@ public:
 
     virtual string getName() const;
 
-    virtual void tempMethod();
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f ray) const;
 };

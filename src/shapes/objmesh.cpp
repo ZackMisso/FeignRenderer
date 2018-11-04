@@ -1,14 +1,14 @@
+// This code is based off of Wenzel Jakob's Nori ray tracer
+
 #include <feign/shapes/objmesh.h>
 #include <fstream>
 
 ObjMesh::ObjMesh() : Shape()
 {
-    // cout << "OBJ MESH Constructor" << endl;
     vs = vector<Point3f>();
     ns = vector<Normal3f>();
     uvs = vector<Vec2f>();
     fs = vector<Vec3u>();
-    // cout << "POST OBJ MESH Constructor" << endl;
 }
 
 ObjMesh::ObjMesh(Node* parent) : Shape(parent)
@@ -36,36 +36,32 @@ uint32_t ObjMesh::verts() const
 
 float ObjMesh::surfaceArea() const
 {
-    throw new NotImplementedException("objmesh");
+    throw new NotImplementedException("objmesh surface area");
 
     return 0.f;
 }
 
 float ObjMesh::surfaceArea(uint32_t index) const
 {
-    throw new NotImplementedException("objmesh");
+    throw new NotImplementedException("objmesh surface area index");
 
     return 0.f;
 }
 
 float ObjMesh::pdf(uint32_t index) const
 {
-    throw new NotImplementedException("objmesh");
+    throw new NotImplementedException("objmesh pdf index");
 
     return 0.f;
 }
 
-void ObjMesh::parseFromFile(const string& filename)
+void ObjMesh::parseFromFile(const string& filename, Transform transform, bool flipNorms)
 {
     // clear current data
     vs.clear();
     ns.clear();
     uvs.clear();
     fs.clear();
-
-    Transform transform; // this is just a place holder
-
-    throw new NotImplementedException("OBJ MESH READ");
 
     ifstream ifs (filename.c_str());
 
@@ -104,6 +100,7 @@ void ObjMesh::parseFromFile(const string& filename)
             line >> n[0];
             line >> n[1];
             line >> n[2];
+            if (flipNorms) n = -n;
             n = transform * n;
             n = n.normalized();
             ns.push_back(n);
@@ -132,15 +129,31 @@ void ObjMesh::parseFromFile(const string& filename)
             fs.push_back(f);
         }
     }
-
-    preProcess();
 }
 
 void ObjMesh::preProcess()
 {
     preProcessChildren();
 
-    throw new NotImplementedException("obj mesh pre process");
+    string filename;
+    primitives->findString("filename", filename, "");
+
+    int flipNorms;
+    primitives->findInt("flipNorms", flipNorms, 0);
+
+    // TODO: future
+    // In the current setup, this transform is not stored
+    // in the future to save memory, this should be cached and only
+    // one object instance should be stored.
+    Transform toWorld;
+    primitives->findTransform("toWorld", toWorld, Transform());
+
+    if (filename.empty())
+    {
+        throw new MissingPrimitiveException("obj mesh filename");
+    }
+
+    parseFromFile(filename, toWorld, flipNorms);
 }
 
 const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }

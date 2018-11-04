@@ -24,3 +24,8 @@ NodeType Sampler::getNodeType() const
 {
     return NT_Sampler;
 }
+
+uint32_t Sampler::getSampleCnt() const
+{
+    return sampleCnt;
+}

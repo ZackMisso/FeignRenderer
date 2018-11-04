@@ -1,7 +1,6 @@
 #pragma once
 
 #include <feign/node.h>
-#include <imedit/image.h>
 
 class Texture : public Node
 {

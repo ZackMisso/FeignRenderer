@@ -41,6 +41,8 @@ void Scene::preProcess()
             emitters.push_back((Emitter*)children[i]);
         }
     }
+
+    primitives->findString("sceneName", sceneName, "test.png");
 }
 
 string Scene::getName() const
@@ -53,6 +55,7 @@ NodeType Scene::getNodeType() const
     return NT_Scene;
 }
 
+string Scene::getSceneName() const { return sceneName; }
 Node* Scene::getRoot() const { return root; }
 vector<Node*> Scene::getSceneObjects() const { return sceneObjects; }
 vector<Emitter*> Scene::getEmitters() const { return emitters; }
