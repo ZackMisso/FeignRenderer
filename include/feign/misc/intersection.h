@@ -3,7 +3,8 @@
 #include <feign/common.h>
 #include <feign/math/vector.h>
 #include <feign/math/coord_frame.h>
-#include <feign/shapes/shape.h>
+
+class Shape;
 
 struct Intersection
 {

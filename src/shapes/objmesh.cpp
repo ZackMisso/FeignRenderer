@@ -156,6 +156,25 @@ void ObjMesh::preProcess()
     parseFromFile(filename, toWorld, flipNorms);
 }
 
+bool ObjMesh::intersect(const Ray3f& ray, Intersection& its)
+{
+    bool intersects = false;
+
+    for (uint32_t i = 0; i < fs.size(); ++i)
+    {
+        intersects |= intersect(i, ray, its);
+    }
+
+    return false;
+}
+
+bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its)
+{
+    throw new NotImplementedException("obj mesh intersect");
+
+    return false;
+}
+
 const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
 const vector<Point3f>& ObjMesh::getVerts() const { return vs; }
 const vector<Normal3f>& ObjMesh::getNorms() const { return ns; }

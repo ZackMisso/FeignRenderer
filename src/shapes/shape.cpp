@@ -1,21 +1,11 @@
 #include <feign/shapes/shape.h>
+#include <feign/shapes/shape.h>
 
-Shape::Shape() : Node()
-{
-    // cout << "SHAPE Constructor" << endl;
-    // TODO
-    // cout << "END SHAPE" << endl;
-}
+Shape::Shape() : Node() { }
 
-Shape::Shape(Node* parent) : Node(parent)
-{
-    // TODO
-}
+Shape::Shape(Node* parent) : Node(parent) { }
 
-Shape::~Shape()
-{
-    // TODO
-}
+Shape::~Shape() { }
 
 string Shape::getName() const
 {

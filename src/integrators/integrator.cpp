@@ -17,6 +17,7 @@ void Integrator::render(const Scene* scene,
     // cout << "Woo" << endl;
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
+        cout << double(k) / double(sampler->getSampleCnt()) << " Percent Done" << endl;
         // cout << "sampleXont" << endl;
         // cout << sampler->getSampleCnt() << endl;
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
@@ -31,7 +32,9 @@ void Integrator::render(const Scene* scene,
                 Ray3f ray;
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
 
+                // cout << "Pre LI" << endl;
                 radiance *= Li(scene, sampler, ray);
+                // cout << "Post LI" << endl;
 
                 // TODO: use reconstruction filters in the future
                 image[0] += radiance(0) / float(sampler->getSampleCnt());

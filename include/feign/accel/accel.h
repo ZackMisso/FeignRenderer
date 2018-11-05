@@ -19,6 +19,8 @@ public:
     virtual string getName() const;
     virtual NodeType getNodeType() const;
 
+    void setMeshes(const vector<Shape*>& param);
+
 protected:
     vector<Shape*> meshes;
 };

@@ -81,6 +81,7 @@ add_executable(feign
     # Accel header files
     include/feign/accel/accel.h
     include/feign/accel/bbh.h
+    include/feign/accel/naive.h
 
     # BSDF header files
     include/feign/bsdfs/bsdf.h
@@ -156,6 +157,7 @@ add_executable(feign
     # Accel implementation files
     src/accel/accel.cpp
     src/accel/bbh.cpp
+    src/accel/naive.cpp
 
     # BSDF implementation files
     src/bsdfs/bsdf.cpp

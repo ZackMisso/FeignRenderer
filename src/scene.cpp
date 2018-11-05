@@ -1,15 +1,18 @@
 #include <feign/scene.h>
+#include <feign/accel/naive.h>
 
 Scene::Scene() : Node()
 {
     sceneObjects = vector<Node*>();
     root = nullptr;
+    acceleration = nullptr;
 }
 
 Scene::Scene(Node* parent) : Node(parent)
 {
     sceneObjects = vector<Node*>();
     root = nullptr;
+    acceleration = nullptr;
 }
 
 Scene::~Scene()
@@ -21,6 +24,8 @@ Scene::~Scene()
 void Scene::preProcess()
 {
     preProcessChildren();
+
+    vector<Shape*> shapes = vector<Shape*>();
 
     for (int i = 0; i < children.size(); ++i)
     {
@@ -40,13 +45,30 @@ void Scene::preProcess()
         {
             emitters.push_back((Emitter*)children[i]);
         }
+        if (children[i]->getNodeType() == NT_Accel)
+        {
+            acceleration = (Accel*)children[i];
+        }
+        if (children[i]->getNodeType() == NT_Mesh)
+        {
+            shapes.push_back((Shape*)children[i]);
+        }
     }
 
     primitives->findString("sceneName", sceneName, "test.png");
+
+    if (!acceleration)
+    {
+        acceleration = new NaiveAccel();
+    }
+
+    acceleration->setMeshes(shapes);
+    acceleration->build();
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
+    // cout << "Acceleration Intersect" << endl;
     return acceleration->intersect(ray, its);
 }
 

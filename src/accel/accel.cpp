@@ -19,3 +19,8 @@ NodeType Accel::getNodeType() const
 {
     return NT_Accel;
 }
+
+void Accel::setMeshes(const vector<Shape*>& param)
+{
+    meshes = param;
+}
