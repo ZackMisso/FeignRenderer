@@ -14,7 +14,7 @@ public:
     virtual void clear() = 0;
     virtual void addShape(Shape* mesh) = 0;
     virtual void build() = 0;
-    virtual bool intersect(const Ray3f& ray, Intersection& its) = 0;
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
 
     virtual string getName() const;
     virtual NodeType getNodeType() const;

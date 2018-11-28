@@ -8,5 +8,5 @@ class NaiveAccel : public Accel
     virtual void clear();
     virtual void addShape(Shape* mesh);
     virtual void build();
-    virtual bool intersect(const Ray3f& ray, Intersection& its);
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
 };

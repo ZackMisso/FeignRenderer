@@ -11,9 +11,10 @@ struct Intersection
     Point3f p;
     Point2f uv;
     float t;
+    uint32_t f; // face index
 
-    CoordinateFrame shadingFrame;
-    CoordinateFrame geometricFrame;
+    CoordinateFrame s_frame;
+    CoordinateFrame g_frame;
 
     const Shape* intersectedMesh;
 

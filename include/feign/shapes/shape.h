@@ -11,8 +11,8 @@ public:
     virtual ~Shape();
 
     virtual void preProcess() = 0;
-    virtual bool intersect(const Ray3f& ray, Intersection& its) = 0;
-    virtual bool intersect(uint32_t face, const Ray3f& ray, Intersection& its) = 0;
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) = 0;
+    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const = 0;
 
     virtual string getName() const;
 

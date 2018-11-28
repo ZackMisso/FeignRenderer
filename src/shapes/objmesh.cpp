@@ -158,19 +158,31 @@ void ObjMesh::preProcess()
     parseFromFile(filename, toWorld, flipNorms);
 }
 
-bool ObjMesh::intersect(const Ray3f& ray, Intersection& its)
+bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its)
 {
+    Ray3f ray(scene_ray);
+
     bool intersects = false;
 
     for (uint32_t i = 0; i < fs.size(); ++i)
     {
-        intersects |= intersect(i, ray, its);
+        Intersection tmp;
+
+        if (intersect(i, ray, tmp))
+        {
+            intersects = true;
+            its.uv = tmp.uv;
+            its.t = tmp.t;
+            its.f = i;
+            ray.maxt = its.t;
+        }
+        // intersects |= intersect(i, ray, its);
     }
 
     return intersects;
 }
 
-bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its)
+bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
 {
     // Vec3u val = fs[face];
     // cout << "whoa" << endl;
@@ -237,6 +249,43 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its)
     // throw new NotImplementedException("obj mesh intersect");
     //
     // return false;
+}
+
+void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
+{
+    Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
+
+    uint32_t i0 = fs[its.f](0);
+    uint32_t i1 = fs[its.f](1);
+    uint32_t i2 = fs[its.f](2);
+
+    Point3f p0 = vs[i0];
+    Point3f p1 = vs[i1];
+    Point3f p2 = vs[i2];
+
+    // compute intersection position
+    its.p = p0 * bary(0) + p1 * bary(1) + p2 * bary(2);
+
+    // compute mesh texture coordinates
+    if (uvs.size() > 0)
+    {
+        its.uv = uvs[i0] * bary(0) + uvs[i1] * bary(1) + uvs[i2] * bary(2);
+    }
+
+    // compute the geometric frame
+    its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
+
+    // compute the normals
+    if (ns.size() > 0)
+    {
+        its.s_frame = CoordinateFrame((ns[i0] * bary(0) +
+                                      ns[i1] * bary(1) +
+                                      ns[i2] * bary(2)).normalized());
+    }
+    else
+    {
+        its.s_frame = its.g_frame;
+    }
 }
 
 const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
