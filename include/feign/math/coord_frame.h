@@ -19,7 +19,7 @@ struct CoordinateFrame
     Vector3f toLocal(const Vector3f& vec) const;
     Vector3f toWorld(const Vector3f& vec) const;
 
-    void coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c);
+    static void coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c);
 
     static float cosTheta(const Vector3f& vec);
     static float sinTheta(const Vector3f& vec);

@@ -102,9 +102,13 @@ void ObjMesh::parseFromFile(const string& filename, Transform transform, bool fl
             line >> n[0];
             line >> n[1];
             line >> n[2];
-            if (flipNorms) n = -n;
-            n = transform * n;
-            n = n.normalized();
+            // cout << "n before flip: " << n[0] << " " << n[1] << " " << n[2] << endl;
+            // if (flipNorms) n = -n;
+            // cout << "n before transform: " << n[0] << " " << n[1] << " " << n[2] << endl;
+            // n = transform * n;
+            // cout << "n after transform: " << n[0] << " " << n[1] << " " << n[2] << endl;
+            // n = n.normalized();
+            // cout << "n after normalized: " << n[0] << " " << n[1] << " " << n[2] << endl;
             ns.push_back(n);
         }
         else if (token == "f")
@@ -253,39 +257,62 @@ bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
 
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
 {
-    Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
-
-    uint32_t i0 = fs[its.f](0);
-    uint32_t i1 = fs[its.f](1);
-    uint32_t i2 = fs[its.f](2);
-
-    Point3f p0 = vs[i0];
-    Point3f p1 = vs[i1];
-    Point3f p2 = vs[i2];
-
-    // compute intersection position
-    its.p = p0 * bary(0) + p1 * bary(1) + p2 * bary(2);
-
-    // compute mesh texture coordinates
-    if (uvs.size() > 0)
-    {
-        its.uv = uvs[i0] * bary(0) + uvs[i1] * bary(1) + uvs[i2] * bary(2);
-    }
-
-    // compute the geometric frame
-    its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
-
-    // compute the normals
-    if (ns.size() > 0)
-    {
-        its.s_frame = CoordinateFrame((ns[i0] * bary(0) +
-                                      ns[i1] * bary(1) +
-                                      ns[i2] * bary(2)).normalized());
-    }
-    else
-    {
-        its.s_frame = its.g_frame;
-    }
+    // Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
+    //
+    // uint32_t i0 = fs[its.f](0);
+    // uint32_t i1 = fs[its.f](1);
+    // uint32_t i2 = fs[its.f](2);
+    //
+    // Point3f p0 = vs[i0];
+    // Point3f p1 = vs[i1];
+    // Point3f p2 = vs[i2];
+    //
+    // cout << "p0: " << p0(0) << " " << p0(1) << " " << p0(2) << endl;
+    // cout << "p1: " << p1(0) << " " << p1(1) << " " << p1(2) << endl;
+    // cout << "p2: " << p2(0) << " " << p2(1) << " " << p2(2) << endl;
+    //
+    // cout << "whooo" << endl;
+    //
+    // // compute intersection position
+    // its.p = p0 * bary(0) + p1 * bary(1) + p2 * bary(2);
+    //
+    // cout << "its.p: " << its.p(0) << " " << its.p(1) << " " << its.p(2) << endl;
+    //
+    // // compute mesh texture coordinates
+    // if (uvs.size() > 0)
+    // {
+    //     cout << "UVU" << endl;
+    //     its.uv = uvs[i0] * bary(0) + uvs[i1] * bary(1) + uvs[i2] * bary(2);
+    // }
+    //
+    // // compute the geometric frame
+    // its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
+    //
+    // // compute the normals
+    // if (ns.size() > 0)
+    // {
+    //     cout << "NUN" << endl;
+    //     Normal3f n = ns[i0] * bary(0) + ns[i1] * bary(1) + ns[i2] * bary(2);
+    //     cout << "n: " << n(0) << " " << n(1) << " " << n(2) << endl;
+    //
+    //     n.normalized();
+    //
+    //     cout << "n0: " << ns[i0](0) << " " << ns[i0](1) << " " << ns[i0](2) << endl;
+    //     cout << "n1: " << ns[i1](0) << " " << ns[i1](1) << " " << ns[i1](2) << endl;
+    //     cout << "n2: " << ns[i2](0) << " " << ns[i2](1) << " " << ns[i2](2) << endl;
+    //
+    //     cout << "n.normed(): " << n(0) << " " << n(1) << " " << n(2) << endl;
+    //
+    //     its.s_frame = CoordinateFrame((ns[i0] * bary(0) +
+    //                                   ns[i1] * bary(1) +
+    //                                   ns[i2] * bary(2)).normalized());
+    // }
+    // else
+    // {
+    //     its.s_frame = its.g_frame;
+    // }
+    //
+    // cout << "its.n: " << its.s_frame.n(0) << " " << its.s_frame.n(1) << " " << its.s_frame.n(2) << endl;
 }
 
 const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
