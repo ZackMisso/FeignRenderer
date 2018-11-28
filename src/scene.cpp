@@ -68,7 +68,6 @@ void Scene::preProcess()
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
-    // cout << "Acceleration Intersect" << endl;
     return acceleration->intersect(ray, its);
 }
 

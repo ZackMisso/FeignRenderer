@@ -769,7 +769,7 @@ struct Matrix4
         vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2) + n[3]*other(3);
         vec[1] = n[4]*other(0) + n[5]*other(1) + n[6]*other(2) + n[7]*other(3);
         vec[2] = n[8]*other(0) + n[9]*other(1) + n[10]*other(2) + n[11]*other(3);
-        vec[3] = n[12]*other(0) + n[13]*other(4) + n[14]*other(8) + n[15]*other(12);
+        vec[3] = n[12]*other(0) + n[13]*other(1) + n[14]*other(2) + n[15]*other(3);
 
         return vec;
     }

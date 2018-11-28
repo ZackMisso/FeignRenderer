@@ -45,9 +45,9 @@ void Perspective::preProcess()
     filter->preProcess();
 }
 
-Color3f Perspective::sampleRay(Ray3f ray,
-                               Point2f filmSamp,
-                               Point2f appSamp) const
+Color3f Perspective::sampleRay(Ray3f& ray,
+                               const Point2f& filmSamp,
+                               const Point2f& appSamp) const
 {
     Point3f nearP = sampleToCamera * Point3f(
                             filmSamp(0) * 1.0 / filmSize(0),
@@ -61,11 +61,16 @@ Color3f Perspective::sampleRay(Ray3f ray,
     float t = focalDistance / d(2);
 
     Vector3f od = d * t;
+    // cout << "OD 1: " << od[0] << " " << od[1] << " " << od[2] << endl;
     od = od - Vector3f(apPos(0), apPos(1), 0);
+    // cout << "OD 2: " << od[0] << " " << od[1] << " " << od[2] << endl;
     od = od.normalized();
+    // cout << "OD 3: " << od[0] << " " << od[1] << " " << od[2] << endl;
+
 
     ray.origin = cameraToWorld * Point3f(apPos(0), apPos(1), 0);
     ray.dir = cameraToWorld * od;
+    // cout << "ray.dir: " << ray.dir[0] << " " << ray.dir[1] << " " << ray.dir[2] << endl;
 
     ray.mint = near * invZ;
     ray.maxt = far * invZ;

@@ -17,7 +17,7 @@ void Integrator::render(const Scene* scene,
     // cout << "Woo" << endl;
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
-        cout << double(k) / double(sampler->getSampleCnt()) << " Percent Done" << endl;
+        cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << endl;
         // cout << "sampleXont" << endl;
         // cout << sampler->getSampleCnt() << endl;
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
@@ -31,6 +31,7 @@ void Integrator::render(const Scene* scene,
 
                 Ray3f ray;
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
+                // cout << "ray.dir before: " << ray.dir[0] << " " << ray.dir[1] << " " << ray.dir[2] << endl;
 
                 // cout << "Pre LI" << endl;
                 radiance *= Li(scene, sampler, ray);

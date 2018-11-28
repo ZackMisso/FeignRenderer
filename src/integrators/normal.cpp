@@ -12,7 +12,7 @@ void NormalIntegrator::preProcess()
 
 Color3f NormalIntegrator::Li(const Scene* scene,
                              Sampler* sampler,
-                             const Ray3f ray) const
+                             const Ray3f& ray) const
 {
     // cout << "Whoo" << endl;
     Intersection its;
@@ -24,7 +24,7 @@ Color3f NormalIntegrator::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
-    cout << "Post Intersect" << endl;
+    // cout << "Post Intersect" << endl;
 
     Normal3f n = ~(its.shadingFrame.n);
     return Color3f(n(0), n(1), n(2));

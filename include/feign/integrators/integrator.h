@@ -21,7 +21,7 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f ray) const = 0;
+                       const Ray3f& ray) const = 0;
 
     virtual string getName() const;
 

@@ -29,5 +29,7 @@ bool NaiveAccel::intersect(const Ray3f& ray, Intersection& its)
         intersects |= meshes[i]->intersect(ray, its);
     }
 
+    // if (intersects) cout << "what" << endl;
+
     return intersects;
 }

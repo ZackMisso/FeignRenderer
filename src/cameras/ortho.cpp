@@ -17,9 +17,9 @@ void Orthographic::preProcess()
     preProcessChildren();
 }
 
-Color3f Orthographic::sampleRay(Ray3f ray,
-                                Point2f filmSamp,
-                                Point2f appSamp) const
+Color3f Orthographic::sampleRay(Ray3f& ray,
+                                const Point2f& filmSamp,
+                                const Point2f& appSamp) const
 {
     throw new NotImplementedException("ortho sampleRay");
 

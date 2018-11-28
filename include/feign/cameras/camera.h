@@ -15,9 +15,9 @@ public:
     // takes in a film and apperture sample
     // calculates a generated ray according to the samples
     // returns an importance to weight the generated ray
-    virtual Color3f sampleRay(Ray3f ray,
-                              Point2f filmSamp,
-                              Point2f appSamp) const = 0;
+    virtual Color3f sampleRay(Ray3f& ray,
+                              const Point2f& filmSamp,
+                              const Point2f& appSamp) const = 0;
 
     virtual string getName() const;
     virtual NodeType getNodeType() const;

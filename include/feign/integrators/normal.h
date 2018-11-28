@@ -14,5 +14,5 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f ray) const;
+                       const Ray3f& ray) const;
 };
