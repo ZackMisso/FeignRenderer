@@ -25,6 +25,7 @@ Node* Parser::parse(string filename)
     checkBalance(filename);
 
     // tokenize the file
+    // TODO: this process of parsing is extremely slow... fix this
     ifstream file;
     file.open(filename);
     stringstream fileStream;

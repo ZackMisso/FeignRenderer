@@ -135,6 +135,26 @@ void ObjMesh::parseFromFile(const string& filename, Transform transform, bool fl
             fs.push_back(f);
         }
     }
+
+    // infoDump();
+}
+
+void ObjMesh::infoDump()
+{
+    std::cout << "Number of Verts: " << vs.size() << std::endl;
+    std::cout << "Number of Faces: " << fs.size() << std::endl;
+    std::cout << "Number of Norms: " << ns.size() << std::endl;
+
+    for (int i = 0; i < fs.size(); ++i)
+    {
+        std::cout << "Face: " << i << std::endl;
+        std::cout << "Vert[0]: ";
+        vs[fs[i](0) - 1].info();
+        std::cout << "Vert[1]: ";
+        vs[fs[i](1) - 1].info();
+        std::cout << "Vert[2]: ";
+        vs[fs[i](2) - 1].info();
+    }
 }
 
 void ObjMesh::preProcess()
@@ -160,6 +180,8 @@ void ObjMesh::preProcess()
     }
 
     parseFromFile(filename, toWorld, flipNorms);
+
+    infoDump();
 }
 
 bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its)
@@ -172,6 +194,8 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its)
     {
         Intersection tmp;
 
+        // std::cout << "checking for intersection" << std::endl;
+
         if (intersect(i, ray, tmp))
         {
             intersects = true;
@@ -179,6 +203,7 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its)
             its.t = tmp.t;
             its.f = i;
             ray.maxt = its.t;
+            std::cout << "intersects yes!!" << std::endl;
         }
         // intersects |= intersect(i, ray, its);
     }
@@ -192,6 +217,8 @@ bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
     // cout << "whoa" << endl;
     // cout << fs.size() << endl;
     // cout << vs.size() << endl;
+
+    // std::cout << "ray.mint: " << ray.mint << "  ray.maxt: " << ray.maxt << std::endl;
 
     uint32_t i0 = fs[face][0];
     uint32_t i1 = fs[face][1];
@@ -217,6 +244,7 @@ bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
         // cout << "p0x: " << p0(0) << endl;
         // cout << "p0y: " << p0(1) << endl;
         // cout << "p0z: " << p0(2) << endl;
+        // std::cout << "first det" << std::endl;
         return false;
     }
 
@@ -244,7 +272,11 @@ bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
 
     its.t = (edge2 % qvec) * invDet;
 
+    std::cout << "its.t: " << its.t << std::endl;
+
     bool ret = its.t >= ray.mint && its.t <= ray.maxt;
+
+    // std::cout << "made it to end" << std::endl;
 
     // if (ret) cout << "WHOO SOMTHING INTERSECTED" << endl;
 

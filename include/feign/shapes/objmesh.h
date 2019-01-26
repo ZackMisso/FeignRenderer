@@ -26,6 +26,8 @@ public:
 
     virtual void preProcess();
 
+    void infoDump();
+
     // TODO
     // bool intersectTri(uint32_t index, const Ray& ray, *intersectionData*) const;
 

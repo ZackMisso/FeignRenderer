@@ -9,13 +9,21 @@
 #include <feign/math/bbox.h>
 #include <feign/log/logger.h>
 
+#define STB_IMAGE_STATIC
+#define STB_IMAGE_WRITE_STATIC
+
 #include <imedit/image.h>
 
 using namespace std;
+using namespace imedit;
 
 // TODO: remove this
-#define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+// main laptop
+// #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+// work laptop
 // #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
+// workstation
+#define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
 
 #define Epsilon 1e-4f
 

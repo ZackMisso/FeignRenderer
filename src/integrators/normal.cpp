@@ -27,6 +27,7 @@ Color3f NormalIntegrator::Li(const Scene* scene,
     // cout << "Post Intersect" << endl;
 
     Normal3f n = ~(its.s_frame.n);
+    std::cout << "LI Normal" << std::endl;
     return Color3f(n(0), n(1), n(2));
 }
 

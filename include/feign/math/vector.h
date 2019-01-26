@@ -157,6 +157,11 @@ struct Vec2
         return vec;
     }
 
+    void info() const
+    {
+        std::cout << "(" << xy[0] << ", " << xy[1] << ")" << std::endl;
+    }
+
     T xy[2];
 };
 
@@ -340,6 +345,13 @@ struct Vec3
         else vec[2] = xyz[2];
 
         return vec;
+    }
+
+    void info() const
+    {
+        std::cout << "(" << xyz[0] << ", " <<
+                            xyz[1] << ", " <<
+                            xyz[2] << ")" << std::endl;
     }
 
     T xyz[3];
@@ -557,6 +569,14 @@ struct Vec4
 
 
         return vec;
+    }
+
+    void info() const
+    {
+        std::cout << "(" << xyzw[0] << ", " <<
+                            xyzw[1] << ", " <<
+                            xyzw[2] << ", " <<
+                            xyzw[3] << ")" << std::endl;
     }
 
     T xyzw[4];
