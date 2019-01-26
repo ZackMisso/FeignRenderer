@@ -15,7 +15,7 @@ NodeType ReconstructionFilter::getNodeType() const
     return NT_Recon_Filter;
 }
 
-string ReconstructionFilter::getName() const
+std::string ReconstructionFilter::getName() const
 {
     return "reconstruction filter: ";
 }

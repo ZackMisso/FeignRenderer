@@ -7,7 +7,7 @@ class Media : public Node
     Media();
     virtual ~Media();
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     // TODO
 };

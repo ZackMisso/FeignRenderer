@@ -67,9 +67,14 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     od = od.normalized();
     // cout << "OD 3: " << od[0] << " " << od[1] << " " << od[2] << endl;
 
+    // std::cout << "camera To World: " << std::endl;
+    // cameraToWorld.print();
 
     ray.origin = cameraToWorld * Point3f(apPos(0), apPos(1), 0);
     ray.dir = cameraToWorld * od;
+    // std::cout << "end" << std::endl;
+
+    // std::cout << std::endl << std::endl;
     // cout << "ray.dir: " << ray.dir[0] << " " << ray.dir[1] << " " << ray.dir[2] << endl;
 
     ray.mint = near * invZ;
@@ -81,7 +86,7 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     return Color3f(1.f);
 }
 
-string Perspective::getName() const
+std::string Perspective::getName() const
 {
     return Camera::getName() + "perspective";
 }

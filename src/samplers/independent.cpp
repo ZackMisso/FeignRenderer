@@ -81,7 +81,7 @@ void Independent::nextSample()
     currentSample++;
 }
 
-string Independent::getName() const
+std::string Independent::getName() const
 {
     return Sampler::getName() + "independent";
 }

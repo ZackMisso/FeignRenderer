@@ -4,7 +4,7 @@ void NaiveAccel::preProcess()
 {
     preProcessChildren();
 
-    meshes = vector<Shape*>();
+    meshes = std::vector<Shape*>();
 }
 
 void NaiveAccel::clear()
@@ -23,7 +23,7 @@ void NaiveAccel::build() { }
 bool NaiveAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 {
     Ray3f ray(scene_ray);
-    
+
     bool intersects = false;
 
     for (int i = 0; i < meshes.size(); ++i)

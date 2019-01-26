@@ -3,14 +3,14 @@
 
 Scene::Scene() : Node()
 {
-    sceneObjects = vector<Node*>();
+    sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
 }
 
 Scene::Scene(Node* parent) : Node(parent)
 {
-    sceneObjects = vector<Node*>();
+    sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
 }
@@ -25,7 +25,7 @@ void Scene::preProcess()
 {
     preProcessChildren();
 
-    vector<Shape*> shapes = vector<Shape*>();
+    std::vector<Shape*> shapes = std::vector<Shape*>();
 
     for (int i = 0; i < children.size(); ++i)
     {
@@ -71,7 +71,7 @@ bool Scene::intersect(const Ray3f& ray, Intersection& its) const
     return acceleration->intersect(ray, its);
 }
 
-string Scene::getName() const
+std::string Scene::getName() const
 {
     return "scene";
 }
@@ -81,10 +81,10 @@ NodeType Scene::getNodeType() const
     return NT_Scene;
 }
 
-string Scene::getSceneName() const { return sceneName; }
+std::string Scene::getSceneName() const { return sceneName; }
 Node* Scene::getRoot() const { return root; }
-vector<Node*> Scene::getSceneObjects() const { return sceneObjects; }
-vector<Emitter*> Scene::getEmitters() const { return emitters; }
+std::vector<Node*> Scene::getSceneObjects() const { return sceneObjects; }
+std::vector<Emitter*> Scene::getEmitters() const { return emitters; }
 Texture* Scene::getEnvMap() const { return envMap; }
 Integrator* Scene::getIntegrator() const { return integrator; }
 Media* Scene::getEnvMedium() const { return envMedium; }

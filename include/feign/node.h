@@ -44,9 +44,9 @@ public:
     virtual void preProcess() = 0;
     void preProcessChildren();
 
-    void printGraph(string indent = "") const;
+    void printGraph(std::string indent = "") const;
 
-    virtual string getName() const = 0;
+    virtual std::string getName() const = 0;
 
     int getTag() const;
 
@@ -55,6 +55,6 @@ public:
 protected:
     Node* parent;
     PrimitiveList* primitives;
-    vector<Node*> children;
+    std::vector<Node*> children;
     int tag;
 };

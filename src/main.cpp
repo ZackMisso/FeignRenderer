@@ -8,13 +8,15 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Beginning Unit Tests" << std::endl;
     UnitTestManager* unitTests = new UnitTestManager();
+
     if (!unitTests->runUnitTests())
     {
         delete unitTests;
-        cout << "Unit Tests Failed -> terminating early" << endl;
+        std::cout << "Unit Tests Failed -> terminating early" << std::endl;
         return -1;
     }
     delete unitTests;
+
     std::cout << "All Unit Tests Passed" << std::endl;
 
     std::cout << "Parsing: " << SCENES_PATH "ajax-normals.firal" << std::endl;
@@ -22,7 +24,7 @@ int main(int argc, char* argv[]) {
 
     if (!parsedNode || parsedNode->getNodeType() != NT_World)
     {
-        cout << "Parse failed" << endl;
+        std::cout << "Parse failed" << std::endl;
         return -1;
     }
 
@@ -30,14 +32,14 @@ int main(int argc, char* argv[]) {
 
     // NOTE: calling it world graph because i want to support multiple scenes
     //       from one scene file -> actually render animations
-    cout << endl;
-    cout << "World Graph Description:" << endl;
-    cout << endl;
+    std::cout << std::endl;
+    std::cout << "World Graph Description:" << std::endl;
+    std::cout << std::endl;
     worldNode->printGraph();
-    cout << endl;
+    std::cout << std::endl;
 
     // preprocess the world
-    cout << "Pre Processing" << endl;
+    std::cout << "Pre Processing" << std::endl;
     worldNode->preProcess();
 
     // render

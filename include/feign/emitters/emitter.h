@@ -9,7 +9,7 @@ public:
     Emitter(Node* parent);
     virtual ~Emitter();
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
 

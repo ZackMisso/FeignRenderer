@@ -14,7 +14,7 @@ public:
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
 protected:
     Transform sampleToCamera;

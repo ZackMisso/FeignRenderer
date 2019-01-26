@@ -5,13 +5,13 @@
 class Parser
 {
 public:
-    static Node* parse(string filename);
-    static Node* generateWorld(const vector<string>& tokens);
-    static bool getNextToken(const vector<string>& tokens,
-                             string& token,
+    static Node* parse(std::string filename);
+    static Node* generateWorld(const std::vector<std::string>& tokens);
+    static bool getNextToken(const std::vector<std::string>& tokens,
+                             std::string& token,
                              int index);
-    static void possiblyAddChild(vector<Node*>& nodes,
+    static void possiblyAddChild(std::vector<Node*>& nodes,
                                  Node* node);
 
-    static void checkBalance(string filename);
+    static void checkBalance(std::string filename);
 };

@@ -10,7 +10,7 @@ Media::~Media()
     // TODO
 }
 
-string Media::getName() const
+std::string Media::getName() const
 {
     return "media: ";
 }

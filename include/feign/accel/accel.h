@@ -16,11 +16,11 @@ public:
     virtual void build() = 0;
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
     virtual NodeType getNodeType() const;
 
-    void setMeshes(const vector<Shape*>& param);
+    void setMeshes(const std::vector<Shape*>& param);
 
 protected:
-    vector<Shape*> meshes;
+    std::vector<Shape*> meshes;
 };

@@ -19,7 +19,7 @@ public:
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
     virtual NodeType getNodeType() const;
 
     Vec2i getFilmSize() const;

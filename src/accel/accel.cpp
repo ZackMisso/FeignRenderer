@@ -2,7 +2,7 @@
 
 Accel::Accel()
 {
-    meshes = vector<Shape*>();
+    meshes = std::vector<Shape*>();
 }
 
 Accel::~Accel()
@@ -10,7 +10,7 @@ Accel::~Accel()
     meshes.clear();
 }
 
-string Accel::getName() const
+std::string Accel::getName() const
 {
     return "accel: ";
 }
@@ -20,7 +20,7 @@ NodeType Accel::getNodeType() const
     return NT_Accel;
 }
 
-void Accel::setMeshes(const vector<Shape*>& param)
+void Accel::setMeshes(const std::vector<Shape*>& param)
 {
     meshes = param;
 }

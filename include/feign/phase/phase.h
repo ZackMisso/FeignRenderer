@@ -8,7 +8,7 @@ public:
     PhaseFunction();
     virtual ~PhaseFunction();
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     // TODO
 };

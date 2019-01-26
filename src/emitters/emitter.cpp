@@ -15,7 +15,7 @@ Emitter::~Emitter()
     // TODO
 }
 
-string Emitter::getName() const
+std::string Emitter::getName() const
 {
     return "emitter: ";
 }

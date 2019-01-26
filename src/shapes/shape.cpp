@@ -7,7 +7,7 @@ Shape::Shape(Node* parent) : Node(parent) { }
 
 Shape::~Shape() { }
 
-string Shape::getName() const
+std::string Shape::getName() const
 {
     return "mesh: ";
 }

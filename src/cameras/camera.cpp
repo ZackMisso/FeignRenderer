@@ -11,7 +11,7 @@ Vec2i Camera::getFilmSize() const
     return filmSize;
 }
 
-string Camera::getName() const
+std::string Camera::getName() const
 {
     return "camera: ";
 }

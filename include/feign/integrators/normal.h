@@ -10,7 +10,7 @@ public:
 
     virtual void preProcess();
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,

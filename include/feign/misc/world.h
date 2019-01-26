@@ -16,9 +16,9 @@ public:
 
     virtual void preProcess();
 
-    vector<Scene*> collectScenes() const;
+    std::vector<Scene*> collectScenes() const;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
 };

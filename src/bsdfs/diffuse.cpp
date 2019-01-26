@@ -32,7 +32,7 @@ float Diffuse::pdf(const BSDFQuery& rec) const
     return 0.f;
 }
 
-string Diffuse::getName() const
+std::string Diffuse::getName() const
 {
     return BSDF::getName() + "diffuse";
 }

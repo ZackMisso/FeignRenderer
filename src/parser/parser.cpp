@@ -19,20 +19,20 @@
 #include <sstream>
 #include <iostream>
 
-Node* Parser::parse(string filename)
+Node* Parser::parse(std::string filename)
 {
     // check to make sure all required nodes have an end tag
     checkBalance(filename);
 
     // tokenize the file
     // TODO: this process of parsing is extremely slow... fix this
-    ifstream file;
+    std::ifstream file;
     file.open(filename);
-    stringstream fileStream;
+    std::stringstream fileStream;
     fileStream << file.rdbuf();
-    vector<string> tokens = vector<string>();
-    cout << tokens.size() << endl;
-    string str;
+    std::vector<std::string> tokens = std::vector<std::string>();
+    std::cout << tokens.size() << std::endl;
+    std::string str;
 
     while (fileStream >> str)
         tokens.push_back(str);
@@ -41,7 +41,10 @@ Node* Parser::parse(string filename)
     return generateWorld(tokens);
 }
 
-bool Parser::getNextToken(const vector<string>& tokens, string& token, int index) {
+bool Parser::getNextToken(const std::vector<std::string>& tokens,
+                          std::string& token,
+                          int index)
+{
     // check if the token has reached the end
     if (index >= tokens.size())
     {
@@ -54,7 +57,7 @@ bool Parser::getNextToken(const vector<string>& tokens, string& token, int index
     return true;
 }
 
-void Parser::possiblyAddChild(vector<Node*>& nodes,
+void Parser::possiblyAddChild(std::vector<Node*>& nodes,
                               Node* node)
 {
     if (nodes.size() > 0)
@@ -65,14 +68,14 @@ void Parser::possiblyAddChild(vector<Node*>& nodes,
     nodes.push_back(node);
 }
 
-Node* Parser::generateWorld(const vector<string>& tokens)
+Node* Parser::generateWorld(const std::vector<std::string>& tokens)
 {
     // initializes counters, and node stack
-    vector<Node*> nodes = vector<Node*>();
-    vector<string> nodeTokens = vector<string>();
-    vector<Transform> transformStack = vector<Transform>();
+    std::vector<Node*> nodes = std::vector<Node*>();
+    std::vector<std::string> nodeTokens = std::vector<std::string>();
+    std::vector<Transform> transformStack = std::vector<Transform>();
 
-    string token;
+    std::string token;
     int index = 0;
 
     WorldNode* world = new WorldNode();
@@ -100,7 +103,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 Transform lastTransform = transformStack.back();
                 Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
                 node->getPrimList()->addTransformPrimitive(transformPrim);
-                cout << node->getName() << endl;
+                std::cout << node->getName() << std::endl;
                 lastTransform.print();
 
                 transformStack.pop_back();
@@ -118,7 +121,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             Sampler* sampler = nullptr;
 
-            string typeToken;
+            std::string typeToken;
             getNextToken(tokens, typeToken, index++);
 
             if (typeToken.empty())
@@ -156,7 +159,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             Integrator* integrator = nullptr;
 
-            string typeToken;
+            std::string typeToken;
             getNextToken(tokens, typeToken, index++);
 
             if (typeToken.empty())
@@ -197,7 +200,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             Camera* camera = nullptr;
 
-            string typeToken;
+            std::string typeToken;
             getNextToken(tokens, typeToken, index++);
 
             if (typeToken.empty())
@@ -242,7 +245,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         {
             nodeTokens.push_back(token);
 
-            string nameToken;
+            std::string nameToken;
             getNextToken(tokens, nameToken, index++);
 
             if (nameToken != "name")
@@ -250,19 +253,19 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("transform name");
             }
 
-            string transformName;
+            std::string transformName;
             getNextToken(tokens, transformName, index++);
 
             Transform transform = Transform();
 
             while(tokens[index] != "/transform")
             {
-                string matType;
+                std::string matType;
                 getNextToken(tokens, matType, index++);
 
                 if (matType == "lookat")
                 {
-                    string targetText;
+                    std::string targetText;
                     getNextToken(tokens, targetText, index++);
 
                     if (targetText != "target")
@@ -274,7 +277,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                     float targetY;
                     float targetZ;
 
-                    string valText;
+                    std::string valText;
                     getNextToken(tokens, valText, index++);
                     targetX = stof(valText);
 
@@ -284,7 +287,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                     getNextToken(tokens, valText, index++);
                     targetZ = stof(valText);
 
-                    string originText;
+                    std::string originText;
                     getNextToken(tokens, originText, index++);
 
                     if (originText != "origin")
@@ -305,7 +308,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                     getNextToken(tokens, valText, index++);
                     originZ = stof(valText);
 
-                    string upText;
+                    std::string upText;
                     getNextToken(tokens, upText, index++);
 
                     if (upText != "up")
@@ -336,10 +339,10 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
                     Matrix4f lookAtMatrix = Matrix4f();
 
-                    lookAtMatrix.setRow(0, Vec4f(xaxis, 0.f));
-                    lookAtMatrix.setRow(1, Vec4f(yaxis, 0.f));
-                    lookAtMatrix.setRow(2, Vec4f(zaxis, 0.f));
-                    lookAtMatrix.setRow(3, Vec4f(origin, 1.f));
+                    lookAtMatrix.setCol(0, Vec4f(xaxis, 0.f));
+                    lookAtMatrix.setCol(1, Vec4f(yaxis, 0.f));
+                    lookAtMatrix.setCol(2, Vec4f(zaxis, 0.f));
+                    lookAtMatrix.setCol(3, Vec4f(origin, 1.f));
 
                     Transform trans = Transform(lookAtMatrix);
 
@@ -349,7 +352,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 {
                     Vec3f translate;
 
-                    string valText;
+                    std::string valText;
                     getNextToken(tokens, valText, index++);
                     translate[0] = stof(valText);
 
@@ -373,7 +376,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 {
                     Vec3f scale;
 
-                    string valText;
+                    std::string valText;
                     getNextToken(tokens, valText, index++);
                     scale[0] = stof(valText);
 
@@ -434,7 +437,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             Shape* mesh = nullptr;
 
-            string typeToken;
+            std::string typeToken;
             getNextToken(tokens, typeToken, index++);
 
             if (typeToken.empty())
@@ -468,7 +471,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 Transform lastTransform = transformStack.back();
                 Primitive<Transform>* transformPrim = new Primitive<Transform>("toWorld", lastTransform);
                 node->getPrimList()->addTransformPrimitive(transformPrim);
-                cout << node->getName() << endl;
+                std::cout << node->getName() << std::endl;
                 lastTransform.print();
 
                 transformStack.pop_back();
@@ -486,7 +489,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
 
             BSDF* bsdf = nullptr;
 
-            string typeToken;
+            std::string typeToken;
             getNextToken(tokens, typeToken, index++);
 
             if (typeToken.empty())
@@ -520,7 +523,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         }
         else if (token == "int")
         {
-            string nameToken;
+            std::string nameToken;
             getNextToken(tokens, nameToken, index++);
 
             if (nameToken != "name")
@@ -528,7 +531,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string nameValue;
+            std::string nameValue;
             getNextToken(tokens, nameValue, index++);
 
             if (nameValue.empty())
@@ -536,7 +539,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string valueToken;
+            std::string valueToken;
             getNextToken(tokens, valueToken, index++);
 
             if (valueToken != "value")
@@ -544,7 +547,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            string valueValue;
+            std::string valueValue;
             getNextToken(tokens, valueValue, index++);
 
             if (valueValue.empty())
@@ -559,7 +562,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         }
         else if (token == "float")
         {
-            string nameToken;
+            std::string nameToken;
             getNextToken(tokens, nameToken, index++);
 
             if (nameToken != "name")
@@ -567,7 +570,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string nameValue;
+            std::string nameValue;
             getNextToken(tokens, nameValue, index++);
 
             if (nameValue.empty())
@@ -575,7 +578,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string valueToken;
+            std::string valueToken;
             getNextToken(tokens, valueToken, index++);
 
             if (valueToken != "value")
@@ -583,7 +586,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            string valueValue;
+            std::string valueValue;
             getNextToken(tokens, valueValue, index++);
 
             if (valueValue.empty())
@@ -598,7 +601,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
         }
         else if (token == "string")
         {
-            string nameToken;
+            std::string nameToken;
             getNextToken(tokens, nameToken, index++);
 
             if (nameToken != "name")
@@ -606,7 +609,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string nameValue;
+            std::string nameValue;
             getNextToken(tokens, nameValue, index++);
 
             if (nameValue.empty())
@@ -614,7 +617,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("name");
             }
 
-            string valueToken;
+            std::string valueToken;
             getNextToken(tokens, valueToken, index++);
 
             if (valueToken != "value")
@@ -622,7 +625,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            string valueValue;
+            std::string valueValue;
             getNextToken(tokens, valueValue, index++);
 
             if (valueValue.empty())
@@ -630,7 +633,7 @@ Node* Parser::generateWorld(const vector<string>& tokens)
                 throw MissingExpectedTokenException("value");
             }
 
-            Primitive<string>* stringPrim = new Primitive<string>(nameValue, valueValue);
+            Primitive<std::string>* stringPrim = new Primitive<std::string>(nameValue, valueValue);
 
             nodes[nodes.size() - 1]->getPrimList()->addStringPrimitive(stringPrim);
         }
@@ -644,15 +647,15 @@ Node* Parser::generateWorld(const vector<string>& tokens)
     return nodes[0];
 }
 
-void Parser::checkBalance(string filename)
+void Parser::checkBalance(std::string filename)
 {
-    ifstream file;
+    std::ifstream file;
     file.open(filename);
-    stringstream ss;
+    std::stringstream ss;
     ss << file.rdbuf();
-    string buf;
+    std::string buf;
 
-    vector<string> majorNodes = vector<string>();
+    std::vector<std::string> majorNodes = std::vector<std::string>();
 
     while (ss >> buf)
     {

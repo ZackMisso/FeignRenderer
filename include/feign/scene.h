@@ -23,10 +23,10 @@ public:
     bool intersect(const Ray3f& ray, Intersection& its) const;
 
     // getter methods
-    string getSceneName() const;
+    std::string getSceneName() const;
     Node* getRoot() const;
-    vector<Node*> getSceneObjects() const;
-    vector<Emitter*> getEmitters() const;
+    std::vector<Node*> getSceneObjects() const;
+    std::vector<Emitter*> getEmitters() const;
     Texture* getEnvMap() const;
     Integrator* getIntegrator() const;
     Media* getEnvMedium() const;
@@ -34,14 +34,14 @@ public:
     Camera* getCamera() const;
 
     virtual NodeType getNodeType() const;
-    virtual string getName() const;
+    virtual std::string getName() const;
 
 protected:
-    string sceneName;
+    std::string sceneName;
     Node* root; // is this needed???
     Accel* acceleration;
-    vector<Node*> sceneObjects; // keeping this for debugging purposes
-    vector<Emitter*> emitters;
+    std::vector<Node*> sceneObjects; // keeping this for debugging purposes
+    std::vector<Emitter*> emitters;
     Texture* envMap;
     Integrator* integrator;
     Media* envMedium;

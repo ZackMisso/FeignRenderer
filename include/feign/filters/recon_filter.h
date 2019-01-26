@@ -12,7 +12,7 @@ public:
 
     virtual NodeType getNodeType() const;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
 protected:
     Vec2f size;

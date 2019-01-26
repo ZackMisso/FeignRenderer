@@ -5,65 +5,135 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-
-class UnrecognizedTokenException : public runtime_error {
+class UnrecognizedTokenException : public std::runtime_error {
 public:
-    UnrecognizedTokenException() : runtime_error("Exception: Unrecognized Token") { cout << "Unrecognized Token" << endl; }
-    UnrecognizedTokenException(string str) : runtime_error("Exception: Unrecognized Token: " + str) { cout << "Unrecognized Token: " << str << endl; }
+    UnrecognizedTokenException() : std::runtime_error("Exception: Unrecognized Token")
+    {
+        std::cout << "Unrecognized Token" << std::endl;
+    }
+    UnrecognizedTokenException(std::string str) : std::runtime_error("Exception: Unrecognized Token: " + str)
+    {
+        std::cout << "Unrecognized Token: " << str << std::endl;
+    }
 };
 
-class MissingExpectedTokenException : public runtime_error {
+class MissingExpectedTokenException : public std::runtime_error {
 public:
-    MissingExpectedTokenException() : runtime_error("Exception: Expected Token") { cout << "Missing Expected Token" << endl; }
-    MissingExpectedTokenException(string str) : runtime_error("Exception: Expected Token: " + str) { cout << "Missing Expected Token: " << str << endl; }
+    MissingExpectedTokenException() : std::runtime_error("Exception: Expected Token")
+    {
+        std::cout << "Missing Expected Token" << std::endl;
+    }
+    MissingExpectedTokenException(std::string str) : std::runtime_error("Exception: Expected Token: " + str)
+    {
+        std::cout << "Missing Expected Token: " << str << std::endl;
+    }
 };
 
-class UnsupportedTypeException : public runtime_error {
+class UnsupportedTypeException : public std::runtime_error {
 public:
-    UnsupportedTypeException() : runtime_error("Exception: Unsupported Type") { cout << "Unsupported Type Token" << endl; }
-    UnsupportedTypeException(string str) : runtime_error("Exception: Unsupported Type: " + str) { cout << "Unsupported Type Token: " << str << endl; }
+    UnsupportedTypeException() : std::runtime_error("Exception: Unsupported Type")
+    {
+        std::cout << "Unsupported Type Token" << std::endl;
+    }
+    UnsupportedTypeException(std::string str) : std::runtime_error("Exception: Unsupported Type: " + str)
+    {
+        std::cout << "Unsupported Type Token: " << str << std::endl;
+    }
 };
 
-class InvalidEndTokenException : public runtime_error {
+class InvalidEndTokenException : public std::runtime_error {
 public:
-    InvalidEndTokenException() : runtime_error("Exception: Invalid End Token") { cout << "Invalid End Token" << endl; }
-    InvalidEndTokenException(string str) : runtime_error("Exception: Invalid End Token: " + str) { cout << "Invalid End Token: " << str << endl; }
+    InvalidEndTokenException() : std::runtime_error("Exception: Invalid End Token")
+    {
+        std::cout << "Invalid End Token" << std::endl;
+    }
+    InvalidEndTokenException(std::string str) : std::runtime_error("Exception: Invalid End Token: " + str)
+    {
+        std::cout << "Invalid End Token: " << str << std::endl;
+    }
 };
 
-class TagMisMatch : public runtime_error {
+class TagMisMatch : public std::runtime_error {
 public:
-    TagMisMatch() : runtime_error("Exception: Tag Mismatch") { cout << "Tag MisMatch" << endl; }
-    TagMisMatch(string str) : runtime_error("Exception: Tag Mismatch: " + str) { cout << "Tag MisMatch: " << str << endl; }
+    TagMisMatch() : std::runtime_error("Exception: Tag Mismatch")
+    {
+        std::cout << "Exception: Tag Mismatch" << std::endl;
+    }
+    TagMisMatch(std::string str) : std::runtime_error("Exception: Tag Mismatch: " + str)
+    {
+        std::cout << "Exception: Tag Mismatch: " << str << std::endl;
+    }
 };
 
-class GlobalTagMisMatch : public runtime_error {
+class GlobalTagMisMatch : public std::runtime_error {
 public:
-    GlobalTagMisMatch() : runtime_error("Exception: Global Tag Mismatch") { cout << "Global Tag MisMatch" << endl; }
-    GlobalTagMisMatch(string str) : runtime_error("Exception: Global Tag Mismatch: " + str) { cout << "Global Tag MisMatch: " << str << endl; }
+    GlobalTagMisMatch() : std::runtime_error("Exception: Global Tag Mismatch")
+    {
+        std::cout << "Global Tag MisMatch" << std::endl;
+    }
+    GlobalTagMisMatch(std::string str) : std::runtime_error("Exception: Global Tag Mismatch: " + str)
+    {
+        std::cout << "Global Tag MisMatch: " << str << std::endl;
+    }
 };
 
-class SceneParseFailedException : public runtime_error {
+class SceneParseFailedException : public std::runtime_error {
 public:
-    SceneParseFailedException() : runtime_error("Exception: Scene Parse Failed") { cout << "Scene Parse Failed" << endl; }
-    SceneParseFailedException(string str) : runtime_error("Exception: Scene Parse Failed: " + str) { cout << "Scene Parse Failed : " << str << endl; }
+    SceneParseFailedException() : std::runtime_error("Exception: Scene Parse Failed")
+    {
+        std::cout << "Scene Parse Failed" << std::endl;
+    }
+    SceneParseFailedException(std::string str) : std::runtime_error("Exception: Scene Parse Failed: " + str)
+    {
+        std::cout << "Scene Parse Failed : " << str << std::endl;
+    }
 };
 
-class NotImplementedException : public runtime_error {
+class NotImplementedException : public std::runtime_error {
 public:
-    NotImplementedException() : runtime_error("Exception: Method Not Implemented") {}
-    NotImplementedException(string str) : runtime_error("Exception: Method Not Implemented: " + str) { cout << str << endl; }
+    NotImplementedException() : std::runtime_error("Exception: Method Not Implemented")
+    {
+    }
+    NotImplementedException(std::string str) : std::runtime_error("Exception: Method Not Implemented: " + str)
+    {
+        std::cout << str << std::endl;
+    }
 };
 
-class OBJUnopenableException : public runtime_error
+class OBJUnopenableException : public std::runtime_error
 {
 public:
-    OBJUnopenableException() : runtime_error("Exception: OBJ file could not be opened") { cout << "Unable to open OBJ file" << endl; }
-    OBJUnopenableException(string str) : runtime_error("Exception: OBJ file could not be opened: " + str) { cout << "Unable to open OBJ file: " << str << endl; }
+    OBJUnopenableException() : std::runtime_error("Exception: OBJ file could not be opened")
+    {
+        std::cout << "Unable to open OBJ file" << std::endl;
+    }
+    OBJUnopenableException(std::string str) : std::runtime_error("Exception: OBJ file could not be opened: " + str)
+    {
+        std::cout << "Unable to open OBJ file: " << str << std::endl;
+    }
 };
 
-class MissingPrimitiveException : public runtime_error {
+class ParseException : public std::runtime_error
+{
 public:
-    MissingPrimitiveException() : runtime_error("Missing Primitive Exception") { cout << "Missing Primitive" << endl; }
-    MissingPrimitiveException(string str) : runtime_error("Missing Primitive Exception") { cout << "Missing Primitive: " << str << endl; }
+    ParseException() : std::runtime_error("Parse Exception")
+    {
+        std::cout << "Parse Exception" << std::endl;
+    }
+    ParseException(std::string str) : std::runtime_error("Parse Exception: " + str)
+    {
+        std::cout << "Parse Exception: " << str << std::endl;
+    }
+};
+
+class MissingPrimitiveException : public std::runtime_error {
+public:
+    MissingPrimitiveException() : std::runtime_error("Missing Primitive Exception")
+    {
+        std::cout << "Missing Primitive" << std::endl;
+    }
+    MissingPrimitiveException(std::string str) : std::runtime_error("Missing Primitive Exception")
+    {
+        std::cout << "Missing Primitive: " << str << std::endl;
+    }
 };

@@ -14,7 +14,7 @@ public:
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) = 0;
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
 };

@@ -2,11 +2,11 @@
 
 PrimitiveList::PrimitiveList()
 {
-    intPrimitives = vector<Primitive<int>*>();
-    floatPrimitives = vector<Primitive<Float>*>();
-    stringPrimitives = vector<Primitive<string>*>();
-    transformPrimitives = vector<Primitive<Transform>*>();
-    colorPrimitives = vector<Primitive<Color3f>*>();
+    intPrimitives = std::vector<Primitive<int>*>();
+    floatPrimitives = std::vector<Primitive<Float>*>();
+    stringPrimitives = std::vector<Primitive<std::string>*>();
+    transformPrimitives = std::vector<Primitive<Transform>*>();
+    colorPrimitives = std::vector<Primitive<Color3f>*>();
 }
 
 PrimitiveList::~PrimitiveList()
@@ -24,7 +24,7 @@ void PrimitiveList::addFloatPrimitive(Primitive<Float>* prim)
     floatPrimitives.push_back(prim);
 }
 
-void PrimitiveList::addStringPrimitive(Primitive<string>* prim)
+void PrimitiveList::addStringPrimitive(Primitive<std::string>* prim)
 {
     stringPrimitives.push_back(prim);
 }
@@ -39,7 +39,7 @@ void PrimitiveList::addColorPrimitive(Primitive<Color3f>* prim)
     colorPrimitives.push_back(prim);
 }
 
-bool PrimitiveList::findInt(string name, int& val) const
+bool PrimitiveList::findInt(std::string name, int& val) const
 {
     for (int i = 0; i < intPrimitives.size(); ++i)
     {
@@ -53,7 +53,7 @@ bool PrimitiveList::findInt(string name, int& val) const
     return false;
 }
 
-bool PrimitiveList::findFloat(string name, Float& val) const
+bool PrimitiveList::findFloat(std::string name, Float& val) const
 {
     for (int i = 0; i < floatPrimitives.size(); ++i)
     {
@@ -67,7 +67,7 @@ bool PrimitiveList::findFloat(string name, Float& val) const
     return false;
 }
 
-bool PrimitiveList::findString(string name, string& val) const
+bool PrimitiveList::findString(std::string name, std::string& val) const
 {
     for (int i = 0; i < stringPrimitives.size(); ++i)
     {
@@ -81,7 +81,7 @@ bool PrimitiveList::findString(string name, string& val) const
     return false;
 }
 
-bool PrimitiveList::findTransform(string name, Transform& val) const
+bool PrimitiveList::findTransform(std::string name, Transform& val) const
 {
     for (int i = 0; i < transformPrimitives.size(); ++i)
     {
@@ -95,7 +95,7 @@ bool PrimitiveList::findTransform(string name, Transform& val) const
     return false;
 }
 
-bool PrimitiveList::findColor(string name, Color3f& val) const
+bool PrimitiveList::findColor(std::string name, Color3f& val) const
 {
     for (int i = 0; i < colorPrimitives.size(); ++i)
     {
@@ -109,7 +109,7 @@ bool PrimitiveList::findColor(string name, Color3f& val) const
     return false;
 }
 
-void PrimitiveList::findInt(string name, int& val, int base) const
+void PrimitiveList::findInt(std::string name, int& val, int base) const
 {
     bool found = findInt(name, val);
     if (!found)
@@ -118,7 +118,7 @@ void PrimitiveList::findInt(string name, int& val, int base) const
     }
 }
 
-void PrimitiveList::findFloat(string name, Float& val, Float base) const
+void PrimitiveList::findFloat(std::string name, Float& val, Float base) const
 {
     bool found = findFloat(name, val);
     if (!found)
@@ -127,7 +127,7 @@ void PrimitiveList::findFloat(string name, Float& val, Float base) const
     }
 }
 
-void PrimitiveList::findString(string name, string& val, string base) const
+void PrimitiveList::findString(std::string name, std::string& val, std::string base) const
 {
     bool found = findString(name, val);
     if (!found)
@@ -136,7 +136,7 @@ void PrimitiveList::findString(string name, string& val, string base) const
     }
 }
 
-void PrimitiveList::findTransform(string name, Transform& val, Transform base) const
+void PrimitiveList::findTransform(std::string name, Transform& val, Transform base) const
 {
     bool found = findTransform(name, val);
     if (!found)
@@ -145,7 +145,7 @@ void PrimitiveList::findTransform(string name, Transform& val, Transform base) c
     }
 }
 
-void PrimitiveList::findColor(string name, Color3f& val, Color3f base) const
+void PrimitiveList::findColor(std::string name, Color3f& val, Color3f base) const
 {
     bool found = findColor(name, val);
     if (!found)

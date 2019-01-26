@@ -50,6 +50,7 @@ Normal3f Transform::operator*(const Normal3f& other) const
 Point3f Transform::operator*(const Point3f& other) const
 {
     Vec4f hom = mat * Vec4f(other, 1.f);
+    // std::cout << "Hom: "; hom.info();
     Vector3f hom3 = hom.head() / hom(3);
     return Point3f(hom3(0), hom3(1), hom3(2));
 }
@@ -64,17 +65,17 @@ Ray3f Transform::operator*(const Ray3f& other) const
 
 void Transform::print() const
 {
-    cout << "Transform: " << endl;
-    cout << mat(0) << " " << mat(1) << " " << mat(2) << " " << mat(3) << endl;
-    cout << mat(4) << " " << mat(5) << " " << mat(6) << " " << mat(7) << endl;
-    cout << mat(8) << " " << mat(9) << " " << mat(10) << " " << mat(11) << endl;
-    cout << mat(12) << " " << mat(13) << " " << mat(14) << " " << mat(15) << endl;
-    cout << "Transform Inverse: " << endl;
-    cout << inv(0) << " " << inv(1) << " " << inv(2) << " " << inv(3) << endl;
-    cout << inv(4) << " " << inv(5) << " " << inv(6) << " " << inv(7) << endl;
-    cout << inv(8) << " " << inv(9) << " " << inv(10) << " " << inv(11) << endl;
-    cout << inv(12) << " " << inv(13) << " " << inv(14) << " " << inv(15) << endl;
-    cout << endl;
+    std::cout << "Transform: " << std::endl;
+    std::cout << mat(0) << " " << mat(1) << " " << mat(2) << " " << mat(3) << std::endl;
+    std::cout << mat(4) << " " << mat(5) << " " << mat(6) << " " << mat(7) << std::endl;
+    std::cout << mat(8) << " " << mat(9) << " " << mat(10) << " " << mat(11) << std::endl;
+    std::cout << mat(12) << " " << mat(13) << " " << mat(14) << " " << mat(15) << std::endl;
+    std::cout << "Transform Inverse: " << std::endl;
+    std::cout << inv(0) << " " << inv(1) << " " << inv(2) << " " << inv(3) << std::endl;
+    std::cout << inv(4) << " " << inv(5) << " " << inv(6) << " " << inv(7) << std::endl;
+    std::cout << inv(8) << " " << inv(9) << " " << inv(10) << " " << inv(11) << std::endl;
+    std::cout << inv(12) << " " << inv(13) << " " << inv(14) << " " << inv(15) << std::endl;
+    std::cout << std::endl;
 }
 
 const Matrix4f& Transform::getMatrix() const

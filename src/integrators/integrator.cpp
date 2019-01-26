@@ -17,7 +17,7 @@ void Integrator::render(const Scene* scene,
     // cout << "Woo" << endl;
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
-        cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << endl;
+        std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
         // cout << "sampleXont" << endl;
         // cout << sampler->getSampleCnt() << endl;
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
@@ -46,7 +46,7 @@ void Integrator::render(const Scene* scene,
     }
 }
 
-string Integrator::getName() const
+std::string Integrator::getName() const
 {
     return "integrator: ";
 }

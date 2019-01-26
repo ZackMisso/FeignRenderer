@@ -15,9 +15,9 @@ struct UnitTestData {
 
     virtual void logReport() const = 0;
 
-    string logInfo;
-    string errInfo;
-    string timeInfo; // maybe use this later ??
+    std::string logInfo;
+    std::string errInfo;
+    std::string timeInfo; // maybe use this later ??
 
     int numberOfTests;
     int numberPassed;

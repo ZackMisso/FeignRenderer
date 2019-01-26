@@ -23,7 +23,7 @@ public:
                        Sampler* sampler,
                        const Ray3f& ray) const = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
 };

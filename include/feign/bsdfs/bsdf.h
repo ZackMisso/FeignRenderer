@@ -30,7 +30,7 @@ public:
     virtual Color3f eval(const BSDFQuery& rec) const = 0;
     virtual float pdf(const BSDFQuery& rec) const = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
 

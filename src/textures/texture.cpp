@@ -5,7 +5,7 @@ void Texture::preProcess()
     // TODO
 }
 
-string Texture::getName() const
+std::string Texture::getName() const
 {
     return "texture: ";
 }

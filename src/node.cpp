@@ -3,14 +3,14 @@
 
 Node::Node()
 {
-    children = vector<Node*>();
+    children = std::vector<Node*>();
     primitives = new PrimitiveList();
     parent = nullptr;
 }
 
 Node::Node(Node* parent) : parent(parent)
 {
-    children = vector<Node*>();
+    children = std::vector<Node*>();
     primitives = new PrimitiveList();
 }
 
@@ -75,10 +75,10 @@ void Node::preProcessChildren()
     }
 }
 
-void Node::printGraph(string indent) const
+void Node::printGraph(std::string indent) const
 {
-    cout << indent << getName() << endl;
-    string newIndent = indent + "  ";
+    std::cout << indent << getName() << std::endl;
+    std::string newIndent = indent + "  ";
 
     for (int i = 0; i < children.size(); ++i)
     {

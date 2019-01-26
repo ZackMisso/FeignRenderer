@@ -22,7 +22,7 @@ BSDF::~BSDF()
     // does nothing
 }
 
-string BSDF::getName() const
+std::string BSDF::getName() const
 {
     return "bsdf: ";
 }

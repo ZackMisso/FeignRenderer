@@ -27,7 +27,7 @@ public:
 
     virtual void nextSample();
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 
 public:
     pcg32 rng;

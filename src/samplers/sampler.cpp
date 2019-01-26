@@ -15,7 +15,7 @@ Sampler::~Sampler()
     // TODO
 }
 
-string Sampler::getName() const
+std::string Sampler::getName() const
 {
     return "sampler: ";
 }

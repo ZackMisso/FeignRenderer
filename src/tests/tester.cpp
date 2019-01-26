@@ -2,6 +2,7 @@
 #include <tests/vector_test.h>
 #include <tests/matrix_test.h>
 #include <tests/transform_test.h>
+#include <tests/ray_intersect_test.h>
 
 UnitTestManager::UnitTestManager() {
     // does nothing for now
@@ -20,11 +21,17 @@ bool UnitTestManager::runUnitTests() {
     MatrixTest matrixTest = MatrixTest();
     bool matrixTestPassed = matrixTest.evaluateTest(matrixTestData);
 
+    RayIntersectTestData rayIntersectTestData = RayIntersectTestData();
+    RayIntersectTest rayTest = RayIntersectTest();
+    bool rayTestPassed = rayTest.evaluateTest(rayIntersectTestData);
+
     transformTestData.logReport();
     vectorTestData.logReport();
     matrixTestData.logReport();
+    rayIntersectTestData.logReport();
 
     return transformTestPassed &&
            vectorTestPassed &&
-           matrixTestPassed;
+           matrixTestPassed &&
+           rayTestPassed;
 }

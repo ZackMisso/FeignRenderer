@@ -14,8 +14,8 @@
 
 #include <imedit/image.h>
 
-using namespace std;
-using namespace imedit;
+// using namespace std;
+// using namespace imedit;
 
 // TODO: remove this
 // main laptop
@@ -65,9 +65,9 @@ typedef Matrix3<double> Matrix3d;
 typedef Matrix4<float> Matrix4f;
 typedef Matrix4<double> Matrix4d;
 
-typedef Image<float> Imagef;
-typedef Image<int> Imagei;
-typedef Image<double> Imaged;
+typedef imedit::Image<float> Imagef;
+typedef imedit::Image<int> Imagei;
+typedef imedit::Image<double> Imaged;
 
 typedef BBox3<float> BBox3f;
 typedef BBox3<double> BBox3d;

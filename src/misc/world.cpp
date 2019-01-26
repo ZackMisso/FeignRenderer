@@ -17,13 +17,13 @@ WorldNode::~WorldNode()
 
 void WorldNode::renderAllScenes()
 {
-    cout << "Starting Rendering Process" << endl;
+    std::cout << "Starting Rendering Process" << std::endl;
 
-    vector<Scene*> scenes = collectScenes();
+    std::vector<Scene*> scenes = collectScenes();
 
     for (int i = 0; i < scenes.size(); ++i)
     {
-        cout << "scene: " << i << endl;
+        std::cout << "scene: " << i << std::endl;
         Scene* scene = scenes[i];
 
         Integrator* integrator = scene->getIntegrator();
@@ -48,17 +48,17 @@ void WorldNode::renderAllScenes()
                               camera->getFilmSize()[1],
                               3);
 
-        cout << "pre Render" << endl;
+        std::cout << "pre Render" << std::endl;
         integrator->render(scene,
                            camera,
                            sampler,
                            image);
-        cout << "post Render" << endl;
+        std::cout << "post Render" << std::endl;
 
         image.write(scene->getSceneName());
     }
 
-    cout << "Rendering Complete" << endl;
+    std::cout << "Rendering Complete" << std::endl;
 }
 
 void WorldNode::preProcess()
@@ -66,9 +66,9 @@ void WorldNode::preProcess()
     preProcessChildren();
 }
 
-vector<Scene*> WorldNode::collectScenes() const
+std::vector<Scene*> WorldNode::collectScenes() const
 {
-    vector<Scene*> scenes = vector<Scene*>();
+    std::vector<Scene*> scenes = std::vector<Scene*>();
 
     for (int i = 0; i < children.size(); ++i)
     {
@@ -81,7 +81,7 @@ vector<Scene*> WorldNode::collectScenes() const
     return scenes;
 }
 
-string WorldNode::getName() const
+std::string WorldNode::getName() const
 {
     return "world";
 }

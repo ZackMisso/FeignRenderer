@@ -12,5 +12,5 @@ public:
 
     virtual float evaluate(const Point2f& p) const;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
 };

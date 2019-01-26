@@ -14,30 +14,30 @@ public:
 
     void addIntPrimitive(Primitive<int>* prim);
     void addFloatPrimitive(Primitive<Float>* prim);
-    void addStringPrimitive(Primitive<string>* prim);
+    void addStringPrimitive(Primitive<std::string>* prim);
     void addTransformPrimitive(Primitive<Transform>* prim);
     void addColorPrimitive(Primitive<Color3f>* prim);
 
-    void findInt(string name, int& val, int base) const;
-    void findFloat(string name, Float& val, Float base) const;
-    void findString(string name, string& val, string base) const;
-    void findTransform(string name, Transform& val, Transform base) const;
-    void findColor(string name, Color3f& val, Color3f base) const;
+    void findInt(std::string name, int& val, int base) const;
+    void findFloat(std::string name, Float& val, Float base) const;
+    void findString(std::string name, std::string& val, std::string base) const;
+    void findTransform(std::string name, Transform& val, Transform base) const;
+    void findColor(std::string name, Color3f& val, Color3f base) const;
 
     void clearPrimitiveList();
 
     int size() const;
 
 protected:
-    bool findInt(string name, int& val) const;
-    bool findFloat(string name, Float& val) const;
-    bool findString(string name, string& val) const;
-    bool findTransform(string name, Transform& val) const;
-    bool findColor(string name, Color3f& val) const;
+    bool findInt(std::string name, int& val) const;
+    bool findFloat(std::string name, Float& val) const;
+    bool findString(std::string name, std::string& val) const;
+    bool findTransform(std::string name, Transform& val) const;
+    bool findColor(std::string name, Color3f& val) const;
 
-    vector<Primitive<int>*> intPrimitives;
-    vector<Primitive<Float>*> floatPrimitives;
-    vector<Primitive<string>*> stringPrimitives;
-    vector<Primitive<Transform>*> transformPrimitives;
-    vector<Primitive<Color3f>*> colorPrimitives;
+    std::vector<Primitive<int>*> intPrimitives;
+    std::vector<Primitive<Float>*> floatPrimitives;
+    std::vector<Primitive<std::string>*> stringPrimitives;
+    std::vector<Primitive<Transform>*> transformPrimitives;
+    std::vector<Primitive<Color3f>*> colorPrimitives;
 };

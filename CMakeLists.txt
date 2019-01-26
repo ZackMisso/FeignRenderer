@@ -138,6 +138,7 @@ add_executable(feign
     # Shapes header files
     include/feign/shapes/shape.h
     include/feign/shapes/objmesh.h
+    include/feign/shapes/triangle.h
 
     # Texture header files
     include/feign/textures/texture.h
@@ -148,6 +149,7 @@ add_executable(feign
     include/tests/vector_test.h
     include/tests/transform_test.h
     include/tests/matrix_test.h
+    include/tests/ray_intersect_test.h
 
     # Implementation files
     src/main.cpp
@@ -211,6 +213,7 @@ add_executable(feign
     # Shapes implementation files
     src/shapes/shape.cpp
     src/shapes/objmesh.cpp
+    src/shapes/triangle.cpp
 
     # Texture implementation files
     src/textures/texture.cpp
@@ -220,6 +223,7 @@ add_executable(feign
     src/tests/vector_test.cpp
     src/tests/transform_test.cpp
     src/tests/matrix_test.cpp
+    src/tests/ray_intersect_test.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

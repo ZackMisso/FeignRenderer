@@ -782,9 +782,16 @@ struct Matrix4
         return mat;
     }
 
-    Vec4<T> operator*(const Vec4<T> other) const
+    Vec4<T> operator*(const Vec4<T>& other) const
     {
         Vec4<T> vec;
+
+        // std::cout << n[0] << " * " << other(0) << " + " <<
+        //              n[1] << " * " << other(1) << " + " <<
+        //              n[2] << " * " << other(2) << " + " <<
+        //              n[3] << " * " << other(3) << std::endl;
+        //
+        // std::cout << "other: "; other.info();
 
         vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2) + n[3]*other(3);
         vec[1] = n[4]*other(0) + n[5]*other(1) + n[6]*other(2) + n[7]*other(3);

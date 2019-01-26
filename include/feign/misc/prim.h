@@ -6,7 +6,7 @@ template <class T>
 class Primitive
 {
 public:
-    Primitive(string str, T val)
+    Primitive(std::string str, T val)
     {
         name = str;
         value = val;
@@ -18,7 +18,7 @@ public:
         return value;
     }
 
-    string getName() const
+    std::string getName() const
     {
         return name;
     }
@@ -29,11 +29,11 @@ public:
         value = param;
     }
 
-    void setName(string param)
+    void setName(std::string param)
     {
         name = param;
     }
 protected:
-    string name;
+    std::string name;
     T value;
 };

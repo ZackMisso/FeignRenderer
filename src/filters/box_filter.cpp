@@ -21,7 +21,7 @@ float BoxFilter::evaluate(const Point2f& p) const
     return 1.f;
 }
 
-string BoxFilter::getName() const
+std::string BoxFilter::getName() const
 {
     return ReconstructionFilter::getName() + "box";
 }

@@ -8,7 +8,7 @@ MatrixTestData::MatrixTestData() : UnitTestData()
 
 void MatrixTestData::logReport() const
 {
-    cout << logInfo << endl;
+    std::cout << logInfo << std::endl;
 }
 
 MatrixTest::MatrixTest() { }

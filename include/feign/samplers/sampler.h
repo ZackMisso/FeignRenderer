@@ -25,7 +25,7 @@ public:
 
     virtual void nextSample() = 0;
 
-    virtual string getName() const;
+    virtual std::string getName() const;
     virtual NodeType getNodeType() const;
 
     uint32_t getSampleCnt() const;
