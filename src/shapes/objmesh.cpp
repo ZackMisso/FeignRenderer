@@ -8,6 +8,7 @@ ObjMesh::ObjMesh() : Shape()
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
     uvs = std::vector<Vec2f>();
+    tris = std::vector<Triangle>();
     // fs = std::vector<Vec3u>();
 }
 
@@ -16,14 +17,15 @@ ObjMesh::ObjMesh(Node* parent) : Shape(parent)
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
     uvs = std::vector<Vec2f>();
+    tris = std::vector<Triangle>();
     // fs = std::vector<Vec3u>();
 }
 
 ObjMesh::ObjMesh(const std::vector<Point3f>& vs,
                  const std::vector<Normal3f>& ns,
                  const std::vector<Vec2f>& uvs,
-                 const std::vector<Vec3u>& fs)
-    : vs(vs), uvs(uvs), ns(ns)//, fs(fs)
+                 const std::vector<Triangle>& tris)
+    : vs(vs), uvs(uvs), ns(ns), tris(tris)
 {
 }
 
@@ -71,6 +73,7 @@ void ObjMesh::parseFromFile(const std::string& filename,
     vs.clear();
     ns.clear();
     uvs.clear();
+    tris.clear();
     // fs.clear();
 
     std::ifstream ifs (filename.c_str());
@@ -168,9 +171,9 @@ void ObjMesh::parseFromFile(const std::string& filename,
                 throw new NotImplementedException("quads in obj");
             }
 
-            Vec3u v1;
-            Vec3u v2;
-            Vec3u v3;
+            Vec3u p;
+            Vec3u uv;
+            Vec3u n;
 
             std::istringstream f1_stream(f1);
             std::istringstream f2_stream(f2);
@@ -179,34 +182,29 @@ void ObjMesh::parseFromFile(const std::string& filename,
             std::string token;
 
             std::getline(f1_stream, token, '/');
-            v1[0] = stoi(token);
+            p[0] = stoi(token) - 1;
             std::getline(f1_stream, token, '/');
-            v1[1] = stoi(token);
+            uv[0] = stoi(token) - 1;
             std::getline(f1_stream, token, '/');
-            v1[2] = stoi(token);
+            n[0] = stoi(token) - 1;
 
-            v1.info();
+            std::getline(f2_stream, token, '/');
+            p[1] = stoi(token) - 1;
+            std::getline(f2_stream, token, '/');
+            uv[1] = stoi(token) - 1;
+            std::getline(f2_stream, token, '/');
+            n[1] = stoi(token) - 1;
 
-            throw new NotImplementedException("temp pause in execution");
+            std::getline(f3_stream, token, '/');
+            p[2] = stoi(token) - 1;
+            std::getline(f3_stream, token, '/');
+            uv[2] = stoi(token) - 1;
+            std::getline(f3_stream, token, '/');
+            n[2] = stoi(token) - 1;
 
-    //         // Returns first token
-    //         char *token = strtok(str, "-");
-    //
-    //         // Keep printing tokens while one of the
-    //         // delimiters present in str[].
-    //         while (token != NULL)
-    //         {
-    //             printf("%s\n", token);
-    //             token = strtok(NULL, "-");
-    //         }
-    //
-    // return 0;
-            // TODO
-
+            tris.push_back(Triangle(p, n, uv));
         }
     }
-
-    // infoDump();
 }
 
 void ObjMesh::infoDump()
@@ -283,144 +281,151 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its)
 
 bool ObjMesh::intersect(uint32_t face, Ray3f& ray, Intersection& its)
 {
-    // // Vec3u val = fs[face];
-    // // cout << "whoa" << endl;
-    // // cout << fs.size() << endl;
-    // // cout << vs.size() << endl;
-    //
-    // // std::cout << "raydir len: " << ray.dir.norm() << std::endl;
-    // // std::cout << "ray Pos: ";
-    // // ray.origin.info();
-    //
-    // // std::cout << "ray.mint: " << ray.mint << "  ray.maxt: " << ray.maxt << std::endl;
-    //
-    // uint32_t i0 = fs[face][0];
-    // uint32_t i1 = fs[face][1];
-    // uint32_t i2 = fs[face][2];
-    //
-    // const Point3f p0 = vs[i0];
-    // const Point3f p1 = vs[i1];
-    // const Point3f p2 = vs[i2];
-    //
-    // Vector3f edge1 = p1 - p0;
-    // Vector3f edge2 = p2 - p0;
-    //
-    // // WHY IS RAY DIRECTION ZERO
-    // // cout << "ray.dir: " << ray.dir(0) << " " << ray.dir(1) << " " << ray.dir(2) << endl;
-    //
-    // Vector3f pvec = ray.dir ^ edge2;
-    //
-    // float det = edge1 % pvec;
-    //
-    // if (det > -1e-8f && det < 1e-8f)
-    // {
-    //     // cout << "Determinate: " << det << endl;
-    //     // cout << "p0x: " << p0(0) << endl;
-    //     // cout << "p0y: " << p0(1) << endl;
-    //     // cout << "p0z: " << p0(2) << endl;
-    //     // std::cout << "first det" << std::endl;
-    //     return false;
-    // }
-    //
-    // float invDet = 1.f / det;
-    //
-    // Vector3f tvec = ray.origin - p0;
-    //
-    // its.uv[0] = (tvec % pvec) * invDet;
-    //
-    // if (its.uv[0] < 0.0 || its.uv[0] > 1.0)
-    // {
-    //     // cout << "U" << endl;
-    //     return false;
-    // }
-    //
-    // Vector3f qvec = tvec ^ edge1;
-    //
-    // its.uv[1] = (ray.dir % qvec) * invDet;
-    //
-    // if (its.uv[1] < 0.0 || its.uv[1] > 1.0)
-    // {
-    //     // cout << "V" << endl;
-    //     return false;
-    // }
-    //
-    // its.t = (edge2 % qvec) * invDet;
-    //
-    // // std::cout << "its.t: " << its.t << std::endl;
-    // // std::cout << "raydir len: " << ray.dir.norm() << std::endl;
-    // // std::cout << std::endl;
-    //
-    // bool ret = its.t >= ray.mint && its.t <= ray.maxt;
-    //
-    // // std::cout << "made it to end" << std::endl;
-    //
-    // // if (ret) cout << "WHOO SOMTHING INTERSECTED" << endl;
-    //
-    // return its.t >= ray.mint && its.t <= ray.maxt;
+    // Vec3u val = fs[face];
+    // cout << "whoa" << endl;
+    // cout << fs.size() << endl;
+    // cout << vs.size() << endl;
 
-    throw new NotImplementedException("obj mesh intersect");
+    // std::cout << "raydir len: " << ray.dir.norm() << std::endl;
+    // std::cout << "ray Pos: ";
+    // ray.origin.info();
 
-    return false;
+    // std::cout << "ray.mint: " << ray.mint << "  ray.maxt: " << ray.maxt << std::endl;
+
+    uint32_t i0 = tris[face].vsInds[0];
+    uint32_t i1 = tris[face].vsInds[1];
+    uint32_t i2 = tris[face].vsInds[2];
+
+    const Point3f p0 = vs[i0];
+    const Point3f p1 = vs[i1];
+    const Point3f p2 = vs[i2];
+
+    Vector3f edge1 = p1 - p0;
+    Vector3f edge2 = p2 - p0;
+
+    // WHY IS RAY DIRECTION ZERO
+    // cout << "ray.dir: " << ray.dir(0) << " " << ray.dir(1) << " " << ray.dir(2) << endl;
+
+    Vector3f pvec = ray.dir ^ edge2;
+
+    float det = edge1 % pvec;
+
+    if (det > -1e-8f && det < 1e-8f)
+    {
+        // cout << "Determinate: " << det << endl;
+        // cout << "p0x: " << p0(0) << endl;
+        // cout << "p0y: " << p0(1) << endl;
+        // cout << "p0z: " << p0(2) << endl;
+        // std::cout << "first det" << std::endl;
+        return false;
+    }
+
+    float invDet = 1.f / det;
+
+    Vector3f tvec = ray.origin - p0;
+
+    its.uv[0] = (tvec % pvec) * invDet;
+
+    if (its.uv[0] < 0.0 || its.uv[0] > 1.0)
+    {
+        // cout << "U" << endl;
+        return false;
+    }
+
+    Vector3f qvec = tvec ^ edge1;
+
+    its.uv[1] = (ray.dir % qvec) * invDet;
+
+    if (its.uv[1] < 0.0 || its.uv[1] > 1.0)
+    {
+        // cout << "V" << endl;
+        return false;
+    }
+
+    its.t = (edge2 % qvec) * invDet;
+
+    // std::cout << "its.t: " << its.t << std::endl;
+    // std::cout << "raydir len: " << ray.dir.norm() << std::endl;
+    // std::cout << std::endl;
+
+    bool ret = its.t >= ray.mint && its.t <= ray.maxt;
+
+    // std::cout << "made it to end" << std::endl;
+
+    // if (ret) cout << "WHOO SOMTHING INTERSECTED" << endl;
+
+    return its.t >= ray.mint && its.t <= ray.maxt;
+
+    // throw new NotImplementedException("obj mesh intersect");
+    //
+    // return false;
 }
 
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
 {
-    // Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
+    Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
+
+    uint32_t i0_vs = tris[its.f].vsInds(0);
+    uint32_t i1_vs = tris[its.f].vsInds(1);
+    uint32_t i2_vs = tris[its.f].vsInds(2);
+
+    Point3f p0 = vs[i0_vs];
+    Point3f p1 = vs[i1_vs];
+    Point3f p2 = vs[i2_vs];
     //
-    // uint32_t i0 = fs[its.f](0);
-    // uint32_t i1 = fs[its.f](1);
-    // uint32_t i2 = fs[its.f](2);
+    // cout << "p0: " << p0(0) << " " << p0(1) << " " << p0(2) << endl;
+    // cout << "p1: " << p1(0) << " " << p1(1) << " " << p1(2) << endl;
+    // cout << "p2: " << p2(0) << " " << p2(1) << " " << p2(2) << endl;
     //
-    // Point3f p0 = vs[i0];
-    // Point3f p1 = vs[i1];
-    // Point3f p2 = vs[i2];
-    // //
-    // // cout << "p0: " << p0(0) << " " << p0(1) << " " << p0(2) << endl;
-    // // cout << "p1: " << p1(0) << " " << p1(1) << " " << p1(2) << endl;
-    // // cout << "p2: " << p2(0) << " " << p2(1) << " " << p2(2) << endl;
-    // //
-    // // cout << "whooo" << endl;
-    // //
-    // // // compute intersection position
-    // its.p = p0 * bary(0) + p1 * bary(1) + p2 * bary(2);
-    // //
-    // // cout << "its.p: " << its.p(0) << " " << its.p(1) << " " << its.p(2) << endl;
-    // //
-    // // // compute mesh texture coordinates
-    // if (uvs.size() > 0)
-    // {
-    //     std::cout << "UVU" << std::endl;
-    //     its.uv = uvs[i0] * bary(0) + uvs[i1] * bary(1) + uvs[i2] * bary(2);
-    // }
+    // cout << "whooo" << endl;
     //
-    // // compute the geometric frame
-    // its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
+    // // compute intersection position
+    its.p = p0 * bary(0) + p1 * bary(1) + p2 * bary(2);
     //
-    // // compute the normals
-    // if (ns.size() > 0)
-    // {
-    //     std::cout << "NUN" << std::endl;
-    //     Normal3f n = ns[i0] * bary(0) + ns[i1] * bary(1) + ns[i2] * bary(2);
-    //     std::cout << "n: " << n(0) << " " << n(1) << " " << n(2) << std::endl;
+    // cout << "its.p: " << its.p(0) << " " << its.p(1) << " " << its.p(2) << endl;
     //
-    //     n.normalized();
-    //
-    //     std::cout << "n0: " << ns[i0](0) << " " << ns[i0](1) << " " << ns[i0](2) << std::endl;
-    //     std::cout << "n1: " << ns[i1](0) << " " << ns[i1](1) << " " << ns[i1](2) << std::endl;
-    //     std::cout << "n2: " << ns[i2](0) << " " << ns[i2](1) << " " << ns[i2](2) << std::endl;
-    //
-    //     std::cout << "n.normed(): " << n(0) << " " << n(1) << " " << n(2) << std::endl;
-    //
-    //     its.s_frame = CoordinateFrame((ns[i0] * bary(0) +
-    //                                    ns[i1] * bary(1) +
-    //                                    ns[i2] * bary(2)).normalized());
-    // }
-    // else
-    // {
-    //     its.s_frame = its.g_frame;
-    // }
-    //
-    // // cout << "its.n: " << its.s_frame.n(0) << " " << its.s_frame.n(1) << " " << its.s_frame.n(2) << endl;
+    // // compute mesh texture coordinates
+    if (uvs.size() > 0)
+    {
+        uint32_t i0_uvs = tris[its.f].uvsInds(0);
+        uint32_t i1_uvs = tris[its.f].uvsInds(1);
+        uint32_t i2_uvs = tris[its.f].uvsInds(2);
+        // std::cout << "UVU" << std::endl;
+        its.uv = uvs[i0_uvs] * bary(0) + uvs[i1_uvs] * bary(1) + uvs[i2_uvs] * bary(2);
+    }
+
+    // compute the geometric frame
+    its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
+
+    // compute the normals
+    if (ns.size() > 0)
+    {
+        uint32_t i0_ns = tris[its.f].nsInds(0);
+        uint32_t i1_ns = tris[its.f].nsInds(1);
+        uint32_t i2_ns = tris[its.f].nsInds(2);
+
+        // std::cout << "NUN" << std::endl;
+        // Normal3f n = ns[i0_ns] * bary(0) + ns[i1_ns] * bary(1) + ns[i2_ns] * bary(2);
+        // // std::cout << "n: " << n(0) << " " << n(1) << " " << n(2) << std::endl;
+        //
+        // n.normalized();
+
+        // std::cout << "n0: " << ns[i0](0) << " " << ns[i0](1) << " " << ns[i0](2) << std::endl;
+        // std::cout << "n1: " << ns[i1](0) << " " << ns[i1](1) << " " << ns[i1](2) << std::endl;
+        // std::cout << "n2: " << ns[i2](0) << " " << ns[i2](1) << " " << ns[i2](2) << std::endl;
+        //
+        // std::cout << "n.normed(): " << n(0) << " " << n(1) << " " << n(2) << std::endl;
+
+        its.s_frame = CoordinateFrame((ns[i0_ns] * bary(0) +
+                                       ns[i1_ns] * bary(1) +
+                                       ns[i2_ns] * bary(2)).normalized());
+    }
+    else
+    {
+        its.s_frame = its.g_frame;
+    }
+
+    // cout << "its.n: " << its.s_frame.n(0) << " " << its.s_frame.n(1) << " " << its.s_frame.n(2) << endl;
 }
 
 const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }

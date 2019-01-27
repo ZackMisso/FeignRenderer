@@ -49,10 +49,12 @@ Color3f Perspective::sampleRay(Ray3f& ray,
                                const Point2f& filmSamp,
                                const Point2f& appSamp) const
 {
+    // std::cout << "what" << std::endl;
     Point3f nearP = sampleToCamera * Point3f(
                             filmSamp(0) * 1.0 / filmSize(0),
                             filmSamp(1) * 1.0 / filmSize(1),
                             0.f);
+    // std::cout << "nah" << std::endl;
 
     Vector3f d = nearP.normalized();
     float invZ = 1.f / d(2);

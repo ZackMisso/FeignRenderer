@@ -38,9 +38,9 @@ void Integrator::render(const Scene* scene,
                 // cout << "Post LI" << endl;
 
                 // TODO: use reconstruction filters in the future
-                image[0] += radiance(0) / float(sampler->getSampleCnt());
-                image[1] += radiance(1) / float(sampler->getSampleCnt());
-                image[2] += radiance(2) / float(sampler->getSampleCnt());
+                image(j, i, 0) += radiance(0) / float(sampler->getSampleCnt());
+                image(j, i, 1) += radiance(1) / float(sampler->getSampleCnt());
+                image(j, i, 2) += radiance(2) / float(sampler->getSampleCnt());
             }
         }
     }

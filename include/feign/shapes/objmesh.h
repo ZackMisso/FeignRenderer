@@ -12,7 +12,7 @@ public:
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,
             const std::vector<Vec2f>& uvs,
-            const std::vector<Vec3u>& fs);
+            const std::vector<Triangle>& tris);
 
     virtual std::string getName() const;
 
