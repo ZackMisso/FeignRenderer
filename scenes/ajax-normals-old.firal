@@ -2,7 +2,7 @@ scene
     sampler independent
         int
             name sampleCount
-            value 32
+            value 2
     /sampler
 
     integrator normals /integrator
@@ -40,6 +40,14 @@ scene
             name toWorld
             scale 100 1 100
         /transform
+    /mesh
+
+    mesh obj
+        string
+            name filename
+            value ../scenes/meshes/ajax.obj
+
+        bsdf diffuse /bsdf
     /mesh
 
 /scene

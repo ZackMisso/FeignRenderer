@@ -17,13 +17,17 @@ void Integrator::render(const Scene* scene,
     // cout << "Woo" << endl;
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
-        std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
+        // std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
         // cout << "sampleXont" << endl;
         // cout << sampler->getSampleCnt() << endl;
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
+                std::cout << double(k * camera->getFilmSize()[1] * camera->getFilmSize()[0] +
+                             i * camera->getFilmSize()[0] + j) /
+                             double(camera->getFilmSize()[0] * camera->getFilmSize()[1] * sampler->getSampleCnt())
+                             * 100.0 << " Percent Done" << std::endl;
                 // cout << "Here" << endl;
 
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
