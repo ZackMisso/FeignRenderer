@@ -9,13 +9,11 @@
 #include <feign/math/bbox.h>
 #include <feign/log/logger.h>
 
+// these are necessary defines for imedit
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_WRITE_STATIC
 
 #include <imedit/image.h>
-
-// using namespace std;
-// using namespace imedit;
 
 // TODO: remove this
 // main laptop
@@ -34,6 +32,12 @@
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
 
+typedef float Float;
+// typedef double Float;
+
+// typedef int Int;
+// typedef long Int;
+
 // vector and matrix types
 // these have no geometric meaning
 typedef Vec2<int> Vec2i;
@@ -49,6 +53,7 @@ typedef Vec4<double> Vec4d;
 typedef Vec4<int> Vec4i;
 typedef Vec4<uint32_t> Vec4u;
 
+// TODO: make all of the following use one Float and one Int type
 // these represent actual geometric primitives
 typedef Point2<float> Point2f;
 typedef Point2<double> Point2d;
@@ -71,31 +76,6 @@ typedef imedit::Image<double> Imaged;
 
 typedef BBox3<float> BBox3f;
 typedef BBox3<double> BBox3d;
-
-typedef float Float;
-
-static Matrix4f Matrix4f_identity()
-{
-    Matrix4f mat;
-
-    mat[0] = 1.0; mat[1] = 0.0; mat[2] = 0.0; mat[3] = 0.0;
-    mat[4] = 0.0; mat[5] = 1.0; mat[6] = 0.0; mat[7] = 0.0;
-    mat[8] = 0.0; mat[9] = 0.0; mat[10] = 1.0; mat[11] = 0.0;
-    mat[12] = 0.0; mat[13] = 0.0; mat[14] = 0.0; mat[15] = 1.0;
-
-    return mat;
-}
-
-static Matrix3f Matrix3f_identity()
-{
-    Matrix3f mat;
-
-    mat[0] = 1.0; mat[1] = 0.0; mat[2] = 0.0;
-    mat[3] = 0.0; mat[4] = 1.0; mat[5] = 0.0;
-    mat[6] = 0.0; mat[7] = 0.0; mat[8] = 1.0;
-
-    return mat;
-}
 
 inline float degToRad(float value) { return value * (M_PI / 180.0f); }
 

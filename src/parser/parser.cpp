@@ -9,7 +9,6 @@
 #include <feign/math/transform.h>
 #include <feign/misc/prim.h>
 #include <feign/misc/world.h>
-#include <feign/misc/transformnode.h>
 #include <feign/samplers/sampler.h>
 #include <feign/samplers/independent.h>
 #include <feign/shapes/objmesh.h>

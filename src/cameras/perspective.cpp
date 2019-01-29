@@ -49,12 +49,10 @@ Color3f Perspective::sampleRay(Ray3f& ray,
                                const Point2f& filmSamp,
                                const Point2f& appSamp) const
 {
-    // std::cout << "what" << std::endl;
     Point3f nearP = sampleToCamera * Point3f(
                             filmSamp(0) * 1.0 / filmSize(0),
                             filmSamp(1) * 1.0 / filmSize(1),
                             0.f);
-    // std::cout << "nah" << std::endl;
 
     Vector3f d = nearP.normalized();
     float invZ = 1.f / d(2);
@@ -63,21 +61,11 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     float t = focalDistance / d(2);
 
     Vector3f od = d * t;
-    // cout << "OD 1: " << od[0] << " " << od[1] << " " << od[2] << endl;
     od = od - Vector3f(apPos(0), apPos(1), 0);
-    // cout << "OD 2: " << od[0] << " " << od[1] << " " << od[2] << endl;
     od = od.normalized();
-    // cout << "OD 3: " << od[0] << " " << od[1] << " " << od[2] << endl;
-
-    // std::cout << "camera To World: " << std::endl;
-    // cameraToWorld.print();
 
     ray.origin = cameraToWorld * Point3f(apPos(0), apPos(1), 0);
     ray.dir = cameraToWorld * od;
-    // std::cout << "end" << std::endl;
-
-    // std::cout << std::endl << std::endl;
-    // cout << "ray.dir: " << ray.dir[0] << " " << ray.dir[1] << " " << ray.dir[2] << endl;
 
     ray.mint = near * invZ;
     ray.maxt = far * invZ;

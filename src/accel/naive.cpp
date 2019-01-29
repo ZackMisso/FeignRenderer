@@ -34,8 +34,6 @@ bool NaiveAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
             ray.maxt = its.t;
             its.intersectedMesh = meshes[i];
         }
-
-        // intersects |= meshes[i]->intersect(ray, its);
     }
 
     if (intersects)

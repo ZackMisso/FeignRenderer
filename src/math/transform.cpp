@@ -3,8 +3,8 @@
 ////////////////////////
 
 Transform::Transform() :
-                  mat(Matrix4f_identity()),
-                  inv(Matrix4f_identity())
+                  mat(Matrix4f::identity()),
+                  inv(Matrix4f::identity())
 {
     // does nothing
 }
@@ -50,7 +50,6 @@ Normal3f Transform::operator*(const Normal3f& other) const
 Point3f Transform::operator*(const Point3f& other) const
 {
     Vec4f hom = mat * Vec4f(other, 1.f);
-    // std::cout << "Hom: "; hom.info();
     Vector3f hom3 = hom.head() / hom(3);
     return Point3f(hom3(0), hom3(1), hom3(2));
 }

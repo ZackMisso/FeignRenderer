@@ -1,7 +1,6 @@
 #pragma once
 
 #include <feign/common.h>
-// #include <feign/math/vector.h>
 
 // TODO: maybe create a separate abstraction for acceleration
 class Triangle

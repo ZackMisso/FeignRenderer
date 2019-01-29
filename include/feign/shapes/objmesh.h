@@ -23,8 +23,8 @@ public:
     float surfaceArea(uint32_t index) const;
     float pdf(uint32_t index) const;
 
-    virtual bool intersect(const Ray3f& scene_ray, Intersection& its);
-    bool intersect(uint32_t tri, Ray3f& ray, Intersection& its);
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
+    bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
 
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 
