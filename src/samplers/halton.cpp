@@ -1,10 +1,10 @@
-#include <feign/samplers/independent.h>
+#include <feign/samplers/halton.h>
 
-Independent::Independent() : Sampler() { }
+Halton::Halton() : Sampler() { }
 
-Independent::Independent(Node* parent) : Sampler(parent) { }
+Halton::Halton(Node* parent) : Sampler(parent) { }
 
-void Independent::preProcess()
+void Halton::preProcess()
 {
     preProcessChildren();
 
@@ -20,7 +20,7 @@ void Independent::preProcess()
     reseed(seed);
 }
 
-void Independent::reseed()
+void Halton::reseed()
 {
     // TODO: fix this seeding
     srand(sample_seed);
@@ -29,60 +29,64 @@ void Independent::reseed()
     rng = pcg32(r1, r2);
 }
 
-void Independent::reseed(uint32_t seed)
+void Halton::reseed(uint32_t seed)
 {
     sample_seed = seed;
     reseed();
 }
 
-void Independent::reset()
+void Halton::reset()
 {
     currentSample = 0;
     reseed();
 }
 
-Float Independent::next1D()
+Float Halton::next1D()
 {
+    throw new NotImplementedException("halton next1D");
+
     return rng.nextFloat();
 }
 
-Vec2f Independent::next2D()
+Vec2f Halton::next2D()
 {
     return Vec2f(next1D(), next1D());
 }
 
-Vec3f Independent::next3D()
+Vec3f Halton::next3D()
 {
     return Vec3f(next1D(), next1D(), next1D());
 }
 
-Vec4f Independent::next4D()
+Vec4f Halton::next4D()
 {
     return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
-Sampler* Independent::copy()
+Sampler* Halton::copy()
 {
-    Independent* newSamp = new Independent();
+    Halton* newSamp = new Halton();
     newSamp->reseed(sample_seed);
 
     return newSamp;
 }
 
-Sampler* Independent::copy(uint32_t seed)
+Sampler* Halton::copy(uint32_t seed)
 {
-    Independent* newSamp = new Independent();
+    Latin* newSamp = new Latin();
     newSamp->reseed(seed);
 
     return newSamp;
 }
 
-void Independent::nextSample()
+void Halton::nextSample()
 {
     currentSample++;
+
+    throw new NotImplementedException("halton nextSample");
 }
 
-std::string Independent::getName() const
+std::string Halton::getName() const
 {
-    return Sampler::getName() + "independent";
+    return Sampler::getName() + "halton";
 }

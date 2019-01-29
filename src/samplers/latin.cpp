@@ -1,10 +1,10 @@
-#include <feign/samplers/independent.h>
+#include <feign/samplers/latin.h>
 
-Independent::Independent() : Sampler() { }
+Latin::Latin() : Sampler() { }
 
-Independent::Independent(Node* parent) : Sampler(parent) { }
+Latin::Latin(Node* parent) : Sampler(parent) { }
 
-void Independent::preProcess()
+void Latin::preProcess()
 {
     preProcessChildren();
 
@@ -20,7 +20,7 @@ void Independent::preProcess()
     reseed(seed);
 }
 
-void Independent::reseed()
+void Latin::reseed()
 {
     // TODO: fix this seeding
     srand(sample_seed);
@@ -29,60 +29,64 @@ void Independent::reseed()
     rng = pcg32(r1, r2);
 }
 
-void Independent::reseed(uint32_t seed)
+void Latin::reseed(uint32_t seed)
 {
     sample_seed = seed;
     reseed();
 }
 
-void Independent::reset()
+void Latin::reset()
 {
     currentSample = 0;
     reseed();
 }
 
-Float Independent::next1D()
+Float Latin::next1D()
 {
+    throw new NotImplementedException("latin next1D");
+    
     return rng.nextFloat();
 }
 
-Vec2f Independent::next2D()
+Vec2f Latin::next2D()
 {
     return Vec2f(next1D(), next1D());
 }
 
-Vec3f Independent::next3D()
+Vec3f Latin::next3D()
 {
     return Vec3f(next1D(), next1D(), next1D());
 }
 
-Vec4f Independent::next4D()
+Vec4f Latin::next4D()
 {
     return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
-Sampler* Independent::copy()
+Sampler* Latin::copy()
 {
-    Independent* newSamp = new Independent();
+    Latin* newSamp = new Latin();
     newSamp->reseed(sample_seed);
 
     return newSamp;
 }
 
-Sampler* Independent::copy(uint32_t seed)
+Sampler* Latin::copy(uint32_t seed)
 {
-    Independent* newSamp = new Independent();
+    Latin* newSamp = new Latin();
     newSamp->reseed(seed);
 
     return newSamp;
 }
 
-void Independent::nextSample()
+void Latin::nextSample()
 {
     currentSample++;
+
+    throw new NotImplementedException("latin next sample");
 }
 
-std::string Independent::getName() const
+std::string Latin::getName() const
 {
-    return Sampler::getName() + "independent";
+    return Sampler::getName() + "latin";
 }

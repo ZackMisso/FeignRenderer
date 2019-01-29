@@ -36,14 +36,10 @@ public:
 
     void infoDump();
 
-    // TODO
-    // bool intersectTri(uint32_t index, const Ray& ray, *intersectionData*) const;
-
     const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
     const std::vector<Point3f>& getVerts() const;
     const std::vector<Normal3f>& getNorms() const;
-    // const std::vector<Vec3u>& getFaces() const;
     const std::vector<Vec2f>& getUVs() const;
 
 protected:
@@ -52,7 +48,6 @@ protected:
     std::vector<Point3f> vs;
     std::vector<Normal3f> ns;
     std::vector<Vec2f> uvs;
-    // std::vector<Vec3u> fs;
 
     BBox3f bbox;
 };

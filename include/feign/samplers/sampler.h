@@ -2,6 +2,9 @@
 
 #include <feign/node.h>
 
+// TODO: rewrite sampler abstraction to allow for different samplers for
+//       different portions of the render
+
 class Sampler : public Node
 {
 public:
@@ -15,9 +18,9 @@ public:
     virtual void reset() = 0;
 
     virtual Float next1D() = 0;
-    virtual Vec2<Float> next2D() = 0;
-    virtual Vec3<Float> next3D() = 0;
-    virtual Vec4<Float> next4D() = 0;
+    virtual Vec2f next2D() = 0;
+    virtual Vec3f next3D() = 0;
+    virtual Vec4f next4D() = 0;
     // maybe add VecX
 
     virtual Sampler* copy() = 0;

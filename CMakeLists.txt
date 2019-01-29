@@ -83,6 +83,9 @@ add_executable(feign
     include/feign/accel/bbh.h
     include/feign/accel/naive.h
 
+    # Api header files
+    include/feign/api/api.h
+
     # BSDF header files
     include/feign/bsdfs/bsdf.h
     include/feign/bsdfs/diffuse.h
@@ -94,6 +97,7 @@ add_executable(feign
 
     # Emitter header files
     include/feign/emitters/emitter.h
+    include/feign/emitters/point.h
 
     # Filter header files
     include/feign/filters/recon_filter.h
@@ -118,6 +122,12 @@ add_executable(feign
     # Media header files
     include/feign/media/media.h
 
+    # Media Density header files
+    include/feign/media/density/density_func.h
+
+    # Media Transmittance Estimator header files
+    include/feign/media/trans_ests/trans_est.h
+
     # Misc header files
     include/feign/misc/prim.h
     include/feign/misc/primlist.h
@@ -133,6 +143,8 @@ add_executable(feign
     # Sampler header files
     include/feign/samplers/sampler.h
     include/feign/samplers/independent.h
+    include/feign/samplers/latin.h
+    include/feign/samplers/halton.h
 
     # Shapes header files
     include/feign/shapes/shape.h
@@ -160,6 +172,9 @@ add_executable(feign
     src/accel/bbh.cpp
     src/accel/naive.cpp
 
+    # Api implementation files
+    src/api/api.cpp
+
     # BSDF implementation files
     src/bsdfs/bsdf.cpp
     src/bsdfs/diffuse.cpp
@@ -171,6 +186,7 @@ add_executable(feign
 
     # Emitter implementation files
     src/emitters/emitter.cpp
+    src/emitters/point.cpp
 
     # Filter implementation files
     src/filters/recon_filter.cpp
@@ -193,6 +209,10 @@ add_executable(feign
     # Media implementation files
     src/media/media.cpp
 
+    # Media Density implementation files
+
+    # Media Transmittance Estimator implementation files
+
     # Misc implementation files
     src/misc/primlist.cpp
     src/misc/world.cpp
@@ -207,6 +227,8 @@ add_executable(feign
     # Sampler implementation files
     src/samplers/sampler.cpp
     src/samplers/independent.cpp
+    src/samplers/latin.cpp
+    src/samplers/halton.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp
