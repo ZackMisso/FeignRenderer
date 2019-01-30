@@ -22,11 +22,13 @@ void Latin::preProcess()
 
 void Latin::reseed()
 {
+    throw new NotImplementedException("latin reseed");
+
     // TODO: fix this seeding
-    srand(sample_seed);
-    uint64_t r1 = rand();
-    uint64_t r2 = rand();
-    rng = pcg32(r1, r2);
+    // srand(sample_seed);
+    // uint64_t r1 = rand();
+    // uint64_t r2 = rand();
+    // rng = pcg32(r1, r2);
 }
 
 void Latin::reseed(uint32_t seed)
@@ -35,17 +37,12 @@ void Latin::reseed(uint32_t seed)
     reseed();
 }
 
-void Latin::reset()
-{
-    currentSample = 0;
-    reseed();
-}
-
 Float Latin::next1D()
 {
     throw new NotImplementedException("latin next1D");
-    
-    return rng.nextFloat();
+
+    return 0.0;
+    // return rng.nextFloat();
 }
 
 Vec2f Latin::next2D()

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <feign/emitter.h>
+#include <feign/emitters/emitter.h>
 
 class PointEmitter : public Emitter
 {

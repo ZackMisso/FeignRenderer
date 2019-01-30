@@ -27,4 +27,4 @@ public:
 protected:
     // TODO
     uint32_t sample_seed;
-}
+};

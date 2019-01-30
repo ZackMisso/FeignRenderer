@@ -35,12 +35,6 @@ void Independent::reseed(uint32_t seed)
     reseed();
 }
 
-void Independent::reset()
-{
-    currentSample = 0;
-    reseed();
-}
-
 Float Independent::next1D()
 {
     return rng.nextFloat();

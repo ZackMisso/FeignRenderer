@@ -15,8 +15,6 @@ public:
     virtual void reseed() = 0;
     virtual void reseed(uint32_t seed) = 0;
 
-    virtual void reset() = 0;
-
     virtual Float next1D() = 0;
     virtual Vec2f next2D() = 0;
     virtual Vec3f next3D() = 0;

@@ -181,6 +181,16 @@ void ObjMesh::infoDump()
     std::cout << "Number of Triangles: " << tris.size() << std::endl;
 }
 
+uint32_t ObjMesh::primitiveCount() const
+{
+    return tris.size();
+}
+
+BBox3f ObjMesh::boundingBox() const
+{
+    return bbox;
+}
+
 void ObjMesh::preProcess()
 {
     preProcessChildren();
@@ -323,7 +333,7 @@ void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) cons
     }
 }
 
-const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
+// const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
 const std::vector<Point3f>& ObjMesh::getVerts() const { return vs; }
 const std::vector<Normal3f>& ObjMesh::getNorms() const { return ns; }
 const std::vector<Vec2f>& ObjMesh::getUVs() const { return uvs; }

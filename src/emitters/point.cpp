@@ -10,7 +10,7 @@ PointEmitter::PointEmitter(Node* parent) : Emitter(parent)
     throw new NotImplementedException("point constructor");
 }
 
-virtual std::string PointEmitter::getName() const
+std::string PointEmitter::getName() const
 {
     return Emitter::getName() + "point";
 }

@@ -6,8 +6,8 @@
 class Latin : public Sampler
 {
 public:
-    Halton();
-    Halton(Node* parent);
+    Latin();
+    Latin(Node* parent);
 
     virtual void preProcess();
     virtual void reseed();
@@ -27,4 +27,4 @@ public:
 protected:
     // TODO
     uint32_t sample_seed;
-}
+};

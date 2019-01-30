@@ -146,14 +146,14 @@ bool MatrixTest::evaluateTest(UnitTestData& testLog) const
 
 bool MatrixTest::matrix4inverseITest() const
 {
-    Matrix4d result = Matrix4d();
+    Matrix4<double> result = Matrix4<double>();
 
     result[0] = 1.0;
     result[5] = 1.0;
     result[10] = 1.0;
     result[15] = 1.0;
 
-    Matrix4d start = result;
+    Matrix4<double> start = result;
     start = ~start;
 
     return start == result;
@@ -191,14 +191,14 @@ bool MatrixTest::matrix3multITest() const
 
 bool MatrixTest::matrix4inverseSTest() const
 {
-    Matrix4d result = Matrix4d();
+    Matrix4<double> result = Matrix4<double>();
 
     result[0] = 0.1;
     result[5] = 1.0 / 3.0;
     result[10] = -0.2;
     result[15] = 1.0 / 6.0;
 
-    Matrix4d start = Matrix4d();
+    Matrix4<double> start = Matrix4<double>();
 
     start[0] = 10.0;
     start[5] = 3.0;
@@ -247,7 +247,7 @@ bool MatrixTest::matrix3multSTest() const
 
 bool MatrixTest::matrix4inverseSTTest() const
 {
-    Matrix4d result = Matrix4d();
+    Matrix4<double> result = Matrix4<double>();
 
     result[0] = 0.1;
     result[5] = 1.0 / 3.0;
@@ -257,7 +257,7 @@ bool MatrixTest::matrix4inverseSTTest() const
     result[7] = 1.0;
     result[11] = 0.8;
 
-    Matrix4d start = Matrix4d();
+    Matrix4<double> start = Matrix4<double>();
 
     start[0] = 10.0;
     start[5] = 3.0;
@@ -309,7 +309,7 @@ bool MatrixTest::matrix3multSTTest() const
 
 bool MatrixTest::matrix4inverseSTRTest() const
 {
-    Matrix4d result = Matrix4d();
+    Matrix4<double> result = Matrix4<double>();
 
     result[0] = 51.0 / 397.0;
     result[1] = 43.0 / 397.0;
@@ -328,7 +328,7 @@ bool MatrixTest::matrix4inverseSTRTest() const
     result[14] = 0.0;
     result[15] = 1.0;
 
-    Matrix4d start = Matrix4d();
+    Matrix4<double> start = Matrix4<double>();
 
     start[0] = 10.0;
     start[1] = -7.0;

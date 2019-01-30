@@ -14,8 +14,6 @@ public:
     virtual void reseed();
     virtual void reseed(uint32_t seed);
 
-    virtual void reset();
-
     virtual Float next1D();
     virtual Vec2f next2D();
     virtual Vec3f next3D();

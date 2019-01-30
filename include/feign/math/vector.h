@@ -102,74 +102,74 @@ struct Vec2
 
     bool operator<(const Vec2<T>& other) const
     {
-        return (xy(0) < other.xy(0) &&
-                xy(1) < other.xy(1));
+        return (xy[0] < other.xy(0) &&
+                xy[1] < other.xy(1));
     }
 
     bool operator<(T c) const
     {
-        return (xy(0) < c &&
-                xy(1) < c);
+        return (xy[0] < c &&
+                xy[1] < c);
     }
 
     bool operator>(const Vec2<T>& other) const
     {
-        return (xy(0) > other.xy(0) &&
-                xy(1) > other.xy(1));
+        return (xy[0] > other.xy[0] &&
+                xy[1] > other.xy[1]);
     }
 
     bool operator>(T c) const
     {
-        return (xy(0) > c &&
-                xy(1) > c);
+        return (xy[0] > c &&
+                xy[1] > c);
     }
 
     bool operator<=(const Vec2<T>& other) const
     {
-        return (xy(0) <= other.xy(0) &&
-                xy(1) <= other.xy(1));
+        return (xy[0] <= other.xy[0] &&
+                xy[1] <= other.xy[1]);
     }
 
     bool operator<=(T c) const
     {
-        return (xy(0) <= c &&
-                xy(1) <= c);
+        return (xy[0] <= c &&
+                xy[1] <= c);
     }
 
     bool operator>=(const Vec2<T>& other) const
     {
-        return (xy(0) >= other.xy(0) &&
-                xy(1) >= other.xy(1));
+        return (xy[0] >= other.xy[0] &&
+                xy[1] >= other.xy[1]);
     }
 
     bool operator>=(T c) const
     {
-        return (xy(0) >= c &&
-                xy(1) >= c);
+        return (xy[0] >= c &&
+                xy[1] >= c);
     }
 
     bool operator==(const Vec2<T>& other) const
     {
-        return (xy(0) == other.xy(0) &&
-                xy(1) == other.xy(1));
+        return (xy[0] == other.xy[0] &&
+                xy[1] == other.xy[1]);
     }
 
     bool operator==(T c) const
     {
-        return (xy(0) == c &&
-                xy(1) == c);
+        return (xy[0] == c &&
+                xy[1] == c);
     }
 
     bool operator!=(const Vec2<T>& other) const
     {
-        return (xy(0) != other.xy(0) &&
-                xy(1) != other.xy(1));
+        return (xy[0] != other.xy[0] &&
+                xy[1] != other.xy[1]);
     }
 
     bool operator!=(T c) const
     {
-        return (xy(0) != c &&
-                xy(1) != c);
+        return (xy[0] != c &&
+                xy[1] != c);
     }
 
     // dot product
@@ -233,11 +233,11 @@ struct Vec2
     {
         Vec2<T> vec;
 
-        if (xy(0) < other.xy(0)) vec.xy[0] = xy(0);
-        else vec.xy[0] = other.xy(0);
+        if (xy[0] < other.xy[0]) vec.xy[0] = xy[0];
+        else vec.xy[0] = other.xy[0];
 
-        if (xy(1) < other.xy(1)) vec.xy[1] = xy(1);
-        else vec.xy[1] = other.xy(1);
+        if (xy[1] < other.xy[1]) vec.xy[1] = xy[1];
+        else vec.xy[1] = other.xy[1];
 
         return vec;
     }
@@ -246,11 +246,11 @@ struct Vec2
     {
         Vec2<T> vec;
 
-        if (xy(0) > other.xy(0)) vec.xy[0] = xy(0);
-        else vec.xy[0] = other.xy(0);
+        if (xy[0] > other.xy[0]) vec.xy[0] = xy[0];
+        else vec.xy[0] = other.xy[0];
 
-        if (xy(1) > other.xy(1)) vec.xy[1] = xy(1);
-        else vec.xy[1] = other.xy(1);
+        if (xy[1] > other.xy[1]) vec.xy[1] = xy[1];
+        else vec.xy[1] = other.xy[1];
 
         return vec;
     }
@@ -405,86 +405,86 @@ struct Vec3
 
     bool operator<(const Vec3<T>& other) const
     {
-        return (xyz(0) < other.xyz(0) &&
-                xyz(1) < other.xyz(1) &&
-                xyz(2) < other.xyz(2));
+        return (xyz[0] < other.xyz[0] &&
+                xyz[1] < other.xyz[1] &&
+                xyz[2] < other.xyz[2]);
     }
 
     bool operator<(T c) const
     {
-        return (xyz(0) < c &&
-                xyz(1) < c &&
-                xyz(2) < c);
+        return (xyz[0] < c &&
+                xyz[1] < c &&
+                xyz[2] < c);
     }
 
     bool operator>(const Vec3<T>& other) const
     {
-        return (xyz(0) > other.xyz(0) &&
-                xyz(1) > other.xyz(1) &&
-                xyz(2) > other.xyz(2));
+        return (xyz[0] > other.xyz[0] &&
+                xyz[1] > other.xyz[1] &&
+                xyz[2] > other.xyz[2]);
     }
 
     bool operator>(T c) const
     {
-        return (xyz(0) > c &&
-                xyz(1) > c &&
-                xyz(2) > c);
+        return (xyz[0] > c &&
+                xyz[1] > c &&
+                xyz[2] > c);
     }
 
     bool operator<=(const Vec3<T>& other) const
     {
-        return (xyz(0) <= other.xyz(0) &&
-                xyz(1) <= other.xyz(1) &&
-                xyz(2) <= other.xyz(2));
+        return (xyz[0] <= other.xyz[0] &&
+                xyz[1] <= other.xyz[1] &&
+                xyz[2] <= other.xyz[2]);
     }
 
     bool operator<=(T c) const
     {
-        return (xyz(0) <= c &&
-                xyz(1) <= c &&
-                xyz(2) <= c);
+        return (xyz[0] <= c &&
+                xyz[1] <= c &&
+                xyz[2] <= c);
     }
 
     bool operator>=(const Vec3<T>& other) const
     {
-        return (xyz(0) >= other.xyz(0) &&
-                xyz(1) >= other.xyz(1) &&
-                xyz(2) >= other.xyz(2));
+        return (xyz[0] >= other.xyz[0] &&
+                xyz[1] >= other.xyz[1] &&
+                xyz[2] >= other.xyz[2]);
     }
 
     bool operator>=(T c) const
     {
-        return (xyz(0) >= c &&
-                xyz(1) >= c &&
-                xyz(2) >= c);
+        return (xyz[0] >= c &&
+                xyz[1] >= c &&
+                xyz[2] >= c);
     }
 
     bool operator==(const Vec3<T>& other) const
     {
-        return (xyz(0) == other.xyz(0) &&
-                xyz(1) == other.xyz(1) &&
-                xyz(2) == other.xyz(2));
+        return (xyz[0] == other.xyz[0] &&
+                xyz[1] == other.xyz[1] &&
+                xyz[2] == other.xyz[2]);
     }
 
     bool operator==(T c) const
     {
-        return (xyz(0) == c &&
-                xyz(1) == c &&
-                xyz(2) == c);
+        return (xyz[0] == c &&
+                xyz[1] == c &&
+                xyz[2] == c);
     }
 
     bool operator!=(const Vec3<T>& other) const
     {
-        return (xyz(0) != other.xyz(0) &&
-                xyz(1) != other.xyz(1) &&
-                xyz(2) != other.xyz(2));
+        return (xyz[0] != other.xyz[0] &&
+                xyz[1] != other.xyz[1] &&
+                xyz[2] != other.xyz[2]);
     }
 
     bool operator!=(T c) const
     {
-        return (xyz(0) != c &&
-                xyz(1) != c &&
-                xyz(2) != c);
+        return (xyz[0] != c &&
+                xyz[1] != c &&
+                xyz[2] != c);
     }
 
     T sqrNorm() const
@@ -543,14 +543,14 @@ struct Vec3
     {
         Vec3<T> vec;
 
-        if (xyz(0) < other.xyz(0)) vec.xyz[0] = xyz(0);
-        else vec.xyz[0] = other.xyz(0);
+        if (xyz[0] < other.xyz[0]) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = other.xyz[0];
 
-        if (xyz(1) < other.xyz(1)) vec.xyz[1] = xyz(1);
-        else vec.xyz[1] = other.xyz(1);
+        if (xyz[1] < other.xyz[1]) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = other.xyz[1];
 
-        if (xyz(2) < other.xyz(2)) vec.xyz[2] = xyz(2);
-        else vec.xyz[2] = other.xyz(2);
+        if (xyz[2] < other.xyz[2]) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = other.xyz[2];
 
         return vec;
     }
@@ -559,14 +559,14 @@ struct Vec3
     {
         Vec3<T> vec;
 
-        if (xyz(0) > other.xyz(0)) vec.xyz[0] = xyz(0);
-        else vec.xyz[0] = other.xyz(0);
+        if (xyz[0] > other.xyz[0]) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = other.xyz[0];
 
-        if (xyz(1) > other.xyz(1)) vec.xyz[1] = xyz(1);
-        else vec.xyz[1] = other.xyz(1);
+        if (xyz[1] > other.xyz[1]) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = other.xyz[1];
 
-        if (xyz(2) > other.xyz(2)) vec.xyz[2] = xyz(2);
-        else vec.xyz[2] = other.xyz(2);
+        if (xyz[2] > other.xyz[2]) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = other.xyz[2];
 
         return vec;
     }
@@ -810,83 +810,83 @@ struct Vec4
 
     bool operator<(const Vec4<T>& other)
     {
-        return (xyzw(0) < other.xyzw(0) &&
-                xyzw(1) < other.xyzw(1) &&
-                xyzw(2) < other.xyzw(2) &&
-                xyzw(3) < other.xyzw(3));
+        return (xyzw[0] < other.xyzw[0] &&
+                xyzw[1] < other.xyzw[1] &&
+                xyzw[2] < other.xyzw[2] &&
+                xyzw[3] < other.xyzw[3]);
     }
 
     bool operator<(T c)
     {
-        return (xyzw(0) < c &&
-                xyzw(1) < c &&
-                xyzw(2) < c &&
-                xyzw(3) < c);
+        return (xyzw[0] < c &&
+                xyzw[1] < c &&
+                xyzw[2] < c &&
+                xyzw[3] < c);
     }
 
     bool operator>(const Vec4<T>& other)
     {
-        return (xyzw(0) > other.xyzw(0) &&
-                xyzw(1) > other.xyzw(1) &&
-                xyzw(2) > other.xyzw(2) &&
-                xyzw(3) > other.xyzw(3));
+        return (xyzw[0] > other.xyzw[0] &&
+                xyzw[1] > other.xyzw[1] &&
+                xyzw[2] > other.xyzw[2] &&
+                xyzw[3] > other.xyzw[3]);
     }
 
     bool operator>(T c)
     {
-        return (xyzw(0) > c &&
-                xyzw(1) > c &&
-                xyzw(2) > c &&
-                xyzw(3) > c);
+        return (xyzw[0] > c &&
+                xyzw[1] > c &&
+                xyzw[2] > c &&
+                xyzw[3] > c);
     }
 
     bool operator<=(const Vec4<T>& other)
     {
-        return (xyzw(0) <= other.xyzw(0) &&
-                xyzw(1) <= other.xyzw(1) &&
-                xyzw(2) <= other.xyzw(2) &&
-                xyzw(3) <= other.xyzw(3));
+        return (xyzw[0] <= other.xyzw[0] &&
+                xyzw[1] <= other.xyzw[1] &&
+                xyzw[2] <= other.xyzw[2] &&
+                xyzw[3] <= other.xyzw[3]);
     }
 
     bool operator<=(T c)
     {
-        return (xyzw(0) <= c &&
-                xyzw(1) <= c &&
-                xyzw(2) <= c &&
-                xyzw(3) <= c);
+        return (xyzw[0] <= c &&
+                xyzw[1] <= c &&
+                xyzw[2] <= c &&
+                xyzw[3] <= c);
     }
 
     bool operator>=(const Vec4<T>& other)
     {
-        return (xyzw(0) >= other.xyzw(0) &&
-                xyzw(1) >= other.xyzw(1) &&
-                xyzw(2) >= other.xyzw(2) &&
-                xyzw(3) >= other.xyzw(3));
+        return (xyzw[0] >= other.xyzw[0] &&
+                xyzw[1] >= other.xyzw[1] &&
+                xyzw[2] >= other.xyzw[2] &&
+                xyzw[3] >= other.xyzw[3]);
     }
 
     bool operator>=(T c)
     {
-        return (xyzw(0) >= c &&
-                xyzw(1) >= c &&
-                xyzw(2) >= c &&
-                xyzw(3) >= c);
+        return (xyzw[0] >= c &&
+                xyzw[1] >= c &&
+                xyzw[2] >= c &&
+                xyzw[3] >= c);
     }
 
     Vec4<T> min(const Vec4<T>& other) const
     {
         Vec4<T> vec;
 
-        if (xyzw(0) < other.xyzw(0)) vec.xyzw[0] = xyzw(0);
-        else vec.xyzw[0] = other.xyzw(0);
+        if (xyzw[0] < other.xyzw[0]) vec.xyzw[0] = xyzw[0];
+        else vec.xyzw[0] = other.xyzw[0];
 
-        if (xyzw(1) < other.xyzw(1)) vec.xyzw[1] = xyzw(1);
-        else vec.xyzw[1] = other.xyzw(1);
+        if (xyzw[1] < other.xyzw[1]) vec.xyzw[1] = xyzw[1];
+        else vec.xyzw[1] = other.xyzw[1];
 
-        if (xyzw(2) < other.xyzw(2)) vec.xyzw[2] = xyzw(2);
-        else vec.xyzw[2] = other.xyzw(2);
+        if (xyzw[2] < other.xyzw[2]) vec.xyzw[2] = xyzw[2];
+        else vec.xyzw[2] = other.xyzw[2];
 
-        if (xyzw(3) < other.xyzw(3)) vec.xyzw[3] = xyzw(3);
-        else vec.xyzw[3] = other.xyzw(3);
+        if (xyzw[3] < other.xyzw[3]) vec.xyzw[3] = xyzw[3];
+        else vec.xyzw[3] = other.xyzw[3];
 
         return vec;
     }
@@ -895,17 +895,17 @@ struct Vec4
     {
         Vec4<T> vec;
 
-        if (xyzw(0) > other.xyzw(0)) vec.xyzw[0] = xyzw(0);
-        else vec.xyzw[0] = other.xyzw(0);
+        if (xyzw[0] > other.xyzw[0]) vec.xyzw[0] = xyzw[0];
+        else vec.xyzw[0] = other.xyzw[0];
 
-        if (xyzw(1) > other.xyzw(1)) vec.xyzw[1] = xyzw(1);
-        else vec.xyzw[1] = other.xyzw(1);
+        if (xyzw[1] > other.xyzw[1]) vec.xyzw[1] = xyzw[1];
+        else vec.xyzw[1] = other.xyzw[1];
 
-        if (xyzw(2) > other.xyzw(2)) vec.xyzw[2] = xyzw(2);
-        else vec.xyzw[2] = other.xyzw(2);
+        if (xyzw[2] > other.xyzw[2]) vec.xyzw[2] = xyzw[2];
+        else vec.xyzw[2] = other.xyzw[2];
 
-        if (xyzw(3) > other.xyzw(3)) vec.xyzw[3] = xyzw(3);
-        else vec.xyzw[3] = other.xyzw(3);
+        if (xyzw[3] > other.xyzw[3]) vec.xyzw[3] = xyzw[3];
+        else vec.xyzw[3] = other.xyzw[3];
 
         return vec;
     }

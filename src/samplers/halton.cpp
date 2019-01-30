@@ -22,11 +22,13 @@ void Halton::preProcess()
 
 void Halton::reseed()
 {
+    throw new NotImplementedException("halton reseed");
+
     // TODO: fix this seeding
-    srand(sample_seed);
-    uint64_t r1 = rand();
-    uint64_t r2 = rand();
-    rng = pcg32(r1, r2);
+    // srand(sample_seed);
+    // uint64_t r1 = rand();
+    // uint64_t r2 = rand();
+    // rng = pcg32(r1, r2);
 }
 
 void Halton::reseed(uint32_t seed)
@@ -35,17 +37,12 @@ void Halton::reseed(uint32_t seed)
     reseed();
 }
 
-void Halton::reset()
-{
-    currentSample = 0;
-    reseed();
-}
-
 Float Halton::next1D()
 {
     throw new NotImplementedException("halton next1D");
 
-    return rng.nextFloat();
+    return 0.0;
+    // return rng.nextFloat();
 }
 
 Vec2f Halton::next2D()
@@ -73,7 +70,7 @@ Sampler* Halton::copy()
 
 Sampler* Halton::copy(uint32_t seed)
 {
-    Latin* newSamp = new Latin();
+    Halton* newSamp = new Halton();
     newSamp->reseed(seed);
 
     return newSamp;

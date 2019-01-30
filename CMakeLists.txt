@@ -80,7 +80,7 @@ add_executable(feign
 
     # Accel header files
     include/feign/accel/accel.h
-    include/feign/accel/bbh.h
+    include/feign/accel/bvh.h
     include/feign/accel/naive.h
 
     # Api header files
@@ -169,7 +169,7 @@ add_executable(feign
 
     # Accel implementation files
     src/accel/accel.cpp
-    src/accel/bbh.cpp
+    src/accel/bvh.cpp
     src/accel/naive.cpp
 
     # Api implementation files

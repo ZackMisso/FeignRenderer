@@ -12,8 +12,9 @@ public:
     ~Accel();
 
     virtual void clear() = 0;
-    virtual void addShape(Shape* mesh) = 0;
     virtual void build() = 0;
+    virtual void addShape(Shape* mesh) = 0;
+    
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
 
     virtual std::string getName() const;

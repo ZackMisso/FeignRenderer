@@ -32,11 +32,14 @@ public:
                        Transform transform,
                        bool flipNorms);
 
+    virtual uint32_t primitiveCount() const;
+    virtual BBox3f boundingBox() const;
+
     virtual void preProcess();
 
     void infoDump();
 
-    const BBox3f& getBoundingBox() const;
+    // const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
     const std::vector<Point3f>& getVerts() const;
     const std::vector<Normal3f>& getNorms() const;
