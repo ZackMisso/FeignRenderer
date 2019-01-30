@@ -4,6 +4,11 @@
 
 #include <feign/accel/accel.h>
 
+#define BVH_SERIAL_THRESHOLD 32
+#define BVH_GRAIN_SIZE 1000 // for parallelization later
+#define BVH_TRAVERSAL_COST 1 // heuristic operator
+#define BVH_INTERSECTION_COST 1 // heuristic operator
+
 struct BVH_Node
 {
     union
@@ -65,11 +70,13 @@ public:
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
 
+    std::pair<float, uint32_t> statistics(uint32_t node_idx = 0) const;
+
     virtual std::string getName() const;
 
 protected:
     std::vector<uint32_t> mesh_offsets;
+    std::vector<uint32_t> indices;
     std::vector<BVH_Node*> nodes;
-    // indices references by nodes?
     BBox3f bbox;
 };

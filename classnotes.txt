@@ -1,0 +1,23 @@
+testsparsesolver:
+
+SparseMatrix<real> A;
+VectorN<real> x,b;
+A.resize(4,4);
+x.resize(4);
+b.resize(4);
+
+// bottom two are the same size:
+// array of col index
+// array of value
+// different size:
+// array of ptrs
+// eigen handles the above for us
+
+Array<Triplen<real>> A_elements
+A_elements.push_back(Triplet<real>(0,0,2))
+// ... //
+A_elements.push_back(Triplet<real>(3,3,1))
+A.setFromTriplets(A_elements.begin(), A_elements.end());
+A.makeCompressed() -> call otherwise eigen will store zeros just in case
+
+can also use: A.coeffRef(0, 0) = 2; 
