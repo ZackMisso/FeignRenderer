@@ -23,8 +23,8 @@ public:
     float surfaceArea(uint32_t index) const;
     float pdf(uint32_t index) const;
 
-    virtual bool intersect(const Ray3f& scene_ray, Intersection& its);
-    bool intersect(uint32_t tri, Ray3f& ray, Intersection& its);
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
+    virtual bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
 
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 
@@ -32,18 +32,21 @@ public:
                        Transform transform,
                        bool flipNorms);
 
+    virtual uint32_t primitiveCount() const;
+
+    virtual BBox3f boundingBox() const;
+    virtual BBox3f boundingBox(uint32_t tri) const;
+    virtual Point3f centroid() const;
+    virtual Point3f centroid(uint32_t tri) const;
+
     virtual void preProcess();
 
     void infoDump();
 
-    // TODO
-    // bool intersectTri(uint32_t index, const Ray& ray, *intersectionData*) const;
-
-    const BBox3f& getBoundingBox() const;
+    // const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
     const std::vector<Point3f>& getVerts() const;
     const std::vector<Normal3f>& getNorms() const;
-    // const std::vector<Vec3u>& getFaces() const;
     const std::vector<Vec2f>& getUVs() const;
 
 protected:
@@ -52,7 +55,6 @@ protected:
     std::vector<Point3f> vs;
     std::vector<Normal3f> ns;
     std::vector<Vec2f> uvs;
-    // std::vector<Vec3u> fs;
 
     BBox3f bbox;
 };

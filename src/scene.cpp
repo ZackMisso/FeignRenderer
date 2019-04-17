@@ -1,5 +1,6 @@
 #include <feign/scene.h>
 #include <feign/accel/naive.h>
+#include <feign/accel/bvh.h>
 
 Scene::Scene() : Node()
 {
@@ -59,10 +60,19 @@ void Scene::preProcess()
 
     if (!acceleration)
     {
-        acceleration = new NaiveAccel();
+        std::cout << "No Specified Acceleration" << std::endl;
+        // acceleration = new NaiveAccel();
+        acceleration = new BVH();
     }
 
-    acceleration->setMeshes(shapes);
+    acceleration->clear();
+
+    for (int i = 0; i < shapes.size(); ++i)
+    {
+        acceleration->addShape(shapes[i]);
+    }
+    // acceleration->setMeshes(shapes);
+    //
     acceleration->build();
 }
 

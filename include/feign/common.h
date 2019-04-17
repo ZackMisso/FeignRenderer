@@ -6,24 +6,24 @@
 
 #include <feign/exceptions.h>
 #include <feign/math/vector.h>
-#include <feign/math/bbox.h>
 #include <feign/log/logger.h>
 
+// these are necessary defines for imedit
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_WRITE_STATIC
 
 #include <imedit/image.h>
 
-// using namespace std;
-// using namespace imedit;
-
 // TODO: remove this
-// main laptop
+// personal laptop
 #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
-// work laptop
+// misc laptop
 // #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
 // workstation
 // #define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
+// work laptop
+// #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
+
 
 #define Epsilon 1e-4f
 
@@ -34,74 +34,47 @@
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
 
+// uncomment the following for desired types
+typedef float Float;
+// typedef double Float;
+
+typedef int Int;
+// typedef long Int;
+
+typedef uint32_t uInt;
+// typedef uint64_t uInt;
+
 // vector and matrix types
 // these have no geometric meaning
-typedef Vec2<int> Vec2i;
-typedef Vec2<uint32_t> Vec2u;
-typedef Vec2<float> Vec2f;
-typedef Vec2<double> Vec2d;
-typedef Vec3<float> Vec3f;
-typedef Vec3<double> Vec3d;
-typedef Vec3<int> Vec3i;
-typedef Vec3<uint32_t> Vec3u;
-typedef Vec4<float> Vec4f;
-typedef Vec4<double> Vec4d;
-typedef Vec4<int> Vec4i;
-typedef Vec4<uint32_t> Vec4u;
+typedef Vec2<Int> Vec2i;
+typedef Vec2<uInt> Vec2u;
+typedef Vec2<Float> Vec2f;
+typedef Vec3<Int> Vec3i;
+typedef Vec3<uInt> Vec3u;
+typedef Vec3<Float> Vec3f;
+typedef Vec4<Int> Vec4i;
+typedef Vec4<uInt> Vec4u;
+typedef Vec4<Float> Vec4f;
 
 // these represent actual geometric primitives
-typedef Point2<float> Point2f;
-typedef Point2<double> Point2d;
-typedef Vector3<float> Vector3f;
-typedef Vector3<double> Vector3d;
-typedef Point3<float> Point3f;
-typedef Point3<double> Point3d;
-typedef Normal3<float> Normal3f;
-typedef Normal3<double> Normal3d;
-typedef Color3<float> Color3f;
+typedef Point2<Float> Point2f;
+typedef Vector3<Float> Vector3f;
+typedef Point3<Float> Point3f;
+typedef Normal3<Float> Normal3f;
+typedef Color3<Float> Color3f;
 
-typedef Matrix3<float> Matrix3f;
-typedef Matrix3<double> Matrix3d;
-typedef Matrix4<float> Matrix4f;
-typedef Matrix4<double> Matrix4d;
+typedef Matrix3<Float> Matrix3f;
+typedef Matrix4<Float> Matrix4f;
 
-typedef imedit::Image<float> Imagef;
-typedef imedit::Image<int> Imagei;
-typedef imedit::Image<double> Imaged;
+typedef imedit::Image<Float> Imagef;
+typedef imedit::Image<uInt> Imagei;
 
-typedef BBox3<float> BBox3f;
-typedef BBox3<double> BBox3d;
+inline Float degToRad(Float value) { return value * (M_PI / 180.0); }
 
-typedef float Float;
-
-static Matrix4f Matrix4f_identity()
-{
-    Matrix4f mat;
-
-    mat[0] = 1.0; mat[1] = 0.0; mat[2] = 0.0; mat[3] = 0.0;
-    mat[4] = 0.0; mat[5] = 1.0; mat[6] = 0.0; mat[7] = 0.0;
-    mat[8] = 0.0; mat[9] = 0.0; mat[10] = 1.0; mat[11] = 0.0;
-    mat[12] = 0.0; mat[13] = 0.0; mat[14] = 0.0; mat[15] = 1.0;
-
-    return mat;
-}
-
-static Matrix3f Matrix3f_identity()
-{
-    Matrix3f mat;
-
-    mat[0] = 1.0; mat[1] = 0.0; mat[2] = 0.0;
-    mat[3] = 0.0; mat[4] = 1.0; mat[5] = 0.0;
-    mat[6] = 0.0; mat[7] = 0.0; mat[8] = 1.0;
-
-    return mat;
-}
-
-inline float degToRad(float value) { return value * (M_PI / 180.0f); }
-
+// maybe move this out of common
 #if !defined(_GNU_SOURCE)
     /// Emulate sincosf using sinf() and cosf()
-    inline void sincosf(float theta, float *_sin, float *_cos) {
+    inline void sincosf(Float theta, Float *_sin, Float *_cos) {
         *_sin = sinf(theta);
         *_cos = cosf(theta);
     }

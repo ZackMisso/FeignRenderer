@@ -100,6 +100,78 @@ struct Vec2
         return vec;
     }
 
+    bool operator<(const Vec2<T>& other) const
+    {
+        return (xy[0] < other.xy(0) &&
+                xy[1] < other.xy(1));
+    }
+
+    bool operator<(T c) const
+    {
+        return (xy[0] < c &&
+                xy[1] < c);
+    }
+
+    bool operator>(const Vec2<T>& other) const
+    {
+        return (xy[0] > other.xy[0] &&
+                xy[1] > other.xy[1]);
+    }
+
+    bool operator>(T c) const
+    {
+        return (xy[0] > c &&
+                xy[1] > c);
+    }
+
+    bool operator<=(const Vec2<T>& other) const
+    {
+        return (xy[0] <= other.xy[0] &&
+                xy[1] <= other.xy[1]);
+    }
+
+    bool operator<=(T c) const
+    {
+        return (xy[0] <= c &&
+                xy[1] <= c);
+    }
+
+    bool operator>=(const Vec2<T>& other) const
+    {
+        return (xy[0] >= other.xy[0] &&
+                xy[1] >= other.xy[1]);
+    }
+
+    bool operator>=(T c) const
+    {
+        return (xy[0] >= c &&
+                xy[1] >= c);
+    }
+
+    bool operator==(const Vec2<T>& other) const
+    {
+        return (xy[0] == other.xy[0] &&
+                xy[1] == other.xy[1]);
+    }
+
+    bool operator==(T c) const
+    {
+        return (xy[0] == c &&
+                xy[1] == c);
+    }
+
+    bool operator!=(const Vec2<T>& other) const
+    {
+        return (xy[0] != other.xy[0] &&
+                xy[1] != other.xy[1]);
+    }
+
+    bool operator!=(T c) const
+    {
+        return (xy[0] != c &&
+                xy[1] != c);
+    }
+
     // dot product
     T operator%(const Vec2<T>& other) const
     {
@@ -155,6 +227,52 @@ struct Vec2
         else vec[1] = xy[1];
 
         return vec;
+    }
+
+    Vec2<T> min(const Vec2<T>& other) const
+    {
+        Vec2<T> vec;
+
+        if (xy[0] < other.xy[0]) vec.xy[0] = xy[0];
+        else vec.xy[0] = other.xy[0];
+
+        if (xy[1] < other.xy[1]) vec.xy[1] = xy[1];
+        else vec.xy[1] = other.xy[1];
+
+        return vec;
+    }
+
+    Vec2<T> max(const Vec2<T>& other) const
+    {
+        Vec2<T> vec;
+
+        if (xy[0] > other.xy[0]) vec.xy[0] = xy[0];
+        else vec.xy[0] = other.xy[0];
+
+        if (xy[1] > other.xy[1]) vec.xy[1] = xy[1];
+        else vec.xy[1] = other.xy[1];
+
+        return vec;
+    }
+
+    int maxIndex() const
+    {
+        return xy[0] > xy[1] ? 0 : 1;
+    }
+
+    int minIndex() const
+    {
+        return xy[0] < xy[1] ? 0 : 1;
+    }
+
+    int maxAbsIndex() const
+    {
+        return std::abs(xy[0]) > std::abs(xy[1]) ? 0 : 1;
+    }
+
+    int minAbsIndex() const
+    {
+        return std::abs(xy[0]) < std::abs(xy[1]) ? 0 : 1;
     }
 
     void info() const
@@ -295,6 +413,90 @@ struct Vec3
         return vec;
     }
 
+    bool operator<(const Vec3<T>& other) const
+    {
+        return (xyz[0] < other.xyz[0] &&
+                xyz[1] < other.xyz[1] &&
+                xyz[2] < other.xyz[2]);
+    }
+
+    bool operator<(T c) const
+    {
+        return (xyz[0] < c &&
+                xyz[1] < c &&
+                xyz[2] < c);
+    }
+
+    bool operator>(const Vec3<T>& other) const
+    {
+        return (xyz[0] > other.xyz[0] &&
+                xyz[1] > other.xyz[1] &&
+                xyz[2] > other.xyz[2]);
+    }
+
+    bool operator>(T c) const
+    {
+        return (xyz[0] > c &&
+                xyz[1] > c &&
+                xyz[2] > c);
+    }
+
+    bool operator<=(const Vec3<T>& other) const
+    {
+        return (xyz[0] <= other.xyz[0] &&
+                xyz[1] <= other.xyz[1] &&
+                xyz[2] <= other.xyz[2]);
+    }
+
+    bool operator<=(T c) const
+    {
+        return (xyz[0] <= c &&
+                xyz[1] <= c &&
+                xyz[2] <= c);
+    }
+
+    bool operator>=(const Vec3<T>& other) const
+    {
+        return (xyz[0] >= other.xyz[0] &&
+                xyz[1] >= other.xyz[1] &&
+                xyz[2] >= other.xyz[2]);
+    }
+
+    bool operator>=(T c) const
+    {
+        return (xyz[0] >= c &&
+                xyz[1] >= c &&
+                xyz[2] >= c);
+    }
+
+    bool operator==(const Vec3<T>& other) const
+    {
+        return (xyz[0] == other.xyz[0] &&
+                xyz[1] == other.xyz[1] &&
+                xyz[2] == other.xyz[2]);
+    }
+
+    bool operator==(T c) const
+    {
+        return (xyz[0] == c &&
+                xyz[1] == c &&
+                xyz[2] == c);
+    }
+
+    bool operator!=(const Vec3<T>& other) const
+    {
+        return (xyz[0] != other.xyz[0] &&
+                xyz[1] != other.xyz[1] &&
+                xyz[2] != other.xyz[2]);
+    }
+
+    bool operator!=(T c) const
+    {
+        return (xyz[0] != c &&
+                xyz[1] != c &&
+                xyz[2] != c);
+    }
+
     T sqrNorm() const
     {
         return xyz[0] * xyz[0] +
@@ -345,6 +547,66 @@ struct Vec3
         else vec[2] = xyz[2];
 
         return vec;
+    }
+
+    Vec3<T> min(const Vec3<T>& other) const
+    {
+        Vec3<T> vec;
+
+        if (xyz[0] < other.xyz[0]) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = other.xyz[0];
+
+        if (xyz[1] < other.xyz[1]) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = other.xyz[1];
+
+        if (xyz[2] < other.xyz[2]) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = other.xyz[2];
+
+        return vec;
+    }
+
+    Vec3<T> max(const Vec3<T>& other) const
+    {
+        Vec3<T> vec;
+
+        if (xyz[0] > other.xyz[0]) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = other.xyz[0];
+
+        if (xyz[1] > other.xyz[1]) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = other.xyz[1];
+
+        if (xyz[2] > other.xyz[2]) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = other.xyz[2];
+
+        return vec;
+    }
+
+    int maxIndex() const
+    {
+        return (xyz[0] > xyz[1])
+               ? (xyz[0] > xyz[2]) ? 0 : 2
+               : (xyz[1] > xyz[2]) ? 1 : 2;
+    }
+
+    int minIndex() const
+    {
+        return (xyz[0] < xyz[1])
+               ? (xyz[0] < xyz[2]) ? 0 : 2
+               : (xyz[1] < xyz[2]) ? 1 : 2;
+    }
+
+    int maxAbsIndex() const
+    {
+        return (std::abs(xyz[0]) > std::abs(xyz[1]))
+               ? (std::abs(xyz[0]) > std::abs(xyz[2])) ? 0 : 2
+               : (std::abs(xyz[1]) > std::abs(xyz[2])) ? 1 : 2;
+    }
+
+    int minAbsIndex() const
+    {
+        return (std::abs(xyz[0]) < std::abs(xyz[1]))
+               ? (std::abs(xyz[0]) < std::abs(xyz[2])) ? 0 : 2
+               : (std::abs(xyz[1]) < std::abs(xyz[2])) ? 1 : 2;
     }
 
     void info() const
@@ -567,8 +829,177 @@ struct Vec4
         if (xyzw[3] < 0.0) vec[3] = -xyzw[3];
         else vec[3] = xyzw[3];
 
+        return vec;
+    }
+
+    bool operator<(const Vec4<T>& other)
+    {
+        return (xyzw[0] < other.xyzw[0] &&
+                xyzw[1] < other.xyzw[1] &&
+                xyzw[2] < other.xyzw[2] &&
+                xyzw[3] < other.xyzw[3]);
+    }
+
+    bool operator<(T c)
+    {
+        return (xyzw[0] < c &&
+                xyzw[1] < c &&
+                xyzw[2] < c &&
+                xyzw[3] < c);
+    }
+
+    bool operator>(const Vec4<T>& other)
+    {
+        return (xyzw[0] > other.xyzw[0] &&
+                xyzw[1] > other.xyzw[1] &&
+                xyzw[2] > other.xyzw[2] &&
+                xyzw[3] > other.xyzw[3]);
+    }
+
+    bool operator>(T c)
+    {
+        return (xyzw[0] > c &&
+                xyzw[1] > c &&
+                xyzw[2] > c &&
+                xyzw[3] > c);
+    }
+
+    bool operator<=(const Vec4<T>& other)
+    {
+        return (xyzw[0] <= other.xyzw[0] &&
+                xyzw[1] <= other.xyzw[1] &&
+                xyzw[2] <= other.xyzw[2] &&
+                xyzw[3] <= other.xyzw[3]);
+    }
+
+    bool operator<=(T c)
+    {
+        return (xyzw[0] <= c &&
+                xyzw[1] <= c &&
+                xyzw[2] <= c &&
+                xyzw[3] <= c);
+    }
+
+    bool operator>=(const Vec4<T>& other)
+    {
+        return (xyzw[0] >= other.xyzw[0] &&
+                xyzw[1] >= other.xyzw[1] &&
+                xyzw[2] >= other.xyzw[2] &&
+                xyzw[3] >= other.xyzw[3]);
+    }
+
+    bool operator>=(T c)
+    {
+        return (xyzw[0] >= c &&
+                xyzw[1] >= c &&
+                xyzw[2] >= c &&
+                xyzw[3] >= c);
+    }
+
+    Vec4<T> min(const Vec4<T>& other) const
+    {
+        Vec4<T> vec;
+
+        if (xyzw[0] < other.xyzw[0]) vec.xyzw[0] = xyzw[0];
+        else vec.xyzw[0] = other.xyzw[0];
+
+        if (xyzw[1] < other.xyzw[1]) vec.xyzw[1] = xyzw[1];
+        else vec.xyzw[1] = other.xyzw[1];
+
+        if (xyzw[2] < other.xyzw[2]) vec.xyzw[2] = xyzw[2];
+        else vec.xyzw[2] = other.xyzw[2];
+
+        if (xyzw[3] < other.xyzw[3]) vec.xyzw[3] = xyzw[3];
+        else vec.xyzw[3] = other.xyzw[3];
 
         return vec;
+    }
+
+    Vec4<T> max(const Vec4<T>& other) const
+    {
+        Vec4<T> vec;
+
+        if (xyzw[0] > other.xyzw[0]) vec.xyzw[0] = xyzw[0];
+        else vec.xyzw[0] = other.xyzw[0];
+
+        if (xyzw[1] > other.xyzw[1]) vec.xyzw[1] = xyzw[1];
+        else vec.xyzw[1] = other.xyzw[1];
+
+        if (xyzw[2] > other.xyzw[2]) vec.xyzw[2] = xyzw[2];
+        else vec.xyzw[2] = other.xyzw[2];
+
+        if (xyzw[3] > other.xyzw[3]) vec.xyzw[3] = xyzw[3];
+        else vec.xyzw[3] = other.xyzw[3];
+
+        return vec;
+    }
+
+    int maxIndex() const
+    {
+        int max = 0;
+        T max_val = xyzw[0];
+
+        for (int i = 1; i < 4; ++i)
+        {
+            if (xyzw[i] > max_val)
+            {
+                max_val = xyzw[i];
+                max = i;
+            }
+        }
+
+        return max;
+    }
+
+    int minIndex() const
+    {
+        int min = 0;
+        T min_val = xyzw[0];
+
+        for (int i = 1; i < 4; ++i)
+        {
+            if (xyzw[i] < min_val)
+            {
+                min_val = xyzw[i];
+                min = i;
+            }
+        }
+
+        return min;
+    }
+
+    int maxAbsIndex() const
+    {
+        int max = 0;
+        T max_val = std::abs(xyzw[0]);
+
+        for (int i = 1; i < 4; ++i)
+        {
+            if (std::abs(xyzw[i]) > max_val)
+            {
+                max_val = std::abs(xyzw[i]);
+                max = i;
+            }
+        }
+
+        return max;
+    }
+
+    int minAbsIndex() const
+    {
+        int min = 0;
+        T min_val = std::abs(xyzw[0]);
+
+        for (int i = 1; i < 4; ++i)
+        {
+            if (std::abs(xyzw[i]) < min_val)
+            {
+                min_val = std::abs(xyzw[i]);
+                min = i;
+            }
+        }
+
+        return min;
     }
 
     void info() const
@@ -600,6 +1031,17 @@ struct Matrix3
         n[0] = n00; n[1] = n01; n[2] = n02;
         n[3] = n10; n[4] = n11; n[5] = n12;
         n[6] = n20; n[7] = n21; n[8] = n22;
+    }
+
+    static Matrix3<T> identity()
+    {
+        Matrix3<T> mat;
+
+        mat[0] = (T)1.0; mat[1] = (T)0.0; mat[2] = (T)0.0;
+        mat[3] = (T)0.0; mat[4] = (T)1.0; mat[5] = (T)0.0;
+        mat[6] = (T)0.0; mat[7] = (T)0.0; mat[8] = (T)1.0;
+
+        return mat;
     }
 
     Matrix3<T> operator*(const Matrix3<T>& other)
@@ -728,6 +1170,18 @@ struct Matrix4
         return mat;
     }
 
+    static Matrix4<T> identity()
+    {
+        Matrix4<T> mat;
+
+        mat[0] = (T)1.0; mat[1] = (T)0.0; mat[2] = (T)0.0; mat[3] = (T)0.0;
+        mat[4] = (T)0.0; mat[5] = (T)1.0; mat[6] = (T)0.0; mat[7] = (T)0.0;
+        mat[8] = (T)0.0; mat[9] = (T)0.0; mat[10] = (T)1.0; mat[11] = (T)0.0;
+        mat[12] = (T)0.0; mat[13] = (T)0.0; mat[14] = (T)0.0; mat[15] = (T)1.0;
+
+        return mat;
+    }
+
     static Matrix4<T> scale(const Vec3<T>& vec)
     {
         Matrix4<T> mat = Matrix4<T>();
@@ -786,13 +1240,6 @@ struct Matrix4
     {
         Vec4<T> vec;
 
-        // std::cout << n[0] << " * " << other(0) << " + " <<
-        //              n[1] << " * " << other(1) << " + " <<
-        //              n[2] << " * " << other(2) << " + " <<
-        //              n[3] << " * " << other(3) << std::endl;
-        //
-        // std::cout << "other: "; other.info();
-
         vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2) + n[3]*other(3);
         vec[1] = n[4]*other(0) + n[5]*other(1) + n[6]*other(2) + n[7]*other(3);
         vec[2] = n[8]*other(0) + n[9]*other(1) + n[10]*other(2) + n[11]*other(3);
@@ -843,33 +1290,33 @@ struct Matrix4
 
         det += n[0] * (n[5] * n[10] * n[15] + n[6] * n[11] * n[13] +
                        n[7] * n[9] * n[14] - n[7] * n[10] * n[13] -
-                       n[6] * n[9] * n[15] - n[5] * n[11] * n[14]); // correct
+                       n[6] * n[9] * n[15] - n[5] * n[11] * n[14]);
 
         det -= n[4] * (n[1] * n[10] * n[15] + n[2] * n[11] * n[13] +
                        n[3] * n[9] * n[14] - n[3] * n[10] * n[13] -
-                       n[2] * n[9] * n[15] - n[1] * n[11] * n[14]); // correct
+                       n[2] * n[9] * n[15] - n[1] * n[11] * n[14]);
 
-        det += n[8] * (n[1] * n[6] * n[15] + n[2] * n[7] * n[13] + // correct
+        det += n[8] * (n[1] * n[6] * n[15] + n[2] * n[7] * n[13] +
                        n[3] * n[5] * n[14] - n[3] * n[6] * n[13] -
                        n[2] * n[5] * n[15] - n[1] * n[7] * n[14]);
 
-        det -= n[12] * (n[1] * n[6] * n[11] + n[2] * n[7] * n[9] + // correct
+        det -= n[12] * (n[1] * n[6] * n[11] + n[2] * n[7] * n[9] +
                         n[3] * n[5] * n[10] - n[3] * n[6] * n[9] -
                         n[2] * n[5] * n[11] - n[1] * n[7] * n[10]);
 
-        T m11 = n[5] * n[10] * n[15] + n[6] * n[11] * n[13] + // correct
+        T m11 = n[5] * n[10] * n[15] + n[6] * n[11] * n[13] +
                 n[7] * n[9] * n[14] - n[7] * n[10] * n[13] -
                 n[6] * n[9] * n[15] - n[5] * n[11] * n[14];
 
-        T m12 = n[4] * n[10] * n[15] + n[6] * n[11] * n[12] + // correct
+        T m12 = n[4] * n[10] * n[15] + n[6] * n[11] * n[12] +
                 n[7] * n[8] * n[14] - n[7] * n[10] * n[12] -
                 n[6] * n[8] * n[15] - n[4] * n[11] * n[14];
 
-        T m13 = n[4] * n[9] * n[15] + n[5] * n[11] * n[12] + // correct
+        T m13 = n[4] * n[9] * n[15] + n[5] * n[11] * n[12] +
                 n[7] * n[8] * n[13] - n[7] * n[9] * n[12] -
                 n[5] * n[8] * n[15] - n[4] * n[11] * n[13];
 
-        T m14 = n[4] * n[9] * n[14] + n[5] * n[10] * n[12] + // correct
+        T m14 = n[4] * n[9] * n[14] + n[5] * n[10] * n[12] +
                 n[6] * n[8] * n[13] - n[6] * n[9] * n[12] -
                 n[5] * n[8] * n[14] - n[4] * n[10] * n[13];
 
@@ -937,24 +1384,6 @@ struct Matrix4
         mat.n[13] = m24 / det;
         mat.n[14] = -m34 / det;
         mat.n[15] = m44 / det;
-
-        // cout << "DET: " << det << endl << endl;;
-        // cout << "m11: " << m11 << endl;
-        // cout << "m12: " << m12 << endl;
-        // cout << "m13: " << m13 << endl;
-        // cout << "m14: " << m14 << endl;
-        // cout << "m21: " << m21 << endl;
-        // cout << "m22: " << m22 << endl;
-        // cout << "m23: " << m23 << endl;
-        // cout << "m24: " << m24 << endl;
-        // cout << "m31: " << m31 << endl;
-        // cout << "m32: " << m32 << endl;
-        // cout << "m33: " << m33 << endl;
-        // cout << "m34: " << m34 << endl;
-        // cout << "m41: " << m41 << endl;
-        // cout << "m42: " << m42 << endl;
-        // cout << "m43: " << m43 << endl;
-        // cout << "m44: " << m44 << endl;
 
         return mat;
     }
@@ -1054,4 +1483,16 @@ struct Color3 : public Vec3<T>
     Color3(T c) : Vec3<T>(c) { }
     Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
     Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Vector4 : public Vec4<T>
+{
+    Vector4() : Vec4<T>() { }
+    Vector4(const Vec4<T>& vec) : Vec4<T>(vec) { }
+    Vector4(T c) : Vec4<T>(c) { }
+    Vector4(T x, T y, T z, T w) : Vec4<T>(x, y, z, w) { }
+    Vector4(Vec2<T> xy, T z, T w) : Vec4<T>(xy, z, w) { }
+    Vector4(Vec2<T> xy, Vec2<T>zw) : Vec4<T>(xy, zw) { }
+    Vector4(Vec3<T> xyz, T w) : Vec4<T>(xyz, w) { }
 };

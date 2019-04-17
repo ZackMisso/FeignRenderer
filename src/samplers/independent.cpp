@@ -22,6 +22,7 @@ void Independent::preProcess()
 
 void Independent::reseed()
 {
+    // TODO: fix this seeding
     srand(sample_seed);
     uint64_t r1 = rand();
     uint64_t r2 = rand();
@@ -34,30 +35,24 @@ void Independent::reseed(uint32_t seed)
     reseed();
 }
 
-void Independent::reset()
-{
-    currentSample = 0;
-    reseed();
-}
-
 Float Independent::next1D()
 {
     return rng.nextFloat();
 }
 
-Vec2<Float> Independent::next2D()
+Vec2f Independent::next2D()
 {
-    return Vec2<Float>(next1D(), next1D());
+    return Vec2f(next1D(), next1D());
 }
 
-Vec3<Float> Independent::next3D()
+Vec3f Independent::next3D()
 {
-    return Vec3<Float>(next1D(), next1D(), next1D());
+    return Vec3f(next1D(), next1D(), next1D());
 }
 
-Vec4<Float> Independent::next4D()
+Vec4f Independent::next4D()
 {
-    return Vec4<Float>(next1D(), next1D(), next1D(), next1D());
+    return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
 Sampler* Independent::copy()

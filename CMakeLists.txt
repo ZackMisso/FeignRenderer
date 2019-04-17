@@ -80,8 +80,11 @@ add_executable(feign
 
     # Accel header files
     include/feign/accel/accel.h
-    include/feign/accel/bbh.h
+    include/feign/accel/bvh.h
     include/feign/accel/naive.h
+
+    # Api header files
+    include/feign/api/api.h
 
     # BSDF header files
     include/feign/bsdfs/bsdf.h
@@ -94,6 +97,7 @@ add_executable(feign
 
     # Emitter header files
     include/feign/emitters/emitter.h
+    include/feign/emitters/point.h
 
     # Filter header files
     include/feign/filters/recon_filter.h
@@ -118,11 +122,16 @@ add_executable(feign
     # Media header files
     include/feign/media/media.h
 
+    # Media Density header files
+    include/feign/media/density/density_func.h
+
+    # Media Transmittance Estimator header files
+    include/feign/media/trans_ests/trans_est.h
+
     # Misc header files
     include/feign/misc/prim.h
     include/feign/misc/primlist.h
     include/feign/misc/world.h
-    include/feign/misc/transformnode.h
     include/feign/misc/intersection.h
 
     # Parser header files
@@ -134,6 +143,8 @@ add_executable(feign
     # Sampler header files
     include/feign/samplers/sampler.h
     include/feign/samplers/independent.h
+    include/feign/samplers/latin.h
+    include/feign/samplers/halton.h
 
     # Shapes header files
     include/feign/shapes/shape.h
@@ -158,8 +169,11 @@ add_executable(feign
 
     # Accel implementation files
     src/accel/accel.cpp
-    src/accel/bbh.cpp
+    src/accel/bvh.cpp
     src/accel/naive.cpp
+
+    # Api implementation files
+    src/api/api.cpp
 
     # BSDF implementation files
     src/bsdfs/bsdf.cpp
@@ -172,6 +186,7 @@ add_executable(feign
 
     # Emitter implementation files
     src/emitters/emitter.cpp
+    src/emitters/point.cpp
 
     # Filter implementation files
     src/filters/recon_filter.cpp
@@ -194,10 +209,13 @@ add_executable(feign
     # Media implementation files
     src/media/media.cpp
 
+    # Media Density implementation files
+
+    # Media Transmittance Estimator implementation files
+
     # Misc implementation files
     src/misc/primlist.cpp
     src/misc/world.cpp
-    src/misc/transformnode.cpp
     src/misc/intersection.cpp
 
     # Parser implementation files
@@ -209,6 +227,8 @@ add_executable(feign
     # Sampler implementation files
     src/samplers/sampler.cpp
     src/samplers/independent.cpp
+    src/samplers/latin.cpp
+    src/samplers/halton.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp
@@ -240,4 +260,4 @@ set(CompilerFlags
 # Lastly, additional libraries may have been built for you.  In addition to linking
 # against NanoGUI, we need to link against those as well.
 #target_link_libraries(feign)
-target_link_libraries(feign ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb ${PYTHON_LIBRARIES})

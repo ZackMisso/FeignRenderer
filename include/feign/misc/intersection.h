@@ -13,8 +13,8 @@ struct Intersection
     float t;
     uint32_t f; // face index
 
-    CoordinateFrame s_frame;
-    CoordinateFrame g_frame;
+    CoordinateFrame s_frame; // shading frame
+    CoordinateFrame g_frame; // geometric frame
 
     const Shape* intersectedMesh;
 
