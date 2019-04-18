@@ -42,12 +42,17 @@ public:
 
     task* execute()
     {
+        // std::cout << "inside execute" << std::endl;
         uint32_t size = (uint32_t) (end - start);
 
         BVH_Node& node = bvh.nodes[node_idx];
 
+        // std::cout << "Node BOUNDS:" << std::endl;
+        // node.bbox.infoDump();
+
         if (size < SERIAL_THRESHOLD)
         {
+            // std::cout << "LEAF" << std::endl;
             execute_serially(bvh, node_idx, start, end, temp);
             return nullptr;
         }
@@ -89,6 +94,8 @@ public:
             }
         );
 
+        // std::cout << "post reduce" << std::endl;
+
         BBox3f bbox_left[Bins::BIN_COUNT];
         bbox_left[0] = bins.bbox[0];
 
@@ -98,8 +105,10 @@ public:
             bbox_left[i] = BBox3f::merge(bbox_left[i - 1], bins.bbox[i]);
         }
 
+        // std::cout << "post merge" << std::endl;
+
         BBox3f bbox_right = bins.bbox[Bins::BIN_COUNT - 1];
-        BBox3f best_bbox_right;
+        BBox3f best_bbox_right = BBox3f();
 
         int64_t best_index = -1;
         float best_cost = (float) INTERSECTION_COST * size;
@@ -134,6 +143,7 @@ public:
 
         bvh.nodes[node_idx_left].bbox = bbox_left[best_index];
         bvh.nodes[node_idx_right].bbox = best_bbox_right;
+        node.inner.rightChild = node_idx_right;
         node.inner.axis = axis;
         node.inner.flag = 0;
 
@@ -200,6 +210,8 @@ public:
                                  uint32_t* end,
                                  uint32_t* temp)
     {
+        // std::cout << "inside serially" << std::endl;
+
         BVH_Node& node = bvh.nodes[node_idx];
         uint32_t size = (uint32_t) (end - start);
 
@@ -222,6 +234,7 @@ public:
                 bbox.expand(bvh.getBoundingBox(f));
                 left_areas[i] = (float)bbox.surfaceArea();
             }
+            // std::cout << "weird" << std::endl;
 
             if (axis == 0)
             {
@@ -349,6 +362,7 @@ void BVH::build()
     BVHBuildTask& task = *new(tbb::task::allocate_root())
         BVHBuildTask(*this, 0u, tmp_indices, tmp_indices + size, temp);
 
+    std::cout << "spawning root" << std::endl;
     tbb::task::spawn_root_and_wait(task);
 
     delete[] temp;
@@ -360,6 +374,8 @@ void BVH::build()
 
     int64_t j = nodes.size();
     int64_t skipped = 0;
+
+    std::cout << "woooow" << std::endl;
 
     for (int64_t i = stats.second-1; i >= 0; --i)
     {
@@ -411,6 +427,8 @@ void BVH::addShape(Shape* mesh)
     meshes.push_back(mesh);
     mesh_offsets.push_back(mesh_offsets.back() + mesh->primitiveCount());
     bbox.expand(mesh->boundingBox());
+    std::cout << "Mesh Box: " << std::endl;
+    mesh->boundingBox().infoDump();
 }
 
 bool BVH::intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -431,7 +449,6 @@ bool BVH::intersect(const Ray3f& scene_ray, Intersection& its) const
     if (nodes.empty() || ray.maxt < ray.mint) return false;
 
     bool foundIntersection = false;
-    uint32_t f = 0;
 
     while (true)
     {
@@ -462,9 +479,10 @@ bool BVH::intersect(const Ray3f& scene_ray, Intersection& its) const
                 {
                     foundIntersection = true;
                     ray.maxt = its.t = tmp_its.t;
+                    // std::cout << "Hit Mesh" << std::endl;
+                    its.intersectedMesh = mesh;
                     its.uv = tmp_its.uv;
-                    its.intersectedMesh = tmp_its.intersectedMesh;
-                    f = idx;
+                    its.f = idx;
                 }
             }
             if (stack_idx == 0) break;

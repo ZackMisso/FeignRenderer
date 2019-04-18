@@ -57,4 +57,5 @@ protected:
     std::vector<Vec2f> uvs;
 
     BBox3f bbox;
+    Float sa;
 };

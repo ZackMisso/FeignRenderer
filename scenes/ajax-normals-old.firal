@@ -2,7 +2,7 @@ scene
     sampler independent
         int
             name sampleCount
-            value 2
+            value 1
     /sampler
 
     integrator normals /integrator

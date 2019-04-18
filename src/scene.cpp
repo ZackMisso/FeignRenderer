@@ -65,7 +65,7 @@ void Scene::preProcess()
         acceleration = new BVH();
     }
 
-    acceleration->clear();
+    // acceleration->clear();
 
     for (int i = 0; i < shapes.size(); ++i)
     {

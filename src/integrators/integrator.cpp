@@ -28,10 +28,10 @@ void Integrator::render(const Scene* scene,
 
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
-                std::cout << double(k * camera->getFilmSize()[1] * camera->getFilmSize()[0] +
-                             i * camera->getFilmSize()[0] + j) /
-                             double(camera->getFilmSize()[0] * camera->getFilmSize()[1] * sampler->getSampleCnt())
-                             * 100.0 << " Percent Done" << std::endl;
+                // std::cout << double(k * camera->getFilmSize()[1] * camera->getFilmSize()[0] +
+                //              i * camera->getFilmSize()[0] + j) /
+                //              double(camera->getFilmSize()[0] * camera->getFilmSize()[1] * sampler->getSampleCnt())
+                //              * 100.0 << " Percent Done" << std::endl;
 
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();

@@ -44,16 +44,20 @@ uint32_t ObjMesh::num_verts() const
 
 float ObjMesh::surfaceArea() const
 {
-    throw new NotImplementedException("objmesh surface area");
-
-    return 0.f;
+    return sa;
 }
 
 float ObjMesh::surfaceArea(uint32_t index) const
 {
-    throw new NotImplementedException("objmesh surface area index");
+    uint32_t i0 = tris[index].vsInds(0);
+    uint32_t i1 = tris[index].vsInds(1);
+    uint32_t i2 = tris[index].vsInds(2);
 
-    return 0.f;
+    Point3f p0 = vs[i0];
+    Point3f p1 = vs[i1];
+    Point3f p2 = vs[i2];
+
+    return Vector3f((p1 - p0) ^ (p2 - p0)).norm() * 0.5;
 }
 
 float ObjMesh::pdf(uint32_t index) const
@@ -193,23 +197,44 @@ BBox3f ObjMesh::boundingBox() const
 
 BBox3f ObjMesh::boundingBox(uint32_t tri) const
 {
-    throw new NotImplementedException("objmesh: triangle bbox");
-    // TODO
-    return bbox;
+    uint32_t i0 = tris[tri].vsInds(0);
+    uint32_t i1 = tris[tri].vsInds(1);
+    uint32_t i2 = tris[tri].vsInds(2);
+
+    Point3f p0 = vs[i0];
+    Point3f p1 = vs[i1];
+    Point3f p2 = vs[i2];
+
+    BBox3f box(p0, p0);
+    box.expand(p1);
+    box.expand(p2);
+    return box;
 }
 
 Point3f ObjMesh::centroid() const
 {
-    throw new NotImplementedException("objmesh: centroid");
-    // TODO
-    return Point3f(0.0);
+    Point3f center = Point3f(0.0);
+
+    for (int i = 0; i < vs.size(); ++i)
+    {
+        center += vs[i];
+    }
+    center /= float(vs.size());
+
+    return center;
 }
 
 Point3f ObjMesh::centroid(uint32_t tri) const
 {
-    throw new NotImplementedException("objmesh: triangle centroid");
-    // TODO
-    return Point3f(0.0);
+    uint32_t i0 = tris[tri].vsInds(0);
+    uint32_t i1 = tris[tri].vsInds(1);
+    uint32_t i2 = tris[tri].vsInds(2);
+
+    Point3f p0 = vs[i0];
+    Point3f p1 = vs[i1];
+    Point3f p2 = vs[i2];
+
+    return (p0 + p1 + p2) * (1.0 / 3.0);
 }
 
 void ObjMesh::preProcess()
@@ -235,6 +260,24 @@ void ObjMesh::preProcess()
     }
 
     parseFromFile(filename, toWorld, flipNorms);
+
+    // TODO: make these tasks multithreaded ???
+
+    // precompute the total surface area and cache it
+    std::cout << "calculating surface area" << std::endl;
+    sa = 0.0;
+    for (uint32_t i = 0; i < tris.size(); ++i)
+    {
+        sa += surfaceArea(i);
+    }
+
+    // precompute the bounding box around the object
+    assert(vs.size() > 0);
+    bbox = BBox3f(vs[0], vs[0]);
+    for (uint32_t i = 1; i < vs.size(); ++i)
+    {
+        bbox.expand(vs[i]);
+    }
 
     infoDump();
 }
