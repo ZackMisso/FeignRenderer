@@ -23,6 +23,8 @@ Color3f NormalIntegrator::Li(const Scene* scene,
 
     Normal3f n = ~(its.s_frame.n);
     return Color3f(n(0), n(1), n(2));
+
+    // return Color3f(1.0, 1.0, 1.0);
 }
 
 std::string NormalIntegrator::getName() const

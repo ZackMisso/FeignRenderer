@@ -80,7 +80,9 @@ protected:
     uint32_t findMesh(uint32_t& idx) const
     {
         auto it = std::lower_bound(mesh_offsets.begin(), mesh_offsets.end(), idx+1) - 1;
+        // std::cout << "Old IDX: " << idx;
         idx -= *it;
+        // std::cout << " New IDX: " << idx << std::endl;
         return (uint32_t) (it - mesh_offsets.begin());
     }
 

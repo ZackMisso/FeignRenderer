@@ -219,7 +219,7 @@ Point3f ObjMesh::centroid() const
     {
         center += vs[i];
     }
-    center /= float(vs.size());
+    center /= double(vs.size());
 
     return center;
 }

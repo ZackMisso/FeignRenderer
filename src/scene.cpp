@@ -69,6 +69,7 @@ void Scene::preProcess()
 
     for (int i = 0; i < shapes.size(); ++i)
     {
+        std::cout << "SHAPE IS BEING ADDED" << std::endl;
         acceleration->addShape(shapes[i]);
     }
     // acceleration->setMeshes(shapes);

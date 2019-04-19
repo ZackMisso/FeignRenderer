@@ -533,6 +533,7 @@ struct Vec3
         return xyz[index];
     }
 
+    // what is this operator???
     Vec3<T> operator~() const
     {
         Vec3<T> vec;
@@ -583,30 +584,38 @@ struct Vec3
 
     int maxIndex() const
     {
-        return (xyz[0] > xyz[1])
-               ? (xyz[0] > xyz[2]) ? 0 : 2
-               : (xyz[1] > xyz[2]) ? 1 : 2;
+        if (xyz[0] > xyz[1] &&
+            xyz[0] > xyz[2]) return 0;
+        if (xyz[1] > xyz[0] &&
+            xyz[1] > xyz[2]) return 1;
+        return 2;
     }
 
     int minIndex() const
     {
-        return (xyz[0] < xyz[1])
-               ? (xyz[0] < xyz[2]) ? 0 : 2
-               : (xyz[1] < xyz[2]) ? 1 : 2;
+        if (xyz[0] < xyz[1] &&
+            xyz[0] < xyz[2]) return 0;
+        if (xyz[1] < xyz[0] &&
+            xyz[1] < xyz[2]) return 1;
+        return 2;
     }
 
     int maxAbsIndex() const
     {
-        return (std::abs(xyz[0]) > std::abs(xyz[1]))
-               ? (std::abs(xyz[0]) > std::abs(xyz[2])) ? 0 : 2
-               : (std::abs(xyz[1]) > std::abs(xyz[2])) ? 1 : 2;
+        if (std::abs(xyz[0]) > std::abs(xyz[1]) &&
+            std::abs(xyz[0]) > std::abs(xyz[2])) return 0;
+        if (std::abs(xyz[1]) > std::abs(xyz[0]) &&
+            std::abs(xyz[1]) > std::abs(xyz[2])) return 1;
+        return 2;
     }
 
     int minAbsIndex() const
     {
-        return (std::abs(xyz[0]) < std::abs(xyz[1]))
-               ? (std::abs(xyz[0]) < std::abs(xyz[2])) ? 0 : 2
-               : (std::abs(xyz[1]) < std::abs(xyz[2])) ? 1 : 2;
+        if (std::abs(xyz[0]) < std::abs(xyz[1]) &&
+            std::abs(xyz[0]) < std::abs(xyz[2])) return 0;
+        if (std::abs(xyz[1]) < std::abs(xyz[0]) &&
+            std::abs(xyz[1]) < std::abs(xyz[2])) return 1;
+        return 2;
     }
 
     void info() const

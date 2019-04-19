@@ -94,7 +94,7 @@ struct BBox3
     int minorAxis() const
     {
         Vec3<T> diag = max - min;
-        return diag.minIndex();
+        return diag.minAbsIndex();
     }
 
     Vec3<T> extents() const
@@ -128,7 +128,7 @@ struct BBox3
         // two.infoDump();
 
         // std::cout << "Pre Merge" << std::endl;
-        BBox3<T> box = BBox3<T>(min_vec, max_vec);
+        // BBox3<T> box = BBox3<T>(min_vec, max_vec);
         // std::cout << "Post Merge" << std::endl;
 
         return BBox3<T>(min_vec, max_vec);

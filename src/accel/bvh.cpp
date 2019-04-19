@@ -320,11 +320,16 @@ void BVH::clear()
     // {
     //     delete nodes[i];
     // }
-
+    meshes.clear();
     nodes.clear();
     mesh_offsets.clear();
     mesh_offsets.push_back(0);
     indices.clear();
+    bbox.reset();
+    nodes.shrink_to_fit();
+    mesh_offsets.shrink_to_fit();
+    meshes.shrink_to_fit();
+    indices.shrink_to_fit();
 }
 
 void BVH::preProcess()
@@ -423,12 +428,16 @@ std::pair<float, uint32_t> BVH::statistics(uint32_t node_idx) const
 
 void BVH::addShape(Shape* mesh)
 {
+    // std::cout << "IN HERE" << std::endl;
     std::cout << "Adding Shape: " << mesh->primitiveCount() << std::endl;
     meshes.push_back(mesh);
+    // std::cout << mesh->primitiveCount() << std::endl;
     mesh_offsets.push_back(mesh_offsets.back() + mesh->primitiveCount());
     bbox.expand(mesh->boundingBox());
     std::cout << "Mesh Box: " << std::endl;
     mesh->boundingBox().infoDump();
+    std::cout << "Actual Box: " << std::endl;
+    bbox.infoDump();
 }
 
 bool BVH::intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -478,8 +487,9 @@ bool BVH::intersect(const Ray3f& scene_ray, Intersection& its) const
                 if (mesh->intersect(idx, ray, tmp_its))
                 {
                     foundIntersection = true;
-                    ray.maxt = its.t = tmp_its.t;
-                    // std::cout << "Hit Mesh" << std::endl;
+                    ray.maxt = tmp_its.t;
+                    its.t = tmp_its.t;
+
                     its.intersectedMesh = mesh;
                     its.uv = tmp_its.uv;
                     its.f = idx;
