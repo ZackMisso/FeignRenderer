@@ -67,8 +67,8 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     ray.origin = cameraToWorld * Point3f(apPos(0), apPos(1), 0);
     ray.dir = cameraToWorld * od;
 
-    ray.mint = near * invZ;
-    ray.maxt = far * invZ;
+    ray.near = near * invZ;
+    ray.far = far * invZ;
 
     // maybe make rays keep track of recipricals
     // ray.update();

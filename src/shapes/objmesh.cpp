@@ -298,7 +298,7 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
             its.uv = tmp.uv;
             its.t = tmp.t;
             its.f = i;
-            ray.maxt = its.t;
+            ray.far = its.t;
         }
     }
 
@@ -349,7 +349,7 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
 
     its.t = (edge2 % qvec) * invDet;
 
-    return its.t >= ray.mint && its.t <= ray.maxt;
+    return its.t >= ray.near && its.t <= ray.far;
 }
 
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const

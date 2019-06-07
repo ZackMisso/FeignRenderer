@@ -1,4 +1,5 @@
 #include <feign/accel/accel.h>
+#include <feign/misc/embree_util.h>
 
 Accel::Accel()
 {

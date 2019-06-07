@@ -61,8 +61,8 @@ void Scene::preProcess()
     if (!acceleration)
     {
         std::cout << "No Specified Acceleration" << std::endl;
-        // acceleration = new NaiveAccel();
-        acceleration = new BVH();
+        acceleration = new NaiveAccel();
+        // acceleration = new BVH();
     }
 
     // acceleration->clear();

@@ -26,6 +26,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|Intel)$")
   endif()
 endif()
 
+IF(APPLE)
+    # Fix linking on 10.14+. See https://stackoverflow.com/questions/54068035
+    LINK_DIRECTORIES(/usr/local/lib)
+ENDIF()
+
 if (APPLE)
   find_library(cocoa_library Cocoa)
   find_library(opengl_library OpenGL)
@@ -47,6 +52,9 @@ set(IMGLIB_NEEDED_DIR
    ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext)
 
 find_package(PythonLibs REQUIRED)
+# find_package(openvdb REQUIRED)
+find_package(embree 3.0 REQUIRED)
+
 include_directories(${PYTHON_INCLUDE_DIRS})
 
 include_directories(
@@ -133,6 +141,7 @@ add_executable(feign
     include/feign/misc/primlist.h
     include/feign/misc/world.h
     include/feign/misc/intersection.h
+    include/feign/misc/embree_util.h
 
     # Parser header files
     include/feign/parser/parser.h
@@ -260,4 +269,4 @@ set(CompilerFlags
 # Lastly, additional libraries may have been built for you.  In addition to linking
 # against NanoGUI, we need to link against those as well.
 #target_link_libraries(feign)
-target_link_libraries(feign tbb ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb openvdb embree3 ${PYTHON_LIBRARIES})

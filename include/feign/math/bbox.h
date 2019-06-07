@@ -164,7 +164,7 @@ struct BBox3
             }
         }
 
-        return ray.mint <= farT && nearT <= ray.maxt;
+        return ray.near <= farT && nearT <= ray.far;
     }
 
     bool intersect(const Ray3f& ray, float& near, float& far) const
@@ -196,7 +196,7 @@ struct BBox3
             }
         }
 
-        return ray.mint <= far && near <= ray.maxt;
+        return ray.near <= far && near <= ray.far;
     }
 
     void reset()

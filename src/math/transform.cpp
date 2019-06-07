@@ -58,8 +58,8 @@ Ray3f Transform::operator*(const Ray3f& other) const
 {
     return Ray3f(operator*(other.origin),
                  operator*(other.dir),
-                 other.mint,
-                 other.maxt);
+                 other.near,
+                 other.far);
 }
 
 void Transform::print() const
