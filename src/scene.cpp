@@ -7,6 +7,7 @@ Scene::Scene() : Node()
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
+    scene = nullptr;
 }
 
 Scene::Scene(Node* parent) : Node(parent)
@@ -14,12 +15,15 @@ Scene::Scene(Node* parent) : Node(parent)
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
+    scene = nullptr;
 }
 
 Scene::~Scene()
 {
     delete root;
     sceneObjects.clear();
+    rtcReleaseScene(scene);
+    scene = nullptr;
 }
 
 void Scene::preProcess()
@@ -63,7 +67,19 @@ void Scene::preProcess()
         std::cout << "No Specified Acceleration" << std::endl;
         acceleration = new NaiveAccel();
         // acceleration = new BVH();
+
+        // scene = rtcDeviceNewScene(EmbreeUtil::getDevice(), RTC_SCENE_STATIC | RTC_SCENE_INCOHERENT, RTC_INTERSECT1);
+        // userGeomId = rtcNewUserGeometry(scene, shapes.size());
+
+        // TODO: implement the scene
     }
+
+    device = rtcNewDevice(rtcore.c_str());
+    scene = rtcNewScene(device);
+
+    // error_handler(nullptr,rtcGetDeviceError(device));
+    /* set error handler */
+    rtcSetDeviceErrorFunction(device, embree_error_handler, nullptr);
 
     // acceleration->clear();
 

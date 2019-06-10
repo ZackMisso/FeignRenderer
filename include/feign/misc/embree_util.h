@@ -1,5 +1,8 @@
 #pragma once
 
+// This util was implemented based off of:
+// https://github.com/tunabrain/tungsten/blob/master/src/core/renderer/TraceableScene.hpp
+
 #include <feign/math/bbox.h>
 #include <feign/math/ray.h>
 #include <feign/math/vector.h>
@@ -9,6 +12,9 @@
 // TODO: Namespace everything
 // namespace feign
 // {
+
+namespace EmbreeUtil
+{
 
 void initDevice();
 RTCDevice getDevice();
@@ -51,6 +57,8 @@ inline RTCRay convert(const Ray3f& ray)
     // new_ray.geomID = RTC_INVALID_GEOMETRY_ID;
     // new_ray.primID = RTC_INVALID_GEOMETRY_ID;
     return new_ray;
+}
+
 }
 
 // }
