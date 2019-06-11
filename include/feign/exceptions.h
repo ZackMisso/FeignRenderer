@@ -137,3 +137,16 @@ public:
         std::cout << "Missing Primitive: " << str << std::endl;
     }
 };
+
+class ClockerException : public std::runtime_error
+{
+public:
+    ClockerException() : std::runtime_error("Clocker Exception")
+    {
+        std::cout << "Clocker Exception" << std::endl;
+    }
+    ClockerException(std::string str) : std::runtime_error("Clocker Exception: " + str)
+    {
+        std::cout << "Clocker Exception: " << str << std::endl;
+    }
+}

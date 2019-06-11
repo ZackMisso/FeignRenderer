@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     std::cout << "All Unit Tests Passed" << std::endl;
 
     std::cout << "Parsing: " << SCENES_PATH "ajax-normals.firal" << std::endl;
-    Node* parsedNode = Parser::parse(SCENES_PATH "ajax-normals-old.firal");
+    Node* parsedNode = Parser::parse(SCENES_PATH "ajax-normals.firal");
     // Node* parsedNode = Parser::parse(SCENES_PATH "ajax-normals.firal");
 
     if (!parsedNode || parsedNode->getNodeType() != NT_World)

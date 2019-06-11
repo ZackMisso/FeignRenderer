@@ -24,6 +24,9 @@
 // work laptop
 // #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
 
+// Stats tracking //
+#define CLOCKING True
+////////////////////
 
 #define Epsilon 1e-4f
 

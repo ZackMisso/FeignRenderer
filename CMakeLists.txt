@@ -161,6 +161,9 @@ add_executable(feign
     include/feign/shapes/objmesh.h
     include/feign/shapes/triangle.h
 
+    # Stats header files
+    include/feign/stats/clocker.h
+
     # Texture header files
     include/feign/textures/texture.h
 
@@ -245,6 +248,9 @@ add_executable(feign
     src/shapes/shape.cpp
     src/shapes/objmesh.cpp
     src/shapes/triangle.cpp
+
+    # Stats implementation files
+    src/stats/clocker.cpp
 
     # Texture implementation files
     src/textures/texture.cpp
