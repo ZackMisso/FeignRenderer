@@ -67,6 +67,43 @@ float ObjMesh::pdf(uint32_t index) const
     return 0.f;
 }
 
+void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
+{
+    RTCGeometry e_mesh = rtcNewGeometry (device, RTC_GEOMETRY_TYPE_TRIANGLE);
+
+    e_Vertex* vertices = (e_Vertex*) rtcSetNewGeometryBuffer(e_mesh,
+                                                             RTC_BUFFER_TYPE_VERTEX,
+                                                             0,
+                                                             RTC_FORMAT_FLOAT3,
+                                                             sizeof(e_Vertex),
+                                                             vs.size());
+
+    for (int i = 0; i < vs.size(); ++i)
+    {
+        vertices[i].x = vs[i](0);
+        vertices[i].y = vs[i](1);
+        vertices[i].z = vs[i](2);
+    }
+
+    e_Triangle* triangles = (e_Triangle*) rtcSetNewGeometryBuffer(e_mesh,
+                                                                RTC_BUFFER_TYPE_INDEX,
+                                                                0,
+                                                                RTC_FORMAT_UINT3,
+                                                                sizeof(e_Triangle),
+                                                                tris.size());
+
+    for (int i = 0; i < tris.size(); ++i)
+    {
+        triangles[i].v0 = tris[i].vsInds(0);
+        triangles[i].v1 = tris[i].vsInds(1);
+        triangles[i].v2 = tris[i].vsInds(2);
+    }
+
+    rtcCommitGeometry(e_mesh);
+    geomID = rtcAttachGeometry(scene, e_mesh);
+    rtcReleaseGeometry(e_mesh);
+}
+
 void ObjMesh::parseFromFile(const std::string& filename,
                             Transform transform,
                             bool flipNorms)

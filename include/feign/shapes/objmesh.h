@@ -28,6 +28,8 @@ public:
 
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 
+    virtual void addShapeToScene(RTCScene scene, RTCDevice device);
+
     void parseFromFile(const std::string& filename,
                        Transform transform,
                        bool flipNorms);

@@ -90,6 +90,7 @@ add_executable(feign
     include/feign/accel/accel.h
     include/feign/accel/bvh.h
     include/feign/accel/naive.h
+    include/feign/accel/embree.h
 
     # Api header files
     include/feign/api/api.h
@@ -180,6 +181,7 @@ add_executable(feign
     src/accel/accel.cpp
     src/accel/bvh.cpp
     src/accel/naive.cpp
+    src/accel/embree.cpp
 
     # Api implementation files
     src/api/api.cpp

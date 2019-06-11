@@ -1,13 +1,15 @@
 #include <feign/scene.h>
 #include <feign/accel/naive.h>
 #include <feign/accel/bvh.h>
+#include <feign/accel/embree.h>
 
 Scene::Scene() : Node()
 {
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
-    scene = nullptr;
+    // scene = nullptr;
+    // rtcore = "start_threads=1,set_affinity=1";
 }
 
 Scene::Scene(Node* parent) : Node(parent)
@@ -15,15 +17,16 @@ Scene::Scene(Node* parent) : Node(parent)
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
-    scene = nullptr;
+    // scene = nullptr;
+    // rtcore = "start_threads=1,set_affinity=1";
 }
 
 Scene::~Scene()
 {
     delete root;
     sceneObjects.clear();
-    rtcReleaseScene(scene);
-    scene = nullptr;
+    // rtcReleaseScene(scene);
+    // scene = nullptr;
 }
 
 void Scene::preProcess()
@@ -65,29 +68,35 @@ void Scene::preProcess()
     if (!acceleration)
     {
         std::cout << "No Specified Acceleration" << std::endl;
-        acceleration = new NaiveAccel();
+        // acceleration = new NaiveAccel();
         // acceleration = new BVH();
+        acceleration = new EmbreeAccel();
 
         // scene = rtcDeviceNewScene(EmbreeUtil::getDevice(), RTC_SCENE_STATIC | RTC_SCENE_INCOHERENT, RTC_INTERSECT1);
         // userGeomId = rtcNewUserGeometry(scene, shapes.size());
 
         // TODO: implement the scene
+
+        acceleration->preProcess();
     }
 
-    device = rtcNewDevice(rtcore.c_str());
-    scene = rtcNewScene(device);
+    // device = rtcNewDevice(rtcore.c_str());
+    // scene = rtcNewScene(device);
 
     // error_handler(nullptr,rtcGetDeviceError(device));
     /* set error handler */
-    rtcSetDeviceErrorFunction(device, embree_error_handler, nullptr);
+    // rtcSetDeviceErrorFunction(device, embree_error_handler, nullptr);
 
     // acceleration->clear();
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        std::cout << "SHAPE IS BEING ADDED" << std::endl;
+        // std::cout << "SHAPE IS BEING ADDED" << std::endl;
         acceleration->addShape(shapes[i]);
+        // shapes[i]->addShapeToScene(scene, device);
     }
+
+    // rtcCommitScene(scene);
     // acceleration->setMeshes(shapes);
     //
     acceleration->build();
