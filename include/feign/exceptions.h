@@ -149,4 +149,4 @@ public:
     {
         std::cout << "Clocker Exception: " << str << std::endl;
     }
-}
+};
