@@ -54,11 +54,7 @@ inline RTCRay convert(const Ray3f& ray)
     new_ray.dir_z = ray.dir(2);
     new_ray.tnear = ray.near;
     new_ray.tfar = ray.far;
-    // new_ray.geomID = RTC_INVALID_GEOMETRY_ID;
-    // new_ray.primID = RTC_INVALID_GEOMETRY_ID;
     return new_ray;
 }
 
 }
-
-// }

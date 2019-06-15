@@ -1,11 +1,19 @@
 #include <feign/shapes/shape.h>
-#include <feign/shapes/shape.h>
 
-Shape::Shape() : Node() { }
+Shape::Shape() : Node()
+{
+    material = new Material();
+}
 
-Shape::Shape(Node* parent) : Node(parent) { }
+Shape::Shape(Node* parent) : Node(parent)
+{
+    material = new Material();
+}
 
-Shape::~Shape() { }
+Shape::~Shape()
+{
+    delete material;
+}
 
 std::string Shape::getName() const
 {

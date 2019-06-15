@@ -2,10 +2,10 @@
 
 Material::Material()
 {
-    // TODO
+    bsdf = nullptr;
 }
 
 Material::~Material()
 {
-    // TODO
+    if (bsdf) delete bsdf;
 }

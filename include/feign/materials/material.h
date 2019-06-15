@@ -4,6 +4,7 @@
 #include <feign/bsdf/bsdf.h>
 
 // TODO: eventually make this more complicated
+// idk how to structure this
 
 class Material
 {

@@ -116,12 +116,15 @@ add_executable(feign
     # Integrator header files
     include/feign/integrators/integrator.h
     include/feign/integrators/normal.h
+    include/feign/integrators/light_unidir.h
+    include/feign/integrators/path_bidir.h
+    include/feign/integrators/path_unidir.h
 
     # Logger header files
     include/feign/log/logger.h
 
     # Material header files
-    include/feign/material.h
+    include/feign/materials/material.h
 
     # Math header files
     include/feign/math/transform.h
@@ -213,6 +216,9 @@ add_executable(feign
     # Integrator implementation files
     src/integrators/integrator.cpp
     src/integrators/normal.cpp
+    src/integrators/light_unidir.cpp
+    src/integrators/path_bidir.cpp
+    src/integrators/path_unidir.cpp
 
     # Logger implementation files
     src/log/logger.cpp

@@ -24,8 +24,13 @@ public:
     Emitter(Node* parent);
     virtual ~Emitter();
 
-    virtual Color3f sample(EmitterQuery& rec,
-                           const Point2f& sample);
+    virtual Color3f sample_li(EmitterQuery& rec,
+                              const Point2f& sample,
+                              Float* pdf) const = 0;
+
+    virtual Color3f sample_pos(EmitterQuery& rec,
+                               const Point2f& sample,
+                               Float* pdf) const = 0;
 
     virtual std::string getName() const;
     virtual NodeType getNodeType() const;

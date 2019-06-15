@@ -1,12 +1,15 @@
 #include <feign/misc/primlist.h>
 
+// TODO: replace all of these with macros
+
 PrimitiveList::PrimitiveList()
 {
-    intPrimitives = std::vector<Primitive<int>*>();
-    floatPrimitives = std::vector<Primitive<Float>*>();
-    stringPrimitives = std::vector<Primitive<std::string>*>();
-    transformPrimitives = std::vector<Primitive<Transform>*>();
-    colorPrimitives = std::vector<Primitive<Color3f>*>();
+    int_primitives = std::vector<Primitive<int>*>();
+    float_primitives = std::vector<Primitive<Float>*>();
+    vec3_primitives = std::vector<Primitive<Vec3>*>();
+    string_primitives = std::vector<Primitive<std::string>*>();
+    transform_primitives = std::vector<Primitive<Transform>*>();
+    color_primitives = std::vector<Primitive<Color3f>*>();
 }
 
 PrimitiveList::~PrimitiveList()
@@ -16,36 +19,41 @@ PrimitiveList::~PrimitiveList()
 
 void PrimitiveList::addIntPrimitive(Primitive<int>* prim)
 {
-    intPrimitives.push_back(prim);
+    int_primitives.push_back(prim);
 }
 
 void PrimitiveList::addFloatPrimitive(Primitive<Float>* prim)
 {
-    floatPrimitives.push_back(prim);
+    float_primitives.push_back(prim);
+}
+
+void PrimitiveList::addVec3Primitive(Primitive<Vec3>* prim)
+{
+    vec3_primitives.push_back(prim);
 }
 
 void PrimitiveList::addStringPrimitive(Primitive<std::string>* prim)
 {
-    stringPrimitives.push_back(prim);
+    string_primitives.push_back(prim);
 }
 
 void PrimitiveList::addTransformPrimitive(Primitive<Transform>* prim)
 {
-    transformPrimitives.push_back(prim);
+    transform_primitives.push_back(prim);
 }
 
 void PrimitiveList::addColorPrimitive(Primitive<Color3f>* prim)
 {
-    colorPrimitives.push_back(prim);
+    color_primitives.push_back(prim);
 }
 
 bool PrimitiveList::findInt(std::string name, int& val) const
 {
-    for (int i = 0; i < intPrimitives.size(); ++i)
+    for (int i = 0; i < int_primitives.size(); ++i)
     {
-        if (intPrimitives[i]->getName() == name)
+        if (int_primitives[i]->getName() == name)
         {
-            val = intPrimitives[i]->getValue();
+            val = int_primitives[i]->getValue();
             return true;
         }
     }
@@ -55,11 +63,25 @@ bool PrimitiveList::findInt(std::string name, int& val) const
 
 bool PrimitiveList::findFloat(std::string name, Float& val) const
 {
-    for (int i = 0; i < floatPrimitives.size(); ++i)
+    for (int i = 0; i < float_primitives.size(); ++i)
     {
-        if (floatPrimitives[i]->getName() == name)
+        if (float_primitives[i]->getName() == name)
         {
-            val = floatPrimitives[i]->getValue();
+            val = float_primitives[i]->getValue();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool PrimitiveList::findVec3(std::string name, Vec3& val) const
+{
+    for (int i = 0; i < vec3_primitives.size(); ++i)
+    {
+        if (vec3_primitives[i]->getName() == name)
+        {
+            val = vec3_primitives[i]->getValue();
             return true;
         }
     }
@@ -69,11 +91,11 @@ bool PrimitiveList::findFloat(std::string name, Float& val) const
 
 bool PrimitiveList::findString(std::string name, std::string& val) const
 {
-    for (int i = 0; i < stringPrimitives.size(); ++i)
+    for (int i = 0; i < string_primitives.size(); ++i)
     {
-        if (stringPrimitives[i]->getName() == name)
+        if (string_primitives[i]->getName() == name)
         {
-            val = stringPrimitives[i]->getValue();
+            val = string_primitives[i]->getValue();
             return true;
         }
     }
@@ -83,11 +105,11 @@ bool PrimitiveList::findString(std::string name, std::string& val) const
 
 bool PrimitiveList::findTransform(std::string name, Transform& val) const
 {
-    for (int i = 0; i < transformPrimitives.size(); ++i)
+    for (int i = 0; i < transform_primitives.size(); ++i)
     {
-        if (transformPrimitives[i]->getName() == name)
+        if (transform_primitives[i]->getName() == name)
         {
-            val = transformPrimitives[i]->getValue();
+            val = transform_primitives[i]->getValue();
             return true;
         }
     }
@@ -97,11 +119,11 @@ bool PrimitiveList::findTransform(std::string name, Transform& val) const
 
 bool PrimitiveList::findColor(std::string name, Color3f& val) const
 {
-    for (int i = 0; i < colorPrimitives.size(); ++i)
+    for (int i = 0; i < color_primitives.size(); ++i)
     {
-        if (colorPrimitives[i]->getName() == name)
+        if (color_primitives[i]->getName() == name)
         {
-            val = colorPrimitives[i]->getValue();
+            val = color_primitives[i]->getValue();
             return true;
         }
     }
