@@ -2,6 +2,7 @@
 
 #include <feign/node.h>
 #include <feign/math/bbox.h>
+#include <feign/materials/material.h>
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
 #include <embree3/rtcore.h>
@@ -40,8 +41,10 @@ public:
 
     virtual NodeType getNodeType() const;
 
+    Material* getMaterial() const { return material; }
     unsigned int getGeomID() const { return geomID; }
 
 protected:
+    Material* material;
     unsigned int geomID;
 };

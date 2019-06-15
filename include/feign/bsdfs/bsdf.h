@@ -9,7 +9,7 @@ struct BSDFQuery
 
     Point3f uvw;
 
-    float eta;
+    Float eta;
 
     bool isDiffuse;
 
@@ -28,10 +28,11 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const = 0;
     virtual Color3f eval(const BSDFQuery& rec) const = 0;
-    virtual float pdf(const BSDFQuery& rec) const = 0;
+    virtual Float pdf(const BSDFQuery& rec) const = 0;
+
+    virtual bool isDelta() const = 0;
 
     virtual std::string getName() const;
-
     virtual NodeType getNodeType() const;
 
     // TODO

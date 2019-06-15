@@ -16,7 +16,7 @@ struct Intersection
     CoordinateFrame s_frame; // shading frame
     CoordinateFrame g_frame; // geometric frame
 
-    const Shape* intersectedMesh;
+    const Shape* intersected_mesh;
 
     Intersection();
 

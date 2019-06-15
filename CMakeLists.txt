@@ -120,6 +120,9 @@ add_executable(feign
     # Logger header files
     include/feign/log/logger.h
 
+    # Material header files
+    include/feign/material.h
+
     # Math header files
     include/feign/math/transform.h
     include/feign/math/ray.h
@@ -213,6 +216,9 @@ add_executable(feign
 
     # Logger implementation files
     src/log/logger.cpp
+
+    # Material implementation files
+    src/materials/material.cpp
 
     # Math implementation files
     src/math/transform.cpp

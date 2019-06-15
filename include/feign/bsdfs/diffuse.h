@@ -10,7 +10,9 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;
-    virtual float pdf(const BSDFQuery& rec) const;
+    virtual Float pdf(const BSDFQuery& rec) const;
+
+    virtual bool isDelta() const { return false; }
 
     virtual void preProcess();
 
