@@ -3,6 +3,7 @@
 #include <tests/matrix_test.h>
 #include <tests/transform_test.h>
 #include <tests/ray_intersect_test.h>
+#include <tests/json_test.h>
 
 UnitTestManager::UnitTestManager() {
     // does nothing for now
@@ -25,13 +26,19 @@ bool UnitTestManager::runUnitTests() {
     RayIntersectTest rayTest = RayIntersectTest();
     bool rayTestPassed = rayTest.evaluateTest(rayIntersectTestData);
 
+    JsonTestData jsonTestData = JsonTestData();
+    JsonTest jsonTest = JsonTest();
+    bool jsonTestPassed = jsonTest.evaluateTest(jsonTestData);
+
     transformTestData.logReport();
     vectorTestData.logReport();
     matrixTestData.logReport();
     rayIntersectTestData.logReport();
+    jsonTestData.logReport();
 
     return transformTestPassed &&
            vectorTestPassed &&
            matrixTestPassed &&
-           rayTestPassed;
+           rayTestPassed &&
+           jsonTestPassed;
 }

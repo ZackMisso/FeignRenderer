@@ -14,7 +14,7 @@ public:
 
     void addIntPrimitive(Primitive<int>* prim);
     void addFloatPrimitive(Primitive<Float>* prim);
-    void addVec3Primitive(Primitive<Vec3>* prim);
+    void addVec3Primitive(Primitive<Vec3f>* prim);
     void addStringPrimitive(Primitive<std::string>* prim);
     void addTransformPrimitive(Primitive<Transform>* prim);
     void addColorPrimitive(Primitive<Color3f>* prim);

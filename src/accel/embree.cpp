@@ -56,11 +56,11 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         {
             if (meshes[i]->getGeomID() == hit.hit.geomID)
             {
-                its.intersectedMesh = meshes[i];
+                its.intersected_mesh = meshes[i];
             }
         }
 
-        its.intersectedMesh->completeIntersectionInfo(ray, its);
+        its.intersected_mesh->completeIntersectionInfo(ray, its);
 
         return true;
     }

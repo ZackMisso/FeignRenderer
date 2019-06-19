@@ -1,7 +1,7 @@
 #pragma once
 
 #include <feign/common.h>
-#include <feign/bsdf/bsdf.h>
+#include <feign/bsdfs/bsdf.h>
 
 // TODO: eventually make this more complicated
 // idk how to structure this

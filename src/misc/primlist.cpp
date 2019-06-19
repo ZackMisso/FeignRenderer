@@ -6,7 +6,7 @@ PrimitiveList::PrimitiveList()
 {
     int_primitives = std::vector<Primitive<int>*>();
     float_primitives = std::vector<Primitive<Float>*>();
-    vec3_primitives = std::vector<Primitive<Vec3>*>();
+    vec3_primitives = std::vector<Primitive<Vec3f>*>();
     string_primitives = std::vector<Primitive<std::string>*>();
     transform_primitives = std::vector<Primitive<Transform>*>();
     color_primitives = std::vector<Primitive<Color3f>*>();
@@ -27,7 +27,7 @@ void PrimitiveList::addFloatPrimitive(Primitive<Float>* prim)
     float_primitives.push_back(prim);
 }
 
-void PrimitiveList::addVec3Primitive(Primitive<Vec3>* prim)
+void PrimitiveList::addVec3Primitive(Primitive<Vec3f>* prim)
 {
     vec3_primitives.push_back(prim);
 }
@@ -75,7 +75,7 @@ bool PrimitiveList::findFloat(std::string name, Float& val) const
     return false;
 }
 
-bool PrimitiveList::findVec3(std::string name, Vec3& val) const
+bool PrimitiveList::findVec3(std::string name, Vec3f& val) const
 {
     for (int i = 0; i < vec3_primitives.size(); ++i)
     {
@@ -178,43 +178,50 @@ void PrimitiveList::findColor(std::string name, Color3f& val, Color3f base) cons
 
 void PrimitiveList::clearPrimitiveList()
 {
-    for (int i = 0; i < intPrimitives.size(); ++i)
+    for (int i = 0; i < int_primitives.size(); ++i)
     {
-        delete intPrimitives[i];
+        delete int_primitives[i];
     }
 
-    for (int i = 0; i < floatPrimitives.size(); ++i)
+    for (int i = 0; i < float_primitives.size(); ++i)
     {
-        delete floatPrimitives[i];
+        delete float_primitives[i];
     }
 
-    for (int i = 0; i < stringPrimitives.size(); ++i)
+    for (int i = 0; i < vec3_primitives.size(); ++i)
     {
-        delete stringPrimitives[i];
+        delete vec3_primitives[i];
     }
 
-    for (int i = 0; i < transformPrimitives.size(); ++i)
+    for (int i = 0; i < string_primitives.size(); ++i)
     {
-        delete transformPrimitives[i];
+        delete string_primitives[i];
     }
 
-    for (int i = 0; i < colorPrimitives.size(); ++i)
+    for (int i = 0; i < transform_primitives.size(); ++i)
     {
-        delete colorPrimitives[i];
+        delete transform_primitives[i];
     }
 
-    intPrimitives.clear();
-    floatPrimitives.clear();
-    stringPrimitives.clear();
-    transformPrimitives.clear();
-    colorPrimitives.clear();
+    for (int i = 0; i < color_primitives.size(); ++i)
+    {
+        delete color_primitives[i];
+    }
+
+    int_primitives.clear();
+    float_primitives.clear();
+    vec3_primitives.clear();
+    string_primitives.clear();
+    transform_primitives.clear();
+    color_primitives.clear();
 }
 
 int PrimitiveList::size() const
 {
-    return intPrimitives.size() +
-           floatPrimitives.size() +
-           stringPrimitives.size() +
-           transformPrimitives.size() +
-           colorPrimitives.size();
+    return int_primitives.size() +
+           float_primitives.size() +
+           vec3_primitives.size() +
+           string_primitives.size() +
+           transform_primitives.size() +
+           color_primitives.size();
 }

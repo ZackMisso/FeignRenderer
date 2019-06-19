@@ -51,6 +51,9 @@ set(IMGLIB_INCLUDE_DIR
 set(IMGLIB_NEEDED_DIR
    ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext)
 
+set(JSON_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/ext/rapidjson/include)
+
 find_package(PythonLibs REQUIRED)
 # find_package(openvdb REQUIRED)
 find_package(embree 3.0 REQUIRED)
@@ -68,6 +71,8 @@ include_directories(
     ${IMGLIB_INCLUDE_DIR}/
 
     ${IMGLIB_NEEDED_DIR}/
+
+    ${JSON_INCLUDE_DIR}
 
     #ext/
 )
@@ -180,6 +185,7 @@ add_executable(feign
     include/tests/transform_test.h
     include/tests/matrix_test.h
     include/tests/ray_intersect_test.h
+    include/tests/json_test.h
 
     # Implementation files
     src/main.cpp
@@ -273,6 +279,7 @@ add_executable(feign
     src/tests/transform_test.cpp
     src/tests/matrix_test.cpp
     src/tests/ray_intersect_test.cpp
+    src/tests/json_test.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

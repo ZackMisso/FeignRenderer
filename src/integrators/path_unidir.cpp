@@ -15,7 +15,7 @@ void Path_Unidirectional_Integrator::preProcess()
     throw new NotImplementedException("path unidir preProcess");
 }
 
-std::string Path_Unidirectional_Integrator::getName()
+std::string Path_Unidirectional_Integrator::getName() const
 {
     throw new NotImplementedException("path unidir getName");
 

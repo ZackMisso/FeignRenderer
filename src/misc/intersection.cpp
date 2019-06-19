@@ -1,6 +1,6 @@
 #include <feign/misc/intersection.h>
 
-Intersection::Intersection() : intersectedMesh(nullptr) { }
+Intersection::Intersection() : intersected_mesh(nullptr) { }
 
 Vector3f Intersection::toLocal(const Vector3f& vec) const
 {

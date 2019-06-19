@@ -32,20 +32,14 @@ bool NaiveAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         {
             intersects = true;
             ray.far = its.t;
-            its.intersectedMesh = meshes[i];
+            its.intersected_mesh = meshes[i];
         }
     }
 
     if (intersects)
     {
-        // Vec3f bary(1.0 - its.uv[0] - its.uv[1], its.uv[0], its.uv[1]);
-
-        // const Shape* mesh = its.intersectedMesh;
-
-        its.intersectedMesh->completeIntersectionInfo(ray, its);
+        its.intersected_mesh->completeIntersectionInfo(ray, its);
     }
-
-    // if (intersects) cout << "what" << endl;
 
     return intersects;
 }
