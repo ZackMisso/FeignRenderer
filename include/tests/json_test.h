@@ -17,7 +17,7 @@ public:
     virtual bool evaluateTest(UnitTestData& testLog) const;
 
     // the tutorial from the RapidJSON devs
-    bool jsonTutorial() const;
+    void jsonTutorial() const;
     bool createBaseSceneTest() const;
     bool readBaseSceneTest() const;
 

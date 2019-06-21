@@ -1,0 +1,51 @@
+{
+    "scene": {
+        "sampler": {
+            "type": "independent",
+            "sample_count": 256
+        },
+        "integrator": {
+            "type": "normals"
+        },
+        "camera": {
+            "type": "perspective",
+            "transform": {
+                "name": "toWorld",
+                "lookat": [
+                    -64.8161,
+                    47.2211,
+                    23.8576,
+                    -65.6055,
+                    47.5762,
+                    24.3583,
+                    0.299858,
+                    0.934836,
+                    -0.190177
+                ]
+            },
+            "fov": 30.0,
+            "width": 768,
+            "height": 768
+        },
+        "mesh": {
+            "filename": "../scenes/meshes/plane.obj",
+            "bsdf": {
+                "type": "diffuse"
+            },
+            "transform": {
+                "name": "toWorld",
+                "scale": [
+                    100.0,
+                    1.0,
+                    100.0
+                ]
+            }
+        },
+        "mesh": {
+            "filename": "../scenes/meshes/ajax.obj",
+            "bsdf": {
+                "type": "diffuse"
+            }
+        }
+    }
+}
