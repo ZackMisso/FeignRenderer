@@ -396,7 +396,7 @@ bool JsonTest::readBaseSceneTest() const
 
                     DummyMesh* mesh = nullptr;
 
-                    if (scene->mesh_one)
+                    if (!scene->mesh_one)
                     {
                         scene->mesh_one = new DummyMesh();
                         mesh = scene->mesh_one;
@@ -412,7 +412,7 @@ bool JsonTest::readBaseSceneTest() const
                     {
                         if (std::string(mesh_itr->name.GetString()) == "filename")
                         {
-                            mesh->filename = std::string(cam_itr->value.GetString());
+                            mesh->filename = std::string(mesh_itr->value.GetString());
                         }
 
                         else if (std::string(mesh_itr->name.GetString()) == "transform")
@@ -430,7 +430,7 @@ bool JsonTest::readBaseSceneTest() const
                             {
                                 if (std::string(trans_itr->name.GetString()) == "name")
                                 {
-                                    scene->camera->transform->name = trans_itr->value.GetString();
+                                    mesh->transform->name = trans_itr->value.GetString();
                                 }
 
                                 else if (std::string(trans_itr->name.GetString()) == "scale")
@@ -439,15 +439,15 @@ bool JsonTest::readBaseSceneTest() const
                                     assert(array.IsArray());
                                     assert(array.Size() == 3);
 
-                                    scene->camera->transform->one = array[0];
-                                    scene->camera->transform->two = 0.0;
-                                    scene->camera->transform->three = 0.0;
-                                    scene->camera->transform->four = 0.0;
-                                    scene->camera->transform->five = array[1];
-                                    scene->camera->transform->six = 0.0;
-                                    scene->camera->transform->seven = 0.0;
-                                    scene->camera->transform->eight = 0.0;
-                                    scene->camera->transform->nine = array[2];
+                                    mesh->transform->one = array[0].GetFloat();
+                                    mesh->transform->two = 0.0;
+                                    mesh->transform->three = 0.0;
+                                    mesh->transform->four = 0.0;
+                                    mesh->transform->five = array[1].GetFloat();
+                                    mesh->transform->six = 0.0;
+                                    mesh->transform->seven = 0.0;
+                                    mesh->transform->eight = 0.0;
+                                    mesh->transform->nine = array[2].GetFloat();
                                 }
 
                                 else
@@ -473,7 +473,7 @@ bool JsonTest::readBaseSceneTest() const
                             {
                                 if (std::string(bsdf_itr->name.GetString()) == "type")
                                 {
-                                    mesh->bsdf->type = std::string(bsdf_itr->name.GetString());
+                                    mesh->bsdf->type = std::string(bsdf_itr->value.GetString());
                                 }
 
                                 else
@@ -494,20 +494,20 @@ bool JsonTest::readBaseSceneTest() const
 
                 else if (std::string(scene_itr->name.GetString()) == "integrator")
                 {
-                    std::cout << "Found an integrator" << std::endl;
-
                     if (scene->integrator)
                     {
                         std::cout << "error: scene should only have one integrator" << std::endl;
                         return false;
                     }
 
+                    scene->integrator = new DummyIntegrator();
+
                     for (rapidjson::Value::ConstMemberIterator inte_itr = scene_itr->value.MemberBegin();
                          inte_itr != scene_itr->value.MemberEnd(); ++inte_itr)
                     {
                         if (std::string(inte_itr->name.GetString()) == "type")
                         {
-                            scene->integrator->type = std::string(inte_itr->name.GetString());
+                            scene->integrator->type = std::string(inte_itr->value.GetString());
                         }
 
                         else
@@ -520,8 +520,6 @@ bool JsonTest::readBaseSceneTest() const
 
                 else if (std::string(scene_itr->name.GetString()) == "sampler")
                 {
-                    std::cout << "Found a sampler" << std::endl;
-
                     if (scene->sampler)
                     {
                         std::cout << "error: scene should only have one sampler" << std::endl;
@@ -535,7 +533,7 @@ bool JsonTest::readBaseSceneTest() const
                     {
                         if (std::string(samp_itr->name.GetString()) == "type")
                         {
-                            scene->sampler->type = std::string(samp_itr->name.GetString());
+                            scene->sampler->type = std::string(samp_itr->value.GetString());
                         }
 
                         else if (std::string(samp_itr->name.GetString()) == "sample_count")
@@ -558,6 +556,8 @@ bool JsonTest::readBaseSceneTest() const
                         std::cout << "error: scene should only have one camera" << std::endl;
                         return false;
                     }
+
+                    scene->camera = new DummyCamera();
 
                     for (rapidjson::Value::ConstMemberIterator cam_itr = scene_itr->value.MemberBegin();
                          cam_itr != scene_itr->value.MemberEnd(); ++cam_itr)
@@ -606,15 +606,15 @@ bool JsonTest::readBaseSceneTest() const
                                     assert(array.IsArray());
                                     assert(array.Size() == 9);
 
-                                    scene->camera->transform->one = array[0];
-                                    scene->camera->transform->two = array[1];
-                                    scene->camera->transform->three = array[2];
-                                    scene->camera->transform->four = array[3];
-                                    scene->camera->transform->five = array[4];
-                                    scene->camera->transform->six = array[5];
-                                    scene->camera->transform->seven = array[6];
-                                    scene->camera->transform->eight = array[7];
-                                    scene->camera->transform->nine = array[8];
+                                    scene->camera->transform->one = array[0].GetFloat();
+                                    scene->camera->transform->two = array[1].GetFloat();
+                                    scene->camera->transform->three = array[2].GetFloat();
+                                    scene->camera->transform->four = array[3].GetFloat();
+                                    scene->camera->transform->five = array[4].GetFloat();
+                                    scene->camera->transform->six = array[5].GetFloat();
+                                    scene->camera->transform->seven = array[6].GetFloat();
+                                    scene->camera->transform->eight = array[7].GetFloat();
+                                    scene->camera->transform->nine = array[8].GetFloat();
                                 }
 
                                 else
@@ -642,7 +642,11 @@ bool JsonTest::readBaseSceneTest() const
         }
     }
 
-    if (!scene->mesh_one) return false;
+    if (!scene->mesh_one)
+    {
+        std::cout << "mesh_one not initialized" << std::endl;
+        return false;
+    }
     if (scene->mesh_one->filename != "../scenes/meshes/plane.obj")
     {
         std::cout << "mesh_one filename" << std::endl;
@@ -650,13 +654,17 @@ bool JsonTest::readBaseSceneTest() const
     }
     if (scene->mesh_one->bsdf->type != "diffuse")
     {
-        std::cout << "mesh_one diffuse" << std::endl;
+        std::cout << "mesh_one diffuse: " << scene->mesh_one->bsdf->type << std::endl;
         return false;
     }
-    if (!scene->mesh_one->transform) return false;
+    if (!scene->mesh_one->transform)
+    {
+        std::cout << "mesh_one transform not initialized" << std::endl;
+        return false;
+    }
     if (scene->mesh_one->transform->one != 100.0)
     {
-        std::cout << "mesh_one one" << std::endl;
+        std::cout << "mesh_one one: " << scene->mesh_one->transform->one << std::endl;
         return false;
     }
     if (scene->mesh_one->transform->two != 0.0)
@@ -694,64 +702,133 @@ bool JsonTest::readBaseSceneTest() const
         std::cout << "mesh_one eight" << std::endl;
         return false;
     }
-    if (scene->mesh_one->transform->nine != 1.0)
+    if (scene->mesh_one->transform->nine != 100.0)
     {
         std::cout << "mesh_one nine" << std::endl;
         return false;
     }
-    if (!scene->mesh_one->bsdf) return false;
-    if (!scene->mesh_two) return false;
-    if (scene->mesh_two->transform) return false;
-    if (!scene->mesh_two->bsdf) return false;
-    if (!scene->integrator) return false;
-    if (!scene->camera) return false;
-    if (!scene->camera->transform) return false;
-    if (scene->camera->transform->one != -64.8161)
+    if (scene->mesh_one->transform->name != "toWorld")
     {
-        std::cout << "camera one" << std::endl;
+        std::cout << "mesh_one transform name: " << scene->mesh_one->transform->name << std::endl;
         return false;
     }
-    if (scene->camera->transform->two != 47.2211)
+    if (!scene->mesh_one->bsdf)
+    {
+        std::cout << "mesh_one bsdf not initialized" << std::endl;
+        return false;
+    }
+    if (scene->mesh_one->bsdf->type != "diffuse")
+    {
+        std::cout << "mesh_one bsdf type" << std::endl;
+        return false;
+    }
+    if (!scene->mesh_two)
+    {
+        std::cout << "mesh_two not initialized" << std::endl;
+        return false;
+    }
+    if (scene->mesh_two->filename != "../scenes/meshes/ajax.obj")
+    {
+        std::cout << "mesh_two filename" << std::endl;
+        return false;
+    }
+    if (!scene->mesh_two->bsdf)
+    {
+        std::cout << "mesh_two not initialized" << std::endl;
+        return false;
+    }
+    if (scene->mesh_two->bsdf->type != "diffuse")
+    {
+        std::cout << "mesh_two bsdf type" << std::endl;
+        return false;
+    }
+    if (!scene->integrator)
+    {
+        std::cout << "integrator not initialized" << std::endl;
+        return false;
+    }
+    if (scene->integrator->type != "normals")
+    {
+        std::cout << "integrator type" << std::endl;
+        return false;
+    }
+    if (!scene->camera)
+    {
+        std::cout << "camera not initialized" << std::endl;
+        return false;
+    }
+    if (!scene->camera->transform)
+    {
+        std::cout << "camera transform not initialized" << std::endl;
+        return false;
+    }
+    if ((scene->camera->transform->one - -64.8161) > 1e-4)
+    {
+        std::cout << "camera one: " << scene->camera->transform->one << std::endl;
+        return false;
+    }
+    if ((scene->camera->transform->two - 47.2211) > 1e-4)
     {
         std::cout << "camera two" << std::endl;
         return false;
     }
-    if (scene->camera->transform->three != 23.8576)
+    if ((scene->camera->transform->three - 23.8576) > 1e-4)
     {
         std::cout << "camera three" << std::endl;
         return false;
     }
-    if (scene->camera->transform->four != -65.6055)
+    if ((scene->camera->transform->four - -65.6055) > 1e-4)
     {
         std::cout << "camera four" << std::endl;
         return false;
     }
-    if (scene->camera->transform->five != 47.5762)
+    if ((scene->camera->transform->five - 47.5762) > 1e-4)
     {
         std::cout << "camera five" << std::endl;
         return false;
     }
-    if (scene->camera->transform->six != 24.3583)
+    if ((scene->camera->transform->six - 24.3583) > 1e-4)
     {
         std::cout << "camera six" << std::endl;
         return false;
     }
-    if (scene->camera->transform->seven != 0.299858)
+    if ((scene->camera->transform->seven - 0.299858) > 1e-4)
     {
         std::cout << "camera seven" << std::endl;
         return false;
     }
-    if (scene->camera->transform->eight != 0.934836)
+    if ((scene->camera->transform->eight - 0.934836) > 1e-4)
     {
         std::cout << "camera eight" << std::endl;
         return false;
     }
-    if (scene->camera->transform->nine != -0.190177)
+    if ((scene->camera->transform->nine - -0.190177) > 1e-4)
     {
         std::cout << "camera nine" << std::endl;
         return false;
     }
-    if (!scene->sampler) return false;
+    if (scene->camera->transform->name != "toWorld")
+    {
+        std::cout << "camera transform name" << std::endl;
+        return false;
+    }
+    if (!scene->sampler)
+    {
+        std::cout << "sampler not initialized" << std::endl;
+        return false;
+    }
+    if (scene->sampler->type != "independent")
+    {
+        std::cout << "sampler type: " << scene->sampler->type << std::endl;
+        return false;
+    }
+    if (scene->sampler->sample_count != 256)
+    {
+        std::cout << "sampler sample_count" << std::endl;
+        return false;
+    }
 
-    return false;
+    delete scene;
+
+    return true;
 }
