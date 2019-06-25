@@ -1,4 +1,5 @@
 #include <feign/parser/json_parser.h>
+#include <feign/api/api.h>
 
 #include <rapidjson/document.h>     // rapidjson's DOM-style API
 #include <rapidjson/prettywriter.h> // for stringify JSON
@@ -6,17 +7,6 @@
 
 #include <cstdio>
 #include <fstream>
-
-// void JsonParser::possiblyAddChild(std::vector<Node*>& nodes,
-//                                   Node* node)
-// {
-//     if (nodes.size() > 0)
-//     {
-//         nodes[nodes.size() - 1]->addChild(node);
-//     }
-//
-//     nodes.push_back(node);
-// }
 
 Transform JsonParser::parseTransform(const rapidjson::Value& value)
 {
@@ -27,19 +17,92 @@ Transform JsonParser::parseTransform(const rapidjson::Value& value)
 void JsonParser::parseBSDF(const rapidjson::Value& value,
                            Node* parent)
 {
-    // TODO
+    std::string type = std::string(value["type"].GetString());
+
+    if (type == "diffuse")
+    {
+        if (value.HasMember("albedo"))
+        {
+            Color3f albedo = Color3f(value["albedo"][0].GetFloat(),
+                                     value["albedo"][1].GetFloat(),
+                                     value["albedo"][2].GetFloat());
+
+            FeignRenderer::bsdf_diffuse(albedo);
+        }
+        else
+        {
+            FeignRenderer::bsdf_diffuse();
+        }
+    }
+    else
+    {
+        std::cout << "unrecognized bsdf: " << type << std::endl;
+    }
 }
 
 void JsonParser::parseSampler(const rapidjson::Value& value,
                               Node* parent)
 {
-    // TODO
+    std::string type = std::string(value["type"].GetString());
+    int sample_cnt = 16;
+    uint32_t seed = 0x13579bd;
+
+    if (value.HasMember("sample_count"))
+    {
+        sample_cnt = value["sample_count"].GetInt();
+    }
+    if (value.HasMember("seed"))
+    {
+        seed = (uint32_t)value["seed"].GetInt();
+    }
+
+    if (type == "independent")
+    {
+        FeignRenderer::sampler_independent(sample_cnt, seed);
+    }
+    else if (type == "halton")
+    {
+        FeignRenderer::sampler_halton(sample_cnt, seed);
+    }
+    else if (type == "latin")
+    {
+        FeignRenderer::sampler_latin(sample_cnt, seed);
+    }
+    else
+    {
+        std::cout << "unrecognized sampler: " << type << std::endl;
+    }
 }
 
 void JsonParser::parseIntegrator(const rapidjson::Value& value,
                                  Node* parent)
 {
-    // TODO
+    std::string type = std::string(value["type"].GetString());
+
+    if (type == "whitted")
+    {
+        FeignRenderer::integrator_whitted();
+    }
+    else if (type == "path")
+    {
+        FeignRenderer::integrator_path_unidir();
+    }
+    else if (type == "bidir")
+    {
+        FeignRenderer::integrator_path_bidir();
+    }
+    else if (type == "light")
+    {
+        FeignRenderer::integrator_light_unidir();
+    }
+    else if (type == "normals")
+    {
+        FeignRenderer::integrator_normal();
+    }
+    else
+    {
+        std::cout << "unrecognized integrator: " << type << std::endl;
+    }
 }
 
 void JsonParser::parseEmitter(const rapidjson::Value& value,

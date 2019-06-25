@@ -8,6 +8,9 @@ class Independent : public Sampler
 public:
     Independent();
     Independent(Node* parent);
+    Independent(Node* parent,
+                uint32_t seed,
+                uint32_t sample_cnt);
 
     virtual void preProcess();
 
@@ -29,5 +32,4 @@ public:
 
 protected:
     pcg32 rng;
-    uint32_t sample_seed;
 };

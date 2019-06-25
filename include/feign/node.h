@@ -52,6 +52,8 @@ public:
 
     PrimitiveList* getPrimList() const;
 
+    Node* getParent() const { return parent; }
+
 protected:
     Node* parent;
     PrimitiveList* primitives;

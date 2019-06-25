@@ -7,6 +7,12 @@ class Perspective : public Camera
 public:
     Perspective();
     Perspective(Node* parent);
+    Perspective(Node* parent,
+                Float aperatureRadius,
+                Float focalDistance,
+                Float fov,
+                Float near,
+                Float far);
 
     virtual void preProcess();
 
@@ -18,9 +24,9 @@ public:
 
 protected:
     Transform sampleToCamera;
-    float aperatureRadius;
-    float focalDistance;
-    float fov;
-    float near;
-    float far;
+    Float aperatureRadius;
+    Float focalDistance;
+    Float fov;
+    Float near;
+    Float far;
 };

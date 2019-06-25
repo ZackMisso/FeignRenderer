@@ -298,5 +298,6 @@ set(CompilerFlags
 # Lastly, additional libraries may have been built for you.  In addition to linking
 # against NanoGUI, we need to link against those as well.
 #target_link_libraries(feign)
+# TODO: get openvdb support running
 #target_link_libraries(feign tbb openvdb embree3 ${PYTHON_LIBRARIES})
 target_link_libraries(feign tbb embree3 ${PYTHON_LIBRARIES})

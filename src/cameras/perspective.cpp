@@ -6,6 +6,22 @@ Perspective::Perspective() : Camera() { }
 
 Perspective::Perspective(Node* parent) : Camera(parent) { }
 
+Perspective::Perspective(Node* parent,
+                         Float aperatureRadius,
+                         Float focalDistance,
+                         Float fov,
+                         Float near,
+                         Float far)
+    : Camera(parent),
+      aperatureRadius(aperatureRadius),
+      focalDistance(focalDistance),
+      fov(fov),
+      near(near),
+      far(far)
+{
+}
+
+// TODO: remove parts of this
 void Perspective::preProcess()
 {
     preProcessChildren();

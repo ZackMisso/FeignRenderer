@@ -4,7 +4,8 @@
 #include <feign/bsdfs/bsdf.h>
 
 // TODO: eventually make this more complicated
-// idk how to structure this
+// idk how to structure this, need to research some more on how other renderers
+// do this
 
 class Material
 {

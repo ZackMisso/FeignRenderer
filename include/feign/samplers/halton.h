@@ -8,6 +8,9 @@ class Halton : public Sampler
 public:
     Halton();
     Halton(Node* parent);
+    Halton(Node* parent,
+           uint32_t seed,
+           uint32_t sample_cnt);
 
     virtual void preProcess();
     virtual void reseed();
@@ -25,6 +28,4 @@ public:
     virtual std::string getName() const;
 
 protected:
-    // TODO
-    uint32_t sample_seed;
 };

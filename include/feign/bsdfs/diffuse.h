@@ -7,6 +7,7 @@ class Diffuse : public BSDF
 public:
     Diffuse();
     Diffuse(Node* parent);
+    Diffuse(Node* parent, Color3f albedo);
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;

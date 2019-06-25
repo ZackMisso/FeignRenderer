@@ -7,6 +7,9 @@ class PointEmitter : public Emitter
 public:
     PointEmitter();
     PointEmitter(Node* parent);
+    PointEmitter(Node* parent,
+                 Color3f I,
+                 Point3f pos);
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,

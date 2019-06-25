@@ -6,6 +6,13 @@ Diffuse::Diffuse() : BSDF() { }
 
 Diffuse::Diffuse(Node* parent) : BSDF(parent) { }
 
+Diffuse::Diffuse(Node* parent, Color3f albedo)
+    : BSDF(parent), albedo(albdeo)
+{
+    // TODO
+}
+
+// TODO: remove all primitives logic from pre processing
 void Diffuse::preProcess()
 {
     preProcessChildren();

@@ -9,6 +9,7 @@ class ObjMesh : public Shape
 public:
     ObjMesh();
     ObjMesh(Node* parent);
+    ObjMesh(Node* parent, const std::string& filename);
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,
             const std::vector<Vec2f>& uvs,
@@ -52,6 +53,8 @@ public:
     const std::vector<Vec2f>& getUVs() const;
 
 protected:
+    std::string filename;
+
     // note: this assumes a triangle mesh
     std::vector<Triangle> tris;
     std::vector<Point3f> vs;

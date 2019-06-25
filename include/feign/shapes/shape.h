@@ -44,6 +44,8 @@ public:
     Material* getMaterial() const { return material; }
     unsigned int getGeomID() const { return geomID; }
 
+    void setMaterial(Material* param) { material = param; }
+
 protected:
     Material* material;
     unsigned int geomID;

@@ -4,6 +4,13 @@ Independent::Independent() : Sampler() { }
 
 Independent::Independent(Node* parent) : Sampler(parent) { }
 
+Independent::Independent(Node* parent,
+                         uint32_t seed,
+                         uint32_t sample_cnt)
+    : Sampler(parent, seed, sample_cnt)
+{
+}
+
 void Independent::preProcess()
 {
     preProcessChildren();
@@ -55,10 +62,11 @@ Vec4f Independent::next4D()
     return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
+// is this copy architecture really desired?
 Sampler* Independent::copy()
 {
     Independent* newSamp = new Independent();
-    newSamp->reseed(sample_seed);
+    newSamp->reseed(sampleSeed);
 
     return newSamp;
 }

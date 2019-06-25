@@ -10,7 +10,11 @@ class Sampler : public Node
 public:
     Sampler();
     Sampler(Node* parent);
-    virtual ~Sampler();
+    Sampler(Node* parent,
+            uint32_t seed,
+            uint32_t sample_cnt);
+
+    virtual ~Sampler() { }
 
     virtual void reseed() = 0;
     virtual void reseed(uint32_t seed) = 0;
@@ -33,5 +37,6 @@ public:
 
 protected:
     uint32_t sampleCnt;
+    uint32_t sampleSeed;
     uint32_t currentSample;
 };

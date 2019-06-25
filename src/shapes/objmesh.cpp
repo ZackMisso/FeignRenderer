@@ -19,12 +19,21 @@ ObjMesh::ObjMesh(Node* parent) : Shape(parent)
     tris = std::vector<Triangle>();
 }
 
+ObjMesh::ObjMesh(Node* parent, const std::string& filename)
+    : Shape(parent), filename(filename)
+{
+    vs = std::vector<Point3f>();
+    ns = std::vector<Normal3f>();
+    uvs = std::vector<Vec2f>();
+    tris = std::vector<Triangle>();
+}
+
 ObjMesh::ObjMesh(const std::vector<Point3f>& vs,
                  const std::vector<Normal3f>& ns,
                  const std::vector<Vec2f>& uvs,
                  const std::vector<Triangle>& tris)
     : vs(vs), uvs(uvs), ns(ns), tris(tris)
-{
+{ // does nothing
 }
 
 std::string ObjMesh::getName() const
@@ -104,6 +113,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
     rtcReleaseGeometry(e_mesh);
 }
 
+// TODO: implement a better parser
 void ObjMesh::parseFromFile(const std::string& filename,
                             Transform transform,
                             bool flipNorms)
@@ -342,6 +352,8 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
     return intersects;
 }
 
+// I do not think I need this function anymore, but I am going to leave it commented
+// out here for reference if need be later
 bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) const
 {
     uint32_t i0 = tris[face].vsInds(0);

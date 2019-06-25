@@ -8,8 +8,6 @@ Scene::Scene() : Node()
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
-    // scene = nullptr;
-    // rtcore = "start_threads=1,set_affinity=1";
 }
 
 Scene::Scene(Node* parent) : Node(parent)
@@ -17,18 +15,16 @@ Scene::Scene(Node* parent) : Node(parent)
     sceneObjects = std::vector<Node*>();
     root = nullptr;
     acceleration = nullptr;
-    // scene = nullptr;
-    // rtcore = "start_threads=1,set_affinity=1";
 }
 
 Scene::~Scene()
 {
     delete root;
     sceneObjects.clear();
-    // rtcReleaseScene(scene);
-    // scene = nullptr;
+    // TODO - more?
 }
 
+// TODO: this preprocess assumes no depth in the scene graph
 void Scene::preProcess()
 {
     preProcessChildren();
@@ -116,13 +112,3 @@ NodeType Scene::getNodeType() const
 {
     return NT_Scene;
 }
-
-std::string Scene::getSceneName() const { return sceneName; }
-Node* Scene::getRoot() const { return root; }
-std::vector<Node*> Scene::getSceneObjects() const { return sceneObjects; }
-std::vector<Emitter*> Scene::getEmitters() const { return emitters; }
-Texture* Scene::getEnvMap() const { return envMap; }
-Integrator* Scene::getIntegrator() const { return integrator; }
-Media* Scene::getEnvMedium() const { return envMedium; }
-Sampler* Scene::getSampler() const { return sampler; }
-Camera* Scene::getCamera() const { return camera; }

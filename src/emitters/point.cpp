@@ -1,13 +1,14 @@
 #include <feign/emitters/point.h>
 
-PointEmitter::PointEmitter() : Emitter()
-{
-    throw new NotImplementedException("point constructor");
-}
+PointEmitter::PointEmitter() : Emitter() { }
 
-PointEmitter::PointEmitter(Node* parent) : Emitter(parent)
+PointEmitter::PointEmitter(Node* parent) : Emitter(parent) { }
+
+PointEmitter::PointEmitter(Node* parent,
+                           Color3f I,
+                           Point3f pos)
+    : Emitter(parent), I(I), pos(pos)
 {
-    throw new NotImplementedException("point constructor");
 }
 
 void PointEmitter::preProcess()
