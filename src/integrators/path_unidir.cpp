@@ -10,7 +10,7 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(Node* parent)
     throw new NotImplementedException("path unidir constructor");
 }
 
-void Path_Unidirectional_Integrator::preProcess()
+void Path_Unidirectional_Integrator::preProcess(bool use_prims)
 {
     throw new NotImplementedException("path unidir preProcess");
 }

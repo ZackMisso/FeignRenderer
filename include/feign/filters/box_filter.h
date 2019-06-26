@@ -8,7 +8,7 @@ public:
     BoxFilter();
     BoxFilter(Vec2f size);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual float evaluate(const Point2f& p) const;
 

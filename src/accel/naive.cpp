@@ -1,8 +1,8 @@
 #include <feign/accel/naive.h>
 
-void NaiveAccel::preProcess()
+void NaiveAccel::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
     meshes = std::vector<Shape*>();
 }

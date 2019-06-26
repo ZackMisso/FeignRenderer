@@ -1,6 +1,6 @@
 #pragma once
 
-#include <integrator.h>
+#include <feign/integrators/integrator.h>
 
 class WhittedIntegrator : public Integrator
 {
@@ -8,11 +8,11 @@ public:
     WhittedIntegrator();
     WhittedIntegrator(Node* parent);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
-}
+};

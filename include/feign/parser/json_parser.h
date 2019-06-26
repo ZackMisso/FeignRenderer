@@ -1,36 +1,31 @@
 #pragma once
 
-#include <feign/node.h>
+#include <feign/misc/world.h>
+#include <rapidjson/document.h>
+
+// the idea behind the parsers is to keep them from having any information
+// related to the current state of the renderer. All the information related to
+// the state of the render state and scene graph should be set and updated by
+// the api. The parser should only make api calls.
 
 class JsonParser
 {
 public:
-    static Transform parseTransform(const rapidjson::Value& value);
+    static void parseTransform(const rapidjson::Value& value);
 
-    static void parseBSDF(const rapidjson::Value& value,
-                          Node* parent);
+    static void parseBSDF(const rapidjson::Value& value);
 
-    static void parseSampler(const rapidjson::Value& value,
-                             Node* parent);
+    static void parseSampler(const rapidjson::Value& value);
 
-    static void parseIntegrator(const rapidjson::Value& value,
-                                Node* parent);
+    static void parseIntegrator(const rapidjson::Value& value);
 
-    static void parseEmitter(const rapidjson::Value& value,
-                             std::vector<Transform>& transform_stack,
-                             Node* parent);
+    static void parseEmitter(const rapidjson::Value& value);
 
-    static void parseCamera(const rapidjson::Value& value,
-                            std::vector<Transform>& transform_stack,
-                            Node* parent);
+    static void parseCamera(const rapidjson::Value& value);
 
-    static void parseSceneObject(const rapidjson::Value& value,
-                                 std::vector<Transform>& transform_stack,
-                                 Node* parent);
-                                 
-    static void parseScene(const rapidjson::Value& value,
-                           std::vector<Transform>& transform_stack,
-                           Node* parent);
+    static void parseSceneObject(const rapidjson::Value& value);
 
-    static Node* parse(std::string filename);
+    static void parseScene(const rapidjson::Value& value);
+
+    static WorldNode* parse(std::string filename);
 };

@@ -9,7 +9,7 @@ public:
     Texture();
     virtual ~Texture();
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 

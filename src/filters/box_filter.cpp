@@ -10,7 +10,7 @@ BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size)
     // does nothing
 }
 
-void BoxFilter::preProcess()
+void BoxFilter::preProcess(bool use_prims)
 {
     throw new NotImplementedException("box_filter preProcess");
 }

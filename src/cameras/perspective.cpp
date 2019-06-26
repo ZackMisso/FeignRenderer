@@ -11,7 +11,9 @@ Perspective::Perspective(Node* parent,
                          Float focalDistance,
                          Float fov,
                          Float near,
-                         Float far)
+                         Float far,
+                         uint32_t width,
+                         uint32_t height)
     : Camera(parent),
       aperatureRadius(aperatureRadius),
       focalDistance(focalDistance),
@@ -19,21 +21,25 @@ Perspective::Perspective(Node* parent,
       near(near),
       far(far)
 {
+    filmSize = Vec2i(width, height);
 }
 
 // TODO: remove parts of this
-void Perspective::preProcess()
+void Perspective::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
-    primitives->findTransform("toWorld", cameraToWorld, Transform());
-    primitives->findInt("width", filmSize[0], 1280);
-    primitives->findInt("height", filmSize[1], 720);
-    primitives->findFloat("aperatureRadius", aperatureRadius, 0.0);
-    primitives->findFloat("focalDistance", focalDistance, 10.0);
-    primitives->findFloat("fov", fov, 30.0);
-    primitives->findFloat("nearClip", near, 1e-4);
-    primitives->findFloat("farClip", far, 1e4);
+    if (use_prims)
+    {
+        primitives->findTransform("toWorld", cameraToWorld, Transform());
+        primitives->findInt("width", filmSize[0], 1280);
+        primitives->findInt("height", filmSize[1], 720);
+        primitives->findFloat("aperatureRadius", aperatureRadius, 0.0);
+        primitives->findFloat("focalDistance", focalDistance, 10.0);
+        primitives->findFloat("fov", fov, 30.0);
+        primitives->findFloat("nearClip", near, 1e-4);
+        primitives->findFloat("farClip", far, 1e4);
+    }
 
     float aspect = float(filmSize[0]) / float(filmSize[1]);
 
@@ -58,7 +64,7 @@ void Perspective::preProcess()
     // TODO: add ability to choose different filters.
 
     filter = new GaussFilter();
-    filter->preProcess();
+    filter->preProcess(use_prims);
 }
 
 Color3f Perspective::sampleRay(Ray3f& ray,
@@ -95,4 +101,18 @@ Color3f Perspective::sampleRay(Ray3f& ray,
 std::string Perspective::getName() const
 {
     return Camera::getName() + "perspective";
+}
+
+void Perspective::print() const
+{
+    std::cout << "camera transform:" << std::endl;
+    cameraToWorld.print();
+    std::cout << "sample to camera transform:" << std::endl;
+    sampleToCamera.print();
+    std::cout << "aperature radius: " << aperatureRadius << std::endl;
+    std::cout << "focal distance: " << focalDistance << std::endl;
+    std::cout << "fov: " << fov << std::endl;
+    std::cout << "near: " << near << std::endl;
+    std::cout << "far: " << far << std::endl;
+    std::cout << std::endl;
 }

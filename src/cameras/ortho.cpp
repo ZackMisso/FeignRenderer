@@ -10,11 +10,11 @@ Orthographic::Orthographic(Node* parent) : Camera(parent)
     // TODO
 }
 
-void Orthographic::preProcess()
+void Orthographic::preProcess(bool use_prims)
 {
     throw new NotImplementedException("preprocess ortho");
 
-    preProcessChildren();
+    preProcessChildren(use_prims);
 }
 
 Color3f Orthographic::sampleRay(Ray3f& ray,

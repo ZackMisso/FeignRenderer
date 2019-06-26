@@ -1,10 +1,54 @@
 #include <feign/api/api.h>
 
-FeignRenderer::WorldNode* world = nullptr;
-FeignRenderer::std::vector<Transform> transform_stack = std::vector<Transform>();
-FeignRenderer::Node* current_node = nullptr;
-FeignRenderer::Scene* current_scene = nullptr;
-FeignRenderer::Transform current_transform = Transform();
+// bsdfs
+#include <feign/bsdfs/diffuse.h>
+
+// cameras
+#include <feign/cameras/ortho.h>
+#include <feign/cameras/perspective.h>
+
+// emitters
+#include <feign/emitters/point.h>
+
+// filters
+#include <feign/filters/box_filter.h>
+#include <feign/filters/gauss_filter.h>
+
+// integrators
+#include <feign/integrators/light_unidir.h>
+#include <feign/integrators/normal.h>
+#include <feign/integrators/path_bidir.h>
+#include <feign/integrators/path_unidir.h>
+#include <feign/integrators/whitted.h>
+
+// materials
+#include <feign/materials/material.h>
+
+// media
+#include <feign/media/media.h>
+
+// phases
+#include <feign/phase/phase.h>
+
+// samplers
+#include <feign/samplers/halton.h>
+#include <feign/samplers/independent.h>
+#include <feign/samplers/latin.h>
+
+// shapes
+#include <feign/shapes/objmesh.h>
+
+// textures
+#include <feign/textures/texture.h>
+
+// scenes
+#include <feign/scene.h>
+
+WorldNode* FeignRenderer::world = nullptr;
+std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
+Node* FeignRenderer::current_node = nullptr;
+Scene* FeignRenderer::current_scene = nullptr;
+Transform FeignRenderer::current_transform = Transform();
 
 void FeignRenderer::begin_world()
 {
@@ -16,37 +60,51 @@ void FeignRenderer::begin_world()
     transform_stack.clear();
 }
 
-void FeignRenderer::begin_scene()
+void FeignRenderer::begin_scene(const std::string& name)
 {
     assert(!current_scene);
 
-    current_transform.push_back(current_transform);
+    transform_stack.push_back(current_transform);
     Scene* scene = new Scene(current_node);
+    scene->setSceneName(name);
     current_node->addChild(scene);
     current_node = scene;
     current_scene = scene;
 }
 
-void FeignRenderer::begin_obj(const std::string& filename)
+void FeignRenderer::begin_node()
 {
-    current_transform.push_back(current_transform);
+    throw new NotImplementedException("api begin node");
+}
+
+void FeignRenderer::begin_obj(const std::string& filename,
+                              bool flip_norms)
+{
+    transform_stack.push_back(current_transform);
+
     ObjMesh* mesh = new ObjMesh(current_node, filename);
     current_node->addChild(mesh);
     current_node = mesh;
 
-    // TODO
+    mesh->parseFromFile(filename,
+                        current_transform,
+                        flip_norms);
 }
 
-void FeignRenderer::end_world()
+WorldNode* FeignRenderer::end_world()
 {
     assert(world);
-    
+
     // TODO: need to fix all pre process calls
-    world->preProcess();
+    world->preProcess(false);
+
+    WorldNode* tmp = world;
 
     current_node = nullptr;
     current_scene = nullptr;
     world = nullptr;
+
+    return tmp;
 }
 
 void FeignRenderer::end_scene()
@@ -55,6 +113,11 @@ void FeignRenderer::end_scene()
     transform_stack.pop_back();
     current_node = current_node->getParent();
     current_scene = nullptr;
+}
+
+void FeignRenderer::end_node()
+{
+    throw new NotImplementedException("api end node");
 }
 
 void FeignRenderer::end_obj()
@@ -76,12 +139,14 @@ void FeignRenderer::bsdf_diffuse(Color3f albedo)
         shape->setMaterial(new Material());
     }
 
-    if (shape->getMaterial()->getBSDf())
+    if (shape->getMaterial()->getBSDF())
     {
         delete shape->getMaterial()->getBSDF();
     }
 
     shape->getMaterial()->setBSDF(new Diffuse(current_node, albedo));
+
+    current_node->addChild(shape->getMaterial()->getBSDF());
 }
 
 void FeignRenderer::camera_ortho(Vec3f ori,
@@ -98,14 +163,18 @@ void FeignRenderer::camera_perspective(Vec3f ori,
                                        Float focalDistance,
                                        Float fov,
                                        Float near,
-                                       Float far)
+                                       Float far,
+                                       uint32_t width,
+                                       uint32_t height)
 {
     Perspective* perspective = new Perspective(current_node,
                                                aperatureRadius,
                                                focalDistance,
                                                fov,
                                                near,
-                                               far);
+                                               far,
+                                               width,
+                                               height);
 
     transform_stack.push_back(current_transform);
     transform_lookat(ori, tar, up);
@@ -121,6 +190,7 @@ void FeignRenderer::camera_perspective(Vec3f ori,
     }
 
     current_scene->setCamera(perspective);
+    current_scene->addChild(perspective);
 }
 
 void FeignRenderer::integrator_light_unidir()
@@ -135,6 +205,7 @@ void FeignRenderer::integrator_light_unidir()
     }
 
     current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::integrator_normal()
@@ -149,6 +220,7 @@ void FeignRenderer::integrator_normal()
     }
 
     current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::integrator_path_bidir()
@@ -163,6 +235,7 @@ void FeignRenderer::integrator_path_bidir()
     }
 
     current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::integrator_path_unidir()
@@ -177,6 +250,7 @@ void FeignRenderer::integrator_path_unidir()
     }
 
     current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::integrator_whitted()
@@ -191,6 +265,7 @@ void FeignRenderer::integrator_whitted()
     }
 
     current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::sampler_independent(uint32_t sample_cnt, uint32_t seed)
@@ -207,6 +282,7 @@ void FeignRenderer::sampler_independent(uint32_t sample_cnt, uint32_t seed)
     }
 
     current_scene->setSampler(sampler);
+    current_scene->addChild(sampler);
 }
 
 void FeignRenderer::sampler_halton(uint32_t sample_cnt, uint32_t seed)
@@ -223,6 +299,7 @@ void FeignRenderer::sampler_halton(uint32_t sample_cnt, uint32_t seed)
     }
 
     current_scene->setSampler(sampler);
+    current_scene->addChild(sampler);
 }
 
 void FeignRenderer::sampler_latin(uint32_t sample_cnt, uint32_t seed)
@@ -239,6 +316,7 @@ void FeignRenderer::sampler_latin(uint32_t sample_cnt, uint32_t seed)
     }
 
     current_scene->setSampler(sampler);
+    current_scene->addChild(sampler);
 }
 
 void FeignRenderer::emitter_point(Color3f I, Point3f pos)
@@ -247,7 +325,8 @@ void FeignRenderer::emitter_point(Color3f I, Point3f pos)
 
     PointEmitter* emitter = new PointEmitter(current_node, I, pos);
 
-    current_scene->getEmitters().push_back(emitter);
+    current_scene->addEmitter(emitter);
+    current_node->addChild(emitter);
 }
 
 void FeignRenderer::transform_scale(Vec3f scale)
@@ -301,4 +380,26 @@ void FeignRenderer::transform_matrix(Float a00, Float a01, Float a02, Float a03,
     Transform transform = Transform(matrix);
 
     current_transform *= transform;
+}
+
+void FeignRenderer::transform_matrix(Matrix4f matrix)
+{
+    Transform transform = Transform(matrix);
+
+    current_transform *= transform;
+}
+
+void FeignRenderer::transform_transform(Transform transform)
+{
+    current_transform *= transform;
+}
+
+void FeignRenderer::transform_push()
+{
+    transform_stack.push_back(current_transform);
+}
+
+void FeignRenderer::transform_pop()
+{
+    transform_stack.pop_back();
 }

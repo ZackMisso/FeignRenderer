@@ -21,7 +21,6 @@ public:
     Shape(Node* parent);
     virtual ~Shape();
 
-    virtual void preProcess() = 0;
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
     virtual bool intersect(uint32_t tri,
                            const Ray3f& scene_ray,

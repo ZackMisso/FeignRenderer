@@ -1,5 +1,5 @@
 NOTE: THIS FILE IS NOW INVALID! I AM CURRENTLY IN THE PROCESS OF TRANSITIONING TO
-HAVING ALL SCENE DESCRIPTIONS BE WRITTEN AND READ FROM JSON.
+HAVING ALL (native) SCENE DESCRIPTIONS BE WRITTEN AND READ FROM JSON.
 
 Scenes files are broken down into descriptions of major scene nodes
 where the beginning and end of every major node is specified, and the

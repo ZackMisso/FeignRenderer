@@ -11,20 +11,22 @@ Halton::Halton(Node* parent,
 {
 }
 
-void Halton::preProcess()
+void Halton::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    throw new NotImplementedException("halton preProcess");
 
-    int samples = 0;
-    primitives->findInt("sampleCount", samples, 16);
-    sampleCnt = samples;
-
-    int seed = 0;
-    primitives->findInt("seed", seed, 0x9486a5);
-
-    currentSample = 0;
-
-    reseed(seed);
+    // preProcessChildren();
+    //
+    // int samples = 0;
+    // primitives->findInt("sampleCount", samples, 16);
+    // sampleCnt = samples;
+    //
+    // int seed = 0;
+    // primitives->findInt("seed", seed, 0x9486a5);
+    //
+    // currentSample = 0;
+    //
+    // reseed(seed);
 }
 
 void Halton::reseed()
@@ -40,8 +42,10 @@ void Halton::reseed()
 
 void Halton::reseed(uint32_t seed)
 {
-    sample_seed = seed;
-    reseed();
+    throw new NotImplementedException("halton reseed");
+
+    // sample_seed = seed;
+    // reseed();
 }
 
 Float Halton::next1D()
@@ -70,7 +74,7 @@ Vec4f Halton::next4D()
 Sampler* Halton::copy()
 {
     Halton* newSamp = new Halton();
-    newSamp->reseed(sample_seed);
+    newSamp->reseed(sampleSeed);
 
     return newSamp;
 }

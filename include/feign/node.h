@@ -39,10 +39,12 @@ public:
     virtual bool hasChild(Node* node);
     virtual void removeChild(Node* node);
 
+    virtual void print() const { }
+
     int numChildren() const;
 
-    virtual void preProcess() = 0;
-    void preProcessChildren();
+    virtual void preProcess(bool use_prims) = 0;
+    void preProcessChildren(bool use_prims);
 
     void printGraph(std::string indent = "") const;
 

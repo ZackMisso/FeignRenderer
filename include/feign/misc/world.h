@@ -14,7 +14,7 @@ public:
 
     void renderAllScenes();
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     std::vector<Scene*> collectScenes() const;
 

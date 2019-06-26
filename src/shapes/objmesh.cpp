@@ -284,29 +284,32 @@ Point3f ObjMesh::centroid(uint32_t tri) const
     return (p0 + p1 + p2) * (1.0 / 3.0);
 }
 
-void ObjMesh::preProcess()
+void ObjMesh::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
-    std::string filename;
-    primitives->findString("filename", filename, "");
-
-    int flipNorms;
-    primitives->findInt("flipNorms", flipNorms, 0);
-
-    // TODO: future
-    // In the current setup, this transform is not stored
-    // in the future to save memory, this should be cached and only
-    // one object instance should be stored.
-    Transform toWorld;
-    primitives->findTransform("toWorld", toWorld, Transform());
-
-    if (filename.empty())
+    if (use_prims)
     {
-        throw new MissingPrimitiveException("obj mesh filename");
+        std::string filename;
+        primitives->findString("filename", filename, "");
+        
+        int flipNorms;
+        primitives->findInt("flipNorms", flipNorms, 0);
+        
+        // TODO: future
+        // In the current setup, this transform is not stored
+        // in the future to save memory, this should be cached and only
+        // one object instance should be stored.
+        Transform toWorld;
+        primitives->findTransform("toWorld", toWorld, Transform());
+        
+        if (filename.empty())
+        {
+            throw new MissingPrimitiveException("obj mesh filename");
+        }
+        
+        parseFromFile(filename, toWorld, flipNorms);
     }
-
-    parseFromFile(filename, toWorld, flipNorms);
 
     // TODO: make these tasks multithreaded ???
 

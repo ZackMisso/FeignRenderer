@@ -10,7 +10,7 @@ Path_Bidirectional_Integrator::Path_Bidirectional_Integrator(Node* parent)
     throw new NotImplementedException("path bidir constructor");
 }
 
-void Path_Bidirectional_Integrator::preProcess()
+void Path_Bidirectional_Integrator::preProcess(bool use_prims)
 {
     throw new NotImplementedException("path bidir preProcess");
 }

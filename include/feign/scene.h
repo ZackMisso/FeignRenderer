@@ -17,15 +17,19 @@ public:
     Scene(Node* parent);
     ~Scene();
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     bool intersect(const Ray3f& ray, Intersection& its) const;
 
+    void addEmitter(Emitter* emitter);
+    void addObject(Node* object);
+
     // getter methods
-    std::string& getSceneName() const { return sceneName; }
+    const std::vector<Node*>& getSceneObjects() const { return sceneObjects; }
+    const std::vector<Emitter*>& getEmitters() const { return emitters; }
+    const std::string& getSceneName() const { return sceneName; }
+
     Node* getRoot() const { return root; }
-    std::vector<Node*>& getSceneObjects() const { return sceneObjects; }
-    std::vector<Emitter*>& getEmitters() const { return emitters; }
     Integrator* getIntegrator() const { return integrator; }
     Media* getEnvMedium() const { return envMedium; }
     Sampler* getSampler() const { return sampler; }

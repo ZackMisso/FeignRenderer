@@ -198,6 +198,8 @@ bool JsonTest::createBaseSceneTest() const
 
     rapidjson::Value scene(rapidjson::kObjectType);
     {
+        scene.AddMember("name", "new_parser", allocator);
+
         rapidjson::Value sampler(rapidjson::kObjectType);
         {
             sampler.AddMember("type", "independent", allocator);
@@ -214,16 +216,16 @@ bool JsonTest::createBaseSceneTest() const
         rapidjson::Value camera(rapidjson::kObjectType);
         {
             camera.AddMember("type", "perspective", allocator);
-            rapidjson::Value transform(rapidjson::kObjectType);
-            {
-                transform.AddMember("name", "toWorld", allocator);
+            // rapidjson::Value transform(rapidjson::kObjectType);
+            // {
+            //     transform.AddMember("name", "toWorld", allocator);
                 rapidjson::Value array(rapidjson::kArrayType);
-                array.PushBack(-64.8161, allocator).PushBack(47.2211, allocator).PushBack(23.8576, allocator);
                 array.PushBack(-65.6055, allocator).PushBack(47.5762, allocator).PushBack(24.3583, allocator);
+                array.PushBack(-64.8161, allocator).PushBack(47.2211, allocator).PushBack(23.8576, allocator);
                 array.PushBack(0.299858, allocator).PushBack(0.934836, allocator).PushBack(-0.190177, allocator);
-                transform.AddMember("lookat", array, allocator);
-                camera.AddMember("transform", transform, allocator);
-            }
+                // transform.AddMember("lookat", array, allocator);
+                camera.AddMember("lookat", array, allocator);
+            // }
             camera.AddMember("fov", 30.0, allocator);
             camera.AddMember("width", 768, allocator);
             camera.AddMember("height", 768, allocator);
@@ -233,6 +235,7 @@ bool JsonTest::createBaseSceneTest() const
         rapidjson::Value floor(rapidjson::kObjectType);
         {
             floor.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+            floor.AddMember("type", "mesh", allocator);
             rapidjson::Value bsdf(kObjectType);
             {
                 bsdf.AddMember("type", "diffuse", allocator);
@@ -246,18 +249,19 @@ bool JsonTest::createBaseSceneTest() const
                 transform.AddMember("scale", scale_array, allocator);
                 floor.AddMember("transform", transform, allocator);
             }
-            scene.AddMember("mesh", floor, allocator);
+            scene.AddMember("object", floor, allocator);
         }
 
         rapidjson::Value ajax(rapidjson::kObjectType);
         {
             ajax.AddMember("filename", "../scenes/meshes/ajax.obj", allocator);
+            ajax.AddMember("type", "mesh", allocator);
             rapidjson::Value bsdf(kObjectType);
             {
                 bsdf.AddMember("type", "diffuse", allocator);
                 ajax.AddMember("bsdf", bsdf, allocator);
             }
-            scene.AddMember("mesh", ajax, allocator);
+            scene.AddMember("object", ajax, allocator);
         }
 
         document.AddMember("scene", scene, allocator);
@@ -386,7 +390,8 @@ bool JsonTest::readBaseSceneTest() const
             for (rapidjson::Value::ConstMemberIterator scene_itr = itr->value.MemberBegin();
                  scene_itr != itr->value.MemberEnd(); ++scene_itr)
             {
-                if (std::string(scene_itr->name.GetString()) == "mesh")
+                if (std::string(scene_itr->name.GetString()) == "object" &&
+                    std::string(scene_itr->value["type"].GetString()) == "mesh")
                 {
                     if (scene->mesh_one && scene->mesh_two)
                     {
@@ -483,7 +488,10 @@ bool JsonTest::readBaseSceneTest() const
                                 }
                             }
                         }
-
+                        else if (std::string(mesh_itr->name.GetString()) == "type")
+                        {
+                            // does nothing
+                        }
                         else
                         {
                             std::cout << "error: mesh should not have any other params" << std::endl;
@@ -582,7 +590,7 @@ bool JsonTest::readBaseSceneTest() const
                             scene->camera->height = cam_itr->value.GetInt();
                         }
 
-                        else if (std::string(cam_itr->name.GetString()) == "transform")
+                        else if (std::string(cam_itr->name.GetString()) == "lookat")
                         {
                             if (scene->camera->transform)
                             {
@@ -592,37 +600,37 @@ bool JsonTest::readBaseSceneTest() const
 
                             scene->camera->transform = new DummyTransform();
 
-                            for (rapidjson::Value::ConstMemberIterator trans_itr = cam_itr->value.MemberBegin();
-                                 trans_itr != cam_itr->value.MemberEnd(); ++trans_itr)
-                            {
-                                if (std::string(trans_itr->name.GetString()) == "name")
-                                {
-                                    scene->camera->transform->name = trans_itr->value.GetString();
-                                }
+                            // for (rapidjson::Value::ConstMemberIterator trans_itr = cam_itr->value.MemberBegin();
+                            //      trans_itr != cam_itr->value.MemberEnd(); ++trans_itr)
+                            // {
+                            //     if (std::string(trans_itr->name.GetString()) == "name")
+                            //     {
+                            //         scene->camera->transform->name = trans_itr->value.GetString();
+                            //     }
 
-                                else if (std::string(trans_itr->name.GetString()) == "lookat")
-                                {
-                                    const Value& array = trans_itr->value;
-                                    assert(array.IsArray());
-                                    assert(array.Size() == 9);
+                                // else if (std::string(trans_itr->name.GetString()) == "lookat")
+                                // {
+                            const Value& array = cam_itr->value;
+                            assert(array.IsArray());
+                            assert(array.Size() == 9);
 
-                                    scene->camera->transform->one = array[0].GetFloat();
-                                    scene->camera->transform->two = array[1].GetFloat();
-                                    scene->camera->transform->three = array[2].GetFloat();
-                                    scene->camera->transform->four = array[3].GetFloat();
-                                    scene->camera->transform->five = array[4].GetFloat();
-                                    scene->camera->transform->six = array[5].GetFloat();
-                                    scene->camera->transform->seven = array[6].GetFloat();
-                                    scene->camera->transform->eight = array[7].GetFloat();
-                                    scene->camera->transform->nine = array[8].GetFloat();
-                                }
-
-                                else
-                                {
-                                    std::cout << "error: transform is not supposed to have another parameter" << std::endl;
-                                    return false;
-                                }
-                            }
+                            scene->camera->transform->one = array[0].GetFloat();
+                            scene->camera->transform->two = array[1].GetFloat();
+                            scene->camera->transform->three = array[2].GetFloat();
+                            scene->camera->transform->four = array[3].GetFloat();
+                            scene->camera->transform->five = array[4].GetFloat();
+                            scene->camera->transform->six = array[5].GetFloat();
+                            scene->camera->transform->seven = array[6].GetFloat();
+                            scene->camera->transform->eight = array[7].GetFloat();
+                            scene->camera->transform->nine = array[8].GetFloat();
+                            //     }
+                            //
+                            //     else
+                            //     {
+                            //         std::cout << "error: transform is not supposed to have another parameter" << std::endl;
+                            //         return false;
+                            //     }
+                            // }
                         }
 
                         else
@@ -632,7 +640,10 @@ bool JsonTest::readBaseSceneTest() const
                         }
                     }
                 }
-
+                else if (std::string(scene_itr->name.GetString()) == "name")
+                {
+                    // does nothing
+                }
                 else
                 {
                     std::cout << "error: no other objects should exist in the scene" << std::endl;
@@ -762,32 +773,32 @@ bool JsonTest::readBaseSceneTest() const
         std::cout << "camera transform not initialized" << std::endl;
         return false;
     }
-    if ((scene->camera->transform->one - -64.8161) > 1e-4)
+    if ((scene->camera->transform->four - -64.8161) > 1e-4)
     {
         std::cout << "camera one: " << scene->camera->transform->one << std::endl;
         return false;
     }
-    if ((scene->camera->transform->two - 47.2211) > 1e-4)
+    if ((scene->camera->transform->five - 47.2211) > 1e-4)
     {
         std::cout << "camera two" << std::endl;
         return false;
     }
-    if ((scene->camera->transform->three - 23.8576) > 1e-4)
+    if ((scene->camera->transform->six - 23.8576) > 1e-4)
     {
         std::cout << "camera three" << std::endl;
         return false;
     }
-    if ((scene->camera->transform->four - -65.6055) > 1e-4)
+    if ((scene->camera->transform->one - -65.6055) > 1e-4)
     {
         std::cout << "camera four" << std::endl;
         return false;
     }
-    if ((scene->camera->transform->five - 47.5762) > 1e-4)
+    if ((scene->camera->transform->two - 47.5762) > 1e-4)
     {
         std::cout << "camera five" << std::endl;
         return false;
     }
-    if ((scene->camera->transform->six - 24.3583) > 1e-4)
+    if ((scene->camera->transform->three - 24.3583) > 1e-4)
     {
         std::cout << "camera six" << std::endl;
         return false;
@@ -807,11 +818,11 @@ bool JsonTest::readBaseSceneTest() const
         std::cout << "camera nine" << std::endl;
         return false;
     }
-    if (scene->camera->transform->name != "toWorld")
-    {
-        std::cout << "camera transform name" << std::endl;
-        return false;
-    }
+    // if (scene->camera->transform->name != "toWorld")
+    // {
+    //     std::cout << "camera transform name" << std::endl;
+    //     return false;
+    // }
     if (!scene->sampler)
     {
         std::cout << "sampler not initialized" << std::endl;
@@ -827,6 +838,8 @@ bool JsonTest::readBaseSceneTest() const
         std::cout << "sampler sample_count" << std::endl;
         return false;
     }
+
+    // TODO: create scripts to automatically generate all scenes
 
     delete scene;
 

@@ -12,6 +12,7 @@
 // to this renderer, then it should also be made available here.
 
 #include <feign/common.h>
+#include <feign/misc/world.h>
 
 class FeignRenderer
 {
@@ -25,12 +26,15 @@ private:
 public:
     // begin
     static void begin_world();
-    static void begin_scene();
-    static void begin_obj(const std::string& filename);
+    static void begin_scene(const std::string& name);
+    static void begin_node();
+    static void begin_obj(const std::string& filename,
+                          bool flip_norms);
 
     // end
-    static void end_world();
+    static WorldNode* end_world();
     static void end_scene();
+    static void end_node();
     static void end_obj();
 
     // bsdfs
@@ -48,7 +52,9 @@ public:
                                    Float focalDistance,
                                    Float fov,
                                    Float near,
-                                   Float far);
+                                   Float far,
+                                   uint32_t width,
+                                   uint32_t height);
 
     // integrators
     static void integrator_light_unidir();
@@ -71,15 +77,24 @@ public:
 
     static void transform_rot(Float degree, Vec3f axis);
 
-    static void transform_trans(Float x,
-                                Float y,
-                                Float z);
+    static void transform_trans(Vec3f translate);
 
     static void transform_lookat(Vec3f eye,
                                  Vec3f at,
                                  Vec3f up);
 
+    static void transform_matrix(Float a00, Float a01, Float a02, Float a03,
+                                 Float a10, Float a11, Float a12, Float a13,
+                                 Float a20, Float a21, Float a22, Float a23,
+                                 Float a30, Float a31, Float a32, Float a33);
+
     static void transform_matrix(Matrix4f matrix);
 
+    static void transform_transform(Transform transform);
+
+    // for external control
+    static void transform_push();
+    static void transform_pop();
+
     // TODO: add methods to run renders or batch renders
-}
+};

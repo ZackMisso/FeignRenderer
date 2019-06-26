@@ -1,7 +1,9 @@
 #include <feign/accel/embree.h>
 
-void EmbreeAccel::preProcess()
+void EmbreeAccel::preProcess(bool use_prims)
 {
+    preProcessChildren(use_prims);
+    
     rtcore = "start_threads=1,set_affinity=1";
     device = rtcNewDevice(rtcore.c_str());
     scene = rtcNewScene(device);

@@ -25,9 +25,9 @@ Scene::~Scene()
 }
 
 // TODO: this preprocess assumes no depth in the scene graph
-void Scene::preProcess()
+void Scene::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
     std::vector<Shape*> shapes = std::vector<Shape*>();
 
@@ -64,43 +64,37 @@ void Scene::preProcess()
     if (!acceleration)
     {
         std::cout << "No Specified Acceleration" << std::endl;
-        // acceleration = new NaiveAccel();
-        // acceleration = new BVH();
         acceleration = new EmbreeAccel();
-
-        // scene = rtcDeviceNewScene(EmbreeUtil::getDevice(), RTC_SCENE_STATIC | RTC_SCENE_INCOHERENT, RTC_INTERSECT1);
-        // userGeomId = rtcNewUserGeometry(scene, shapes.size());
-
-        // TODO: implement the scene
-
-        acceleration->preProcess();
+        acceleration->preProcess(use_prims);
     }
 
-    // device = rtcNewDevice(rtcore.c_str());
-    // scene = rtcNewScene(device);
-
-    // error_handler(nullptr,rtcGetDeviceError(device));
-    /* set error handler */
-    // rtcSetDeviceErrorFunction(device, embree_error_handler, nullptr);
-
-    // acceleration->clear();
+    std::cout << "adding shapes" << std::endl;
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        // std::cout << "SHAPE IS BEING ADDED" << std::endl;
         acceleration->addShape(shapes[i]);
-        // shapes[i]->addShapeToScene(scene, device);
     }
 
-    // rtcCommitScene(scene);
-    // acceleration->setMeshes(shapes);
-    //
+    std::cout << "building" << std::endl;
+
     acceleration->build();
+
+    std::cout << "what" << std::endl;
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
     return acceleration->intersect(ray, its);
+}
+
+void Scene::addEmitter(Emitter* emitter)
+{
+    emitters.push_back(emitter);
+}
+
+void Scene::addObject(Node* node)
+{
+    sceneObjects.push_back(node);
 }
 
 std::string Scene::getName() const

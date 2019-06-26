@@ -5,9 +5,9 @@ NormalIntegrator::NormalIntegrator() : Integrator() { }
 
 NormalIntegrator::NormalIntegrator(Node* parent) : Integrator(parent) { }
 
-void NormalIntegrator::preProcess()
+void NormalIntegrator::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 }
 
 Color3f NormalIntegrator::Li(const Scene* scene,

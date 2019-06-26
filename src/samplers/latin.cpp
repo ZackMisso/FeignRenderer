@@ -10,20 +10,25 @@ Latin::Latin(Node* parent,
 {
 }
 
-void Latin::preProcess()
+void Latin::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
-    int samples = 0;
-    primitives->findInt("sampleCount", samples, 16);
-    sampleCnt = samples;
+    if (use_prims)
+    {
+        int samples = 0;
+        primitives->findInt("sampleCount", samples, 16);
+        sampleCnt = samples;
 
-    int seed = 0;
-    primitives->findInt("seed", seed, 0x9486a5);
+        int seed = 0;
+        primitives->findInt("seed", seed, 0x9486a5);
+        
+        sampleSeed = seed;
+    }
 
     currentSample = 0;
 
-    reseed(seed);
+    reseed(sampleSeed);
 }
 
 void Latin::reseed()
@@ -39,7 +44,7 @@ void Latin::reseed()
 
 void Latin::reseed(uint32_t seed)
 {
-    sample_seed = seed;
+    sampleSeed = seed;
     reseed();
 }
 
@@ -69,7 +74,7 @@ Vec4f Latin::next4D()
 Sampler* Latin::copy()
 {
     Latin* newSamp = new Latin();
-    newSamp->reseed(sample_seed);
+    newSamp->reseed(sampleSeed);
 
     return newSamp;
 }

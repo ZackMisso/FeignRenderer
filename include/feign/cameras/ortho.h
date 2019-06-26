@@ -8,7 +8,7 @@ public:
     Orthographic();
     Orthographic(Node* parent);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual Color3f sampleRay(Ray3f& ray,
                               const Point2f& filmSamp,

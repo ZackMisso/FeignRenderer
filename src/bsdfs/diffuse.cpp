@@ -7,17 +7,20 @@ Diffuse::Diffuse() : BSDF() { }
 Diffuse::Diffuse(Node* parent) : BSDF(parent) { }
 
 Diffuse::Diffuse(Node* parent, Color3f albedo)
-    : BSDF(parent), albedo(albdeo)
+    : BSDF(parent), albedo(albedo)
 {
     // TODO
 }
 
 // TODO: remove all primitives logic from pre processing
-void Diffuse::preProcess()
+void Diffuse::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
-    primitives->findColor("albedo", albedo, Color3f(0.5));
+    if (use_prims)
+    {
+        primitives->findColor("albedo", albedo, Color3f(0.5));
+    }
 }
 
 // the idea is that sample returns eval() / pdf()

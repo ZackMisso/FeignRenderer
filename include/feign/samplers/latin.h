@@ -12,7 +12,7 @@ public:
           uint32_t seed,
           uint32_t sample_cnt);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
     virtual void reseed();
     virtual void reseed(uint32_t seed);
 

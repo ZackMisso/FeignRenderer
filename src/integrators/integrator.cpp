@@ -17,6 +17,7 @@ void Integrator::render(const Scene* scene,
 
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
+        std::cout << "sample: " << k << std::endl;
         // std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)

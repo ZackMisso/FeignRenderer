@@ -42,7 +42,7 @@ public:
     virtual Point3f centroid() const;
     virtual Point3f centroid(uint32_t tri) const;
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     void infoDump();
 

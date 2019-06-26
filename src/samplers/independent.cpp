@@ -11,26 +11,31 @@ Independent::Independent(Node* parent,
 {
 }
 
-void Independent::preProcess()
+void Independent::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 
-    int samples = 0;
-    primitives->findInt("sampleCount", samples, 16);
-    sampleCnt = samples;
+    if (use_prims)
+    {
+        int samples = 0;
+        primitives->findInt("sampleCount", samples, 16);
+        sampleCnt = samples;
 
-    int seed = 0;
-    primitives->findInt("seed", seed, 0x9486a5);
+        int seed = 0;
+        primitives->findInt("seed", seed, 0x9486a5);
+
+        sampleSeed = seed;
+    }
 
     currentSample = 0;
 
-    reseed(seed);
+    reseed(sampleSeed);
 }
 
 void Independent::reseed()
 {
     // TODO: fix this seeding
-    srand(sample_seed);
+    srand(sampleSeed);
     uint64_t r1 = rand();
     uint64_t r2 = rand();
     rng = pcg32(r1, r2);
@@ -38,7 +43,7 @@ void Independent::reseed()
 
 void Independent::reseed(uint32_t seed)
 {
-    sample_seed = seed;
+    sampleSeed = seed;
     reseed();
 }
 

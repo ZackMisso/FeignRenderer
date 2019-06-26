@@ -8,7 +8,7 @@ public:
     Light_Unidirectional_Integrator();
     Light_Unidirectional_Integrator(Node* parent);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 

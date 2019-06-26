@@ -8,7 +8,7 @@ public:
     Path_Unidirectional_Integrator();
     Path_Unidirectional_Integrator(Node* parent);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 

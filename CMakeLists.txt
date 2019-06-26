@@ -124,6 +124,7 @@ add_executable(feign
     include/feign/integrators/light_unidir.h
     include/feign/integrators/path_bidir.h
     include/feign/integrators/path_unidir.h
+    include/feign/integrators/whitted.h
 
     # Logger header files
     include/feign/log/logger.h
@@ -226,6 +227,7 @@ add_executable(feign
     src/integrators/light_unidir.cpp
     src/integrators/path_bidir.cpp
     src/integrators/path_unidir.cpp
+    src/integrators/whitted.cpp
 
     # Logger implementation files
     src/log/logger.cpp

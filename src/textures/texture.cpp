@@ -1,6 +1,6 @@
 #include <feign/textures/texture.h>
 
-void Texture::preProcess()
+void Texture::preProcess(bool use_prims)
 {
     // TODO
 }

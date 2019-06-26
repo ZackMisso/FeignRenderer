@@ -12,15 +12,19 @@ public:
                 Float focalDistance,
                 Float fov,
                 Float near,
-                Float far);
+                Float far,
+                uint32_t width,
+                uint32_t height);
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual Color3f sampleRay(Ray3f& ray,
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const;
 
     virtual std::string getName() const;
+
+    void print() const;
 
 protected:
     Transform sampleToCamera;

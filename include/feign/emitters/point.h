@@ -19,7 +19,7 @@ public:
                                const Point2f& sample,
                                Float* pdf) const;
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 

@@ -24,6 +24,8 @@ public:
 
     Vec2i getFilmSize() const;
 
+    void setCameraToWorld(const Transform& param) { cameraToWorld = param; }
+
 protected:
     Transform cameraToWorld;
     ReconstructionFilter* filter;

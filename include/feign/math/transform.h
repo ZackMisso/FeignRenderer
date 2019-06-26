@@ -17,7 +17,9 @@ public:
     Vector3f operator*(const Vector3f& other) const;
     Normal3f operator*(const Normal3f& other) const;
     Point3f operator*(const Point3f& other) const;
-    Ray3f operator*(const Ray3f& other)const;
+    Ray3f operator*(const Ray3f& other) const;
+
+    void operator*=(const Transform& other);
 
     // methods
     Transform inverse() const;

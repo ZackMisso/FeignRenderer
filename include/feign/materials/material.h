@@ -13,7 +13,7 @@ public:
     Material();
     ~Material();
 
-    const BSDF* getBSDF() const { return bsdf; }
+    BSDF* getBSDF() const { return bsdf; }
     void setBSDF(BSDF* param) { bsdf = param; }
 
 protected:

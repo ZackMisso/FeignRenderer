@@ -15,7 +15,7 @@ public:
 
     virtual bool isDelta() const { return false; }
 
-    virtual void preProcess();
+    virtual void preProcess(bool use_prims);
 
     virtual std::string getName() const;
 

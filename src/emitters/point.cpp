@@ -11,10 +11,10 @@ PointEmitter::PointEmitter(Node* parent,
 {
 }
 
-void PointEmitter::preProcess()
+void PointEmitter::preProcess(bool use_prims)
 {
-    primitives->findColor("I", I, Color3f(10.f));
-    primitives->findVec3("pos", pos, Point3f(0.0));
+    // primitives->findColor("I", I, Color3f(10.f));
+    // primitives->findVec3("pos", pos, Point3f(0.0));
 }
 
 Color3f PointEmitter::sample_li(EmitterQuery& rec,

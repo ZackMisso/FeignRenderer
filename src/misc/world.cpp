@@ -43,6 +43,8 @@ void WorldNode::renderAllScenes()
             throw new MissingPrimitiveException("no specified sampler");
         }
 
+        std::cout << "rendering film: " << camera->getFilmSize()[0] << ", " << camera->getFilmSize()[1] << std::endl;
+
         // TODO: this will need to be changed for parallelization
         Imagef image = Imagef(camera->getFilmSize()[0],
                               camera->getFilmSize()[1],
@@ -61,9 +63,9 @@ void WorldNode::renderAllScenes()
     std::cout << "Rendering Complete" << std::endl;
 }
 
-void WorldNode::preProcess()
+void WorldNode::preProcess(bool use_prims)
 {
-    preProcessChildren();
+    preProcessChildren(use_prims);
 }
 
 std::vector<Scene*> WorldNode::collectScenes() const

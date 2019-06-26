@@ -67,11 +67,11 @@ void Node::removeChild(Node* node)
     }
 }
 
-void Node::preProcessChildren()
+void Node::preProcessChildren(bool use_prims)
 {
     for (int i = 0; i < children.size(); ++i)
     {
-        children[i]->preProcess();
+        children[i]->preProcess(use_prims);
     }
 }
 

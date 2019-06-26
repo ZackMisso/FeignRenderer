@@ -62,6 +62,12 @@ Ray3f Transform::operator*(const Ray3f& other) const
                  other.far);
 }
 
+void Transform::operator*=(const Transform& other)
+{
+    mat = mat * other.mat;
+    inv = other.inv * inv;
+}
+
 void Transform::print() const
 {
     std::cout << "Transform: " << std::endl;
