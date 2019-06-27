@@ -118,6 +118,10 @@ void ObjMesh::parseFromFile(const std::string& filename,
                             Transform transform,
                             bool flipNorms)
 {
+    std::cout << "parsing obj from file: " << filename << std::endl;
+    transform.print();
+    std::cout << std::endl;
+    
     // clear current data
     vs.clear();
     ns.clear();
@@ -292,22 +296,22 @@ void ObjMesh::preProcess(bool use_prims)
     {
         std::string filename;
         primitives->findString("filename", filename, "");
-        
+
         int flipNorms;
         primitives->findInt("flipNorms", flipNorms, 0);
-        
+
         // TODO: future
         // In the current setup, this transform is not stored
         // in the future to save memory, this should be cached and only
         // one object instance should be stored.
         Transform toWorld;
         primitives->findTransform("toWorld", toWorld, Transform());
-        
+
         if (filename.empty())
         {
             throw new MissingPrimitiveException("obj mesh filename");
         }
-        
+
         parseFromFile(filename, toWorld, flipNorms);
     }
 

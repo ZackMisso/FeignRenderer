@@ -297,6 +297,8 @@ void JsonParser::parseSceneObject(const rapidjson::Value& value)
 {
     const char* type = value["type"].GetString();
 
+    FeignRenderer::transform_push();
+
     // specific object logic
     if (strcmp(type, "mesh") == 0)
     {
@@ -360,6 +362,8 @@ void JsonParser::parseSceneObject(const rapidjson::Value& value)
     {
         FeignRenderer::end_node();
     }
+
+    FeignRenderer::transform_pop();
 }
 
 void JsonParser::parseScene(const rapidjson::Value& value)

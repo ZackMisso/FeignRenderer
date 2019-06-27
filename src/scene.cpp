@@ -63,23 +63,24 @@ void Scene::preProcess(bool use_prims)
 
     if (!acceleration)
     {
-        std::cout << "No Specified Acceleration" << std::endl;
+        // std::cout << "No Specified Acceleration" << std::endl;
         acceleration = new EmbreeAccel();
         acceleration->preProcess(use_prims);
     }
 
-    std::cout << "adding shapes" << std::endl;
+    // std::cout << "adding shapes" << std::endl;
 
     for (int i = 0; i < shapes.size(); ++i)
     {
+        // std::cout << "wooop" << std::endl;
         acceleration->addShape(shapes[i]);
     }
 
-    std::cout << "building" << std::endl;
+    // std::cout << "building" << std::endl;
 
     acceleration->build();
 
-    std::cout << "what" << std::endl;
+    // std::cout << "what" << std::endl;
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const

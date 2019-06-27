@@ -22,10 +22,10 @@ void Integrator::render(const Scene* scene,
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
-            std::cout << double(k * camera->getFilmSize()[1] * camera->getFilmSize()[0] +
-                         i * camera->getFilmSize()[0]) /
-                         double(camera->getFilmSize()[0] * camera->getFilmSize()[1] * sampler->getSampleCnt())
-                         * 100.0 << " Percent Done" << std::endl;
+            // std::cout << double(k * camera->getFilmSize()[1] * camera->getFilmSize()[0] +
+            //              i * camera->getFilmSize()[0]) /
+            //              double(camera->getFilmSize()[0] * camera->getFilmSize()[1] * sampler->getSampleCnt())
+            //              * 100.0 << " Percent Done" << std::endl;
 
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {

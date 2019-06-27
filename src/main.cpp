@@ -7,20 +7,20 @@
 int main(int argc, char* argv[]) {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    // std::cout << "Beginning Unit Tests" << std::endl;
-    // UnitTestManager* unitTests = new UnitTestManager();
-    //
-    // if (!unitTests->runUnitTests())
-    // {
-    //     delete unitTests;
-    //     std::cout << "Unit Tests Failed -> terminating early" << std::endl;
-    //     return -1;
-    // }
-    // delete unitTests;
-    //
-    // std::cout << "All Unit Tests Passed" << std::endl;
+    std::cout << "Beginning Unit Tests" << std::endl;
+    UnitTestManager* unitTests = new UnitTestManager();
 
-    ////////// OLD PARSER TEST //////////
+    if (!unitTests->runUnitTests())
+    {
+        delete unitTests;
+        std::cout << "Unit Tests Failed -> terminating early" << std::endl;
+        return -1;
+    }
+    delete unitTests;
+
+    std::cout << "All Unit Tests Passed" << std::endl;
+
+    // ////////// OLD PARSER TEST //////////
     // std::cout << "Parsing: " << SCENES_PATH "ajax-normals.firal" << std::endl;
     // Node* parsedNode = Parser::parse(SCENES_PATH "ajax-normals.firal");
     // // Node* parsedNode = Parser::parse(SCENES_PATH "ajax-normals.firal");
@@ -46,22 +46,24 @@ int main(int argc, char* argv[]) {
     // worldNode->preProcess(true);
     // // // render
     // // worldNode->renderAllScenes();
-    /////////////////////////////////////
+    // /////////////////////////////////////
 
     std::cout << "parsing new world" << std::endl;
 
     WorldNode* newWorld = JsonParser::parse(SCENES_PATH "ajax-normals-generated.json");
 
-    // std::cout << std::endl;
-    // std::cout << "New World Graph Description:" << std::endl;
-    // std::cout << std::endl;
-    // newWorld->printGraph();
-    // std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << "New World Graph Description:" << std::endl;
+    std::cout << std::endl;
+    newWorld->printGraph();
+    std::cout << std::endl;
     //
     // std::cout << "Rendering" << std::endl;
     //
-    // std::vector<Scene*> new_scenes = newWorld->collectScenes();
+    std::vector<Scene*> new_scenes = newWorld->collectScenes();
     // std::vector<Scene*> old_scenes = worldNode->collectScenes();
+
+    std::cout << "number of objects: " << new_scenes[0]->getSceneObjects().size() << std::endl;
     //
     // std::cout << "new world camera: " << std::endl;
     // new_scenes[0]->getCamera()->print();

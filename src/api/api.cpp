@@ -401,5 +401,6 @@ void FeignRenderer::transform_push()
 
 void FeignRenderer::transform_pop()
 {
+    current_transform = transform_stack[transform_stack.size()-1];
     transform_stack.pop_back();
 }

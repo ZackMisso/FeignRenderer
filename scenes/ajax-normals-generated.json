@@ -3,7 +3,7 @@
         "name": "new_parser",
         "sampler": {
             "type": "independent",
-            "sample_count": 8
+            "sample_count": 256
         },
         "integrator": {
             "type": "normals"
