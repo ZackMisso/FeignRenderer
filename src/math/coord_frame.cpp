@@ -8,7 +8,7 @@ CoordinateFrame::CoordinateFrame(const Vector3f& s, const Vector3f& t, const Nor
 CoordinateFrame::CoordinateFrame(const Vector3f& x, const Vector3f& y, const Vector3f& z)
             : s(x), t(y), n(z) { }
 
-CoordinateFrame::CoordinateFrame(const Vector3f& n)
+CoordinateFrame::CoordinateFrame(const Normal3f& n)
             : n(n)
 {
     coordinateSystem(n, s, t);
@@ -84,9 +84,8 @@ float CoordinateFrame::cosPhiSqr(const Vector3f& vec)
     return 0.f;
 }
 
-
 void CoordinateFrame::coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c) {
-    if (std::abs(a(0)) > std::abs(a(0)))
+    if (std::abs(a(0)) > std::abs(a(1)))
     {
         float invLen = 1.f / std::sqrt(a(0) * a(0) + a(2) * a(2));
         c = Vector3f(a(2) * invLen, 0.f, -a(0) * invLen);

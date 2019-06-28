@@ -5,9 +5,9 @@ WhittedIntegrator::WhittedIntegrator() : Integrator() { }
 
 WhittedIntegrator::WhittedIntegrator(Node* parent) : Integrator(parent) { }
 
-void WhittedIntegrator::preProcess(bool use_prims)
+void WhittedIntegrator::preProcess()
 {
-    preProcessChildren(use_prims);
+    preProcessChildren();
 }
 
 Color3f WhittedIntegrator::Li(const Scene* scene,

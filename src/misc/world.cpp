@@ -50,22 +50,23 @@ void WorldNode::renderAllScenes()
                               camera->getFilmSize()[1],
                               3);
 
-        std::cout << "pre Render" << std::endl;
         integrator->render(scene,
                            camera,
                            sampler,
                            image);
-        std::cout << "post Render" << std::endl;
 
-        image.write(scene->getSceneName());
+        std::cout << "writing scene: " << scene->getSceneName() << std::endl;
+
+        image.write(scene->getSceneName() + ".hdr");
+        image.write(scene->getSceneName() + ".png");
     }
 
     std::cout << "Rendering Complete" << std::endl;
 }
 
-void WorldNode::preProcess(bool use_prims)
+void WorldNode::preProcess()
 {
-    preProcessChildren(use_prims);
+    preProcessChildren();
 }
 
 std::vector<Scene*> WorldNode::collectScenes() const

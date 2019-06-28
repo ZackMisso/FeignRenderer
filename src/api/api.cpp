@@ -95,8 +95,7 @@ WorldNode* FeignRenderer::end_world()
 {
     assert(world);
 
-    // TODO: need to fix all pre process calls
-    world->preProcess(false);
+    world->preProcess();
 
     WorldNode* tmp = world;
 
@@ -272,14 +271,20 @@ void FeignRenderer::sampler_independent(uint32_t sample_cnt, uint32_t seed)
 {
     assert(current_scene);
 
+    // std::cout << "asserted" << std::endl;
+
     Independent* sampler = new Independent(current_scene,
                                            seed,
                                            sample_cnt);
+
+    // std::cout << "getting sampler" << std::endl;
 
     if (current_scene->getSampler())
     {
         delete current_scene->getSampler();
     }
+
+    // std::cout << "booyah" << std::endl;
 
     current_scene->setSampler(sampler);
     current_scene->addChild(sampler);

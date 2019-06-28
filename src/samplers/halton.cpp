@@ -11,7 +11,7 @@ Halton::Halton(Node* parent,
 {
 }
 
-void Halton::preProcess(bool use_prims)
+void Halton::preProcess()
 {
     throw new NotImplementedException("halton preProcess");
 

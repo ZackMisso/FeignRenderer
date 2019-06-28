@@ -14,7 +14,7 @@ struct CoordinateFrame
     CoordinateFrame();
     CoordinateFrame(const Vector3f& s, const Vector3f& t, const Normal3f& n);
     CoordinateFrame(const Vector3f& x, const Vector3f& y, const Vector3f& z);
-    CoordinateFrame(const Vector3f& n);
+    CoordinateFrame(const Normal3f& n);
 
     Vector3f toLocal(const Vector3f& vec) const;
     Vector3f toWorld(const Vector3f& vec) const;

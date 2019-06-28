@@ -8,7 +8,7 @@ public:
     GaussFilter();
     GaussFilter(Vec2f size);
 
-    virtual void preProcess(bool use_prims);
+    virtual void preProcess();
 
     virtual float evaluate(const Point2f& p) const;
 

@@ -17,7 +17,7 @@ public:
     Scene(Node* parent);
     ~Scene();
 
-    virtual void preProcess(bool use_prims);
+    virtual void preProcess();
 
     bool intersect(const Ray3f& ray, Intersection& its) const;
 

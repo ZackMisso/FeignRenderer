@@ -1,5 +1,7 @@
 #include <feign/samplers/independent.h>
 
+// TODO: maybe keep track of dimensions
+
 Independent::Independent() : Sampler() { }
 
 Independent::Independent(Node* parent) : Sampler(parent) { }
@@ -11,21 +13,9 @@ Independent::Independent(Node* parent,
 {
 }
 
-void Independent::preProcess(bool use_prims)
+void Independent::preProcess()
 {
-    preProcessChildren(use_prims);
-
-    if (use_prims)
-    {
-        int samples = 0;
-        primitives->findInt("sampleCount", samples, 16);
-        sampleCnt = samples;
-
-        int seed = 0;
-        primitives->findInt("seed", seed, 0x9486a5);
-
-        sampleSeed = seed;
-    }
+    preProcessChildren();
 
     currentSample = 0;
 
@@ -34,17 +24,13 @@ void Independent::preProcess(bool use_prims)
 
 void Independent::reseed()
 {
-    // TODO: fix this seeding
-    srand(sampleSeed);
-    uint64_t r1 = rand();
-    uint64_t r2 = rand();
-    rng = pcg32(r1, r2);
+    rng = pcg32(sampleSeed, 1);
 }
 
 void Independent::reseed(uint32_t seed)
 {
     sampleSeed = seed;
-    reseed();
+    rng = pcg32(sampleSeed, 1);
 }
 
 Float Independent::next1D()

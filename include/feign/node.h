@@ -1,10 +1,7 @@
 #pragma once
 
-// TODO: rename this class - this node can be used for more than one
-// scene
 
 #include <feign/common.h>
-#include <feign/misc/primlist.h>
 
 enum NodeType
 {
@@ -43,8 +40,8 @@ public:
 
     int numChildren() const;
 
-    virtual void preProcess(bool use_prims) = 0;
-    void preProcessChildren(bool use_prims);
+    virtual void preProcess() = 0;
+    void preProcessChildren();
 
     void printGraph(std::string indent = "") const;
 
@@ -52,13 +49,10 @@ public:
 
     int getTag() const;
 
-    PrimitiveList* getPrimList() const;
-
     Node* getParent() const { return parent; }
 
 protected:
     Node* parent;
-    PrimitiveList* primitives;
     std::vector<Node*> children;
     int tag;
 };

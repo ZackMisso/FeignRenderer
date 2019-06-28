@@ -8,7 +8,7 @@ public:
     WhittedIntegrator();
     WhittedIntegrator(Node* parent);
 
-    virtual void preProcess(bool use_prims);
+    virtual void preProcess();
 
     virtual std::string getName() const;
 

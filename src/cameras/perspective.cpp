@@ -25,21 +25,9 @@ Perspective::Perspective(Node* parent,
 }
 
 // TODO: remove parts of this
-void Perspective::preProcess(bool use_prims)
+void Perspective::preProcess()
 {
-    preProcessChildren(use_prims);
-
-    if (use_prims)
-    {
-        primitives->findTransform("toWorld", cameraToWorld, Transform());
-        primitives->findInt("width", filmSize[0], 1280);
-        primitives->findInt("height", filmSize[1], 720);
-        primitives->findFloat("aperatureRadius", aperatureRadius, 0.0);
-        primitives->findFloat("focalDistance", focalDistance, 10.0);
-        primitives->findFloat("fov", fov, 30.0);
-        primitives->findFloat("nearClip", near, 1e-4);
-        primitives->findFloat("farClip", far, 1e4);
-    }
+    preProcessChildren();
 
     float aspect = float(filmSize[0]) / float(filmSize[1]);
 
@@ -64,7 +52,7 @@ void Perspective::preProcess(bool use_prims)
     // TODO: add ability to choose different filters.
 
     filter = new GaussFilter();
-    filter->preProcess(use_prims);
+    filter->preProcess();
 }
 
 Color3f Perspective::sampleRay(Ray3f& ray,

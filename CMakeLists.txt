@@ -93,7 +93,6 @@ add_executable(feign
 
     # Accel header files
     include/feign/accel/accel.h
-    include/feign/accel/bvh.h
     include/feign/accel/naive.h
     include/feign/accel/embree.h
 
@@ -150,14 +149,11 @@ add_executable(feign
     include/feign/media/trans_ests/trans_est.h
 
     # Misc header files
-    include/feign/misc/prim.h
-    include/feign/misc/primlist.h
     include/feign/misc/world.h
     include/feign/misc/intersection.h
     include/feign/misc/embree_util.h
 
     # Parser header files
-    include/feign/parser/parser.h
     include/feign/parser/json_parser.h
 
     # Phase Function header files
@@ -196,7 +192,6 @@ add_executable(feign
 
     # Accel implementation files
     src/accel/accel.cpp
-    src/accel/bvh.cpp
     src/accel/naive.cpp
     src/accel/embree.cpp
 
@@ -249,12 +244,10 @@ add_executable(feign
     # Media Transmittance Estimator implementation files
 
     # Misc implementation files
-    src/misc/primlist.cpp
     src/misc/world.cpp
     src/misc/intersection.cpp
 
     # Parser implementation files
-    src/parser/parser.cpp
     src/parser/json_parser.cpp
 
     # Phase Function implementation files

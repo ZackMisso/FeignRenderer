@@ -8,7 +8,7 @@
 class EmbreeAccel : public Accel
 {
 public:
-    virtual void preProcess(bool use_prims);
+    virtual void preProcess();
     virtual void clear();
     virtual void addShape(Shape* mesh);
     virtual void build();

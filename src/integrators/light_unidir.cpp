@@ -10,7 +10,7 @@ Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(Node* parent)
     throw new NotImplementedException("light unidir constructor");
 }
 
-void Light_Unidirectional_Integrator::preProcess(bool use_prims)
+void Light_Unidirectional_Integrator::preProcess()
 {
     throw new NotImplementedException("light unidir preProcess");
 }

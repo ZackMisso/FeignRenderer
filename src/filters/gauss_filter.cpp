@@ -10,25 +10,13 @@ GaussFilter::GaussFilter(Vec2f size) : ReconstructionFilter(size)
     // does nothing
 }
 
-void GaussFilter::preProcess(bool use_prims)
+void GaussFilter::preProcess()
 {
-    preProcessChildren(use_prims);
+    preProcessChildren();
 
-    float xrad = 0.f;
-    float yrad = 0.f;
-
-    if (use_prims)
-    {
-        primitives->findFloat("xrad", xrad, 2.f);
-        primitives->findFloat("yrad", yrad, 2.f);
-        primitives->findFloat("alpha", alpha, 2.f);
-    }
-    else
-    {
-        xrad = 2.0;
-        yrad = 2.0;
-        alpha = 2.0;
-    }
+    float xrad = 2.f;
+    float yrad = 2.f;
+    alpha = 2.f;
 
     expCoeff[0] = std::exp(-alpha * xrad * xrad);
     expCoeff[1] = std::exp(-alpha * yrad * yrad);

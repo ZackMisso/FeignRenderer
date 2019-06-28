@@ -17,7 +17,7 @@ void Integrator::render(const Scene* scene,
 
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
-        std::cout << "sample: " << k << std::endl;
+        // std::cout << "sample: " << k << std::endl;
         // std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
@@ -43,11 +43,17 @@ void Integrator::render(const Scene* scene,
                 radiance *= Li(scene, sampler, ray);
 
                 // TODO: use reconstruction filters in the future
-                image(j, i, 0) += radiance(0) / float(sampler->getSampleCnt());
-                image(j, i, 1) += radiance(1) / float(sampler->getSampleCnt());
-                image(j, i, 2) += radiance(2) / float(sampler->getSampleCnt());
+                image(j, i, 0) += radiance(0); // / float(sampler->getSampleCnt());
+                image(j, i, 1) += radiance(1); // / float(sampler->getSampleCnt());
+                image(j, i, 2) += radiance(2); // / float(sampler->getSampleCnt());
             }
         }
+    }
+
+    std::cout << "sample count: " << sampler->getSampleCnt() << std::endl;
+    for (int i = 0; i < image.size(); ++i)
+    {
+        image[i] = image[i] / Float(sampler->getSampleCnt());
     }
 }
 

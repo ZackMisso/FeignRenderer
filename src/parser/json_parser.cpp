@@ -131,9 +131,13 @@ void JsonParser::parseSampler(const rapidjson::Value& value)
         seed = (uint32_t)value["seed"].GetInt();
     }
 
+    // std::cout << "moo" << std::endl;
+
     if (strcmp(type, "independent") == 0)
     {
+        // std::cout << "before api call" << std::endl;
         FeignRenderer::sampler_independent(sample_cnt, seed);
+        // std::cout << "after api call" << std::endl;
     }
     else if (strcmp(type, "halton") == 0)
     {
@@ -387,26 +391,32 @@ void JsonParser::parseScene(const rapidjson::Value& value)
         // sampler
         if (strcmp(itr->name.GetString(), "sampler") == 0)
         {
+            // std::cout << "parsing sampler" << std::endl;
             parseSampler(itr->value);
+            // std::cout << "outside sampler" << std::endl;
         }
         // integrator
         else if (strcmp(itr->name.GetString(), "integrator") == 0)
         {
+            // std::cout << "parsing integrator" << std::endl;
             parseIntegrator(itr->value);
         }
         // camera
         else if (strcmp(itr->name.GetString(), "camera") == 0)
         {
+            // std::cout << "parsing camera" << std::endl;
             parseCamera(itr->value);
         }
         // object
         else if (strcmp(itr->name.GetString(), "object") == 0)
         {
+            // std::cout << "parsing object" << std::endl;
             parseSceneObject(itr->value);
         }
         // emitter
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
+            // std::cout << "parsing emitter" << std::endl;
             parseEmitter(itr->value);
         }
         else if (strcmp(itr->name.GetString(), "name") == 0)

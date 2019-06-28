@@ -16,7 +16,7 @@ public:
                 uint32_t width,
                 uint32_t height);
 
-    virtual void preProcess(bool use_prims);
+    virtual void preProcess();
 
     virtual Color3f sampleRay(Ray3f& ray,
                               const Point2f& filmSamp,

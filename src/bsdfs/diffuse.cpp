@@ -12,15 +12,9 @@ Diffuse::Diffuse(Node* parent, Color3f albedo)
     // TODO
 }
 
-// TODO: remove all primitives logic from pre processing
-void Diffuse::preProcess(bool use_prims)
+void Diffuse::preProcess()
 {
-    preProcessChildren(use_prims);
-
-    if (use_prims)
-    {
-        primitives->findColor("albedo", albedo, Color3f(0.5));
-    }
+    preProcessChildren();
 }
 
 // the idea is that sample returns eval() / pdf()

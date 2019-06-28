@@ -10,21 +10,9 @@ Latin::Latin(Node* parent,
 {
 }
 
-void Latin::preProcess(bool use_prims)
+void Latin::preProcess()
 {
-    preProcessChildren(use_prims);
-
-    if (use_prims)
-    {
-        int samples = 0;
-        primitives->findInt("sampleCount", samples, 16);
-        sampleCnt = samples;
-
-        int seed = 0;
-        primitives->findInt("seed", seed, 0x9486a5);
-        
-        sampleSeed = seed;
-    }
+    preProcessChildren();
 
     currentSample = 0;
 

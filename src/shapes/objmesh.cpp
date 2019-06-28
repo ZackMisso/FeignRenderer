@@ -121,7 +121,7 @@ void ObjMesh::parseFromFile(const std::string& filename,
     std::cout << "parsing obj from file: " << filename << std::endl;
     transform.print();
     std::cout << std::endl;
-    
+
     // clear current data
     vs.clear();
     ns.clear();
@@ -168,7 +168,9 @@ void ObjMesh::parseFromFile(const std::string& filename,
             line >> n[1];
             line >> n[2];
 
-            ns.push_back(n);
+            n = transform * n;
+
+            ns.push_back(n.normalized());
         }
         else if (token == "f")
         {
@@ -288,32 +290,9 @@ Point3f ObjMesh::centroid(uint32_t tri) const
     return (p0 + p1 + p2) * (1.0 / 3.0);
 }
 
-void ObjMesh::preProcess(bool use_prims)
+void ObjMesh::preProcess()
 {
-    preProcessChildren(use_prims);
-
-    if (use_prims)
-    {
-        std::string filename;
-        primitives->findString("filename", filename, "");
-
-        int flipNorms;
-        primitives->findInt("flipNorms", flipNorms, 0);
-
-        // TODO: future
-        // In the current setup, this transform is not stored
-        // in the future to save memory, this should be cached and only
-        // one object instance should be stored.
-        Transform toWorld;
-        primitives->findTransform("toWorld", toWorld, Transform());
-
-        if (filename.empty())
-        {
-            throw new MissingPrimitiveException("obj mesh filename");
-        }
-
-        parseFromFile(filename, toWorld, flipNorms);
-    }
+    preProcessChildren();
 
     // TODO: make these tasks multithreaded ???
 
@@ -411,6 +390,7 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
+    // Vec3f bary(its.uv(0), its.uv(1), 1.0 - its.uv(0) - its.uv(1));
 
     uint32_t i0_vs = tris[its.f].vsInds(0);
     uint32_t i1_vs = tris[its.f].vsInds(1);

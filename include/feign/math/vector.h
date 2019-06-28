@@ -533,7 +533,6 @@ struct Vec3
         return xyz[index];
     }
 
-    // what is this operator???
     Vec3<T> operator~() const
     {
         Vec3<T> vec;

@@ -4,19 +4,16 @@
 Node::Node()
 {
     children = std::vector<Node*>();
-    primitives = new PrimitiveList();
     parent = nullptr;
 }
 
 Node::Node(Node* parent) : parent(parent)
 {
     children = std::vector<Node*>();
-    primitives = new PrimitiveList();
 }
 
 Node::~Node()
 {
-    delete primitives;
     for (int i = 0; i < children.size(); ++i) {
         delete children[i];
     }
@@ -67,11 +64,11 @@ void Node::removeChild(Node* node)
     }
 }
 
-void Node::preProcessChildren(bool use_prims)
+void Node::preProcessChildren()
 {
     for (int i = 0; i < children.size(); ++i)
     {
-        children[i]->preProcess(use_prims);
+        children[i]->preProcess();
     }
 }
 
@@ -94,9 +91,4 @@ int Node::numChildren() const
 int Node::getTag() const
 {
     return tag;
-}
-
-PrimitiveList* Node::getPrimList() const
-{
-    return primitives;
 }

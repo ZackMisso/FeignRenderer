@@ -1,8 +1,8 @@
 #include <feign/textures/texture.h>
 
-void Texture::preProcess(bool use_prims)
+void Texture::preProcess()
 {
-    // TODO
+    throw new NotImplementedException("texture preProcess");
 }
 
 std::string Texture::getName() const
