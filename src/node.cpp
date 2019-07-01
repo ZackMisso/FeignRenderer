@@ -14,10 +14,13 @@ Node::Node(Node* parent) : parent(parent)
 
 Node::~Node()
 {
-    for (int i = 0; i < children.size(); ++i) {
+    std::cout << "clearing " << std::endl;
+    for (int i = 0; i < children.size(); ++i)
+    {
         delete children[i];
     }
     children.clear();
+    std::cout << "cleared" << std::endl;
     parent = nullptr;
 }
 

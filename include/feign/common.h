@@ -39,8 +39,8 @@
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 // uncomment the following for desired types
-typedef float Float;
-// typedef double Float;
+// typedef float Float;
+typedef double Float;
 
 typedef int Int;
 // typedef long Int;

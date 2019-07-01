@@ -9,6 +9,7 @@ PointEmitter::PointEmitter(Node* parent,
                            Point3f pos)
     : Emitter(parent), I(I), pos(pos)
 {
+    // does nothing
 }
 
 void PointEmitter::preProcess() { preProcessChildren(); }

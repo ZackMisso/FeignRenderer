@@ -22,8 +22,8 @@ RTCDevice getDevice();
 inline RTCBounds convert(const BBox3f& box)
 {
     return RTCBounds{
-        box.min(0), box.min(1), box.min(2),
-        box.max(0), box.max(1), box.max(2)
+        (float)box.min(0), (float)box.min(1), (float)box.min(2),
+        (float)box.max(0), (float)box.max(1), (float)box.max(2)
     };
 }
 

@@ -2,23 +2,23 @@
 
 BoxFilter::BoxFilter() : ReconstructionFilter()
 {
-    // does nothing
+    size = Vec2f(0.5, 0.5);
 }
 
-BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size)
-{
-    // does nothing
-}
+BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size) { }
 
 void BoxFilter::preProcess()
 {
-    throw new NotImplementedException("box_filter preProcess");
+    // does nothing
 }
 
 Float BoxFilter::evaluate(const Point2f& p) const
 {
-    throw new NotImplementedException("box_filter evaluate");
-    return 1.f;
+    if (std::abs(p(0)) < size(0) && std::abs(p(1)) < size(1))
+    {
+        return 1.0;
+    }
+    return 0.0;
 }
 
 std::string BoxFilter::getName() const

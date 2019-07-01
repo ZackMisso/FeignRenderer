@@ -5,6 +5,9 @@
 #include <tests/tester.h>
 
 int main(int argc, char* argv[]) {
+    // std::cout << 0.002*0.002+0.010*0.010+0.991*0.991 << std::endl;
+    // std::cout << 0.004*0.004+0.014*0.014+0.991*0.991 << std::endl;
+    
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
     std::string scene = "ajax-normals-generated";
@@ -25,7 +28,6 @@ int main(int argc, char* argv[]) {
             delete unitTests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
-            ++i;
         }
         if (strcmp(argv[i], "-g") == 0)
         {
@@ -34,14 +36,14 @@ int main(int argc, char* argv[]) {
             SceneGenerator::create_all_scenes();
 
             std::cout << "Finished generating all scenes" << std::endl;
-            ++i;
         }
         if (strcmp(argv[i], "-s") == 0)
         {
             scene = std::string(argv[++i]);
-            ++i;
         }
     }
+
+    std::cout << SCENES_PATH << scene << ".json" << std::endl;
 
     WorldNode* world = JsonParser::parse(SCENES_PATH + scene + ".json");
 
@@ -52,6 +54,8 @@ int main(int argc, char* argv[]) {
     // std::cout << std::endl;
 
     world->renderAllScenes();
+
+    delete world;
 
     return 0;
 }

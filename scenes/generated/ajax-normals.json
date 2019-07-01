@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "new_parser",
+        "name": "ajax_normals",
         "sampler": {
             "type": "independent",
             "sample_count": 256

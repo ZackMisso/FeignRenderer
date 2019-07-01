@@ -4,6 +4,7 @@ void EmbreeAccel::preProcess()
 {
     preProcessChildren();
 
+    // initialize embree datastructures
     rtcore = "start_threads=1,set_affinity=1";
     device = rtcNewDevice(rtcore.c_str());
     scene = rtcNewScene(device);
@@ -16,17 +17,21 @@ void EmbreeAccel::clear()
     scene = nullptr;
 }
 
+// adds all intersectable meshes in a scene to embree's backend
 void EmbreeAccel::addShape(Shape* mesh)
 {
     mesh->addShapeToScene(scene, device);
     meshes.push_back(mesh);
 }
 
+// commits all changes for this scene. This must be called after all scene
+// geometry has been defined but before rendering
 void EmbreeAccel::build()
 {
     rtcCommitScene(scene);
 }
 
+// the interface between the integrators and embree
 bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 {
     RTCIntersectContext context;
@@ -45,7 +50,7 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 
     if (hit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {
-        // need to set uv, t, primId, and far
+        // need to set uv, t, primId, and update far
         its.t = hit.ray.tfar;
         its.uv = Vec2f(hit.hit.u, hit.hit.v);
         its.f = hit.hit.primID;
@@ -62,6 +67,8 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
             }
         }
 
+        // complete the intersection information by calculating normals / uv's /
+        // etc.
         its.intersected_mesh->completeIntersectionInfo(ray, its);
 
         return true;

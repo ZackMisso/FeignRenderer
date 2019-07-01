@@ -7,6 +7,7 @@ class GaussFilter : public ReconstructionFilter
 public:
     GaussFilter();
     GaussFilter(Vec2f size);
+    GaussFilter(Vec2f size, Float std_dev);
 
     virtual void preProcess();
 
@@ -16,5 +17,6 @@ public:
 
 protected:
     Vec2f expCoeff;
-    float alpha;
+    Float alpha;
+    Float std_dev;
 };
