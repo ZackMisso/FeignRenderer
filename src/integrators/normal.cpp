@@ -7,6 +7,8 @@ NormalIntegrator::NormalIntegrator(Node* parent) : Integrator(parent) { }
 
 void NormalIntegrator::preProcess()
 {
+    Integrator::preProcess();
+    
     preProcessChildren();
 }
 

@@ -12,6 +12,8 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(Node* parent)
 
 void Path_Unidirectional_Integrator::preProcess()
 {
+    Integrator::preProcess();
+    
     throw new NotImplementedException("path unidir preProcess");
 }
 

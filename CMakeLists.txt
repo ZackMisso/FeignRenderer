@@ -152,6 +152,7 @@ add_executable(feign
     include/feign/misc/world.h
     include/feign/misc/intersection.h
     include/feign/misc/embree_util.h
+    include/feign/misc/scene_generator.h
 
     # Parser header files
     include/feign/parser/json_parser.h

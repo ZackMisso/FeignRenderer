@@ -3,6 +3,7 @@
 #include <feign/node.h>
 #include <feign/cameras/camera.h>
 #include <feign/samplers/sampler.h>
+#include <feign/filters/recon_filter.h>
 
 // needed forward declaration
 class Scene;
@@ -13,6 +14,8 @@ public:
     Integrator();
     Integrator(Node* parent);
     virtual ~Integrator();
+    
+    virtual void preProcess();
 
     virtual void render(const Scene* scene,
                         const Camera* camera,
@@ -26,4 +29,7 @@ public:
     virtual std::string getName() const;
 
     virtual NodeType getNodeType() const;
+
+protected:
+    ReconstructionFilter* filter;
 };

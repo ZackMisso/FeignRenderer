@@ -215,4 +215,137 @@ struct BBox3
     Vec3<T> max;
 };
 
+template <typename T>
+struct BBox2
+{
+    BBox2()
+    {
+        reset();
+    }
+
+    BBox2(Vec2<T> vec)
+    {
+        min = vec;
+        max = vec;
+    }
+
+    BBox2(Vec2<T> tlc, T w, T h)
+    {
+        assert(w >= 0 && h >= 0);
+
+        min = tlc;
+        max = tlc + Vec2<T>(w, h);
+    }
+
+    BBox2(Vec2<T> tlc, Vec2<T> blc)
+    {
+        min = tlc;
+        max = blc;
+    }
+
+    T area() const
+    {
+        return (max.x - min.x) * (max.y - min.y);
+    }
+
+    Vec2<T> center() const
+    {
+        (max + min) * T(0.5);
+    }
+
+    bool contains(const Vec2<T> p) const
+    {
+        return p > min && p < max;
+    }
+
+    bool containsOrOnBoundry(const Vec2<T>& p) const
+    {
+        return p >= min && p <= max;
+    }
+
+    bool contains(const BBox2<T>& bbox) const
+    {
+        return bbox.min > min && bbox.max < max;
+    }
+
+    bool containsOrOnBoundry(const BBox2<T>& bbox) const
+    {
+        return bbox.min >= min && bbox.max <= max;
+    }
+
+    bool overlapExcludeBoundry(const BBox2<T>& bbox) const
+    {
+        return bbox.min < min && bbox.max > max;
+    }
+
+    bool overlaps(const BBox2<T>& bbox) const
+    {
+        return bbox.min <= min && bbox.max >= max;
+    }
+
+    int majorAxis() const
+    {
+        Vec2<T> diag = max - min;
+        return diag.maxAbsIndex();
+    }
+
+    int minorAxis() const
+    {
+        Vec2<T> diag = max - min;
+        return diag.minAbsIndex();
+    }
+
+    Vec2<T> extents() const
+    {
+        return max - min;
+    }
+
+    void expand(const Vec2<T>& p)
+    {
+        min = min.min(p);
+        max = max.max(p);
+    }
+
+    void expand(const BBox2<T>& bbox)
+    {
+        // std::cout << ""
+        min = min.min(bbox.min);
+        max = max.max(bbox.max);
+    }
+
+    void clip(const Vec2<T>& n_min, const Vec2<T>& n_max)
+    {
+        if (min(0) < n_min(0)) min[0] = n_min(0);
+        if (min(1) < n_min(1)) min[1] = n_min(1);
+        if (max(0) > n_max(0)) max[0] = n_max(0);
+        if (max(1) > n_max(1)) max[1] = n_max(1);
+    }
+
+    static BBox2<T> merge(const BBox2<T>& one, const BBox2<T>& two)
+    {
+        // TODO: rename these methods because they are not intuitive
+        Vec2<T> min_vec = one.min.min(two.min);
+        Vec2<T> max_vec = one.max.max(two.max);
+
+        return BBox2<T>(min_vec, max_vec);
+    }
+
+    void reset()
+    {
+        min = Vec2<T>(std::numeric_limits<T>::infinity());
+        max = Vec2<T>(-std::numeric_limits<T>::infinity());
+    }
+
+    void infoDump() const
+    {
+        std::cout << "Min: " << "(" << min(0) << ", " << min(1) << ")" << std::endl;
+        std::cout << "Max: " << "(" << max(0) << ", " << max(1) << ")" << std::endl;
+    }
+
+    Vec2<T> min;
+    Vec2<T> max;
+};
+
 typedef BBox3<Float> BBox3f;
+typedef BBox2<Float> BBox2f;
+typedef BBox2<int> BBox2i;

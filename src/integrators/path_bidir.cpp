@@ -12,6 +12,8 @@ Path_Bidirectional_Integrator::Path_Bidirectional_Integrator(Node* parent)
 
 void Path_Bidirectional_Integrator::preProcess()
 {
+    Integrator::preProcess();
+    
     throw new NotImplementedException("path bidir preProcess");
 }
 

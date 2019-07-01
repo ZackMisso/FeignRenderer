@@ -7,6 +7,8 @@ WhittedIntegrator::WhittedIntegrator(Node* parent) : Integrator(parent) { }
 
 void WhittedIntegrator::preProcess()
 {
+    Integrator::preProcess();
+
     preProcessChildren();
 }
 
@@ -23,10 +25,10 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
-    return Color3f(1.f);
+    // return Color3f(1.f);
 
     // TODO: finish this
-    //
+
     // const std::vector<Emitters*> emitters = scene->getEmitters();
     // const BSDF* bsdf = its.intersected_mesh->getMaterial()->getBSDF();
     //

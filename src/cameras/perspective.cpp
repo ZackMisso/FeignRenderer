@@ -48,11 +48,6 @@ void Perspective::preProcess()
     Matrix4f mat = aspectScale * aspectTrans * perspective;
 
     sampleToCamera = Transform(mat).inverse();
-
-    // TODO: add ability to choose different filters.
-
-    filter = new GaussFilter();
-    filter->preProcess();
 }
 
 Color3f Perspective::sampleRay(Ray3f& ray,

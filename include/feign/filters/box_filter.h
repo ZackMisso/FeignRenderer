@@ -10,7 +10,7 @@ public:
 
     virtual void preProcess();
 
-    virtual float evaluate(const Point2f& p) const;
+    virtual Float evaluate(const Point2f& p) const;
 
     virtual std::string getName() const;
 };

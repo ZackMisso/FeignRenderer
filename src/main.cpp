@@ -1,26 +1,50 @@
 #include <iostream>
 #include <feign/parser/json_parser.h>
 #include <feign/misc/world.h>
+#include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 
 int main(int argc, char* argv[]) {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    // std::cout << "Beginning Unit Tests" << std::endl;
-    // UnitTestManager* unitTests = new UnitTestManager();
-    //
-    // if (!unitTests->runUnitTests())
-    // {
-    //     delete unitTests;
-    //     std::cout << "Unit Tests Failed -> terminating early" << std::endl;
-    //     return -1;
-    // }
-    // delete unitTests;
-    //
-    // std::cout << "All Unit Tests Passed" << std::endl;
+    std::string scene = "ajax-normals-generated";
 
-    WorldNode* world = JsonParser::parse(SCENES_PATH "ajax-normals-generated.json");
-    std::cout << "post world" << std::endl;
+    for (int i = 1; i < argc; ++i)
+    {
+        if (strcmp(argv[i], "-u") == 0)
+        {
+            std::cout << "Beginning Unit Tests" << std::endl;
+            UnitTestManager* unitTests = new UnitTestManager();
+
+            if (!unitTests->runUnitTests())
+            {
+                delete unitTests;
+                std::cout << "Unit Tests Failed -> terminating early" << std::endl;
+                return -1;
+            }
+            delete unitTests;
+
+            std::cout << "All Unit Tests Passed" << std::endl;
+            ++i;
+        }
+        if (strcmp(argv[i], "-g") == 0)
+        {
+            std::cout << "Generating all scenes" << std::endl;
+
+            SceneGenerator::create_all_scenes();
+
+            std::cout << "Finished generating all scenes" << std::endl;
+            ++i;
+        }
+        if (strcmp(argv[i], "-s") == 0)
+        {
+            scene = std::string(argv[++i]);
+            ++i;
+        }
+    }
+
+    WorldNode* world = JsonParser::parse(SCENES_PATH + scene + ".json");
+
     // std::cout << std::endl;
     // std::cout << "New World Graph Description:" << std::endl;
     // std::cout << std::endl;

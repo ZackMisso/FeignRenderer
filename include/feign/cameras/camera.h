@@ -3,7 +3,6 @@
 #include <feign/node.h>
 #include <feign/math/ray.h>
 #include <feign/math/transform.h>
-#include <feign/filters/recon_filter.h>
 
 class Camera : public Node
 {
@@ -28,6 +27,5 @@ public:
 
 protected:
     Transform cameraToWorld;
-    ReconstructionFilter* filter;
     Vec2i filmSize;
 };
