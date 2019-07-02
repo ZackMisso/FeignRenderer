@@ -20,42 +20,42 @@ Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& po
 
 Point2f WarpSpace::squareToUniformDisk(const Point2f &sample)
 {
-    float r = std::sqrt(1-sample(1));
-    float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float r = std::sqrt(1-sample(1));
+    Float sinPhi, cosPhi;
+    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Point2f(cosPhi * r, sinPhi * r);
 }
 
-float WarpSpace::squareToUniformDiskPdf(const Point2f &p)
+Float WarpSpace::squareToUniformDiskPdf(const Point2f &p)
 {
     return p.sqrNorm() <= 1 ? INV_PI : 0.0f;
 }
 
 Vector3f WarpSpace::squareToUniformSphere(const Point2f &sample)
 {
-    float z = 1.0f - 2.0f * sample(1);
-    float r = std::sqrt(std::max((float) 0.0f, 1.0f - z*z));
-    float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float z = 1.0f - 2.0f * sample(1);
+    Float r = std::sqrt(std::max((Float) 0.0f, 1.0f - z*z));
+    Float sinPhi, cosPhi;
+    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * cosPhi, r * sinPhi, z);
 }
 
-float WarpSpace::squareToUniformSpherePdf(const Vector3f &v)
+Float WarpSpace::squareToUniformSpherePdf(const Vector3f &v)
 {
     return INV_FOURPI;
 }
 
-Vector3f WarpSpace::squareToUniformSphereCap(const Point2f &sample, float cosThetaMax)
+Vector3f WarpSpace::squareToUniformSphereCap(const Point2f &sample, Float cosThetaMax)
 {
-    float z = sample(1) + (1.f-sample(1)) * cosThetaMax;
-    float r = std::sqrt(1-z*z);
-    float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float z = sample(1) + (1.f-sample(1)) * cosThetaMax;
+    Float r = std::sqrt(1-z*z);
+    Float sinPhi, cosPhi;
+    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * cosPhi, r * sinPhi, z);
 }
 
-float WarpSpace::squareToUniformSphereCapPdf(const Vector3f &v, float cosThetaMax)
+Float WarpSpace::squareToUniformSphereCapPdf(const Vector3f &v, Float cosThetaMax)
 {
     if (v(2) < cosThetaMax)
         return 0.0f;
@@ -64,16 +64,16 @@ float WarpSpace::squareToUniformSphereCapPdf(const Vector3f &v, float cosThetaMa
 
 Vector3f WarpSpace::squareToUniformHemisphere(const Point2f &sample)
 {
-    float cosTheta = sample(1);
-    float sinTheta = std::sqrt(std::max((float) 0, 1-cosTheta*cosTheta));
+    Float cosTheta = sample(1);
+    Float sinTheta = std::sqrt(std::max((Float) 0, 1-cosTheta*cosTheta));
 
-    float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Vector3f(cosPhi * sinTheta, sinPhi * sinTheta, cosTheta);
 }
 
-float WarpSpace::squareToUniformHemispherePdf(const Vector3f &v)
+Float WarpSpace::squareToUniformHemispherePdf(const Vector3f &v)
 {
     return v(2) > 0 ? INV_TWOPI : 0.0f;
 }
@@ -81,41 +81,41 @@ float WarpSpace::squareToUniformHemispherePdf(const Vector3f &v)
 Vector3f WarpSpace::squareToCosineHemisphere(const Point2f &sample)
 {
     Point2f p = squareToUniformDisk(sample);
-    float z = std::sqrt(std::max((float) 0, 1.0f - p(0)*p(0) - p(1)*p(1)));
+    Float z = std::sqrt(std::max((Float) 0, 1.0f - p(0)*p(0) - p(1)*p(1)));
 
     return Vector3f(p(0), p(1), z);
 }
 
-float WarpSpace::squareToCosineHemispherePdf(const Vector3f &v)
+Float WarpSpace::squareToCosineHemispherePdf(const Vector3f &v)
 {
     return v(2) > 0 ? INV_PI * v(2) : 0.0f;
 }
 
-Vector3f WarpSpace::squareToCosinePowerHemisphere(const Point2f &sample, float n)
+Vector3f WarpSpace::squareToCosinePowerHemisphere(const Point2f &sample, Float n)
 {
-    float cosTheta  = std::pow(sample(1), 1.0f / (n + 1.0f));
-    float sinTheta  = std::sqrt(std::max((float) 0.0f, 1.0f - cosTheta * cosTheta));
+    Float cosTheta  = std::pow(sample(1), 1.0f / (n + 1.0f));
+    Float sinTheta  = std::sqrt(std::max((Float) 0.0f, 1.0f - cosTheta * cosTheta));
 
-    float sinPhi, cosPhi;
-    sincosf(2.0f * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Vector3f(cosPhi * sinTheta, sinPhi * sinTheta, cosTheta);
 }
 
-float WarpSpace::squareToCosinePowerHemispherePdf(const Vector3f &v, float n)
+Float WarpSpace::squareToCosinePowerHemispherePdf(const Vector3f &v, Float n)
 {
     return v(2) > 0 ? 0.5f * (n + 1.0f) * std::pow(v(2), n) * INV_PI : 0.0f;
 }
 
 Point2f WarpSpace::squareToUniformTriangle(const Point2f &sample)
 {
-    float u = 1 - sqrt(sample(0));
-    float v = sample(1) * sqrt(sample(0));
+    Float u = 1 - sqrt(sample(0));
+    Float v = sample(1) * sqrt(sample(0));
 
     return Point2f(u, v);
 }
 
-float WarpSpace::squareToUniformTrianglePdf(const Point2f &sample)
+Float WarpSpace::squareToUniformTrianglePdf(const Point2f &sample)
 {
     if (sample(0) + sample(1) > 1.0) return 0.0f;
     if (sample(0) + sample(1) < 0.0) return 0.0f;
@@ -123,14 +123,14 @@ float WarpSpace::squareToUniformTrianglePdf(const Point2f &sample)
     return 2.0f;
 }
 
-Vector3f WarpSpace::squareToBeckmann(const Point2f &sample, float alpha)
+Vector3f WarpSpace::squareToBeckmann(const Point2f &sample, Float alpha)
 {
     throw new NotImplementedException("square to beckmann");
 
     return Vector3f(0.f);
 }
 
-float WarpSpace::squareToBeckmannPdf(const Vector3f &m, float alpha)
+Float WarpSpace::squareToBeckmannPdf(const Vector3f &m, Float alpha)
 {
     throw new NotImplementedException("square to beckmann pdf");
 

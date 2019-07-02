@@ -1,5 +1,6 @@
 #include <feign/integrators/integrator.h>
 #include <feign/filters/gauss_filter.h>
+#include <feign/filters/box_filter.h>
 #include <feign/scene.h>
 
 Integrator::Integrator() : Node()
@@ -18,7 +19,8 @@ void Integrator::preProcess()
 {
     if (!filter)
     {
-        filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
+        // filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
+        filter = new BoxFilter();
         addChild(filter);
     }
 

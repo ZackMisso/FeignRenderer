@@ -9,26 +9,26 @@ public:
     static Vector3f sampleUniformHemisphere(Sampler *sampler, const Normal3f& northPole);
 
     static Point2f squareToUniformDisk(const Point2f &sample);
-    static float squareToUniformDiskPdf(const Point2f &p);
+    static Float squareToUniformDiskPdf(const Point2f &p);
 
     static Vector3f squareToUniformSphere(const Point2f &sample);
-    static float squareToUniformSpherePdf(const Vector3f &v);
+    static Float squareToUniformSpherePdf(const Vector3f &v);
 
-    static Vector3f squareToUniformSphereCap(const Point2f &sample, float cosThetaMax);
-    static float squareToUniformSphereCapPdf(const Vector3f &v, float cosThetaMax);
+    static Vector3f squareToUniformSphereCap(const Point2f &sample, Float cosThetaMax);
+    static Float squareToUniformSphereCapPdf(const Vector3f &v, Float cosThetaMax);
 
     static Vector3f squareToUniformHemisphere(const Point2f &sample);
-    static float squareToUniformHemispherePdf(const Vector3f &v);
+    static Float squareToUniformHemispherePdf(const Vector3f &v);
 
     static Vector3f squareToCosineHemisphere(const Point2f &sample);
-    static float squareToCosineHemispherePdf(const Vector3f &v);
+    static Float squareToCosineHemispherePdf(const Vector3f &v);
 
-    static Vector3f squareToCosinePowerHemisphere(const Point2f &sample, float n);
-    static float squareToCosinePowerHemispherePdf(const Vector3f &v, float n);
+    static Vector3f squareToCosinePowerHemisphere(const Point2f &sample, Float n);
+    static Float squareToCosinePowerHemispherePdf(const Vector3f &v, Float n);
 
     static Point2f squareToUniformTriangle(const Point2f &sample);
-    static float squareToUniformTrianglePdf(const Point2f &sample);
+    static Float squareToUniformTrianglePdf(const Point2f &sample);
 
-    static Vector3f squareToBeckmann(const Point2f &sample, float alpha);
-    static float squareToBeckmannPdf(const Vector3f &m, float alpha);
+    static Vector3f squareToBeckmann(const Point2f &sample, Float alpha);
+    static Float squareToBeckmannPdf(const Vector3f &m, Float alpha);
 };
