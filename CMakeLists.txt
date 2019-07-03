@@ -54,6 +54,9 @@ set(IMGLIB_NEEDED_DIR
 set(JSON_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/ext/rapidjson/include)
 
+set(TINYEXR_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/tinyexr)
+
 find_package(PythonLibs REQUIRED)
 # find_package(openvdb REQUIRED)
 find_package(embree 3.0 REQUIRED)
@@ -74,6 +77,8 @@ include_directories(
 
     ${JSON_INCLUDE_DIR}
 
+    ${TINYEXR_INCLUDE_DIR}
+
     #ext/
 )
 
@@ -85,6 +90,9 @@ endif()
 
 
 add_executable(feign
+
+    ext/ImageEditLib/ext/tinyexr/tinyexr.cc
+
     # Header files
     include/feign/common.h
     include/feign/scene.h
@@ -289,6 +297,7 @@ set(CompilerFlags
       CMAKE_MACOSX_RPATH
       PCG32_INCLUDE_DIR
       IMGLIB_INCLUDE_DIR
+      TINYEXR_INCLUDE_DIR
 )
 
 # Lastly, additional libraries may have been built for you.  In addition to linking

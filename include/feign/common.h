@@ -11,7 +11,7 @@
 // these are necessary defines for imedit
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_WRITE_STATIC
-
+#define TINYEXR_IMPLEMENTATION
 #include <imedit/image.h>
 
 // TODO: remove this
