@@ -90,9 +90,6 @@ endif()
 
 
 add_executable(feign
-
-    ext/ImageEditLib/ext/tinyexr/tinyexr.cc
-
     # Header files
     include/feign/common.h
     include/feign/scene.h
@@ -286,6 +283,9 @@ add_executable(feign
     src/tests/matrix_test.cpp
     src/tests/ray_intersect_test.cpp
     src/tests/json_test.cpp
+
+    # imedit implementation files
+    ext/ImageEditLib/src/image.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

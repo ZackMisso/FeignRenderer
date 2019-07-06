@@ -19,8 +19,8 @@ void Integrator::preProcess()
 {
     if (!filter)
     {
-        // filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
-        filter = new BoxFilter();
+        filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
+        // filter = new BoxFilter();
         addChild(filter);
     }
 

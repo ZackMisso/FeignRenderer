@@ -17,8 +17,6 @@ WorldNode::~WorldNode()
 
 void WorldNode::renderAllScenes()
 {
-    std::cout << "Starting Rendering Process" << std::endl;
-
     std::vector<Scene*> scenes = collectScenes();
 
     for (int i = 0; i < scenes.size(); ++i)
@@ -59,6 +57,7 @@ void WorldNode::renderAllScenes()
 
         image.write(scene->getSceneName() + ".hdr");
         image.write(scene->getSceneName() + ".png");
+        image.write(scene->getSceneName() + ".exr");
     }
 
     std::cout << "Rendering Complete" << std::endl;

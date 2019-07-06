@@ -9,6 +9,8 @@ public:
     Texture();
     virtual ~Texture();
 
+    virtual void evaluate(const Point3f& point) = 0;
+
     virtual void preProcess();
 
     virtual std::string getName() const;

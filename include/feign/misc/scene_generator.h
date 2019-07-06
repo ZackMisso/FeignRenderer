@@ -4,6 +4,7 @@
 // scenes for this renderer
 
 #include <feign/common.h>
+#include <fstream>
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>

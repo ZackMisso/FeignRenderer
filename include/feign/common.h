@@ -9,9 +9,6 @@
 #include <feign/log/logger.h>
 
 // these are necessary defines for imedit
-#define STB_IMAGE_STATIC
-#define STB_IMAGE_WRITE_STATIC
-#define TINYEXR_IMPLEMENTATION
 #include <imedit/image.h>
 
 // TODO: remove this
@@ -70,8 +67,7 @@ typedef Color3<Float> Color3f;
 typedef Matrix3<Float> Matrix3f;
 typedef Matrix4<Float> Matrix4f;
 
-typedef imedit::Image<Float> Imagef;
-typedef imedit::Image<uInt> Imagei;
+typedef imedit::Image Imagef;
 
 inline Float degToRad(Float value) { return value * (M_PI / 180.0); }
 
