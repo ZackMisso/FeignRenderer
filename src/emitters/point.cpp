@@ -19,7 +19,8 @@ Color3f PointEmitter::sample_li(EmitterQuery& rec,
                                 Float* pdf) const
 {
     rec.wi = (pos - rec.p).normalized();
-    *pdf = 1.0;
+
+    if (pdf) *pdf = 1.0;
 
     return I / (pos - rec.p).sqrNorm();
 }

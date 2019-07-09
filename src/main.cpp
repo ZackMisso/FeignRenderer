@@ -5,12 +5,10 @@
 #include <tests/tester.h>
 
 int main(int argc, char* argv[]) {
-    // std::cout << 0.002*0.002+0.010*0.010+0.991*0.991 << std::endl;
-    // std::cout << 0.004*0.004+0.014*0.014+0.991*0.991 << std::endl;
-    
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
     std::string scene = "ajax-normals-generated";
+    scene = "generated/ajax-diffuse";
 
     for (int i = 1; i < argc; ++i)
     {

@@ -339,6 +339,15 @@ struct Vec3
         return vec;
     }
 
+    Vec3<T> operator*(const Vec3<T>& other) const
+    {
+        Vec3<T> vec;
+        vec[0] = xyz[0] * other(0);
+        vec[1] = xyz[1] * other(1);
+        vec[2] = xyz[2] * other(2);
+        return vec;
+    }
+
     Vec3<T> operator*(T c) const
     {
         Vec3<T> vec;

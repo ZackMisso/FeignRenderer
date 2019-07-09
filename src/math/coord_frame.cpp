@@ -16,68 +16,67 @@ CoordinateFrame::CoordinateFrame(const Normal3f& n)
 
 Vector3f CoordinateFrame::toLocal(const Vector3f& vec) const
 {
-    throw new NotImplementedException("coordinate frame toLocal");
-
-    return Vector3f(0.f);
+    return Vector3f((vec % s),
+                    (vec % t),
+                    (vec % n));
 }
 
 Vector3f CoordinateFrame::toWorld(const Vector3f& vec) const
 {
-    throw new NotImplementedException("coordinate frame toWorld");
-
-    return Vector3f(0.f);
+    return s * vec(0) +
+           t * vec(1) +
+           n * vec(2);
 }
 
-float CoordinateFrame::cosTheta(const Vector3f& vec)
+// assumes the input is in local space
+Float CoordinateFrame::cosTheta(const Vector3f& vec)
 {
-    throw new NotImplementedException("coordinate frame cosTheta");
-
-    return 0.f;
+    return vec(2);
 }
 
-float CoordinateFrame::sinTheta(const Vector3f& vec)
+Float CoordinateFrame::sinTheta(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame sinTheta");
 
     return 0.f;
 }
 
-float CoordinateFrame::tanTheta(const Vector3f& vec)
+Float CoordinateFrame::tanTheta(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame tanTheta");
 
     return 0.f;
 }
 
-float CoordinateFrame::sinThetaSqr(const Vector3f& vec)
+Float CoordinateFrame::sinThetaSqr(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame sinThetaSqr");
 
     return 0.f;
 }
 
-float CoordinateFrame::sinPhi(const Vector3f& vec)
+Float CoordinateFrame::sinPhi(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame sinPhi");
 
     return 0.f;
 }
 
-float CoordinateFrame::cosPhi(const Vector3f& vec)
+Float CoordinateFrame::cosPhi(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame cosPhi");
 
     return 0.f;
 }
 
-float CoordinateFrame::sinPhiSqr(const Vector3f& vec)
+Float CoordinateFrame::sinPhiSqr(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame sinPhiSqr");
 
     return 0.f;
 }
 
-float CoordinateFrame::cosPhiSqr(const Vector3f& vec)
+Float CoordinateFrame::cosPhiSqr(const Vector3f& vec)
 {
     throw new NotImplementedException("coordinate frame cosPhiSqr");
 
@@ -87,12 +86,12 @@ float CoordinateFrame::cosPhiSqr(const Vector3f& vec)
 void CoordinateFrame::coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c) {
     if (std::abs(a(0)) > std::abs(a(1)))
     {
-        float invLen = 1.f / std::sqrt(a(0) * a(0) + a(2) * a(2));
+        Float invLen = 1.f / std::sqrt(a(0) * a(0) + a(2) * a(2));
         c = Vector3f(a(2) * invLen, 0.f, -a(0) * invLen);
     }
     else
     {
-        float invLen = 1.f / std::sqrt(a(1) * a(1) + a(2) * a(2));
+        Float invLen = 1.f / std::sqrt(a(1) * a(1) + a(2) * a(2));
         c = Vector3f(0.f, a(2) * invLen, -a(1) * invLen);
     }
     b = c ^ a;

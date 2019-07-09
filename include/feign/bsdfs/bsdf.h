@@ -8,15 +8,29 @@ struct BSDFQuery
     Vector3f wo;
 
     Point3f uvw;
+    Point3f pos;
 
     Float eta;
 
     bool isDiffuse;
 
-    BSDFQuery(const Vector3f& wi, Point2f& uv);
-    BSDFQuery(const Vector3f& wi, Point3f& uvw);
-    BSDFQuery(const Vector3f& wi, const Vector3f& wo, Point2f& uv);
-    BSDFQuery(const Vector3f& wi, const Vector3f& wo, Point3f& uvw);
+    BSDFQuery(const Vector3f& wi,
+              const Point2f& uv,
+              const Point3f& pos);
+
+    BSDFQuery(const Vector3f& wi,
+              const Point3f& uvw,
+              const Point3f& pos);
+
+    BSDFQuery(const Vector3f& wi,
+              const Vector3f& wo,
+              const Point2f& uv,
+              const Point3f& pos);
+
+    BSDFQuery(const Vector3f& wi,
+              const Vector3f& wo,
+              const Point3f& uvw,
+              const Point3f& pos);
 };
 
 class BSDF : public Node

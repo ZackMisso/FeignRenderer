@@ -21,12 +21,12 @@ struct CoordinateFrame
 
     static void coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c);
 
-    static float cosTheta(const Vector3f& vec);
-    static float sinTheta(const Vector3f& vec);
-    static float tanTheta(const Vector3f& vec);
-    static float sinThetaSqr(const Vector3f& vec);
-    static float sinPhi(const Vector3f& vec);
-    static float cosPhi(const Vector3f& vec);
-    static float sinPhiSqr(const Vector3f& vec);
-    static float cosPhiSqr(const Vector3f& vec);
+    static Float cosTheta(const Vector3f& vec);
+    static Float sinTheta(const Vector3f& vec);
+    static Float tanTheta(const Vector3f& vec);
+    static Float sinThetaSqr(const Vector3f& vec);
+    static Float sinPhi(const Vector3f& vec);
+    static Float cosPhi(const Vector3f& vec);
+    static Float sinPhiSqr(const Vector3f& vec);
+    static Float cosPhiSqr(const Vector3f& vec);
 };

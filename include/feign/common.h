@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <limits>
+#include <assert.h>
 
 #include <feign/exceptions.h>
 #include <feign/math/vector.h>
@@ -13,11 +15,11 @@
 
 // TODO: remove this
 // personal laptop
-#define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+// #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
 // misc laptop
 // #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
 // workstation
-// #define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
+#define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
 // work laptop
 // #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
 
