@@ -18,11 +18,13 @@ Color3f PointEmitter::sample_li(EmitterQuery& rec,
                                 const Point2f& sample,
                                 Float* pdf) const
 {
-    rec.wi = (pos - rec.p).normalized();
+    rec.wi = (pos - rec.p);
+    rec.sqr_dist = rec.wi.sqrNorm();
+    rec.wi = rec.wi.normalized();
 
     if (pdf) *pdf = 1.0;
 
-    return I / (pos - rec.p).sqrNorm();
+    return I / rec.sqr_dist * INV_FOURPI;
 }
 
 Color3f PointEmitter::sample_pos(EmitterQuery& rec,

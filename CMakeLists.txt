@@ -123,6 +123,7 @@ add_executable(feign
     include/feign/filters/gauss_filter.h
 
     # Integrator header files
+    include/feign/integrators/amb_occ.h
     include/feign/integrators/integrator.h
     include/feign/integrators/normal.h
     include/feign/integrators/light_unidir.h
@@ -223,6 +224,7 @@ add_executable(feign
     src/filters/gauss_filter.cpp
 
     # Integrator implementation files
+    src/integrators/amb_occ.cpp
     src/integrators/integrator.cpp
     src/integrators/normal.cpp
     src/integrators/light_unidir.cpp

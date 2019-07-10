@@ -30,43 +30,32 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     Color3f result(0.f);
 
-    // std::cout << "before for loop" << std::endl;
-
     for (int i = 0; i < emitters.size(); ++i)
     {
         EmitterQuery eqr(its.p);
 
-        // std::cout << "sample_li call" << std::endl;
         Float* pdf = nullptr;
         Color3f Li = emitters[i]->sample_li(eqr,
                                             sampler->next2D(),
                                             pdf);
-
-        // std::cout << "initializing bqr" << std::endl;
 
         BSDFQuery bqr(its.toLocal(-dir),
                       its.toLocal(eqr.wi),
                       its.uv,
                       its.p);
 
-        // std::cout << "evaluating" << std::endl;
-
         Color3f bsdf_val = bsdf->eval(bqr);
         float cos_term = its.s_frame.n % eqr.wi;
 
         if (cos_term < -Epsilon) cos_term = -cos_term;
 
-        // std::cout << "shadow ray" << std::endl;
+        Ray3f shadow_ray(its.p,
+                         eqr.wi,
+                         Epsilon,
+                         sqrt(eqr.sqr_dist));
 
-        Ray3f shadow_ray;
-        shadow_ray.origin = its.p;
-        shadow_ray.dir = eqr.wi;
-        shadow_ray.near = Epsilon;
-        shadow_ray.far = sqrt(eqr.sqr_dist);
-
-        // std::cout << "shadow intersection" << std::endl;
         Intersection tmp;
-        if (!scene->intersect(ray, tmp))
+        if (!scene->intersect(shadow_ray, tmp))
         {
             result = result + bsdf_val * Li * cos_term;
         }
