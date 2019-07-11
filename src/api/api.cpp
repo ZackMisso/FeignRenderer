@@ -15,6 +15,7 @@
 #include <feign/filters/gauss_filter.h>
 
 // integrators
+#include <feign/integrators/amb_occ.h>
 #include <feign/integrators/light_unidir.h>
 #include <feign/integrators/normal.h>
 #include <feign/integrators/path_bidir.h>
@@ -190,6 +191,21 @@ void FeignRenderer::camera_perspective(Vec3f ori,
 
     current_scene->setCamera(perspective);
     current_scene->addChild(perspective);
+}
+
+void FeignRenderer::integrator_amb_occ()
+{
+    assert(current_scene);
+
+    Ambient_Occlusion_Integrator* integrator = new Ambient_Occlusion_Integrator(current_scene);
+
+    if (current_scene->getIntegrator())
+    {
+        delete current_scene->getIntegrator();
+    }
+
+    current_scene->setIntegrator(integrator);
+    current_scene->addChild(integrator);
 }
 
 void FeignRenderer::integrator_light_unidir()

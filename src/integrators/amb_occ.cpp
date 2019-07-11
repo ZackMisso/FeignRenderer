@@ -41,6 +41,12 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
                      Epsilon,
                      std::numeric_limits<Float>::infinity());
 
+    Intersection shadow_its;
+    if (scene->intersect(shadow_ray, shadow_its))
+    {
+        return Color3f(0.f);
+    }
+
     Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
 
     return Color3f(cosTerm * INV_PI / pdf);

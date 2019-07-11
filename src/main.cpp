@@ -4,11 +4,35 @@
 #include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 
+void run_scene(std::string scene)
+{
+    WorldNode* world = JsonParser::parse(SCENES_PATH + scene + ".json");
+
+    // std::cout << std::endl;
+    // std::cout << "New World Graph Description:" << std::endl;
+    // std::cout << std::endl;
+    // world->printGraph();
+    // std::cout << std::endl;
+
+    world->renderAllScenes();
+
+    delete world;
+}
+
+// these are all the base debug scenes
+void run_all_scenes()
+{
+    run_scene("generated/ajax-amb_occ");
+    run_scene("generated/ajax-normals");
+    run_scene("generated/ajax-diffuse");
+}
+
 int main(int argc, char* argv[]) {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
     std::string scene = "ajax-normals-generated";
-    scene = "generated/ajax-diffuse";
+    // scene = "generated/ajax-diffuse";
+    scene = "generated/ajax-amb_occ";
 
     for (int i = 1; i < argc; ++i)
     {
@@ -39,21 +63,16 @@ int main(int argc, char* argv[]) {
         {
             scene = std::string(argv[++i]);
         }
+        if (strcmp(argv[i], "-a") == 0)
+        {
+            run_all_scenes();
+            return 0;
+        }
     }
 
     std::cout << SCENES_PATH << scene << ".json" << std::endl;
 
-    WorldNode* world = JsonParser::parse(SCENES_PATH + scene + ".json");
-
-    // std::cout << std::endl;
-    // std::cout << "New World Graph Description:" << std::endl;
-    // std::cout << std::endl;
-    // world->printGraph();
-    // std::cout << std::endl;
-
-    world->renderAllScenes();
-
-    delete world;
+    run_scene(scene);
 
     return 0;
 }

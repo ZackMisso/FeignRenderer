@@ -177,6 +177,10 @@ void JsonParser::parseIntegrator(const rapidjson::Value& value)
     {
         FeignRenderer::integrator_normal();
     }
+    else if (strcmp(type, "amb_occ") == 0)
+    {
+        FeignRenderer::integrator_amb_occ();
+    }
     else
     {
         std::cout << "unrecognized integrator: " << type << std::endl;

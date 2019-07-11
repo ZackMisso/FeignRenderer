@@ -116,6 +116,9 @@ add_executable(feign
     # Emitter header files
     include/feign/emitters/emitter.h
     include/feign/emitters/point.h
+    include/feign/emitters/distant.h
+    include/feign/emitters/directional.h
+    include/feign/emitters/environment.h
 
     # Filter header files
     include/feign/filters/recon_filter.h
@@ -217,6 +220,9 @@ add_executable(feign
     # Emitter implementation files
     src/emitters/emitter.cpp
     src/emitters/point.cpp
+    src/emitters/distant.cpp
+    src/emitters/directional.cpp
+    src/emitters/environment.cpp
 
     # Filter implementation files
     src/filters/recon_filter.cpp

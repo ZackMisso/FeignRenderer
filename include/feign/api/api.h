@@ -57,6 +57,7 @@ public:
                                    uint32_t height);
 
     // integrators
+    static void integrator_amb_occ();
     static void integrator_light_unidir();
     static void integrator_normal();
     static void integrator_path_bidir();

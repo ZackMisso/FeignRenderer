@@ -30,41 +30,69 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     Color3f result(0.f);
 
-    for (int i = 0; i < emitters.size(); ++i)
+    // TODO: create a method to sample all emitters in base integrator
+    if (!bsdf->isDelta()) // TODO: is this the best way of handling this
     {
-        EmitterQuery eqr(its.p);
+        for (int i = 0; i < emitters.size(); ++i)
+        {
+            EmitterQuery eqr(its.p);
 
-        Float* pdf = nullptr;
-        Color3f Li = emitters[i]->sample_li(eqr,
-                                            sampler->next2D(),
-                                            pdf);
+            Float* pdf = nullptr;
+            Color3f Li = emitters[i]->sample_li(eqr,
+                                                sampler->next2D(),
+                                                pdf);
+
+            BSDFQuery bqr(its.toLocal(-dir),
+                          its.toLocal(eqr.wi),
+                          its.uv,
+                          its.p);
+
+            Color3f bsdf_val = bsdf->eval(bqr);
+            float cos_term = its.s_frame.n % eqr.wi;
+
+            if (cos_term < -Epsilon) cos_term = -cos_term;
+
+            Ray3f shadow_ray(its.p,
+                             eqr.wi,
+                             Epsilon,
+                             sqrt(eqr.sqr_dist));
+
+            Intersection tmp;
+            if (!scene->intersect(shadow_ray, tmp))
+            {
+                result = result + bsdf_val * Li * cos_term;
+            }
+        }
+    }
+    else
+    {
+        // perfect specular reflections
+
+        // perform russian roulette first to save computation
+        if (sampler->next1D() > 0.95f) return Color3f(0.f);
 
         BSDFQuery bqr(its.toLocal(-dir),
-                      its.toLocal(eqr.wi),
                       its.uv,
                       its.p);
 
-        Color3f bsdf_val = bsdf->eval(bqr);
-        float cos_term = its.s_frame.n % eqr.wi;
+        Point2f sample;
+        Color3f color = bsdf->sample(bqr, sample);
 
-        if (cos_term < -Epsilon) cos_term = -cos_term;
+        if (color.is_black()) return color;
 
-        Ray3f shadow_ray(its.p,
-                         eqr.wi,
+        Ray3f reflection(its.p,
+                         its.toWorld(bqr.wo),
                          Epsilon,
-                         sqrt(eqr.sqr_dist));
+                         std::numeric_limits<Float>::infinity());
 
-        Intersection tmp;
-        if (!scene->intersect(shadow_ray, tmp))
-        {
-            result = result + bsdf_val * Li * cos_term;
-        }
+        Color3f recur = Li(scene, sampler, reflection);
+
+        return recur * 1.f / (0.95f) * color;
+
+        // TODO: add refraction
+
+        return result;
     }
-
-    // TODO: add reflect and refraction
-
-    return result;
-
 }
 
 std::string WhittedIntegrator::getName() const

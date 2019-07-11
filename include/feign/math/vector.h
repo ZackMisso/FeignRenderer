@@ -1500,6 +1500,13 @@ struct Color3 : public Vec3<T>
     Color3(T c) : Vec3<T>(c) { }
     Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
     Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+
+    bool is_black() const
+    {
+        return Vec3<T>::operator()(0) == 0.0 &&
+               Vec3<T>::operator()(1) == 0.0 &&
+               Vec3<T>::operator()(2) == 0.0;
+    }
 };
 
 template <typename T>
