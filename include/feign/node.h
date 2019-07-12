@@ -45,7 +45,7 @@ public:
 
     void printGraph(std::string indent = "") const;
 
-    virtual std::string getName() const = 0;
+    virtual std::string getName() const { return ""; };
 
     int getTag() const;
 

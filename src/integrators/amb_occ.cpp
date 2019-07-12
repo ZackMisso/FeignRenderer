@@ -29,11 +29,11 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
 
     if (!scene->intersect(ray, its))
     {
-        return Color3f(0.f);
+        return Color3f(1.f);
     }
 
     Point2f point = sampler->next2D();
-    Vector3f sample_dir = WarpSpace::squareToUniformHemisphere(point);
+    Vector3f sample_dir = WarpSpace::squareToCosineHemisphere(point);
     Float pdf = WarpSpace::squareToCosineHemispherePdf(sample_dir);
 
     Ray3f shadow_ray(its.p,
@@ -47,9 +47,26 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
-    Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
+    // Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
 
-    return Color3f(cosTerm * INV_PI / pdf);
+    if (sample_dir(2) == 0.0)
+    {
+        std::cout << "zero z" << std::endl;
+    }
+
+    // if (pdf == 0.0)
+    // {
+    //
+    // }
+
+    if (pdf == 0.0)
+    {
+        std::cout << "ZERO PDF" << std::endl;
+        std::cout << "sampled dir: " << std::endl;
+        sample_dir.info();
+    }
+
+    return Color3f(1.0);
 }
 
 std::string Ambient_Occlusion_Integrator::getName() const

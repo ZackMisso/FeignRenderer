@@ -12,6 +12,7 @@ Emitter::Emitter(Node* parent) : Node(parent)
 
 Emitter::~Emitter()
 {
+    std::cout << "deleting emitter" << std::endl;
     // TODO
 }
 

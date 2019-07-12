@@ -15,11 +15,11 @@
 
 // TODO: remove this
 // personal laptop
-// #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
+#define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
 // misc laptop
 // #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
 // workstation
-#define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
+// #define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
 // work laptop
 // #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
 
@@ -73,11 +73,8 @@ typedef imedit::Image Imagef;
 
 inline Float degToRad(Float value) { return value * (M_PI / 180.0); }
 
-// maybe move this out of common
-#if !defined(_GNU_SOURCE)
-    /// Emulate sincosf using sinf() and cosf()
-    inline void sincosf(Float theta, Float *_sin, Float *_cos) {
-        *_sin = sinf(theta);
-        *_cos = cosf(theta);
-    }
-#endif
+inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
+{
+    *_sin = sinf(theta);
+    *_cos = cosf(theta);
+}

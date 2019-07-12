@@ -3,7 +3,7 @@
         "name": "ajax_amb_occ",
         "sampler": {
             "type": "independent",
-            "sample_count": 1024
+            "sample_count": 256
         },
         "integrator": {
             "type": "amb_occ"

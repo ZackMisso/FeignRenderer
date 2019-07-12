@@ -23,6 +23,7 @@ void Clocker::initialize()
 
 void Clocker::deinitialize()
 {
+    std::cout << "deleting clocker" << std::endl;
     delete instance;
 }
 

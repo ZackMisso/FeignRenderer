@@ -7,6 +7,7 @@ Media::Media() : Node()
 
 Media::~Media()
 {
+    std::cout << "deleting media" << std::endl;
     // TODO
 }
 

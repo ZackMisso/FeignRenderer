@@ -26,7 +26,11 @@ Scene::Scene(Node* parent) : Node(parent)
 
 Scene::~Scene()
 {
+    std::cout << "deleting scene" << std::endl;
+    std::cout << "before delete root" << std::endl;
+    if (!root) std::cout << "root does not exist" << std::endl;
     delete root;
+    std::cout << "post delete root" << std::endl;
     sceneObjects.clear();
 }
 

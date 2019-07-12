@@ -4,7 +4,7 @@ Camera::Camera() : Node() { }
 
 Camera::Camera(Node* parent) : Node(parent) { }
 
-Camera::~Camera() { }
+Camera::~Camera() { std::cout << "deleting camera" << std::endl; }
 
 Vec2i Camera::getFilmSize() const
 {

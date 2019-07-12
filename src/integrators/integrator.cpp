@@ -13,7 +13,7 @@ Integrator::Integrator(Node* parent) : Node(parent)
     filter = nullptr;
 }
 
-Integrator::~Integrator() { }
+Integrator::~Integrator() { std::cout << "deleting integrator" << std::endl; }
 
 void Integrator::preProcess()
 {

@@ -20,9 +20,9 @@ Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& po
 
 Point2f WarpSpace::squareToUniformDisk(const Point2f &sample)
 {
-    Float r = std::sqrt(1-sample(1));
-    float sinPhi, cosPhi;
-    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float r = std::sqrt(sample(1));
+    Float sinPhi, cosPhi;
+    feign_sincos(2.0 * M_PI * (sample(0)), &sinPhi, &cosPhi);
 
     return Point2f(Float(cosPhi) * r, Float(sinPhi) * r);
 }
@@ -36,8 +36,8 @@ Vector3f WarpSpace::squareToUniformSphere(const Point2f &sample)
 {
     Float z = 1.0f - 2.0f * sample(1);
     Float r = std::sqrt(std::max((Float) 0.0f, 1.0f - z*z));
-    float sinPhi, cosPhi;
-    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * Float(cosPhi), r * Float(sinPhi), z);
 }
 
@@ -50,8 +50,8 @@ Vector3f WarpSpace::squareToUniformSphereCap(const Point2f &sample, Float cosThe
 {
     Float z = sample(1) + (1.f-sample(1)) * cosThetaMax;
     Float r = std::sqrt(1-z*z);
-    float sinPhi, cosPhi;
-    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * Float(cosPhi), r * Float(sinPhi), z);
 }
 
@@ -64,11 +64,11 @@ Float WarpSpace::squareToUniformSphereCapPdf(const Vector3f &v, Float cosThetaMa
 
 Vector3f WarpSpace::squareToUniformHemisphere(const Point2f &sample)
 {
-    Float cosTheta = sample(1);
+    Float cosTheta = 1.0 - sample(1); // TODO: verify this is ok
     Float sinTheta = std::sqrt(std::max((Float) 0, 1-cosTheta*cosTheta));
 
-    float sinPhi, cosPhi;
-    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Vector3f(Float(cosPhi) * sinTheta, Float(sinPhi) * sinTheta, cosTheta);
 }
@@ -81,7 +81,7 @@ Float WarpSpace::squareToUniformHemispherePdf(const Vector3f &v)
 Vector3f WarpSpace::squareToCosineHemisphere(const Point2f &sample)
 {
     Point2f p = squareToUniformDisk(sample);
-    Float z = std::sqrt(std::max((Float) 0, 1.0f - p(0)*p(0) - p(1)*p(1)));
+    Float z = std::sqrt(std::max((Float) 0, 1.0 - p(0)*p(0) - p(1)*p(1)));
 
     return Vector3f(p(0), p(1), z);
 }
@@ -96,8 +96,8 @@ Vector3f WarpSpace::squareToCosinePowerHemisphere(const Point2f &sample, Float n
     Float cosTheta  = std::pow(sample(1), 1.0f / (n + 1.0f));
     Float sinTheta  = std::sqrt(std::max((Float) 0.0f, 1.0f - cosTheta * cosTheta));
 
-    float sinPhi, cosPhi;
-    sincosf(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
+    Float sinPhi, cosPhi;
+    feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
 
     return Vector3f(Float(cosPhi) * sinTheta, Float(sinPhi) * sinTheta, cosTheta);
 }

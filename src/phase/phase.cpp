@@ -7,6 +7,7 @@ PhaseFunction::PhaseFunction()
 
 PhaseFunction::~PhaseFunction()
 {
+    std::cout << "deleting phase" << std::endl;
     // TODO
 }
 

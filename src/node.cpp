@@ -15,12 +15,13 @@ Node::Node(Node* parent) : parent(parent)
 Node::~Node()
 {
     std::cout << "clearing " << std::endl;
+    // printGraph();
     for (int i = 0; i < children.size(); ++i)
     {
-        delete children[i];
+        if (children[i]) delete children[i];
     }
     children.clear();
-    std::cout << "cleared" << std::endl;
+    std::cout << "cleared " << std::endl;
     parent = nullptr;
 }
 

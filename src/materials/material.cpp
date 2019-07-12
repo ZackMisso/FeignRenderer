@@ -7,5 +7,6 @@ Material::Material()
 
 Material::~Material()
 {
-    if (bsdf) delete bsdf;
+    std::cout << "deleting material" << std::endl;
+    // if (bsdf) delete bsdf;
 }

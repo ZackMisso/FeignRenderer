@@ -29,6 +29,7 @@ BSDF::BSDF(Node* parent) : Node(parent) { }
 
 BSDF::~BSDF()
 {
+    std::cout << "deleting bsdf" << std::endl;
     // does nothing
 }
 

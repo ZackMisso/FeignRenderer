@@ -12,6 +12,7 @@ WorldNode::WorldNode(Node* parent) : Node(parent)
 
 WorldNode::~WorldNode()
 {
+    std::cout << "world deconstructor" << std::endl;
     // does nothing for now
 }
 

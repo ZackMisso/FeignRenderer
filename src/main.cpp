@@ -22,9 +22,9 @@ void run_scene(std::string scene)
 // these are all the base debug scenes
 void run_all_scenes()
 {
-    run_scene("generated/ajax-amb_occ");
     run_scene("generated/ajax-normals");
     run_scene("generated/ajax-diffuse");
+    run_scene("generated/ajax-amb_occ");
 }
 
 int main(int argc, char* argv[]) {

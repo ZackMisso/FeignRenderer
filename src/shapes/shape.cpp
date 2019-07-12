@@ -12,6 +12,7 @@ Shape::Shape(Node* parent) : Node(parent)
 
 Shape::~Shape()
 {
+    std::cout << "deleting shape" << std::endl;
     delete material;
 }
 
