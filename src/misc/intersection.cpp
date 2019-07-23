@@ -11,3 +11,13 @@ Vector3f Intersection::toWorld(const Vector3f& vec) const
 {
     return s_frame.toWorld(vec);
 }
+
+Vector3f Intersection::toLocalGeom(const Vector3f& vec) const
+{
+    return g_frame.toLocal(vec);
+}
+
+Vector3f Intersection::toWorldGeom(const Vector3f& vec) const
+{
+    return g_frame.toWorld(vec);
+}

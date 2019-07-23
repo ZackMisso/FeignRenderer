@@ -60,7 +60,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
             Intersection tmp;
             if (!scene->intersect(shadow_ray, tmp))
             {
-                result = result + bsdf_val * Li * cos_term;
+                result += bsdf_val * Li * cos_term;
             }
         }
     }
@@ -90,9 +90,9 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         return recur * 1.f / (0.95f) * color;
 
         // TODO: add refraction
-
-        return result;
     }
+
+    return result;
 }
 
 std::string WhittedIntegrator::getName() const

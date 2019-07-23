@@ -1,0 +1,99 @@
+{
+    "scene": {
+        "name": "cbox_whitted",
+        "sampler": {
+            "type": "independent",
+            "sample_count": 512
+        },
+        "integrator": {
+            "type": "whitted"
+        },
+        "camera": {
+            "type": "perspective",
+            "lookat": [
+                0.0,
+                0.919769,
+                5.41159,
+                0.0,
+                0.893051,
+                4.41198,
+                0.0,
+                1.0,
+                0.0
+            ],
+            "fov": 27.7856,
+            "width": 600,
+            "height": 800
+        },
+        "object": {
+            "filename": "../scenes/meshes/walls.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "diffuse",
+                "albedo": [
+                    0.725,
+                    0.71,
+                    0.68
+                ]
+            }
+        },
+        "object": {
+            "filename": "../scenes/meshes/rightwall.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "diffuse",
+                "albedo": [
+                    0.161,
+                    0.133,
+                    0.427
+                ]
+            }
+        },
+        "object": {
+            "filename": "../scenes/meshes/leftwall.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "diffuse",
+                "albedo": [
+                    0.63,
+                    0.065,
+                    0.05
+                ]
+            }
+        },
+        "object": {
+            "filename": "../scenes/meshes/sphere1.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "mirror"
+            }
+        },
+        "object": {
+            "filename": "../scenes/meshes/sphere2.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "mirror"
+            }
+        },
+        "object": {
+            "filename": "../scenes/meshes/ajax.obj",
+            "type": "mesh",
+            "bsdf": {
+                "type": "diffuse"
+            }
+        },
+        "emitter": {
+            "type": "point",
+            "I": [
+                20.0,
+                20.0,
+                20.0
+            ],
+            "pos": [
+                0.0,
+                1.0,
+                1.0
+            ]
+        }
+    }
+}

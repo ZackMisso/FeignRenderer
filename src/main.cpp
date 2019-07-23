@@ -27,12 +27,13 @@ void run_all_scenes()
     run_scene("generated/ajax-amb_occ");
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
     std::string scene = "ajax-normals-generated";
-    // scene = "generated/ajax-diffuse";
-    scene = "generated/ajax-amb_occ";
+    scene = "generated/ajax-diffuse";
+    // scene = "generated/ajax-amb_occ";
 
     for (int i = 1; i < argc; ++i)
     {

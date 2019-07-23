@@ -472,4 +472,121 @@ public:
         output << str << std::endl;
         output.close();
     }
+
+    static void create_sphere_direct()
+    {
+        rapidjson::Document document;
+        document.SetObject();
+
+        rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+        rapidjson::Value scene(rapidjson::kObjectType);
+        {
+            scene.AddMember("name", "sphere_direct", allocator);
+
+            rapidjson::Value sampler(rapidjson::kObjectType);
+            {
+                sampler.AddMember("type", "independent", allocator);
+                sampler.AddMember("sample_count", 256, allocator);
+                scene.AddMember("sampler", sampler, allocator);
+            }
+
+            rapidjson::Value integrator(rapidjson::kObjectType);
+            {
+                integrator.AddMember("type", "direct", allocator);
+                scene.AddMember("integrator", integrator, allocator);
+            }
+
+            rapidjson::Value emitter(rapidjson::kObjectType);
+            {
+                point_one.AddMember("type", "distant", allocator);
+                rapidjson::Value radiance(rapidjson::kArrayType);
+                {
+                    radiance.PushBack(20.0, allocator).PushBack(20.0, allocator).PushBack(20.0, allocator);
+                }
+                emitter.AddMember("radiance", radiance, allocator);
+                emitter.AddMember("thetaA", value = 180, allocator);
+                scene.AddMember("emitter", emitter, allocator);
+            }
+
+            rapidjson::Value camera(rapidjson::kObjectType);
+            {
+                camera.AddMember("type", "perspective", allocator);
+
+                rapidjson::Value array(rapidjson::kArrayType);
+                array.PushBack(5.0, allocator).PushBack(5.0, allocator).PushBack(1.0, allocator);
+                array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator);
+                array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(1.0, allocator);
+                camera.AddMember("lookat", array, allocator);
+
+                camera.AddMember("fov", 40.0, allocator);
+                camera.AddMember("width", 512, allocator);
+                camera.AddMember("height", 512, allocator);
+                scene.AddMember("camera", camera, allocator);
+            }
+
+            rapidjson::Value sphere(rapidjson::kObjectType);
+            {
+                sphere.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere.AddMember("type", "mesh", allocator);
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(1.0).PushBack(1.0).PushBack(1.0);
+                    }
+                    bsdf.AddMember("albedo", albedo, allocator);
+                    sphere.AddMember("bsdf", bsdf, allocator);
+                }
+                scene.AddMember("object", sphere, allocator);
+            }
+
+            rapidjson::Value floor(rapidjson::kObjectType);
+            {
+                floor.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(1.0).PushBack(1.0).PushBack(1.0);
+                    }
+                    bsdf.AddMember("albedo", albedo, allocator);
+                    floor.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    scale_array.PushBack(10.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                    transform.AddMember("scale", scale_array, allocator);
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    rotate_array.PushBack(90.0, allocator).PushBack(1.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator);
+                    transform.AddMember("rotate", rotate_array, allocator);
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    translate_array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(-1.0, allocator);
+                    transform.AddMember("translate", translate_array, allocator);
+                    floor.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", floor, allocator);
+            }
+
+            document.AddMember("scene", scene, allocator);
+        }
+
+        rapidjson::StringBuffer sb;
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+        document.Accept(writer);
+
+        std::string str = sb.GetString();
+
+        std::ofstream output;
+        output.open("../scenes/generated/sphere_direct.json");
+        output << str << std::endl;
+        output.close();
+    }
 };

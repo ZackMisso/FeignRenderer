@@ -29,7 +29,7 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
 
     if (!scene->intersect(ray, its))
     {
-        return Color3f(1.f);
+        return Color3f(0.f);
     }
 
     Point2f point = sampler->next2D();
@@ -37,36 +37,36 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
     Float pdf = WarpSpace::squareToCosineHemispherePdf(sample_dir);
 
     Ray3f shadow_ray(its.p,
-                     its.toWorld(sample_dir),
+                     its.toWorldGeom(sample_dir),
                      Epsilon,
                      std::numeric_limits<Float>::infinity());
 
     Intersection shadow_its;
-    if (scene->intersect(shadow_ray, shadow_its))
+    if (!scene->intersect(shadow_ray, shadow_its))
     {
-        return Color3f(0.f);
+        return Color3f(1.f);
     }
 
-    // Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
-
-    if (sample_dir(2) == 0.0)
-    {
-        std::cout << "zero z" << std::endl;
-    }
-
+    // // Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
+    //
+    // if (sample_dir(2) == 0.0)
+    // {
+    //     std::cout << "zero z" << std::endl;
+    // }
+    //
+    // // if (pdf == 0.0)
+    // // {
+    // //
+    // // }
+    //
     // if (pdf == 0.0)
     // {
-    //
+    //     std::cout << "ZERO PDF" << std::endl;
+    //     std::cout << "sampled dir: " << std::endl;
+    //     sample_dir.info();
     // }
 
-    if (pdf == 0.0)
-    {
-        std::cout << "ZERO PDF" << std::endl;
-        std::cout << "sampled dir: " << std::endl;
-        sample_dir.info();
-    }
-
-    return Color3f(1.0);
+    return Color3f(0.0);
 }
 
 std::string Ambient_Occlusion_Integrator::getName() const

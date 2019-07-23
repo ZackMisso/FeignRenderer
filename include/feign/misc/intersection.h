@@ -22,4 +22,7 @@ struct Intersection
 
     Vector3f toLocal(const Vector3f& vec) const;
     Vector3f toWorld(const Vector3f& vec) const;
+
+    Vector3f toLocalGeom(const Vector3f& vec) const;
+    Vector3f toWorldGeom(const Vector3f& vec) const;
 };
