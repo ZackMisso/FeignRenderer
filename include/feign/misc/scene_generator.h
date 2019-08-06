@@ -534,7 +534,7 @@ public:
                     bsdf.AddMember("type", "diffuse", allocator);
                     rapidjson::Value albedo(rapidjson::kArrayType);
                     {
-                        albedo.PushBack(1.0).PushBack(1.0).PushBack(1.0);
+                        albedo.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
                     }
                     bsdf.AddMember("albedo", albedo, allocator);
                     sphere.AddMember("bsdf", bsdf, allocator);
