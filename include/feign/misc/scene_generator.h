@@ -499,13 +499,13 @@ public:
 
             rapidjson::Value emitter(rapidjson::kObjectType);
             {
-                point_one.AddMember("type", "distant", allocator);
+                emitter.AddMember("type", "distant", allocator);
                 rapidjson::Value radiance(rapidjson::kArrayType);
                 {
                     radiance.PushBack(20.0, allocator).PushBack(20.0, allocator).PushBack(20.0, allocator);
                 }
                 emitter.AddMember("radiance", radiance, allocator);
-                emitter.AddMember("thetaA", value = 180, allocator);
+                emitter.AddMember("thetaA", 180, allocator);
                 scene.AddMember("emitter", emitter, allocator);
             }
 
@@ -545,13 +545,14 @@ public:
             rapidjson::Value floor(rapidjson::kObjectType);
             {
                 floor.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                floor.AddMember("type", "mesh", allocator);
 
                 rapidjson::Value bsdf(rapidjson::kObjectType);
                 {
                     bsdf.AddMember("type", "diffuse", allocator);
                     rapidjson::Value albedo(rapidjson::kArrayType);
                     {
-                        albedo.PushBack(1.0).PushBack(1.0).PushBack(1.0);
+                        albedo.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
                     }
                     bsdf.AddMember("albedo", albedo, allocator);
                     floor.AddMember("bsdf", bsdf, allocator);
@@ -586,6 +587,778 @@ public:
 
         std::ofstream output;
         output.open("../scenes/generated/sphere_direct.json");
+        output << str << std::endl;
+        output.close();
+    }
+
+    static void create_spherical()
+    {
+        rapidjson::Document document;
+        document.SetObject();
+
+        rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+        rapidjson::Value scene(rapidjson::kObjectType);
+        {
+            scene.AddMember("name", "spherical", allocator);
+
+            rapidjson::Value sampler(rapidjson::kObjectType);
+            {
+                sampler.AddMember("type", "independent", allocator);
+                sampler.AddMember("sampler_count", 256, allocator);
+                scene.AddMember("sampler", sampler, allocator);
+            }
+
+            rapidjson::Value integrator(rapidjson::kObjectType);
+            {
+                integrator.AddMember("type", "path", allocator);
+                scene.AddMember("integrator", integrator, allocator);
+            }
+
+            rapidjson::Value camera(rapidjson::kObjectType);
+            {
+                camera.AddMember("type", "perspective", allocator);
+
+                rapidjson::Value array(rapidjson::kArrayType);
+                array.PushBack(8.0, allocator).PushBack(8.0, allocator).PushBack(0.4, allocator); // origin
+                array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(1.0, allocator); // target
+                array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(1.0, allocator); // up
+                camera.AddMember("lookat", array, allocator);
+
+                camera.AddMember("fov", 70.0, allocator);
+                camera.AddMember("width", 1920, allocator);
+                camera.AddMember("height", 1200, allocator);
+                scene.AddMember("camera", camera, allocator);
+            }
+
+            rapidjson::Value sphere_1(rapidjson::kObjectType);
+            {
+                sphere_1.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere_1.AddMember("type", "mesh", allocator);
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "dielectric", allocator);
+                    sphere_1.AddMember("bsdf", bsdf, allocator);
+                }
+                scene.AddMember("object", sphere_1, allocator);
+            }
+
+            rapidjson::Value sphere_2(rapidjson::kObjectType);
+            {
+                sphere_2.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere_2.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(3.75, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    sphere_2.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "blinn", allocator);
+                    bsdf.AddMember("ks", 0.3, allocator);
+                    rapidjson::Value kd(rapidjson::kArrayType);
+                    {
+                        kd.PushBack(0.175, allocator).PushBack(0.225, allocator).PushBack(0.325, allocator);
+                        bsdf.AddMember("kd", kd, allocator);
+                    }
+                    bsdf.AddMember("e", 100.0, allocator);
+                    sphere_2.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", sphere_2, allocator);
+            }
+
+            rapidjson::Value sphere_3(rapidjson::kObjectType);
+            {
+                sphere_3.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere_3.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(0.0, allocator).PushBack(3.75, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    sphere_3.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "blinn", allocator);
+                    bsdf.AddMember("ks", 0.3, allocator);
+                    rapidjson::Value kd(rapidjson::kArrayType);
+                    {
+                        kd.PushBack(0.35, allocator).PushBack(0.4, allocator).PushBack(0.3, allocator);
+                        bsdf.AddMember("kd", kd, allocator);
+                    }
+                    bsdf.AddMember("e", 100.0, allocator);
+                    sphere_3.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", sphere_3, allocator);
+            }
+
+            rapidjson::Value sphere_4(rapidjson::kObjectType);
+            {
+                sphere_4.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere_4.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(2.0, allocator).PushBack(2.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(2.0, allocator).PushBack(-6.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    sphere_4.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "dielectric", allocator);
+                    sphere_4.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", sphere_4, allocator);
+            }
+
+            rapidjson::Value sphere_5(rapidjson::kObjectType);
+            {
+                sphere_5.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                sphere_5.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(2.0, allocator).PushBack(2.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-6.0, allocator).PushBack(2.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    sphere_5.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "dielectric", allocator);
+                    sphere_5.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", sphere_5, allocator);
+            }
+
+            rapidjson::Value floor(rapidjson::kObjectType);
+            {
+                floor.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                floor.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "dielectric", allocator);
+                    floor.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(10.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(90.0, allocator).PushBack(1.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(-1.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    floor.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", floor, allocator);
+            }
+
+            rapidjson::Value ceiling(rapidjson::kObjectType);
+            {
+                ceiling.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                ceiling.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "mirror", allocator);
+                    ceiling.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(10.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(270.0, allocator).PushBack(1.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(8.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    ceiling.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", ceiling, allocator);
+            }
+
+            rapidjson::Value wall_1(rapidjson::kObjectType);
+            {
+                wall_1.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                wall_1.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "mirror", allocator);
+                    wall_1.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(7.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(90.0, allocator).PushBack(0.0, allocator).PushBack(1.0, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(0.0, allocator).PushBack(-10.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    wall_1.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", wall_1, allocator);
+            }
+
+            rapidjson::Value wall_2(rapidjson::kObjectType);
+            {
+                wall_2.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                wall_2.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "mirror", allocator);
+                    wall_2.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(7.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(90.0, allocator).PushBack(0.0, allocator).PushBack(1.0, allocator).PushBack(0.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(0.0, allocator).PushBack(10.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    wall_2.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", wall_2, allocator);
+            }
+
+            rapidjson::Value wall_3(rapidjson::kObjectType);
+            {
+                wall_3.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                wall_3.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "mirror", allocator);
+                    wall_3.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(7.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(-90.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(-1.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(10.0, allocator).PushBack(0.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    wall_3.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", wall_3, allocator);
+            }
+
+            rapidjson::Value wall_4(rapidjson::kObjectType);
+            {
+                wall_4.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+                wall_4.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "mirror", allocator);
+                    wall_4.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(7.0, allocator).PushBack(1.0, allocator).PushBack(10.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value rotate_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(-90.0, allocator).PushBack(0.0, allocator).PushBack(0.0, allocator).PushBack(-1.0, allocator);
+                        transform.AddMember("rotate", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-10.0, allocator).PushBack(0.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    wall_4.AddMember("transform", transform, allocator);
+                }
+
+                scene.AddMember("object", wall_4, allocator);
+            }
+
+            rapidjson::Value holder_1(rapidjson::kObjectType);
+            {
+                holder_1.AddMember("filename", "../scenes/meshes/cube.obj", allocator);
+                holder_1.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(2.0, allocator).PushBack(2.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(8.0, allocator).PushBack(-8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    holder_1.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    holder_1.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", holder_1, allocator);
+            }
+
+            rapidjson::Value light_1(rapidjson::kObjectType);
+            {
+                light_1.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                light_1.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(8.0, allocator).PushBack(-8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    light_1.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    light_1.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value emitter(rapidjson::kArrayType);
+                {
+                    emitter.AddMember("type", "area", allocator);
+
+                    rapidjson::Value radiance(rapidjson::kArrayType);
+                    {
+                        radiance.PushBack(0.0, allocator).PushBack(4.0, allocator).PushBack(4.0, allocator);
+                        emitter.AddMember("radiance", radiance, allocator);
+                    }
+
+                    light_1.AddMember("emitter", emitter, allocator);
+                }
+
+                scene.AddMember("object", light_1, allocator);
+            }
+
+            rapidjson::Value holder_2(rapidjson::kObjectType);
+            {
+                holder_2.AddMember("filename", "../scenes/meshes/cube.obj", allocator);
+                holder_2.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(2.0, allocator).PushBack(2.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-8.0, allocator).PushBack(8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    holder_2.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    holder_2.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", holder_2, allocator);
+            }
+
+            rapidjson::Value light_2(rapidjson::kObjectType);
+            {
+                light_2.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                light_2.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-8.0, allocator).PushBack(8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    light_2.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    light_2.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value emitter(rapidjson::kArrayType);
+                {
+                    emitter.AddMember("type", "area", allocator);
+
+                    rapidjson::Value radiance(rapidjson::kArrayType);
+                    {
+                        radiance.PushBack(4.0, allocator).PushBack(4.0, allocator).PushBack(0.0, allocator);
+                        emitter.AddMember("radiance", radiance, allocator);
+                    }
+
+                    light_2.AddMember("emitter", emitter, allocator);
+                }
+
+                scene.AddMember("object", light_2, allocator);
+            }
+
+            rapidjson::Value holder_3(rapidjson::kObjectType);
+            {
+                holder_3.AddMember("filename", "../scenes/meshes/cube.obj", allocator);
+                holder_3.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(2.0, allocator).PushBack(2.0, allocator).PushBack(6.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-8.0, allocator).PushBack(-8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    holder_3.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    holder_3.AddMember("bsdf", bsdf, allocator);
+                }
+
+                scene.AddMember("object", holder_3, allocator);
+            }
+
+            rapidjson::Value light_3(rapidjson::kObjectType);
+            {
+                light_3.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                light_3.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(1.0, allocator).PushBack(1.0, allocator).PushBack(1.0, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-8.0, allocator).PushBack(-8.0, allocator).PushBack(2.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    light_3.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    light_3.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value emitter(rapidjson::kArrayType);
+                {
+                    emitter.AddMember("type", "area", allocator);
+
+                    rapidjson::Value radiance(rapidjson::kArrayType);
+                    {
+                        radiance.PushBack(4.0, allocator).PushBack(4.0, allocator).PushBack(4.0, allocator);
+                        emitter.AddMember("radiance", radiance, allocator);
+                    }
+
+                    light_3.AddMember("emitter", emitter, allocator);
+                }
+
+                scene.AddMember("object", light_3, allocator);
+            }
+
+            rapidjson::Value light_4(rapidjson::kObjectType);
+            {
+                light_4.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                light_4.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(5.0, allocator).PushBack(0.1, allocator).PushBack(0.1, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(3.0, allocator).PushBack(-8.6, allocator).PushBack(13.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    light_4.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    light_4.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value emitter(rapidjson::kArrayType);
+                {
+                    emitter.AddMember("type", "area", allocator);
+
+                    rapidjson::Value radiance(rapidjson::kArrayType);
+                    {
+                        radiance.PushBack(0.0, allocator).PushBack(2.0, allocator).PushBack(0.0, allocator);
+                        emitter.AddMember("radiance", radiance, allocator);
+                    }
+
+                    light_4.AddMember("emitter", emitter, allocator);
+                }
+
+                scene.AddMember("object", light_4, allocator);
+            }
+
+            rapidjson::Value light_5(rapidjson::kObjectType);
+            {
+                light_5.AddMember("filename", "../scenes/meshes/sphere1.obj", allocator);
+                light_5.AddMember("type", "mesh", allocator);
+
+                rapidjson::Value transform(rapidjson::kObjectType);
+                {
+                    transform.AddMember("name", "toWorld", allocator);
+                    rapidjson::Value scale_array(rapidjson::kArrayType);
+                    {
+                        scale_array.PushBack(0.1, allocator).PushBack(5.0, allocator).PushBack(0.1, allocator);
+                        transform.AddMember("scale", scale_array, allocator);
+                    }
+                    rapidjson::Value translate_array(rapidjson::kArrayType);
+                    {
+                        translate_array.PushBack(-8.6, allocator).PushBack(-3.0, allocator).PushBack(13.0, allocator);
+                        transform.AddMember("translate", translate_array, allocator);
+                    }
+                    light_5.AddMember("transform", transform, allocator);
+                }
+
+                rapidjson::Value bsdf(rapidjson::kObjectType);
+                {
+                    bsdf.AddMember("type", "diffuse", allocator);
+
+                    rapidjson::Value albedo(rapidjson::kArrayType);
+                    {
+                        albedo.PushBack(0.2, allocator).PushBack(0.2, allocator).PushBack(0.2, allocator);
+                        bsdf.AddMember("albedo", albedo, allocator);
+                    }
+
+                    light_5.AddMember("bsdf", bsdf, allocator);
+                }
+
+                rapidjson::Value emitter(rapidjson::kArrayType);
+                {
+                    emitter.AddMember("type", "area", allocator);
+
+                    rapidjson::Value radiance(rapidjson::kArrayType);
+                    {
+                        radiance.PushBack(0.0, allocator).PushBack(2.0, allocator).PushBack(0.0, allocator);
+                        emitter.AddMember("radiance", radiance, allocator);
+                    }
+
+                    light_5.AddMember("emitter", emitter, allocator);
+                }
+
+                scene.AddMember("object", light_5, allocator);
+            }
+
+            document.AddMember("scene", scene, allocator);
+        }
+
+        rapidjson::StringBuffer sb;
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+        document.Accept(writer);
+
+        std::string str = sb.GetString();
+
+        std::ofstream output;
+        output.open("../scenes/generated/spherical.json");
         output << str << std::endl;
         output.close();
     }
