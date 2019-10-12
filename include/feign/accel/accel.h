@@ -1,3 +1,11 @@
+/**
+ * Author:    Zackary Misso
+ * Last Edited:   10.12.2019
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #pragma once
 
 #include <feign/node.h>
@@ -14,7 +22,7 @@ public:
     virtual void clear() = 0;
     virtual void build() = 0;
     virtual void addShape(Shape* mesh) = 0;
-    
+
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
 
     virtual std::string getName() const;

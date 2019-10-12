@@ -1,3 +1,11 @@
+/**
+ * Author:    Zackary Misso
+ * Last Edited:   10.12.2019
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author.
+ **/
+
 #include <tests/json_test.h>
 
 #include <rapidjson/document.h>     // rapidjson's DOM-style API

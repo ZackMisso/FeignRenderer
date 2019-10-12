@@ -1,4 +1,12 @@
-// This code is based off of Wenzel Jakob's Nori ray tracer
+/**
+ * Author:    Zackary Misso
+ * Last Edited:   10.12.2019
+ *
+ * Based off of Wenzel Jakob's Nori ray tracer
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
 
 #include <feign/shapes/objmesh.h>
 #include <fstream>

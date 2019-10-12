@@ -1,8 +1,16 @@
+/**
+ * Author:    Zackary Misso
+ * Last Edited:   10.12.2019
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author.
+ **/
+
 #include <feign/parser/json_parser.h>
 #include <feign/api/api.h>
 
-#include <rapidjson/document.h>     // rapidjson's DOM-style API
-#include <rapidjson/prettywriter.h> // for stringify JSON
+#include <rapidjson/document.h>
+#include <rapidjson/prettywriter.h>
 #include <rapidjson/filereadstream.h>
 
 #include <cstdio>
