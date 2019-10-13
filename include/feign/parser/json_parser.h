@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <feign/misc/world.h>
+#include <feign/scene.h>
 #include <rapidjson/document.h>
 
 // the idea behind the parsers is to keep them from having any information
@@ -35,5 +35,5 @@ public:
 
     static void parseScene(const rapidjson::Value& value);
 
-    static WorldNode* parse(std::string filename);
+    static Scene* parse(std::string filename);
 };

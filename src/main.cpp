@@ -8,13 +8,15 @@
 
 #include <iostream>
 #include <feign/parser/json_parser.h>
-#include <feign/misc/world.h>
+#include <feign/scene.h>
 #include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 
-void run_scene(std::string scene)
+void run_scene(std::string scene_name)
 {
-    WorldNode* world = JsonParser::parse(SCENES_PATH + scene + ".json");
+    // TODO: disallow direct access to the parser and instead render
+    //       through the api function calls
+    Scene* scene = JsonParser::parse(SCENES_PATH + scene_name + ".json");
 
     // std::cout << std::endl;
     // std::cout << "New World Graph Description:" << std::endl;
@@ -22,9 +24,11 @@ void run_scene(std::string scene)
     // world->printGraph();
     // std::cout << std::endl;
 
-    world->renderAllScenes();
+    scene->renderScene();
 
-    delete world;
+    // world->renderAllScenes();
+
+    delete scene;
 }
 
 // these are all the base debug scenes

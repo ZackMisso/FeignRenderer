@@ -126,13 +126,7 @@ add_executable(feign
     include/feign/filters/gauss_filter.h
 
     # Integrator header files
-    include/feign/integrators/amb_occ.h
     include/feign/integrators/integrator.h
-    include/feign/integrators/normal.h
-    include/feign/integrators/light_unidir.h
-    include/feign/integrators/path_bidir.h
-    include/feign/integrators/path_unidir.h
-    include/feign/integrators/whitted.h
 
     # Logger header files
     include/feign/log/logger.h
@@ -158,7 +152,6 @@ add_executable(feign
     include/feign/media/trans_ests/trans_est.h
 
     # Misc header files
-    include/feign/misc/world.h
     include/feign/misc/intersection.h
     include/feign/misc/embree_util.h
     include/feign/misc/scene_generator.h
@@ -258,7 +251,6 @@ add_executable(feign
     # Media Transmittance Estimator implementation files
 
     # Misc implementation files
-    src/misc/world.cpp
     src/misc/intersection.cpp
 
     # Parser implementation files

@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/amb_occ.h>
+#include <feign/integrators/integrator.h>
 #include <feign/math/warp.h>
 #include <feign/scene.h>
 

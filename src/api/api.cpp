@@ -23,12 +23,7 @@
 #include <feign/filters/gauss_filter.h>
 
 // integrators
-#include <feign/integrators/amb_occ.h>
-#include <feign/integrators/light_unidir.h>
-#include <feign/integrators/normal.h>
-#include <feign/integrators/path_bidir.h>
-#include <feign/integrators/path_unidir.h>
-#include <feign/integrators/whitted.h>
+#include <feign/integrators/integrator.h>
 
 // materials
 #include <feign/materials/material.h>
@@ -53,7 +48,6 @@
 // scenes
 #include <feign/scene.h>
 
-WorldNode* FeignRenderer::world = nullptr;
 std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
 Node* FeignRenderer::current_node = nullptr;
 Scene* FeignRenderer::current_scene = nullptr;
@@ -61,10 +55,10 @@ Transform FeignRenderer::current_transform = Transform();
 
 void FeignRenderer::begin_world()
 {
-    // Note: this method will never delete the old world
-    if (world) world = nullptr;
-    world = new WorldNode();
-    current_node = world;
+    // Note: this method will never delete the old scene
+    if (current_scene) current_scene = nullptr;
+    current_scene = nullptr;
+    current_node = nullptr;
     current_transform = Transform();
     transform_stack.clear();
 }
@@ -72,11 +66,12 @@ void FeignRenderer::begin_world()
 void FeignRenderer::begin_scene(const std::string& name)
 {
     assert(!current_scene);
+    assert(!current_node);
 
     transform_stack.push_back(current_transform);
     Scene* scene = new Scene(current_node);
-    scene->setSceneName(name);
-    current_node->addChild(scene);
+    scene->sceneName = name;
+
     current_node = scene;
     current_scene = scene;
 }
@@ -100,17 +95,16 @@ void FeignRenderer::begin_obj(const std::string& filename,
                         flip_norms);
 }
 
-WorldNode* FeignRenderer::end_world()
+Scene* FeignRenderer::end_world()
 {
-    assert(world);
+    assert(current_scene);
 
-    world->preProcess();
+    current_scene->preProcess();
 
-    WorldNode* tmp = world;
+    Scene* tmp = current_scene;
 
     current_node = nullptr;
     current_scene = nullptr;
-    world = nullptr;
 
     return tmp;
 }
@@ -192,159 +186,64 @@ void FeignRenderer::camera_perspective(Vec3f ori,
     current_transform = transform_stack[transform_stack.size()-1];
     transform_stack.pop_back();
 
-    if (current_scene->getCamera())
+    if (current_scene->camera)
     {
-        delete current_scene->getCamera();
+        delete current_scene->camera;
     }
 
-    current_scene->setCamera(perspective);
+    current_scene->camera = perspective;
     current_scene->addChild(perspective);
 }
 
-void FeignRenderer::integrator_amb_occ()
+void FeignRenderer::integrator(std::string integrator_type)
 {
     assert(current_scene);
 
-    Ambient_Occlusion_Integrator* integrator = new Ambient_Occlusion_Integrator(current_scene);
+    Integrator* integrator;
 
-    if (current_scene->getIntegrator())
-    {
-        delete current_scene->getIntegrator();
-    }
+    if (integrator_type == "amb_occ")           integrator = new Ambient_Occlusion_Integrator(current_scene);
+    else if (integrator_type == "light_unidir") integrator = new Light_Unidirectional_Integrator(current_scene);
+    else if (integrator_type == "normal")       integrator = new NormalIntegrator(current_scene);
+    else if (integrator_type == "path_bidir")   integrator = new Path_Bidirectional_Integrator(current_scene);
+    else if (integrator_type == "path_unidir")  integrator = new Path_Unidirectional_Integrator(current_scene);
+    else if (integrator_type == "whitted")      integrator = new WhittedIntegrator(current_scene);
+    else assert(false);
 
-    current_scene->setIntegrator(integrator);
+    if (current_scene->integrator) delete current_scene->integrator;
+
+    current_scene->integrator = integrator;
     current_scene->addChild(integrator);
 }
 
-void FeignRenderer::integrator_light_unidir()
+void FeignRenderer::sampler(std::string sampler_type,
+                            uint32_t sample_cnt,
+                            uint32_t seed)
 {
     assert(current_scene);
 
-    Light_Unidirectional_Integrator* integrator = new Light_Unidirectional_Integrator(current_scene);
+    Sampler* sampler;
 
-    if (current_scene->getIntegrator())
+    if (sampler_type == "independent")
     {
-        delete current_scene->getIntegrator();
+        sampler = new Independent(current_scene,
+                                  seed,
+                                  sample_cnt);
     }
-
-    current_scene->setIntegrator(integrator);
-    current_scene->addChild(integrator);
-}
-
-void FeignRenderer::integrator_normal()
-{
-    assert(current_scene);
-
-    NormalIntegrator* integrator = new NormalIntegrator(current_scene);
-
-    if (current_scene->getIntegrator())
+    else if (sampler_type == "halton")
     {
-        delete current_scene->getIntegrator();
+        sampler = new Halton(current_scene,
+                             seed,
+                             sample_cnt);
     }
-
-    current_scene->setIntegrator(integrator);
-    current_scene->addChild(integrator);
-}
-
-void FeignRenderer::integrator_path_bidir()
-{
-    assert(current_scene);
-
-    Path_Bidirectional_Integrator* integrator = new Path_Bidirectional_Integrator(current_scene);
-
-    if (current_scene->getIntegrator())
+    else if (sampler_type == "latin")
     {
-        delete current_scene->getIntegrator();
+        sampler = new Latin(current_scene,
+                            seed,
+                            sample_cnt);
     }
+    else assert(false);
 
-    current_scene->setIntegrator(integrator);
-    current_scene->addChild(integrator);
-}
-
-void FeignRenderer::integrator_path_unidir()
-{
-    assert(current_scene);
-
-    Path_Unidirectional_Integrator* integrator = new Path_Unidirectional_Integrator(current_scene);
-
-    if (current_scene->getIntegrator())
-    {
-        delete current_scene->getIntegrator();
-    }
-
-    current_scene->setIntegrator(integrator);
-    current_scene->addChild(integrator);
-}
-
-void FeignRenderer::integrator_whitted()
-{
-    assert(current_scene);
-
-    WhittedIntegrator* integrator = new WhittedIntegrator(current_scene);
-
-    if (current_scene->getIntegrator())
-    {
-        delete current_scene->getIntegrator();
-    }
-
-    current_scene->setIntegrator(integrator);
-    current_scene->addChild(integrator);
-}
-
-void FeignRenderer::sampler_independent(uint32_t sample_cnt, uint32_t seed)
-{
-    assert(current_scene);
-
-    // std::cout << "asserted" << std::endl;
-
-    Independent* sampler = new Independent(current_scene,
-                                           seed,
-                                           sample_cnt);
-
-    // std::cout << "getting sampler" << std::endl;
-
-    if (current_scene->getSampler())
-    {
-        delete current_scene->getSampler();
-    }
-
-    // std::cout << "booyah" << std::endl;
-
-    current_scene->setSampler(sampler);
-    current_scene->addChild(sampler);
-}
-
-void FeignRenderer::sampler_halton(uint32_t sample_cnt, uint32_t seed)
-{
-    assert(current_scene);
-
-    Halton* sampler = new Halton(current_scene,
-                                 seed,
-                                 sample_cnt);
-
-    if (current_scene->getSampler())
-    {
-        delete current_scene->getSampler();
-    }
-
-    current_scene->setSampler(sampler);
-    current_scene->addChild(sampler);
-}
-
-void FeignRenderer::sampler_latin(uint32_t sample_cnt, uint32_t seed)
-{
-    assert(current_scene);
-
-    Latin* sampler = new Latin(current_scene,
-                               seed,
-                               sample_cnt);
-
-    if (current_scene->getSampler())
-    {
-        delete current_scene->getSampler();
-    }
-
-    current_scene->setSampler(sampler);
+    if (current_scene->sampler) delete current_scene->sampler;
     current_scene->addChild(sampler);
 }
 

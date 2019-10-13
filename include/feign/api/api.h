@@ -12,20 +12,20 @@
 // and calling the correct api calls to initialize a scene.
 
 // the format of the api is slightly different than the format of the rest of the
-// project. All method names are written in lower case.
+// project. All method names are written in lower case and separate words are
+// separated by underscores.
 
 // this api is the main interface between this renderer and whatever application
-// or gui attempting to use it. This api is made to be used to set up a world of
-// scenes and sets up the parameters and executes renders. If a feature is added
-// to this renderer, then it should also be made available here.
+// or gui attempting to use it. This api is made to be used to set up a scene
+// and sets up the parameters and executes renders. If a feature is added to
+// this renderer, then it should also be made available here.
 
 #include <feign/common.h>
-#include <feign/misc/world.h>
+#include <feign/scene.h>
 
 class FeignRenderer
 {
 private:
-    static WorldNode* world;
     static std::vector<Transform> transform_stack;
     static Transform current_transform;
     static Node* current_node;
@@ -40,7 +40,7 @@ public:
                           bool flip_norms);
 
     // end
-    static WorldNode* end_world();
+    static Scene* end_world(); // TODO: make void and render
     static void end_scene();
     static void end_node();
     static void end_obj();
@@ -65,17 +65,12 @@ public:
                                    uint32_t height);
 
     // integrators
-    static void integrator_amb_occ();
-    static void integrator_light_unidir();
-    static void integrator_normal();
-    static void integrator_path_bidir();
-    static void integrator_path_unidir();
-    static void integrator_whitted();
+    static void integrator(std::string integrator_type);
 
     // samplers
-    static void sampler_independent(uint32_t sample_cnt, uint32_t seed);
-    static void sampler_halton(uint32_t sample_cnt, uint32_t seed);
-    static void sampler_latin(uint32_t sample_cnt, uint32_t seed);
+    static void sampler(std::string sampler_type,
+                        uint32_t sample_cnt,
+                        uint32_t seed);
 
     // emitters
     static void emitter_point(Color3f I = Color3f(1.0),
@@ -101,6 +96,7 @@ public:
 
     static void transform_transform(Transform transform);
 
+    // TODO: ehhh are these needed anymore???
     // for external control
     static void transform_push();
     static void transform_pop();

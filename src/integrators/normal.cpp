@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/normal.h>
+#include <feign/integrators/integrator.h>
 #include <feign/scene.h>
 
 NormalIntegrator::NormalIntegrator() : Integrator() { }

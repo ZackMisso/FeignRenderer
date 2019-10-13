@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/path_bidir.h>
+#include <feign/integrators/integrator.h>
 
 Path_Bidirectional_Integrator::Path_Bidirectional_Integrator()
 {

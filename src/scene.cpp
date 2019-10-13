@@ -42,7 +42,6 @@ Scene::~Scene()
     sceneObjects.clear();
 }
 
-// TODO: this preprocess assumes no depth in the scene graph
 void Scene::preProcess()
 {
     preProcessChildren();
@@ -94,6 +93,42 @@ void Scene::preProcess()
     }
 
     acceleration->build();
+}
+
+void Scene::renderScene() const
+{
+    if (!integrator)
+    {
+        throw new MissingPrimitiveException("no specified integrator");
+    }
+    if (!camera)
+    {
+        throw new MissingPrimitiveException("no specified camera");
+    }
+    if (!sampler)
+    {
+        throw new MissingPrimitiveException("no specified sampler");
+    }
+
+    std::cout << "rendering film: " << camera->getFilmSize()[0] << ", " << camera->getFilmSize()[1] << std::endl;
+
+    // TODO: this will need to be changed for parallelization
+    Imagef image = Imagef(camera->getFilmSize()[0],
+                          camera->getFilmSize()[1],
+                          3);
+
+    integrator->render(this,
+                       camera,
+                       sampler,
+                       image);
+
+    std::cout << "writing scene: " << sceneName << std::endl;
+
+    image.write(sceneName + ".png"); // .png writer has some issues
+                                     // for some scenes
+    image.write(sceneName + ".exr");
+
+    std::cout << "Rendering Complete" << std::endl;
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const

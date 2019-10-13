@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/path_unidir.h>
+#include <feign/integrators/integrator.h>
 
 Path_Unidirectional_Integrator::Path_Unidirectional_Integrator()
 {

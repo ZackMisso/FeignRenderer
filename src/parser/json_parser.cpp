@@ -139,60 +139,16 @@ void JsonParser::parseSampler(const rapidjson::Value& value)
         seed = (uint32_t)value["seed"].GetInt();
     }
 
-    // std::cout << "moo" << std::endl;
-
-    if (strcmp(type, "independent") == 0)
-    {
-        // std::cout << "before api call" << std::endl;
-        FeignRenderer::sampler_independent(sample_cnt, seed);
-        // std::cout << "after api call" << std::endl;
-    }
-    else if (strcmp(type, "halton") == 0)
-    {
-        FeignRenderer::sampler_halton(sample_cnt, seed);
-    }
-    else if (strcmp(type, "latin") == 0)
-    {
-        FeignRenderer::sampler_latin(sample_cnt, seed);
-    }
-    else
-    {
-        std::cout << "unrecognized sampler: " << type << std::endl;
-    }
+    FeignRenderer::sampler(std::string(type),
+                           sample_cnt,
+                           seed);
 }
 
 void JsonParser::parseIntegrator(const rapidjson::Value& value)
 {
     const char* type = value["type"].GetString();
 
-    if (strcmp(type, "whitted") == 0)
-    {
-        FeignRenderer::integrator_whitted();
-    }
-    else if (strcmp(type, "path") == 0)
-    {
-        FeignRenderer::integrator_path_unidir();
-    }
-    else if (strcmp(type, "bidir") == 0)
-    {
-        FeignRenderer::integrator_path_bidir();
-    }
-    else if (strcmp(type, "light") == 0)
-    {
-        FeignRenderer::integrator_light_unidir();
-    }
-    else if (strcmp(type, "normals") == 0)
-    {
-        FeignRenderer::integrator_normal();
-    }
-    else if (strcmp(type, "amb_occ") == 0)
-    {
-        FeignRenderer::integrator_amb_occ();
-    }
-    else
-    {
-        std::cout << "unrecognized integrator: " << type << std::endl;
-    }
+    FeignRenderer::integrator(std::string(type));
 }
 
 void JsonParser::parseEmitter(const rapidjson::Value& value)
@@ -444,7 +400,7 @@ void JsonParser::parseScene(const rapidjson::Value& value)
     FeignRenderer::end_scene();
 }
 
-WorldNode* JsonParser::parse(std::string filename)
+Scene* JsonParser::parse(std::string filename)
 {
     FILE* file = fopen(filename.c_str(), "r");
     char read_buffer[65536];

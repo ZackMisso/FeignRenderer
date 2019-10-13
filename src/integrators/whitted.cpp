@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/whitted.h>
+#include <feign/integrators/integrator.h>
 #include <feign/scene.h>
 
 WhittedIntegrator::WhittedIntegrator() : Integrator() { }
@@ -33,7 +33,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
-    const std::vector<Emitter*> emitters = scene->getEmitters();
+    const std::vector<Emitter*> emitters = scene->emitters;
     const BSDF* bsdf = its.intersected_mesh->getMaterial()->getBSDF();
 
     Color3f result(0.f);
