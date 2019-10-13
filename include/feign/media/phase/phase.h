@@ -8,17 +8,15 @@
 
 #pragma once
 
-#include <feign/filters/recon_filter.h>
+#include <feign/core/node.h>
 
-class BoxFilter : public ReconstructionFilter
+class PhaseFunction : public Node
 {
 public:
-    BoxFilter();
-    BoxFilter(Vec2f size);
-
-    virtual void preProcess();
-
-    virtual Float evaluate(const Point2f& p) const;
+    PhaseFunction();
+    virtual ~PhaseFunction();
 
     virtual std::string getName() const;
+
+    // TODO
 };

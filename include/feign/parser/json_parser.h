@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <feign/scene.h>
+#include <feign/core/scene.h>
 #include <rapidjson/document.h>
 
 // the idea behind the parsers is to keep them from having any information

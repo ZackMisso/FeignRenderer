@@ -8,8 +8,11 @@
 
 #pragma once
 
-#include <feign/node.h>
+#include <feign/core/node.h>
 
+/////////////////////////////////////////////////
+// BSDF Query Object
+/////////////////////////////////////////////////
 struct BSDFQuery
 {
     Vector3f wi;
@@ -40,7 +43,11 @@ struct BSDFQuery
               const Point3f& uvw,
               const Point3f& pos);
 };
+/////////////////////////////////////////////////
 
+/////////////////////////////////////////////////
+// BSDF
+/////////////////////////////////////////////////
 class BSDF : public Node
 {
 public:
@@ -59,3 +66,29 @@ public:
 
     // TODO
 };
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Diffuse BSDF
+/////////////////////////////////////////////////
+class Diffuse : public BSDF
+{
+public:
+    Diffuse();
+    Diffuse(Node* parent);
+    Diffuse(Node* parent, Color3f albedo);
+
+    virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
+    virtual Color3f eval(const BSDFQuery& rec) const;
+    virtual Float pdf(const BSDFQuery& rec) const;
+
+    virtual bool isDelta() const { return false; }
+
+    virtual void preProcess();
+
+    virtual std::string getName() const;
+
+protected:
+    Color3f albedo;
+};
+/////////////////////////////////////////////////

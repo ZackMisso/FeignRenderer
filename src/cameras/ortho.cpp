@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/cameras/ortho.h>
+#include <feign/core/camera.h>
 
 Orthographic::Orthographic() : Camera()
 {

@@ -9,7 +9,7 @@
 #pragma once
 
 #include <feign/common.h>
-#include <feign/bsdfs/bsdf.h>
+#include <feign/core/bsdf.h>
 
 // TODO: eventually make this more complicated
 // idk how to structure this, need to research some more on how other renderers

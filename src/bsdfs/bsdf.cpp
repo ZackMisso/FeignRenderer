@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/bsdfs/bsdf.h>
+#include <feign/core/bsdf.h>
 
 BSDFQuery::BSDFQuery(const Vector3f& wi,
                      const Point2f& uv,

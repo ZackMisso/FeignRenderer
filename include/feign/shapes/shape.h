@@ -8,14 +8,11 @@
 
 #pragma once
 
-#include <feign/node.h>
+#include <feign/core/node.h>
 #include <feign/math/bbox.h>
 #include <feign/materials/material.h>
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
-#include <embree3/rtcore.h>
-#include <embree3/rtcore_ray.h>
-#include <embree3/rtcore_scene.h>
 
 // These structs are used for passing data to embree.
 // Note: embree does not have to have normal information.

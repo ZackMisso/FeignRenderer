@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/bsdfs/diffuse.h>
+#include <feign/core/bsdf.h>
 #include <feign/math/warp.h>
 #include <feign/math/coord_frame.h>
 

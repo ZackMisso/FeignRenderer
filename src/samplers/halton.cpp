@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/samplers/halton.h>
+#include <feign/core/sampler.h>
 
 Halton::Halton() : Sampler() { }
 

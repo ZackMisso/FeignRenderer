@@ -7,7 +7,7 @@
  **/
 
 #include <feign/parser/json_parser.h>
-#include <feign/api/api.h>
+#include <feign/core/api.h>
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>

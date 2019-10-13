@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/integrator.h>
+#include <feign/core/integrator.h>
 
 Light_Unidirectional_Integrator::Light_Unidirectional_Integrator()
 {

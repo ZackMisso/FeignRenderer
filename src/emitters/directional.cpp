@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/emitters/directional.h>
+#include <feign/core/emitter.h>
 
 DirectionalEmitter::DirectionalEmitter()
 {

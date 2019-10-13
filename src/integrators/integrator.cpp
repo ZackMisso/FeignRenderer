@@ -6,10 +6,9 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/integrator.h>
-#include <feign/filters/gauss_filter.h>
-#include <feign/filters/box_filter.h>
-#include <feign/scene.h>
+#include <feign/core/integrator.h>
+#include <feign/core/recon_filter.h>
+#include <feign/core/scene.h>
 
 Integrator::Integrator() : Node()
 {

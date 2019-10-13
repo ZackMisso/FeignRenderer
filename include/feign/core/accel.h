@@ -8,7 +8,39 @@
 
 #pragma once
 
-#include <feign/accel/accel.h>
+#include <feign/core/node.h>
+#include <feign/math/ray.h>
+#include <feign/shapes/shape.h>
+#include <feign/misc/intersection.h>
+
+/////////////////////////////////////////////////
+// Ray Tracing Acceleration Structure
+/////////////////////////////////////////////////
+class Accel : public Node
+{
+public:
+    Accel();
+    ~Accel();
+
+    virtual void clear() = 0;
+    virtual void build() = 0;
+    virtual void addShape(Shape* mesh) = 0;
+
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
+
+    virtual std::string getName() const;
+    virtual NodeType getNodeType() const;
+
+    void setMeshes(const std::vector<Shape*>& param);
+
+protected:
+    std::vector<Shape*> meshes;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Embree Acceleration Structure
+/////////////////////////////////////////////////
 #include <embree3/rtcore.h>
 #include <embree3/rtcore_ray.h>
 #include <embree3/rtcore_scene.h>
@@ -53,3 +85,17 @@ protected:
     unsigned userGeomId;
     std::string rtcore; // configuration
 };
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Naive Acceleration Structure
+/////////////////////////////////////////////////
+class NaiveAccel : public Accel
+{
+    virtual void preProcess();
+    virtual void clear();
+    virtual void addShape(Shape* mesh);
+    virtual void build();
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
+};
+/////////////////////////////////////////////////

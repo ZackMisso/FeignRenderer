@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/filters/recon_filter.h>
+#include <feign/core/recon_filter.h>
 
 ReconstructionFilter::ReconstructionFilter()
 {

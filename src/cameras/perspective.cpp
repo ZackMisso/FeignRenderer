@@ -6,8 +6,8 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/cameras/perspective.h>
-#include <feign/filters/gauss_filter.h>
+#include <feign/core/camera.h>
+#include <feign/core/recon_filter.h>
 #include <feign/math/warp.h>
 
 Perspective::Perspective() : Camera() { }

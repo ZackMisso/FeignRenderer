@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <feign/parser/json_parser.h>
-#include <feign/scene.h>
+#include <feign/core/scene.h>
 #include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 

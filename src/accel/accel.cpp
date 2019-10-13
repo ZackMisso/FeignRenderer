@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/accel/accel.h>
+#include <feign/core/accel.h>
 #include <feign/misc/embree_util.h>
 
 Accel::Accel()

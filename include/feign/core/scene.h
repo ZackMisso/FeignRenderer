@@ -9,13 +9,13 @@
 #pragma once
 
 #include <feign/common.h>
-#include <feign/node.h>
-#include <feign/accel/accel.h>
-#include <feign/integrators/integrator.h>
-#include <feign/emitters/emitter.h>
+#include <feign/core/node.h>
+#include <feign/core/accel.h>
+#include <feign/core/integrator.h>
+#include <feign/core/emitter.h>
+#include <feign/core/sampler.h>
+#include <feign/core/camera.h>
 #include <feign/media/media.h>
-#include <feign/samplers/sampler.h>
-#include <feign/cameras/camera.h>
 #include <feign/misc/intersection.h>
 
 // TODO: scene should not be an observable data structure externally

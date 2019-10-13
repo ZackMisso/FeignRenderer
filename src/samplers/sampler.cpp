@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/samplers/sampler.h>
+#include <feign/core/sampler.h>
 
 Sampler::Sampler() : Node()
 {

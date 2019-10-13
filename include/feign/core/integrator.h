@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <feign/node.h>
-#include <feign/cameras/camera.h>
-#include <feign/samplers/sampler.h>
-#include <feign/filters/recon_filter.h>
+#include <feign/core/node.h>
+#include <feign/core/camera.h>
+#include <feign/core/sampler.h>
+#include <feign/core/recon_filter.h>
 
 // needed forward declaration
 class Scene;

@@ -21,7 +21,7 @@
 // this renderer, then it should also be made available here.
 
 #include <feign/common.h>
-#include <feign/scene.h>
+#include <feign/core/scene.h>
 
 class FeignRenderer
 {

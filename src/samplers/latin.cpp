@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/samplers/latin.h>
+#include <feign/core/sampler.h>
 
 Latin::Latin() : Sampler() { }
 

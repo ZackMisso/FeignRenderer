@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/emitters/distant.h>
+#include <feign/core/emitter.h>
 
 DistantEmitter::DistantEmitter()
 {

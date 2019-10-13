@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/filters/box_filter.h>
+#include <feign/core/recon_filter.h>
 
 BoxFilter::BoxFilter() : ReconstructionFilter()
 {

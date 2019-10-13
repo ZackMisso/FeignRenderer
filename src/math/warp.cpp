@@ -9,23 +9,6 @@
 #include <feign/math/warp.h>
 #include <tgmath.h>
 
-Vector3f WarpSpace::sampleUniformHemisphere(Sampler *sampler, const Normal3f& pole)
-{
-    // Naive implementation using rejection sampling
-    Vector3f v;
-    do {
-        v[0] = 1.f - 2.f * sampler->next1D();
-        v[1] = 1.f - 2.f * sampler->next1D();
-        v[2] = 1.f - 2.f * sampler->next1D();
-    } while (v.sqrNorm() > 1.f);
-
-    if (v % pole < 0.f)
-        v = -v;
-    v /= v.norm();
-
-    return v;
-}
-
 Point2f WarpSpace::squareToUniformDisk(const Point2f &sample)
 {
     Float r = std::sqrt(sample(1));

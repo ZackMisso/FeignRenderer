@@ -6,9 +6,8 @@
  * acknowledgement is provided to the original author.
  **/
 
-#include <feign/scene.h>
-#include <feign/accel/naive.h>
-#include <feign/accel/embree.h>
+#include <feign/core/scene.h>
+#include <feign/core/accel.h>
 
 Scene::Scene() : Node()
 {

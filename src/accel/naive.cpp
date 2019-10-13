@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/accel/naive.h>
+#include <feign/core/accel.h>
 
 void NaiveAccel::preProcess()
 {

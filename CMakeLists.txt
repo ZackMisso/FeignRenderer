@@ -92,41 +92,19 @@ endif()
 add_executable(feign
     # Header files
     include/feign/common.h
-    include/feign/scene.h
-    include/feign/node.h
     include/feign/exceptions.h
 
-    # Accel header files
-    include/feign/accel/accel.h
-    include/feign/accel/naive.h
-    include/feign/accel/embree.h
-
-    # Api header files
-    include/feign/api/api.h
-
-    # BSDF header files
-    include/feign/bsdfs/bsdf.h
-    include/feign/bsdfs/diffuse.h
-
-    # Camera header files
-    include/feign/cameras/camera.h
-    include/feign/cameras/perspective.h
-    include/feign/cameras/ortho.h
-
-    # Emitter header files
-    include/feign/emitters/emitter.h
-    include/feign/emitters/point.h
-    include/feign/emitters/distant.h
-    include/feign/emitters/directional.h
-    include/feign/emitters/environment.h
-
-    # Filter header files
-    include/feign/filters/recon_filter.h
-    include/feign/filters/box_filter.h
-    include/feign/filters/gauss_filter.h
-
-    # Integrator header files
-    include/feign/integrators/integrator.h
+    # Core header files
+    include/feign/core/scene.h
+    include/feign/core/node.h
+    include/feign/core/accel.h
+    include/feign/core/api.h
+    include/feign/core/bsdf.h
+    include/feign/core/camera.h
+    include/feign/core/emitter.h
+    include/feign/core/recon_filter.h
+    include/feign/core/integrator.h
+    include/feign/core/sampler.h
 
     # Logger header files
     include/feign/log/logger.h
@@ -160,13 +138,7 @@ add_executable(feign
     include/feign/parser/json_parser.h
 
     # Phase Function header files
-    include/feign/phase/phase.h
-
-    # Sampler header files
-    include/feign/samplers/sampler.h
-    include/feign/samplers/independent.h
-    include/feign/samplers/latin.h
-    include/feign/samplers/halton.h
+    include/feign/media/phase/phase.h
 
     # Shapes header files
     include/feign/shapes/shape.h
@@ -250,14 +222,14 @@ add_executable(feign
 
     # Media Transmittance Estimator implementation files
 
+    # Phase Function implementation files
+    src/media/phase/phase.cpp
+
     # Misc implementation files
     src/misc/intersection.cpp
 
     # Parser implementation files
     src/parser/json_parser.cpp
-
-    # Phase Function implementation files
-    src/phase/phase.cpp
 
     # Sampler implementation files
     src/samplers/sampler.cpp

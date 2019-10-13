@@ -6,47 +6,28 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/api/api.h>
-
-// bsdfs
-#include <feign/bsdfs/diffuse.h>
-
-// cameras
-#include <feign/cameras/ortho.h>
-#include <feign/cameras/perspective.h>
-
-// emitters
-#include <feign/emitters/point.h>
-
-// filters
-#include <feign/filters/box_filter.h>
-#include <feign/filters/gauss_filter.h>
-
-// integrators
-#include <feign/integrators/integrator.h>
+// core includes
+#include <feign/core/api.h>
+#include <feign/core/bsdf.h>
+#include <feign/core/camera.h>
+#include <feign/core/emitter.h>
+#include <feign/core/recon_filter.h>
+#include <feign/core/integrator.h>
+#include <feign/core/sampler.h>
+#include <feign/core/scene.h>
 
 // materials
 #include <feign/materials/material.h>
 
-// media
+// media includes
 #include <feign/media/media.h>
-
-// phases
-#include <feign/phase/phase.h>
-
-// samplers
-#include <feign/samplers/halton.h>
-#include <feign/samplers/independent.h>
-#include <feign/samplers/latin.h>
+#include <feign/media/phase/phase.h>
 
 // shapes
 #include <feign/shapes/objmesh.h>
 
 // textures
 #include <feign/textures/texture.h>
-
-// scenes
-#include <feign/scene.h>
 
 std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
 Node* FeignRenderer::current_node = nullptr;

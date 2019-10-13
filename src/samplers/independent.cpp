@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/samplers/independent.h>
+#include <feign/core/sampler.h>
 
 // TODO: maybe keep track of dimensions
 

@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author.
  **/
 
-#include <feign/node.h>
+#include <feign/core/node.h>
 #include <feign/exceptions.h>
 
 Node::Node()

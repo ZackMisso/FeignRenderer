@@ -9,13 +9,11 @@
 #pragma once
 
 #include <feign/common.h>
-#include <feign/samplers/sampler.h>
+#include <feign/core/sampler.h>
 
 class WarpSpace
 {
 public:
-    static Vector3f sampleUniformHemisphere(Sampler *sampler, const Normal3f& northPole);
-
     static Point2f squareToUniformDisk(const Point2f &sample);
     static Float squareToUniformDiskPdf(const Point2f &p);
 

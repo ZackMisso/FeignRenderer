@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <feign/node.h>
+#include <feign/core/node.h>
 
 class Media : public Node
 {

@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/accel/embree.h>
+#include <feign/core/accel.h>
 
 void EmbreeAccel::preProcess()
 {

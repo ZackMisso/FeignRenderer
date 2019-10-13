@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/cameras/camera.h>
+#include <feign/core/camera.h>
 
 Camera::Camera() : Node() { }
 

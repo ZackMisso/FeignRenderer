@@ -6,9 +6,9 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/integrator.h>
+#include <feign/core/integrator.h>
+#include <feign/core/scene.h>
 #include <feign/math/warp.h>
-#include <feign/scene.h>
 
 Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator()
 {

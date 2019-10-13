@@ -6,8 +6,8 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/integrators/integrator.h>
-#include <feign/scene.h>
+#include <feign/core/integrator.h>
+#include <feign/core/scene.h>
 
 WhittedIntegrator::WhittedIntegrator() : Integrator() { }
 

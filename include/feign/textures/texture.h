@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <feign/node.h>
+#include <feign/core/node.h>
 
 // TODO: make an abstraction for 2D, 3D, and Volumetrix textures
 class Texture : public Node
