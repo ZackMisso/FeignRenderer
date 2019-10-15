@@ -21,3 +21,112 @@ project utilizes rapidjson for handling all io.
 ----------------------------------------
 Currently supported Nodes and their uses
 ----------------------------------------
+
+---------------- SCENE -----------------
+"scene:" {
+    "name": "scene_name"
+    "integrator": "integrator_name"
+    "sampler": "sampler_name"
+    "camera": "camera_name"
+    "medium": "global_medium_name"
+}
+
+NOTE: Only one scene node may be defined per file
+
+name - defines the user given name for the scene as scene_name
+
+integrator - tells the scene to use the integrator whose id is specified as
+             integrator_name.
+             Default value: uni_path integrator.
+
+sampler - tells the scene to use the sampler whose id is specified as
+          sampler_name
+          Default value: independent sampler which takes 8 spp.
+
+camera - tells the scene to use the camera whose id is specified as camera_name
+         Default value: perspective camera with unit transform and 45 fov.
+
+medium - tells the scene to use the atmospheric medium whose id is specified as
+         global_medium_name
+         Default value: none
+---------------- SCENE -----------------
+
+-------------- INTEGRATOR --------------
+"integrator:" {
+    "name": "integrator_name"
+    "type": "integrator_type"
+    "max_time": long_value
+    "max_heuristic": long_value
+}
+
+name - defines the user given name for the integrator as integrator_name.
+       Note: integrator_name must be the same string as the "integrator"
+             argument in the scene node or else this will be ignored.
+
+type - tells the renderer which integrator to use as integrator_type
+       Default value:
+           normal
+       Currently supported:
+           normal
+           whitted
+
+max_time - tells the renderer the maximum amount of time to spend rendering
+           Default value: -1 (Note: negative means the renderer will ignore this)
+
+max_heuristic - tells the renderer some maximum arbitrary value to terminate
+                renders once reached. This is a free parameter to use for
+                experiments
+                Default: -1 (Note: negative means the renderer will ignore this)
+-------------- INTEGRATOR --------------
+
+--------------- SAMPLER ----------------
+"sampler:" {
+    "name": "sampler_name"
+    "type": "sampler_type"
+    "spp": int_value
+    "seed": long_value
+    "seed2": long_value
+}
+
+name - defines the user given name for the sampler as sampler_name.
+       NOTE: sampler_name must be the same string as the "sampler" argument in
+             the scene node or else this will be ignored.
+
+type - tells the renderer which sampler implementation to use as sampler_type
+       Default value:
+           independent
+       Currently Supported:
+           independent
+
+spp - tells the renderer how many samples per pixel to use
+      Default value: 8 (NOTE: must always be non-zero)
+
+seed - tells the renderer the seed to use for the sampler
+       Default value: 0x12345678
+
+seed2 - tells the renderer the seed to use for random permutations of stratified
+        samples. (NOTE: currently not used)
+        Default value: 0x968574132
+--------------- SAMPLER ----------------
+
+---------------- CAMERA ----------------
+"camera:" {
+    "name": "camera_name"
+    "type": "camera_type"
+    "params": "params_name"
+}
+
+name - defines the user given name for the camera as camera_name
+       NOTE: camera_name must be the same string as the "camera" argument in
+             the scene node or else this will be ignored.
+
+type - tells the renderer which camera implementation to use as camera_type
+       Default value:
+           perspective
+       Currently Supported:
+           perspective
+
+params - tells the renderer which node contains the type-dependent parameters
+         for the camera. If this node is not provided, its default will be
+         instantiated.
+---------------- CAMERA ----------------

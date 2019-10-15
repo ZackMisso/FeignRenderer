@@ -28,20 +28,21 @@ class FeignRenderer
 private:
     static std::vector<Transform> transform_stack;
     static Transform current_transform;
-    static Node* current_node;
-    static Scene* current_scene;
+    static Scene* scene;
+    
+    // TODO: what is the best representation? vector? tree?
+    static std::vector<Node*> nodes;
 
 public:
     // begin
     static void begin_world();
-    static void begin_scene(const std::string& name);
+    static void create_scene(std::string name);
     static void begin_node();
     static void begin_obj(const std::string& filename,
                           bool flip_norms);
 
     // end
-    static Scene* end_world(); // TODO: make void and render
-    static void end_scene();
+    static void end_world();
     static void end_node();
     static void end_obj();
 

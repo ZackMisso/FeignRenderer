@@ -47,12 +47,12 @@ public:
 
     virtual std::string getName() const { return ""; }
 
-    int getTag() const;
+    std::string getNodeName() const { return node_name; }
 
     Node* getParent() const { return parent; }
 
 protected:
-    Node* parent;
-    std::vector<Node*> children;
-    int tag;
+    Node* parent;                // parent node
+    std::vector<Node*> children; // children of this node
+    std::string node_name;       // user/scene defined name
 };

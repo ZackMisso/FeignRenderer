@@ -30,35 +30,36 @@
 #include <feign/textures/texture.h>
 
 std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
-Node* FeignRenderer::current_node = nullptr;
-Scene* FeignRenderer::current_scene = nullptr;
 Transform FeignRenderer::current_transform = Transform();
+Node* FeignRenderer::current_node = nullptr;
+Scene* FeignRenderer::scene = nullptr;
 
 void FeignRenderer::begin_world()
 {
-    // Note: this method will never delete the old scene
-    if (current_scene) current_scene = nullptr;
     current_scene = nullptr;
     current_node = nullptr;
     current_transform = Transform();
+    nodes = std::vector<Node*>();
     transform_stack.clear();
 }
 
-void FeignRenderer::begin_scene(const std::string& name)
+// create scene should only be called once per world
+void FeignRenderer::create_scene(const std::string& name)
 {
     assert(!current_scene);
-    assert(!current_node);
 
-    transform_stack.push_back(current_transform);
-    Scene* scene = new Scene(current_node);
+    // if current_node exists push it onto the stack
+    if (current_node) nodes.push_back(current_node);
+
+    scene = new Scene(current_node);
     scene->sceneName = name;
 
     current_node = scene;
-    current_scene = scene;
 }
 
 void FeignRenderer::begin_node()
 {
+    // what is this?
     throw new NotImplementedException("api begin node");
 }
 
