@@ -38,7 +38,7 @@ public:
 
     virtual void print() const { }
 
-    int numChildren() const;
+    int numChildren() const { return children.size(); }
 
     virtual void preProcess() = 0;
     void preProcessChildren();

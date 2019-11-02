@@ -94,13 +94,3 @@ void Node::printGraph(std::string indent) const
         children[i]->printGraph(newIndent);
     }
 }
-
-int Node::numChildren() const
-{
-    return children.size();
-}
-
-int Node::getTag() const
-{
-    return tag;
-}

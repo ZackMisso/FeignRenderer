@@ -114,6 +114,35 @@ seed2 - tells the renderer the seed to use for random permutations of stratified
     "name": "camera_name"
     "type": "camera_type"
     "params": "params_name"
+    "origin": [
+        float_value (origin.x),
+        float_value (origin.y),
+        float_value (origin.z)
+    ]
+    "target": [
+        float_value (target.x),
+        float_value (target.y),
+        float_value (target.z)
+    ]
+    "up": [
+        float_value (up.x),
+        float_value (up.y),
+        float_value (up.z)
+    ]
+    "lookat": [
+        float_value,
+        float_value,
+        float_value,
+        float_value,
+        float_value,
+        float_value,
+        float_value,
+        float_value,
+        float_value
+    ]
+    "fov": float_value
+    "width": int_value
+    "height:" int_value
 }
 
 name - defines the user given name for the camera as camera_name
@@ -126,7 +155,103 @@ type - tells the renderer which camera implementation to use as camera_type
        Currently Supported:
            perspective
 
-params - tells the renderer which node contains the type-dependent parameters
-         for the camera. If this node is not provided, its default will be
-         instantiated.
+origin - the origin vector of the camera
+
+target - the target vector of the camera
+
+up - the up vector of the camera
+
+lookat - the full lookat matrix of the camera
+
+fov - the field of view of the camera
+
+width - the width of the image plane in pixels
+
+height - the height of the image plane in pixels
 ---------------- CAMERA ----------------
+
+---------------- OBJECT ----------------
+"object:" {
+    "name": "object_name"
+    "mesh": "mesh_name"
+    "material": "material_name"
+    /* "media": "media_name" */ TODO: these should own the object and not vice versa
+    /* "emitter": "emitter_name" */
+    /* transform operations */
+}
+
+name - defines the user given name for the camera as camera_name
+
+mesh - indicates the mesh of the object to be object_name
+       default value: none
+
+material - indicates the material of the object to be material_name
+           default value: none
+
+media - indicates the media of the object to be media_name
+        default value: none
+
+emitter - indicates the emitter of the object to be media_name
+          default value: none
+
+transform operations:
+    "scale": [float_value, float_value, float_value]
+    "translate:" [float_value, float_value, float_value]
+    "rotate:" [float_value (degree), float_value, float_value, float_value (axis)]
+
+transform operations are applied in the order which they appear
+---------------- OBJECT ----------------
+
+----------------- MESH -----------------
+"mesh": {
+    "name": "mesh_name"
+    "type": "mesh_type"
+    "filename": "file_path"
+    /* TODO - optional parameters */
+}
+
+name - defines the user given name for the mesh as mesh_name
+
+type - indicates the type of mesh to be created as mesh_type
+       currently supported types:
+           "triangle_mesh"
+
+filename - defines the path to the geometry for the mesh or other data
+----------------- MESH -----------------
+
+---------------- EMITTER ---------------
+"emitter": {
+    "name": "emitter_name"
+    "type": "emitter_type"
+    "mesh": "mesh_name" (only valid if type==mesh)
+    "pos": [
+        float_value (pos.x),
+        float_value (pos.y),
+        float_value (pos.z)
+    ]
+    "intensity": [
+        float_value (I.x),
+        float_value (I.y),
+        float_value (I.z)
+    ]
+    /* transform operations */
+}
+
+name - defines the user given name for the emitter as emitter_name
+
+type - indicates the type of emitter to be created as emitter_type
+       default: point
+       currently supported types:
+           "point"
+
+mesh - indicates the mesh for the emitter if it is a mesh emitter
+
+pos - indicates the position of the mesh before transforms are applied for certain
+      emitters.
+      default:
+          Point3f(0.0)
+
+intensity - The intensity of the emitter to be applied for all emitters
+            default:
+                Color3f(1.0) - white
+---------------- EMITTER ---------------

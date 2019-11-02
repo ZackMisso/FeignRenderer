@@ -23,10 +23,105 @@ class SceneGenerator
 public:
     static void create_all_scenes()
     {
-        create_ajax_normals_scene();
-        create_ajax_diffuse_scene();
-        create_ajax_amb_occ_scene();
-        create_cbox_whitted_scene();
+        // create_ajax_normals_scene();
+        create_ajax_normals_scene_2();
+        // create_ajax_diffuse_scene();
+        // create_ajax_amb_occ_scene();
+        // create_cbox_whitted_scene();
+    }
+
+    static void create_ajax_normals_scene_2()
+    {
+        rapidjson::Document document;
+        document.SetObject();
+
+        rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+        rapidjson::Value scene(rapidjson::kObjectType);
+        {
+            scene.AddMember("name", "ajax_normals", allocator);
+            scene.AddMember("integrator", "integrator", allocator);
+            scene.AddMember("sampler", "sampler", allocator);
+            scene.AddMember("camera", "camera", allocator);
+            document.AddMember("scene", scene, allocator);
+        }
+
+        rapidjson::Value integrator(rapidjson::kObjectType);
+        {
+            integrator.AddMember("name", "integrator", allocator);
+            integrator.AddMember("type", "normals", allocator);
+            document.AddMember("integrator", integrator, allocator);
+        }
+
+        rapidjson::Value sampler(rapidjson::kObjectType);
+        {
+            sampler.AddMember("name", "sampler", allocator);
+            sampler.AddMember("type", "independent", allocator);
+            sampler.AddMember("sample_count", 16, allocator);
+            document.AddMember("sampler", sampler, allocator);
+        }
+
+        rapidjson::Value camera(rapidjson::kObjectType);
+        {
+            camera.AddMember("name", "camera", allocator);
+            camera.AddMember("type", "perspective", allocator);
+            {
+                rapidjson::Value array(rapidjson::kArrayType);
+                array.PushBack(-65.6055, allocator).PushBack(47.5762, allocator).PushBack(24.3583, allocator);
+                array.PushBack(-64.8161, allocator).PushBack(47.2211, allocator).PushBack(23.8576, allocator);
+                array.PushBack(0.299858, allocator).PushBack(0.934836, allocator).PushBack(-0.190177, allocator);
+                camera.AddMember("lookat", array, allocator);
+            }
+            camera.AddMember("fov", 30.0, allocator);
+            camera.AddMember("width", 768, allocator);
+            camera.AddMember("height", 768, allocator);
+            document.AddMember("camera", camera, allocator);
+        }
+
+        rapidjson::Value floor(rapidjson::kObjectType);
+        {
+            floor.AddMember("name", "floor", allocator);
+            floor.AddMember("mesh", "plane", allocator);
+            floor.AddMember("material", "floor_material", allocator);
+            rapidjson::Value scale_array(rapidjson::kArrayType);
+            scale_array.PushBack(100.0, allocator).PushBack(1.0, allocator).PushBack(100.0, allocator);
+            floor.AddMember("scale", scale_array, allocator);
+            document.AddMember("object", floor, allocator);
+        }
+
+        rapidjson::Value floor_mesh(rapidjson::kObjectType);
+        {
+            floor_mesh.AddMember("name", "plane", allocator);
+            floor_mesh.AddMember("type", "triangle_mesh", allocator);
+            floor_mesh.AddMember("filename", "../scenes/meshes/plane.obj", allocator);
+            document.AddMember("mesh", floor_mesh, allocator);
+        }
+
+        rapidjson::Value ajax(rapidjson::kObjectType);
+        {
+            ajax.AddMember("name", "ajax", allocator);
+            ajax.AddMember("mesh", "ajax_data", allocator);
+            document.AddMember("object", ajax, allocator);
+        }
+
+        rapidjson::Value ajax_obj(rapidjson::kObjectType);
+        {
+            ajax_obj.AddMember("name", "ajax_obj", allocator);
+            ajax_obj.AddMember("type", "triangle_mesh", allocator);
+            ajax_obj.AddMember("filename", "../scenes/meshes/ajax.obj", allocator);
+            document.AddMember("mesh", ajax_obj, allocator);
+        }
+
+        rapidjson::StringBuffer sb;
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+        document.Accept(writer);
+
+        std::string str = sb.GetString();
+
+        std::ofstream output;
+        output.open("../scenes/generated/ajax-normals-new-format.json");
+        output << str << std::endl;
+        output.close();
     }
 
     static void create_ajax_normals_scene()
