@@ -16,7 +16,8 @@ void run_scene(std::string scene_name)
 {
     // TODO: disallow direct access to the parser and instead render
     //       through the api function calls
-    Scene* scene = JsonParser::parse(SCENES_PATH + scene_name + ".json");
+    std::cout << SCENES_PATH + scene_name + ".json" << std::endl;
+    JsonParser::parse(SCENES_PATH + scene_name + ".json");
 
     // std::cout << std::endl;
     // std::cout << "New World Graph Description:" << std::endl;
@@ -24,11 +25,11 @@ void run_scene(std::string scene_name)
     // world->printGraph();
     // std::cout << std::endl;
 
-    scene->renderScene();
+    // scene->renderScene();
 
     // world->renderAllScenes();
 
-    delete scene;
+    // delete scene;
 }
 
 // these are all the base debug scenes
@@ -43,8 +44,8 @@ int main(int argc, char* argv[])
 {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    std::string scene = "ajax-normals-generated";
-    scene = "generated/ajax-diffuse";
+    std::string scene = "generated/ajax-normals-new-format";
+    // scene = "generated/ajax-diffuse";
     // scene = "generated/ajax-amb_occ";
 
     for (int i = 1; i < argc; ++i)

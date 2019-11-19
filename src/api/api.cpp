@@ -15,9 +15,7 @@
 #include <feign/core/integrator.h>
 #include <feign/core/sampler.h>
 #include <feign/core/scene.h>
-
-// materials
-#include <feign/materials/material.h>
+#include <feign/core/material.h>
 
 // media includes
 #include <feign/media/media.h>
@@ -32,6 +30,17 @@
 std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
 Transform FeignRenderer::current_transform = Transform();
 Scene* FeignRenderer::scene = nullptr;
+
+std::unordered_map<std::string, BSDF*>                 FeignRenderer::bsdfs = std::unordered_map<std::string, BSDF*>();
+std::unordered_map<std::string, Camera*>               FeignRenderer::cameras = std::unordered_map<std::string, Camera*>();
+std::unordered_map<std::string, Emitter*>              FeignRenderer::emitters = std::unordered_map<std::string, Emitter*>();
+std::unordered_map<std::string, Media*>                FeignRenderer::medias = std::unordered_map<std::string, Media*>();
+std::unordered_map<std::string, Integrator*>           FeignRenderer::integrators = std::unordered_map<std::string, Integrator*>();
+std::unordered_map<std::string, Sampler*>              FeignRenderer::samplers = std::unordered_map<std::string, Sampler*>();
+std::unordered_map<std::string, ReconstructionFilter*> FeignRenderer::filters = std::unordered_map<std::string, ReconstructionFilter*>();
+std::unordered_map<std::string, Material*>             FeignRenderer::materials = std::unordered_map<std::string, Material*>();
+
+
 
 // TODO: rewrite all of this
 

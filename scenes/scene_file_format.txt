@@ -113,7 +113,6 @@ seed2 - tells the renderer the seed to use for random permutations of stratified
 "camera:" {
     "name": "camera_name"
     "type": "camera_type"
-    "params": "params_name"
     "origin": [
         float_value (origin.x),
         float_value (origin.y),
@@ -188,12 +187,6 @@ mesh - indicates the mesh of the object to be object_name
 material - indicates the material of the object to be material_name
            default value: none
 
-media - indicates the media of the object to be media_name
-        default value: none
-
-emitter - indicates the emitter of the object to be media_name
-          default value: none
-
 transform operations:
     "scale": [float_value, float_value, float_value]
     "translate:" [float_value, float_value, float_value]
@@ -224,6 +217,7 @@ filename - defines the path to the geometry for the mesh or other data
     "name": "emitter_name"
     "type": "emitter_type"
     "mesh": "mesh_name" (only valid if type==mesh)
+    "material": material_name
     "pos": [
         float_value (pos.x),
         float_value (pos.y),
@@ -246,6 +240,9 @@ type - indicates the type of emitter to be created as emitter_type
 
 mesh - indicates the mesh for the emitter if it is a mesh emitter
 
+material - indicates the material of the object to be material_name
+           default value: none
+
 pos - indicates the position of the mesh before transforms are applied for certain
       emitters.
       default:
@@ -255,3 +252,37 @@ intensity - The intensity of the emitter to be applied for all emitters
             default:
                 Color3f(1.0) - white
 ---------------- EMITTER ---------------
+
+--------------- MATERIAL ---------------
+"material": {
+    "name": "material_name"
+    "bsdf": "bsdf_name"
+}
+
+name - defines the user given name for the material as material_name
+
+bsdf - defines the bsdf for the material as bsdf_name
+--------------- MATERIAL ---------------
+
+----------------- BSDF -----------------
+"bsdf": {
+    "name": "bsdf_name"
+    "type": "bsdf_type"
+    "albedo": [
+        float_value (albedo.r),
+        float_value (albedo.g),
+        float_value (albedo.b)
+    ]
+}
+
+name - defines the user given name for the bsdf as bsdf_name
+
+type - defines the type of the bsdf
+       default: diffuse
+       currently supported types:
+           "diffuse"
+----------------- BSDF -----------------
+
+----------------- MEDIA ----------------
+TODO: soon
+----------------- MEDIA ----------------

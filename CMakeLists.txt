@@ -105,12 +105,10 @@ add_executable(feign
     include/feign/core/recon_filter.h
     include/feign/core/integrator.h
     include/feign/core/sampler.h
+    include/feign/core/material.h
 
     # Logger header files
     include/feign/log/logger.h
-
-    # Material header files
-    include/feign/materials/material.h
 
     # Math header files
     include/feign/math/transform.h
@@ -276,5 +274,5 @@ set(CompilerFlags
 # against NanoGUI, we need to link against those as well.
 #target_link_libraries(feign)
 # TODO: get openvdb support running
-#target_link_libraries(feign tbb openvdb embree3 ${PYTHON_LIBRARIES})
-target_link_libraries(feign tbb embree3 ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb openvdb embree3 ${PYTHON_LIBRARIES})
+#target_link_libraries(feign tbb embree3 ${PYTHON_LIBRARIES})

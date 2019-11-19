@@ -9,8 +9,8 @@
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/core/material.h>
 #include <feign/math/bbox.h>
-#include <feign/materials/material.h>
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
 

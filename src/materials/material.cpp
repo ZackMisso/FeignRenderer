@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/materials/material.h>
+#include <feign/core/material.h>
 
 Material::Material()
 {
