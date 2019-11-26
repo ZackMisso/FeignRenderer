@@ -9,15 +9,15 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-NormalIntegrator::NormalIntegrator() : Integrator() { }
-
-NormalIntegrator::NormalIntegrator(Node* parent) : Integrator(parent) { }
+NormalIntegrator::NormalIntegrator() : Integrator()
+{
+}
 
 void NormalIntegrator::preProcess()
 {
     Integrator::preProcess();
 
-    preProcessChildren();
+    // preProcessChildren();
 }
 
 Color3f NormalIntegrator::Li(const Scene* scene,

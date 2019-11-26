@@ -13,11 +13,6 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator()
     throw new NotImplementedException("path unidir constructor");
 }
 
-Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(Node* parent)
-{
-    throw new NotImplementedException("path unidir constructor");
-}
-
 void Path_Unidirectional_Integrator::preProcess()
 {
     Integrator::preProcess();

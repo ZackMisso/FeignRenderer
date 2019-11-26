@@ -1,0 +1,8 @@
+What needs to be done to become production ready:
+
+Get parser working
+Get basic brdfs implemented
+Get path tracing implemented
+
+Need to have a more accurate way of representing materials - singular bsdf will
+    not work

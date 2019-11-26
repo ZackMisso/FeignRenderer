@@ -20,7 +20,8 @@ PointEmitter::PointEmitter(Node* parent,
     // does nothing
 }
 
-void PointEmitter::preProcess() { preProcessChildren(); }
+// void PointEmitter::preProcess() { preProcessChildren(); }
+void PointEmitter::preProcess() { }
 
 Color3f PointEmitter::sample_li(EmitterQuery& rec,
                                 const Point2f& sample,

@@ -21,9 +21,7 @@ class Sampler : public Node
 {
 public:
     Sampler();
-    Sampler(Node* parent);
-    Sampler(Node* parent,
-            uint32_t seed,
+    Sampler(uint32_t seed,
             uint32_t sample_cnt);
 
     virtual ~Sampler() { }
@@ -61,9 +59,7 @@ class Independent : public Sampler
 {
 public:
     Independent();
-    Independent(Node* parent);
-    Independent(Node* parent,
-                uint32_t seed,
+    Independent(uint32_t seed,
                 uint32_t sample_cnt);
 
     virtual void preProcess();
@@ -96,9 +92,7 @@ class Latin : public Sampler
 {
 public:
     Latin();
-    Latin(Node* parent);
-    Latin(Node* parent,
-          uint32_t seed,
+    Latin(uint32_t seed,
           uint32_t sample_cnt);
 
     virtual void preProcess();
@@ -127,9 +121,7 @@ class Halton : public Sampler
 {
 public:
     Halton();
-    Halton(Node* parent);
-    Halton(Node* parent,
-           uint32_t seed,
+    Halton(uint32_t seed,
            uint32_t sample_cnt);
 
     virtual void preProcess();

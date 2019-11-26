@@ -8,11 +8,14 @@
 
 #include <feign/core/camera.h>
 
-Camera::Camera() : Node() { }
+Camera::Camera() : Node()
+{
+}
 
-Camera::Camera(Node* parent) : Node(parent) { }
-
-Camera::~Camera() { std::cout << "deleting camera" << std::endl; }
+Camera::~Camera()
+{
+    std::cout << "deleting camera" << std::endl;
+}
 
 Vec2i Camera::getFilmSize() const
 {

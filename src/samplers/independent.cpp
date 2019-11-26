@@ -12,18 +12,15 @@
 
 Independent::Independent() : Sampler() { }
 
-Independent::Independent(Node* parent) : Sampler(parent) { }
-
-Independent::Independent(Node* parent,
-                         uint32_t seed,
+Independent::Independent(uint32_t seed,
                          uint32_t sample_cnt)
-    : Sampler(parent, seed, sample_cnt)
+    : Sampler(seed, sample_cnt)
 {
 }
 
 void Independent::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     currentSample = 0;
 

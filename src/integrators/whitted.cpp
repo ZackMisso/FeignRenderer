@@ -9,15 +9,15 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-WhittedIntegrator::WhittedIntegrator() : Integrator() { }
-
-WhittedIntegrator::WhittedIntegrator(Node* parent) : Integrator(parent) { }
+WhittedIntegrator::WhittedIntegrator() : Integrator()
+{
+}
 
 void WhittedIntegrator::preProcess()
 {
     Integrator::preProcess();
 
-    preProcessChildren();
+    // preProcessChildren();
 }
 
 Color3f WhittedIntegrator::Li(const Scene* scene,

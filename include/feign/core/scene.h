@@ -45,6 +45,7 @@ public:
     Node* root; // is this needed???
     Accel* acceleration;
     std::vector<Node*> sceneObjects; // keeping this for debugging purposes
+    std::vector<Shape*> shapes; // how should this be stored?
     std::vector<Emitter*> emitters;
     Integrator* integrator;
     Media* envMedium;

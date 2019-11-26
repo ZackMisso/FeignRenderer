@@ -12,17 +12,7 @@
 Scene::Scene() : Node()
 {
     sceneObjects = std::vector<Node*>();
-    root = nullptr;
-    acceleration = nullptr;
-    integrator = nullptr;
-    envMedium = nullptr;
-    sampler = nullptr;
-    camera = nullptr;
-}
-
-Scene::Scene(Node* parent) : Node(parent)
-{
-    sceneObjects = std::vector<Node*>();
+    shapes = std::vector<Shape*>();
     root = nullptr;
     acceleration = nullptr;
     integrator = nullptr;
@@ -43,48 +33,46 @@ Scene::~Scene()
 
 void Scene::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
-    std::vector<Shape*> shapes = std::vector<Shape*>();
+    // std::vector<Shape*> shapes = std::vector<Shape*>();
 
-    for (int i = 0; i < children.size(); ++i)
-    {
-        if (children[i]->getNodeType() == NT_Camera)
-        {
-            camera = (Camera*)children[i];
-        }
-        if (children[i]->getNodeType() == NT_Sampler)
-        {
-            sampler = (Sampler*)children[i];
-        }
-        if (children[i]->getNodeType() == NT_Integrator)
-        {
-            integrator = (Integrator*)children[i];
-        }
-        if (children[i]->getNodeType() == NT_Emitter)
-        {
-            emitters.push_back((Emitter*)children[i]);
-        }
-        if (children[i]->getNodeType() == NT_Accel)
-        {
-            acceleration = (Accel*)children[i];
-        }
-        if (children[i]->getNodeType() == NT_Mesh)
-        {
-            shapes.push_back((Shape*)children[i]);
-        }
-    }
+    // for (int i = 0; i < children.size(); ++i)
+    // {
+    //     if (children[i]->getNodeType() == NT_Camera)
+    //     {
+    //         camera = (Camera*)children[i];
+    //     }
+    //     if (children[i]->getNodeType() == NT_Sampler)
+    //     {
+    //         sampler = (Sampler*)children[i];
+    //     }
+    //     if (children[i]->getNodeType() == NT_Integrator)
+    //     {
+    //         integrator = (Integrator*)children[i];
+    //     }
+    //     if (children[i]->getNodeType() == NT_Emitter)
+    //     {
+    //         emitters.push_back((Emitter*)children[i]);
+    //     }
+    //     if (children[i]->getNodeType() == NT_Accel)
+    //     {
+    //         acceleration = (Accel*)children[i];
+    //     }
+    //     if (children[i]->getNodeType() == NT_Mesh)
+    //     {
+    //         shapes.push_back((Shape*)children[i]);
+    //     }
+    // }
 
-    std::cout << "before accel" << std::endl;
     if (!acceleration)
     {
-        std::cout << "in accel" << std::endl;
         acceleration = new EmbreeAccel();
         // acceleration = new NaiveAccel();
-        children.push_back(acceleration);
+        // children.push_back(acceleration);
         acceleration->preProcess();
     }
-    std::cout << "after accel" << std::endl;
+    // std::cout << "after accel" << std::endl;
 
     for (int i = 0; i < shapes.size(); ++i)
     {

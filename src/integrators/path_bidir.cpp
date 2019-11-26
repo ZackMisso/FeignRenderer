@@ -13,11 +13,6 @@ Path_Bidirectional_Integrator::Path_Bidirectional_Integrator()
     throw new NotImplementedException("path bidir constructor");
 }
 
-Path_Bidirectional_Integrator::Path_Bidirectional_Integrator(Node* parent)
-{
-    throw new NotImplementedException("path bidir constructor");
-}
-
 void Path_Bidirectional_Integrator::preProcess()
 {
     Integrator::preProcess();

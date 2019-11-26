@@ -33,8 +33,6 @@ BSDFQuery::BSDFQuery(const Vector3f& wi,
 
 BSDF::BSDF() : Node() { }
 
-BSDF::BSDF(Node* parent) : Node(parent) { }
-
 BSDF::~BSDF()
 {
     std::cout << "deleting bsdf" << std::endl;

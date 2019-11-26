@@ -26,7 +26,7 @@ GaussFilter::GaussFilter(Vec2f size, Float std_dev)
 
 void GaussFilter::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     Float xrad = size[0];
     Float yrad = size[1];

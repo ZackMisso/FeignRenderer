@@ -26,33 +26,33 @@ class Node
 {
 public:
     Node();
-    Node(Node* parent);
     virtual ~Node();
 
     virtual NodeType getNodeType() const = 0;
 
-    virtual void addChild(Node* node);
-    virtual void setParent(Node* node);
-    virtual bool hasChild(Node* node);
-    virtual void removeChild(Node* node);
+    // virtual void addChild(Node* node);
+    // virtual void setParent(Node* node);
+    // virtual bool hasChild(Node* node);
+    // virtual void removeChild(Node* node);
 
     virtual void print() const { }
 
-    int numChildren() const { return children.size(); }
+    // int numChildren() const { return children.size(); }
 
     virtual void preProcess() = 0;
-    void preProcessChildren();
+    // void preProcessChildren();
 
-    void printGraph(std::string indent = "") const;
+    // void printGraph(std::string indent = "") const;
 
     virtual std::string getName() const { return ""; }
 
     std::string getNodeName() const { return node_name; }
 
-    Node* getParent() const { return parent; }
+    // Node* getParent() const { return parent; }
 
 protected:
-    Node* parent;                // parent node
-    std::vector<Node*> children; // children of this node
+    // Node* parent;                // parent node
+    // // do nodes need access to their children???
+    // std::vector<Node*> children; // children of this node
     std::string node_name;       // user/scene defined name
 };

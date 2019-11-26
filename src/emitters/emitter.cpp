@@ -13,11 +13,6 @@ Emitter::Emitter() : Node()
     // TODO
 }
 
-Emitter::Emitter(Node* parent) : Node(parent)
-{
-    // TODO
-}
-
 Emitter::~Emitter()
 {
     std::cout << "deleting emitter" << std::endl;

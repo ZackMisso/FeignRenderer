@@ -19,7 +19,6 @@ class Camera : public Node
 {
 public:
     Camera();
-    Camera(Node* parent);
     virtual ~Camera();
 
     // takes in a film and apperture sample
@@ -48,10 +47,7 @@ protected:
 class Perspective : public Camera
 {
 public:
-    Perspective();
-    Perspective(Node* parent);
-    Perspective(Node* parent,
-                Float aperatureRadius,
+    Perspective(Float aperatureRadius,
                 Float focalDistance,
                 Float fov,
                 Float near,
@@ -86,7 +82,6 @@ class Orthographic : public Camera
 {
 public:
     Orthographic();
-    Orthographic(Node* parent);
 
     virtual void preProcess();
 

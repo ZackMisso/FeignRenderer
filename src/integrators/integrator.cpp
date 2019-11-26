@@ -15,11 +15,6 @@ Integrator::Integrator() : Node()
     filter = nullptr;
 }
 
-Integrator::Integrator(Node* parent) : Node(parent)
-{
-    filter = nullptr;
-}
-
 Integrator::~Integrator() { std::cout << "deleting integrator" << std::endl; }
 
 void Integrator::preProcess()
@@ -28,10 +23,10 @@ void Integrator::preProcess()
     {
         filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
         // filter = new BoxFilter();
-        addChild(filter);
+        // addChild(filter);
     }
 
-    preProcessChildren();
+    // preProcessChildren();
 }
 
 // TODO: multithreading

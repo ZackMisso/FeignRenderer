@@ -13,11 +13,6 @@ DirectionalEmitter::DirectionalEmitter()
     throw new NotImplementedException("emitter directional");
 }
 
-DirectionalEmitter::DirectionalEmitter(Node* parent)
-{
-    throw new NotImplementedException("emitter directional");
-}
-
 Color3f DirectionalEmitter::sample_li(EmitterQuery& rec,
                                   const Point2f& sample,
                                   Float* pdf) const

@@ -10,6 +10,7 @@
 
 Media::Media() : Node()
 {
+    throw new NotImplementedException("media constructore");
     // TODO
 }
 

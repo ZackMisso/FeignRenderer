@@ -300,7 +300,7 @@ Point3f ObjMesh::centroid(uint32_t tri) const
 
 void ObjMesh::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     // TODO: make these tasks multithreaded ???
 

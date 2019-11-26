@@ -10,17 +10,15 @@
 
 Latin::Latin() : Sampler() { }
 
-Latin::Latin(Node* parent) : Sampler(parent) { }
-
-Latin::Latin(Node* parent,
-             uint32_t seed,
+Latin::Latin(uint32_t seed,
              uint32_t sample_cnt)
+    : Sampler(seed, sample_cnt)
 {
 }
 
 void Latin::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     currentSample = 0;
 

@@ -8,14 +8,13 @@
 
 #include <feign/core/sampler.h>
 
-Halton::Halton() : Sampler() { }
+Halton::Halton() : Sampler()
+{
+}
 
-Halton::Halton(Node* parent) : Sampler(parent) { }
-
-Halton::Halton(Node* parent,
-               uint32_t seed,
+Halton::Halton(uint32_t seed,
                uint32_t sample_cnt)
-    : Sampler(parent, seed, sample_cnt)
+    : Sampler(seed, sample_cnt)
 {
 }
 

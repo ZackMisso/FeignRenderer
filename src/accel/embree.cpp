@@ -10,7 +10,7 @@
 
 void EmbreeAccel::preProcess()
 {
-    preProcessChildren();
+    // preProcessChisldren();
 
     // initialize embree datastructures
     rtcore = "start_threads=1,set_affinity=1";

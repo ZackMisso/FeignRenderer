@@ -10,19 +10,14 @@
 #include <feign/core/recon_filter.h>
 #include <feign/math/warp.h>
 
-Perspective::Perspective() : Camera() { }
-
-Perspective::Perspective(Node* parent) : Camera(parent) { }
-
-Perspective::Perspective(Node* parent,
-                         Float aperatureRadius,
+Perspective::Perspective(Float aperatureRadius,
                          Float focalDistance,
                          Float fov,
                          Float near,
                          Float far,
                          uint32_t width,
                          uint32_t height)
-    : Camera(parent),
+    : Camera(),
       aperatureRadius(aperatureRadius),
       focalDistance(focalDistance),
       fov(fov),
@@ -35,7 +30,7 @@ Perspective::Perspective(Node* parent,
 // TODO: remove parts of this
 void Perspective::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     float aspect = float(filmSize[0]) / float(filmSize[1]);
 

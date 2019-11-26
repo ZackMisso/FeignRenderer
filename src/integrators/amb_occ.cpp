@@ -15,16 +15,11 @@ Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator()
     // does nothing
 }
 
-Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(Node* parent)
-{
-    // does nothing
-}
-
 void Ambient_Occlusion_Integrator::preProcess()
 {
     Integrator::preProcess();
 
-    preProcessChildren();
+    // preProcessChildren();
 }
 
 Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,

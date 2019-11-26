@@ -45,6 +45,8 @@ private:
     static std::unordered_map<std::string, ReconstructionFilter*> filters;
     static std::unordered_map<std::string, Material*> materials;
 
+    static void clean_up();
+
 public:
     // TODO: this new api is not good for users directly
     static void fr_scene(std::string name,

@@ -10,19 +10,9 @@
 #include <feign/math/warp.h>
 #include <feign/math/coord_frame.h>
 
-Diffuse::Diffuse() : BSDF() { }
-
-Diffuse::Diffuse(Node* parent) : BSDF(parent) { }
-
-Diffuse::Diffuse(Node* parent, Color3f albedo)
-    : BSDF(parent), albedo(albedo)
+Diffuse::Diffuse(Color3f albedo)
+    : BSDF(), albedo(albedo)
 {
-    // TODO
-}
-
-void Diffuse::preProcess()
-{
-    preProcessChildren();
 }
 
 // the idea is that sample returns eval() / pdf()

@@ -13,11 +13,6 @@ Light_Unidirectional_Integrator::Light_Unidirectional_Integrator()
     throw new NotImplementedException("light unidir constructor");
 }
 
-Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(Node* parent)
-{
-    throw new NotImplementedException("light unidir constructor");
-}
-
 void Light_Unidirectional_Integrator::preProcess()
 {
     Integrator::preProcess();

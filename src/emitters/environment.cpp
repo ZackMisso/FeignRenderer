@@ -13,11 +13,6 @@ EnvironmentEmitter::EnvironmentEmitter()
     throw new NotImplementedException("emitter environment");
 }
 
-EnvironmentEmitter::EnvironmentEmitter(Node* parent)
-{
-    throw new NotImplementedException("emitter environment");
-}
-
 Color3f EnvironmentEmitter::sample_li(EmitterQuery& rec,
                                   const Point2f& sample,
                                   Float* pdf) const

@@ -10,7 +10,7 @@
 
 void NaiveAccel::preProcess()
 {
-    preProcessChildren();
+    // preProcessChildren();
 
     meshes = std::vector<Shape*>();
 }

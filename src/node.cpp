@@ -11,86 +11,80 @@
 
 Node::Node()
 {
-    children = std::vector<Node*>();
-    parent = nullptr;
-}
-
-Node::Node(Node* parent) : parent(parent)
-{
-    children = std::vector<Node*>();
+    // children = std::ves
 }
 
 Node::~Node()
 {
-    std::cout << "clearing " << std::endl;
+    // std::cout << "clearing " << std::endl;
     // printGraph();
-    for (int i = 0; i < children.size(); ++i)
-    {
-        if (children[i]) delete children[i];
-    }
-    children.clear();
-    std::cout << "cleared " << std::endl;
-    parent = nullptr;
+    // for (int i = 0; i < children.size(); ++i)
+    // {
+    //     if (children[i]) delete children[i];
+    // }
+    // children.clear();
+    // std::cout << "cleared " << std::endl;
+    // parent = nullptr;
 }
 
-void Node::addChild(Node* node)
-{
-    children.push_back(node);
-}
+// void Node::addChild(Node* node)
+// {
+//     children.push_back(node);
+// }
 
-void Node::setParent(Node* node)
-{
-    if (parent) parent->removeChild(this);
-    parent = node;
+// void Node::setParent(Node* node)
+// {
+//     if (parent) parent->removeChild(this);
+//     parent = node;
+//
+//     if (!node->hasChild(this)) node->addChild(this);
+// }
 
-    if (!node->hasChild(this)) node->addChild(this);
-}
+// bool Node::hasChild(Node* node)
+// {
+//     for (int i = 0; i < children.size(); i++)
+//     {
+//         if (children[i] == node) return true;
+//     }
+//
+//     return false;
+// }
 
-bool Node::hasChild(Node* node)
-{
-    for (int i = 0; i < children.size(); i++)
-    {
-        if (children[i] == node) return true;
-    }
+// void Node::removeChild(Node* node)
+// {
+//     for (int i = 0; i < children.size(); i++)
+//     {
+//         if (children[i] == node)
+//         {
+//             int lastIndex = children.size() - 1;
+//
+//             // swap for O(1) remove
+//             Node* tmp = children[lastIndex];
+//             children[lastIndex] = node;
+//             children[i] = tmp;
+//
+//             children.pop_back();
+//
+//             if (node->parent) node->parent = nullptr;
+//         }
+//     }
+// }
 
-    return false;
-}
+// void Node::preProcessChildren()
+// {
+//     for (int i = 0; i < children.size(); ++i)
+//     {
+//         children[i]->preProcess();
+//     }
+// }
 
-void Node::removeChild(Node* node)
-{
-    for (int i = 0; i < children.size(); i++)
-    {
-        if (children[i] == node)
-        {
-            int lastIndex = children.size() - 1;
-
-            // swap for O(1) remove
-            Node* tmp = children[lastIndex];
-            children[lastIndex] = node;
-            children[i] = tmp;
-
-            children.pop_back();
-
-            if (node->parent) node->parent = nullptr;
-        }
-    }
-}
-
-void Node::preProcessChildren()
-{
-    for (int i = 0; i < children.size(); ++i)
-    {
-        children[i]->preProcess();
-    }
-}
-
-void Node::printGraph(std::string indent) const
-{
-    std::cout << indent << getName() << std::endl;
-    std::string newIndent = indent + "  ";
-
-    for (int i = 0; i < children.size(); ++i)
-    {
-        children[i]->printGraph(newIndent);
-    }
-}
+// void Node::printGraph(std::string indent) const
+// {
+//     std::cout << indent << getName() << std::endl;
+//     std::string newIndent = indent + "  ";
+//
+//     // for (int i = 0; i < children.size(); ++i)
+//     // {
+//     //     children[i]->printGraph(newIndent);
+//     // }
+// }

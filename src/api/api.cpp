@@ -40,6 +40,120 @@ std::unordered_map<std::string, Sampler*>              FeignRenderer::samplers =
 std::unordered_map<std::string, ReconstructionFilter*> FeignRenderer::filters = std::unordered_map<std::string, ReconstructionFilter*>();
 std::unordered_map<std::string, Material*>             FeignRenderer::materials = std::unordered_map<std::string, Material*>();
 
+void FeignRenderer::fr_scene(std::string name,
+                             std::string integrator_node,
+                             std::string sampler_node,
+                             std::string camera_node,
+                             std::string medium_node)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_integrator(std::string name,
+                                  std::string type,
+                                  long max_time,
+                                  long max_heuristic)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_sampler(std::string name,
+                               std::string type,
+                               int spp,
+                               long seed,
+                               long seed2)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_camera(std::string name,
+                              std::string type,
+                              Vector3f origin,
+                              Vector3f target,
+                              Vector3f up,
+                              float fov,
+                              Vec2i image_res)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_object(std::string name,
+                              std::string mesh,
+                              std::string material)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_mesh(std::string name,
+                            std::string type,
+                            std::string filename)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_emitter(std::string name,
+                               std::string type,
+                               std::string mesh,
+                               std::string material,
+                               Vector3f pos,
+                               Color3f intensity)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_material(std::string name,
+                                std::string bsdf)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_bsdf(std::string name,
+                            std::string type,
+                            Color3f albedo)
+{
+    if (type == "diffuse")
+    {
+        // Diffuse*
+        // TODO
+    }
+    else
+    {
+        // unrecognized bsdf
+        std::cout << "ERROR: BSDF : " << type << " : does not exist" << std::endl;
+        assert(false);
+    }
+}
+
+void FeignRenderer::fr_clear_transform()
+{
+    // TODO
+}
+
+void FeignRenderer::fr_scale(float sx, float sy, float sz)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_translate(float tx, float ty, float tz)
+{
+    // TODO
+}
+
+void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
+{
+    // TODO
+}
+
+// this is the big one
+void FeignRenderer::flush_renders()
+{
+    // TODO
+}
+
+void FeignRenderer::clean_up()
+{
+    // TODO
+}
 
 
 // TODO: rewrite all of this
