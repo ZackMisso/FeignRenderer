@@ -87,8 +87,3 @@ void Latin::nextSample()
 
     throw new NotImplementedException("latin next sample");
 }
-
-std::string Latin::getName() const
-{
-    return Sampler::getName() + "latin";
-}

@@ -18,12 +18,18 @@
 #include <feign/media/media.h>
 #include <feign/misc/intersection.h>
 
+// required forward declarations for the Nodes
+class IntegratorNode;
+class SamplerNode;
+class MediaNode;
+class AccelNode;
+class CameraNode;
+
 // TODO: scene should not be an observable data structure externally
-class Scene : public Node
+class Scene
 {
 public:
     Scene();
-    Scene(Node* parent);
     ~Scene();
 
     virtual void preProcess();
@@ -33,22 +39,53 @@ public:
     bool intersect(const Ray3f& ray, Intersection& its) const;
 
     void addEmitter(Emitter* emitter);
-    void addObject(Node* object);
-
-    virtual NodeType getNodeType() const;
-    virtual std::string getName() const;
+    // void addObject(Node* object);
 
     // TODO: should these really be public...
 public:
-    std::string sceneName;
+    std::string name;
     BBox3f sceneBounds;
-    Node* root; // is this needed???
-    Accel* acceleration;
-    std::vector<Node*> sceneObjects; // keeping this for debugging purposes
-    std::vector<Shape*> shapes; // how should this be stored?
-    std::vector<Emitter*> emitters;
+
+    // required structures
     Integrator* integrator;
-    Media* envMedium;
     Sampler* sampler;
     Camera* camera;
+    Accel* ray_accel;
+
+    // pre-processed structures
+    std::vector<Emitter*> emitters;
+    std::vector<Shape*> shapes;
+
+    // optional structures
+    Media* env_medium;
 };
+
+// TODO: the nodes should be a layer of abstraction over the actual
+// implementation
+
+/////////////////////////////////////////////////
+// Scene Node structure
+/////////////////////////////////////////////////
+struct SceneNode : public Node
+{
+public:
+    SceneNode() : scene(nullptr) { }
+    SceneNode(Scene* scene) : scene(scene) { }
+
+    SceneNode(std::string name,
+              std::string integrator,
+              std::string sampler,
+              std::string camera,
+              std::string medium) {}
+
+    ~SceneNode() { }
+
+    Scene* scene;
+
+    IntegratorNode integrator_node;
+    SamplerNode sampler_node;
+    CameraNode camera_node;
+    AccelNode accel_node;
+    MediaNode media_node;
+};
+/////////////////////////////////////////////////

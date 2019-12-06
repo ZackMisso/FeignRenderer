@@ -3,32 +3,33 @@
 
 #include <feign/common.h>
 
-enum NodeType
-{
-    NT_Emitter,
-    NT_Mesh,
-    NT_BSDF,
-    NT_PhaseFunction,
-    NT_Integrator,
-    NT_Media,
-    NT_Sampler,
-    NT_Texture,
-    NT_Scene,
-    NT_Transform,
-    NT_Camera,
-    NT_Primitive,
-    NT_World,
-    NT_Recon_Filter,
-    NT_Accel
-};
+// enum NodeType
+// {
+//     NT_Emitter,
+//     NT_Mesh,
+//     NT_BSDF,
+//     NT_PhaseFunction,
+//     NT_Integrator,
+//     NT_Media,
+//     NT_Sampler,
+//     NT_Texture,
+//     NT_Scene,
+//     NT_Transform,
+//     NT_Camera,
+//     NT_Primitive,
+//     NT_World,
+//     NT_Recon_Filter,
+//     NT_Accel
+// };
 
-class Node
+// TODO: should accel nodes be public?
+struct Node
 {
 public:
-    Node();
-    virtual ~Node();
+    Node() { }
+    virtual ~Node() { }
 
-    virtual NodeType getNodeType() const = 0;
+    // virtual NodeType getNodeType() const = 0;
 
     // virtual void addChild(Node* node);
     // virtual void setParent(Node* node);
@@ -39,20 +40,20 @@ public:
 
     // int numChildren() const { return children.size(); }
 
-    virtual void preProcess() = 0;
+    // virtual void preProcess() = 0;
     // void preProcessChildren();
 
     // void printGraph(std::string indent = "") const;
 
-    virtual std::string getName() const { return ""; }
+    virtual std::string getName() const { return name; }
 
-    std::string getNodeName() const { return node_name; }
+    // std::string getNodeName() const { return node_name; }
 
     // Node* getParent() const { return parent; }
 
-protected:
+// protected:
     // Node* parent;                // parent node
     // // do nodes need access to their children???
     // std::vector<Node*> children; // children of this node
-    std::string node_name;       // user/scene defined name
+    std::string name;       // user/scene defined name
 };

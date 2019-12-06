@@ -15,11 +15,11 @@
 /////////////////////////////////////////////////
 // Camera
 /////////////////////////////////////////////////
-class Camera : public Node
+class Camera
 {
 public:
-    Camera();
-    virtual ~Camera();
+    Camera() { }
+    virtual ~Camera() { }
 
     // takes in a film and apperture sample
     // calculates a generated ray according to the samples
@@ -28,10 +28,7 @@ public:
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const = 0;
 
-    virtual std::string getName() const;
-    virtual NodeType getNodeType() const;
-
-    Vec2i getFilmSize() const;
+    Vec2i getFilmSize() const { return filmSize; }
 
     void setCameraToWorld(const Transform& param) { cameraToWorld = param; }
 
@@ -61,8 +58,6 @@ public:
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const;
 
-    virtual std::string getName() const;
-
     void print() const;
 
 protected:
@@ -88,7 +83,18 @@ public:
     virtual Color3f sampleRay(Ray3f& ray,
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const;
+};
+/////////////////////////////////////////////////
 
-    virtual std::string getName() const;
+/////////////////////////////////////////////////
+// Camera Node structure
+/////////////////////////////////////////////////
+struct CameraNode : public Node
+{
+public:
+    CameraNode() : camera(nullptr) { }
+    CameraNode(Camera* camera) : camera(camera) { }
+
+    Camera* camera;
 };
 /////////////////////////////////////////////////

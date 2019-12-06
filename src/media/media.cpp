@@ -8,7 +8,7 @@
 
 #include <feign/media/media.h>
 
-Media::Media() : Node()
+Media::Media()
 {
     throw new NotImplementedException("media constructore");
     // TODO
@@ -18,9 +18,4 @@ Media::~Media()
 {
     std::cout << "deleting media" << std::endl;
     // TODO
-}
-
-std::string Media::getName() const
-{
-    return "media: ";
 }

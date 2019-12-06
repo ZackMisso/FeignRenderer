@@ -28,8 +28,3 @@ Color3f Orthographic::sampleRay(Ray3f& ray,
 
     return Color3f(1.0);
 }
-
-std::string Orthographic::getName() const
-{
-    return Camera::getName() + " orthographic";
-}

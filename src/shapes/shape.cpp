@@ -8,12 +8,7 @@
 
 #include <feign/shapes/shape.h>
 
-Shape::Shape() : Node()
-{
-    material = new Material();
-}
-
-Shape::Shape(Node* parent) : Node(parent)
+Shape::Shape()
 {
     material = new Material();
 }
@@ -22,14 +17,4 @@ Shape::~Shape()
 {
     std::cout << "deleting shape" << std::endl;
     delete material;
-}
-
-std::string Shape::getName() const
-{
-    return "mesh: ";
-}
-
-NodeType Shape::getNodeType() const
-{
-    return NT_Mesh;
 }

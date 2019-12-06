@@ -100,8 +100,3 @@ void Halton::nextSample()
 
     throw new NotImplementedException("halton nextSample");
 }
-
-std::string Halton::getName() const
-{
-    return Sampler::getName() + "halton";
-}

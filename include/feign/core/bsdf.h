@@ -27,41 +27,42 @@ struct BSDFQuery
 
     BSDFQuery(const Vector3f& wi,
               const Point2f& uv,
-              const Point3f& pos);
+              const Point3f& pos)
+        : wi(wi), uvw(Point3f(uv, 0.f)), pos(pos) { }
 
     BSDFQuery(const Vector3f& wi,
               const Point3f& uvw,
-              const Point3f& pos);
+              const Point3f& pos)
+        : wi(wi), uvw(uvw), pos(pos) { }
 
     BSDFQuery(const Vector3f& wi,
               const Vector3f& wo,
               const Point2f& uv,
-              const Point3f& pos);
+              const Point3f& pos)
+        : wi(wi), wo(wo), uvw(Point3f(uv, 0.f)), pos(pos) { }
 
     BSDFQuery(const Vector3f& wi,
               const Vector3f& wo,
               const Point3f& uvw,
-              const Point3f& pos);
+              const Point3f& pos)
+        : wi(wi), wo(wo), uvw(uvw), pos(pos) { }
 };
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // BSDF
 /////////////////////////////////////////////////
-class BSDF : public Node
+class BSDF
 {
 public:
-    BSDF();
-    virtual ~BSDF();
+    BSDF() { }
+    virtual ~BSDF() { }
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const = 0;
     virtual Color3f eval(const BSDFQuery& rec) const = 0;
     virtual Float pdf(const BSDFQuery& rec) const = 0;
 
     virtual bool isDelta() const = 0;
-
-    virtual std::string getName() const;
-    virtual NodeType getNodeType() const;
 
     // TODO
 };
@@ -81,9 +82,20 @@ public:
 
     virtual bool isDelta() const { return false; }
 
-    virtual std::string getName() const;
-
 protected:
     Color3f albedo;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// BSDF Node structure
+/////////////////////////////////////////////////
+struct BSDFNode : public Node
+{
+public:
+    BSDFNode() : bsdf(nullptr) { }
+    BSDFNode(BSDF* bsdf) : bsdf(bsdf) { }
+
+    BSDF* bsdf;
 };
 /////////////////////////////////////////////////

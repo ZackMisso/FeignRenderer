@@ -27,3 +27,16 @@ public:
 protected:
     BSDF* bsdf;
 };
+
+/////////////////////////////////////////////////
+// Material Node structure
+/////////////////////////////////////////////////
+struct MaterialNode : public Node
+{
+public:
+    MaterialNode() : material(nullptr) { }
+    MaterialNode(Material* material) : material(material) { }
+
+    Material* material;
+};
+/////////////////////////////////////////////////

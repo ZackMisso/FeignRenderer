@@ -13,17 +13,13 @@
 /////////////////////////////////////////////////
 // Reconstruction Filter
 /////////////////////////////////////////////////
-class ReconstructionFilter : public Node
+class ReconstructionFilter
 {
 public:
-    ReconstructionFilter();
-    ReconstructionFilter(Vec2f size);
+    ReconstructionFilter() { }
+    ReconstructionFilter(Vec2f size) : size(size) { }
 
     virtual Float evaluate(const Point2f& p) const = 0;
-
-    virtual NodeType getNodeType() const;
-
-    virtual std::string getName() const;
 
     Vec2f getSize() const { return size; }
 
@@ -44,8 +40,6 @@ public:
     virtual void preProcess();
 
     virtual Float evaluate(const Point2f& p) const;
-
-    virtual std::string getName() const;
 };
 /////////////////////////////////////////////////
 
@@ -63,11 +57,22 @@ public:
 
     virtual Float evaluate(const Point2f& p) const;
 
-    virtual std::string getName() const;
-
 protected:
     Vec2f expCoeff;
     Float alpha;
     Float std_dev;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Filter Node structure
+/////////////////////////////////////////////////
+struct FilterNode : public Node
+{
+public:
+    FilterNode() : filter(nullptr) { }
+    FilterNode(ReconstructionFilter* filter) : filter(filter) { }
+
+    ReconstructionFilter* filter;
 };
 /////////////////////////////////////////////////

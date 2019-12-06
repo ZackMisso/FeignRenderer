@@ -20,13 +20,6 @@ void Path_Bidirectional_Integrator::preProcess()
     throw new NotImplementedException("path bidir preProcess");
 }
 
-std::string Path_Bidirectional_Integrator::getName() const
-{
-    throw new NotImplementedException("path bidir getName");
-
-    return "";
-}
-
 Color3f Path_Bidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
                                            const Ray3f& ray) const

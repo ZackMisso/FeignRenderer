@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////
 // Ray Tracing Acceleration Structure
 /////////////////////////////////////////////////
-class Accel : public Node
+class Accel
 {
 public:
     Accel();
@@ -24,12 +24,10 @@ public:
 
     virtual void clear() = 0;
     virtual void build() = 0;
+    virtual void preProcess() = 0;
     virtual void addShape(Shape* mesh) = 0;
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
-
-    virtual std::string getName() const;
-    virtual NodeType getNodeType() const;
 
     void setMeshes(const std::vector<Shape*>& param);
 
@@ -97,5 +95,18 @@ class NaiveAccel : public Accel
     virtual void addShape(Shape* mesh);
     virtual void build();
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Accel Node structure
+/////////////////////////////////////////////////
+struct AccelNode : public Node
+{
+public:
+    AccelNode() : accel(nullptr) { }
+    AccelNode(Accel* accel) : accel(accel) { }
+
+    Accel* accel;
 };
 /////////////////////////////////////////////////

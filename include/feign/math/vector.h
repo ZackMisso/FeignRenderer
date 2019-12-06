@@ -1142,7 +1142,9 @@ struct Matrix3
     {
         Matrix3<T> mat;
 
-        throw new NotImplementedException("Matrix3 inverse");
+        assert(false);
+
+        // throw new NotImplementedException("Matrix3 inverse");
 
         return mat;
     }

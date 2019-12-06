@@ -7,25 +7,25 @@
  **/
 
 #include <feign/core/node.h>
-#include <feign/exceptions.h>
+// #include <feign/exceptions.h>
 
-Node::Node()
-{
-    // children = std::ves
-}
-
-Node::~Node()
-{
-    // std::cout << "clearing " << std::endl;
-    // printGraph();
-    // for (int i = 0; i < children.size(); ++i)
-    // {
-    //     if (children[i]) delete children[i];
-    // }
-    // children.clear();
-    // std::cout << "cleared " << std::endl;
-    // parent = nullptr;
-}
+// Node::Node()
+// {
+//     // children = std::ves
+// }
+//
+// Node::~Node()
+// {
+//     // std::cout << "clearing " << std::endl;
+//     // printGraph();
+//     // for (int i = 0; i < children.size(); ++i)
+//     // {
+//     //     if (children[i]) delete children[i];
+//     // }
+//     // children.clear();
+//     // std::cout << "cleared " << std::endl;
+//     // parent = nullptr;
+// }
 
 // void Node::addChild(Node* node)
 // {

@@ -16,14 +16,13 @@ class ObjMesh : public Shape
 {
 public:
     ObjMesh();
-    ObjMesh(Node* parent);
-    ObjMesh(Node* parent, const std::string& filename);
+    ObjMesh(const std::string& filename);
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,
             const std::vector<Vec2f>& uvs,
             const std::vector<Triangle>& tris);
 
-    virtual std::string getName() const;
+    ~ObjMesh() { }
 
     uint32_t num_tris() const;
     uint32_t num_verts() const;

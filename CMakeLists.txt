@@ -92,7 +92,6 @@ endif()
 add_executable(feign
     # Header files
     include/feign/common.h
-    include/feign/exceptions.h
 
     # Core header files
     include/feign/core/scene.h
@@ -172,23 +171,19 @@ add_executable(feign
     src/api/api.cpp
 
     # BSDF implementation files
-    src/bsdfs/bsdf.cpp
     src/bsdfs/diffuse.cpp
 
     # Camera implementation files
-    src/cameras/camera.cpp
     src/cameras/perspective.cpp
     src/cameras/ortho.cpp
 
     # Emitter implementation files
-    src/emitters/emitter.cpp
     src/emitters/point.cpp
     src/emitters/distant.cpp
     src/emitters/directional.cpp
     src/emitters/environment.cpp
 
     # Filter implementation files
-    src/filters/recon_filter.cpp
     src/filters/box_filter.cpp
     src/filters/gauss_filter.cpp
 

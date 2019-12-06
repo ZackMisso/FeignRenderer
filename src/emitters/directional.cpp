@@ -31,8 +31,3 @@ void DirectionalEmitter::preProcess()
 {
     throw new NotImplementedException("emitter directional");
 }
-
-std::string DirectionalEmitter::getName() const
-{
-    throw new NotImplementedException("emitter directional");
-}

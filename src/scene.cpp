@@ -9,26 +9,27 @@
 #include <feign/core/scene.h>
 #include <feign/core/accel.h>
 
-Scene::Scene() : Node()
+Scene::Scene()
 {
-    sceneObjects = std::vector<Node*>();
+    // sceneObjects = std::vector<Node*>();
     shapes = std::vector<Shape*>();
-    root = nullptr;
-    acceleration = nullptr;
+    // root = nullptr;
+    ray_accel = nullptr;
     integrator = nullptr;
-    envMedium = nullptr;
+    env_medium = nullptr;
     sampler = nullptr;
     camera = nullptr;
 }
 
 Scene::~Scene()
 {
-    std::cout << "deleting scene" << std::endl;
-    std::cout << "before delete root" << std::endl;
-    if (!root) std::cout << "root does not exist" << std::endl;
-    delete root;
-    std::cout << "post delete root" << std::endl;
-    sceneObjects.clear();
+    // TODO delete correctly
+    // std::cout << "deleting scene" << std::endl;
+    // std::cout << "before delete root" << std::endl;
+    // if (!root) std::cout << "root does not exist" << std::endl;
+    // delete root;
+    // std::cout << "post delete root" << std::endl;
+    // sceneObjects.clear();
 }
 
 void Scene::preProcess()
@@ -57,7 +58,7 @@ void Scene::preProcess()
     //     }
     //     if (children[i]->getNodeType() == NT_Accel)
     //     {
-    //         acceleration = (Accel*)children[i];
+    //         ray_accel = (Accel*)children[i];
     //     }
     //     if (children[i]->getNodeType() == NT_Mesh)
     //     {
@@ -65,36 +66,36 @@ void Scene::preProcess()
     //     }
     // }
 
-    if (!acceleration)
+    if (!ray_accel)
     {
-        acceleration = new EmbreeAccel();
-        // acceleration = new NaiveAccel();
-        // children.push_back(acceleration);
-        acceleration->preProcess();
+        ray_accel = new EmbreeAccel();
+        // ray_accel = new NaiveAccel();
+        // children.push_back(ray_accel);
+        ray_accel->preProcess();
     }
     // std::cout << "after accel" << std::endl;
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        acceleration->addShape(shapes[i]);
+        ray_accel->addShape(shapes[i]);
     }
 
-    acceleration->build();
+    ray_accel->build();
 }
 
 void Scene::renderScene() const
 {
     if (!integrator)
     {
-        throw new MissingPrimitiveException("no specified integrator");
+        throw new FeignRendererException("scene: no specified integrator");
     }
     if (!camera)
     {
-        throw new MissingPrimitiveException("no specified camera");
+        throw new FeignRendererException("scene: no specified camera");
     }
     if (!sampler)
     {
-        throw new MissingPrimitiveException("no specified sampler");
+        throw new FeignRendererException("scene: no specified sampler");
     }
 
     std::cout << "rendering film: " << camera->getFilmSize()[0] << ", " << camera->getFilmSize()[1] << std::endl;
@@ -109,18 +110,18 @@ void Scene::renderScene() const
                        sampler,
                        image);
 
-    std::cout << "writing scene: " << sceneName << std::endl;
+    std::cout << "writing scene: " << name << std::endl;
 
-    image.write(sceneName + ".png"); // .png writer has some issues
+    image.write(name + ".png"); // .png writer has some issues
                                      // for some scenes
-    image.write(sceneName + ".exr");
+    image.write(name + ".exr");
 
     std::cout << "Rendering Complete" << std::endl;
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
-    return acceleration->intersect(ray, its);
+    return ray_accel->intersect(ray, its);
 }
 
 void Scene::addEmitter(Emitter* emitter)
@@ -128,17 +129,7 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
-void Scene::addObject(Node* node)
-{
-    sceneObjects.push_back(node);
-}
-
-std::string Scene::getName() const
-{
-    return "scene";
-}
-
-NodeType Scene::getNodeType() const
-{
-    return NT_Scene;
-}
+// void Scene::addObject(Node* node)
+// {
+//     sceneObjects.push_back(node);
+// }

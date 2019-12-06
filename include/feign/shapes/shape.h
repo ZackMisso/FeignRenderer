@@ -19,7 +19,7 @@
 struct e_Vertex   { float x,y,z,r;  };
 struct e_Triangle { int v0, v1, v2; };
 
-class Shape : public Node
+class Shape
 {
 public:
     Shape();
@@ -41,10 +41,6 @@ public:
 
     virtual void addShapeToScene(RTCScene scene, RTCDevice device) = 0;
 
-    virtual std::string getName() const;
-
-    virtual NodeType getNodeType() const;
-
     Material* getMaterial() const { return material; }
     unsigned int getGeomID() const { return geomID; }
 
@@ -54,3 +50,16 @@ protected:
     Material* material;
     unsigned int geomID;
 };
+
+/////////////////////////////////////////////////
+// Object Node structure
+/////////////////////////////////////////////////
+struct ObjectNode : public Node
+{
+public:
+    ObjectNode() : mesh(nullptr) { }
+    ObjectNode(Shape* mesh) : mesh(mesh) { }
+
+    Shape* mesh;
+};
+/////////////////////////////////////////////////

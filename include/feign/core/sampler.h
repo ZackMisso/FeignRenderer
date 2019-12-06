@@ -40,9 +40,6 @@ public:
 
     virtual void nextSample() = 0;
 
-    virtual std::string getName() const;
-    virtual NodeType getNodeType() const;
-
     uint32_t getSampleCnt() const;
 
 protected:
@@ -140,5 +137,18 @@ public:
     virtual std::string getName() const;
 
 protected:
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Sampler Node structure
+/////////////////////////////////////////////////
+struct SamplerNode : public Node
+{
+public:
+    SamplerNode() : sampler(nullptr) { }
+    SamplerNode(Sampler* sampler) : sampler(sampler) { }
+
+    Sampler* sampler;
 };
 /////////////////////////////////////////////////

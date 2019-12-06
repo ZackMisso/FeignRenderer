@@ -84,11 +84,6 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     return Color3f(1.f);
 }
 
-std::string Perspective::getName() const
-{
-    return Camera::getName() + "perspective";
-}
-
 void Perspective::print() const
 {
     std::cout << "camera transform:" << std::endl;

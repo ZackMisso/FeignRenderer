@@ -14,7 +14,6 @@
 #include <limits>
 #include <assert.h>
 
-#include <feign/exceptions.h>
 #include <feign/math/vector.h>
 #include <feign/log/logger.h>
 
@@ -86,3 +85,29 @@ inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
     *_sin = sinf(theta);
     *_cos = cosf(theta);
 }
+
+/////////////////////////////////////////////////
+// EXCEPTIONS
+/////////////////////////////////////////////////
+class NotImplementedException : public std::runtime_error
+{
+public:
+    NotImplementedException() : std::runtime_error("Exception: Method Not Implemented") { }
+
+    NotImplementedException(std::string str) : std::runtime_error("Exception: Method Not Implemented: " + str)
+    {
+        std::cout << str << std::endl;
+    }
+};
+
+class FeignRendererException : public std::runtime_error
+{
+public:
+    FeignRendererException() : std::runtime_error("Renderer Exception") { }
+
+    FeignRendererException(std::string str) : std::runtime_error("Renderer Exception: " + str)
+    {
+        std::cout << str << std::endl;
+    }
+};
+/////////////////////////////////////////////////

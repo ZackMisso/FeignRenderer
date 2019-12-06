@@ -19,11 +19,11 @@ class Scene;
 /////////////////////////////////////////////////
 // Integrator
 /////////////////////////////////////////////////
-class Integrator : public Node
+class Integrator
 {
 public:
-    Integrator();
-    virtual ~Integrator();
+    Integrator() : filter(nullptr) { }
+    virtual ~Integrator() { }
 
     virtual void preProcess();
 
@@ -35,10 +35,6 @@ public:
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const = 0;
-
-    virtual std::string getName() const;
-
-    virtual NodeType getNodeType() const;
 
 protected:
     ReconstructionFilter* filter;
@@ -55,8 +51,6 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
@@ -72,8 +66,6 @@ public:
     Light_Unidirectional_Integrator();
 
     virtual void preProcess();
-
-    virtual std::string getName() const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -92,8 +84,6 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
@@ -109,8 +99,6 @@ public:
     Path_Bidirectional_Integrator();
 
     virtual void preProcess();
-
-    virtual std::string getName() const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -128,8 +116,6 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
@@ -146,10 +132,21 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Integrator Node structure
+/////////////////////////////////////////////////
+struct IntegratorNode : public Node
+{
+public:
+    IntegratorNode() : integrator(nullptr) { }
+    IntegratorNode(Integrator* integrator) : integrator(integrator) { }
+
+    Integrator* integrator;
 };
 /////////////////////////////////////////////////

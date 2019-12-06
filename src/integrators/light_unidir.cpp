@@ -20,13 +20,6 @@ void Light_Unidirectional_Integrator::preProcess()
     throw new NotImplementedException("light unidir preProcess");
 }
 
-std::string Light_Unidirectional_Integrator::getName() const
-{
-    throw new NotImplementedException("light unidir getName");
-
-    return "";
-}
-
 Color3f Light_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
                                            const Ray3f& ray) const

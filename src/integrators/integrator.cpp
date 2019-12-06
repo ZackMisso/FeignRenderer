@@ -10,13 +10,6 @@
 #include <feign/core/recon_filter.h>
 #include <feign/core/scene.h>
 
-Integrator::Integrator() : Node()
-{
-    filter = nullptr;
-}
-
-Integrator::~Integrator() { std::cout << "deleting integrator" << std::endl; }
-
 void Integrator::preProcess()
 {
     if (!filter)
@@ -90,14 +83,4 @@ void Integrator::render(const Scene* scene,
             image(j, i, 2) = image(j, i, 2) / filter_weights(j, i, 0);
         }
     }
-}
-
-std::string Integrator::getName() const
-{
-    return "integrator: ";
-}
-
-NodeType Integrator::getNodeType() const
-{
-    return NT_Integrator;
 }

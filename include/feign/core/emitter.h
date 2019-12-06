@@ -32,11 +32,11 @@ struct EmitterQuery
 /////////////////////////////////////////////////
 // Emitter
 /////////////////////////////////////////////////
-class Emitter : public Node
+class Emitter
 {
 public:
-    Emitter();
-    virtual ~Emitter();
+    Emitter() { }
+    virtual ~Emitter() { }
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -45,9 +45,6 @@ public:
     virtual Color3f sample_pos(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const = 0;
-
-    virtual std::string getName() const;
-    virtual NodeType getNodeType() const;
 };
 /////////////////////////////////////////////////
 
@@ -68,8 +65,6 @@ public:
                                Float* pdf) const;
 
     virtual void preProcess();
-
-    virtual std::string getName() const;
 
 protected:
 };
@@ -92,8 +87,6 @@ public:
                                Float* pdf) const;
 
     virtual void preProcess();
-
-    virtual std::string getName() const;
 
 protected:
 };
@@ -119,8 +112,6 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
 protected:
     Color3f I;
     Point3f pos;
@@ -145,8 +136,19 @@ public:
 
     virtual void preProcess();
 
-    virtual std::string getName() const;
-
 protected:
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Emittrer Node structure
+/////////////////////////////////////////////////
+struct EmitterNode : public Node
+{
+public:
+    EmitterNode() : emitter(nullptr) { }
+    EmitterNode(Emitter* emitter) : emitter(emitter) { }
+
+    Emitter* emitter;
 };
 /////////////////////////////////////////////////

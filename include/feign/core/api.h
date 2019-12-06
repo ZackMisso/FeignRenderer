@@ -32,18 +32,19 @@ class FeignRenderer
 private:
     static std::vector<Transform> transform_stack;
     static Transform current_transform;
-    static Scene* scene;
+    static SceneNode* scene;
 
     // TODO: what is the best representation? vector? tree?
     static std::vector<Node*> nodes;
-    static std::unordered_map<std::string, BSDF*> bsdfs;
-    static std::unordered_map<std::string, Camera*> cameras;
-    static std::unordered_map<std::string, Emitter*> emitters;
-    static std::unordered_map<std::string, Media*> medias;
-    static std::unordered_map<std::string, Integrator*> integrators;
-    static std::unordered_map<std::string, Sampler*> samplers;
-    static std::unordered_map<std::string, ReconstructionFilter*> filters;
-    static std::unordered_map<std::string, Material*> materials;
+    static std::unordered_map<std::string, BSDFNode*> bsdfs;
+    static std::unordered_map<std::string, CameraNode*> cameras;
+    static std::unordered_map<std::string, EmitterNode*> emitters;
+    static std::unordered_map<std::string, MediaNode*> medias;
+    static std::unordered_map<std::string, IntegratorNode*> integrators;
+    static std::unordered_map<std::string, SamplerNode*> samplers;
+    static std::unordered_map<std::string, FilterNode*> filters;
+    static std::unordered_map<std::string, MaterialNode*> materials;
+    static std::unordered_map<std::string, ObjectNode*> meshes;
 
     static void clean_up();
 

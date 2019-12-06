@@ -19,16 +19,8 @@ ObjMesh::ObjMesh() : Shape()
     tris = std::vector<Triangle>();
 }
 
-ObjMesh::ObjMesh(Node* parent) : Shape(parent)
-{
-    vs = std::vector<Point3f>();
-    ns = std::vector<Normal3f>();
-    uvs = std::vector<Vec2f>();
-    tris = std::vector<Triangle>();
-}
-
-ObjMesh::ObjMesh(Node* parent, const std::string& filename)
-    : Shape(parent), filename(filename)
+ObjMesh::ObjMesh(const std::string& filename)
+    : Shape(), filename(filename)
 {
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
@@ -40,13 +32,8 @@ ObjMesh::ObjMesh(const std::vector<Point3f>& vs,
                  const std::vector<Normal3f>& ns,
                  const std::vector<Vec2f>& uvs,
                  const std::vector<Triangle>& tris)
-    : vs(vs), uvs(uvs), ns(ns), tris(tris)
+    : Shape(), vs(vs), uvs(uvs), ns(ns), tris(tris)
 { // does nothing
-}
-
-std::string ObjMesh::getName() const
-{
-    return Shape::getName() + "obj";
 }
 
 uint32_t ObjMesh::num_tris() const
@@ -140,7 +127,7 @@ void ObjMesh::parseFromFile(const std::string& filename,
 
     if (ifs.fail())
     {
-        throw new OBJUnopenableException(filename);
+        throw new FeignRendererException(filename);
     }
 
     std::string lineStr;
@@ -196,7 +183,7 @@ void ObjMesh::parseFromFile(const std::string& filename,
 
             if (!f5.empty())
             {
-                throw new ParseException("Meshes with more than 4 verts in a face are not supported");
+                throw new FeignRendererException("Meshes with more than 4 verts in a face are not supported");
             }
 
             if (!f4.empty())

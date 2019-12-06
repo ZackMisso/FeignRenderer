@@ -48,8 +48,3 @@ Float GaussFilter::evaluate(const Point2f& p) const
 
     return xval * yval;
 }
-
-std::string GaussFilter::getName() const
-{
-    return ReconstructionFilter::getName() + "gaussian";
-}

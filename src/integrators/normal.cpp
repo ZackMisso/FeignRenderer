@@ -35,8 +35,3 @@ Color3f NormalIntegrator::Li(const Scene* scene,
 
     return Color3f(shad_n(0), shad_n(1), shad_n(2));
 }
-
-std::string NormalIntegrator::getName() const
-{
-    return Integrator::getName() + "normal";
-}

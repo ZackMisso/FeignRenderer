@@ -20,13 +20,6 @@ void Path_Unidirectional_Integrator::preProcess()
     throw new NotImplementedException("path unidir preProcess");
 }
 
-std::string Path_Unidirectional_Integrator::getName() const
-{
-    throw new NotImplementedException("path unidir getName");
-
-    return "";
-}
-
 Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
                                            const Ray3f& ray) const

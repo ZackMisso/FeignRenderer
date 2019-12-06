@@ -102,8 +102,3 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     return result;
 }
-
-std::string WhittedIntegrator::getName() const
-{
-    return Integrator::getName() + "whitted";
-}

@@ -50,8 +50,3 @@ Float Diffuse::pdf(const BSDFQuery& rec) const
 
     return INV_PI * CoordinateFrame::cosTheta(rec.wo);
 }
-
-std::string Diffuse::getName() const
-{
-    return BSDF::getName() + "diffuse";
-}

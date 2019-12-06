@@ -71,8 +71,3 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
 
     return Color3f(0.0);
 }
-
-std::string Ambient_Occlusion_Integrator::getName() const
-{
-    return Integrator::getName() + "amb_occ";
-}

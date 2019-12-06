@@ -10,12 +10,23 @@
 
 #include <feign/core/node.h>
 
-class Media : public Node
+class Media
 {
     Media();
     virtual ~Media();
 
-    virtual std::string getName() const;
-
     // TODO
 };
+
+/////////////////////////////////////////////////
+// Material Node structure
+/////////////////////////////////////////////////
+struct MediaNode : public Node
+{
+public:
+    MediaNode() : media(nullptr) { }
+    MediaNode(Media* media) : media(media) { }
+
+    Media* media;
+};
+/////////////////////////////////////////////////

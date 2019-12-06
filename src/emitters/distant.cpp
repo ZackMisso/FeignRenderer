@@ -31,8 +31,3 @@ void DistantEmitter::preProcess()
 {
     throw new NotImplementedException("emitter distant");
 }
-
-std::string DistantEmitter::getName() const
-{
-    throw new NotImplementedException("emitter distant");
-}

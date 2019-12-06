@@ -31,8 +31,3 @@ void EnvironmentEmitter::preProcess()
 {
     throw new NotImplementedException("emitter environment");
 }
-
-std::string EnvironmentEmitter::getName() const
-{
-    throw new NotImplementedException("emitter environment");
-}

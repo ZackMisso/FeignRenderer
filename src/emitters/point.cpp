@@ -10,12 +10,9 @@
 
 PointEmitter::PointEmitter() : Emitter() { }
 
-PointEmitter::PointEmitter(Node* parent) : Emitter(parent) { }
-
-PointEmitter::PointEmitter(Node* parent,
-                           Color3f I,
+PointEmitter::PointEmitter(Color3f I,
                            Point3f pos)
-    : Emitter(parent), I(I), pos(pos)
+    : I(I), pos(pos)
 {
     // does nothing
 }
@@ -43,9 +40,4 @@ Color3f PointEmitter::sample_pos(EmitterQuery& rec,
     throw new NotImplementedException("point sample pos");
 
     return Color3f(0.f);
-}
-
-std::string PointEmitter::getName() const
-{
-    return Emitter::getName() + "point";
 }

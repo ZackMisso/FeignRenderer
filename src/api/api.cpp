@@ -29,16 +29,17 @@
 
 std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
 Transform FeignRenderer::current_transform = Transform();
-Scene* FeignRenderer::scene = nullptr;
+SceneNode* FeignRenderer::scene = nullptr;
 
-std::unordered_map<std::string, BSDF*>                 FeignRenderer::bsdfs = std::unordered_map<std::string, BSDF*>();
-std::unordered_map<std::string, Camera*>               FeignRenderer::cameras = std::unordered_map<std::string, Camera*>();
-std::unordered_map<std::string, Emitter*>              FeignRenderer::emitters = std::unordered_map<std::string, Emitter*>();
-std::unordered_map<std::string, Media*>                FeignRenderer::medias = std::unordered_map<std::string, Media*>();
-std::unordered_map<std::string, Integrator*>           FeignRenderer::integrators = std::unordered_map<std::string, Integrator*>();
-std::unordered_map<std::string, Sampler*>              FeignRenderer::samplers = std::unordered_map<std::string, Sampler*>();
-std::unordered_map<std::string, ReconstructionFilter*> FeignRenderer::filters = std::unordered_map<std::string, ReconstructionFilter*>();
-std::unordered_map<std::string, Material*>             FeignRenderer::materials = std::unordered_map<std::string, Material*>();
+std::unordered_map<std::string, BSDFNode*>                 FeignRenderer::bsdfs = std::unordered_map<std::string, BSDFNode*>();
+std::unordered_map<std::string, CameraNode*>               FeignRenderer::cameras = std::unordered_map<std::string, CameraNode*>();
+std::unordered_map<std::string, EmitterNode*>              FeignRenderer::emitters = std::unordered_map<std::string, EmitterNode*>();
+std::unordered_map<std::string, MediaNode*>                FeignRenderer::medias = std::unordered_map<std::string, MediaNode*>();
+std::unordered_map<std::string, IntegratorNode*>           FeignRenderer::integrators = std::unordered_map<std::string, IntegratorNode*>();
+std::unordered_map<std::string, SamplerNode*>              FeignRenderer::samplers = std::unordered_map<std::string, SamplerNode*>();
+std::unordered_map<std::string, FilterNode*>               FeignRenderer::filters = std::unordered_map<std::string, FilterNode*>();
+std::unordered_map<std::string, MaterialNode*>             FeignRenderer::materials = std::unordered_map<std::string, MaterialNode*>();
+std::unordered_map<std::string, ObjectNode*>               FeignRenderer::meshes = std::unordered_map<std::string, ObjectNode*>();
 
 void FeignRenderer::fr_scene(std::string name,
                              std::string integrator_node,
@@ -46,7 +47,15 @@ void FeignRenderer::fr_scene(std::string name,
                              std::string camera_node,
                              std::string medium_node)
 {
-    // TODO
+
+    if (scene)
+    {
+        throw new FeignRendererException("only one scene may be constructed");
+    }
+
+    scene = new Scene();
+
+    throw new NotImplementedException("fr_scene");
 }
 
 void FeignRenderer::fr_integrator(std::string name,
@@ -54,7 +63,7 @@ void FeignRenderer::fr_integrator(std::string name,
                                   long max_time,
                                   long max_heuristic)
 {
-    // TODO
+    throw new NotImplementedException("fr_integrator");
 }
 
 void FeignRenderer::fr_sampler(std::string name,
@@ -63,7 +72,7 @@ void FeignRenderer::fr_sampler(std::string name,
                                long seed,
                                long seed2)
 {
-    // TODO
+    throw new NotImplementedException("fr_sampler");
 }
 
 void FeignRenderer::fr_camera(std::string name,
@@ -74,21 +83,21 @@ void FeignRenderer::fr_camera(std::string name,
                               float fov,
                               Vec2i image_res)
 {
-    // TODO
+    throw new NotImplementedException("fr_camera");
 }
 
 void FeignRenderer::fr_object(std::string name,
                               std::string mesh,
                               std::string material)
 {
-    // TODO
+    throw new NotImplementedException("fr_object");
 }
 
 void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
                             std::string filename)
 {
-    // TODO
+    throw new NotImplementedException("fr_mesh");
 }
 
 void FeignRenderer::fr_emitter(std::string name,
@@ -98,13 +107,13 @@ void FeignRenderer::fr_emitter(std::string name,
                                Vector3f pos,
                                Color3f intensity)
 {
-    // TODO
+    throw new NotImplementedException("fr_emitter");
 }
 
 void FeignRenderer::fr_material(std::string name,
                                 std::string bsdf)
 {
-    // TODO
+    throw new NotImplementedException("fr_material");
 }
 
 void FeignRenderer::fr_bsdf(std::string name,
@@ -113,6 +122,7 @@ void FeignRenderer::fr_bsdf(std::string name,
 {
     if (type == "diffuse")
     {
+        throw new NotImplementedException("fr_bsdf");
         // Diffuse*
         // TODO
     }
@@ -126,32 +136,38 @@ void FeignRenderer::fr_bsdf(std::string name,
 
 void FeignRenderer::fr_clear_transform()
 {
+    throw new NotImplementedException("fr_clear_transform");
     // TODO
 }
 
 void FeignRenderer::fr_scale(float sx, float sy, float sz)
 {
+    throw new NotImplementedException("fr_scale");
     // TODO
 }
 
 void FeignRenderer::fr_translate(float tx, float ty, float tz)
 {
+    throw new NotImplementedException("fr_translate");
     // TODO
 }
 
 void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 {
+    throw new NotImplementedException("fr_rotate");
     // TODO
 }
 
 // this is the big one
 void FeignRenderer::flush_renders()
 {
+    throw new NotImplementedException("flush_renders");
     // TODO
 }
 
 void FeignRenderer::clean_up()
 {
+    throw new NotImplementedException("clean_up");
     // TODO
 }
 
