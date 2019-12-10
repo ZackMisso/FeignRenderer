@@ -105,6 +105,7 @@ struct AccelNode : public Node
 {
 public:
     AccelNode() : accel(nullptr) { }
+    AccelNode(std::string name) : Node(name) { }
     AccelNode(Accel* accel) : accel(accel) { }
 
     Accel* accel;

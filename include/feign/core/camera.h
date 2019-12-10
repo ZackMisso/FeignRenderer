@@ -93,6 +93,7 @@ struct CameraNode : public Node
 {
 public:
     CameraNode() : camera(nullptr) { }
+    CameraNode(std::string name) : Node(name) { }
     CameraNode(Camera* camera) : camera(camera) { }
 
     Camera* camera;

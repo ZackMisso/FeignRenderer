@@ -71,6 +71,7 @@ struct FilterNode : public Node
 {
 public:
     FilterNode() : filter(nullptr) { }
+    FilterNode(std::string name) : Node(name) { }
     FilterNode(ReconstructionFilter* filter) : filter(filter) { }
 
     ReconstructionFilter* filter;

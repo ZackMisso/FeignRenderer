@@ -9,16 +9,31 @@
 #include <feign/core/scene.h>
 #include <feign/core/accel.h>
 
-Scene::Scene()
+// Scene::Scene()
+// {
+//     // sceneObjects = std::vector<Node*>();
+//     shapes = std::vector<Shape*>();
+//     // root = nullptr;
+//     ray_accel = nullptr;
+//     integrator = nullptr;
+//     env_medium = nullptr;
+//     sampler = nullptr;
+//     camera = nullptr;
+// }
+
+Scene::Scene(std::string name,
+             IntegratorNode* integrator,
+             SamplerNode* sampler,
+             CameraNode* camera,
+             MediumNode* media)
+    : name(name),
+      integrator(integrator),
+      sampler(sampler),
+      camera(camera),
+      env_media(media)
 {
-    // sceneObjects = std::vector<Node*>();
     shapes = std::vector<Shape*>();
-    // root = nullptr;
     ray_accel = nullptr;
-    integrator = nullptr;
-    env_medium = nullptr;
-    sampler = nullptr;
-    camera = nullptr;
 }
 
 Scene::~Scene()

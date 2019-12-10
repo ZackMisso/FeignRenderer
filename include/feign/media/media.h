@@ -25,6 +25,7 @@ struct MediaNode : public Node
 {
 public:
     MediaNode() : media(nullptr) { }
+    MediaNode(std::string name) : Node(name) { }
     MediaNode(Media* media) : media(media) { }
 
     Media* media;

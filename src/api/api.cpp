@@ -41,21 +41,141 @@ std::unordered_map<std::string, FilterNode*>               FeignRenderer::filter
 std::unordered_map<std::string, MaterialNode*>             FeignRenderer::materials = std::unordered_map<std::string, MaterialNode*>();
 std::unordered_map<std::string, ObjectNode*>               FeignRenderer::meshes = std::unordered_map<std::string, ObjectNode*>();
 
+IntegratorNode* find_integrator(std::string name)
+{
+    std::unordered_map<std::string, IntegratorNode*>::const_iterator itr = FeignRenderer::integrators.find(name);
+
+    if (itr == FeignRenderer::integrators.end())
+    {
+        FeignRenderer::integrators.insert(name, new IntegratorNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+CameraNode* find_camera(std::string name)
+{
+    std::unordered_map<std::string, CameraNode*>::const_iterator itr = FeignRenderer::cameras.find(name);
+
+    if (itr == FeignRenderer::cameras.end())
+    {
+        FeignRenderer::cameras.insert(name, new CameraNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+EmitterNode* find_emitter(std::string name)
+{
+    std::unordered_map<std::string, EmitterNode*>::const_iterator itr = FeignRenderer::emitters.find(name);
+
+    if (itr == FeignRenderer::emitters.end())
+    {
+        FeignRenderer::emitters.insert(name, new EmitterNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+MediaNode* find_media(std::string name)
+{
+    std::unordered_map<std::string, MediaNode*>::const_iterator itr = FeignRenderer::medias.find(name);
+
+    if (itr == FeignRenderer::medias.end())
+    {
+        FeignRenderer::medias.insert(name, new MediaNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+SamplerNode* find_sampler(std::string name)
+{
+    std::unordered_map<std::string, SamplerNode*>::const_iterator itr = FeignRenderer::samplers.find(name);
+
+    if (itr == FeignRenderer::samplers.end())
+    {
+        FeignRenderer::samplers.insert(name, new SamplerNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+FilterNode* find_filter(std::string name)
+{
+    std::unordered_map<std::string, FilterNode*>::const_iterator itr = FeignRenderer::filters.find(name);
+
+    if (itr == FeignRenderer::filters.end())
+    {
+        FeignRenderer::filters.insert(name, new FilterNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+MaterialNode* find_material(std::string name)
+{
+    std::unordered_map<std::string, MaterialNode*>::const_iterator itr = FeignRenderer::materials.find(name);
+
+    if (itr == FeignRenderer::materials.end())
+    {
+        FeignRenderer::materials.insert(name, new MaterialNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+ObjectNode* find_object(std::string name)
+{
+    std::unordered_map<std::string, ObjectNode*>::const_iterator itr = FeignRenderer::objects.find(name);
+
+    if (itr == FeignRenderer::objects.end())
+    {
+        FeignRenderer::objects.insert(name, new ObjectNode(name));
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
 void FeignRenderer::fr_scene(std::string name,
                              std::string integrator_node,
                              std::string sampler_node,
                              std::string camera_node,
                              std::string medium_node)
 {
-
     if (scene)
     {
-        throw new FeignRendererException("only one scene may be constructed");
+        throw new FeignRendererException("currently only one scene may be constructed");
     }
 
-    scene = new Scene();
+    IntegratorNode* integrator = find_integrator(integrator_node);
+    SamplerNode* sampler = find_sampler(sampler_node);
+    CameraNode* camera = find_camera(camera_node);
+    MediumNode* media = nullptr;
 
-    throw new NotImplementedException("fr_scene");
+    if (!medium_node.empty()) media = find_media(medium_node);
+
+    scene = new Scene(name,
+                      integrator,
+                      sampler,
+                      camera,
+                      media);
 }
 
 void FeignRenderer::fr_integrator(std::string name,
@@ -63,6 +183,19 @@ void FeignRenderer::fr_integrator(std::string name,
                                   long max_time,
                                   long max_heuristic)
 {
+    if (type == "normal")
+    {
+        // TODO
+    }
+    else if (type == "whitted")
+    {
+        // TODO
+    }
+    else
+    {
+        throw new NotImplementedException("unsupported integrator");
+    }
+    
     throw new NotImplementedException("fr_integrator");
 }
 

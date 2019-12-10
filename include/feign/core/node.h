@@ -27,6 +27,7 @@ struct Node
 {
 public:
     Node() { }
+    Node(std::string name) : name(name) { }
     virtual ~Node() { }
 
     // virtual NodeType getNodeType() const = 0;

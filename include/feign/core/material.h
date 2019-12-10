@@ -35,6 +35,7 @@ struct MaterialNode : public Node
 {
 public:
     MaterialNode() : material(nullptr) { }
+    MaterialNode(std::string name) : Node(name) { }
     MaterialNode(Material* material) : material(material) { }
 
     Material* material;

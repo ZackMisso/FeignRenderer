@@ -29,7 +29,12 @@ class CameraNode;
 class Scene
 {
 public:
-    Scene();
+    Scene(std::string name,
+          IntegratorNode* integrator,
+          SamplerNode* sampler,
+          CameraNode* camera,
+          MediumNode* media);
+
     ~Scene();
 
     virtual void preProcess();
@@ -47,9 +52,9 @@ public:
     BBox3f sceneBounds;
 
     // required structures
-    Integrator* integrator;
-    Sampler* sampler;
-    Camera* camera;
+    IntegratorNode* integrator;
+    SamplerNode* sampler;
+    CameraNode* camera;
     Accel* ray_accel;
 
     // pre-processed structures
@@ -57,7 +62,7 @@ public:
     std::vector<Shape*> shapes;
 
     // optional structures
-    Media* env_medium;
+    MediaNode* env_medium;
 };
 
 // TODO: the nodes should be a layer of abstraction over the actual
@@ -70,6 +75,7 @@ struct SceneNode : public Node
 {
 public:
     SceneNode() : scene(nullptr) { }
+    SceneNode(std::string name) : Node(name) { }
     SceneNode(Scene* scene) : scene(scene) { }
 
     SceneNode(std::string name,

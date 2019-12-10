@@ -147,6 +147,7 @@ struct SamplerNode : public Node
 {
 public:
     SamplerNode() : sampler(nullptr) { }
+    SamplerNode(std::string name) : Node(name) { }
     SamplerNode(Sampler* sampler) : sampler(sampler) { }
 
     Sampler* sampler;

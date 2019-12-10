@@ -147,6 +147,7 @@ struct EmitterNode : public Node
 {
 public:
     EmitterNode() : emitter(nullptr) { }
+    EmitterNode(std::string name) : Node(name) { }
     EmitterNode(Emitter* emitter) : emitter(emitter) { }
 
     Emitter* emitter;
