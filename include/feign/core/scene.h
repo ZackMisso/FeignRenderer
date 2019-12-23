@@ -33,7 +33,7 @@ public:
           IntegratorNode* integrator,
           SamplerNode* sampler,
           CameraNode* camera,
-          MediumNode* media);
+          MediaNode* media);
 
     ~Scene();
 
@@ -52,9 +52,9 @@ public:
     BBox3f sceneBounds;
 
     // required structures
-    IntegratorNode* integrator;
-    SamplerNode* sampler;
-    CameraNode* camera;
+    IntegratorNode* integrator_node;
+    SamplerNode* sampler_node;
+    CameraNode* camera_node;
     Accel* ray_accel;
 
     // pre-processed structures
@@ -62,7 +62,7 @@ public:
     std::vector<Shape*> shapes;
 
     // optional structures
-    MediaNode* env_medium;
+    MediaNode* env_medium_node;
 };
 
 // TODO: the nodes should be a layer of abstraction over the actual
@@ -77,21 +77,23 @@ public:
     SceneNode() : scene(nullptr) { }
     SceneNode(std::string name) : Node(name) { }
     SceneNode(Scene* scene) : scene(scene) { }
+    SceneNode(std::string name, Scene* scene)
+        : Node(name), scene(scene) { }
 
-    SceneNode(std::string name,
-              std::string integrator,
-              std::string sampler,
-              std::string camera,
-              std::string medium) {}
+    // SceneNode(std::string name,
+    //           std::string integrator,
+    //           std::string sampler,
+    //           std::string camera,
+    //           std::string medium) {}
 
     ~SceneNode() { }
 
     Scene* scene;
 
-    IntegratorNode integrator_node;
-    SamplerNode sampler_node;
-    CameraNode camera_node;
-    AccelNode accel_node;
-    MediaNode media_node;
+    // IntegratorNode* integrator_node;
+    // SamplerNode* sampler_node;
+    // CameraNode* camera_node;
+    // AccelNode* accel_node;
+    // MediaNode* media_node;
 };
 /////////////////////////////////////////////////

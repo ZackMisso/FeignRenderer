@@ -44,9 +44,21 @@ private:
     static std::unordered_map<std::string, SamplerNode*> samplers;
     static std::unordered_map<std::string, FilterNode*> filters;
     static std::unordered_map<std::string, MaterialNode*> materials;
-    static std::unordered_map<std::string, ObjectNode*> meshes;
+    static std::unordered_map<std::string, ObjectNode*> objects;
+    static std::unordered_map<std::string, MeshNode*> meshes;
 
     static void clean_up();
+
+    static BSDFNode*       find_bsdf(std::string name);
+    static IntegratorNode* find_integrator(std::string name);
+    static CameraNode*     find_camera(std::string name);
+    static EmitterNode*    find_emitter(std::string name);
+    static MediaNode*      find_media(std::string name);
+    static SamplerNode*    find_sampler(std::string name);
+    static FilterNode*     find_filter(std::string name);
+    static MaterialNode*   find_material(std::string name);
+    static ObjectNode*     find_object(std::string name);
+    static MeshNode*       find_mesh(std::string name);
 
 public:
     // TODO: this new api is not good for users directly
@@ -72,12 +84,17 @@ public:
                           Vector3f origin,
                           Vector3f target,
                           Vector3f up,
-                          float fov,
+                          Float fov,
+                          Float near,
+                          Float far,
+                          Float focal_dist,
+                          Float app_radius,
                           Vec2i image_res);
 
     static void fr_object(std::string name,
                           std::string mesh,
-                          std::string material);
+                          std::string material,
+                          int index = -1);
 
     static void fr_mesh(std::string name,
                         std::string type,

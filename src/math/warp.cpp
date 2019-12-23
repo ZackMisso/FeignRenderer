@@ -72,7 +72,7 @@ Float WarpSpace::squareToUniformHemispherePdf(const Vector3f &v)
 Vector3f WarpSpace::squareToCosineHemisphere(const Point2f &sample)
 {
     Point2f p = squareToUniformDisk(sample);
-    Float z = std::sqrt(std::max((Float) 0, 1.0 - p(0)*p(0) - p(1)*p(1)));
+    Float z = std::sqrt(std::max((Float) 0, (Float)1.0 - p(0)*p(0) - p(1)*p(1)));
 
     return Vector3f(p(0), p(1), z);
 }

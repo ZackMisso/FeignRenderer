@@ -6,7 +6,7 @@
             "sample_count": 256
         },
         "integrator": {
-            "type": "normals"
+            "type": "normal"
         },
         "camera": {
             "type": "perspective",

@@ -45,9 +45,10 @@
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 // uncomment the following for desired types
-// typedef float Float;
-typedef double Float;
+typedef float Float;
+// typedef double Float;
 
+// TODO: do i want to use these?
 typedef int Int;
 // typedef long Int;
 
@@ -84,6 +85,11 @@ inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
 {
     *_sin = sinf(theta);
     *_cos = cosf(theta);
+}
+
+inline void LOG(std::string val)
+{
+    std::cout << val << std::endl;
 }
 
 /////////////////////////////////////////////////

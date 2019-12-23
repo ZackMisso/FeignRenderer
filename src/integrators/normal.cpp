@@ -9,7 +9,8 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-NormalIntegrator::NormalIntegrator() : Integrator()
+NormalIntegrator::NormalIntegrator(long max_time, long max_heuristic)
+    : Integrator(max_time, max_heuristic)
 {
 }
 

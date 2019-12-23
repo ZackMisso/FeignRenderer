@@ -7,7 +7,7 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "normals"
+        "type": "normal"
     },
     "sampler": {
         "name": "sampler",
@@ -49,7 +49,7 @@
     },
     "object": {
         "name": "ajax",
-        "mesh": "ajax_data"
+        "mesh": "ajax_obj"
     },
     "mesh": {
         "name": "ajax_obj",

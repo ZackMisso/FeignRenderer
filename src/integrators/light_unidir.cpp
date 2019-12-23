@@ -8,7 +8,8 @@
 
 #include <feign/core/integrator.h>
 
-Light_Unidirectional_Integrator::Light_Unidirectional_Integrator()
+Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(long max_time, long max_heuristic)
+    : Integrator(max_time, max_heuristic)
 {
     throw new NotImplementedException("light unidir constructor");
 }

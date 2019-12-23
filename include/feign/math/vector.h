@@ -1236,6 +1236,17 @@ struct Matrix4
         return mat;
     }
 
+    static Matrix4<T> rotate(T angle, const Vec3<T>& vec)
+    {
+        Matrix4<T> mat = Matrix4<T>();
+
+        std::cout << "matrix rotate not implemented" << std::endl;
+        assert(false);
+        // throw new NotImplementedException("matrix rotate");
+
+        return mat;
+    }
+
     Matrix4<T> operator*(const Matrix4<T>& other) const
     {
         Matrix4<T> mat;

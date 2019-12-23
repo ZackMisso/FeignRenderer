@@ -110,7 +110,6 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 
 // TODO: implement a better parser
 void ObjMesh::parseFromFile(const std::string& filename,
-                            Transform transform,
                             bool flipNorms)
 {
     std::cout << "parsing obj from file: " << filename << std::endl;
@@ -231,6 +230,7 @@ void ObjMesh::infoDump()
 {
     std::cout << "Number of Verts: " << vs.size() << std::endl;
     std::cout << "Number of Triangles: " << tris.size() << std::endl;
+    LOG("post dump");
 }
 
 uint32_t ObjMesh::primitiveCount() const
@@ -290,9 +290,11 @@ void ObjMesh::preProcess()
     // preProcessChildren();
 
     // TODO: make these tasks multithreaded ???
+    LOG("parsing from file: " + filename);
+    parseFromFile(filename);
 
     // precompute the total surface area and cache it
-    std::cout << "calculating surface area" << std::endl;
+    LOG("calculating surface area");
     sa = 0.0;
     for (uint32_t i = 0; i < tris.size(); ++i)
     {
@@ -300,13 +302,17 @@ void ObjMesh::preProcess()
     }
 
     // precompute the bounding box around the object
+    LOG("asserting size");
     assert(vs.size() > 0);
+
+    LOG("calculating bbox");
     bbox = BBox3f(vs[0], vs[0]);
     for (uint32_t i = 1; i < vs.size(); ++i)
     {
         bbox.expand(vs[i]);
     }
 
+    LOG("info dump");
     infoDump();
 }
 

@@ -22,7 +22,7 @@ class Sampler : public Node
 public:
     Sampler();
     Sampler(uint32_t seed,
-            uint32_t sample_cnt);
+            int sample_cnt);
 
     virtual ~Sampler() { }
 
@@ -43,7 +43,7 @@ public:
     uint32_t getSampleCnt() const;
 
 protected:
-    uint32_t sampleCnt;
+    int sampleCnt;
     uint32_t sampleSeed;
     uint32_t currentSample;
 };
@@ -57,7 +57,7 @@ class Independent : public Sampler
 public:
     Independent();
     Independent(uint32_t seed,
-                uint32_t sample_cnt);
+                int sample_cnt);
 
     virtual void preProcess();
 
@@ -75,7 +75,7 @@ public:
 
     virtual void nextSample();
 
-    virtual std::string getName() const;
+    // virtual std::string getName() const;
 
 protected:
     pcg32 rng;
@@ -90,7 +90,7 @@ class Latin : public Sampler
 public:
     Latin();
     Latin(uint32_t seed,
-          uint32_t sample_cnt);
+          int sample_cnt);
 
     virtual void preProcess();
     virtual void reseed();
@@ -105,7 +105,7 @@ public:
     virtual Sampler* copy(uint32_t seed);
 
     virtual void nextSample();
-    virtual std::string getName() const;
+    // virtual std::string getName() const;
 
 protected:
 };
@@ -119,7 +119,7 @@ class Halton : public Sampler
 public:
     Halton();
     Halton(uint32_t seed,
-           uint32_t sample_cnt);
+           int sample_cnt);
 
     virtual void preProcess();
     virtual void reseed();
@@ -134,7 +134,7 @@ public:
     virtual Sampler* copy(uint32_t seed);
 
     virtual void nextSample();
-    virtual std::string getName() const;
+    // virtual std::string getName() const;
 
 protected:
 };

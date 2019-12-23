@@ -21,11 +21,11 @@ public:
     Material();
     ~Material();
 
-    BSDF* getBSDF() const { return bsdf; }
-    void setBSDF(BSDF* param) { bsdf = param; }
+    BSDF* getBSDF() const { return bsdf->bsdf; }
+    void setBSDF(BSDF* param) { bsdf->bsdf = param; }
 
-protected:
-    BSDF* bsdf;
+// protected:
+    BSDFNode* bsdf;
 };
 
 /////////////////////////////////////////////////

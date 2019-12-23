@@ -39,15 +39,37 @@ std::unordered_map<std::string, IntegratorNode*>           FeignRenderer::integr
 std::unordered_map<std::string, SamplerNode*>              FeignRenderer::samplers = std::unordered_map<std::string, SamplerNode*>();
 std::unordered_map<std::string, FilterNode*>               FeignRenderer::filters = std::unordered_map<std::string, FilterNode*>();
 std::unordered_map<std::string, MaterialNode*>             FeignRenderer::materials = std::unordered_map<std::string, MaterialNode*>();
-std::unordered_map<std::string, ObjectNode*>               FeignRenderer::meshes = std::unordered_map<std::string, ObjectNode*>();
+std::unordered_map<std::string, ObjectNode*>               FeignRenderer::objects = std::unordered_map<std::string, ObjectNode*>();
+std::unordered_map<std::string, MeshNode*>                 FeignRenderer::meshes = std::unordered_map<std::string, MeshNode*>();
 
-IntegratorNode* find_integrator(std::string name)
+// this is temporary delete this later
+std::vector<ObjectNode*> temp_list = std::vector<ObjectNode*>();
+
+BSDFNode* FeignRenderer::find_bsdf(std::string name)
+{
+    std::unordered_map<std::string, BSDFNode*>::const_iterator itr = FeignRenderer::bsdfs.find(name);
+
+    if (itr == FeignRenderer::bsdfs.end())
+    {
+        BSDFNode* node = new BSDFNode(name);
+        FeignRenderer::bsdfs.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+IntegratorNode* FeignRenderer::find_integrator(std::string name)
 {
     std::unordered_map<std::string, IntegratorNode*>::const_iterator itr = FeignRenderer::integrators.find(name);
 
     if (itr == FeignRenderer::integrators.end())
     {
-        FeignRenderer::integrators.insert(name, new IntegratorNode(name));
+        IntegratorNode* node = new IntegratorNode(name);
+        FeignRenderer::integrators.insert({name, node});
+        return node;
     }
     else
     {
@@ -55,13 +77,15 @@ IntegratorNode* find_integrator(std::string name)
     }
 }
 
-CameraNode* find_camera(std::string name)
+CameraNode* FeignRenderer::find_camera(std::string name)
 {
     std::unordered_map<std::string, CameraNode*>::const_iterator itr = FeignRenderer::cameras.find(name);
 
     if (itr == FeignRenderer::cameras.end())
     {
-        FeignRenderer::cameras.insert(name, new CameraNode(name));
+        CameraNode* node = new CameraNode(name);
+        FeignRenderer::cameras.insert({name, node});
+        return node;
     }
     else
     {
@@ -69,13 +93,15 @@ CameraNode* find_camera(std::string name)
     }
 }
 
-EmitterNode* find_emitter(std::string name)
+EmitterNode* FeignRenderer::find_emitter(std::string name)
 {
     std::unordered_map<std::string, EmitterNode*>::const_iterator itr = FeignRenderer::emitters.find(name);
 
     if (itr == FeignRenderer::emitters.end())
     {
-        FeignRenderer::emitters.insert(name, new EmitterNode(name));
+        EmitterNode* node = new EmitterNode(name);
+        FeignRenderer::emitters.insert({name, node});
+        return node;
     }
     else
     {
@@ -83,13 +109,15 @@ EmitterNode* find_emitter(std::string name)
     }
 }
 
-MediaNode* find_media(std::string name)
+MediaNode* FeignRenderer::find_media(std::string name)
 {
     std::unordered_map<std::string, MediaNode*>::const_iterator itr = FeignRenderer::medias.find(name);
 
     if (itr == FeignRenderer::medias.end())
     {
-        FeignRenderer::medias.insert(name, new MediaNode(name));
+        MediaNode* node = new MediaNode(name);
+        FeignRenderer::medias.insert({name, node});
+        return node;
     }
     else
     {
@@ -97,13 +125,15 @@ MediaNode* find_media(std::string name)
     }
 }
 
-SamplerNode* find_sampler(std::string name)
+SamplerNode* FeignRenderer::find_sampler(std::string name)
 {
     std::unordered_map<std::string, SamplerNode*>::const_iterator itr = FeignRenderer::samplers.find(name);
 
     if (itr == FeignRenderer::samplers.end())
     {
-        FeignRenderer::samplers.insert(name, new SamplerNode(name));
+        SamplerNode* node = new SamplerNode(name);
+        FeignRenderer::samplers.insert({name, node});
+        return node;
     }
     else
     {
@@ -111,13 +141,15 @@ SamplerNode* find_sampler(std::string name)
     }
 }
 
-FilterNode* find_filter(std::string name)
+FilterNode* FeignRenderer::find_filter(std::string name)
 {
     std::unordered_map<std::string, FilterNode*>::const_iterator itr = FeignRenderer::filters.find(name);
 
     if (itr == FeignRenderer::filters.end())
     {
-        FeignRenderer::filters.insert(name, new FilterNode(name));
+        FilterNode* node = new FilterNode(name);
+        FeignRenderer::filters.insert({name, node});
+        return node;
     }
     else
     {
@@ -125,13 +157,15 @@ FilterNode* find_filter(std::string name)
     }
 }
 
-MaterialNode* find_material(std::string name)
+MaterialNode* FeignRenderer::find_material(std::string name)
 {
     std::unordered_map<std::string, MaterialNode*>::const_iterator itr = FeignRenderer::materials.find(name);
 
     if (itr == FeignRenderer::materials.end())
     {
-        FeignRenderer::materials.insert(name, new MaterialNode(name));
+        MaterialNode* node = new MaterialNode(name);
+        FeignRenderer::materials.insert({name, node});
+        return node;
     }
     else
     {
@@ -139,13 +173,34 @@ MaterialNode* find_material(std::string name)
     }
 }
 
-ObjectNode* find_object(std::string name)
+ObjectNode* FeignRenderer::find_object(std::string name)
 {
     std::unordered_map<std::string, ObjectNode*>::const_iterator itr = FeignRenderer::objects.find(name);
 
     if (itr == FeignRenderer::objects.end())
     {
-        FeignRenderer::objects.insert(name, new ObjectNode(name));
+        ObjectNode* node = new ObjectNode(name);
+        FeignRenderer::objects.insert({name, node});
+        // TODO: DELETE THIS
+        temp_list.push_back(node);
+        // blahblahblah
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+MeshNode* FeignRenderer::find_mesh(std::string name)
+{
+    std::unordered_map<std::string, MeshNode*>::const_iterator itr = FeignRenderer::meshes.find(name);
+
+    if (itr == FeignRenderer::meshes.end())
+    {
+        MeshNode* node = new MeshNode(name);
+        FeignRenderer::meshes.insert({name, node});
+        return node;
     }
     else
     {
@@ -167,15 +222,15 @@ void FeignRenderer::fr_scene(std::string name,
     IntegratorNode* integrator = find_integrator(integrator_node);
     SamplerNode* sampler = find_sampler(sampler_node);
     CameraNode* camera = find_camera(camera_node);
-    MediumNode* media = nullptr;
+    MediaNode* media = nullptr;
 
     if (!medium_node.empty()) media = find_media(medium_node);
 
-    scene = new Scene(name,
-                      integrator,
-                      sampler,
-                      camera,
-                      media);
+    scene = new SceneNode(name, new Scene(name,
+                                          integrator,
+                                          sampler,
+                                          camera,
+                                          media));
 }
 
 void FeignRenderer::fr_integrator(std::string name,
@@ -183,20 +238,25 @@ void FeignRenderer::fr_integrator(std::string name,
                                   long max_time,
                                   long max_heuristic)
 {
+    IntegratorNode* integrator = find_integrator(name);
+
+    if (integrator->integrator)
+    {
+        throw new FeignRendererException("integrator already defined");
+    }
+
     if (type == "normal")
     {
-        // TODO
+        integrator->integrator = new NormalIntegrator(max_time, max_heuristic);
     }
     else if (type == "whitted")
     {
-        // TODO
+        integrator->integrator = new WhittedIntegrator(max_time, max_heuristic);
     }
     else
     {
-        throw new NotImplementedException("unsupported integrator");
+        throw new NotImplementedException("unsupported integrator: " + type);
     }
-    
-    throw new NotImplementedException("fr_integrator");
 }
 
 void FeignRenderer::fr_sampler(std::string name,
@@ -205,7 +265,25 @@ void FeignRenderer::fr_sampler(std::string name,
                                long seed,
                                long seed2)
 {
-    throw new NotImplementedException("fr_sampler");
+    SamplerNode* sampler = find_sampler(name);
+
+    if (sampler->sampler)
+    {
+        throw new FeignRendererException("sampler already defined");
+    }
+
+    if (type == "independent")
+    {
+        sampler->sampler = new Independent(seed, spp);
+    }
+    else if (type == "latin")
+    {
+        throw new NotImplementedException("latin sampler still unsupported");
+    }
+    else
+    {
+        throw new NotImplementedException("unsupported sampler: " + type);
+    }
 }
 
 void FeignRenderer::fr_camera(std::string name,
@@ -213,24 +291,109 @@ void FeignRenderer::fr_camera(std::string name,
                               Vector3f origin,
                               Vector3f target,
                               Vector3f up,
-                              float fov,
+                              Float fov,
+                              Float near,
+                              Float far,
+                              Float focal_dist,
+                              Float app_radius,
                               Vec2i image_res)
 {
-    throw new NotImplementedException("fr_camera");
+    CameraNode* camera = find_camera(name);
+
+    if (camera->camera)
+    {
+        throw new FeignRendererException("camera already defined");
+    }
+
+    if (type == "perspective")
+    {
+        Perspective* perspective = new Perspective(app_radius,
+                                                   focal_dist,
+                                                   fov,
+                                                   near,
+                                                   far,
+                                                   image_res[0],
+                                                   image_res[1]);
+
+        Vec3f zaxis = (target - origin).normalized();
+        Vec3f xaxis = ((up.normalized()) ^ zaxis).normalized();
+        Vec3f yaxis = (zaxis ^ xaxis).normalized();
+
+        Matrix4f look_at_matrix = Matrix4f();
+
+        look_at_matrix.setCol(0, Vec4f(xaxis, 0.f));
+        look_at_matrix.setCol(1, Vec4f(yaxis, 0.f));
+        look_at_matrix.setCol(2, Vec4f(zaxis, 0.f));
+        look_at_matrix.setCol(3, Vec4f(origin, 1.f));
+
+        perspective->setTransform(current_transform * Transform(look_at_matrix));
+
+        camera->camera = perspective;
+    }
+    else if (type == "orthographic")
+    {
+        throw new NotImplementedException("orthographic not supported yet" + type);
+    }
+    else
+    {
+        throw new NotImplementedException("unsupported camera type: " + type);
+    }
 }
 
 void FeignRenderer::fr_object(std::string name,
                               std::string mesh,
-                              std::string material)
+                              std::string material,
+                              int index)
 {
-    throw new NotImplementedException("fr_object");
+    if (index >= 0) name += "_" + std::to_string(index);
+
+    ObjectNode* object = find_object(name);
+
+    // objects are allowed to have the same name and instead be refered to
+    // by instance
+    if (object->mesh)
+    {
+        fr_object(name,
+                  mesh,
+                  material,
+                  index+1);
+
+        return;
+    }
+
+    object->transform = current_transform;
+    object->mesh = find_mesh(mesh);
+    object->material = find_material(material);
 }
 
 void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
                             std::string filename)
 {
-    throw new NotImplementedException("fr_mesh");
+    LOG("MESHES: " + std::to_string(meshes.size()));
+    MeshNode* mesh = find_mesh(name);
+    LOG("MESHES 2: " + std::to_string(meshes.size()));
+
+    if (!mesh)
+    {
+        LOG("WHAT NOW");
+    }
+
+    LOG("creating_mesh: " + name);
+
+    if (mesh->mesh)
+    {
+        throw new FeignRendererException("mesh already defined");
+    }
+
+    if (type == "triangle_mesh")
+    {
+        mesh->mesh = new ObjMesh(filename);
+    }
+    else
+    {
+        throw new NotImplementedException("mesh type not recognized: " + type);
+    }
 }
 
 void FeignRenderer::fr_emitter(std::string name,
@@ -246,18 +409,38 @@ void FeignRenderer::fr_emitter(std::string name,
 void FeignRenderer::fr_material(std::string name,
                                 std::string bsdf)
 {
-    throw new NotImplementedException("fr_material");
+    MaterialNode* material = find_material(name);
+
+    if (material->material)
+    {
+        throw new FeignRendererException("material already defined");
+    }
+
+    material->material = new Material();
+    material->material->bsdf = find_bsdf(bsdf);
 }
 
 void FeignRenderer::fr_bsdf(std::string name,
                             std::string type,
                             Color3f albedo)
 {
+    BSDFNode* bsdf = find_bsdf(name);
+
+    if (bsdf->bsdf)
+    {
+        throw new FeignRendererException("bsdf already defined");
+    }
+
     if (type == "diffuse")
     {
-        throw new NotImplementedException("fr_bsdf");
+        throw new NotImplementedException("fr_bsdf diffuse");
         // Diffuse*
         // TODO
+        // Diffuse
+    }
+    else if (type == "null")
+    {
+        bsdf->bsdf = nullptr;
     }
     else
     {
@@ -269,32 +452,69 @@ void FeignRenderer::fr_bsdf(std::string name,
 
 void FeignRenderer::fr_clear_transform()
 {
-    throw new NotImplementedException("fr_clear_transform");
-    // TODO
+    current_transform = Transform();
 }
 
 void FeignRenderer::fr_scale(float sx, float sy, float sz)
 {
-    throw new NotImplementedException("fr_scale");
-    // TODO
+    Matrix4f matrix = Matrix4f::scale(Vec3f(sx, sy, sz));
+    Transform scale_transform = Transform(matrix);
+    current_transform *= scale_transform;
 }
 
 void FeignRenderer::fr_translate(float tx, float ty, float tz)
 {
-    throw new NotImplementedException("fr_translate");
-    // TODO
+    Matrix4f matrix = Matrix4f::translate(Vec3f(tx, ty, tz));
+    Transform translate_transform = Transform(matrix);
+    current_transform *= translate_transform;
 }
 
 void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 {
-    throw new NotImplementedException("fr_rotate");
-    // TODO
+    Matrix4f matrix = Matrix4f::rotate(angle, Vec3f(x, y, z));
+    Transform rotate_transform = Transform(matrix);
+    current_transform *= rotate_transform;
 }
 
 // this is the big one
 void FeignRenderer::flush_renders()
 {
-    throw new NotImplementedException("flush_renders");
+    Scene* scene_obj = scene->scene;
+
+    assert(scene_obj);
+
+    // first preprocess all meshes
+    LOG("pre mesh preprocessing");
+
+    // TODO: how do you iterate through an unordered map???
+    for (int i = 0; i < temp_list.size(); ++i)
+    {
+        Shape* mesh = temp_list[i]->mesh->mesh;
+
+        if (!mesh)
+        {
+            LOG(std::to_string(temp_list.size()));
+            throw new FeignRendererException("mesh is not initialized");
+        }
+
+        mesh->transform = temp_list[i]->transform * mesh->transform;
+        mesh->preProcess();
+        scene_obj->shapes.push_back(mesh);
+    }
+
+    LOG("post mesh preprocessing");
+
+    // preprocess the scene
+    scene_obj->preProcess();
+
+    // render current scene
+    LOG("rendering scene");
+    scene_obj->renderScene();
+
+    // clean up used memory after the renders
+    clean_up();
+
+    // throw new NotImplementedException("flush_renders");
     // TODO
 }
 
@@ -303,6 +523,22 @@ void FeignRenderer::clean_up()
     throw new NotImplementedException("clean_up");
     // TODO
 }
+
+// void FeignRenderer::end_world()
+// {
+//     assert(scene);
+//
+//     scene->preProcess();
+//
+//     // TODO: render logic here
+//
+//     Scene* tmp = scene;
+//
+//     current_node = nullptr;
+//     scene = nullptr;
+//
+//     // return tmp;
+// }
 
 
 // TODO: rewrite all of this

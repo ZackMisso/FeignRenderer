@@ -10,7 +10,8 @@
 #include <feign/core/scene.h>
 #include <feign/math/warp.h>
 
-Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator()
+Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(long max_time, long max_heuristic)
+    : Integrator(max_time, max_heuristic)
 {
     // does nothing
 }

@@ -13,7 +13,7 @@
 Independent::Independent() : Sampler() { }
 
 Independent::Independent(uint32_t seed,
-                         uint32_t sample_cnt)
+                         int sample_cnt)
     : Sampler(seed, sample_cnt)
 {
 }

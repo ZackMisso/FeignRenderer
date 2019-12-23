@@ -11,6 +11,7 @@
 Shape::Shape()
 {
     material = new Material();
+    transform = Transform();
 }
 
 Shape::~Shape()

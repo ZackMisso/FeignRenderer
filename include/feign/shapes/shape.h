@@ -11,6 +11,7 @@
 #include <feign/core/node.h>
 #include <feign/core/material.h>
 #include <feign/math/bbox.h>
+#include <feign/math/transform.h>
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
 
@@ -39,6 +40,8 @@ public:
     virtual Point3f centroid() const = 0;
     virtual Point3f centroid(uint32_t tri) const = 0;
 
+    virtual void preProcess() { }
+
     virtual void addShapeToScene(RTCScene scene, RTCDevice device) = 0;
 
     Material* getMaterial() const { return material; }
@@ -46,10 +49,25 @@ public:
 
     void setMaterial(Material* param) { material = param; }
 
+    Transform transform;
 protected:
-    Material* material;
+    Material* material; // should this go here?
     unsigned int geomID;
 };
+
+/////////////////////////////////////////////////
+// Mesh Node structure
+/////////////////////////////////////////////////
+struct MeshNode : public Node
+{
+public:
+    MeshNode() : mesh(nullptr) { }
+    MeshNode(Shape* mesh) : mesh(mesh) { }
+    MeshNode(std::string name) : Node(name) { }
+
+    Shape* mesh;
+};
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // Object Node structure
@@ -58,8 +76,11 @@ struct ObjectNode : public Node
 {
 public:
     ObjectNode() : mesh(nullptr) { }
-    ObjectNode(Shape* mesh) : mesh(mesh) { }
+    ObjectNode(MeshNode* mesh) : mesh(mesh) { }
+    ObjectNode(std::string name) : Node(name) { }
 
-    Shape* mesh;
+    MeshNode* mesh;
+    MaterialNode* material;
+    Transform transform;
 };
 /////////////////////////////////////////////////

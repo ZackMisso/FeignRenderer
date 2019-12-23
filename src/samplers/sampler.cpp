@@ -10,11 +10,10 @@
 
 Sampler::Sampler() : Node()
 {
-    // TODO
 }
 
 Sampler::Sampler(uint32_t seed,
-                 uint32_t sample_cnt)
+                 int sample_cnt)
     : Node(), sampleSeed(seed), sampleCnt(sample_cnt)
 {
 }

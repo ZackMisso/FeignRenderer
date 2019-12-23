@@ -25,12 +25,12 @@ Scene::Scene(std::string name,
              IntegratorNode* integrator,
              SamplerNode* sampler,
              CameraNode* camera,
-             MediumNode* media)
+             MediaNode* media)
     : name(name),
-      integrator(integrator),
-      sampler(sampler),
-      camera(camera),
-      env_media(media)
+      integrator_node(integrator),
+      sampler_node(sampler),
+      camera_node(camera),
+      env_medium_node(media)
 {
     shapes = std::vector<Shape*>();
     ray_accel = nullptr;
@@ -96,10 +96,16 @@ void Scene::preProcess()
     }
 
     ray_accel->build();
+
+    integrator_node->integrator->preProcess();
 }
 
 void Scene::renderScene() const
 {
+    Integrator* integrator = integrator_node->integrator;
+    Camera* camera = camera_node->camera;
+    Sampler* sampler = sampler_node->sampler;
+
     if (!integrator)
     {
         throw new FeignRendererException("scene: no specified integrator");

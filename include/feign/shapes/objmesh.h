@@ -39,8 +39,7 @@ public:
     virtual void addShapeToScene(RTCScene scene, RTCDevice device);
 
     void parseFromFile(const std::string& filename,
-                       Transform transform,
-                       bool flipNorms);
+                       bool flipNorms = false);
 
     virtual uint32_t primitiveCount() const;
 

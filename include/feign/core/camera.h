@@ -60,6 +60,11 @@ public:
 
     void print() const;
 
+    void setTransform(const Transform& transform)
+    {
+        sampleToCamera = transform;
+    }
+
 protected:
     Transform sampleToCamera;
     Float aperatureRadius;

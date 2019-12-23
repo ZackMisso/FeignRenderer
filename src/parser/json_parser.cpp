@@ -146,7 +146,11 @@ void JsonParser::parse(std::string filename)
             Vector3f target = Vector3f(0.f);
             Vector3f up = Vector3f(0.f, 1.f, 0.f);
             Vec2i image_res = Vec2i(512, 512);
-            float fov = 45.f;
+            Float fov = 45.f;
+            Float app_radius = 0.f;
+            Float near = 1e-4f;
+            Float far = 1e4f;
+            Float focal_dist = 10.f;
 
             const rapidjson::Value& value = itr->value;
 
@@ -160,19 +164,35 @@ void JsonParser::parse(std::string filename)
             }
             if (value.HasMember("origin"))
             {
-                // TODO
+                throw NotImplementedException("origin vector json_parser");
             }
             if (value.HasMember("target"))
             {
-                // TODO
+                throw NotImplementedException("target vector json_parser");
             }
             if (value.HasMember("up"))
             {
-                // TODO
+                throw NotImplementedException("up vector json_parser");
             }
             if (value.HasMember("fov"))
             {
                 fov = value["fov"].GetFloat();
+            }
+            if (value.HasMember("near"))
+            {
+                near = value["near"].GetFloat();
+            }
+            if (value.HasMember("far"))
+            {
+                far = value["far"].GetFloat();
+            }
+            if (value.HasMember("app_radius"))
+            {
+                app_radius = value["app_radius"].GetFloat();
+            }
+            if (value.HasMember("focal_dist"))
+            {
+                focal_dist = value["focal_dist"].GetFloat();
             }
             if (value.HasMember("width"))
             {
@@ -189,6 +209,10 @@ void JsonParser::parse(std::string filename)
                                      target,
                                      up,
                                      fov,
+                                     near,
+                                     far,
+                                     focal_dist,
+                                     app_radius,
                                      image_res);
         }
         else if (strcmp(itr->name.GetString(), "object") == 0)
@@ -202,40 +226,40 @@ void JsonParser::parse(std::string filename)
             FeignRenderer::fr_clear_transform();
 
             for (rapidjson::Value::ConstMemberIterator itr_2 = value.MemberBegin();
-                 itr_2 != document.MemberEnd(); ++itr_2)
+                 itr_2 != value.MemberEnd(); ++itr_2)
             {
                 const rapidjson::Value& value_2 = itr_2->value;
 
-                if (strcmp(itr_2->name.GetString(), "name"))
+                if (strcmp(itr_2->name.GetString(), "name") == 0)
                 {
-                    name = itr_2->value.GetString();
+                    name = value_2.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "mesh"))
+                else if (strcmp(itr_2->name.GetString(), "mesh") == 0)
                 {
-                    mesh = itr_2->value.GetString();
+                    mesh = value_2.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "material"))
+                else if (strcmp(itr_2->name.GetString(), "material") == 0)
                 {
-                    material = itr_2->value.GetString();
+                    material = value_2.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "scale"))
+                else if (strcmp(itr_2->name.GetString(), "scale") == 0)
                 {
-                    FeignRenderer::fr_scale(itr_2->value[0].GetFloat(),
-                                            itr_2->value[1].GetFloat(),
-                                            itr_2->value[2].GetFloat());
+                    FeignRenderer::fr_scale(value_2[0].GetFloat(),
+                                            value_2[1].GetFloat(),
+                                            value_2[2].GetFloat());
                 }
-                else if (strcmp(itr_2->name.GetString(), "translate"))
+                else if (strcmp(itr_2->name.GetString(), "translate") == 0)
                 {
-                    FeignRenderer::fr_translate(itr_2->value[0].GetFloat(),
-                                                itr_2->value[1].GetFloat(),
-                                                itr_2->value[2].GetFloat());
+                    FeignRenderer::fr_translate(value_2[0].GetFloat(),
+                                                value_2[1].GetFloat(),
+                                                value_2[2].GetFloat());
                 }
-                else if (strcmp(itr_2->name.GetString(), "rotate"))
+                else if (strcmp(itr_2->name.GetString(), "rotate") == 0)
                 {
-                    FeignRenderer::fr_rotate(itr_2->value[0].GetFloat(),
-                                             itr_2->value[1].GetFloat(),
-                                             itr_2->value[2].GetFloat(),
-                                             itr_2->value[3].GetFloat());
+                    FeignRenderer::fr_rotate(value_2[0].GetFloat(),
+                                             value_2[1].GetFloat(),
+                                             value_2[2].GetFloat(),
+                                             value_2[3].GetFloat());
                 }
             }
 

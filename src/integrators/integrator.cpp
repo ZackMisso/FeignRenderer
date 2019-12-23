@@ -32,6 +32,8 @@ void Integrator::render(const Scene* scene,
     Imagef filter_weights = Imagef(image.width(), image.height(), 1);
     filter_weights.clear();
 
+    LOG("starting render loop");
+
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
         std::cout << double(k) / double(sampler->getSampleCnt()) * 100.0 << " Percent Done" << std::endl;
@@ -40,20 +42,25 @@ void Integrator::render(const Scene* scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
+                // LOG("taking pixel and apeture samples");
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
+                // LOG("sampling ray");
                 Ray3f ray;
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
 
+                // LOG("calculating radiance");
                 radiance *= Li(scene, sampler, ray);
 
+                // LOG("getting filter bounds");
                 BBox2f filter_bounds = BBox2f(pixelSample - filter->getSize(),
                                               pixelSample + filter->getSize());
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
                                    Point2f(camera->getFilmSize()[0]-1, camera->getFilmSize()[1]-1));
 
+                // LOG("splatting filter");
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
                 {
@@ -74,6 +81,7 @@ void Integrator::render(const Scene* scene,
         }
     }
 
+    // LOG("dividing by filter weights");
     for (int i = 0; i < image.height(); ++i)
     {
         for (int j = 0; j < image.width(); ++j)
