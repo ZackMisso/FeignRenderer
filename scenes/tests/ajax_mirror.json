@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "ajax_diffuse",
+        "name": "ajax_mirror",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -22,9 +22,9 @@
             -65.6055,
             47.5762,
             24.3583,
-            -64.8161,
-            47.2211,
-            23.8576,
+            -12.0,
+            0.0,
+            -12.0,
             0.299858,
             0.934836,
             -0.190177
@@ -36,11 +36,11 @@
     "object": {
         "name": "floor",
         "mesh": "plane",
-        "material": "diffuse_material",
+        "material": "mirror_material",
         "scale": [
-            100.0,
+            200.0,
             1.0,
-            100.0
+            200.0
         ]
     },
     "mesh": {
@@ -65,6 +65,19 @@
     "bsdf": {
         "name": "diffuse_bsdf",
         "type": "diffuse"
+    },
+    "material": {
+        "name": "mirror_material",
+        "bsdf": "mirror_bsdf"
+    },
+    "bsdf": {
+        "name": "mirror_bsdf",
+        "type": "mirror",
+        "albedo": [
+            1.0,
+            1.0,
+            1.0
+        ]
     },
     "emitter": {
         "name": "point_emitter",

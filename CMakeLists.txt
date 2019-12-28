@@ -129,7 +129,6 @@ add_executable(feign
     # Misc header files
     include/feign/misc/intersection.h
     include/feign/misc/embree_util.h
-    include/feign/misc/scene_generator.h
 
     # Parser header files
     include/feign/parser/json_parser.h
@@ -172,6 +171,7 @@ add_executable(feign
 
     # BSDF implementation files
     src/bsdfs/diffuse.cpp
+    src/bsdfs/mirror.cpp
 
     # Camera implementation files
     src/cameras/perspective.cpp

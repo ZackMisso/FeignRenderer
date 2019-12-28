@@ -9,8 +9,11 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-NormalIntegrator::NormalIntegrator(std::string location, long max_time, long max_heuristic)
-    : Integrator(location, max_time, max_heuristic)
+NormalIntegrator::NormalIntegrator(FilterNode* filter,
+                                   std::string location,
+                                   long max_time,
+                                   long max_heuristic)
+    : Integrator(filter, location, max_time, max_heuristic)
 {
 }
 

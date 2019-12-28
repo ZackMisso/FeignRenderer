@@ -9,8 +9,11 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-CosineTermIntegrator::CosineTermIntegrator(std::string location, long max_time, long max_heuristic)
-    : Integrator(location, max_time, max_heuristic)
+CosineTermIntegrator::CosineTermIntegrator(FilterNode* filter,
+                                           std::string location,
+                                           long max_time,
+                                           long max_heuristic)
+    : Integrator(filter, location, max_time, max_heuristic)
 {
 }
 

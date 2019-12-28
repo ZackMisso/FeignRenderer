@@ -90,6 +90,7 @@ void JsonParser::parse(std::string filename)
 
             std::string name = "integrator";
             std::string type = "normal";
+            std::string filter = "default";
             long max_time = -1;
             long max_heuristic = -1;
 
@@ -103,6 +104,10 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
+            if (value.HasMember("filter"))
+            {
+                filter = value["filter"].GetString();
+            }
             if (value.HasMember("max_time"))
             {
                 max_time = value["max_time"].GetInt();
@@ -114,6 +119,7 @@ void JsonParser::parse(std::string filename)
 
             FeignRenderer::fr_integrator(name,
                                          type,
+                                         filter,
                                          max_time,
                                          max_heuristic);
         }
@@ -328,10 +334,11 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
+            // LOG("emitter");
             std::string name = "emitter";
             std::string type = "point";
-            std::string mesh = "default";
-            std::string material = "default";
+            std::string mesh = "null";
+            std::string material = "null";
             Vector3f pos = Vector3f(0.f);
             Color3f intensity = Color3f(1.f);
 
@@ -340,51 +347,53 @@ void JsonParser::parse(std::string filename)
             FeignRenderer::fr_clear_transform();
 
             for (rapidjson::Value::ConstMemberIterator itr_2 = value.MemberBegin();
-                 itr_2 != document.MemberEnd(); ++itr_2)
+                 itr_2 != value.MemberEnd(); ++itr_2)
             {
+                // LOG("emitter iter");
                 const rapidjson::Value& value_2 = itr_2->value;
 
-                if (strcmp(itr_2->name.GetString(), "name"))
+                if (strcmp(itr_2->name.GetString(), "name") == 0)
                 {
                     name = itr_2->value.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "type"))
+                else if (strcmp(itr_2->name.GetString(), "type") == 0)
                 {
                     type = itr_2->value.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "mesh"))
+                else if (strcmp(itr_2->name.GetString(), "mesh") == 0)
                 {
                     mesh = itr_2->value.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "material"))
+                else if (strcmp(itr_2->name.GetString(), "material") == 0)
                 {
                     material = itr_2->value.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "pos"))
+                else if (strcmp(itr_2->name.GetString(), "position") == 0)
                 {
                     pos[0] = itr_2->value[0].GetFloat();
                     pos[1] = itr_2->value[1].GetFloat();
                     pos[2] = itr_2->value[2].GetFloat();
                 }
-                else if (strcmp(itr_2->name.GetString(), "intensity"))
+                else if (strcmp(itr_2->name.GetString(), "intensity") == 0)
                 {
+                    // LOG("intensity");
                     intensity[0] = itr_2->value[0].GetFloat();
                     intensity[1] = itr_2->value[1].GetFloat();
                     intensity[2] = itr_2->value[2].GetFloat();
                 }
-                else if (strcmp(itr_2->name.GetString(), "scale"))
+                else if (strcmp(itr_2->name.GetString(), "scale") == 0)
                 {
                     FeignRenderer::fr_scale(itr_2->value[0].GetFloat(),
                                             itr_2->value[1].GetFloat(),
                                             itr_2->value[2].GetFloat());
                 }
-                else if (strcmp(itr_2->name.GetString(), "translate"))
+                else if (strcmp(itr_2->name.GetString(), "translate") == 0)
                 {
                     FeignRenderer::fr_translate(itr_2->value[0].GetFloat(),
                                                 itr_2->value[1].GetFloat(),
                                                 itr_2->value[2].GetFloat());
                 }
-                else if (strcmp(itr_2->name.GetString(), "rotate"))
+                else if (strcmp(itr_2->name.GetString(), "rotate") == 0)
                 {
                     FeignRenderer::fr_rotate(itr_2->value[0].GetFloat(),
                                              itr_2->value[1].GetFloat(),
@@ -393,12 +402,16 @@ void JsonParser::parse(std::string filename)
                 }
             }
 
+            LOG("fr_emitter");
+
             FeignRenderer::fr_emitter(name,
                                       type,
                                       mesh,
                                       material,
                                       pos,
                                       intensity);
+
+            LOG("post emitter");
 
             FeignRenderer::fr_clear_transform();
         }

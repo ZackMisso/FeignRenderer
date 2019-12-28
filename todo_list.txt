@@ -1,5 +1,11 @@
 TODO notes:
 
-currently one Mesh can only be used by one object at a time
 need to support rotation matrices
+implement path tracer
+implement volumetric path tracer
+rethink the current structure for evaluating bsdfs
+create automated scene testing
+currently one Mesh can only be used by one object at a time
 move save location for renders to scene instead of integrators
+implement cube map
+implement sphere map

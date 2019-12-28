@@ -18,6 +18,7 @@ Diffuse::Diffuse(Color3f albedo)
 // the idea is that sample returns eval() / pdf()
 Color3f Diffuse::sample(BSDFQuery& rec, const Point2f& sample) const
 {
+    LOG("in diffuse sample");
     if (CoordinateFrame::cosTheta(rec.wi) <= 0)
     {
         return Color3f(0.f, 0.f, 0.f);

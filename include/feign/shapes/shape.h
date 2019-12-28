@@ -24,8 +24,7 @@ class Shape
 {
 public:
     Shape();
-    Shape(Node* parent);
-    virtual ~Shape();
+    virtual ~Shape() { }
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
     virtual bool intersect(uint32_t tri,
@@ -44,15 +43,15 @@ public:
 
     virtual void addShapeToScene(RTCScene scene, RTCDevice device) = 0;
 
-    Material* getMaterial() const { return material; }
     unsigned int getGeomID() const { return geomID; }
+    unsigned int getInstID() const { return instID; }
 
-    void setMaterial(Material* param) { material = param; }
+    void setInstID(unsigned int val) { instID = val; }
 
     Transform transform;
 protected:
-    Material* material; // should this go here?
     unsigned int geomID;
+    unsigned int instID;
 };
 
 /////////////////////////////////////////////////

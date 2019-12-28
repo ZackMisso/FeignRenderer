@@ -22,8 +22,11 @@ class Scene;
 class Integrator
 {
 public:
-    Integrator(std::string location, long max_time, long max_heuristic)
-        : filter(nullptr),
+    Integrator(FilterNode* filter,
+               std::string location,
+               long max_time,
+               long max_heuristic)
+        : filter(filter),
           location(location),
           max_time(max_time),
           max_heuristic(max_heuristic) { }
@@ -43,7 +46,7 @@ public:
 
     std::string location;
 protected:
-    ReconstructionFilter* filter;
+    FilterNode* filter;
     long max_time;
     long max_heuristic;
 };
@@ -55,7 +58,10 @@ protected:
 class Ambient_Occlusion_Integrator : public Integrator
 {
 public:
-    Ambient_Occlusion_Integrator(std::string location, long max_time, long max_heuristic);
+    Ambient_Occlusion_Integrator(FilterNode* filter,
+                                 std::string location,
+                                 long max_time,
+                                 long max_heuristic);
 
     virtual void preProcess();
 
@@ -71,7 +77,10 @@ public:
 class Light_Unidirectional_Integrator : public Integrator
 {
 public:
-    Light_Unidirectional_Integrator(std::string location, long max_time, long max_heuristic);
+    Light_Unidirectional_Integrator(FilterNode* filter,
+                                    std::string location,
+                                    long max_time,
+                                    long max_heuristic);
 
     virtual void preProcess();
 
@@ -88,7 +97,10 @@ public:
 class NormalIntegrator : public Integrator
 {
 public:
-    NormalIntegrator(std::string location, long max_time, long max_heuristic);
+    NormalIntegrator(FilterNode* filter,
+                     std::string location,
+                     long max_time,
+                     long max_heuristic);
 
     virtual void preProcess();
 
@@ -104,7 +116,10 @@ public:
 class Path_Bidirectional_Integrator : public Integrator
 {
 public:
-    Path_Bidirectional_Integrator(std::string location, long max_time, long max_heuristic);
+    Path_Bidirectional_Integrator(FilterNode* filter,
+                                  std::string location,
+                                  long max_time,
+                                  long max_heuristic);
 
     virtual void preProcess();
 
@@ -120,7 +135,10 @@ public:
 class Path_Unidirectional_Integrator : public Integrator
 {
 public:
-    Path_Unidirectional_Integrator(std::string location, long max_time, long max_heuristic);
+    Path_Unidirectional_Integrator(FilterNode* filter,
+                                   std::string location,
+                                   long max_time,
+                                   long max_heuristic);
 
     virtual void preProcess();
 
@@ -136,7 +154,10 @@ public:
 class WhittedIntegrator : public Integrator
 {
 public:
-    WhittedIntegrator(std::string location, long max_time, long max_heuristic);
+    WhittedIntegrator(FilterNode* filter,
+                      std::string location,
+                      long max_time,
+                      long max_heuristic);
 
     virtual void preProcess();
 
@@ -177,7 +198,10 @@ public:
 class CosineTermIntegrator : public Integrator
 {
 public:
-    CosineTermIntegrator(std::string location, long max_time, long max_heuristic);
+    CosineTermIntegrator(FilterNode* filter,
+                         std::string location,
+                         long max_time,
+                         long max_heuristic);
 
     virtual void preProcess();
 

@@ -12,13 +12,9 @@
 
 void Integrator::preProcess()
 {
-    if (!filter)
-    {
-        filter = new GaussFilter(Vec2f(2.0, 2.0), 0.5);
-        // filter = new BoxFilter();
-    }
-
-    filter->preProcess();
+    if (!filter) LOG("filter node never created");
+    if (!filter->filter) LOG("filter object never created");
+    filter->filter->preProcess();
 }
 
 // TODO: multithreading
@@ -65,8 +61,8 @@ void Integrator::render(const Scene* scene,
                 }
 
                 // LOG("getting filter bounds");
-                BBox2f filter_bounds = BBox2f(pixelSample - filter->getSize(),
-                                              pixelSample + filter->getSize());
+                BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
+                                              pixelSample + filter->filter->getSize());
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
                                    Point2f(camera->getFilmSize()[0]-1, camera->getFilmSize()[1]-1));
@@ -78,8 +74,8 @@ void Integrator::render(const Scene* scene,
                     for (int fj = std::floor(filter_bounds.min(0));
                          fj <= std::floor(filter_bounds.max(0)); ++fj)
                     {
-                        Float weight = filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
-                                                        pixelSample);
+                        Float weight = filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
+                                                                pixelSample);
 
 
 
@@ -108,16 +104,15 @@ void Integrator::render(const Scene* scene,
     {
         for (int j = 0; j < image.width(); ++j)
         {
-
-            if (filter_weights(j, i, 0) == 0.f)
-            {
-                LOG("ZERO WEIGHTS");
-            }
-
-            if (std::isnan(filter_weights(j, i, 0)))
-            {
-                LOG("weight nan");
-            }
+            // if (filter_weights(j, i, 0) == 0.f)
+            // {
+            //     LOG("ZERO WEIGHTS");
+            // }
+            //
+            // if (std::isnan(filter_weights(j, i, 0)))
+            // {
+            //     LOG("weight nan");
+            // }
 
             image(j, i, 0) = image(j, i, 0) / filter_weights(j, i, 0);
             image(j, i, 1) = image(j, i, 1) / filter_weights(j, i, 0);

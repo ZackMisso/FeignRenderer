@@ -9,8 +9,11 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-WhittedIntegrator::WhittedIntegrator(std::string location, long max_time, long max_heuristic)
-    : Integrator(location, max_time, max_heuristic)
+WhittedIntegrator::WhittedIntegrator(FilterNode* filter,
+                                     std::string location,
+                                     long max_time,
+                                     long max_heuristic)
+    : Integrator(filter, location, max_time, max_heuristic)
 {
 }
 
@@ -26,6 +29,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
     Intersection its;
 
     Vector3f dir = ray.dir;
+    Float rr_cont_probability = 0.95f;
 
     if (!scene->intersect(ray, its))
     {
@@ -33,13 +37,14 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
     }
 
     const std::vector<Emitter*> emitters = scene->emitters;
-    const BSDF* bsdf = its.intersected_mesh->getMaterial()->getBSDF();
+    const BSDF* bsdf = scene->getShapeBSDF(its.intersected_mesh);
 
     Color3f result(0.f);
 
     // TODO: create a method to sample all emitters in base integrator
     if (!bsdf->isDelta()) // TODO: is this the best way of handling this
     {
+        // LOG("emitters size:", (int)emitters.size());
         for (int i = 0; i < emitters.size(); ++i)
         {
             EmitterQuery eqr(its.p);
@@ -76,13 +81,13 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         // perfect specular reflections
 
         // perform russian roulette first to save computation
-        if (sampler->next1D() > 0.95f) return Color3f(0.f);
+        if (sampler->next1D() > rr_cont_probability) return Color3f(0.f);
 
         BSDFQuery bqr(its.toLocal(-dir),
                       its.uv,
                       its.p);
 
-        Point2f sample;
+        Point2f sample = sampler->next2D();
         Color3f color = bsdf->sample(bqr, sample);
 
         if (color.is_black()) return color;
@@ -94,7 +99,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
         Color3f recur = Li(scene, sampler, reflection);
 
-        return recur * 1.f / (0.95f) * color;
+        return recur * 1.f / rr_cont_probability * color;
 
         // TODO: add refraction
     }

@@ -10,8 +10,11 @@
 #include <feign/core/scene.h>
 #include <feign/math/warp.h>
 
-Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(std::string location, long max_time, long max_heuristic)
-    : Integrator(location, max_time, max_heuristic)
+Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode* filter,
+                                                           std::string location,
+                                                           long max_time,
+                                                           long max_heuristic)
+    : Integrator(filter, location, max_time, max_heuristic)
 {
     // does nothing
 }

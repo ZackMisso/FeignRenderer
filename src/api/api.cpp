@@ -211,6 +211,12 @@ FilterNode* FeignRenderer::find_filter(std::string name)
     {
         FilterNode* node = new FilterNode(name);
         filters.insert({name, node});
+
+        if (name == "default")
+        {
+            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
+        }
+
         return node;
     }
     else
@@ -294,12 +300,13 @@ void FeignRenderer::fr_scene(std::string name,
 
 void FeignRenderer::fr_integrator(std::string name,
                                   std::string type,
+                                  std::string filter,
                                   long max_time,
                                   long max_heuristic,
                                   std::string location)
 {
-    LOG("integrators: " + std::to_string(getInstance()->integrators.size()));
     IntegratorNode* integrator = getInstance()->find_integrator(name);
+    FilterNode* filter_node = getInstance()->find_filter(filter);
 
     if (integrator->integrator)
     {
@@ -308,15 +315,15 @@ void FeignRenderer::fr_integrator(std::string name,
 
     if (type == "normal")
     {
-        integrator->integrator = new NormalIntegrator(location, max_time, max_heuristic);
+        integrator->integrator = new NormalIntegrator(filter_node, location, max_time, max_heuristic);
     }
     else if (type == "whitted")
     {
-        integrator->integrator = new WhittedIntegrator(location, max_time, max_heuristic);
+        integrator->integrator = new WhittedIntegrator(filter_node, location, max_time, max_heuristic);
     }
     else if (type == "cosine_term")
     {
-        integrator->integrator = new CosineTermIntegrator(location, max_time, max_heuristic);
+        integrator->integrator = new CosineTermIntegrator(filter_node, location, max_time, max_heuristic);
     }
     else
     {
@@ -508,6 +515,10 @@ void FeignRenderer::fr_bsdf(std::string name,
     {
         bsdf->bsdf = new Diffuse(albedo);
     }
+    else if (type == "mirror")
+    {
+        bsdf->bsdf = new Mirror(albedo);
+    }
     else if (type == "null")
     {
         bsdf->bsdf = nullptr;
@@ -554,6 +565,7 @@ void FeignRenderer::flush_renders()
     assert(scene_obj);
 
     // first preprocess all meshes
+    unsigned int inst_index = 0;
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
@@ -566,6 +578,10 @@ void FeignRenderer::flush_renders()
         mesh->transform = it.second->transform * mesh->transform;
         mesh->preProcess();
         scene_obj->shapes.push_back(mesh);
+        scene_obj->objects.push_back(it.second);
+        mesh->setInstID(inst_index);
+
+        inst_index++;
     }
 
     // preprocess the scene

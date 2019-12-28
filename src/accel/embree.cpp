@@ -30,7 +30,9 @@ void EmbreeAccel::addShape(Shape* mesh)
 {
     LOG("adding shape to scene");
     mesh->addShapeToScene(scene, device);
+    LOG("pushing back mesh");
     meshes.push_back(mesh);
+    LOG("finished adding shape");
 }
 
 // commits all changes for this scene. This must be called after all scene

@@ -21,12 +21,15 @@ Scene::Scene(std::string name,
       env_medium_node(media)
 {
     shapes = std::vector<Shape*>();
+    objects = std::vector<ObjectNode*>();
     ray_accel = nullptr;
 }
 
 Scene::~Scene()
 {
     delete ray_accel;
+    shapes.clear();
+    objects.clear();
 }
 
 void Scene::preProcess()
@@ -35,7 +38,6 @@ void Scene::preProcess()
     {
         ray_accel = new EmbreeAccel();
         // ray_accel = new NaiveAccel();
-        // children.push_back(ray_accel);
         ray_accel->preProcess();
     }
 
@@ -44,12 +46,17 @@ void Scene::preProcess()
         LOG("adding shape");
         shapes[i]->transform.print();
         ray_accel->addShape(shapes[i]);
+        LOG("added shape");
     }
 
+    LOG("building accel structure");
     ray_accel->build();
 
+    LOG("preprocessing integrator");
     integrator_node->integrator->preProcess();
+    LOG("preprocessing camera");
     camera_node->camera->preProcess();
+    LOG("finished scene preprocess");
 }
 
 void Scene::renderScene() const
@@ -96,7 +103,7 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
-// void Scene::addObject(Node* node)
-// {
-//     sceneObjects.push_back(node);
-// }
+const BSDF* Scene::getShapeBSDF(const Shape* shape) const
+{
+    return objects[shape->getInstID()]->material->material->bsdf->bsdf;
+}

@@ -78,6 +78,7 @@ public:
 
     static void fr_integrator(std::string name,
                               std::string type,
+                              std::string filter,
                               long max_time,
                               long max_heuristic,
                               std::string location = "");

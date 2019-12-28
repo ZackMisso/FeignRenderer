@@ -45,6 +45,8 @@ public:
 
     void addEmitter(Emitter* emitter);
 
+    const BSDF* getShapeBSDF(const Shape* shape) const;
+
     // TODO: should these really be public...
 public:
     std::string name;
@@ -59,6 +61,7 @@ public:
     // pre-processed structures
     std::vector<Emitter*> emitters;
     std::vector<Shape*> shapes;
+    std::vector<ObjectNode*> objects;
 
     // optional structures
     MediaNode* env_medium_node;

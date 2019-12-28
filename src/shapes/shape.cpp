@@ -10,12 +10,6 @@
 
 Shape::Shape()
 {
-    material = new Material();
+    instID = 0;
     transform = Transform();
-}
-
-Shape::~Shape()
-{
-    std::cout << "deleting shape" << std::endl;
-    delete material;
 }

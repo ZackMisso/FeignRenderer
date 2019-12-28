@@ -15,7 +15,7 @@ static void ajax_cosine()
     imedit::color_map_inferno(color_map);
 
     int start_frame = 0;
-    int end_frame = 720;
+    int end_frame = 60;
 
     for (int i = start_frame; i < end_frame; ++i)
     {
@@ -37,6 +37,7 @@ static void ajax_cosine()
 
         FeignRenderer::fr_integrator("integrator",
                                      "cosine_term",
+                                     "default",
                                      1000,
                                      1000,
                                      test_name + "/");

@@ -7,7 +7,8 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "normal"
+        "type": "normal",
+        "filter": "default"
     },
     "sampler": {
         "name": "sampler",

@@ -9,7 +9,6 @@
 #include <iostream>
 #include <feign/parser/json_parser.h>
 #include <feign/core/scene.h>
-#include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 
 #include "../scenes/adrien/ajax_cosine.h"
@@ -26,12 +25,9 @@ void run_scene(std::string scene_name)
 // these are all the base debug scenes
 void run_all_scenes()
 {
-    run_scene("generated/ajax-normals");
-    run_scene("generated/ajax-diffuse");
-    run_scene("generated/ajax-amb_occ");
-
     run_scene("tests/ajax_normals");
     run_scene("tests/ajax_diffuse");
+    run_scene("tests/ajax_mirror");
 }
 
 int main(int argc, char* argv[])
@@ -46,10 +42,8 @@ int main(int argc, char* argv[])
     // /////\\\ TEMPORARY \\\/////
 
     // std::string scene = "tests/ajax_normals";
-    std::string scene = "tests/ajax_diffuse";
-    // std::string scene = "generated/ajax-normals-new-format";
-    // scene = "generated/ajax-diffuse";
-    // scene = "generated/ajax-amb_occ";
+    // std::string scene = "tests/ajax_diffuse";
+    std::string scene = "tests/ajax_mirror";
 
     for (int i = 1; i < argc; ++i)
     {
@@ -67,14 +61,6 @@ int main(int argc, char* argv[])
             delete unitTests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
-        }
-        if (strcmp(argv[i], "-g") == 0)
-        {
-            std::cout << "Generating all scenes" << std::endl;
-
-            SceneGenerator::create_all_scenes();
-
-            std::cout << "Finished generating all scenes" << std::endl;
         }
         if (strcmp(argv[i], "-s") == 0)
         {

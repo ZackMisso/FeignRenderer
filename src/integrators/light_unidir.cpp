@@ -8,8 +8,11 @@
 
 #include <feign/core/integrator.h>
 
-Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(std::string location, long max_time, long max_heuristic)
-    : Integrator(location, max_time, max_heuristic)
+Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(FilterNode* filter,
+                                                                 std::string location,
+                                                                 long max_time,
+                                                                 long max_heuristic)
+    : Integrator(filter, location, max_time, max_heuristic)
 {
     throw new NotImplementedException("light unidir constructor");
 }
