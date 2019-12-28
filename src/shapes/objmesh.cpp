@@ -90,11 +90,11 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
     }
 
     e_Triangle* triangles = (e_Triangle*) rtcSetNewGeometryBuffer(e_mesh,
-                                                                RTC_BUFFER_TYPE_INDEX,
-                                                                0,
-                                                                RTC_FORMAT_UINT3,
-                                                                sizeof(e_Triangle),
-                                                                tris.size());
+                                                                  RTC_BUFFER_TYPE_INDEX,
+                                                                  0,
+                                                                  RTC_FORMAT_UINT3,
+                                                                  sizeof(e_Triangle),
+                                                                  tris.size());
 
     for (int i = 0; i < tris.size(); ++i)
     {
@@ -230,6 +230,12 @@ void ObjMesh::infoDump()
 {
     std::cout << "Number of Verts: " << vs.size() << std::endl;
     std::cout << "Number of Triangles: " << tris.size() << std::endl;
+
+    // for (int i = 0; i < vs.size(); ++i)
+    // {
+    //     std::cout << vs[i][0] << " " << vs[i][1] << " " << vs[i][2] << std::endl;
+    // }
+
     LOG("post dump");
 }
 
@@ -300,6 +306,11 @@ void ObjMesh::preProcess()
     {
         sa += surfaceArea(i);
     }
+
+    Point3f center = centroid();
+
+    LOG("centroid:");
+    LOG(center);
 
     // precompute the bounding box around the object
     LOG("asserting size");

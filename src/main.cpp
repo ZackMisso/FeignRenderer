@@ -12,24 +12,15 @@
 #include <feign/misc/scene_generator.h>
 #include <tests/tester.h>
 
+#include "../scenes/adrien/ajax_cosine.h"
+
 void run_scene(std::string scene_name)
 {
-    // TODO: disallow direct access to the parser and instead render
-    //       through the api function calls
-    std::cout << SCENES_PATH + scene_name + ".json" << std::endl;
+    FeignRenderer::initialize();
+
     JsonParser::parse(SCENES_PATH + scene_name + ".json");
 
-    // std::cout << std::endl;
-    // std::cout << "New World Graph Description:" << std::endl;
-    // std::cout << std::endl;
-    // world->printGraph();
-    // std::cout << std::endl;
-
-    // scene->renderScene();
-
-    // world->renderAllScenes();
-
-    // delete scene;
+    FeignRenderer::clean_up();
 }
 
 // these are all the base debug scenes
@@ -38,13 +29,25 @@ void run_all_scenes()
     run_scene("generated/ajax-normals");
     run_scene("generated/ajax-diffuse");
     run_scene("generated/ajax-amb_occ");
+
+    run_scene("tests/ajax_normals");
+    run_scene("tests/ajax_diffuse");
 }
 
 int main(int argc, char* argv[])
 {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    std::string scene = "generated/ajax-normals-new-format";
+    // //////// TEMPORARY ////////
+    //
+    // ajax_cosine();
+    // return 0;
+    //
+    // /////\\\ TEMPORARY \\\/////
+
+    // std::string scene = "tests/ajax_normals";
+    std::string scene = "tests/ajax_diffuse";
+    // std::string scene = "generated/ajax-normals-new-format";
     // scene = "generated/ajax-diffuse";
     // scene = "generated/ajax-amb_occ";
 

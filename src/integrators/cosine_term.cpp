@@ -9,17 +9,17 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-NormalIntegrator::NormalIntegrator(std::string location, long max_time, long max_heuristic)
+CosineTermIntegrator::CosineTermIntegrator(std::string location, long max_time, long max_heuristic)
     : Integrator(location, max_time, max_heuristic)
 {
 }
 
-void NormalIntegrator::preProcess()
+void CosineTermIntegrator::preProcess()
 {
     Integrator::preProcess();
 }
 
-Color3f NormalIntegrator::Li(const Scene* scene,
+Color3f CosineTermIntegrator::Li(const Scene* scene,
                              Sampler* sampler,
                              const Ray3f& ray) const
 {
@@ -27,10 +27,12 @@ Color3f NormalIntegrator::Li(const Scene* scene,
 
     if (!scene->intersect(ray, its))
     {
-        return Color3f(0.f);
+        return Color3f(-2.f);
     }
 
-    Normal3f shad_n = ~(its.s_frame.n);
+    Normal3f shad_n = its.s_frame.n;
+    Vector3f vect_n = (Vector3f)shad_n;
+    Float cosine_term = vect_n % ray.dir;
 
-    return Color3f(shad_n(0), shad_n(1), shad_n(2));
+    return Color3f(cosine_term, cosine_term, cosine_term);
 }

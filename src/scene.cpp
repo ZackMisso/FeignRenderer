@@ -9,18 +9,6 @@
 #include <feign/core/scene.h>
 #include <feign/core/accel.h>
 
-// Scene::Scene()
-// {
-//     // sceneObjects = std::vector<Node*>();
-//     shapes = std::vector<Shape*>();
-//     // root = nullptr;
-//     ray_accel = nullptr;
-//     integrator = nullptr;
-//     env_medium = nullptr;
-//     sampler = nullptr;
-//     camera = nullptr;
-// }
-
 Scene::Scene(std::string name,
              IntegratorNode* integrator,
              SamplerNode* sampler,
@@ -38,49 +26,11 @@ Scene::Scene(std::string name,
 
 Scene::~Scene()
 {
-    // TODO delete correctly
-    // std::cout << "deleting scene" << std::endl;
-    // std::cout << "before delete root" << std::endl;
-    // if (!root) std::cout << "root does not exist" << std::endl;
-    // delete root;
-    // std::cout << "post delete root" << std::endl;
-    // sceneObjects.clear();
+    delete ray_accel;
 }
 
 void Scene::preProcess()
 {
-    // preProcessChildren();
-
-    // std::vector<Shape*> shapes = std::vector<Shape*>();
-
-    // for (int i = 0; i < children.size(); ++i)
-    // {
-    //     if (children[i]->getNodeType() == NT_Camera)
-    //     {
-    //         camera = (Camera*)children[i];
-    //     }
-    //     if (children[i]->getNodeType() == NT_Sampler)
-    //     {
-    //         sampler = (Sampler*)children[i];
-    //     }
-    //     if (children[i]->getNodeType() == NT_Integrator)
-    //     {
-    //         integrator = (Integrator*)children[i];
-    //     }
-    //     if (children[i]->getNodeType() == NT_Emitter)
-    //     {
-    //         emitters.push_back((Emitter*)children[i]);
-    //     }
-    //     if (children[i]->getNodeType() == NT_Accel)
-    //     {
-    //         ray_accel = (Accel*)children[i];
-    //     }
-    //     if (children[i]->getNodeType() == NT_Mesh)
-    //     {
-    //         shapes.push_back((Shape*)children[i]);
-    //     }
-    // }
-
     if (!ray_accel)
     {
         ray_accel = new EmbreeAccel();
@@ -88,16 +38,18 @@ void Scene::preProcess()
         // children.push_back(ray_accel);
         ray_accel->preProcess();
     }
-    // std::cout << "after accel" << std::endl;
 
     for (int i = 0; i < shapes.size(); ++i)
     {
+        LOG("adding shape");
+        shapes[i]->transform.print();
         ray_accel->addShape(shapes[i]);
     }
 
     ray_accel->build();
 
     integrator_node->integrator->preProcess();
+    camera_node->camera->preProcess();
 }
 
 void Scene::renderScene() const
@@ -119,8 +71,6 @@ void Scene::renderScene() const
         throw new FeignRendererException("scene: no specified sampler");
     }
 
-    std::cout << "rendering film: " << camera->getFilmSize()[0] << ", " << camera->getFilmSize()[1] << std::endl;
-
     // TODO: this will need to be changed for parallelization
     Imagef image = Imagef(camera->getFilmSize()[0],
                           camera->getFilmSize()[1],
@@ -131,13 +81,9 @@ void Scene::renderScene() const
                        sampler,
                        image);
 
-    std::cout << "writing scene: " << name << std::endl;
-
-    image.write(name + ".png"); // .png writer has some issues
-                                     // for some scenes
-    image.write(name + ".exr");
-
-    std::cout << "Rendering Complete" << std::endl;
+    image.write(integrator->location + name + ".png"); // .png writer has some issues for some scenes
+    image.write(integrator->location + name + ".hdr"); // .hdr writer has some issues for some scenes
+    image.write(integrator->location + name + ".exr");
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const

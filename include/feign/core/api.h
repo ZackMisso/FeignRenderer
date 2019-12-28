@@ -30,37 +30,45 @@
 class FeignRenderer
 {
 private:
-    static std::vector<Transform> transform_stack;
-    static Transform current_transform;
-    static SceneNode* scene;
+    FeignRenderer();
+    ~FeignRenderer();
 
-    // TODO: what is the best representation? vector? tree?
-    static std::vector<Node*> nodes;
-    static std::unordered_map<std::string, BSDFNode*> bsdfs;
-    static std::unordered_map<std::string, CameraNode*> cameras;
-    static std::unordered_map<std::string, EmitterNode*> emitters;
-    static std::unordered_map<std::string, MediaNode*> medias;
-    static std::unordered_map<std::string, IntegratorNode*> integrators;
-    static std::unordered_map<std::string, SamplerNode*> samplers;
-    static std::unordered_map<std::string, FilterNode*> filters;
-    static std::unordered_map<std::string, MaterialNode*> materials;
-    static std::unordered_map<std::string, ObjectNode*> objects;
-    static std::unordered_map<std::string, MeshNode*> meshes;
+    static FeignRenderer* instance;
 
-    static void clean_up();
-
-    static BSDFNode*       find_bsdf(std::string name);
-    static IntegratorNode* find_integrator(std::string name);
-    static CameraNode*     find_camera(std::string name);
-    static EmitterNode*    find_emitter(std::string name);
-    static MediaNode*      find_media(std::string name);
-    static SamplerNode*    find_sampler(std::string name);
-    static FilterNode*     find_filter(std::string name);
-    static MaterialNode*   find_material(std::string name);
-    static ObjectNode*     find_object(std::string name);
-    static MeshNode*       find_mesh(std::string name);
+protected:
+    static FeignRenderer* getInstance() { return instance; }
 
 public:
+
+    Transform current_transform;
+    SceneNode* scene;
+
+    // TODO: what is the best representation? vector? tree?
+    std::unordered_map<std::string, BSDFNode*> bsdfs;
+    std::unordered_map<std::string, CameraNode*> cameras;
+    std::unordered_map<std::string, EmitterNode*> emitters;
+    std::unordered_map<std::string, MediaNode*> medias;
+    std::unordered_map<std::string, IntegratorNode*> integrators;
+    std::unordered_map<std::string, SamplerNode*> samplers;
+    std::unordered_map<std::string, FilterNode*> filters;
+    std::unordered_map<std::string, MaterialNode*> materials;
+    std::unordered_map<std::string, ObjectNode*> objects;
+    std::unordered_map<std::string, MeshNode*> meshes;
+
+    BSDFNode*       find_bsdf(std::string name);
+    IntegratorNode* find_integrator(std::string name);
+    CameraNode*     find_camera(std::string name);
+    EmitterNode*    find_emitter(std::string name);
+    MediaNode*      find_media(std::string name);
+    SamplerNode*    find_sampler(std::string name);
+    FilterNode*     find_filter(std::string name);
+    MaterialNode*   find_material(std::string name);
+    ObjectNode*     find_object(std::string name);
+    MeshNode*       find_mesh(std::string name);
+
+    static void initialize();
+    static void clean_up();
+
     // TODO: this new api is not good for users directly
     static void fr_scene(std::string name,
                          std::string integrator_node,
@@ -71,7 +79,8 @@ public:
     static void fr_integrator(std::string name,
                               std::string type,
                               long max_time,
-                              long max_heuristic);
+                              long max_heuristic,
+                              std::string location = "");
 
     static void fr_sampler(std::string name,
                            std::string type,
@@ -120,78 +129,4 @@ public:
     static void fr_rotate(float angle, float x, float y, float z);
 
     static void flush_renders();
-
-
-
-
-    // Old api
-    // // begin
-    // static void begin_world();
-    // static void create_scene(std::string name);
-    // static void begin_node();
-    // static void begin_obj(const std::string& filename,
-    //                       bool flip_norms);
-    //
-    // // end
-    // static void end_world();
-    // static void end_node();
-    // static void end_obj();
-    //
-    // // bsdfs
-    // static void bsdf_diffuse(Color3f albedo = Color3f(0.5));
-    //
-    // // cameras
-    // static void camera_ortho(Vec3f ori,
-    //                          Vec3f tar,
-    //                          Vec3f up);
-    //
-    // static void camera_perspective(Vec3f ori,
-    //                                Vec3f tar,
-    //                                Vec3f up,
-    //                                Float aperatureRadius,
-    //                                Float focalDistance,
-    //                                Float fov,
-    //                                Float near,
-    //                                Float far,
-    //                                uint32_t width,
-    //                                uint32_t height);
-    //
-    // // integrators
-    // static void integrator(std::string integrator_type);
-    //
-    // // samplers
-    // static void sampler(std::string sampler_type,
-    //                     uint32_t sample_cnt,
-    //                     uint32_t seed);
-    //
-    // // emitters
-    // static void emitter_point(Color3f I = Color3f(1.0),
-    //                           Point3f pos = Point3f(0.0));
-    //
-    // // transforms
-    // static void transform_scale(Vec3f scale);
-    //
-    // static void transform_rot(Float degree, Vec3f axis);
-    //
-    // static void transform_trans(Vec3f translate);
-    //
-    // static void transform_lookat(Vec3f eye,
-    //                              Vec3f at,
-    //                              Vec3f up);
-    //
-    // static void transform_matrix(Float a00, Float a01, Float a02, Float a03,
-    //                              Float a10, Float a11, Float a12, Float a13,
-    //                              Float a20, Float a21, Float a22, Float a23,
-    //                              Float a30, Float a31, Float a32, Float a33);
-    //
-    // static void transform_matrix(Matrix4f matrix);
-    //
-    // static void transform_transform(Transform transform);
-    //
-    // // TODO: ehhh are these needed anymore???
-    // // for external control
-    // static void transform_push();
-    // static void transform_pop();
-
-    // TODO: add methods to run renders or batch renders
 };

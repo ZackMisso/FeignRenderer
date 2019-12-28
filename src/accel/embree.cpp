@@ -28,6 +28,7 @@ void EmbreeAccel::clear()
 // adds all intersectable meshes in a scene to embree's backend
 void EmbreeAccel::addShape(Shape* mesh)
 {
+    LOG("adding shape to scene");
     mesh->addShapeToScene(scene, device);
     meshes.push_back(mesh);
 }

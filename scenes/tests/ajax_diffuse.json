@@ -1,13 +1,13 @@
 {
     "scene": {
-        "name": "ajax_cosine",
+        "name": "ajax_diffuse",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
     },
     "integrator": {
         "name": "integrator",
-        "type": "cosine_term"
+        "type": "whitted"
     },
     "sampler": {
         "name": "sampler",
@@ -35,7 +35,7 @@
     "object": {
         "name": "floor",
         "mesh": "plane",
-        "material": "floor_material",
+        "material": "diffuse_material",
         "scale": [
             100.0,
             1.0,
@@ -49,11 +49,20 @@
     },
     "object": {
         "name": "ajax",
-        "mesh": "ajax_obj"
+        "mesh": "ajax_obj",
+        "material": "diffuse_material"
     },
     "mesh": {
         "name": "ajax_obj",
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/ajax.obj"
+    },
+    "material": {
+        "name": "diffuse_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse"
     }
 }

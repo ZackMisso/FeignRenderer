@@ -27,11 +27,8 @@ Perspective::Perspective(Float aperatureRadius,
     filmSize = Vec2i(width, height);
 }
 
-// TODO: remove parts of this
 void Perspective::preProcess()
 {
-    // preProcessChildren();
-
     float aspect = float(filmSize[0]) / float(filmSize[1]);
 
     float recip = 1.0 / (far - near);

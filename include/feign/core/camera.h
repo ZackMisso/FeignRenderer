@@ -28,6 +28,8 @@ public:
                               const Point2f& filmSamp,
                               const Point2f& appSamp) const = 0;
 
+    virtual void preProcess() { }
+
     Vec2i getFilmSize() const { return filmSize; }
 
     void setCameraToWorld(const Transform& param) { cameraToWorld = param; }
@@ -51,6 +53,8 @@ public:
                 Float far,
                 uint32_t width,
                 uint32_t height);
+
+    ~Perspective() { }
 
     virtual void preProcess();
 
@@ -82,6 +86,7 @@ class Orthographic : public Camera
 {
 public:
     Orthographic();
+    ~Orthographic() { }
 
     virtual void preProcess();
 
@@ -98,8 +103,10 @@ struct CameraNode : public Node
 {
 public:
     CameraNode() : camera(nullptr) { }
-    CameraNode(std::string name) : Node(name) { }
+    CameraNode(std::string name) : Node(name), camera(nullptr) { }
     CameraNode(Camera* camera) : camera(camera) { }
+
+    ~CameraNode() { delete camera; }
 
     Camera* camera;
 };

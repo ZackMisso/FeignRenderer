@@ -18,7 +18,9 @@ class ReconstructionFilter
 public:
     ReconstructionFilter() { }
     ReconstructionFilter(Vec2f size) : size(size) { }
+    virtual ~ReconstructionFilter() { }
 
+    virtual void preProcess() { }
     virtual Float evaluate(const Point2f& p) const = 0;
 
     Vec2f getSize() const { return size; }
@@ -71,8 +73,10 @@ struct FilterNode : public Node
 {
 public:
     FilterNode() : filter(nullptr) { }
-    FilterNode(std::string name) : Node(name) { }
+    FilterNode(std::string name) : Node(name), filter(nullptr) { }
     FilterNode(ReconstructionFilter* filter) : filter(filter) { }
+
+    ~FilterNode() { delete filter; }
 
     ReconstructionFilter* filter;
 };

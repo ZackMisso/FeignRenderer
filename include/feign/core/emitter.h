@@ -147,8 +147,10 @@ struct EmitterNode : public Node
 {
 public:
     EmitterNode() : emitter(nullptr) { }
-    EmitterNode(std::string name) : Node(name) { }
+    EmitterNode(std::string name) : Node(name), emitter(nullptr) { }
     EmitterNode(Emitter* emitter) : emitter(emitter) { }
+
+    ~EmitterNode() { delete emitter; }
 
     Emitter* emitter;
 };

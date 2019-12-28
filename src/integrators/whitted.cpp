@@ -9,16 +9,14 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-WhittedIntegrator::WhittedIntegrator(long max_time, long max_heuristic)
-    : Integrator(max_time, max_heuristic)
+WhittedIntegrator::WhittedIntegrator(std::string location, long max_time, long max_heuristic)
+    : Integrator(location, max_time, max_heuristic)
 {
 }
 
 void WhittedIntegrator::preProcess()
 {
     Integrator::preProcess();
-
-    // preProcessChildren();
 }
 
 Color3f WhittedIntegrator::Li(const Scene* scene,

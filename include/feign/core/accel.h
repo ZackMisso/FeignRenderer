@@ -20,7 +20,7 @@ class Accel
 {
 public:
     Accel();
-    ~Accel();
+    virtual ~Accel();
 
     virtual void clear() = 0;
     virtual void build() = 0;
@@ -101,11 +101,12 @@ class NaiveAccel : public Accel
 /////////////////////////////////////////////////
 // Accel Node structure
 /////////////////////////////////////////////////
+// TODO: actually use this somewhere
 struct AccelNode : public Node
 {
 public:
     AccelNode() : accel(nullptr) { }
-    AccelNode(std::string name) : Node(name) { }
+    AccelNode(std::string name) : Node(name), accel(nullptr) { }
     AccelNode(Accel* accel) : accel(accel) { }
 
     Accel* accel;

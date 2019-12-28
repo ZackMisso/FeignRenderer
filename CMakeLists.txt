@@ -195,6 +195,7 @@ add_executable(feign
     src/integrators/path_bidir.cpp
     src/integrators/path_unidir.cpp
     src/integrators/whitted.cpp
+    src/integrators/cosine_term.cpp
 
     # Logger implementation files
     src/log/logger.cpp

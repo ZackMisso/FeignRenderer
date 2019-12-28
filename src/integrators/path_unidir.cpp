@@ -8,8 +8,8 @@
 
 #include <feign/core/integrator.h>
 
-Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(long max_time, long max_heuristic)
-    : Integrator(max_time, max_heuristic)
+Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(std::string location, long max_time, long max_heuristic)
+    : Integrator(location, max_time, max_heuristic)
 {
     throw new NotImplementedException("path unidir constructor");
 }

@@ -18,13 +18,17 @@
 
 void JsonParser::parse(std::string filename)
 {
+    // LOG("parsing: " + filename);
     FILE* file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
 
+    LOG(filename);
     rapidjson::Document document;
     document.ParseStream(input_stream);
     fclose(file);
+
+    LOG("start full parse");
 
     // TODO: these all can be parsed in parallel since they are processed
     // individually first
@@ -33,8 +37,11 @@ void JsonParser::parse(std::string filename)
     for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
          itr != document.MemberEnd(); ++itr)
     {
+        LOG("parse: ");
         if (strcmp(itr->name.GetString(), "scene") == 0)
         {
+            LOG("parsing scene");
+
             std::string name = "default";
             std::string integrator = "default";
             std::string sampler = "default";
@@ -64,6 +71,13 @@ void JsonParser::parse(std::string filename)
                 medium = (value["medium"].GetString());
             }
 
+            // LOG("setting scene");
+            // LOG("name: " + name);
+            // LOG("integrator: " + integrator);
+            // LOG("sampler: " + sampler);
+            // LOG("camera: " + camera);
+            // LOG("name: " + name);
+
             FeignRenderer::fr_scene(name,
                                     integrator,
                                     sampler,
@@ -72,6 +86,8 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "integrator") == 0)
         {
+            LOG("parsing integrator");
+
             std::string name = "integrator";
             std::string type = "normal";
             long max_time = -1;
@@ -103,6 +119,8 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "sampler") == 0)
         {
+            LOG("parsing sampler");
+
             std::string name = "sampler";
             std::string type = "independent";
             int spp = 8;
@@ -119,15 +137,15 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("max_time"))
+            if (value.HasMember("sample_count"))
             {
-                spp = value["spp"].GetInt();
+                spp = value["sample_count"].GetInt();
             }
-            if (value.HasMember("max_heuristic"))
+            if (value.HasMember("seed"))
             {
                 seed = value["seed"].GetInt();
             }
-            if (value.HasMember("max_heuristic"))
+            if (value.HasMember("seed2"))
             {
                 seed2 = value["seed2"].GetInt();
             }
@@ -140,13 +158,15 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "camera") == 0)
         {
+            LOG("parsing camera");
+
             std::string name = "camera";
             std::string type = "perspective";
-            Vector3f origin = Vector3f(0.f, 0.f, 1.f);
+            Vector3f origin = Vector3f(0.f, 1.f, 0.f);
             Vector3f target = Vector3f(0.f);
             Vector3f up = Vector3f(0.f, 1.f, 0.f);
             Vec2i image_res = Vec2i(512, 512);
-            Float fov = 45.f;
+            Float fov = 30.f;
             Float app_radius = 0.f;
             Float near = 1e-4f;
             Float far = 1e4f;
@@ -202,6 +222,20 @@ void JsonParser::parse(std::string filename)
             {
                 image_res[1] = value["height"].GetInt();
             }
+            if (value.HasMember("lookat"))
+            {
+                origin = Vector3f(value["lookat"][0].GetFloat(),
+                                  value["lookat"][1].GetFloat(),
+                                  value["lookat"][2].GetFloat());
+
+                target = Vector3f(value["lookat"][3].GetFloat(),
+                                  value["lookat"][4].GetFloat(),
+                                  value["lookat"][5].GetFloat());
+
+                up = Vector3f(value["lookat"][6].GetFloat(),
+                              value["lookat"][7].GetFloat(),
+                              value["lookat"][8].GetFloat());
+            }
 
             FeignRenderer::fr_camera(name,
                                      type,
@@ -219,7 +253,7 @@ void JsonParser::parse(std::string filename)
         {
             std::string name = "obj";
             std::string mesh = "default";
-            std::string material = "default";
+            std::string material = "null";
 
             const rapidjson::Value& value = itr->value;
 
@@ -370,6 +404,7 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "material") == 0)
         {
+            LOG("material");
             std::string name = "material";
             std::string bsdf = "default";
 

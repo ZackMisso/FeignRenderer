@@ -1,13 +1,13 @@
 {
     "scene": {
-        "name": "ajax_cosine",
+        "name": "ajax_normals",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
     },
     "integrator": {
         "name": "integrator",
-        "type": "cosine_term"
+        "type": "normal"
     },
     "sampler": {
         "name": "sampler",
@@ -35,7 +35,6 @@
     "object": {
         "name": "floor",
         "mesh": "plane",
-        "material": "floor_material",
         "scale": [
             100.0,
             1.0,

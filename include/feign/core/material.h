@@ -35,8 +35,10 @@ struct MaterialNode : public Node
 {
 public:
     MaterialNode() : material(nullptr) { }
-    MaterialNode(std::string name) : Node(name) { }
+    MaterialNode(std::string name) : Node(name), material(nullptr) { }
     MaterialNode(Material* material) : material(material) { }
+
+    ~MaterialNode() { delete material; }
 
     Material* material;
 };

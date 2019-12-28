@@ -2,3 +2,4 @@ TODO notes:
 
 currently one Mesh can only be used by one object at a time
 need to support rotation matrices
+move save location for renders to scene instead of integrators

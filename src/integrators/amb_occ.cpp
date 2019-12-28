@@ -10,8 +10,8 @@
 #include <feign/core/scene.h>
 #include <feign/math/warp.h>
 
-Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(long max_time, long max_heuristic)
-    : Integrator(max_time, max_heuristic)
+Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(std::string location, long max_time, long max_heuristic)
+    : Integrator(location, max_time, max_heuristic)
 {
     // does nothing
 }
@@ -19,8 +19,6 @@ Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(long max_time, long m
 void Ambient_Occlusion_Integrator::preProcess()
 {
     Integrator::preProcess();
-
-    // preProcessChildren();
 }
 
 Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
@@ -50,25 +48,6 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
     {
         return Color3f(1.f);
     }
-
-    // // Float cosTerm = its.s_frame.n % its.toWorld(sample_dir);
-    //
-    // if (sample_dir(2) == 0.0)
-    // {
-    //     std::cout << "zero z" << std::endl;
-    // }
-    //
-    // // if (pdf == 0.0)
-    // // {
-    // //
-    // // }
-    //
-    // if (pdf == 0.0)
-    // {
-    //     std::cout << "ZERO PDF" << std::endl;
-    //     std::cout << "sampled dir: " << std::endl;
-    //     sample_dir.info();
-    // }
 
     return Color3f(0.0);
 }

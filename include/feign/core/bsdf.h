@@ -94,8 +94,10 @@ struct BSDFNode : public Node
 {
 public:
     BSDFNode() : bsdf(nullptr) { }
-    BSDFNode(std::string name) : Node(name) { }
+    BSDFNode(std::string name) : Node(name), bsdf(nullptr) { }
     BSDFNode(BSDF* bsdf) : bsdf(bsdf) { }
+
+    ~BSDFNode() { delete bsdf; }
 
     BSDF* bsdf;
 };

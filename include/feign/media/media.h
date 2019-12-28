@@ -12,6 +12,7 @@
 
 class Media
 {
+public:
     Media();
     virtual ~Media();
 
@@ -25,8 +26,10 @@ struct MediaNode : public Node
 {
 public:
     MediaNode() : media(nullptr) { }
-    MediaNode(std::string name) : Node(name) { }
+    MediaNode(std::string name) : Node(name), media(nullptr) { }
     MediaNode(Media* media) : media(media) { }
+
+    ~MediaNode() { delete media; }
 
     Media* media;
 };

@@ -63,7 +63,7 @@ struct MeshNode : public Node
 public:
     MeshNode() : mesh(nullptr) { }
     MeshNode(Shape* mesh) : mesh(mesh) { }
-    MeshNode(std::string name) : Node(name) { }
+    MeshNode(std::string name) : Node(name), mesh(nullptr) { }
 
     Shape* mesh;
 };
@@ -77,7 +77,7 @@ struct ObjectNode : public Node
 public:
     ObjectNode() : mesh(nullptr) { }
     ObjectNode(MeshNode* mesh) : mesh(mesh) { }
-    ObjectNode(std::string name) : Node(name) { }
+    ObjectNode(std::string name) : Node(name), mesh(nullptr) { }
 
     MeshNode* mesh;
     MaterialNode* material;

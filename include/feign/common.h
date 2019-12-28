@@ -19,6 +19,7 @@
 
 // these are necessary defines for imedit
 #include <imedit/image.h>
+#include <imedit/im_color_maps.h>
 
 // TODO: remove this
 // personal laptop
@@ -90,6 +91,26 @@ inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
 inline void LOG(std::string val)
 {
     std::cout << val << std::endl;
+}
+
+inline void LOG(std::string val, int num)
+{
+    std::cout << val << " " << num << std::endl;
+}
+
+inline void LOG(std::string val, float num)
+{
+    std::cout << val << " " << num << std::endl;
+}
+
+inline void LOG(Vec3f val)
+{
+    std::cout << val[0] << " " << val[1] << " " << val[2] << std::endl;
+}
+
+inline void LOG(std::string val, Vec3f num)
+{
+    std::cout << val << " " << num[0] << " " << num[1] << " " << num[2] << std::endl;
 }
 
 /////////////////////////////////////////////////

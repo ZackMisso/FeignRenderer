@@ -147,8 +147,10 @@ struct SamplerNode : public Node
 {
 public:
     SamplerNode() : sampler(nullptr) { }
-    SamplerNode(std::string name) : Node(name) { }
+    SamplerNode(std::string name) : Node(name), sampler(nullptr) { }
     SamplerNode(Sampler* sampler) : sampler(sampler) { }
+
+    ~SamplerNode() { delete sampler; }
 
     Sampler* sampler;
 };

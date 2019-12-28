@@ -44,7 +44,6 @@ public:
     bool intersect(const Ray3f& ray, Intersection& its) const;
 
     void addEmitter(Emitter* emitter);
-    // void addObject(Node* object);
 
     // TODO: should these really be public...
 public:
@@ -75,25 +74,13 @@ struct SceneNode : public Node
 {
 public:
     SceneNode() : scene(nullptr) { }
-    SceneNode(std::string name) : Node(name) { }
+    SceneNode(std::string name) : Node(name), scene(nullptr) { }
     SceneNode(Scene* scene) : scene(scene) { }
     SceneNode(std::string name, Scene* scene)
         : Node(name), scene(scene) { }
 
-    // SceneNode(std::string name,
-    //           std::string integrator,
-    //           std::string sampler,
-    //           std::string camera,
-    //           std::string medium) {}
-
-    ~SceneNode() { }
+    ~SceneNode() { delete scene; }
 
     Scene* scene;
-
-    // IntegratorNode* integrator_node;
-    // SamplerNode* sampler_node;
-    // CameraNode* camera_node;
-    // AccelNode* accel_node;
-    // MediaNode* media_node;
 };
 /////////////////////////////////////////////////
