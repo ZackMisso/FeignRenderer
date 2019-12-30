@@ -1,6 +1,8 @@
 TODO notes:
 
-need to support rotation matrices
+change the way parameters are passed in by incorporating local structs for each type
+create distant light sources
+create directional light sources
 implement path tracer
 implement volumetric path tracer
 rethink the current structure for evaluating bsdfs
@@ -9,3 +11,4 @@ currently one Mesh can only be used by one object at a time
 move save location for renders to scene instead of integrators
 implement cube map
 implement sphere map
+start planning shader frameworks

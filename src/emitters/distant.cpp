@@ -17,17 +17,28 @@ Color3f DistantEmitter::sample_li(EmitterQuery& rec,
                                   const Point2f& sample,
                                   Float* pdf) const
 {
-    throw new NotImplementedException("emitter distant");
+    // Vector3f light_pos = Warp::squareToUniformSphereCap(sample, cos_angle);
+    // Vector3f light_pos_world = transform * lightPos;
+    //
+    // rec.wi = light_pos_world;
+    // rec.sqr_dist = std::numeric_limits<float>::infinity();
+    // rec.wi.normalize();
+    // *pdf = Warp::squareToUniformSphereCapPdf(light_pos, cos_angle);
+    //
+    // return radiance;
+
+    throw new NotImplementedException("emitter distant sample li");
 }
 
 Color3f DistantEmitter::sample_pos(EmitterQuery& rec,
                                    const Point2f& sample,
                                    Float* pdf) const
 {
-    throw new NotImplementedException("emitter distant");
+    throw new NotImplementedException("emitter distant sample pos");
 }
 
 void DistantEmitter::preProcess()
 {
-    throw new NotImplementedException("emitter distant");
+    // throw new NotImplementedException("emitter distant ");
+    // does nothing for now
 }

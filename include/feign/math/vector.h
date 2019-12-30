@@ -1240,8 +1240,39 @@ struct Matrix4
     {
         Matrix4<T> mat = Matrix4<T>();
 
-        std::cout << "matrix rotate not implemented" << std::endl;
-        assert(false);
+        T c = cos(angle * M_PI / 180.f);
+        T s = sin(angle * M_PI / 180.f);
+        T t = 1.0 - c;
+
+        Vec3<T> norm_vec = vec.normalized();
+    	//  if axis is not already normalised then uncomment this
+    	// double magnitude = Math.sqrt(a1.x*a1.x + a1.y*a1.y + a1.z*a1.z);
+    	// if (magnitude==0) throw error;
+    	// a1.x /= magnitude;
+    	// a1.y /= magnitude;
+    	// a1.z /= magnitude;
+
+        mat[0] = c + norm_vec(0) * norm_vec(0) * t;
+        mat[5] = c + norm_vec(1) * norm_vec(1) * t;
+        mat[10] = c + norm_vec(2) * norm_vec(2) * t;
+
+
+        T tmp1 = norm_vec(0) * norm_vec(1) * t;
+        T tmp2 = norm_vec(2) * s;
+        mat[1] = tmp1 + tmp2;
+        mat[4] = tmp1 - tmp2;
+        tmp1 = norm_vec(0) * norm_vec(2) * t;
+        tmp2 = norm_vec(1) * s;
+        mat[2] = tmp1 - tmp2;
+        mat[8] = tmp1 + tmp2;
+        tmp1 = norm_vec(1) * norm_vec(2) * t;
+        tmp2 = norm_vec(0) * s;
+        mat[6] = tmp1 + tmp2;
+        mat[9] = tmp1 - tmp2;
+        mat[15] = 1.0;
+
+        // std::cout << "matrix rotate not implemented" << std::endl;
+        // assert(false);
         // throw new NotImplementedException("matrix rotate");
 
         return mat;

@@ -12,6 +12,7 @@
 #include <tests/tester.h>
 
 #include "../scenes/adrien/ajax_cosine.h"
+#include "../scenes/month_of_shaders/jan_1_2020.h"
 
 void run_scene(std::string scene_name)
 {
@@ -41,9 +42,18 @@ int main(int argc, char* argv[])
     //
     // /////\\\ TEMPORARY \\\/////
 
+    ////// Month of shaders ////////
+
+    jan_1_2020();
+    return 0;
+
+    ///\\\ Month of shaders \\\/////
+
     // std::string scene = "tests/ajax_normals";
     // std::string scene = "tests/ajax_diffuse";
-    std::string scene = "tests/ajax_mirror";
+    // std::string scene = "tests/ajax_mirror";
+    // std::string scene = "tests/box_rotations";
+    std::string scene = "tests/box_distant";
 
     for (int i = 1; i < argc; ++i)
     {

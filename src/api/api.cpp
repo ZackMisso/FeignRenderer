@@ -540,21 +540,21 @@ void FeignRenderer::fr_scale(float sx, float sy, float sz)
 {
     Matrix4f matrix = Matrix4f::scale(Vec3f(sx, sy, sz));
     Transform scale_transform = Transform(matrix);
-    getInstance()->current_transform *= scale_transform;
+    getInstance()->current_transform = scale_transform * getInstance()->current_transform;
 }
 
 void FeignRenderer::fr_translate(float tx, float ty, float tz)
 {
     Matrix4f matrix = Matrix4f::translate(Vec3f(tx, ty, tz));
     Transform translate_transform = Transform(matrix);
-    getInstance()->current_transform *= translate_transform;
+    getInstance()->current_transform = translate_transform * getInstance()->current_transform;
 }
 
 void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 {
     Matrix4f matrix = Matrix4f::rotate(angle, Vec3f(x, y, z));
     Transform rotate_transform = Transform(matrix);
-    getInstance()->current_transform *= rotate_transform;
+    getInstance()->current_transform = rotate_transform * getInstance()->current_transform;
 }
 
 // this is the big one
