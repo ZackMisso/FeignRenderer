@@ -80,6 +80,8 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 
         // complete the intersection information by calculating normals / uv's /
         // etc.
+        // TODO: this is redundant and should not be used since embree already
+        // handles this information for us
         its.intersected_mesh->completeIntersectionInfo(ray, its);
 
         return true;

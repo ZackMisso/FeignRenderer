@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <feign/shapes/shape.h>
+#include <feign/core/shape.h>
 #include <feign/shapes/triangle.h>
 #include <feign/math/transform.h>
 
@@ -54,9 +54,14 @@ public:
 
     // const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
+    const std::vector<Triangle>& getTris() const;
     const std::vector<Point3f>& getVerts() const;
     const std::vector<Normal3f>& getNorms() const;
     const std::vector<Vec2f>& getUVs() const;
+
+    void setVerts(std::vector<Point3f>& param);
+    void setNorms(std::vector<Normal3f>& param);
+    void setUVs(std::vector<Vec2f>& param);
 
 protected:
     std::string filename;

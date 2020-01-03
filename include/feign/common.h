@@ -45,6 +45,13 @@
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
 
+// MeshTypes are used to verify that geometry shaders are valid
+enum MeshType
+{
+    OBJ_MESH,
+    SDF_MESH
+};
+
 // uncomment the following for desired types
 typedef float Float;
 // typedef double Float;

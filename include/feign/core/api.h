@@ -22,6 +22,7 @@
 
 #include <feign/common.h>
 #include <feign/core/scene.h>
+#include <feign/core/shader.h>
 #include <unordered_map>
 
 // The end goal is to design all of this so it can be specified by a node graph
@@ -54,17 +55,19 @@ public:
     std::unordered_map<std::string, MaterialNode*> materials;
     std::unordered_map<std::string, ObjectNode*> objects;
     std::unordered_map<std::string, MeshNode*> meshes;
+    std::unordered_map<std::string, GeometryShaderNode*> geom_shaders;
 
-    BSDFNode*       find_bsdf(std::string name);
-    IntegratorNode* find_integrator(std::string name);
-    CameraNode*     find_camera(std::string name);
-    EmitterNode*    find_emitter(std::string name);
-    MediaNode*      find_media(std::string name);
-    SamplerNode*    find_sampler(std::string name);
-    FilterNode*     find_filter(std::string name);
-    MaterialNode*   find_material(std::string name);
-    ObjectNode*     find_object(std::string name);
-    MeshNode*       find_mesh(std::string name);
+    BSDFNode*           find_bsdf(std::string name);
+    IntegratorNode*     find_integrator(std::string name);
+    CameraNode*         find_camera(std::string name);
+    EmitterNode*        find_emitter(std::string name);
+    MediaNode*          find_media(std::string name);
+    SamplerNode*        find_sampler(std::string name);
+    FilterNode*         find_filter(std::string name);
+    MaterialNode*       find_material(std::string name);
+    ObjectNode*         find_object(std::string name);
+    MeshNode*           find_mesh(std::string name);
+    GeometryShaderNode* find_geometry_shader(std::string name);
 
     static void initialize();
     static void clean_up();
@@ -108,7 +111,12 @@ public:
 
     static void fr_mesh(std::string name,
                         std::string type,
-                        std::string filename);
+                        std::string filename,
+                        std::string shader = "");
+
+    static void fr_shader(std::string name,
+                          std::string type,
+                          float test_param);
 
     static void fr_emitter(std::string name,
                            std::string type,

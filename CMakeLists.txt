@@ -105,6 +105,8 @@ add_executable(feign
     include/feign/core/integrator.h
     include/feign/core/sampler.h
     include/feign/core/material.h
+    include/feign/core/shape.h
+    include/feign/core/shader.h
 
     # Logger header files
     include/feign/log/logger.h
@@ -137,7 +139,6 @@ add_executable(feign
     include/feign/media/phase/phase.h
 
     # Shapes header files
-    include/feign/shapes/shape.h
     include/feign/shapes/objmesh.h
     include/feign/shapes/triangle.h
 
@@ -230,6 +231,9 @@ add_executable(feign
     src/samplers/independent.cpp
     src/samplers/latin.cpp
     src/samplers/halton.cpp
+
+    # Shader implementation files
+    src/shaders/interp_verts_to_sphere.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp

@@ -314,6 +314,7 @@ void JsonParser::parse(std::string filename)
             std::string name = "mesh";
             std::string type = "default";
             std::string filename = "default";
+            std::string geom_shader = "default";
 
             const rapidjson::Value& value = itr->value;
 
@@ -329,8 +330,12 @@ void JsonParser::parse(std::string filename)
             {
                 filename = value["filename"].GetString();
             }
+            if (value.HasMember("geom_shader"))
+            {
+                geom_shader = value["geom_shader"].GetString();
+            }
 
-            FeignRenderer::fr_mesh(name, type, filename);
+            FeignRenderer::fr_mesh(name, type, filename, geom_shader);
         }
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
@@ -458,6 +463,29 @@ void JsonParser::parse(std::string filename)
             }
 
             FeignRenderer::fr_bsdf(name, type, albedo);
+        }
+        else if (strcmp(itr->name.GetString(), "shader") == 0)
+        {
+            std::string name = "shader";
+            std::string type = "none";
+            float test_val = 0.f;
+
+            const rapidjson::Value& value = itr->value;
+
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
+            if (value.HasMember("test_value"))
+            {
+                test_val = value["test_value"].GetFloat();
+            }
+
+            FeignRenderer::fr_shader(name, type, test_val);
         }
         else
         {

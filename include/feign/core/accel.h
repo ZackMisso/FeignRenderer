@@ -9,8 +9,8 @@
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/core/shape.h>
 #include <feign/math/ray.h>
-#include <feign/shapes/shape.h>
 #include <feign/misc/intersection.h>
 
 /////////////////////////////////////////////////

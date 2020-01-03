@@ -10,6 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/core/material.h>
+#include <feign/core/shader.h>
 #include <feign/math/bbox.h>
 #include <feign/math/transform.h>
 #include <feign/misc/intersection.h>
@@ -26,10 +27,17 @@ public:
     Shape();
     virtual ~Shape() { }
 
-    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
+    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const
+    {
+        return false;
+    }
+
     virtual bool intersect(uint32_t tri,
                            const Ray3f& scene_ray,
-                           Intersection& its) const = 0;
+                           Intersection& its) const
+    {
+       return false;
+    }
 
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const = 0;
     virtual uint32_t primitiveCount() const = 0;
@@ -41,7 +49,8 @@ public:
 
     virtual void preProcess() { }
 
-    virtual void addShapeToScene(RTCScene scene, RTCDevice device) = 0;
+    // this is only used by embree
+    virtual void addShapeToScene(RTCScene scene, RTCDevice device) { }
 
     unsigned int getGeomID() const { return geomID; }
     unsigned int getInstID() const { return instID; }
@@ -49,6 +58,8 @@ public:
     void setInstID(unsigned int val) { instID = val; }
 
     Transform transform;
+
+    GeometryShaderNode* geomShader;
 protected:
     unsigned int geomID;
     unsigned int instID;

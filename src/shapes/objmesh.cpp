@@ -445,7 +445,11 @@ void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) cons
     }
 }
 
-// const BBox3f& ObjMesh::getBoundingBox() const { return bbox; }
+const std::vector<Triangle>& ObjMesh::getTris() const { return tris; }
 const std::vector<Point3f>& ObjMesh::getVerts() const { return vs; }
 const std::vector<Normal3f>& ObjMesh::getNorms() const { return ns; }
 const std::vector<Vec2f>& ObjMesh::getUVs() const { return uvs; }
+
+void ObjMesh::setVerts(std::vector<Point3f>& param) { vs = param; }
+void ObjMesh::setNorms(std::vector<Normal3f>& param) { ns = param; }
+void ObjMesh::setUVs(std::vector<Vec2f>& param) { uvs = param; }

@@ -56,6 +56,7 @@ FeignRenderer::FeignRenderer()
     materials = std::unordered_map<std::string, MaterialNode*>();
     objects = std::unordered_map<std::string, ObjectNode*>();
     meshes = std::unordered_map<std::string, MeshNode*>();
+    geom_shaders = std::unordered_map<std::string, GeometryShaderNode*>();
 
     bsdfs.clear();
     cameras.clear();
@@ -67,6 +68,7 @@ FeignRenderer::FeignRenderer()
     materials.clear();
     objects.clear();
     meshes.clear();
+    geom_shaders.clear();
 
     LOG("integrators: " + std::to_string(integrators.size()));
 
@@ -86,6 +88,7 @@ FeignRenderer::~FeignRenderer()
     for (auto it : materials) delete it.second;
     for (auto it : objects) delete it.second;
     for (auto it : meshes) delete it.second;
+    for (auto it : geom_shaders) delete it.second;
 
     delete scene;
     scene = nullptr;
@@ -100,6 +103,7 @@ FeignRenderer::~FeignRenderer()
     materials.clear();
     objects.clear();
     meshes.clear();
+    geom_shaders.clear();
 }
 
 void FeignRenderer::initialize()
@@ -265,6 +269,22 @@ MeshNode* FeignRenderer::find_mesh(std::string name)
     {
         MeshNode* node = new MeshNode(name);
         meshes.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+GeometryShaderNode* FeignRenderer::find_geometry_shader(std::string name)
+{
+    std::unordered_map<std::string, GeometryShaderNode*>::const_iterator itr = geom_shaders.find(name);
+
+    if (itr == geom_shaders.end())
+    {
+        GeometryShaderNode* node = new GeometryShaderNode(name);
+        geom_shaders.insert({name, node});
         return node;
     }
     else
@@ -441,9 +461,11 @@ void FeignRenderer::fr_object(std::string name,
 
 void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
-                            std::string filename)
+                            std::string filename,
+                            std::string shader)
 {
     MeshNode* mesh = getInstance()->find_mesh(name);
+    GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(shader);
 
     if (mesh->mesh)
     {
@@ -453,10 +475,34 @@ void FeignRenderer::fr_mesh(std::string name,
     if (type == "triangle_mesh")
     {
         mesh->mesh = new ObjMesh(filename);
+        mesh->mesh->geomShader = geom_shader;
     }
     else
     {
         throw new NotImplementedException("mesh type not recognized: " + type);
+    }
+}
+
+void FeignRenderer::fr_shader(std::string name,
+                              std::string type,
+                              float test_param)
+{
+    // TODO: incorporate other shader types later
+
+    GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(name);
+
+    if (geom_shader->shader)
+    {
+        throw new FeignRendererException("geometry shader already defined");
+    }
+
+    if (type == "interp_verts_to_sphere")
+    {
+        geom_shader->shader = new InterpVertsToSphereShader(test_param);
+    }
+    else
+    {
+        throw new NotImplementedException("geometry shader type not recognized: " + type);
     }
 }
 

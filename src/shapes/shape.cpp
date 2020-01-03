@@ -6,9 +6,9 @@
  * acknowledgement is provided to the original author.
  **/
 
-#include <feign/shapes/shape.h>
+#include <feign/core/shape.h>
 
-Shape::Shape()
+Shape::Shape() : geomShader(nullptr)
 {
     instID = 0;
     transform = Transform();
