@@ -469,6 +469,7 @@ void JsonParser::parse(std::string filename)
             std::string name = "shader";
             std::string type = "none";
             float test_val = 0.f;
+            float test_val_2 = 0.f;
 
             const rapidjson::Value& value = itr->value;
 
@@ -484,8 +485,12 @@ void JsonParser::parse(std::string filename)
             {
                 test_val = value["test_value"].GetFloat();
             }
+            if (value.HasMember("test_value_2"))
+            {
+                test_val_2 = value["test_value_2"].GetFloat();
+            }
 
-            FeignRenderer::fr_shader(name, type, test_val);
+            FeignRenderer::fr_shader(name, type, test_val, test_val_2);
         }
         else
         {

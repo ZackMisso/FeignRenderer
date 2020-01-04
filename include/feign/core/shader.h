@@ -11,7 +11,7 @@ public:
     virtual ~GeometryShader() { }
 
     // TODO: figure out a way to make this safe
-    virtual void evaluate(void* mesh, float value) { }
+    virtual void evaluate(void* mesh) { }
     virtual bool isValid(MeshType mesh_type) const { return true; }
 };
 
@@ -23,12 +23,13 @@ public:
 struct InterpVertsToSphereShader : public GeometryShader
 {
 public:
-    InterpVertsToSphereShader(float prop_of_shortest_axis);
+    InterpVertsToSphereShader(float prop_of_shortest_axis, float interp);
 
-    virtual void evaluate(void* mesh, float interp);
+    virtual void evaluate(void* mesh);
     virtual bool isValid(MeshType mesh_type) const;
 
     float prop_of_shortest_axis;
+    float interp;
 };
 
 /////////////////////////////////////////////////

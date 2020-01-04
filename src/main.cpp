@@ -13,6 +13,7 @@
 
 #include "../scenes/adrien/ajax_cosine.h"
 #include "../scenes/month_of_shaders/jan_1_2020.h"
+#include "../scenes/month_of_shaders/jan_2_2020.h"
 
 void run_scene(std::string scene_name)
 {
@@ -44,7 +45,9 @@ int main(int argc, char* argv[])
 
     ////// Month of shaders ////////
 
-    jan_1_2020();
+    // jan_1_2020();
+    jan_2_2020();
+    // jan_3_2020();
     return 0;
 
     ///\\\ Month of shaders \\\/////

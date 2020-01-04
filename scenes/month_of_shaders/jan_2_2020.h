@@ -1,5 +1,15 @@
 #include <feign/core/api.h>
 
+float interp_value(int index, int flip)
+{
+    if (index > flip)
+    {
+        return 1.f - float(index - flip) / float(flip);
+    }
+
+    return 1.f - float(flip - index) / float(flip);
+}
+
 static void jan_2_2020()
 {
     std::string test_name = "jan_2_2020";
@@ -9,13 +19,10 @@ static void jan_2_2020()
     std::string publish_command = "ffmpeg -r 60 -f image2 -s 1920x1080 -i " + test_name + "/" + test_name + "_%04d.png -vcodec libx264 -crf 25  -pix_fmt yuv420p " + test_name + ".mp4";
 
     // system(rm_command.c_str());
-    system(mkdir_command.c_str());
+    // system(mkdir_command.c_str());
 
-    std::vector<imedit::Pixel> color_map = std::vector<imedit::Pixel>();
-    imedit::color_map_inferno(color_map);
-
-    int start_frame = 0;
-    int end_frame = 1;
+    int start_frame = 630;
+    int end_frame = 720;
 
     for (int i = start_frame; i < end_frame; ++i)
     {
@@ -36,7 +43,7 @@ static void jan_2_2020()
                                 "");
 
         FeignRenderer::fr_integrator("integrator",
-                                     "cosine_term",
+                                     "normal",
                                      "default",
                                      1000,
                                      1000,
@@ -71,50 +78,12 @@ static void jan_2_2020()
 
         FeignRenderer::fr_shader("test_shader",
                                  "interp_verts_to_sphere",
-                                 0.8f);
+                                 0.6f,
+                                 interp_value(i, 360));
 
         FeignRenderer::flush_renders();
 
         FeignRenderer::clean_up();
-    }
-
-    for (int i = start_frame; i < end_frame; ++i)
-    {
-        char str[5];
-        snprintf(str, 5, "%04d", i);
-        std::string name = test_name + "_" + std::string(str);
-
-        std::string filename = test_name + "/" + name + ".exr";
-        Imagef image = Imagef(filename);
-
-        for (int i = 0; i < image.height(); ++i)
-        {
-            for (int j = 0; j < image.width(); ++j)
-            {
-                float proxy = image(j, i, 0);
-
-                if (proxy == -2.f)
-                {
-                    image(j, i, 0) = 0.f;
-                    image(j, i, 1) = 0.f;
-                    image(j, i, 2) = 0.f;
-                }
-                else
-                {
-                    proxy += 1.f;
-                    if (proxy < 0.f) proxy = 0.f;
-                    if (proxy > 1.f) proxy = 1.f;
-
-                    imedit::Pixel pixel = color_from_proxy(color_map, 1.f - proxy);
-
-                    image(j, i, 0) = pixel.r;
-                    image(j, i, 1) = pixel.g;
-                    image(j, i, 2) = pixel.b;
-                }
-            }
-        }
-
-        image.write(test_name + "/" + name + ".png");
     }
 
     system(publish_command.c_str());

@@ -323,6 +323,11 @@ void ObjMesh::preProcess()
         bbox.expand(vs[i]);
     }
 
+    if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
+    {
+        geomShader->shader->evaluate((void*)this);
+    }
+
     LOG("info dump");
     infoDump();
 }

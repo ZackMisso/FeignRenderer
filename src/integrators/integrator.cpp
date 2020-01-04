@@ -55,10 +55,10 @@ void Integrator::render(const Scene* scene,
                 // LOG("calculating radiance");
                 radiance *= Li(scene, sampler, ray);
 
-                if (std::isnan(radiance[0]))
-                {
-                    LOG("Radiance is nan");
-                }
+                // if (std::isnan(radiance[0]))
+                // {
+                //     LOG("Radiance is nan");
+                // }
 
                 // LOG("getting filter bounds");
                 BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
@@ -83,14 +83,14 @@ void Integrator::render(const Scene* scene,
                         image(fj, fi, 1) += weight * radiance(1);
                         image(fj, fi, 2) += weight * radiance(2);
 
-                        if (std::isnan(image(fj, fi, 0)))
-                        {
-                            // GaussFilter* debug = (GaussFilter*)filter;
-                            // LOG("filter alpha: " std::to_string(filter->alpha));
-                            LOG("nan setting");
-                            LOG("weight: " + std::to_string(weight));
-                            LOG("radiance: " + std::to_string(radiance(0)));
-                        }
+                        // if (std::isnan(image(fj, fi, 0)))
+                        // {
+                        //     // GaussFilter* debug = (GaussFilter*)filter;
+                        //     // LOG("filter alpha: " std::to_string(filter->alpha));
+                        //     LOG("nan setting");
+                        //     LOG("weight: " + std::to_string(weight));
+                        //     LOG("radiance: " + std::to_string(radiance(0)));
+                        // }
 
                         filter_weights(fj, fi, 0) += weight;
                     }
@@ -118,10 +118,10 @@ void Integrator::render(const Scene* scene,
             image(j, i, 1) = image(j, i, 1) / filter_weights(j, i, 0);
             image(j, i, 2) = image(j, i, 2) / filter_weights(j, i, 0);
 
-            if (std::isnan(image(j, i, 0)))
-            {
-                LOG(std::to_string(j) + " " + std::to_string(i) + " is nan");
-            }
+            // if (std::isnan(image(j, i, 0)))
+            // {
+            //     LOG(std::to_string(j) + " " + std::to_string(i) + " is nan");
+            // }
         }
     }
 }

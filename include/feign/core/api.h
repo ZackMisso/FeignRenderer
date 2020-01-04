@@ -116,7 +116,8 @@ public:
 
     static void fr_shader(std::string name,
                           std::string type,
-                          float test_param);
+                          float test_param,
+                          float test_param_2);
 
     static void fr_emitter(std::string name,
                            std::string type,

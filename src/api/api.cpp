@@ -485,7 +485,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
 void FeignRenderer::fr_shader(std::string name,
                               std::string type,
-                              float test_param)
+                              float test_param,
+                              float test_param_2)
 {
     // TODO: incorporate other shader types later
 
@@ -498,7 +499,7 @@ void FeignRenderer::fr_shader(std::string name,
 
     if (type == "interp_verts_to_sphere")
     {
-        geom_shader->shader = new InterpVertsToSphereShader(test_param);
+        geom_shader->shader = new InterpVertsToSphereShader(test_param, test_param_2);
     }
     else
     {
