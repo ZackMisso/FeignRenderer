@@ -18,6 +18,14 @@
 class Material
 {
 public:
+    struct Params
+    {
+        Params(std::string bsdf_name)
+            : bsdf_name(bsdf_name) { }
+
+        std::string bsdf_name;
+    };
+
     Material();
     ~Material();
 

@@ -23,6 +23,15 @@ public:
 struct InterpVertsToSphereShader : public GeometryShader
 {
 public:
+    struct Params
+    {
+        Params(float prop, float proxy)
+            : prop(prop), proxy(proxy) { }
+
+        float prop;
+        float proxy;
+    };
+
     InterpVertsToSphereShader(float prop_of_shortest_axis, float interp);
 
     virtual void evaluate(void* mesh);

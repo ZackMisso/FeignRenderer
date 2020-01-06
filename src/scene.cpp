@@ -43,20 +43,14 @@ void Scene::preProcess()
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        LOG("adding shape");
         shapes[i]->transform.print();
         ray_accel->addShape(shapes[i]);
-        LOG("added shape");
     }
 
-    LOG("building accel structure");
     ray_accel->build();
 
-    LOG("preprocessing integrator");
     integrator_node->integrator->preProcess();
-    LOG("preprocessing camera");
     camera_node->camera->preProcess();
-    LOG("finished scene preprocess");
 }
 
 void Scene::renderScene() const
@@ -105,5 +99,6 @@ void Scene::addEmitter(Emitter* emitter)
 
 const BSDF* Scene::getShapeBSDF(const Shape* shape) const
 {
+    // this is really gross to look at, figure out how to make this look nicer
     return objects[shape->getInstID()]->material->material->bsdf->bsdf;
 }

@@ -71,13 +71,6 @@ void JsonParser::parse(std::string filename)
                 medium = (value["medium"].GetString());
             }
 
-            // LOG("setting scene");
-            // LOG("name: " + name);
-            // LOG("integrator: " + integrator);
-            // LOG("sampler: " + sampler);
-            // LOG("camera: " + camera);
-            // LOG("name: " + name);
-
             FeignRenderer::fr_scene(name,
                                     integrator,
                                     sampler,

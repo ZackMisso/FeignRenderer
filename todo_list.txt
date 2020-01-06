@@ -1,6 +1,8 @@
 TODO notes:
 
 change the way parameters are passed in by incorporating local structs for each type
+rewrite the way that materials work
+get automated tests to work again
 create distant light sources
 create directional light sources
 implement path tracer

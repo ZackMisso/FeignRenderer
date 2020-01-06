@@ -22,6 +22,20 @@ class Scene;
 class Integrator
 {
 public:
+    struct Params
+    {
+        Params(long max_time,
+               long max_heuristic,
+               std::string location)
+            : max_time(max_time),
+              max_heuristic(max_heuristic),
+              location(location) { }
+
+        long max_time;
+        long max_heuristic;
+        std::string location;
+    };
+
     Integrator(FilterNode* filter,
                std::string location,
                long max_time,

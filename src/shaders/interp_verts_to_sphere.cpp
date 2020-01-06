@@ -45,8 +45,6 @@ void InterpVertsToSphereShader::evaluate(void* mesh)
     // make up
     for (int i = 0; i < triangles.size(); ++i)
     {
-        // LOG("hi");
-        // TODO: how to deal with degenerate triangles
         uint32_t i0_vs = triangles[i].vsInds(0);
         uint32_t i1_vs = triangles[i].vsInds(1);
         uint32_t i2_vs = triangles[i].vsInds(2);

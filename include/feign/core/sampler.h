@@ -55,6 +55,15 @@ protected:
 class Independent : public Sampler
 {
 public:
+    struct Params
+    {
+        Params(int sample_cnt, uint32_t seed)
+            : sample_cnt(sample_cnt), seed(seed) { }
+        
+        uint32_t seed;
+        int sample_cnt;
+    };
+
     Independent();
     Independent(uint32_t seed,
                 int sample_cnt);

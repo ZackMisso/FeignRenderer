@@ -27,22 +27,7 @@
 // textures
 #include <feign/textures/texture.h>
 
-// std::vector<Transform> FeignRenderer::transform_stack = std::vector<Transform>();
-// Transform FeignRenderer::current_transform = Transform();
-// SceneNode* FeignRenderer::scene = nullptr;
-
 FeignRenderer* FeignRenderer::instance = nullptr;
-
-// std::unordered_map<std::string, BSDFNode*>                 FeignRenderer::bsdfs = std::unordered_map<std::string, BSDFNode*>();
-// std::unordered_map<std::string, CameraNode*>               FeignRenderer::cameras = std::unordered_map<std::string, CameraNode*>();
-// std::unordered_map<std::string, EmitterNode*>              FeignRenderer::emitters = std::unordered_map<std::string, EmitterNode*>();
-// std::unordered_map<std::string, MediaNode*>                FeignRenderer::medias = std::unordered_map<std::string, MediaNode*>();
-// std::unordered_map<std::string, IntegratorNode*>           FeignRenderer::integrators = std::unordered_map<std::string, IntegratorNode*>();
-// std::unordered_map<std::string, SamplerNode*>              FeignRenderer::samplers = std::unordered_map<std::string, SamplerNode*>();
-// std::unordered_map<std::string, FilterNode*>               FeignRenderer::filters = std::unordered_map<std::string, FilterNode*>();
-// std::unordered_map<std::string, MaterialNode*>             FeignRenderer::materials = std::unordered_map<std::string, MaterialNode*>();
-// std::unordered_map<std::string, ObjectNode*>               FeignRenderer::objects = std::unordered_map<std::string, ObjectNode*>();
-// std::unordered_map<std::string, MeshNode*>                 FeignRenderer::meshes = std::unordered_map<std::string, MeshNode*>();
 
 FeignRenderer::FeignRenderer()
 {
@@ -69,8 +54,6 @@ FeignRenderer::FeignRenderer()
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
-
-    LOG("integrators: " + std::to_string(integrators.size()));
 
     current_transform = Transform();
     scene = nullptr;
@@ -318,12 +301,16 @@ void FeignRenderer::fr_scene(std::string name,
                                                          media));
 }
 
+// void FeignRenderer::fr_integrator(std::string name,
+//                                   std::string type,
+//                                   std::string filter,
+//                                   long max_time,
+//                                   long max_heuristic,
+//                                   std::string location)
 void FeignRenderer::fr_integrator(std::string name,
                                   std::string type,
                                   std::string filter,
-                                  long max_time,
-                                  long max_heuristic,
-                                  std::string location)
+                                  void* integrator_data)
 {
     IntegratorNode* integrator = getInstance()->find_integrator(name);
     FilterNode* filter_node = getInstance()->find_filter(filter);
@@ -335,15 +322,27 @@ void FeignRenderer::fr_integrator(std::string name,
 
     if (type == "normal")
     {
-        integrator->integrator = new NormalIntegrator(filter_node, location, max_time, max_heuristic);
+        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        integrator->integrator = new NormalIntegrator(filter_node,
+                                                      params->location,
+                                                      params->max_time,
+                                                      params->max_heuristic);
     }
     else if (type == "whitted")
     {
-        integrator->integrator = new WhittedIntegrator(filter_node, location, max_time, max_heuristic);
+        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        integrator->integrator = new WhittedIntegrator(filter_node,
+                                                       params->location,
+                                                       params->max_time,
+                                                       params->max_heuristic);
     }
     else if (type == "cosine_term")
     {
-        integrator->integrator = new CosineTermIntegrator(filter_node, location, max_time, max_heuristic);
+        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        integrator->integrator = new CosineTermIntegrator(filter_node,
+                                                          params->location,
+                                                          params->max_time,
+                                                          params->max_heuristic);
     }
     else
     {
@@ -351,11 +350,14 @@ void FeignRenderer::fr_integrator(std::string name,
     }
 }
 
+// void FeignRenderer::fr_sampler(std::string name,
+//                                std::string type,
+//                                int spp,
+//                                long seed,
+//                                long seed2)
 void FeignRenderer::fr_sampler(std::string name,
                                std::string type,
-                               int spp,
-                               long seed,
-                               long seed2)
+                               void* sampler_data)
 {
     LOG("samplers: " + std::to_string(getInstance()->samplers.size()));
     SamplerNode* sampler = getInstance()->find_sampler(name);
@@ -367,7 +369,8 @@ void FeignRenderer::fr_sampler(std::string name,
 
     if (type == "independent")
     {
-        sampler->sampler = new Independent(seed, spp);
+        Integrator::Params* params = (Integrator::Params*)sampler_data;
+        sampler->sampler = new Independent(params->seed, params->sample_cnt);
     }
     else if (type == "latin")
     {
@@ -379,17 +382,20 @@ void FeignRenderer::fr_sampler(std::string name,
     }
 }
 
+// void FeignRenderer::fr_camera(std::string name,
+//                               std::string type,
+//                               Vector3f origin,
+//                               Vector3f target,
+//                               Vector3f up,
+//                               Float fov,
+//                               Float near,
+//                               Float far,
+//                               Float focal_dist,
+//                               Float app_radius,
+//                               Vec2i image_res)
 void FeignRenderer::fr_camera(std::string name,
                               std::string type,
-                              Vector3f origin,
-                              Vector3f target,
-                              Vector3f up,
-                              Float fov,
-                              Float near,
-                              Float far,
-                              Float focal_dist,
-                              Float app_radius,
-                              Vec2i image_res)
+                              void* camera_data)
 {
     CameraNode* camera = getInstance()->find_camera(name);
 
@@ -400,16 +406,18 @@ void FeignRenderer::fr_camera(std::string name,
 
     if (type == "perspective")
     {
-        Perspective* perspective = new Perspective(app_radius,
-                                                   focal_dist,
-                                                   fov,
-                                                   near,
-                                                   far,
-                                                   image_res[0],
-                                                   image_res[1]);
+        Perspective::Params* params = (Perspective::Params*)camera_data;
 
-        Vec3f zaxis = (target - origin).normalized();
-        Vec3f xaxis = ((up.normalized()) ^ zaxis).normalized();
+        Perspective* perspective = new Perspective(params->app_radius,
+                                                   params->focal_dist,
+                                                   params->fov,
+                                                   params->near,
+                                                   params->far,
+                                                   params->image_res[0],
+                                                   params->image_res[1]);
+
+        Vec3f zaxis = (params->target - params->origin).normalized();
+        Vec3f xaxis = ((params->up.normalized()) ^ zaxis).normalized();
         Vec3f yaxis = (zaxis ^ xaxis).normalized();
 
         Matrix4f look_at_matrix = Matrix4f();
@@ -417,7 +425,7 @@ void FeignRenderer::fr_camera(std::string name,
         look_at_matrix.setCol(0, Vec4f(xaxis, 0.f));
         look_at_matrix.setCol(1, Vec4f(yaxis, 0.f));
         look_at_matrix.setCol(2, Vec4f(zaxis, 0.f));
-        look_at_matrix.setCol(3, Vec4f(origin, 1.f));
+        look_at_matrix.setCol(3, Vec4f(params->origin, 1.f));
 
         perspective->setCameraToWorld(getInstance()->current_transform * Transform(look_at_matrix));
 
@@ -483,10 +491,13 @@ void FeignRenderer::fr_mesh(std::string name,
     }
 }
 
+// void FeignRenderer::fr_shader(std::string name,
+//                               std::string type,
+//                               float test_param,
+//                               float test_param_2)
 void FeignRenderer::fr_shader(std::string name,
                               std::string type,
-                              float test_param,
-                              float test_param_2)
+                              void* shader_data)
 {
     // TODO: incorporate other shader types later
 
@@ -499,7 +510,9 @@ void FeignRenderer::fr_shader(std::string name,
 
     if (type == "interp_verts_to_sphere")
     {
-        geom_shader->shader = new InterpVertsToSphereShader(test_param, test_param_2);
+        InterpVertsToSphereShader::Params* params = (InterpVertsToSphereShader::Params*)shader_data;
+        geom_shader->shader = new InterpVertsToSphereShader(params->prop,
+                                                            params->proxy);
     }
     else
     {
@@ -507,12 +520,17 @@ void FeignRenderer::fr_shader(std::string name,
     }
 }
 
+// void FeignRenderer::fr_emitter(std::string name,
+//                                std::string type,
+//                                std::string mesh,
+//                                std::string material,
+//                                Vector3f pos,
+//                                Color3f intensity)
 void FeignRenderer::fr_emitter(std::string name,
                                std::string type,
                                std::string mesh,
                                std::string material,
-                               Vector3f pos,
-                               Color3f intensity)
+                               void* emitter_data)
 {
     EmitterNode* emitter = getInstance()->find_emitter(name);
 
@@ -524,7 +542,8 @@ void FeignRenderer::fr_emitter(std::string name,
     if (type == "point")
     {
         assert(getInstance()->scene);
-        emitter->emitter = new PointEmitter(intensity, pos);
+        PointEmitter::Params* params = (PointEmitter::Params*)emitter_data;
+        emitter->emitter = new PointEmitter(params->intensity, params->pos);
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
     else
@@ -533,8 +552,10 @@ void FeignRenderer::fr_emitter(std::string name,
     }
 }
 
+// void FeignRenderer::fr_material(std::string name,
+//                                 std::string bsdf)
 void FeignRenderer::fr_material(std::string name,
-                                std::string bsdf)
+                                void* material_data)
 {
     MaterialNode* material = getInstance()->find_material(name);
 
@@ -543,13 +564,18 @@ void FeignRenderer::fr_material(std::string name,
         throw new FeignRendererException("material already defined");
     }
 
+    Material::Params* params = (Material::Params*)material_data;
+
     material->material = new Material();
-    material->material->bsdf = getInstance()->find_bsdf(bsdf);
+    material->material->bsdf = getInstance()->find_bsdf(params->bsdf_name);
 }
 
+// void FeignRenderer::fr_bsdf(std::string name,
+//                             std::string type,
+//                             Color3f albedo)
 void FeignRenderer::fr_bsdf(std::string name,
                             std::string type,
-                            Color3f albedo)
+                            void* bsdf_data)
 {
     BSDFNode* bsdf = getInstance()->find_bsdf(name);
 
@@ -560,11 +586,13 @@ void FeignRenderer::fr_bsdf(std::string name,
 
     if (type == "diffuse")
     {
-        bsdf->bsdf = new Diffuse(albedo);
+        Diffuse::Params* params = (DiffuseParams*)bsdf_data;
+        bsdf->bsdf = new Diffuse(params->albedo);
     }
     else if (type == "mirror")
     {
-        bsdf->bsdf = new Mirror(albedo);
+        // bsdf->bsdf = new Mirror(albedo);
+        throw new FeignRendererException("bsdf already defined");
     }
     else if (type == "null")
     {

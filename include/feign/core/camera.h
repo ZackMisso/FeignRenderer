@@ -46,6 +46,38 @@ protected:
 class Perspective : public Camera
 {
 public:
+    struct Params
+    {
+        Params(Vector3f origin,
+               Vector3f target,
+               Vector3f up,
+               Float fov,
+               Float near,
+               Float far,
+               Float focal_dist,
+               Float app_radius,
+               Vec2i image_res)
+            : origin(origin),
+              target(target),
+              up(up),
+              fov(fov),
+              near(near),
+              far(far),
+              focal_dist(focal_dist),
+              app_radius(app_radius),
+              image_res(image_res) { }
+
+        Vector3f origin;
+        Vector3f target;
+        Vector3f up;
+        Float fov;
+        Float near;
+        Float far;
+        Float focal_dist;
+        Float app_radius;
+        Vec2i image_res;
+    };
+
     Perspective(Float aperatureRadius,
                 Float focalDistance,
                 Float fov,

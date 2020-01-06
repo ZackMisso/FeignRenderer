@@ -98,6 +98,15 @@ protected:
 class PointEmitter : public Emitter
 {
 public:
+    struct Params
+    {
+        Params(Color3f intensity, Point3f pos)
+            : intensity(intensity), pos(pos) { }
+
+        Color3f intensity;
+        Point3f pos;
+    };
+
     PointEmitter();
     PointEmitter(Color3f I,
                  Point3f pos);

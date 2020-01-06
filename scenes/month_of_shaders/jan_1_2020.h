@@ -1,5 +1,10 @@
 #include <feign/core/api.h>
 
+// January 1, 2020
+// This render displays the cosine term of the rendering equation as a nice
+// heatmap. This shader is used as a means to test my api to verify that it
+// works.
+
 static void jan_1_2020()
 {
     std::string test_name = "jan_1_2020";
@@ -35,30 +40,32 @@ static void jan_1_2020()
                                 "camera",
                                 "");
 
+        Integrator::Params int_params(1000, 1000, test_name + "/");
+
         FeignRenderer::fr_integrator("integrator",
                                      "cosine_term",
                                      "default",
-                                     1000,
-                                     1000,
-                                     test_name + "/");
+                                     &int_params);
+
+        Independent::Params samp_params(16, 0x12345);
 
         FeignRenderer::fr_sampler("sampler",
                                   "independent",
-                                  16,
-                                  0x12345,
-                                  0xa3c5e);
+                                  &samp_params);
+
+        Perspective::Params cam_params(origin,
+                                       Vector3f(-1.24528, 19.2211, -17.5872),
+                                       Vector3f(0, 1, 0),
+                                       50.f,
+                                       1e-4f,
+                                       1e4f,
+                                       10.f,
+                                       0.f,
+                                       Vec2i(1920, 1080))
 
         FeignRenderer::fr_camera("camera",
                                  "perspective",
-                                 origin,
-                                 Vector3f(-1.24528, 19.2211, -17.5872),
-                                 Vector3f(0, 1, 0),
-                                 50.f,
-                                 1e-4f,
-                                 1e4f,
-                                 10.f,
-                                 0.f,
-                                 Vec2i(1920, 1080));
+                                 &cam_params);
 
         FeignRenderer::fr_object("ajax",
                                  "ajax_obj",
