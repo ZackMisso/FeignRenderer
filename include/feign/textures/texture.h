@@ -6,6 +6,9 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+ // TODO: is this really worth an abstraction if I am going to implement a
+ //       shader system?
+
 #pragma once
 
 #include <feign/core/node.h>

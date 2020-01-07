@@ -61,7 +61,7 @@ static void jan_1_2020()
                                        1e4f,
                                        10.f,
                                        0.f,
-                                       Vec2i(1920, 1080))
+                                       Vec2i(1920, 1080));
 
         FeignRenderer::fr_camera("camera",
                                  "perspective",

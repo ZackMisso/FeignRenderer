@@ -100,6 +100,14 @@ protected:
 class Mirror : public BSDF
 {
 public:
+    struct Params
+    {
+        Params(Color3f albedo)
+            : albedo(albedo) { }
+
+        Color3f albedo;
+    };
+    
     Mirror(Color3f albedo);
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;

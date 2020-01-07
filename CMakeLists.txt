@@ -202,7 +202,8 @@ add_executable(feign
     src/log/logger.cpp
 
     # Material implementation files
-    src/materials/material.cpp
+    src/materials/simple.cpp
+    src/materials/wireframe.cpp
 
     # Math implementation files
     src/math/transform.cpp

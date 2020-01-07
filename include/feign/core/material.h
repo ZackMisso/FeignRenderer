@@ -11,11 +11,19 @@
 #include <feign/common.h>
 #include <feign/core/bsdf.h>
 
-// TODO: eventually make this more complicated
-// idk how to structure this, need to research some more on how other renderers
-// do this
-
 class Material
+{
+public:
+    Material() { }
+    virtual ~Material() { }
+
+    // should this get the bsdf???
+    // need to do more research on how more complicated materials work
+    virtual BSDF* getBSDF(const Intersection& its) const = 0;
+};
+
+// a material with only one bsdf
+class SimpleMaterial
 {
 public:
     struct Params
@@ -26,14 +34,38 @@ public:
         std::string bsdf_name;
     };
 
-    Material();
-    ~Material();
+    SimpleMaterial(BSDFNode* bsdf)
+        : bsdf(bsdf) { }
 
-    BSDF* getBSDF() const { return bsdf->bsdf; }
-    void setBSDF(BSDF* param) { bsdf->bsdf = param; }
+    ~SimpleMaterial() { }
 
-// protected:
+    virtual BSDF* getBSDF(const Intersection& its) const;
+
     BSDFNode* bsdf;
+};
+
+// a material with different scattering properties along the edges of a mesh
+class WireframeMaterial
+{
+public:
+    struct Params
+    {
+        Params(std::string wireframe_bsdf,
+               std::string mesh_bsdf)
+            : wireframe_bsdf(wireframe_bsdf),
+              mesh_bsdf(mesh_bsdf) { }
+
+        std::string wireframe_bsdf;
+        std::string mesh_bsdf;
+    };
+
+    WireframeMaterial(BSDFNode* wireframe_bsdf, BSDFNode* mesh_bsdf);
+    ~WireframeMaterial();
+
+    virtual BSDF* getBSDF(const Intersection& its) const;
+
+    BSDFNode* wireframe_bsdf;
+    BSDFNode* mesh_bsdf;
 };
 
 /////////////////////////////////////////////////

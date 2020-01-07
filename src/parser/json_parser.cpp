@@ -16,9 +16,15 @@
 #include <cstdio>
 #include <fstream>
 
+// TODO: maybe implement individual methods later to make the parse method not
+//       so crowded
+// void parse_independent_sampler(const rapidjson::Value& value)
+// {
+//
+// }
+
 void JsonParser::parse(std::string filename)
 {
-    // LOG("parsing: " + filename);
     FILE* file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
@@ -28,20 +34,14 @@ void JsonParser::parse(std::string filename)
     document.ParseStream(input_stream);
     fclose(file);
 
-    LOG("start full parse");
-
-    // TODO: these all can be parsed in parallel since they are processed
-    // individually first
+    // TODO: parallelize this
 
     // still need to figure out what is the best way of building the scene
     for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
          itr != document.MemberEnd(); ++itr)
     {
-        LOG("parse: ");
         if (strcmp(itr->name.GetString(), "scene") == 0)
         {
-            LOG("parsing scene");
-
             std::string name = "default";
             std::string integrator = "default";
             std::string sampler = "default";
@@ -79,23 +79,22 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "integrator") == 0)
         {
-            LOG("parsing integrator");
-
             std::string name = "integrator";
             std::string type = "normal";
             std::string filter = "default";
+            std::string location = "";
             long max_time = -1;
             long max_heuristic = -1;
 
             const rapidjson::Value& value = itr->value;
 
-            if (value.HasMember("name"))
-            {
-                name = value["name"].GetString();
-            }
             if (value.HasMember("type"))
             {
                 type = value["type"].GetString();
+            }
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
             }
             if (value.HasMember("filter"))
             {
@@ -109,22 +108,24 @@ void JsonParser::parse(std::string filename)
             {
                 max_heuristic = value["max_heuristic"].GetInt();
             }
+            if (value.HasMember("location"))
+            {
+                location = value["location"].GetString();
+            }
+
+            // all integrators share the same set of params unless there are
+            // future exceptions
+            Integrator::Params params(max_time, max_heuristic, location);
 
             FeignRenderer::fr_integrator(name,
                                          type,
                                          filter,
-                                         max_time,
-                                         max_heuristic);
+                                         &params);
         }
         else if (strcmp(itr->name.GetString(), "sampler") == 0)
         {
-            LOG("parsing sampler");
-
             std::string name = "sampler";
             std::string type = "independent";
-            int spp = 8;
-            long seed = 0x12345678;
-            long seed2 = 0x968574132;
 
             const rapidjson::Value& value = itr->value;
 
@@ -136,24 +137,29 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("sample_count"))
-            {
-                spp = value["sample_count"].GetInt();
-            }
-            if (value.HasMember("seed"))
-            {
-                seed = value["seed"].GetInt();
-            }
-            if (value.HasMember("seed2"))
-            {
-                seed2 = value["seed2"].GetInt();
-            }
 
-            FeignRenderer::fr_sampler(name,
-                                      type,
-                                      spp,
-                                      seed,
-                                      seed2);
+            if (type == "independent")
+            {
+                int spp = 8;
+                long seed = 0x12345678;
+
+                if (value.HasMember("sample_count"))
+                {
+                    spp = value["sample_count"].GetInt();
+                }
+                if (value.HasMember("seed"))
+                {
+                    seed = value["seed"].GetInt();
+                }
+
+                Independent::Params params(seed, spp);
+
+                FeignRenderer::fr_sampler(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException("parsing for any sampling routine other than independent not supported in json");
+            }
         }
         else if (strcmp(itr->name.GetString(), "camera") == 0)
         {
@@ -161,15 +167,6 @@ void JsonParser::parse(std::string filename)
 
             std::string name = "camera";
             std::string type = "perspective";
-            Vector3f origin = Vector3f(0.f, 1.f, 0.f);
-            Vector3f target = Vector3f(0.f);
-            Vector3f up = Vector3f(0.f, 1.f, 0.f);
-            Vec2i image_res = Vec2i(512, 512);
-            Float fov = 30.f;
-            Float app_radius = 0.f;
-            Float near = 1e-4f;
-            Float far = 1e4f;
-            Float focal_dist = 10.f;
 
             const rapidjson::Value& value = itr->value;
 
@@ -181,72 +178,92 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("origin"))
-            {
-                throw NotImplementedException("origin vector json_parser");
-            }
-            if (value.HasMember("target"))
-            {
-                throw NotImplementedException("target vector json_parser");
-            }
-            if (value.HasMember("up"))
-            {
-                throw NotImplementedException("up vector json_parser");
-            }
-            if (value.HasMember("fov"))
-            {
-                fov = value["fov"].GetFloat();
-            }
-            if (value.HasMember("near"))
-            {
-                near = value["near"].GetFloat();
-            }
-            if (value.HasMember("far"))
-            {
-                far = value["far"].GetFloat();
-            }
-            if (value.HasMember("app_radius"))
-            {
-                app_radius = value["app_radius"].GetFloat();
-            }
-            if (value.HasMember("focal_dist"))
-            {
-                focal_dist = value["focal_dist"].GetFloat();
-            }
-            if (value.HasMember("width"))
-            {
-                image_res[0] = value["width"].GetInt();
-            }
-            if (value.HasMember("height"))
-            {
-                image_res[1] = value["height"].GetInt();
-            }
-            if (value.HasMember("lookat"))
-            {
-                origin = Vector3f(value["lookat"][0].GetFloat(),
-                                  value["lookat"][1].GetFloat(),
-                                  value["lookat"][2].GetFloat());
 
-                target = Vector3f(value["lookat"][3].GetFloat(),
-                                  value["lookat"][4].GetFloat(),
-                                  value["lookat"][5].GetFloat());
+            if (type == "perspective")
+            {
+                Vector3f origin = Vector3f(0.f, 1.f, 0.f);
+                Vector3f target = Vector3f(0.f);
+                Vector3f up = Vector3f(0.f, 1.f, 0.f);
+                Vec2i image_res = Vec2i(512, 512);
+                Float fov = 30.f;
+                Float app_radius = 0.f;
+                Float near = 1e-4f;
+                Float far = 1e4f;
+                Float focal_dist = 10.f;
 
-                up = Vector3f(value["lookat"][6].GetFloat(),
-                              value["lookat"][7].GetFloat(),
-                              value["lookat"][8].GetFloat());
+                if (value.HasMember("origin"))
+                {
+                    throw NotImplementedException("origin vector json_parser");
+                }
+                if (value.HasMember("target"))
+                {
+                    throw NotImplementedException("target vector json_parser");
+                }
+                if (value.HasMember("up"))
+                {
+                    throw NotImplementedException("up vector json_parser");
+                }
+                if (value.HasMember("fov"))
+                {
+                    fov = value["fov"].GetFloat();
+                }
+                if (value.HasMember("near"))
+                {
+                    near = value["near"].GetFloat();
+                }
+                if (value.HasMember("far"))
+                {
+                    far = value["far"].GetFloat();
+                }
+                if (value.HasMember("app_radius"))
+                {
+                    app_radius = value["app_radius"].GetFloat();
+                }
+                if (value.HasMember("focal_dist"))
+                {
+                    focal_dist = value["focal_dist"].GetFloat();
+                }
+                if (value.HasMember("width"))
+                {
+                    image_res[0] = value["width"].GetInt();
+                }
+                if (value.HasMember("height"))
+                {
+                    image_res[1] = value["height"].GetInt();
+                }
+                if (value.HasMember("lookat"))
+                {
+                    origin = Vector3f(value["lookat"][0].GetFloat(),
+                                      value["lookat"][1].GetFloat(),
+                                      value["lookat"][2].GetFloat());
+
+                    target = Vector3f(value["lookat"][3].GetFloat(),
+                                      value["lookat"][4].GetFloat(),
+                                      value["lookat"][5].GetFloat());
+
+                    up = Vector3f(value["lookat"][6].GetFloat(),
+                                  value["lookat"][7].GetFloat(),
+                                  value["lookat"][8].GetFloat());
+                }
+
+                Perspective::Params params(origin,
+                                           target,
+                                           up,
+                                           fov,
+                                           near,
+                                           far,
+                                           focal_dist,
+                                           app_radius,
+                                           image_res);
+
+                FeignRenderer::fr_camera(name,
+                                         type,
+                                         &params);
             }
-
-            FeignRenderer::fr_camera(name,
-                                     type,
-                                     origin,
-                                     target,
-                                     up,
-                                     fov,
-                                     near,
-                                     far,
-                                     focal_dist,
-                                     app_radius,
-                                     image_res);
+            else
+            {
+                throw new FeignRendererException(type + " can not be parsed through json");
+            }
         }
         else if (strcmp(itr->name.GetString(), "object") == 0)
         {
@@ -342,44 +359,31 @@ void JsonParser::parse(std::string filename)
 
             const rapidjson::Value& value = itr->value;
 
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
+            if (value.HasMember("mesh"))
+            {
+                type = value["mesh"].GetString();
+            }
+            if (value.HasMember("material"))
+            {
+                type = value["material"].GetString();
+            }
+
             FeignRenderer::fr_clear_transform();
 
             for (rapidjson::Value::ConstMemberIterator itr_2 = value.MemberBegin();
                  itr_2 != value.MemberEnd(); ++itr_2)
             {
-                // LOG("emitter iter");
                 const rapidjson::Value& value_2 = itr_2->value;
 
-                if (strcmp(itr_2->name.GetString(), "name") == 0)
-                {
-                    name = itr_2->value.GetString();
-                }
-                else if (strcmp(itr_2->name.GetString(), "type") == 0)
-                {
-                    type = itr_2->value.GetString();
-                }
-                else if (strcmp(itr_2->name.GetString(), "mesh") == 0)
-                {
-                    mesh = itr_2->value.GetString();
-                }
-                else if (strcmp(itr_2->name.GetString(), "material") == 0)
-                {
-                    material = itr_2->value.GetString();
-                }
-                else if (strcmp(itr_2->name.GetString(), "position") == 0)
-                {
-                    pos[0] = itr_2->value[0].GetFloat();
-                    pos[1] = itr_2->value[1].GetFloat();
-                    pos[2] = itr_2->value[2].GetFloat();
-                }
-                else if (strcmp(itr_2->name.GetString(), "intensity") == 0)
-                {
-                    // LOG("intensity");
-                    intensity[0] = itr_2->value[0].GetFloat();
-                    intensity[1] = itr_2->value[1].GetFloat();
-                    intensity[2] = itr_2->value[2].GetFloat();
-                }
-                else if (strcmp(itr_2->name.GetString(), "scale") == 0)
+                if (strcmp(itr_2->name.GetString(), "scale") == 0)
                 {
                     FeignRenderer::fr_scale(itr_2->value[0].GetFloat(),
                                             itr_2->value[1].GetFloat(),
@@ -400,24 +404,43 @@ void JsonParser::parse(std::string filename)
                 }
             }
 
-            LOG("fr_emitter");
+            if (type == "point")
+            {
+                Vector3f pos = Vector3f(0.f);
+                Color3f intensity = Color3f(1.f);
 
-            FeignRenderer::fr_emitter(name,
-                                      type,
-                                      mesh,
-                                      material,
-                                      pos,
-                                      intensity);
+                if (value.HasMember("position"))
+                {
+                    pos[0] = value[0].GetFloat();
+                    pos[1] = value[1].GetFloat();
+                    pos[2] = value[2].GetFloat();
+                }
+                else if (value.HasMember("intensity"))
+                {
+                    intensity[0] = value[0].GetFloat();
+                    intensity[1] = value[1].GetFloat();
+                    intensity[2] = value[2].GetFloat();
+                }
 
-            LOG("post emitter");
+                PointEmitter::Params params(intensity, pos);
+
+                FeignRenderer::fr_emitter(name,
+                                          type,
+                                          mesh,
+                                          material,
+                                          &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " emitter not parsable yet");
+            }
 
             FeignRenderer::fr_clear_transform();
         }
         else if (strcmp(itr->name.GetString(), "material") == 0)
         {
-            LOG("material");
             std::string name = "material";
-            std::string bsdf = "default";
+            std::string type = "simple";
 
             const rapidjson::Value& value = itr->value;
 
@@ -425,18 +448,33 @@ void JsonParser::parse(std::string filename)
             {
                 name = value["name"].GetString();
             }
-            if (value.HasMember("bsdf"))
+            if (value.HasMember("type"))
             {
-                bsdf = value["bsdf"].GetString();
+                type = value["type"].GetString();
             }
 
-            FeignRenderer::fr_material(name, bsdf);
+            if (type == "simple")
+            {
+                std::string bsdf = "default";
+
+                if (value.HasMember("bsdf"))
+                {
+                    bsdf = value["bsdf"].GetString();
+                }
+
+                Material::Params params(bsdf);
+
+                FeignRenderer::fr_material(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " material is not parsable yet");
+            }
         }
         else if (strcmp(itr->name.GetString(), "bsdf") == 0)
         {
             std::string name = "bsdf";
             std::string type = "diffuse";
-            Color3f albedo = Color3f(1.f);
 
             const rapidjson::Value& value = itr->value;
 
@@ -448,21 +486,47 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("albedo"))
-            {
-                albedo[0] = value["albedo"][0].GetFloat();
-                albedo[1] = value["albedo"][1].GetFloat();
-                albedo[2] = value["albedo"][2].GetFloat();
-            }
 
-            FeignRenderer::fr_bsdf(name, type, albedo);
+            if (type == "diffuse")
+            {
+                Color3f albedo = Color3f(1.f);
+
+                if (value.HasMember("albedo"))
+                {
+                    albedo[0] = value["albedo"][0].GetFloat();
+                    albedo[1] = value["albedo"][1].GetFloat();
+                    albedo[2] = value["albedo"][2].GetFloat();
+                }
+
+                Diffuse::Params params(albedo);
+
+                FeignRenderer::fr_bsdf(name, type, &params);
+            }
+            else if (type == "mirror")
+            {
+                Color3f albedo = Color3f(1.f);
+
+                if (value.HasMember("albedo"))
+                {
+                    albedo[0] = value["albedo"][0].GetFloat();
+                    albedo[1] = value["albedo"][1].GetFloat();
+                    albedo[2] = value["albedo"][2].GetFloat();
+                }
+
+                Mirror::Params params(albedo);
+
+                FeignRenderer::fr_bsdf(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " bsdf is not parsable yet");
+            }
         }
         else if (strcmp(itr->name.GetString(), "shader") == 0)
         {
             std::string name = "shader";
             std::string type = "none";
-            float test_val = 0.f;
-            float test_val_2 = 0.f;
+
 
             const rapidjson::Value& value = itr->value;
 
@@ -474,21 +538,33 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("test_value"))
-            {
-                test_val = value["test_value"].GetFloat();
-            }
-            if (value.HasMember("test_value_2"))
-            {
-                test_val_2 = value["test_value_2"].GetFloat();
-            }
 
-            FeignRenderer::fr_shader(name, type, test_val, test_val_2);
+            if (type == "interp_verts_to_sphere")
+            {
+                float prop = 0.f;
+                float proxy = 0.f;
+
+                if (value.HasMember("prop_of_minor_axis"))
+                {
+                    prop = value["prop_of_minor_axis"].GetFloat();
+                }
+                if (value.HasMember("proxy"))
+                {
+                    proxy = value["proxy"].GetFloat();
+                }
+
+                InterpVertsToSphereShader::Params params(prop, proxy);
+
+                FeignRenderer::fr_shader(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " shader is not parsable yet");
+            }
         }
         else
         {
             assert(false);
-            // error
         }
     }
 

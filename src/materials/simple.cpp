@@ -8,13 +8,12 @@
 
 #include <feign/core/material.h>
 
-Material::Material()
-{
-    bsdf = nullptr;
-}
+SimpleMaterial::SimpleMaterial(BSDFNode* bsdf)
+    : bsdf(bsdf) { }
 
-Material::~Material()
+SimpleMaterial::~SimpleMaterial() { }
+
+BSDF* SimpleMaterial::getBSDF(const Intersection& its) const
 {
-    std::cout << "deleting material" << std::endl;
-    // if (bsdf) delete bsdf;
+    return bsdf;
 }

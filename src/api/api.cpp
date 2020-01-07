@@ -322,7 +322,7 @@ void FeignRenderer::fr_integrator(std::string name,
 
     if (type == "normal")
     {
-        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new NormalIntegrator(filter_node,
                                                       params->location,
                                                       params->max_time,
@@ -330,7 +330,7 @@ void FeignRenderer::fr_integrator(std::string name,
     }
     else if (type == "whitted")
     {
-        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new WhittedIntegrator(filter_node,
                                                        params->location,
                                                        params->max_time,
@@ -338,7 +338,7 @@ void FeignRenderer::fr_integrator(std::string name,
     }
     else if (type == "cosine_term")
     {
-        Integrator::IntegratorParams* params = (Integrator::IntegratorParams*)integrator_data;
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new CosineTermIntegrator(filter_node,
                                                           params->location,
                                                           params->max_time,
@@ -369,7 +369,7 @@ void FeignRenderer::fr_sampler(std::string name,
 
     if (type == "independent")
     {
-        Integrator::Params* params = (Integrator::Params*)sampler_data;
+        Independent::Params* params = (Independent::Params*)sampler_data;
         sampler->sampler = new Independent(params->seed, params->sample_cnt);
     }
     else if (type == "latin")
@@ -555,6 +555,7 @@ void FeignRenderer::fr_emitter(std::string name,
 // void FeignRenderer::fr_material(std::string name,
 //                                 std::string bsdf)
 void FeignRenderer::fr_material(std::string name,
+                                std::string type,
                                 void* material_data)
 {
     MaterialNode* material = getInstance()->find_material(name);
@@ -562,6 +563,28 @@ void FeignRenderer::fr_material(std::string name,
     if (material->material)
     {
         throw new FeignRendererException("material already defined");
+    }
+
+    if (type == "simple")
+    {
+        SimpleMaterial::Params* params = (SimpleMaterial::Params*)material_data;
+
+        BSDFNode* bsdf = getInstance()->find_bsdf(params->bsdf_name);
+
+        material->material = new SimpleMaterial(bsdf);
+    }
+    else if (type == "wireframe")
+    {
+        WireframeMaterial::Params* params = (WireframeMaterial::Params*)material_data;
+
+        BSDFNode* wireframe_bsdf = getInstance()->find_bsdf(params->wireframe_bsdf);
+        BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
+
+        material->material = new WireframeMaterial(wireframe_bsdf, mesh_bsdf);
+    }
+    else
+    {
+        throw new FeignRendererException("material type not recognized: " + type);
     }
 
     Material::Params* params = (Material::Params*)material_data;
@@ -586,13 +609,13 @@ void FeignRenderer::fr_bsdf(std::string name,
 
     if (type == "diffuse")
     {
-        Diffuse::Params* params = (DiffuseParams*)bsdf_data;
+        Diffuse::Params* params = (Diffuse::Params*)bsdf_data;
         bsdf->bsdf = new Diffuse(params->albedo);
     }
     else if (type == "mirror")
     {
-        // bsdf->bsdf = new Mirror(albedo);
-        throw new FeignRendererException("bsdf already defined");
+        Mirror::Params* params = (Mirror::Params*)bsdf_data;
+        bsdf->bsdf = new Mirror(params->albedo);
     }
     else if (type == "null")
     {

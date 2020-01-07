@@ -19,21 +19,5 @@
 class JsonParser
 {
 public:
-    // static void parseTransform(const rapidjson::Value& value);
-    //
-    // static void parseMaterial(const rapidjson::Value& value);
-    //
-    // static void parseSampler(const rapidjson::Value& value);
-    //
-    // static void parseIntegrator(const rapidjson::Value& value);
-    //
-    // static void parseEmitter(const rapidjson::Value& value);
-    //
-    // static void parseCamera(const rapidjson::Value& value);
-    //
-    // static void parseSceneObject(const rapidjson::Value& value);
-    //
-    // static void parseScene(const rapidjson::Value& value);
-
     static void parse(std::string filename);
 };

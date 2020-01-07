@@ -13,4 +13,7 @@ currently one Mesh can only be used by one object at a time
 move save location for renders to scene instead of integrators
 implement cube map
 implement sphere map
+implement individual functions for each object type in the json parser for
+    cleaner and clearer code
+parallelize the parsing code
 start planning shader frameworks
