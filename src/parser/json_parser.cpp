@@ -152,7 +152,7 @@ void JsonParser::parse(std::string filename)
                     seed = value["seed"].GetInt();
                 }
 
-                Independent::Params params(seed, spp);
+                Independent::Params params(spp, seed);
 
                 FeignRenderer::fr_sampler(name, type, &params);
             }
@@ -462,7 +462,25 @@ void JsonParser::parse(std::string filename)
                     bsdf = value["bsdf"].GetString();
                 }
 
-                Material::Params params(bsdf);
+                SimpleMaterial::Params params(bsdf);
+
+                FeignRenderer::fr_material(name, type, &params);
+            }
+            else if (type == "wireframe")
+            {
+                std::string wireframe_bsdf = "default";
+                std::string mesh_bsdf = "default";
+
+                if (value.HasMember("wireframe_bsdf"))
+                {
+                    wireframe_bsdf = value["wireframe_bsdf"].GetString();
+                }
+                if (value.HasMember("mesh_bsdf"))
+                {
+                    mesh_bsdf = value["mesh_bsdf"].GetString();
+                }
+
+                WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf);
 
                 FeignRenderer::fr_material(name, type, &params);
             }

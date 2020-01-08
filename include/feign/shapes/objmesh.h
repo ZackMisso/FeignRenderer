@@ -62,7 +62,6 @@ public:
     void setVerts(std::vector<Point3f>& param);
     void setNorms(std::vector<Normal3f>& param);
     void setUVs(std::vector<Vec2f>& param);
-
 protected:
     std::string filename;
 

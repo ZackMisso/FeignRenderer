@@ -30,6 +30,8 @@ void run_all_scenes()
     run_scene("tests/ajax_normals");
     run_scene("tests/ajax_diffuse");
     run_scene("tests/ajax_mirror");
+    // run_scene("tests/box_distant");
+    run_scene("tests/box_rotations");
 }
 
 int main(int argc, char* argv[])
@@ -45,13 +47,13 @@ int main(int argc, char* argv[])
 
     ////// Month of shaders ////////
 
-    jan_1_2020();          // done
+    // jan_1_2020();          // done
     // jan_2_2020();          // done
     // jan_3_2020();          // TODO
     // jan_4_2020();          // TODO
     // jan_5_2020();          // TODO
     // jan_6_2020();          // TODO
-    return 0;
+    // return 0;
 
     ///\\\ Month of shaders \\\/////
 
@@ -59,7 +61,7 @@ int main(int argc, char* argv[])
     // std::string scene = "tests/ajax_diffuse";
     // std::string scene = "tests/ajax_mirror";
     // std::string scene = "tests/box_rotations";
-    std::string scene = "tests/box_distant";
+    std::string scene = "tests/ajax_bary";
 
     for (int i = 1; i < argc; ++i)
     {

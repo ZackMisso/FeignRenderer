@@ -97,8 +97,9 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
-const BSDF* Scene::getShapeBSDF(const Shape* shape) const
+const BSDF* Scene::getShapeBSDF(const Intersection& its) const
 {
     // this is really gross to look at, figure out how to make this look nicer
-    return objects[shape->getInstID()]->material->material->bsdf->bsdf;
+    int id = its.intersected_mesh->getInstID();
+    return objects[id]->material->material->getBSDF(its);
 }

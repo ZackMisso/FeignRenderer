@@ -15,5 +15,5 @@ SimpleMaterial::~SimpleMaterial() { }
 
 BSDF* SimpleMaterial::getBSDF(const Intersection& its) const
 {
-    return bsdf;
+    return bsdf->bsdf;
 }

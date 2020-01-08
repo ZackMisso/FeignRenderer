@@ -224,3 +224,26 @@ public:
                        const Ray3f& ray) const;
 };
 /////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// this integrator is used for experimenting with implementing
+// a wireframe material. Seeing if you can use barycentric
+// coordinates to tell when you are close to an edge or not.
+/////////////////////////////////////////////////
+// Barycentric Integrator
+/////////////////////////////////////////////////
+class BarycentricIntegrator : public Integrator
+{
+public:
+    BarycentricIntegrator(FilterNode* filter,
+                          std::string location,
+                          long max_time,
+                          long max_heuristic);
+
+    virtual void preProcess();
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////

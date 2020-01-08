@@ -15,10 +15,15 @@ WireframeMaterial::WireframeMaterial(BSDFNode* wireframe_bsdf,
 
 WireframeMaterial::~WireframeMaterial() { }
 
-// TODO: this needs to take something as a parameter
 BSDF* WireframeMaterial::getBSDF(const Intersection& its) const
 {
-    throw new FeignRendererException("wireframe material getBSDF() not implemented");
-    return nullptr;
-    // TODO
+    Point3f bary = its.bary;
+    float min = bary[0];
+    if (bary[1] < min) min = bary[1];
+    if (bary[2] < min) min = bary[2];
+
+    if (min < threshold)
+        return wireframe_bsdf;
+
+    return mesh_bsdf;
 }

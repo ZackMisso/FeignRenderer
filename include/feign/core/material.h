@@ -10,6 +10,7 @@
 
 #include <feign/common.h>
 #include <feign/core/bsdf.h>
+#include <feign/misc/intersection.h>
 
 class Material
 {
@@ -23,7 +24,7 @@ public:
 };
 
 // a material with only one bsdf
-class SimpleMaterial
+class SimpleMaterial : public Material
 {
 public:
     struct Params
@@ -34,10 +35,8 @@ public:
         std::string bsdf_name;
     };
 
-    SimpleMaterial(BSDFNode* bsdf)
-        : bsdf(bsdf) { }
-
-    ~SimpleMaterial() { }
+    SimpleMaterial(BSDFNode* bsdf);
+    ~SimpleMaterial();
 
     virtual BSDF* getBSDF(const Intersection& its) const;
 
@@ -45,18 +44,21 @@ public:
 };
 
 // a material with different scattering properties along the edges of a mesh
-class WireframeMaterial
+class WireframeMaterial : public Material
 {
 public:
     struct Params
     {
         Params(std::string wireframe_bsdf,
-               std::string mesh_bsdf)
+               std::string mesh_bsdf,
+               float threshold)
             : wireframe_bsdf(wireframe_bsdf),
-              mesh_bsdf(mesh_bsdf) { }
+              mesh_bsdf(mesh_bsdf),
+              threshold(threshold) { }
 
         std::string wireframe_bsdf;
         std::string mesh_bsdf;
+        float threshold;
     };
 
     WireframeMaterial(BSDFNode* wireframe_bsdf, BSDFNode* mesh_bsdf);
@@ -65,7 +67,8 @@ public:
     virtual BSDF* getBSDF(const Intersection& its) const;
 
     BSDFNode* wireframe_bsdf;
-    BSDFNode* mesh_bsdf;
+    BSDFNode* mesh_bsdf,
+    float threshold;
 };
 
 /////////////////////////////////////////////////

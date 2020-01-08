@@ -37,7 +37,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
     }
 
     const std::vector<Emitter*> emitters = scene->emitters;
-    const BSDF* bsdf = scene->getShapeBSDF(its.intersected_mesh);
+    const BSDF* bsdf = scene->getShapeBSDF(its);
 
     Color3f result(0.f);
 

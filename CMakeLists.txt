@@ -107,6 +107,7 @@ add_executable(feign
     include/feign/core/material.h
     include/feign/core/shape.h
     include/feign/core/shader.h
+    include/feign/core/texture.h
 
     # Logger header files
     include/feign/log/logger.h
@@ -141,12 +142,10 @@ add_executable(feign
     # Shapes header files
     include/feign/shapes/objmesh.h
     include/feign/shapes/triangle.h
+    include/feign/shapes/grid_obj.h
 
     # Stats header files
     include/feign/stats/clocker.h
-
-    # Texture header files
-    include/feign/textures/texture.h
 
     # Tests header files
     include/tests/test.h
@@ -197,6 +196,7 @@ add_executable(feign
     src/integrators/path_unidir.cpp
     src/integrators/whitted.cpp
     src/integrators/cosine_term.cpp
+    src/integrators/barycentric.cpp
 
     # Logger implementation files
     src/log/logger.cpp
@@ -240,12 +240,13 @@ add_executable(feign
     src/shapes/shape.cpp
     src/shapes/objmesh.cpp
     src/shapes/triangle.cpp
+    src/shapes/grid_obj.cpp
 
     # Stats implementation files
     src/stats/clocker.cpp
 
     # Texture implementation files
-    src/textures/texture.cpp
+    src/textures/image_texture.cpp
 
     # Test implementation files
     src/tests/tester.cpp

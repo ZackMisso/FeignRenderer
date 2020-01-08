@@ -45,7 +45,7 @@ public:
 
     void addEmitter(Emitter* emitter);
 
-    const BSDF* getShapeBSDF(const Shape* shape) const;
+    const BSDF* getShapeBSDF(const Intersection& its) const;
 
     // TODO: should these really be public...
 public:

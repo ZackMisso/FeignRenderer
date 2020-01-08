@@ -112,6 +112,9 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 void ObjMesh::parseFromFile(const std::string& filename,
                             bool flipNorms)
 {
+    if (filename.empty)
+        return;
+
     std::cout << "parsing obj from file: " << filename << std::endl;
     transform.print();
     std::cout << std::endl;
@@ -299,6 +302,12 @@ void ObjMesh::preProcess()
     LOG("parsing from file: " + filename);
     parseFromFile(filename);
 
+    // apply the geometry shader to the mesh
+    if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
+    {
+        geomShader->shader->evaluate((void*)this);
+    }
+
     // precompute the total surface area and cache it
     LOG("calculating surface area");
     sa = 0.0;
@@ -321,11 +330,6 @@ void ObjMesh::preProcess()
     for (uint32_t i = 1; i < vs.size(); ++i)
     {
         bbox.expand(vs[i]);
-    }
-
-    if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
-    {
-        geomShader->shader->evaluate((void*)this);
     }
 
     LOG("info dump");
@@ -407,6 +411,8 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
+
+    its.bary = Point3f(bary);
     // Vec3f bary(its.uv(0), its.uv(1), 1.0 - its.uv(0) - its.uv(1));
 
     uint32_t i0_vs = tris[its.f].vsInds(0);

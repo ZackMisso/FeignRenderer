@@ -14,12 +14,16 @@
 
 class Shape;
 
+// TODO: add an intersection data struct for applying shaders
 struct Intersection
 {
     Point3f p;
     Point2f uv;
     float t;
     uint32_t f; // face index
+
+    // used for shaders
+    Point3f bary;
 
     CoordinateFrame s_frame; // shading frame
     CoordinateFrame g_frame; // geometric frame

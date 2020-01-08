@@ -344,6 +344,14 @@ void FeignRenderer::fr_integrator(std::string name,
                                                           params->max_time,
                                                           params->max_heuristic);
     }
+    else if (type == "barycentric")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new BarycentricIntegrator(filter_node,
+                                                           params->location,
+                                                           params->max_time,
+                                                           params->max_heuristic);
+    }
     else
     {
         throw new NotImplementedException("unsupported integrator: " + type);
@@ -586,11 +594,6 @@ void FeignRenderer::fr_material(std::string name,
     {
         throw new FeignRendererException("material type not recognized: " + type);
     }
-
-    Material::Params* params = (Material::Params*)material_data;
-
-    material->material = new Material();
-    material->material->bsdf = getInstance()->find_bsdf(params->bsdf_name);
 }
 
 // void FeignRenderer::fr_bsdf(std::string name,
