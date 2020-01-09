@@ -14,6 +14,7 @@ ImageTexture::ImageTexture(std::string filename)
 void ImageTexture::preProcess()
 {
     image = Imagef(filename);
+    // TODO: convert to grayscale
     initialized = true;
 }
 

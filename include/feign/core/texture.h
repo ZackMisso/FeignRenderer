@@ -25,6 +25,13 @@ public:
 class ImageTexture : public Texture
 {
 public:
+    struct Params
+    {
+        Params(std::string filename) : filename(filename) { }
+
+        std::string filename;
+    };
+
     ImageTexture(std::string filename);
 
     virtual Color3f evaluate(const Point2f& point);
@@ -32,7 +39,6 @@ public:
 
     Imagef image;
     std::string filename;
-
 private:
     bool initialized;
 };

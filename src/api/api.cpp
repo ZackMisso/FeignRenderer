@@ -42,6 +42,7 @@ FeignRenderer::FeignRenderer()
     objects = std::unordered_map<std::string, ObjectNode*>();
     meshes = std::unordered_map<std::string, MeshNode*>();
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode*>();
+    textures = std::unordered_map<std::string, Texture*>();
 
     bsdfs.clear();
     cameras.clear();
@@ -54,6 +55,7 @@ FeignRenderer::FeignRenderer()
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
+    textures.clear();
 
     current_transform = Transform();
     scene = nullptr;
@@ -72,6 +74,7 @@ FeignRenderer::~FeignRenderer()
     for (auto it : objects) delete it.second;
     for (auto it : meshes) delete it.second;
     for (auto it : geom_shaders) delete it.second;
+    for (auto it : textures) delete it.second;
 
     delete scene;
     scene = nullptr;
@@ -87,6 +90,7 @@ FeignRenderer::~FeignRenderer()
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
+    textures.clear();
 }
 
 void FeignRenderer::initialize()
@@ -276,6 +280,22 @@ GeometryShaderNode* FeignRenderer::find_geometry_shader(std::string name)
     }
 }
 
+TextureNode* FeignRenderer::find_texture(std::string name)
+{
+    std::unordered_map<std::string, TextureNode*>::const_iterator itr = textures.find(name);
+
+    if (itr == textures.end())
+    {
+        TextureNode* node = new TextureNode(name);
+        textures.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
 void FeignRenderer::fr_scene(std::string name,
                              std::string integrator_node,
                              std::string sampler_node,
@@ -301,12 +321,6 @@ void FeignRenderer::fr_scene(std::string name,
                                                          media));
 }
 
-// void FeignRenderer::fr_integrator(std::string name,
-//                                   std::string type,
-//                                   std::string filter,
-//                                   long max_time,
-//                                   long max_heuristic,
-//                                   std::string location)
 void FeignRenderer::fr_integrator(std::string name,
                                   std::string type,
                                   std::string filter,
@@ -358,11 +372,6 @@ void FeignRenderer::fr_integrator(std::string name,
     }
 }
 
-// void FeignRenderer::fr_sampler(std::string name,
-//                                std::string type,
-//                                int spp,
-//                                long seed,
-//                                long seed2)
 void FeignRenderer::fr_sampler(std::string name,
                                std::string type,
                                void* sampler_data)
@@ -390,17 +399,6 @@ void FeignRenderer::fr_sampler(std::string name,
     }
 }
 
-// void FeignRenderer::fr_camera(std::string name,
-//                               std::string type,
-//                               Vector3f origin,
-//                               Vector3f target,
-//                               Vector3f up,
-//                               Float fov,
-//                               Float near,
-//                               Float far,
-//                               Float focal_dist,
-//                               Float app_radius,
-//                               Vec2i image_res)
 void FeignRenderer::fr_camera(std::string name,
                               std::string type,
                               void* camera_data)
@@ -499,10 +497,6 @@ void FeignRenderer::fr_mesh(std::string name,
     }
 }
 
-// void FeignRenderer::fr_shader(std::string name,
-//                               std::string type,
-//                               float test_param,
-//                               float test_param_2)
 void FeignRenderer::fr_shader(std::string name,
                               std::string type,
                               void* shader_data)
@@ -528,12 +522,6 @@ void FeignRenderer::fr_shader(std::string name,
     }
 }
 
-// void FeignRenderer::fr_emitter(std::string name,
-//                                std::string type,
-//                                std::string mesh,
-//                                std::string material,
-//                                Vector3f pos,
-//                                Color3f intensity)
 void FeignRenderer::fr_emitter(std::string name,
                                std::string type,
                                std::string mesh,
@@ -560,8 +548,6 @@ void FeignRenderer::fr_emitter(std::string name,
     }
 }
 
-// void FeignRenderer::fr_material(std::string name,
-//                                 std::string bsdf)
 void FeignRenderer::fr_material(std::string name,
                                 std::string type,
                                 void* material_data)
@@ -596,9 +582,6 @@ void FeignRenderer::fr_material(std::string name,
     }
 }
 
-// void FeignRenderer::fr_bsdf(std::string name,
-//                             std::string type,
-//                             Color3f albedo)
 void FeignRenderer::fr_bsdf(std::string name,
                             std::string type,
                             void* bsdf_data)
@@ -629,6 +612,28 @@ void FeignRenderer::fr_bsdf(std::string name,
         // unrecognized bsdf
         std::cout << "ERROR: BSDF : " << type << " : does not exist" << std::endl;
         assert(false);
+    }
+}
+
+void FeignRenderer::fr_texture(std::string name,
+                               std::string type,
+                               void* texture_data)
+{
+    TextureNode* texture = getInstance()->find_texture(name);
+
+    if (texture->texture)
+    {
+        throw new FeignRendererException("texture already defined");
+    }
+
+    if (type == "image")
+    {
+        ImageTexture::Params* params = (ImageTexture::Params*)texture_data;
+        texture->texture = new ImageTexture(params->filename);
+    }
+    else
+    {
+        throw new FeignRendererException(type + " texture not supported");
     }
 }
 
