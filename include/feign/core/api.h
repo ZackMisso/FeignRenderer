@@ -23,7 +23,14 @@
 #include <feign/common.h>
 #include <feign/core/scene.h>
 #include <feign/core/shader.h>
+#include <feign/core/texture.h>
 #include <unordered_map>
+
+// OLD
+///usr/local/bin:/usr/local/opt/llvm/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:
+
+// NEW
+///usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:
 
 // The end goal is to design all of this so it can be specified by a node graph
 // but it also needs to retain speed
@@ -68,7 +75,7 @@ public:
     ObjectNode*         find_object(std::string name);
     MeshNode*           find_mesh(std::string name);
     GeometryShaderNode* find_geometry_shader(std::string name);
-    Texture*            find_texture(std::string name);
+    TextureNode*        find_texture(std::string name);
 
     static void initialize();
     static void clean_up();
@@ -97,10 +104,14 @@ public:
                           std::string material,
                           int index = -1); // what is this index parameter again
 
+    // static void fr_mesh(std::string name,
+    //                     std::string type,
+    //                     std::string filename,
+    //                     std::string shader = "");
+
     static void fr_mesh(std::string name,
                         std::string type,
-                        std::string filename,
-                        std::string shader = "");
+                        void* mesh_data);
 
     static void fr_shader(std::string name,
                           std::string type,

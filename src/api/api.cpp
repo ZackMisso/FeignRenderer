@@ -16,6 +16,7 @@
 #include <feign/core/sampler.h>
 #include <feign/core/scene.h>
 #include <feign/core/material.h>
+#include <feign/core/texture.h>
 
 // media includes
 #include <feign/media/media.h>
@@ -23,9 +24,8 @@
 
 // shapes
 #include <feign/shapes/objmesh.h>
+#include <feign/shapes/grid_obj.h>
 
-// textures
-#include <feign/textures/texture.h>
 
 FeignRenderer* FeignRenderer::instance = nullptr;
 
@@ -42,7 +42,7 @@ FeignRenderer::FeignRenderer()
     objects = std::unordered_map<std::string, ObjectNode*>();
     meshes = std::unordered_map<std::string, MeshNode*>();
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode*>();
-    textures = std::unordered_map<std::string, Texture*>();
+    textures = std::unordered_map<std::string, TextureNode*>();
 
     bsdfs.clear();
     cameras.clear();
@@ -475,11 +475,9 @@ void FeignRenderer::fr_object(std::string name,
 
 void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
-                            std::string filename,
-                            std::string shader)
+                            void* mesh_data)
 {
     MeshNode* mesh = getInstance()->find_mesh(name);
-    GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(shader);
 
     if (mesh->mesh)
     {
@@ -488,7 +486,21 @@ void FeignRenderer::fr_mesh(std::string name,
 
     if (type == "triangle_mesh")
     {
-        mesh->mesh = new ObjMesh(filename);
+        ObjMesh::Params* params = (ObjMesh::Params*)mesh_data;
+
+        GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
+
+        mesh->mesh = new ObjMesh(params->filename);
+        mesh->mesh->geomShader = geom_shader;
+    }
+    else if (type == "grid")
+    {
+        GridObj::Params* params = (GridObj::Params*)mesh_data;
+
+        GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
+        TextureNode* terrain_texture = getInstance()->find_texture(params->texture);
+
+        mesh->mesh = new GridObj(params->resolution, terrain_texture);
         mesh->mesh->geomShader = geom_shader;
     }
     else
@@ -574,7 +586,9 @@ void FeignRenderer::fr_material(std::string name,
         BSDFNode* wireframe_bsdf = getInstance()->find_bsdf(params->wireframe_bsdf);
         BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
 
-        material->material = new WireframeMaterial(wireframe_bsdf, mesh_bsdf);
+        material->material = new WireframeMaterial(wireframe_bsdf,
+                                                   mesh_bsdf,
+                                                   params->threshold);
     }
     else
     {

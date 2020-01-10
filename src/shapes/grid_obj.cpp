@@ -29,16 +29,21 @@ void GridObj::preProcess()
     Float min = -1.0;
     Float max = 1.0;
 
+    int index = 0;
+
     for (int i = 0; i < resolution[1]; ++i)
     {
         for (int j = 0; j < resolution[0]; ++j)
         {
-            vs.push_back(Point3f((max - min) * (float(j) / float(resolution[0]-1) + min),
-                                 0.f;
-                                 (max - min) * (float(i) / float(resolution[0]-1) + min));
-            ns.push_back(Normal3f(0.f, 1.f, 0.f));
-            uvs.push_back(Vec2f(float(j) / float(resolution[0]-1),
-                                float(i) / float(resolution[0]-1));
+            vs[index] = Point3f((max - min) * float(j) / float(resolution[0]-1) + min,
+                                0.f,
+                                (max - min) * float(i) / float(resolution[1]-1) + min);
+
+            ns[index] = Normal3f(0.f, 1.f, 0.f);
+            uvs[index] = Vec2f(float(j) / float(resolution[0]-1),
+                               float(i) / float(resolution[1]-1));
+
+            index++;
         }
     }
 
@@ -52,10 +57,10 @@ void GridObj::preProcess()
             // [0,1]
             // [0,0]
 
-            int one = (i-1) * resolition[0] + j;
-            int two = (i) * resolition[0] + j;
-            int three = (i) * resolition[0] + (j-1);
-            int four = (i-1) * resolition[0] + (j-1);
+            int one = (i-1) * resolution[0] + j;
+            int two = (i) * resolution[0] + j;
+            int three = (i) * resolution[0] + (j-1);
+            int four = (i-1) * resolution[0] + (j-1);
 
             Vec3u inds_one = Vec3u(one, four, two);
             Vec3u inds_two = Vec3u(four, three, two);
@@ -69,14 +74,47 @@ void GridObj::preProcess()
     // this assumes the terrain_map is already in grayscale
     if (terrain_map)
     {
+        terrain_map->texture->preProcess();
+
         for (int i = 0; i < vs.size(); ++i)
         {
-            Color3f terrain_map_eval = terrain_map->evaluate(Point2f(vs[i][0], vs[i][2]));
+            Color3f terrain_map_eval = terrain_map->texture->evaluate(Point2f(0.5f * (vs[i][0] + 1.f),
+                                                                              0.5f * (vs[i][2] + 1.f)));
             vs[i][1] += terrain_map_eval[0];
         }
 
-        // TODO: update the normals of the grid after displacement
-        new throw FeignRendererException("update normals of grid object after displacement");
+        // TODO: make this its own function
+        std::vector<Normal3f> new_norms = std::vector<Normal3f>(ns.size());
+
+        for (int i = 0; i < tris.size(); ++i)
+        {
+            uint32_t i0_vs = tris[i].vsInds(0);
+            uint32_t i1_vs = tris[i].vsInds(1);
+            uint32_t i2_vs = tris[i].vsInds(2);
+
+            uint32_t i0_ns = tris[i].nsInds(0);
+            uint32_t i1_ns = tris[i].nsInds(1);
+            uint32_t i2_ns = tris[i].nsInds(2);
+
+            Point3f p0 = vs[i0_vs];
+            Point3f p1 = vs[i1_vs];
+            Point3f p2 = vs[i2_vs];
+
+            Normal3f tri_norm = ((p1-p0)^(p2-p0));
+
+            if (tri_norm.sqrNorm() == 0.f)
+            {
+                tri_norm = Normal3f(0.f, 1.f, 0.f);
+            }
+
+            tri_norm = tri_norm.normalized();
+
+            new_norms[i0_ns] += tri_norm;
+            new_norms[i1_ns] += tri_norm;
+            new_norms[i2_ns] += tri_norm;
+        }
+
+        ns = new_norms;
     }
 
     // apply the mesh's transformation to all of the points

@@ -12,6 +12,7 @@
 #include <tests/tester.h>
 
 #include "../scenes/adrien/ajax_cosine.h"
+#include "../scenes/adrien/neon_intro.h"
 #include "../scenes/month_of_shaders/jan_1_2020.h"
 #include "../scenes/month_of_shaders/jan_2_2020.h"
 
@@ -38,12 +39,13 @@ int main(int argc, char* argv[])
 {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    // //////// TEMPORARY ////////
-    //
+    //////// TEMPORARY ////////
+
     // ajax_cosine();
-    // return 0;
-    //
-    // /////\\\ TEMPORARY \\\/////
+    neon_intro();
+    return 0;
+
+    /////\\\ TEMPORARY \\\/////
 
     ////// Month of shaders ////////
 

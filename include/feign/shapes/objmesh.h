@@ -15,6 +15,16 @@
 class ObjMesh : public Shape
 {
 public:
+    struct Params
+    {
+        Params(std::string filename,
+               std::string shader)
+            : filename(filename), shader(shader) { }
+
+        std::string filename;
+        std::string shader;
+    };
+
     ObjMesh();
     ObjMesh(const std::string& filename);
     ObjMesh(const std::vector<Point3f>& vs,

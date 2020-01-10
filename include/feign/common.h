@@ -120,6 +120,13 @@ inline void LOG(std::string val, Vec3f num)
     std::cout << val << " " << num[0] << " " << num[1] << " " << num[2] << std::endl;
 }
 
+inline Float bound(Float val, Float min, Float max)
+{
+    if (val > max) return max;
+    if (val < min) return min;
+    return val;
+}
+
 /////////////////////////////////////////////////
 // EXCEPTIONS
 /////////////////////////////////////////////////

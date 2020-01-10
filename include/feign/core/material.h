@@ -61,13 +61,15 @@ public:
         float threshold;
     };
 
-    WireframeMaterial(BSDFNode* wireframe_bsdf, BSDFNode* mesh_bsdf);
+    WireframeMaterial(BSDFNode* wireframe_bsdf,
+                      BSDFNode* mesh_bsdf,
+                      float threshold);
     ~WireframeMaterial();
 
     virtual BSDF* getBSDF(const Intersection& its) const;
 
     BSDFNode* wireframe_bsdf;
-    BSDFNode* mesh_bsdf,
+    BSDFNode* mesh_bsdf;
     float threshold;
 };
 

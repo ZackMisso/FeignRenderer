@@ -1,4 +1,5 @@
 #include <feign/core/api.h>
+#include <feign/shapes/objmesh.h>
 
 // January 1, 2020
 // This render displays the cosine term of the rendering equation as a nice
@@ -71,9 +72,11 @@ static void jan_1_2020()
                                  "ajax_obj",
                                  "null");
 
+        ObjMesh::Params ajax_params("../scenes/meshes/ajax.obj", "");
+
         FeignRenderer::fr_mesh("ajax_obj",
                                "triangle_mesh",
-                               "../scenes/meshes/ajax.obj");
+                               &ajax_params);
 
         FeignRenderer::flush_renders();
 

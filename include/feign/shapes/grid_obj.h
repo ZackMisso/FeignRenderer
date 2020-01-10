@@ -8,12 +8,26 @@
 
 #pragma once
 
-#include <feign/core/objmesh.h>
+#include <feign/shapes/objmesh.h>
 #include <feign/core/texture.h>
 
 class GridObj : public ObjMesh
 {
 public:
+    struct Params
+    {
+        Params(std::string texture,
+               std::string shader,
+               Vec2i resolution)
+            : texture(texture),
+              shader(shader),
+              resolution(resolution) { }
+
+        std::string shader;
+        std::string texture;
+        Vec2i resolution;
+    };
+
     GridObj();
     GridObj(Vec2i res, TextureNode* terrain_map);
 

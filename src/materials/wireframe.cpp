@@ -9,9 +9,11 @@
 #include <feign/core/material.h>
 
 WireframeMaterial::WireframeMaterial(BSDFNode* wireframe_bsdf,
-                                     BSDFNode* mesh_bsdf)
+                                     BSDFNode* mesh_bsdf,
+                                     Float threshold)
     : wireframe_bsdf(wireframe_bsdf),
-      mesh_bsdf(mesh_bsdf) { }
+      mesh_bsdf(mesh_bsdf),
+      threshold(threshold) { }
 
 WireframeMaterial::~WireframeMaterial() { }
 
@@ -22,8 +24,10 @@ BSDF* WireframeMaterial::getBSDF(const Intersection& its) const
     if (bary[1] < min) min = bary[1];
     if (bary[2] < min) min = bary[2];
 
-    if (min < threshold)
-        return wireframe_bsdf;
+    // LOG("Threshold:", threshold);
 
-    return mesh_bsdf;
+    if (min < threshold)
+        return wireframe_bsdf->bsdf;
+
+    return mesh_bsdf->bsdf;
 }

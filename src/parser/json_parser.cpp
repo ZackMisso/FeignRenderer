@@ -9,6 +9,9 @@
 #include <feign/parser/json_parser.h>
 #include <feign/core/api.h>
 
+#include <feign/shapes/objmesh.h>
+#include <feign/shapes/grid_obj.h>
+
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/filereadstream.h>
@@ -323,8 +326,6 @@ void JsonParser::parse(std::string filename)
         {
             std::string name = "mesh";
             std::string type = "default";
-            std::string filename = "default";
-            std::string geom_shader = "default";
 
             const rapidjson::Value& value = itr->value;
 
@@ -336,16 +337,55 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("filename"))
-            {
-                filename = value["filename"].GetString();
-            }
-            if (value.HasMember("geom_shader"))
-            {
-                geom_shader = value["geom_shader"].GetString();
-            }
 
-            FeignRenderer::fr_mesh(name, type, filename, geom_shader);
+            if (type == "triangle_mesh")
+            {
+                std::string filename = "default";
+                std::string geom_shader = "default";
+
+                if (value.HasMember("filename"))
+                {
+                    filename = value["filename"].GetString();
+                }
+                if (value.HasMember("geom_shader"))
+                {
+                    geom_shader = value["geom_shader"].GetString();
+                }
+
+                ObjMesh::Params params(filename, geom_shader);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else if (type == "grid")
+            {
+                std::string texture = "default";
+                std::string geom_shader = "default";
+                Vec2i resolution = Vec2i(2, 2);
+
+                if (value.HasMember("texture"))
+                {
+                    texture = value["texture"].GetString();
+                }
+                if (value.HasMember("geom_shader"))
+                {
+                    geom_shader = value["geom_shader"].GetString();
+                }
+                if (value.HasMember("resolution"))
+                {
+                    resolution = Vec2i(value["resolution"][0].GetInt(),
+                                       value["resolution"][1].GetInt());
+                }
+
+                GridObj::Params params(texture,
+                                       geom_shader,
+                                       resolution);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " mesh not recognized");
+            }
         }
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
@@ -470,6 +510,7 @@ void JsonParser::parse(std::string filename)
             {
                 std::string wireframe_bsdf = "default";
                 std::string mesh_bsdf = "default";
+                float threshold = 0.01f;
 
                 if (value.HasMember("wireframe_bsdf"))
                 {
@@ -479,8 +520,12 @@ void JsonParser::parse(std::string filename)
                 {
                     mesh_bsdf = value["mesh_bsdf"].GetString();
                 }
+                if (value.HasMember("threshold"))
+                {
+                    threshold = value["threshold"].GetFloat();
+                }
 
-                WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf);
+                WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf, threshold);
 
                 FeignRenderer::fr_material(name, type, &params);
             }

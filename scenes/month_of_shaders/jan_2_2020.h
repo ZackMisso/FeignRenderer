@@ -1,4 +1,5 @@
 #include <feign/core/api.h>
+#include <feign/shapes/objmesh.h>
 
 // January 2, 2020
 // This render test displacement maps by interpolating a mesh between its original
@@ -81,10 +82,11 @@ static void jan_2_2020()
                                  "ajax_obj",
                                  "null");
 
+        ObjMesh::Params ajax_params("../scenes/meshes/ajax.obj", "test_shader");
+
         FeignRenderer::fr_mesh("ajax_obj",
                                "triangle_mesh",
-                               "../scenes/meshes/ajax.obj",
-                               "test_shader");
+                               &ajax_params);
 
         InterpVertsToSphereShader::Params shad_params(0.6f,
                                                       interp_value(i, 360));

@@ -13,11 +13,12 @@
 class Texture
 {
 public:
-    Texture();
-    virtual ~Texture();
+    Texture() { }
+    virtual ~Texture() { }
 
     virtual Color3f evaluate(const Point2f& point) { return Color3f(0.f); }
     virtual Color3f evaluate(const Point3f& point) { return Color3f(0.f); }
+    virtual Imagef evaluate_image(int width, int height);
 
     virtual void preProcess() { }
 };
@@ -38,6 +39,26 @@ public:
     virtual void preProcess();
 
     Imagef image;
+    std::string filename;
+private:
+    bool initialized;
+};
+
+class NoiseTexture : public Texture
+{
+public:
+    struct Params
+    {
+        Params(std::string filename) : filename(filename) { }
+
+        std::string filename;
+    };
+
+    NoiseTexture(std::string filename);
+
+    virtual Color3f evaluate(const Point2f& point);
+    virtual void preProcess();
+
     std::string filename;
 private:
     bool initialized;

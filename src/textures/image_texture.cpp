@@ -14,7 +14,7 @@ ImageTexture::ImageTexture(std::string filename)
 void ImageTexture::preProcess()
 {
     image = Imagef(filename);
-    // TODO: convert to grayscale
+    // TODO: convert to grayscale... maybe
     initialized = true;
 }
 
@@ -22,7 +22,15 @@ Color3f ImageTexture::evaluate(const Point2f& point)
 {
     assert(initialized);
 
-    return Color3f(image(point[0], point[1], 0),
-                   image(point[0], point[1], 1),
-                   image(point[0], point[1], 2));
+    Point2f sample;
+
+    sample[0] = bound(point(0), 0.f, 1.f);
+    sample[1] = bound(point(1), 0.f, 1.f);
+
+    sample[0] *= image.width();
+    sample[1] *= image.height();
+
+    return Color3f(image(sample(0), sample(1), 0),
+                   image(sample(0), sample(1), 1),
+                   image(sample(0), sample(1), 2));
 }

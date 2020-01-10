@@ -112,7 +112,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 void ObjMesh::parseFromFile(const std::string& filename,
                             bool flipNorms)
 {
-    if (filename.empty)
+    if (filename.empty())
         return;
 
     std::cout << "parsing obj from file: " << filename << std::endl;

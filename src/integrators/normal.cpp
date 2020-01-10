@@ -35,5 +35,10 @@ Color3f NormalIntegrator::Li(const Scene* scene,
 
     Normal3f shad_n = ~(its.s_frame.n);
 
+    if (shad_n(0) < 0.f || shad_n(1) < 0.f || shad_n(2) < 0.f)
+    {
+        return Color3f(0.f);
+    }
+
     return Color3f(shad_n(0), shad_n(1), shad_n(2));
 }

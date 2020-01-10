@@ -1,4 +1,5 @@
 #include <feign/core/api.h>
+#include <feign/shapes/objmesh.h>
 
 static void ajax_cosine()
 {
@@ -66,9 +67,11 @@ static void ajax_cosine()
                                  "ajax_obj",
                                  "null");
 
+        ObjMesh::Params ajax_params("../scenes/meshes/ajax.obj", "");
+
         FeignRenderer::fr_mesh("ajax_obj",
                                "triangle_mesh",
-                               "../scenes/meshes/ajax.obj");
+                               &ajax_params);
 
         FeignRenderer::flush_renders();
 
