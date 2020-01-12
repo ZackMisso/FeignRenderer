@@ -13,14 +13,14 @@
 class Texture
 {
 public:
-    Texture() { }
-    virtual ~Texture() { }
+    Texture();
+    virtual ~Texture();
 
-    virtual Color3f evaluate(const Point2f& point) { return Color3f(0.f); }
-    virtual Color3f evaluate(const Point3f& point) { return Color3f(0.f); }
+    virtual Color3f evaluate(const Point2f& point);
+    virtual Color3f evaluate(const Point3f& point);
     virtual Imagef evaluate_image(int width, int height);
 
-    virtual void preProcess() { }
+    virtual void preProcess();
 };
 
 class ImageTexture : public Texture

@@ -247,6 +247,8 @@ add_executable(feign
 
     # Texture implementation files
     src/textures/image_texture.cpp
+    src/textures/noise_texture.cpp
+    src/textures/texture.cpp
 
     # Test implementation files
     src/tests/tester.cpp

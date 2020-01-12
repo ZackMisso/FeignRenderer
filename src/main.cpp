@@ -15,6 +15,7 @@
 #include "../scenes/adrien/neon_intro.h"
 #include "../scenes/month_of_shaders/jan_1_2020.h"
 #include "../scenes/month_of_shaders/jan_2_2020.h"
+#include "../scenes/month_of_shaders/jan_3_2020.h"
 
 void run_scene(std::string scene_name)
 {
@@ -39,23 +40,23 @@ int main(int argc, char* argv[])
 {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
-    //////// TEMPORARY ////////
-
-    // ajax_cosine();
-    neon_intro();
-    return 0;
-
-    /////\\\ TEMPORARY \\\/////
+    // //////// TEMPORARY ////////
+    //
+    // // ajax_cosine();
+    // neon_intro();
+    // return 0;
+    //
+    // /////\\\ TEMPORARY \\\/////
 
     ////// Month of shaders ////////
 
     // jan_1_2020();          // done
     // jan_2_2020();          // done
-    // jan_3_2020();          // TODO
+    jan_3_2020();          // TODO
     // jan_4_2020();          // TODO
     // jan_5_2020();          // TODO
     // jan_6_2020();          // TODO
-    // return 0;
+    return 0;
 
     ///\\\ Month of shaders \\\/////
 
