@@ -5,7 +5,7 @@
 static void neon_intro()
 {
     std::string test_name = "neon_intro";
-    int take = 33;
+    int take = 38;
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
@@ -18,7 +18,7 @@ static void neon_intro()
     // imedit::color_map_inferno(color_map);
 
     int start_frame = 0;
-    int end_frame = 100;
+    int end_frame = 600;
 
     for (int i = start_frame; i < end_frame; ++i)
     {
@@ -45,14 +45,14 @@ static void neon_intro()
                                      "default",
                                      &int_params);
 
-        Independent::Params samp_params(4, 0x12345);
+        Independent::Params samp_params(1, 0x12345);
 
         FeignRenderer::fr_sampler("sampler",
                                   "independent",
                                   &samp_params);
 
-        Perspective::Params cam_params(Vector3f(0.f, 0.7f, -98.f),
-                                       Vector3f(0.f, 0.65f, -94.0f),
+        Perspective::Params cam_params(Vector3f(0.f, 0.86f, -98.f),
+                                       Vector3f(0.f, 0.82f, -94.0f),
                                        Vector3f(0, 1, 0),
                                        25.f,
                                        1e-4f,

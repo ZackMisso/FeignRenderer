@@ -8,6 +8,11 @@
 
 #include <feign/core/accel.h>
 
+EmbreeAccel::~EmbreeAccel()
+{
+    clear();
+}
+
 void EmbreeAccel::preProcess()
 {
     // preProcessChisldren();

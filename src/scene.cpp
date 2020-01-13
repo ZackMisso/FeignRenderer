@@ -28,8 +28,12 @@ Scene::Scene(std::string name,
 Scene::~Scene()
 {
     delete ray_accel;
+    integrator_node = nullptr;
+    sampler_node = nullptr;
+    camera_node = nullptr;
     shapes.clear();
     objects.clear();
+    emitters.clear();
 }
 
 void Scene::preProcess()

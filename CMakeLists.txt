@@ -172,6 +172,8 @@ add_executable(feign
     # BSDF implementation files
     src/bsdfs/diffuse.cpp
     src/bsdfs/mirror.cpp
+    src/bsdfs/null.cpp
+    src/bsdfs/dielectric.cpp
 
     # Camera implementation files
     src/cameras/perspective.cpp

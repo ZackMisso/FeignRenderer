@@ -75,6 +75,8 @@ public:
     MeshNode(Shape* mesh) : mesh(mesh) { }
     MeshNode(std::string name) : Node(name), mesh(nullptr) { }
 
+    ~MeshNode() { delete mesh; }
+
     Shape* mesh;
 };
 /////////////////////////////////////////////////
@@ -88,6 +90,8 @@ public:
     ObjectNode() : mesh(nullptr) { }
     ObjectNode(MeshNode* mesh) : mesh(mesh) { }
     ObjectNode(std::string name) : Node(name), mesh(nullptr) { }
+
+    ~ObjectNode() { }
 
     MeshNode* mesh;
     MaterialNode* material;

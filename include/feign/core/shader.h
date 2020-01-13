@@ -50,6 +50,8 @@ public:
     GeometryShaderNode() : shader(nullptr) { }
     GeometryShaderNode(std::string name) : Node(name), shader(nullptr) { }
 
+    ~GeometryShaderNode() { delete shader; }
+
     GeometryShader* shader;
 };
 /////////////////////////////////////////////////

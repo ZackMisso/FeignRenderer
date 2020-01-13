@@ -107,7 +107,7 @@ public:
 
         Color3f albedo;
     };
-    
+
     Mirror(Color3f albedo);
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
@@ -121,27 +121,49 @@ protected:
 };
 /////////////////////////////////////////////////
 
-// TODO: this should not be a bsdf and should instead be a material
-// /////////////////////////////////////////////////
-// // Wireframe BSDF
-// // this BSDF was used for the jan_3_2020 shader. It is a diffuse
-// // shader whose albedo is line_albedo along lines
-// /////////////////////////////////////////////////
-// class Wireframe : public BSDF
-// {
-// public:
-//     Wireframe(Color3f albedo);
-//
-//     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
-//     virtual Color3f eval(const BSDFQuery& rec) const;
-//     virtual Float pdf(const BSDFQuery& rec) const;
-//
-//     virtual bool isDelta() const { return true; }
-//
-// protected:
-//     Color3f albedo;
-// };
-// /////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// Null BSDF
+/////////////////////////////////////////////////
+class NullBSDF : public BSDF
+{
+public:
+    NullBSDF();
+
+    virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
+    virtual Color3f eval(const BSDFQuery& rec) const;
+    virtual Float pdf(const BSDFQuery& rec) const;
+
+    virtual bool isDelta() const { return false; }
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Dielectric BSDF
+/////////////////////////////////////////////////
+class Dielectric : public BSDF
+{
+public:
+    struct Params
+    {
+        Params(Float int_ior, Float ext_ior);
+
+        Float int_ior;
+        Float ext_ior;
+    };
+
+    Dielectric(Float int_ior, Float ext_ior);
+
+    virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
+    virtual Color3f eval(const BSDFQuery& rec) const;
+    virtual Float pdf(const BSDFQuery& rec) const;
+
+    virtual bool isDelta() const { return false; }
+
+protected:
+    Float int_ior;
+    Float ext_ior;
+};
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // BSDF Node structure

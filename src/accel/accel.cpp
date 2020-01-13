@@ -16,7 +16,6 @@ Accel::Accel()
 
 Accel::~Accel()
 {
-    std::cout << "deleting accel" << std::endl;
     meshes.clear();
 }
 

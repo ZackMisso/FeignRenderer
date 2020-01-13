@@ -63,6 +63,8 @@ FeignRenderer::FeignRenderer()
 
 FeignRenderer::~FeignRenderer()
 {
+    LOG("cleaning up");
+
     for (auto it : bsdfs) delete it.second;
     for (auto it : cameras) delete it.second;
     for (auto it : emitters) delete it.second;
@@ -643,7 +645,7 @@ void FeignRenderer::fr_texture(std::string name,
     if (type == "image")
     {
         ImageTexture::Params* params = (ImageTexture::Params*)texture_data;
-        texture->texture = new ImageTexture(params->filename);
+        texture->texture = new ImageTexture(params->filename, params->scale);
     }
     else
     {
@@ -716,6 +718,6 @@ void FeignRenderer::flush_renders()
 
 void FeignRenderer::clean_up()
 {
-    delete getInstance();
+    if (FeignRenderer::instance) delete FeignRenderer::instance;
     FeignRenderer::instance = nullptr;
 }

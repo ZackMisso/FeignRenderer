@@ -127,6 +127,40 @@ protected:
 };
 /////////////////////////////////////////////////
 
+// /////////////////////////////////////////////////
+// // Mesh Emitter
+// /////////////////////////////////////////////////
+// class MeshEmitter : public Emitter
+// {
+// public:
+//     struct Params
+//     {
+//         Params(Color3f intensity, Point3f pos)
+//             : intensity(intensity), pos(pos) { }
+//
+//         MeshNode* mesh;
+//         Color3f intensity;
+//     };
+//
+//     MeshEmitter(MeshNode* mesh,
+//                 Color3f intensity);
+//
+//     virtual Color3f sample_li(EmitterQuery& rec,
+//                               const Point2f& sample,
+//                               Float* pdf) const;
+//
+//     virtual Color3f sample_pos(EmitterQuery& rec,
+//                                const Point2f& sample,
+//                                Float* pdf) const;
+//
+//     virtual void preProcess();
+//
+// protected:
+//     MeshNode* mesh;
+//     Color3f intensity;
+// };
+// /////////////////////////////////////////////////
+
 /////////////////////////////////////////////////
 // Environment Emitter
 /////////////////////////////////////////////////

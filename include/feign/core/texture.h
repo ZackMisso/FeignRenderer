@@ -28,12 +28,18 @@ class ImageTexture : public Texture
 public:
     struct Params
     {
-        Params(std::string filename) : filename(filename) { }
+        Params(std::string filename,
+               Vec3f scale = Vec3f(1.f))
+            : filename(filename), scale(scale) { }
 
         std::string filename;
+        Vec3f scale;
     };
 
-    ImageTexture(std::string filename);
+    ImageTexture(std::string filename,
+                 Vec3f scale = Vec3f(1.f));
+
+    ~ImageTexture();
 
     virtual Color3f evaluate(const Point2f& point);
     virtual void preProcess();
@@ -41,6 +47,7 @@ public:
     Imagef image;
     std::string filename;
 private:
+    Vec3f scale;
     bool initialized;
 };
 
@@ -73,6 +80,8 @@ public:
     TextureNode() : texture(nullptr) { }
     TextureNode(std::string name) : Node(name), texture(nullptr) { }
     TextureNode(Texture* texture) : texture(texture) { }
+
+    ~TextureNode() { delete texture; }
 
     Texture* texture;
 };

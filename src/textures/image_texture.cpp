@@ -8,14 +8,21 @@
 
 #include <feign/core/texture.h>
 
-ImageTexture::ImageTexture(std::string filename)
-    : filename(filename), initialized(false) { }
+ImageTexture::ImageTexture(std::string filename, Vec3f scale)
+    : filename(filename), scale(scale), initialized(false) { }
+
+ImageTexture::~ImageTexture()
+{
+    image.clear();
+}
 
 void ImageTexture::preProcess()
 {
+    LOG("pre-processing image");
     image = Imagef(filename);
     // TODO: convert to grayscale... maybe
     initialized = true;
+    LOG("done pre-processing image");
 }
 
 Color3f ImageTexture::evaluate(const Point2f& point)
@@ -32,5 +39,5 @@ Color3f ImageTexture::evaluate(const Point2f& point)
 
     return Color3f(image(sample(0), sample(1), 0),
                    image(sample(0), sample(1), 1),
-                   image(sample(0), sample(1), 2));
+                   image(sample(0), sample(1), 2)) * scale;
 }

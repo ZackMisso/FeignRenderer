@@ -46,6 +46,8 @@ protected:
 class EmbreeAccel : public Accel
 {
 public:
+    ~EmbreeAccel();
+    
     virtual void preProcess();
     virtual void clear();
     virtual void addShape(Shape* mesh);

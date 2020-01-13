@@ -23,11 +23,11 @@ void Integrator::render(const Scene* scene,
                         Sampler* sampler,
                         Imagef& image) const
 {
+    LOG("starting render loop");
+
     image.clear();
     Imagef filter_weights = Imagef(image.width(), image.height(), 1);
     filter_weights.clear();
-
-    LOG("starting render loop");
 
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {

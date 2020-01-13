@@ -127,6 +127,47 @@ inline Float bound(Float val, Float min, Float max)
     return val;
 }
 
+// based on code from Wenzel Jakob
+inline Float fresnel(Float cos_theta,
+                     Float ext_ior,
+                     Float int_ior)
+{
+    Float etaI = ext_ior;
+    Float etaT = int_ior;
+
+    if (ext_ior == int_ior)
+    {
+        return 0.f;
+    }
+
+    /* Swap the indices of refraction if the interaction starts
+       at the inside of the object */
+    if (cos_theta < 0.0f)
+    {
+        std::swap(etaI, etaT);
+        cos_theta = -cos_theta;
+    }
+
+    /* Using Snell's law, calculate the squared sine of the
+       angle between the normal and the transmitted ray */
+    Float eta = etaI / etaT;
+    Float sinThetaTSqr = eta * eta * (1.f - cos_theta * cos_theta);
+
+    if (sinThetaTSqr > 1.0f)
+    {
+        return 1.0f;  /* Total internal reflection! */
+    }
+
+    Float cosThetaT = std::sqrt(1.0f - sinThetaTSqr);
+
+    Float Rs = (etaI * cos_theta - etaT * cos_theta)
+             / (etaI * cos_theta + etaT * cos_theta);
+    Float Rp = (etaT * cos_theta - etaI * cos_theta)
+             / (etaT * cos_theta + etaI * cos_theta);
+
+    return (Rs * Rs + Rp * Rp) / 2.0f;
+}
+
 /////////////////////////////////////////////////
 // EXCEPTIONS
 /////////////////////////////////////////////////
