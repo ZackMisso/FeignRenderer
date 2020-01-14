@@ -348,6 +348,7 @@ struct BBox2
     {
         std::cout << "Min: " << "(" << min(0) << ", " << min(1) << ")" << std::endl;
         std::cout << "Max: " << "(" << max(0) << ", " << max(1) << ")" << std::endl;
+        std::cout << "Extents: " << (max - min).norm() << std::endl;
     }
 
     Vec2<T> min;

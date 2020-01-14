@@ -1,5 +1,6 @@
 TODO notes:
 
+remake shader system so that shaders are evaluated first instead of materials
 get automated tests to work
 change objects to take in param structs instead of each individual variable
 create distant light sources

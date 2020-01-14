@@ -1,3 +1,5 @@
+#include <feign/core/api.h>
+
 // January 4, 2020
 // This render tests terrain maps
 
@@ -73,18 +75,13 @@ static void jan_4_2020()
                                &mesh_params);
 
         Float proxy = interp_value(i, 360);
-        // LOG("proxy:", proxy);
 
         ImageTexture::Params im_params("../scenes/textures/final_noise.png",
                                        Vec3f(proxy));
 
-        // LOG("post im params");
-
         FeignRenderer::fr_texture("disp_texture",
                                   "image",
                                   &im_params);
-
-        // LOG("post texture");
 
         SimpleMaterial::Params simple_mat_params("wireframe_bsdf");
 
@@ -92,15 +89,11 @@ static void jan_4_2020()
                                    "simple",
                                    &simple_mat_params);
 
-        // LOG("simple mat");
-
         Diffuse::Params wireframe_bsdf_params(Color3f(0.8f, 0.8f, 0.8f));
 
         FeignRenderer::fr_bsdf("wireframe_bsdf",
                                "diffuse",
                                &wireframe_bsdf_params);
-
-        // LOG("post bsdf");
 
         for (int j = 0; j < 20; ++j)
         {
@@ -116,8 +109,6 @@ static void jan_4_2020()
                                       "null",
                                       &emitter_params);
         }
-
-        LOG("post emitters");
 
         FeignRenderer::flush_renders();
 

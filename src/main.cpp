@@ -17,6 +17,7 @@
 #include "../scenes/month_of_shaders/jan_2_2020.h"
 #include "../scenes/month_of_shaders/jan_3_2020.h"
 #include "../scenes/month_of_shaders/jan_4_2020.h"
+#include "../scenes/month_of_shaders/jan_5_2020.h"
 
 void run_scene(std::string scene_name)
 {
@@ -44,7 +45,7 @@ int main(int argc, char* argv[])
     // //////// TEMPORARY ////////
     //
     // // ajax_cosine();
-    neon_intro();
+    // neon_intro();
     // return 0;
     //
     // /////\\\ TEMPORARY \\\/////
@@ -55,7 +56,7 @@ int main(int argc, char* argv[])
     // jan_2_2020();          // done
     // jan_3_2020();          // TODO
     // jan_4_2020();         // TODO
-    // jan_5_2020();          // TODO
+    jan_5_2020();          // TODO
     // jan_6_2020();          // TODO
     return 0;
 

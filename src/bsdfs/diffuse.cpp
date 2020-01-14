@@ -32,11 +32,11 @@ Color3f Diffuse::sample(BSDFQuery& rec, const Point2f& sample) const
 
 Color3f Diffuse::eval(const BSDFQuery& rec) const
 {
-    if (CoordinateFrame::cosTheta(rec.wi) <= 0 ||
-        CoordinateFrame::cosTheta(rec.wo) <= 0)
-    {
-        return Color3f(0.0f);
-    }
+    // if (CoordinateFrame::cosTheta(rec.wi) <= 0 ||
+    //     CoordinateFrame::cosTheta(rec.wo) <= 0)
+    // {
+    //     return Color3f(0.0f);
+    // }
 
     return albedo * INV_PI;
 }

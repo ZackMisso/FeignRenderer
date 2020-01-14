@@ -37,7 +37,8 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
     }
 
     const std::vector<Emitter*> emitters = scene->emitters;
-    const BSDF* bsdf = scene->getShapeBSDF(its);
+    Color3f mat_scale = Color3f(1.f);
+    const BSDF* bsdf = scene->getShapeBSDF(its, mat_scale);
 
     Color3f result(0.f);
 
@@ -59,10 +60,16 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                           its.uv,
                           its.p);
 
-            Color3f bsdf_val = bsdf->eval(bqr);
+            Color3f bsdf_val = bsdf->eval(bqr) * mat_scale;
             float cos_term = its.s_frame.n % eqr.wi;
 
             if (cos_term < -Epsilon) cos_term = -cos_term;
+
+            // if (ray.depth >= 1)
+            // {
+            //     LOG("bsdf_val:", bsdf_val);
+            //     LOG("cos_term:", cos_term);
+            // }
 
             Ray3f shadow_ray(its.p,
                              eqr.wi,
@@ -70,8 +77,13 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                              sqrt(eqr.sqr_dist));
 
             Intersection tmp;
-            if (!scene->intersect(shadow_ray, tmp))
+            // TODO: global check
+            if (!scene->intersect(shadow_ray, tmp) || true)
             {
+                // if (ray.depth >= 1)
+                // {
+                //     LOG("COUNTS");
+                // }
                 result += bsdf_val * Li * cos_term;
             }
         }
@@ -88,14 +100,15 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                       its.p);
 
         Point2f sample = sampler->next2D();
-        Color3f color = bsdf->sample(bqr, sample);
+        Color3f color = bsdf->sample(bqr, sample) * mat_scale;
 
         if (color.is_black()) return color;
 
         Ray3f reflection(its.p,
                          its.toWorld(bqr.wo),
                          Epsilon,
-                         std::numeric_limits<Float>::infinity());
+                         std::numeric_limits<Float>::infinity(),
+                         ray.depth+1);
 
         Color3f recur = Li(scene, sampler, reflection);
 

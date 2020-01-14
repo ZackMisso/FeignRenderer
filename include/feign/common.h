@@ -168,6 +168,13 @@ inline Float fresnel(Float cos_theta,
     return (Rs * Rs + Rp * Rp) / 2.0f;
 }
 
+inline Color3f color_max(Color3f one, Color3f two)
+{
+    return Color3f(std::max(one(0), two(0)),
+                   std::max(one(1), two(1)),
+                   std::max(one(2), two(2)));
+}
+
 /////////////////////////////////////////////////
 // EXCEPTIONS
 /////////////////////////////////////////////////

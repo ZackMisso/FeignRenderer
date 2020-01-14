@@ -17,14 +17,15 @@ WireframeMaterial::WireframeMaterial(BSDFNode* wireframe_bsdf,
 
 WireframeMaterial::~WireframeMaterial() { }
 
-BSDF* WireframeMaterial::getBSDF(const Intersection& its) const
+BSDF* WireframeMaterial::getBSDF(const Intersection& its,
+                                 Color3f& mat_scale) const
 {
     Point3f bary = its.bary;
     float min = bary[0];
     if (bary[1] < min) min = bary[1];
     if (bary[2] < min) min = bary[2];
 
-    // LOG("Threshold:", threshold);
+    mat_scale = Color3f(1.f);
 
     if (min < threshold)
         return wireframe_bsdf->bsdf;

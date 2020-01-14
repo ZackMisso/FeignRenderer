@@ -13,7 +13,7 @@ NullBSDF::NullBSDF() : BSDF() { }
 // the idea is that sample returns eval() / pdf()
 Color3f NullBSDF::sample(BSDFQuery& rec, const Point2f& sample) const
 {
-    rec.wo = rec.wi;
+    rec.wo = -rec.wi;
     rec.eta = 1.0f;
 
     return Color3f(1.f);

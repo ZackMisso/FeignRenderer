@@ -13,7 +13,9 @@ SimpleMaterial::SimpleMaterial(BSDFNode* bsdf)
 
 SimpleMaterial::~SimpleMaterial() { }
 
-BSDF* SimpleMaterial::getBSDF(const Intersection& its) const
+BSDF* SimpleMaterial::getBSDF(const Intersection& its,
+                              Color3f& mat_scale) const
 {
+    mat_scale = Color3f(1.f);
     return bsdf->bsdf;
 }

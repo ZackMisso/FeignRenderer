@@ -14,6 +14,7 @@ Ray3f::Ray3f()
     dir = Vector3f(0.f, 0.f, 1.f);
     near = Epsilon;
     far = std::numeric_limits<double>::infinity();
+    depth = 0;
 }
 
 Ray3f::Ray3f(Vector3f d) : dir(d)
@@ -21,16 +22,18 @@ Ray3f::Ray3f(Vector3f d) : dir(d)
     origin = Point3f(0.f);
     near = Epsilon;
     far = std::numeric_limits<double>::infinity();
+    depth = 0;
 }
 
 Ray3f::Ray3f(Point3f o, Vector3f d) : origin(o), dir(d)
 {
     near = Epsilon;
     far = std::numeric_limits<double>::infinity();
+    depth = 0;
 }
 
-Ray3f::Ray3f(Point3f o, Vector3f d, Float n, Float f)
-    : origin(o), dir(d), near(n), far(f)
+Ray3f::Ray3f(Point3f o, Vector3f d, Float n, Float f, uint32_t depth)
+    : origin(o), dir(d), near(n), far(f), depth(depth)
 { }
 
 Ray3f::Ray3f(const Ray3f& other)
@@ -39,6 +42,7 @@ Ray3f::Ray3f(const Ray3f& other)
     dir = other.dir;
     near = other.near;
     far = other.far;
+    depth = other.depth;
 }
 
 Point3f Ray3f::operator()(Float t) const

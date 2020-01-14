@@ -239,6 +239,8 @@ void ObjMesh::infoDump()
     //     std::cout << vs[i][0] << " " << vs[i][1] << " " << vs[i][2] << std::endl;
     // }
 
+    bbox.infoDump();
+
     LOG("post dump");
 }
 

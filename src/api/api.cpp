@@ -592,6 +592,23 @@ void FeignRenderer::fr_material(std::string name,
                                                    mesh_bsdf,
                                                    params->threshold);
     }
+    else if (type == "radar")
+    {
+        RadarMaterial::Params* params = (RadarMaterial::Params*)material_data;
+
+        BSDFNode* radar_bsdf = getInstance()->find_bsdf(params->radar_bsdf);
+        BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
+
+        material->material = new RadarMaterial(radar_bsdf,
+                                               mesh_bsdf,
+                                               params->start_points,
+                                               params->end_dist,
+                                               params->start_times,
+                                               params->end_times,
+                                               params->band_width,
+                                               params->fall_off,
+                                               params->proxy);
+    }
     else
     {
         throw new FeignRendererException("material type not recognized: " + type);
@@ -618,6 +635,11 @@ void FeignRenderer::fr_bsdf(std::string name,
     {
         Mirror::Params* params = (Mirror::Params*)bsdf_data;
         bsdf->bsdf = new Mirror(params->albedo);
+    }
+    // TODO: there should not be two null bsdfs
+    else if (type == "nullbsdf")
+    {
+        bsdf->bsdf = new NullBSDF();
     }
     else if (type == "null")
     {

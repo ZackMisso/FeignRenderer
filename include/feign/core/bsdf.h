@@ -133,7 +133,7 @@ public:
     virtual Color3f eval(const BSDFQuery& rec) const;
     virtual Float pdf(const BSDFQuery& rec) const;
 
-    virtual bool isDelta() const { return false; }
+    virtual bool isDelta() const { return true; }
 };
 /////////////////////////////////////////////////
 

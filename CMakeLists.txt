@@ -206,6 +206,7 @@ add_executable(feign
     # Material implementation files
     src/materials/simple.cpp
     src/materials/wireframe.cpp
+    src/materials/radar.cpp
 
     # Math implementation files
     src/math/transform.cpp

@@ -17,7 +17,7 @@ struct Ray3f
     Ray3f();
     Ray3f(Vector3f d);
     Ray3f(Point3f o, Vector3f d);
-    Ray3f(Point3f o, Vector3f d, Float n, Float f);
+    Ray3f(Point3f o, Vector3f d, Float n, Float f, uint32_t depth = 0);
     Ray3f(const Ray3f& other);
 
     Point3f operator()(Float t) const;

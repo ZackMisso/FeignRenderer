@@ -17,7 +17,7 @@ static void neon_intro()
     // std::vector<imedit::Pixel> color_map = std::vector<imedit::Pixel>();
     // imedit::color_map_inferno(color_map);
 
-    int start_frame = 0;
+    int start_frame = 503;
     int end_frame = 600;
 
     for (int i = start_frame; i < end_frame; ++i)

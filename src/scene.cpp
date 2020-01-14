@@ -101,9 +101,15 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
-const BSDF* Scene::getShapeBSDF(const Intersection& its) const
+const BSDF* Scene::getShapeBSDF(const Intersection& its, Color3f& mat_scale) const
 {
+    // LOG("getting shape bsdf");
     // this is really gross to look at, figure out how to make this look nicer
     int id = its.intersected_mesh->getInstID();
-    return objects[id]->material->material->getBSDF(its);
+    // LOG("what");
+    // if (objects[id]->material)
+    //     LOG("material exists");
+    // if (objects[id]->material->material)
+    //     LOG("materials material exists");
+    return objects[id]->material->material->getBSDF(its, mat_scale);
 }
