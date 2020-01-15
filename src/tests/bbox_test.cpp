@@ -1,11 +1,11 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Anyone has permission to use the following code as long as proper
- * acknowledgement is provided to the original author.
+ * acknowledgement is provided to the original author(s).
  **/
- 
+
 #include <tests/bbox_test.h>
 #include <feign/math/bbox.h>
 #include <feign/math/ray.h>

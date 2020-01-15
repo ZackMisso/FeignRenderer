@@ -24,8 +24,8 @@ static void jan_5_2020()
     // system(rm_command.c_str());
     // system(mkdir_command.c_str());
 
-    int start_frame = 180;
-    int end_frame = 270;
+    int start_frame = 670;
+    int end_frame = 720;
 
     for (int i = start_frame; i < end_frame; i++)
     {

@@ -1,11 +1,10 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
-
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
@@ -45,7 +44,6 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
     // TODO: create a method to sample all emitters in base integrator
     if (!bsdf->isDelta()) // TODO: is this the best way of handling this
     {
-        // LOG("emitters size:", (int)emitters.size());
         for (int i = 0; i < emitters.size(); ++i)
         {
             EmitterQuery eqr(its.p);
@@ -65,25 +63,15 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
             if (cos_term < -Epsilon) cos_term = -cos_term;
 
-            // if (ray.depth >= 1)
-            // {
-            //     LOG("bsdf_val:", bsdf_val);
-            //     LOG("cos_term:", cos_term);
-            // }
-
             Ray3f shadow_ray(its.p,
                              eqr.wi,
                              Epsilon,
                              sqrt(eqr.sqr_dist));
 
             Intersection tmp;
-            // TODO: global check
-            if (!scene->intersect(shadow_ray, tmp) || true)
+
+            if (!scene->intersect(shadow_ray, tmp) || global_params.ignore_shadow_checks)
             {
-                // if (ray.depth >= 1)
-                // {
-                //     LOG("COUNTS");
-                // }
                 result += bsdf_val * Li * cos_term;
             }
         }

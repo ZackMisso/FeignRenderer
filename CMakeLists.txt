@@ -159,7 +159,6 @@ add_executable(feign
     # Implementation files
     src/main.cpp
     src/scene.cpp
-    src/node.cpp
 
     # Accel implementation files
     src/accel/accel.cpp
@@ -238,6 +237,8 @@ add_executable(feign
 
     # Shader implementation files
     src/shaders/interp_verts_to_sphere.cpp
+    src/shaders/material.cpp
+    src/shaders/simple_material.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp

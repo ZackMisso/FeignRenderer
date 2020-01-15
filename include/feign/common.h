@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -44,6 +44,14 @@
 #define INV_FOURPI   0.07957747154594766788f
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
+
+// a list of global parameters
+struct GlobalParams
+{
+    bool ignore_shadow_checks = true;
+};
+
+static GlobalParams global_params;
 
 // MeshTypes are used to verify that geometry shaders are valid
 enum MeshType

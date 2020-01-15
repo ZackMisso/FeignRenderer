@@ -1,6 +1,54 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.1.1
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/misc/intersection.h>
+
+// this struct represents what is returned from the material shader when it
+// gets evaluated
+struct MaterialClosure
+{
+    // TODO
+    MaterialClosure();
+};
+
+// material shaders manipulate and control the actual materials which are on objects.
+// These shaders are also the entry point for the information which integrators
+// get while evaluating materials.
+struct MaterialShader
+{
+public:
+    virtual ~MaterialShader();
+
+    virtual MaterialClosure evaluate(const Intersection& its) const;
+    // not sure if validation is really necessary
+    // virtual bool isValid();
+};
+
+// // a simple material shader which just evaluates one material
+// struct SimpleMaterialShader
+// {
+//     struct Params
+//     {
+//         Params(std::string material)
+//             : material(material) { }
+//
+//         std::string material;
+//     };
+//
+//     SimpleMaterialShader(MaterialNode* material);
+//
+//     virtual MaterialClosure evaluate(const Intersection& its);
+//
+//     MaterialNode* material;
+// };
 
 // geometry shaders manipulate the vertices, normals, and triangles directly.
 // These shaders do not manipulate the lighting but instead the physical locations
@@ -42,7 +90,7 @@ public:
 };
 
 /////////////////////////////////////////////////
-// Object Node structure
+// Geometry Shader Node structure
 /////////////////////////////////////////////////
 struct GeometryShaderNode : public Node
 {
@@ -53,5 +101,20 @@ public:
     ~GeometryShaderNode() { delete shader; }
 
     GeometryShader* shader;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Material Shader Node structure
+/////////////////////////////////////////////////
+struct MaterialShaderNode : public Node
+{
+public:
+    MaterialShaderNode() : shader(nullptr) { }
+    MaterialShaderNode(std::string name) : Node(name), shader(nullptr) { }
+
+    ~MaterialShaderNode() { delete shader; }
+
+    MaterialShader* shader;
 };
 /////////////////////////////////////////////////

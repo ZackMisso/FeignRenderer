@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -25,12 +25,6 @@
 #include <feign/core/shader.h>
 #include <feign/core/texture.h>
 #include <unordered_map>
-
-// OLD
-///usr/local/bin:/usr/local/opt/llvm/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:
-
-// NEW
-///usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:
 
 // The end goal is to design all of this so it can be specified by a node graph
 // but it also needs to retain speed
@@ -62,6 +56,7 @@ public:
     std::unordered_map<std::string, ObjectNode*> objects;
     std::unordered_map<std::string, MeshNode*> meshes;
     std::unordered_map<std::string, GeometryShaderNode*> geom_shaders;
+    std::unordered_map<std::string, MaterialShaderNode*> material_shaders;
     std::unordered_map<std::string, TextureNode*> textures;
 
     BSDFNode*           find_bsdf(std::string name);
@@ -75,6 +70,7 @@ public:
     ObjectNode*         find_object(std::string name);
     MeshNode*           find_mesh(std::string name);
     GeometryShaderNode* find_geometry_shader(std::string name);
+    MaterialShaderNode* find_material_shader(std::string name);
     TextureNode*        find_texture(std::string name);
 
     static void initialize();
@@ -104,15 +100,11 @@ public:
                           std::string material,
                           int index = -1); // what is this index parameter again
 
-    // static void fr_mesh(std::string name,
-    //                     std::string type,
-    //                     std::string filename,
-    //                     std::string shader = "");
-
     static void fr_mesh(std::string name,
                         std::string type,
                         void* mesh_data);
 
+    // TODO: should this be separated into the different shaders?
     static void fr_shader(std::string name,
                           std::string type,
                           void* shader_data);

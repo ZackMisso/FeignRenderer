@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Based off Wenzel Jakob's implementation in Nori
  *

@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Last Edited:   10.12.2019
+ * Version:   0.1.1
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -42,6 +42,7 @@ FeignRenderer::FeignRenderer()
     objects = std::unordered_map<std::string, ObjectNode*>();
     meshes = std::unordered_map<std::string, MeshNode*>();
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode*>();
+    material_shaders = std::unordered_map<std::string, MaterialShaderNode*>();
     textures = std::unordered_map<std::string, TextureNode*>();
 
     bsdfs.clear();
@@ -55,6 +56,7 @@ FeignRenderer::FeignRenderer()
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
+    material_shaders.clear();
     textures.clear();
 
     current_transform = Transform();
@@ -63,8 +65,6 @@ FeignRenderer::FeignRenderer()
 
 FeignRenderer::~FeignRenderer()
 {
-    LOG("cleaning up");
-
     for (auto it : bsdfs) delete it.second;
     for (auto it : cameras) delete it.second;
     for (auto it : emitters) delete it.second;
@@ -76,6 +76,7 @@ FeignRenderer::~FeignRenderer()
     for (auto it : objects) delete it.second;
     for (auto it : meshes) delete it.second;
     for (auto it : geom_shaders) delete it.second;
+    for (auto it : material_shaders) delete it.second;
     for (auto it : textures) delete it.second;
 
     delete scene;
@@ -93,6 +94,7 @@ FeignRenderer::~FeignRenderer()
     meshes.clear();
     geom_shaders.clear();
     textures.clear();
+    material_shaders.clear();
 }
 
 void FeignRenderer::initialize()
@@ -274,6 +276,22 @@ GeometryShaderNode* FeignRenderer::find_geometry_shader(std::string name)
     {
         GeometryShaderNode* node = new GeometryShaderNode(name);
         geom_shaders.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+MaterialShaderNode* FeignRenderer::find_material_shader(std::string name)
+{
+    std::unordered_map<std::string, MaterialShaderNode*>::const_iterator itr = material_shaders.find(name);
+
+    if (itr == material_shaders.end())
+    {
+        MaterialShaderNode* node = new MaterialShaderNode(name);
+        material_shaders.insert({name, node});
         return node;
     }
     else
