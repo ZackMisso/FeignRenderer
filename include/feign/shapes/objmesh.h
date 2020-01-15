@@ -42,7 +42,7 @@ public:
     float pdf(uint32_t index) const;
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
-    virtual bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
+    bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
 
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 

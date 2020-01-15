@@ -2,24 +2,20 @@
  * Author:    Zackary Misso
  * Version:   0.1.1
  *
+ * This util was implemented based off of Benedikt Bitterli's code here:
+ * https://github.com/tunabrain/tungsten/blob/master/src/core/renderer/TraceableScene.hpp
+ *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #pragma once
 
-// This util was implemented based off of:
-// https://github.com/tunabrain/tungsten/blob/master/src/core/renderer/TraceableScene.hpp
-
 #include <feign/math/bbox.h>
 #include <feign/math/ray.h>
 #include <feign/math/vector.h>
 #include <embree3/rtcore.h>
 #include <embree3/rtcore_ray.h>
-
-// TODO: Namespace everything
-// namespace feign
-// {
 
 namespace EmbreeUtil
 {

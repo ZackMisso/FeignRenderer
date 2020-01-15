@@ -18,6 +18,7 @@
 #include "../scenes/month_of_shaders/jan_3_2020.h"
 #include "../scenes/month_of_shaders/jan_4_2020.h"
 #include "../scenes/month_of_shaders/jan_5_2020.h"
+#include "../scenes/month_of_shaders/jan_6_2020.h"
 
 void run_scene(std::string scene_name)
 {

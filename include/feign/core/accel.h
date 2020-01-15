@@ -87,10 +87,14 @@ protected:
 };
 /////////////////////////////////////////////////
 
+// TODO: make a combined embree + sdf acceleration structure
 /////////////////////////////////////////////////
-// Naive Acceleration Structure
+// SDF Acceleration Structure
 /////////////////////////////////////////////////
-class NaiveAccel : public Accel
+// This acceleration structure is used in scenes where only sign distance
+// functions exist
+/////////////////////////////////////////////////
+class SDFAccel : public Accel
 {
     virtual void preProcess();
     virtual void clear();

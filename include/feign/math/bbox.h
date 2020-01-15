@@ -33,6 +33,7 @@ struct BBox3
         max = tlc + Vec3<T>(w, h, d);
     }
 
+    // TODO: blc should be renamed to brc
     BBox3(Vec3<T> tlc, Vec3<T> blc)
     {
         // The following assert breaks when both min and max have been reset

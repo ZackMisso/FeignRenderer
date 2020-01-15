@@ -21,6 +21,9 @@
 struct e_Vertex   { float x,y,z,r;  };
 struct e_Triangle { int v0, v1, v2; };
 
+/////////////////////////////////////////////////
+// Shape abstraction
+/////////////////////////////////////////////////
 class Shape
 {
 public:
@@ -32,20 +35,11 @@ public:
         return false;
     }
 
-    virtual bool intersect(uint32_t tri,
-                           const Ray3f& scene_ray,
-                           Intersection& its) const
-    {
-       return false;
-    }
-
     virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const = 0;
     virtual uint32_t primitiveCount() const = 0;
 
     virtual BBox3f boundingBox() const = 0;
-    virtual BBox3f boundingBox(uint32_t tri) const = 0;
     virtual Point3f centroid() const = 0;
-    virtual Point3f centroid(uint32_t tri) const = 0;
 
     virtual void preProcess() { }
 
@@ -58,12 +52,88 @@ public:
     void setInstID(unsigned int val) { instID = val; }
 
     Transform transform;
-
     GeometryShaderNode* geomShader;
 protected:
     unsigned int geomID;
     unsigned int instID;
 };
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Function Shape
+/////////////////////////////////////////////////
+class SDFShape : public Shape
+{
+    SDFShape() { }
+    ~SDFShape() { }
+
+    virtual float evaluate(Point3f pt) const = 0;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Function Sphere shape
+/////////////////////////////////////////////////
+class SDFSphere : public SDFShape
+{
+    struct Params
+    {
+        Params(Point3f center, Float radius)
+            : center(center), radius(radius) { }
+
+        Point3f center;
+        Float radius;
+    };
+
+    SDFSphere(Point3f center, Float radius);
+    ~SDFSphere();
+
+    virtual Float evaluate(Point3f pt) const;
+
+    virtual BBox3f boundingBox() const;
+    virtual Point3f centroid() const;
+
+    virtual uint32_t primitiveCount() const { return 1; }
+
+    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
+
+protected:
+    Point3f center;
+    Float radius;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Function Box shape
+/////////////////////////////////////////////////
+class SDFBox : public SDFShape
+{
+    struct Params
+    {
+        Params(Point3f tlc, Point3f brc)
+            : tlc(tlc), brc(brc) { }
+
+        Point3f tlc;
+        Point3f brc;
+    };
+
+    SDFBox(Point3f tlc, Point3f brc);
+    ~SDFBox();
+
+    virtual Float evaluate(Point3f pt) const;
+
+    virtual BBox3f boundingBox() const;
+    virtual Point3f centroid() const;
+
+    virtual uint32_t primitiveCount() const { return 1; }
+
+    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
+
+protected:
+    Point3f tlc;
+    Point3f brc;
+};
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // Mesh Node structure

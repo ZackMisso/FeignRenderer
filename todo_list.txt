@@ -1,12 +1,12 @@
 TODO notes:
 
 remake shader system so that shaders are evaluated first instead of materials
-get automated tests to work
-change objects to take in param structs instead of each individual variable
 create distant light sources
 create directional light sources
 implement path tracer
 implement volumetric path tracer
+get automated tests to work
+change objects to take in param structs instead of each individual variable
 rethink the current structure for evaluating bsdfs
 create automated scene testing
 implement operator accessors on all nodes to simplify text
@@ -18,4 +18,4 @@ implement individual functions for each object type in the json parser for
     cleaner and clearer code
 parallelize the parsing code
 start planning shader frameworks
-create my own memory allocator
+create my own memory allocator - ambitious

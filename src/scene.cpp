@@ -40,8 +40,15 @@ void Scene::preProcess()
 {
     if (!ray_accel)
     {
-        ray_accel = new EmbreeAccel();
-        // ray_accel = new NaiveAccel();
+        if (global_params.sdf_only)
+        {
+            ray_accel = new SDFAccel();
+        }
+        else
+        {
+            ray_accel = new EmbreeAccel();
+        }
+
         ray_accel->preProcess();
     }
 

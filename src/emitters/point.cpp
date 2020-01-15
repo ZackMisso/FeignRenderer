@@ -17,7 +17,6 @@ PointEmitter::PointEmitter(Color3f I,
     // does nothing
 }
 
-// void PointEmitter::preProcess() { preProcessChildren(); }
 void PointEmitter::preProcess() { }
 
 Color3f PointEmitter::sample_li(EmitterQuery& rec,

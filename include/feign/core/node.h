@@ -17,7 +17,7 @@ public:
     Node(std::string name) : name(name) { }
     virtual ~Node() { }
 
-    virtual void print() const { }
+    virtual void print() const { } // TODO: remove this
 
-    std::string name;       // user/scene defined name
+    std::string name;
 };

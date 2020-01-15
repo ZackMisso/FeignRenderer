@@ -21,7 +21,7 @@
 #include <imedit/image.h>
 #include <imedit/im_color_maps.h>
 
-// TODO: remove this
+// TODO: remove this so everyone forgets im a star fox fanboy
 // personal laptop
 #define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
 // misc laptop
@@ -48,7 +48,8 @@
 // a list of global parameters
 struct GlobalParams
 {
-    bool ignore_shadow_checks = true;
+    bool ignore_shadow_checks = true; // ignores shadow checks when determining light contribution
+    bool sdf_only = false;            // tells the renderer whether or not it is rendering signed distance fields
 };
 
 static GlobalParams global_params;
@@ -63,13 +64,6 @@ enum MeshType
 // uncomment the following for desired types
 typedef float Float;
 // typedef double Float;
-
-// TODO: do i want to use these?
-typedef int Int;
-// typedef long Int;
-
-typedef uint32_t uInt;
-// typedef uint64_t uInt;
 
 // vector and matrix types
 // these have no geometric meaning
@@ -95,7 +89,10 @@ typedef Matrix4<Float> Matrix4f;
 
 typedef imedit::Image Imagef;
 
-inline Float degToRad(Float value) { return value * (M_PI / 180.0); }
+inline Float degToRad(Float value)
+{
+    return value * (M_PI / 180.0);
+}
 
 inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
 {
@@ -103,6 +100,7 @@ inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
     *_cos = cosf(theta);
 }
 
+// logging methods to avoid typing std::cout/std::endl everywhere
 inline void LOG(std::string val)
 {
     std::cout << val << std::endl;

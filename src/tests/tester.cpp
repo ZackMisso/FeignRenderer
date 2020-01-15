@@ -13,6 +13,9 @@
 #include <tests/ray_intersect_test.h>
 #include <tests/json_test.h>
 
+// NOTE: this is a renderer, my unit tests are going to be converted to all
+//       running and comparing renders instead of these individual unit tests
+
 UnitTestManager::UnitTestManager() {
     // does nothing for now
 }

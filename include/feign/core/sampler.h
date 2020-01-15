@@ -84,8 +84,6 @@ public:
 
     virtual void nextSample();
 
-    // virtual std::string getName() const;
-
 protected:
     pcg32 rng;
 };
@@ -114,7 +112,6 @@ public:
     virtual Sampler* copy(uint32_t seed);
 
     virtual void nextSample();
-    // virtual std::string getName() const;
 
 protected:
 };
@@ -143,7 +140,6 @@ public:
     virtual Sampler* copy(uint32_t seed);
 
     virtual void nextSample();
-    // virtual std::string getName() const;
 
 protected:
 };

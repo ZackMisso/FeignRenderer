@@ -88,7 +88,8 @@ else()
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -flto -Wno-unused-result -fno-strict-aliasing -Wlto-type-mismatch")
 endif()
 
-
+# all of these files are listed out instead of using * notation because
+# it avoids having to rebuild the entire project when you add a new file
 add_executable(feign
     # Header files
     include/feign/common.h
@@ -108,9 +109,6 @@ add_executable(feign
     include/feign/core/shape.h
     include/feign/core/shader.h
     include/feign/core/texture.h
-
-    # Logger header files
-    include/feign/log/logger.h
 
     # Math header files
     include/feign/math/transform.h
@@ -162,8 +160,8 @@ add_executable(feign
 
     # Accel implementation files
     src/accel/accel.cpp
-    src/accel/naive.cpp
     src/accel/embree.cpp
+    src/accel/sdf.cpp
 
     # Api implementation files
     src/api/api.cpp
@@ -198,9 +196,6 @@ add_executable(feign
     src/integrators/whitted.cpp
     src/integrators/cosine_term.cpp
     src/integrators/barycentric.cpp
-
-    # Logger implementation files
-    src/log/logger.cpp
 
     # Material implementation files
     src/materials/simple.cpp
@@ -245,6 +240,8 @@ add_executable(feign
     src/shapes/objmesh.cpp
     src/shapes/triangle.cpp
     src/shapes/grid_obj.cpp
+    src/shapes/sdf_sphere.cpp
+    src/shapes/sdf_box.cpp
 
     # Stats implementation files
     src/stats/clocker.cpp
