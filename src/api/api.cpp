@@ -601,31 +601,33 @@ void FeignRenderer::fr_material(std::string name,
     }
     else if (type == "wireframe")
     {
-        WireframeMaterial::Params* params = (WireframeMaterial::Params*)material_data;
-
-        BSDFNode* wireframe_bsdf = getInstance()->find_bsdf(params->wireframe_bsdf);
-        BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
-
-        material->material = new WireframeMaterial(wireframe_bsdf,
-                                                   mesh_bsdf,
-                                                   params->threshold);
+        throw new FeignRendererException("zack broke this too");
+        // WireframeMaterial::Params* params = (WireframeMaterial::Params*)material_data;
+        //
+        // BSDFNode* wireframe_bsdf = getInstance()->find_bsdf(params->wireframe_bsdf);
+        // BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
+        //
+        // material->material = new WireframeMaterial(wireframe_bsdf,
+        //                                            mesh_bsdf,
+        //                                            params->threshold);
     }
     else if (type == "radar")
     {
-        RadarMaterial::Params* params = (RadarMaterial::Params*)material_data;
-
-        BSDFNode* radar_bsdf = getInstance()->find_bsdf(params->radar_bsdf);
-        BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
-
-        material->material = new RadarMaterial(radar_bsdf,
-                                               mesh_bsdf,
-                                               params->start_points,
-                                               params->end_dist,
-                                               params->start_times,
-                                               params->end_times,
-                                               params->band_width,
-                                               params->fall_off,
-                                               params->proxy);
+        throw new FeignRendererException("zack broke this");
+        // RadarMaterial::Params* params = (RadarMaterial::Params*)material_data;
+        //
+        // BSDFNode* radar_bsdf = getInstance()->find_bsdf(params->radar_bsdf);
+        // BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
+        //
+        // material->material = new RadarMaterial(radar_bsdf,
+        //                                        mesh_bsdf,
+        //                                        params->start_points,
+        //                                        params->end_dist,
+        //                                        params->start_times,
+        //                                        params->end_times,
+        //                                        params->band_width,
+        //                                        params->fall_off,
+        //                                        params->proxy);
     }
     else
     {

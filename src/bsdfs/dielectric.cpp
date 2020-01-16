@@ -67,8 +67,3 @@ Color3f Dielectric::eval(const BSDFQuery& rec) const
 {
     return Color3f(0.0f);
 }
-
-Float Dielectric::pdf(const BSDFQuery& rec) const
-{
-    return 0.0f;
-}

@@ -45,8 +45,7 @@ public:
 
     void addEmitter(Emitter* emitter);
 
-    const BSDF* getShapeBSDF(const Intersection& its,
-                             Color3f& mat_scale) const;
+    const Material* getShapeMaterial(const Intersection& its) const;
 
     // TODO: should these really be public...
 public:

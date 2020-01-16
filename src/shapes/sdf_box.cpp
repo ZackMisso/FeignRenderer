@@ -8,8 +8,8 @@
 
  #include <feign/core/shape.h>
 
-SDFBox::SDFBox(Point3f center, Float radius)
-    : center(center), radius(radius) { }
+SDFBox::SDFBox(Point3f tlc, Point3f brc)
+    : tlc(tlc), brc(brc) { }
 
 Float SDFBox::evaluate(Point3f pt) const
 {
@@ -33,5 +33,5 @@ Point3f SDFBox::centroid() const
 void SDFBox::completeIntersectionInfo(const Ray3f& ray,
                                          Intersection& its) const
 {
-    .throw new NotImplementedException("sdf sphere completeIntersectionInfo");
+    throw new NotImplementedException("sdf box completeIntersectionInfo");
 }

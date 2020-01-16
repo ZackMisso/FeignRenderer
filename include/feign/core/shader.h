@@ -9,15 +9,8 @@
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/core/material.h>
 #include <feign/misc/intersection.h>
-
-// this struct represents what is returned from the material shader when it
-// gets evaluated
-struct MaterialClosure
-{
-    // TODO
-    MaterialClosure();
-};
 
 // material shaders manipulate and control the actual materials which are on objects.
 // These shaders are also the entry point for the information which integrators
@@ -25,30 +18,28 @@ struct MaterialClosure
 struct MaterialShader
 {
 public:
-    virtual ~MaterialShader();
+    virtual ~MaterialShader() { }
 
-    virtual MaterialClosure evaluate(const Intersection& its) const;
-    // not sure if validation is really necessary
-    // virtual bool isValid();
+    virtual MaterialClosure evaluate(const Intersection& its) const = 0;
 };
 
-// // a simple material shader which just evaluates one material
-// struct SimpleMaterialShader
-// {
-//     struct Params
-//     {
-//         Params(std::string material)
-//             : material(material) { }
-//
-//         std::string material;
-//     };
-//
-//     SimpleMaterialShader(MaterialNode* material);
-//
-//     virtual MaterialClosure evaluate(const Intersection& its);
-//
-//     MaterialNode* material;
-// };
+// a simple material shader which just evaluates one material
+struct SimpleMaterialShader
+{
+    struct Params
+    {
+        Params(std::string material)
+            : material(material) { }
+
+        std::string material;
+    };
+
+    SimpleMaterialShader(MaterialNode* material);
+
+    virtual MaterialClosure evaluate(const Intersection& its) const;
+
+    MaterialNode* material;
+};
 
 // geometry shaders manipulate the vertices, normals, and triangles directly.
 // These shaders do not manipulate the lighting but instead the physical locations

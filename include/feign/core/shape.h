@@ -64,6 +64,7 @@ protected:
 /////////////////////////////////////////////////
 class SDFShape : public Shape
 {
+public:
     SDFShape() { }
     ~SDFShape() { }
 
@@ -76,6 +77,7 @@ class SDFShape : public Shape
 /////////////////////////////////////////////////
 class SDFSphere : public SDFShape
 {
+public:
     struct Params
     {
         Params(Point3f center, Float radius)
@@ -108,6 +110,7 @@ protected:
 /////////////////////////////////////////////////
 class SDFBox : public SDFShape
 {
+public:
     struct Params
     {
         Params(Point3f tlc, Point3f brc)

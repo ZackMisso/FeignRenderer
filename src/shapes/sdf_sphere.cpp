@@ -36,5 +36,5 @@ Point3f SDFSphere::centroid() const
 void SDFSphere::completeIntersectionInfo(const Ray3f& ray,
                                          Intersection& its) const
 {
-    .throw new NotImplementedException("sdf sphere completeIntersectionInfo");
+    throw new NotImplementedException("sdf sphere completeIntersectionInfo");
 }

@@ -508,26 +508,27 @@ void JsonParser::parse(std::string filename)
             }
             else if (type == "wireframe")
             {
-                std::string wireframe_bsdf = "default";
-                std::string mesh_bsdf = "default";
-                float threshold = 0.01f;
-
-                if (value.HasMember("wireframe_bsdf"))
-                {
-                    wireframe_bsdf = value["wireframe_bsdf"].GetString();
-                }
-                if (value.HasMember("mesh_bsdf"))
-                {
-                    mesh_bsdf = value["mesh_bsdf"].GetString();
-                }
-                if (value.HasMember("threshold"))
-                {
-                    threshold = value["threshold"].GetFloat();
-                }
-
-                WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf, threshold);
-
-                FeignRenderer::fr_material(name, type, &params);
+                throw new FeignRendererException("zack broke this");
+                // std::string wireframe_bsdf = "default";
+                // std::string mesh_bsdf = "default";
+                // float threshold = 0.01f;
+                //
+                // if (value.HasMember("wireframe_bsdf"))
+                // {
+                //     wireframe_bsdf = value["wireframe_bsdf"].GetString();
+                // }
+                // if (value.HasMember("mesh_bsdf"))
+                // {
+                //     mesh_bsdf = value["mesh_bsdf"].GetString();
+                // }
+                // if (value.HasMember("threshold"))
+                // {
+                //     threshold = value["threshold"].GetFloat();
+                // }
+                //
+                // WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf, threshold);
+                //
+                // FeignRenderer::fr_material(name, type, &params);
             }
             else
             {

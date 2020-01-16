@@ -15,7 +15,6 @@
 #include <assert.h>
 
 #include <feign/math/vector.h>
-#include <feign/log/logger.h>
 
 // these are necessary defines for imedit
 #include <imedit/image.h>
@@ -67,14 +66,14 @@ typedef float Float;
 
 // vector and matrix types
 // these have no geometric meaning
-typedef Vec2<Int> Vec2i;
-typedef Vec2<uInt> Vec2u;
+typedef Vec2<int> Vec2i;
+typedef Vec2<uint32_t> Vec2u;
 typedef Vec2<Float> Vec2f;
-typedef Vec3<Int> Vec3i;
-typedef Vec3<uInt> Vec3u;
+typedef Vec3<int> Vec3i;
+typedef Vec3<uint32_t> Vec3u;
 typedef Vec3<Float> Vec3f;
-typedef Vec4<Int> Vec4i;
-typedef Vec4<uInt> Vec4u;
+typedef Vec4<int> Vec4i;
+typedef Vec4<uint32_t> Vec4u;
 typedef Vec4<Float> Vec4f;
 
 // these represent actual geometric primitives

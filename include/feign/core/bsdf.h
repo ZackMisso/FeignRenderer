@@ -22,8 +22,9 @@ struct BSDFQuery
     Point3f pos;
 
     Float eta;
+    Float pdf;
 
-    bool isDiffuse;
+    bool isDelta;
 
     BSDFQuery(const Vector3f& wi,
               const Point2f& uv,
@@ -60,7 +61,6 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const = 0;
     virtual Color3f eval(const BSDFQuery& rec) const = 0;
-    virtual Float pdf(const BSDFQuery& rec) const = 0;
 
     // TODO: remove this method
     virtual bool isDelta() const = 0;
@@ -85,7 +85,6 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;
-    virtual Float pdf(const BSDFQuery& rec) const;
 
     virtual bool isDelta() const { return false; }
 
@@ -112,7 +111,6 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;
-    virtual Float pdf(const BSDFQuery& rec) const;
 
     virtual bool isDelta() const { return true; }
 
@@ -131,7 +129,6 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;
-    virtual Float pdf(const BSDFQuery& rec) const;
 
     virtual bool isDelta() const { return true; }
 };
@@ -155,7 +152,6 @@ public:
 
     virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
     virtual Color3f eval(const BSDFQuery& rec) const;
-    virtual Float pdf(const BSDFQuery& rec) const;
 
     virtual bool isDelta() const { return false; }
 
@@ -176,6 +172,8 @@ public:
     BSDFNode(BSDF* bsdf) : bsdf(bsdf) { }
 
     ~BSDFNode() { delete bsdf; }
+
+    BSDF* operator()() { return bsdf; }
 
     BSDF* bsdf;
 };

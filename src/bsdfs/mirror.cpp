@@ -34,8 +34,3 @@ Color3f Mirror::eval(const BSDFQuery& rec) const
 {
     return Color3f(0.f);
 }
-
-Float Mirror::pdf(const BSDFQuery& rec) const
-{
-    return 0.f;
-}

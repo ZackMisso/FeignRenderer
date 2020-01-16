@@ -101,6 +101,7 @@ add_executable(feign
     include/feign/core/api.h
     include/feign/core/bsdf.h
     include/feign/core/camera.h
+    include/feign/core/closure.h
     include/feign/core/emitter.h
     include/feign/core/recon_filter.h
     include/feign/core/integrator.h
@@ -232,7 +233,6 @@ add_executable(feign
 
     # Shader implementation files
     src/shaders/interp_verts_to_sphere.cpp
-    src/shaders/material.cpp
     src/shaders/simple_material.cpp
 
     # Shapes implementation files

@@ -23,8 +23,3 @@ Color3f NullBSDF::eval(const BSDFQuery& rec) const
 {
     return Color3f(1.f);
 }
-
-Float NullBSDF::pdf(const BSDFQuery& rec) const
-{
-    return 1.f;
-}
