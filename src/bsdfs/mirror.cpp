@@ -13,24 +13,29 @@
 Mirror::Mirror(Color3f albedo)
     : BSDF(), albedo(albedo) { }
 
-Color3f Mirror::sample(BSDFQuery& rec, const Point2f& sample) const
+// Color3f Mirror::sample(BSDFQuery& rec, const Point2f& sample) const
+void Mirror::sample(MaterialClosure& closure) const
 {
-    if (CoordinateFrame::cosTheta(rec.wi) <= 0)
+    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
-        return Color3f(0.f, 0.f, 0.f);
+        closure.albedo = Color3f(0.f);
     }
+    else
+    {
+        // assert(false);
+        closure.wo = Vector3f(
+            -closure.wi(0),
+            -closure.wi(1),
+             closure.wi(2)
+        );
 
-    rec.wo = Vector3f(
-        -rec.wi(0),
-        -rec.wi(1),
-         rec.wi(2)
-    );
-    rec.eta = 1.0f;
-
-    return albedo;
+        closure.eta = 1.0f;
+        closure.albedo = albedo;
+    }
 }
 
-Color3f Mirror::eval(const BSDFQuery& rec) const
+// Color3f Mirror::eval(const BSDFQuery& rec) const
+void Mirror::evaluate(MaterialClosure& closure) const
 {
-    return Color3f(0.f);
+    closure.albedo = Color3f(0.f);
 }

@@ -36,12 +36,17 @@
     "object": {
         "name": "floor",
         "mesh": "plane",
-        "material": "diffuse_material",
+        "material_shader": "simple_shader",
         "scale": [
             100.0,
             1.0,
             100.0
         ]
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "material": "diffuse_material"
     },
     "mesh": {
         "name": "plane",
@@ -51,7 +56,7 @@
     "object": {
         "name": "ajax",
         "mesh": "ajax_obj",
-        "material": "diffuse_material"
+        "material_shader": "simple_shader"
     },
     "mesh": {
         "name": "ajax_obj",
@@ -60,6 +65,7 @@
     },
     "material": {
         "name": "diffuse_material",
+        "type": "simple",
         "bsdf": "diffuse_bsdf"
     },
     "bsdf": {

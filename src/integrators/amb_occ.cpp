@@ -37,8 +37,8 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
     }
 
     Point2f point = sampler->next2D();
-    Vector3f sample_dir = WarpSpace::squareToCosineHemisphere(point);
-    Float pdf = WarpSpace::squareToCosineHemispherePdf(sample_dir);
+    Vector3f sample_dir = WarpSpace::sqrToCosHemi(point);
+    Float pdf = WarpSpace::sqrToCosHemiPdf(sample_dir);
 
     Ray3f shadow_ray(its.p,
                      its.toWorldGeom(sample_dir),

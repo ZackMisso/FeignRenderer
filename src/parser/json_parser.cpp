@@ -270,9 +270,10 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "object") == 0)
         {
+            LOG("parsing object");
             std::string name = "obj";
             std::string mesh = "default";
-            std::string material = "null";
+            std::string material_shader = "null";
 
             const rapidjson::Value& value = itr->value;
 
@@ -291,9 +292,9 @@ void JsonParser::parse(std::string filename)
                 {
                     mesh = value_2.GetString();
                 }
-                else if (strcmp(itr_2->name.GetString(), "material") == 0)
+                else if (strcmp(itr_2->name.GetString(), "material_shader") == 0)
                 {
-                    material = value_2.GetString();
+                    material_shader = value_2.GetString();
                 }
                 else if (strcmp(itr_2->name.GetString(), "scale") == 0)
                 {
@@ -318,12 +319,15 @@ void JsonParser::parse(std::string filename)
 
             FeignRenderer::fr_object(name,
                                      mesh,
-                                     material);
+                                     material_shader);
 
             FeignRenderer::fr_clear_transform();
+
+            LOG("finished parsing object");
         }
         else if (strcmp(itr->name.GetString(), "mesh") == 0)
         {
+            LOG("parsing mesh");
             std::string name = "mesh";
             std::string type = "default";
 
@@ -389,13 +393,14 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
-            // LOG("emitter");
+            // assert(false);
+            LOG("parsing emitter");
             std::string name = "emitter";
             std::string type = "point";
             std::string mesh = "null";
             std::string material = "null";
-            Vector3f pos = Vector3f(0.f);
-            Color3f intensity = Color3f(1.f);
+            // Vector3f pos = Vector3f(0.f);
+            // Color3f intensity = Color3f(1.f);
 
             const rapidjson::Value& value = itr->value;
 
@@ -446,21 +451,25 @@ void JsonParser::parse(std::string filename)
 
             if (type == "point")
             {
+                // assert(false);
                 Vector3f pos = Vector3f(0.f);
                 Color3f intensity = Color3f(1.f);
 
                 if (value.HasMember("position"))
                 {
-                    pos[0] = value[0].GetFloat();
-                    pos[1] = value[1].GetFloat();
-                    pos[2] = value[2].GetFloat();
+                    // assert(false);
+                    pos[0] = value["position"][0].GetFloat();
+                    pos[1] = value["position"][1].GetFloat();
+                    pos[2] = value["position"][2].GetFloat();
                 }
-                else if (value.HasMember("intensity"))
+                if (value.HasMember("intensity"))
                 {
-                    intensity[0] = value[0].GetFloat();
-                    intensity[1] = value[1].GetFloat();
-                    intensity[2] = value[2].GetFloat();
+                    // assert(false);
+                    intensity[0] = value["intensity"][0].GetFloat();
+                    intensity[1] = value["intensity"][1].GetFloat();
+                    intensity[2] = value["intensity"][2].GetFloat();
                 }
+                // assert(false);
 
                 PointEmitter::Params params(intensity, pos);
 
@@ -479,6 +488,7 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "material") == 0)
         {
+            LOG("parsing material");
             std::string name = "material";
             std::string type = "simple";
 
@@ -537,6 +547,7 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "bsdf") == 0)
         {
+            LOG("parsing bsdf");
             std::string name = "bsdf";
             std::string type = "diffuse";
 
@@ -553,7 +564,7 @@ void JsonParser::parse(std::string filename)
 
             if (type == "diffuse")
             {
-                Color3f albedo = Color3f(1.f);
+                Color3f albedo = Color3f(1.0f);
 
                 if (value.HasMember("albedo"))
                 {
@@ -588,9 +599,9 @@ void JsonParser::parse(std::string filename)
         }
         else if (strcmp(itr->name.GetString(), "shader") == 0)
         {
+            LOG("parsing shader");
             std::string name = "shader";
             std::string type = "none";
-
 
             const rapidjson::Value& value = itr->value;
 
@@ -618,6 +629,19 @@ void JsonParser::parse(std::string filename)
                 }
 
                 InterpVertsToSphereShader::Params params(prop, proxy);
+
+                FeignRenderer::fr_shader(name, type, &params);
+            }
+            else if (type == "simple_material")
+            {
+                std::string material = "defualt";
+
+                if (value.HasMember("material"))
+                {
+                    material = value["material"].GetString();
+                }
+
+                SimpleMaterial::Params params(material);
 
                 FeignRenderer::fr_shader(name, type, &params);
             }

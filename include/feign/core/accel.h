@@ -25,14 +25,10 @@ public:
     virtual void clear() = 0;
     virtual void build() = 0;
     virtual void preProcess() = 0;
-    virtual void addShape(Shape* mesh) = 0;
+    virtual void addShape(Shape* mesh) { };
+    virtual void addShape(SDFShape* mesh) { };
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
-
-    void setMeshes(const std::vector<Shape*>& param);
-
-protected:
-    std::vector<Shape*> meshes;
 };
 /////////////////////////////////////////////////
 
@@ -80,6 +76,7 @@ public:
     }
 
 protected:
+    std::vector<Shape*> meshes;
     RTCScene scene = nullptr;
     RTCDevice device = nullptr;
     unsigned userGeomId;
@@ -98,9 +95,13 @@ class SDFAccel : public Accel
 {
     virtual void preProcess();
     virtual void clear();
-    virtual void addShape(Shape* mesh);
+    virtual void addShape(SDFShape* mesh);
     virtual void build();
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
+
+protected:
+    std::vector<SDFShape*> sdfs;
+    BBox3f scene_box;
 };
 /////////////////////////////////////////////////
 

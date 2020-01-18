@@ -7,63 +7,69 @@
  **/
 
 #include <feign/core/bsdf.h>
+#include <feign/core/sampler.h>
 #include <feign/math/coord_frame.h>
 
 Dielectric::Dielectric(Float int_ior, Float ext_ior) : BSDF() { }
 
 // the idea is that sample returns eval() / pdf()
-Color3f Dielectric::sample(BSDFQuery& rec, const Point2f& sample) const
+// Color3f Dielectric::sample(BSDFQuery& rec, const Point2f& sample) const
+void Dielectric::sample(MaterialClosure& closure) const
 {
-    float cos_theta = rec.wi[2];
+    Float sample = closure.sampler->next1D();
 
-    if (CoordinateFrame::cosTheta(rec.wi) < 0.f)
+    float cos_theta = closure.wi[2];
+
+    if (CoordinateFrame::cosTheta(closure.wi) < 0.f)
     {
         // refracts out of object
-        rec.eta = int_ior / ext_ior;
+        closure.eta = int_ior / ext_ior;
     }
     else
     {
         // refracts into object
-        rec.eta = ext_ior / int_ior;
+        closure.eta = ext_ior / int_ior;
     }
 
-    float prob = fresnel(CoordinateFrame::cosTheta(rec.wi),
+    float prob = fresnel(CoordinateFrame::cosTheta(closure.wi),
                          ext_ior,
                          int_ior);
 
-    if (sample(0) < prob)
+    if (sample < prob)
     {
         // reflects
-        Vector3f wr = Vector3f(-rec.wi[0],
-                               -rec.wi[1],
-                               rec.wi[2]);
+        Vector3f wr = Vector3f(-closure.wi[0],
+                               -closure.wi[1],
+                               closure.wi[2]);
 
-        rec.wo = wr;
-        rec.eta = 1.f;
+        closure.wo = wr;
+        closure.eta = 1.f;
+        //closure.albedo += Color3f(1.f);
 
-        return Color3f(1.f);
+        // return Color3f(1.f);
     }
     else
     {
         // refracts
-        Vector3f wr = Vector3f(-rec.wi[0],
-                               -rec.wi[1],
+        Vector3f wr = Vector3f(-closure.wi[0],
+                               -closure.wi[1],
                                0.0);
 
-        Vector3f wtperp = wr * rec.eta;
+        Vector3f wtperp = wr * closure.eta;
         Vector3f wtpara = Vector3f(0.f,
                                    0.f,
                                    -sqrt(1.0 - wtperp.sqrNorm()));
 
-        rec.wo = wtperp + wtpara;
+        closure.wo = wtperp + wtpara;
 
-        if (cos_theta < -Epsilon) rec.wo[2] = -rec.wo[2];
+        if (cos_theta < -Epsilon) closure.wo[2] = -closure.wo[2];
 
-        return Color3f(1.f);
+        // return Color3f(1.f);
     }
 }
 
-Color3f Dielectric::eval(const BSDFQuery& rec) const
+// Color3f Dielectric::eval(const BSDFQuery& rec) const
+void Dielectric::evaluate(MaterialClosure& closure) const
 {
-    return Color3f(0.0f);
+    closure.wo = Color3f(0.0f);
 }

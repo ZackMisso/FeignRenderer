@@ -14,27 +14,27 @@
 class WarpSpace
 {
 public:
-    static Point2f squareToUniformDisk(const Point2f &sample);
-    static Float squareToUniformDiskPdf(const Point2f &p);
+    static Point2f sqrToUniDisk(const Point2f &sample);
+    static Float sqrToUniDiskPdf(const Point2f &p);
 
-    static Vector3f squareToUniformSphere(const Point2f &sample);
-    static Float squareToUniformSpherePdf(const Vector3f &v);
+    static Vector3f sqrToUniSph(const Point2f &sample);
+    static Float sqrToUniSphPdf(const Vector3f &v);
 
-    static Vector3f squareToUniformSphereCap(const Point2f &sample, Float cosThetaMax);
-    static Float squareToUniformSphereCapPdf(const Vector3f &v, Float cosThetaMax);
+    static Vector3f sqrToUniSphCap(const Point2f &sample, Float cosThetaMax);
+    static Float sqrToUniSphCapPdf(const Vector3f &v, Float cosThetaMax);
 
-    static Vector3f squareToUniformHemisphere(const Point2f &sample);
-    static Float squareToUniformHemispherePdf(const Vector3f &v);
+    static Vector3f sqrToUniHemi(const Point2f &sample);
+    static Float sqrToUniHemiPdf(const Vector3f &v);
 
-    static Vector3f squareToCosineHemisphere(const Point2f &sample);
-    static Float squareToCosineHemispherePdf(const Vector3f &v);
+    static Vector3f sqrToCosHemi(const Point2f &sample);
+    static Float sqrToCosHemiPdf(const Vector3f &v);
 
-    static Vector3f squareToCosinePowerHemisphere(const Point2f &sample, Float n);
-    static Float squareToCosinePowerHemispherePdf(const Vector3f &v, Float n);
+    static Vector3f sqrToCosPowHemi(const Point2f &sample, Float n);
+    static Float sqrToCosPowHemiPdf(const Vector3f &v, Float n);
 
-    static Point2f squareToUniformTriangle(const Point2f &sample);
-    static Float squareToUniformTrianglePdf(const Point2f &sample);
+    static Point2f sqrToUniTri(const Point2f &sample);
+    static Float sqrToUniTriPdf(const Point2f &sample);
 
-    static Vector3f squareToBeckmann(const Point2f &sample, Float alpha);
-    static Float squareToBeckmannPdf(const Vector3f &m, Float alpha);
+    static Vector3f sqrToBeck(const Point2f &sample, Float alpha);
+    static Float sqrToBeckPdf(const Vector3f &m, Float alpha);
 };

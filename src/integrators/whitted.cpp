@@ -35,6 +35,62 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
+    // const std::vector<Emitter>* emitters = scene->emitters;
+    const MaterialShader* shader = scene->getShapeMaterialShader(its);
+
+    // create the material closure
+    MaterialClosure closure = MaterialClosure(sampler,
+                                              &its,
+                                              &ray,
+                                              scene,
+                                              true);
+
+    // TODO: shouldn't these all go in one call?
+    // evaluate the material shader
+    shader->evaluate(closure);
+
+    // accumulate the shadow rays
+    closure.accumulate_shadow_rays(shader);
+
+    if (closure.is_specular)
+    {
+        // assert(false);
+        // sample the next path
+        closure.wi = its.toLocal(-ray.dir);
+        shader->sample(closure);
+
+        // random termination
+        if (sampler->next1D() > rr_cont_probability) return Color3f(0.f);
+
+        // assert(false);
+
+        Ray3f new_ray(its.p,
+                      its.toWorld(closure.wo),
+                      Epsilon,
+                      std::numeric_limits<Float>::infinity(),
+                      ray.depth + 1);
+
+        Color3f recur = Li(scene, sampler, new_ray);
+        // LOG("recur:", recur);
+        // LOG("nee:", closure.nee);
+        // LOG("albedo:", closure.albedo);
+
+        // return closure.nee + closure.emission;
+
+        return closure.albedo * (recur * 1.f / rr_cont_probability) +
+               closure.nee + closure.emission;
+    }
+
+    return closure.emission + closure.nee;
+
+    // do stuff
+
+    // first evaluate the material for all emitters
+    // if (!material->isDelta())
+    // {
+    //
+    // }
+
     throw new FeignRendererException("zack broke all of this");
 
     return Color3f(0.f);

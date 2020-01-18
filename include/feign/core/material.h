@@ -19,8 +19,10 @@ public:
     Material() { }
     virtual ~Material() { }
 
+    // TODO: lights should be only handled through the shader
     virtual void sample(MaterialClosure& closure) const = 0;
     virtual void evaluate(MaterialClosure& closure) const = 0;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const { }
 
     // should this get the bsdf???
     // need to do more research on how more complicated materials work
@@ -45,6 +47,7 @@ public:
 
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const;
 
     // virtual BSDF* getBSDF(const Intersection& its,
     //                       Color3f& mat_scale) const;

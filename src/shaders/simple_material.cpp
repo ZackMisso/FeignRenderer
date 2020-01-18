@@ -11,11 +11,26 @@
 SimpleMaterialShader::SimpleMaterialShader(MaterialNode* material)
     : material(material) { }
 
-MaterialClosure SimpleMaterialShader::evaluate(const Intersection& its) const
+void SimpleMaterialShader::sample(MaterialClosure& closure) const
 {
-    MaterialClosure closure = MaterialClosure();
-
-    (*material)()->evaluate(closure);
-
-    return closure;
+    (*material)()->sample(closure);
 }
+
+void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
+{
+    (*material)()->evaluate(closure);
+}
+
+void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
+{
+    (*material)()->evaluate_mat_only(closure);
+}
+
+// MaterialClosure SimpleMaterialShader::evaluate(const Intersection& its) const
+// {
+//     MaterialClosure closure = MaterialClosure();
+//
+//     (*material)()->evaluate(closure);
+//
+//     return closure;
+// }

@@ -20,11 +20,14 @@ struct MaterialShader
 public:
     virtual ~MaterialShader() { }
 
-    virtual MaterialClosure evaluate(const Intersection& its) const = 0;
+    // virtual MaterialClosure evaluate(const Intersection& its) const = 0;
+    virtual void sample(MaterialClosure& closure) const = 0;
+    virtual void evaluate(MaterialClosure& closure) const = 0;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const = 0;
 };
 
 // a simple material shader which just evaluates one material
-struct SimpleMaterialShader
+struct SimpleMaterialShader : public MaterialShader
 {
     struct Params
     {
@@ -36,7 +39,10 @@ struct SimpleMaterialShader
 
     SimpleMaterialShader(MaterialNode* material);
 
-    virtual MaterialClosure evaluate(const Intersection& its) const;
+    // virtual MaterialClosure evaluate(const Intersection& its) const;
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const;
 
     MaterialNode* material;
 };
@@ -105,6 +111,8 @@ public:
     MaterialShaderNode(std::string name) : Node(name), shader(nullptr) { }
 
     ~MaterialShaderNode() { delete shader; }
+
+    MaterialShader* operator()() { return shader; }
 
     MaterialShader* shader;
 };

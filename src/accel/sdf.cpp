@@ -18,16 +18,19 @@ void SDFAccel::clear()
     meshes.clear();
 }
 
-void SDFAccel::addShape(Shape* mesh)
+void SDFAccel::addShape(SDFShape* mesh)
 {
-    // TODO: add check to make sure shape is a sdf
-    throw new NotImplementedException("sdf accel add shape");
-    meshes.push_back(mesh);
+    sdfs.push_back(mesh);
 }
 
 void SDFAccel::build()
 {
-    throw new NotImplementedException("sdf accel build");
+    scene_box = BBox3f();
+
+    for (int i = 0; i < sdfs.size(); ++i)
+    {
+        scene_box.expand(sdfs[i].boundingBox());
+    }
 }
 
 // brute force

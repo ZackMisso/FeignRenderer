@@ -108,9 +108,51 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
-const Material* Scene::getShapeMaterial(const Intersection& its) const
+const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) const
 {
     int id = its.intersected_mesh->getInstID();
 
-    return (*(objects[id]->material))();
+    return (*(*objects[id]).material_shader)();
+}
+
+// TODO: this should also work for media closures...
+void Scene::eval_all_emitters(MaterialClosure& closure) const
+{
+    closure.shadow_rays = std::vector<EmitterEval>(emitters.size());
+
+    for (int i = 0; i < emitters.size(); ++i)
+    {
+        // LOG("evaluating emitters:", int(emitters.size()));
+        EmitterQuery eqr(closure.its->p);
+        Float emitter_pdf = 0.f;
+        Color3f Li = emitters[i]->sample_li(eqr,
+                                            closure.sampler->next2D(),
+                                            &emitter_pdf);
+
+        Ray3f shadow_ray = Ray3f(closure.its->p,
+                                 eqr.wi,
+                                 Epsilon,
+                                 sqrt(eqr.sqr_dist));
+
+        Intersection tmp;
+
+        if (!intersect(shadow_ray, tmp) ||
+             global_params.ignore_shadow_checks)
+        {
+            Float cos_term = closure.its->s_frame.n % eqr.wi;
+            if (cos_term < -Epsilon) cos_term = -cos_term;
+
+            closure.shadow_rays[i].valid = true;
+            closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
+            closure.shadow_rays[i].throughput = Li * cos_term;
+            // Note: bsdf_values are fully accumulated later
+        }
+    }
+}
+
+void Scene::eval_one_emitter(MaterialClosure& closure) const
+{
+    closure.shadow_rays = std::vector<EmitterEval>(1);
+
+    throw new NotImplementedException("scene eval_one_emitter");
 }

@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 16
+        "sample_count": 128
     },
     "camera": {
         "name": "camera",
@@ -36,12 +36,17 @@
     "object": {
         "name": "floor",
         "mesh": "plane",
-        "material": "mirror_material",
+        "material_shader": "mirror_material_shader",
         "scale": [
             200.0,
             1.0,
             200.0
         ]
+    },
+    "shader": {
+        "name": "mirror_material_shader",
+        "type": "simple_material",
+        "material": "mirror_material"
     },
     "mesh": {
         "name": "plane",
@@ -51,6 +56,11 @@
     "object": {
         "name": "ajax",
         "mesh": "ajax_obj",
+        "material_shader": "diffuse_material_shader"
+    },
+    "shader": {
+        "name": "diffuse_material_shader",
+        "type": "simple_material",
         "material": "diffuse_material"
     },
     "mesh": {

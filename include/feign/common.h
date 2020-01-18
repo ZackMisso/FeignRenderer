@@ -47,7 +47,7 @@
 // a list of global parameters
 struct GlobalParams
 {
-    bool ignore_shadow_checks = true; // ignores shadow checks when determining light contribution
+    bool ignore_shadow_checks = false; // ignores shadow checks when determining light contribution
     bool sdf_only = false;            // tells the renderer whether or not it is rendering signed distance fields
 };
 
@@ -59,6 +59,78 @@ enum MeshType
     OBJ_MESH,
     SDF_MESH
 };
+
+/////////////////////////////////////////////////
+// VECTOR TYPES
+/////////////////////////////////////////////////
+template <typename T>
+struct Point2 : public Vec2<T>
+{
+    Point2() : Vec2<T>() { }
+    Point2(const Vec2<T>& other) : Vec2<T>(other) { }
+    Point2(T c) : Vec2<T>(c) { }
+    Point2(T x, T y) : Vec2<T>(x, y) { }
+};
+
+template <typename T>
+struct Vector3 : public Vec3<T>
+{
+    Vector3() : Vec3<T>() { }
+    Vector3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Vector3(T c) : Vec3<T>(c) { }
+    Vector3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Vector3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Point3 : public Vec3<T>
+{
+    Point3() : Vec3<T>() { }
+    Point3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Point3(T c) : Vec3<T>(c) { }
+    Point3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Point3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Normal3 : public Vec3<T>
+{
+    Normal3() : Vec3<T>() { }
+    Normal3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Normal3(T c) : Vec3<T>(c) { }
+    Normal3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Color3 : public Vec3<T>
+{
+    Color3() : Vec3<T>() { }
+    Color3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Color3(T c) : Vec3<T>(c) { }
+    Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+
+    bool is_black() const
+    {
+        return std::abs(Vec3<T>::operator()(0)) < Epsilon &&
+               std::abs(Vec3<T>::operator()(1)) < Epsilon &&
+               std::abs(Vec3<T>::operator()(2)) < Epsilon;
+    }
+};
+
+template <typename T>
+struct Vector4 : public Vec4<T>
+{
+    Vector4() : Vec4<T>() { }
+    Vector4(const Vec4<T>& vec) : Vec4<T>(vec) { }
+    Vector4(T c) : Vec4<T>(c) { }
+    Vector4(T x, T y, T z, T w) : Vec4<T>(x, y, z, w) { }
+    Vector4(Vec2<T> xy, T z, T w) : Vec4<T>(xy, z, w) { }
+    Vector4(Vec2<T> xy, Vec2<T>zw) : Vec4<T>(xy, zw) { }
+    Vector4(Vec3<T> xyz, T w) : Vec4<T>(xyz, w) { }
+};
+/////////////////////////////////////////////////
 
 // uncomment the following for desired types
 typedef float Float;
@@ -87,6 +159,13 @@ typedef Matrix3<Float> Matrix3f;
 typedef Matrix4<Float> Matrix4f;
 
 typedef imedit::Image Imagef;
+
+struct EmitterEval
+{
+    Color3f throughput;
+    Vector3f shadow_ray;
+    bool valid = false;
+};
 
 inline Float degToRad(Float value)
 {

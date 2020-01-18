@@ -469,7 +469,7 @@ void FeignRenderer::fr_camera(std::string name,
 
 void FeignRenderer::fr_object(std::string name,
                               std::string mesh,
-                              std::string material,
+                              std::string material_shader,
                               int index)
 {
     if (index >= 0) name += "_" + std::to_string(index);
@@ -482,7 +482,7 @@ void FeignRenderer::fr_object(std::string name,
     {
         fr_object(name,
                   mesh,
-                  material,
+                  material_shader,
                   index+1);
 
         return;
@@ -490,7 +490,7 @@ void FeignRenderer::fr_object(std::string name,
 
     object->transform = getInstance()->current_transform;
     object->mesh = getInstance()->find_mesh(mesh);
-    object->material = getInstance()->find_material(material);
+    object->material_shader = getInstance()->find_material_shader(material_shader);
 }
 
 void FeignRenderer::fr_mesh(std::string name,
@@ -535,18 +535,31 @@ void FeignRenderer::fr_shader(std::string name,
 {
     // TODO: incorporate other shader types later
 
-    GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(name);
-
-    if (geom_shader->shader)
-    {
-        throw new FeignRendererException("geometry shader already defined");
-    }
-
     if (type == "interp_verts_to_sphere")
     {
+        GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(name);
+
+        if (geom_shader->shader)
+        {
+            throw new FeignRendererException("geometry shader already defined");
+        }
+
         InterpVertsToSphereShader::Params* params = (InterpVertsToSphereShader::Params*)shader_data;
         geom_shader->shader = new InterpVertsToSphereShader(params->prop,
                                                             params->proxy);
+    }
+    if (type == "simple_material")
+    {
+        MaterialShaderNode* material_shader = getInstance()->find_material_shader(name);
+
+        if (material_shader->shader)
+        {
+            throw new FeignRendererException("material shader already defined");
+        }
+
+        SimpleMaterialShader::Params* params = (SimpleMaterialShader::Params*)shader_data;
+        MaterialNode* material = getInstance()->find_material(params->material);
+        material_shader->shader = new SimpleMaterialShader(material);
     }
     else
     {

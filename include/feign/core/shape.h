@@ -167,8 +167,8 @@ public:
     ~ObjectNode() { }
 
     MeshNode* mesh;
-    MaterialNode* material;
-    // MaterialShaderNode* material_shader;
+    // MaterialNode* material;
+    MaterialShaderNode* material_shader;
     Transform transform;
 };
 /////////////////////////////////////////////////

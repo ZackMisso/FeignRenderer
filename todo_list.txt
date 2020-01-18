@@ -1,5 +1,6 @@
 TODO notes:
 
+automatically create simple shaders if none are specified
 remake shader system so that shaders are evaluated first instead of materials
 create distant light sources
 create directional light sources

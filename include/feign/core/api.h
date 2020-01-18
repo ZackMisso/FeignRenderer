@@ -97,7 +97,7 @@ public:
 
     static void fr_object(std::string name,
                           std::string mesh,
-                          std::string material,
+                          std::string material_shader,
                           int index = -1); // what is this index parameter again
 
     static void fr_mesh(std::string name,

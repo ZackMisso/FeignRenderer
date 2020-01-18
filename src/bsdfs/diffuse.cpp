@@ -16,26 +16,35 @@ Diffuse::Diffuse(Color3f albedo)
 }
 
 // the idea is that sample returns eval() / pdf()
-Color3f Diffuse::sample(BSDFQuery& rec, const Point2f& sample) const
+// Color3f Diffuse::sample(BSDFQuery& rec, const Point2f& sample) const
+void Diffuse::sample(MaterialClosure& closure) const
 {
-    if (CoordinateFrame::cosTheta(rec.wi) <= 0)
+    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
-        return Color3f(0.f, 0.f, 0.f);
+        closure.albedo = Color3f(0.f, 0.f, 0.f);
+        // return Color3f(0.f, 0.f, 0.f);
+    }
+    else
+    {
+
+        closure.wo = WarpSpace::sqrToCosHemi(closure.sampler->next2D());
+        closure.eta = 1.0f;
+        closure.albedo = albedo;
     }
 
-    rec.wo = WarpSpace::squareToCosineHemisphere(sample);
-    rec.eta = 1.0f;
-
-    return albedo;
+    // return albedo;
 }
 
-Color3f Diffuse::eval(const BSDFQuery& rec) const
+void Diffuse::evaluate(MaterialClosure& closure) const
 {
-    if (CoordinateFrame::cosTheta(rec.wi) <= 0 ||
-        CoordinateFrame::cosTheta(rec.wo) <= 0)
+    // LOG("evaluating");
+    if (CoordinateFrame::cosTheta(closure.wi) <= 0 ||
+        CoordinateFrame::cosTheta(closure.wo) <= 0)
     {
-        return Color3f(0.0f);
+        closure.albedo = Color3f(0.f);
     }
-
-    return albedo * INV_PI;
+    else
+    {
+        closure.albedo = albedo * INV_PI;
+    }
 }

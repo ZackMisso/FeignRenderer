@@ -65,9 +65,9 @@ int main(int argc, char* argv[])
 
     // std::string scene = "tests/ajax_normals";
     // std::string scene = "tests/ajax_diffuse";
-    // std::string scene = "tests/ajax_mirror";
+    std::string scene = "tests/ajax_mirror";
     // std::string scene = "tests/box_rotations";
-    std::string scene = "tests/ajax_bary";
+    // std::string scene = "tests/ajax_bary";
 
     for (int i = 1; i < argc; ++i)
     {

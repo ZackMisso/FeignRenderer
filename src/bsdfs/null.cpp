@@ -11,15 +11,18 @@
 NullBSDF::NullBSDF() : BSDF() { }
 
 // the idea is that sample returns eval() / pdf()
-Color3f NullBSDF::sample(BSDFQuery& rec, const Point2f& sample) const
+// Color3f NullBSDF::sample(BSDFQuery& rec, const Point2f& sample) const
+void NullBSDF::sample(MaterialClosure& closure) const
 {
-    rec.wo = -rec.wi;
-    rec.eta = 1.0f;
+    closure.wo = -closure.wi;
+    closure.eta = 1.0f;
+    closure.albedo = Color3f(1.f);
 
-    return Color3f(1.f);
+    // return Color3f(1.f);
 }
 
-Color3f NullBSDF::eval(const BSDFQuery& rec) const
+// Color3f NullBSDF::eval(const BSDFQuery& rec) const
+void NullBSDF::evaluate(MaterialClosure& closure) const
 {
-    return Color3f(1.f);
+    closure.albedo = Color3f(1.f);
 }

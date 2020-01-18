@@ -25,9 +25,12 @@ Color3f PointEmitter::sample_li(EmitterQuery& rec,
 {
     rec.wi = (pos - rec.p);
     rec.sqr_dist = rec.wi.sqrNorm();
+    // LOG("sqr_dist", rec.sqr_dist);
     rec.wi = rec.wi.normalized();
 
     if (pdf) *pdf = 1.0;
+
+    // LOG("I", I);
 
     return I / rec.sqr_dist * INV_FOURPI;
 }

@@ -177,6 +177,9 @@ add_executable(feign
     src/cameras/perspective.cpp
     src/cameras/ortho.cpp
 
+    # Closure implementation files
+    src/closure/material.cpp
+
     # Emitter implementation files
     src/emitters/point.cpp
     src/emitters/distant.cpp

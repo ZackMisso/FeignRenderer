@@ -16,8 +16,6 @@ Orthographic::Orthographic() : Camera()
 void Orthographic::preProcess()
 {
     throw new NotImplementedException("preprocess ortho");
-
-    // preProcessChildren();
 }
 
 Color3f Orthographic::sampleRay(Ray3f& ray,

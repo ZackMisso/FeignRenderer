@@ -12,61 +12,50 @@
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
 
-// should this really be a thing???
+// yes i know this is bad design
+class Scene;
+class Sampler;
+class MaterialShader;
 
 // this struct represents what is returned from the material shader when it
 // gets evaluated
 struct MaterialClosure
 {
-    MaterialClosure()
-    {
-        throw new FeignRendererException("empty constructor should not be used");
-    }
-    
-    MaterialClosure(Point2f sample,
-                    const Intersection* its,
-                    const Ray3f* ray)
-        : sample(sample),
-          its(its),
-          ray(ray),
-          albedo(Color3f(0.f)),
-          emission(Color3f(0.f)),
-          wo(Vector3f(1.f)),
-          pdf(1.f),
-          eta(1.f),
-          is_specular(false) { }
+    MaterialClosure();
 
-    // i do not think this is needed
-    // MaterialClosure(const Intersection* its,
-    //                 const Ray3f* ray)
-    //     : sample(Point2f(0.f)),
-    //       its(its),
-    //       ray(ray),
-    //       bsdf_sample(Color3f(0.f)),
-    //       emission(Color3f(0.f)),
-    //       wo(Vector3f(1.f)),
-    //       bsdf_pdf(1.f),
-    //       is_specular(false) { }
+    MaterialClosure(Sampler* sampler,
+                    const Intersection* its,
+                    const Ray3f* ray,
+                    const Scene* scene,
+                    bool sample_all_emitters = false);
+
+    void accumulate_shadow_rays(const MaterialShader* shader);
 
     // always inputs
-    Point2f sample;          // the random numbers to use
+    Sampler* sampler;        // the sampler to use
     const Intersection* its; // a reference to the intersection info
     const Ray3f* ray;        // a reference to the incoming ray
+    const Scene* scene;      // a reference to the scene
+    Vector3f wi;
 
     // sometimes inputs or outputs depending on sampling
     Vector3f wo;             // the outgoing ray
+    std::vector<EmitterEval> shadow_rays;
 
     // always outputs
     Color3f albedo;          // the bsdf sample of the material
     Color3f emission;        // the emissive term from the material
+    Color3f nee;             // contribution from nee
     Float pdf;               // the pdf of the bsdf sample
     Float eta;               // how the ior changes
     bool is_specular;        // whether or not this material is discretely evaluated
+    // bool trace_ray;
+    bool sample_all_emitters;
 };
 
-// this struct represents what is returned from a media shader when it gets
-// evaluated
-struct MediaClosure
-{
-    // TODO
-};
+// // this struct represents what is returned from a media shader when it gets
+// // evaluated
+// struct MediaClosure
+// {
+//     // TODO
+// };

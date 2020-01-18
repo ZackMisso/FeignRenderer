@@ -62,7 +62,7 @@ Color3f Perspective::sampleRay(Ray3f& ray,
     Vector3f d = nearP.normalized();
     float invZ = 1.f / d(2);
 
-    Point2f apPos = WarpSpace::squareToUniformDisk(appSamp) * aperatureRadius;
+    Point2f apPos = WarpSpace::sqrToUniDisk(appSamp) * aperatureRadius;
     float t = focalDistance / d(2);
 
     Vector3f od = d * t;
