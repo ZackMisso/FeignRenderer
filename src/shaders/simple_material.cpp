@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/shader.h>
+#include <feign/core/scene.h>
 
 SimpleMaterialShader::SimpleMaterialShader(MaterialNode* material)
     : material(material) { }
@@ -18,12 +19,26 @@ void SimpleMaterialShader::sample(MaterialClosure& closure) const
 
 void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 {
-    (*material)()->evaluate(closure);
+    closure.is_specular = (*material)()->isDelta();
+
+    if (closure.is_specular)
+    {
+        return;
+    }
+
+    if (closure.sample_all_emitters)
+    {
+        closure.scene->eval_all_emitters(closure);
+    }
+    else
+    {
+        closure.scene->eval_one_emitter(closure);
+    }
 }
 
 void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
 {
-    (*material)()->evaluate_mat_only(closure);
+    (*material)()->evaluate(closure);
 }
 
 // MaterialClosure SimpleMaterialShader::evaluate(const Intersection& its) const

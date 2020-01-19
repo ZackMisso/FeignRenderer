@@ -10,7 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/core/material.h>
-#include <feign/misc/intersection.h>
+#include <feign/math/functor.h>
 
 // material shaders manipulate and control the actual materials which are on objects.
 // These shaders are also the entry point for the information which integrators
@@ -45,6 +45,97 @@ struct SimpleMaterialShader : public MaterialShader
     virtual void evaluate_mat_only(MaterialClosure& closure) const;
 
     MaterialNode* material;
+};
+
+struct WireframeMaterialShader : public MaterialShader
+{
+public:
+    struct Params
+    {
+        Params(std::string wireframe_mat,
+               std::string mesh_mat,
+               float threshold)
+            : wireframe_mat(wireframe_mat),
+              mesh_mat(mesh_mat),
+              threshold(threshold) { }
+
+        std::string wireframe_mat;
+        std::string mesh_mat;
+        float threshold;
+    };
+
+    WireframeMaterialShader(MaterialNode* wireframe_mat,
+                            MaterialNode* mesh_mat,
+                            float threshold);
+
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const;
+    Material* choose_mat(MaterialClosure& closure) const;
+
+    MaterialNode* wireframe_mat;
+    MaterialNode* mesh_mat;
+    float threshold;
+};
+
+struct RadarMaterialShader : public MaterialShader
+{
+    struct Params
+    {
+        Params(std::string radar_mat,
+               std::string mesh_mat,
+               std::vector<Point3f> start_points,
+               std::vector<Float> end_dist,
+               std::vector<Float> start_times,
+               std::vector<Float> end_times,
+               float band_width,
+               float fall_off,
+               float proxy)
+            : radar_mat(radar_mat),
+              mesh_mat(mesh_mat),
+              start_points(start_points),
+              end_dist(end_dist),
+              start_times(start_times),
+              end_times(end_times),
+              band_width(band_width),
+              fall_off(fall_off),
+              proxy(proxy) { }
+
+        std::string radar_mat;
+        std::string mesh_mat;
+        std::vector<Point3f> start_points;
+        std::vector<Float> end_dist;
+        std::vector<Float> start_times;
+        std::vector<Float> end_times;
+        float band_width;
+        float fall_off;
+        float proxy;
+    };
+
+    RadarMaterialShader(MaterialNode* radar_mat,
+                        MaterialNode* mesh_mat,
+                        std::vector<Point3f> start_points,
+                        std::vector<Float> end_dist,
+                        std::vector<Float> start_proxies,
+                        std::vector<Float> end_proxies,
+                        float band_width,
+                        float fall_off,
+                        float proxy);
+
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void evaluate_mat_only(MaterialClosure& closure) const;
+    Material* choose_mat(MaterialClosure& closure, Color3f& scale) const;
+
+    MaterialNode* radar_mat;
+    MaterialNode* mesh_mat;
+    std::vector<Point3f> start_points;
+    std::vector<Float> end_dist;
+    std::vector<Float> start_proxies;
+    std::vector<Float> end_proxies;
+    float band_width;
+    float fall_off;
+    float proxy;
 };
 
 // geometry shaders manipulate the vertices, normals, and triangles directly.
@@ -84,6 +175,38 @@ public:
 
     float prop_of_shortest_axis;
     float interp;
+};
+
+// used with grid objects to make wave displacements
+struct WaveDisplacementShader : public GeometryShader
+{
+public:
+    struct Params
+    {
+        // TODO: create functor abstaction later
+        //       for now this just stores max value
+        Params(std::vector<Point2f> points,
+               std::vector<Float> functors,
+               std::vector<Float> start_proxies,
+               std::vector<Float> end_proxies)
+            : points(points),
+              functors(functors),
+              start_proxies(start_proxies),
+              end_proxies(end_proxies) { }
+
+        std::vector<Point2f> points;
+        std::vector<Float> functors;
+        std::vector<Float> start_proxies;
+        std::vector<Float> end_proxies;
+    };
+
+    WaveDisplacementShader(std::vector<Point2f> points,
+                           std::vector<Functor> functors,
+                           std::vector<Float> start_proxies,
+                           std::vector<Float> end_proxies);
+
+    virtual void evaluate(void* mesh);
+    virtual bool isValid(MeshType mesh_type) const;
 };
 
 /////////////////////////////////////////////////

@@ -13,6 +13,7 @@
 
 #include "../scenes/adrien/ajax_cosine.h"
 #include "../scenes/adrien/neon_intro.h"
+#include "../scenes/adrien/sphere_ground.h"
 #include "../scenes/month_of_shaders/jan_1_2020.h"
 #include "../scenes/month_of_shaders/jan_2_2020.h"
 #include "../scenes/month_of_shaders/jan_3_2020.h"
@@ -55,17 +56,18 @@ int main(int argc, char* argv[])
 
     // jan_1_2020();          // done
     // jan_2_2020();          // done
-    // jan_3_2020();          // TODO
-    // jan_4_2020();         // TODO
-    // jan_5_2020();          // TODO
+    // jan_3_2020();          // done
+    // jan_4_2020();         // done
+    // jan_5_2020();          // done
     // jan_6_2020();          // TODO
-    // return 0;
+    sphere_ground();
+    return 0;
 
     ///\\\ Month of shaders \\\/////
 
-    // std::string scene = "tests/ajax_normals";
+    std::string scene = "tests/ajax_normals";
     // std::string scene = "tests/ajax_diffuse";
-    std::string scene = "tests/ajax_mirror";
+    // std::string scene = "tests/ajax_mirror";
     // std::string scene = "tests/box_rotations";
     // std::string scene = "tests/ajax_bary";
 

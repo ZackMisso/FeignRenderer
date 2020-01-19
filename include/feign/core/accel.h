@@ -19,8 +19,7 @@
 class Accel
 {
 public:
-    Accel();
-    virtual ~Accel();
+    virtual ~Accel() { }
 
     virtual void clear() = 0;
     virtual void build() = 0;
@@ -42,6 +41,7 @@ public:
 class EmbreeAccel : public Accel
 {
 public:
+    EmbreeAccel();
     ~EmbreeAccel();
 
     virtual void preProcess();

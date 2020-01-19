@@ -47,7 +47,7 @@
 // a list of global parameters
 struct GlobalParams
 {
-    bool ignore_shadow_checks = false; // ignores shadow checks when determining light contribution
+    bool ignore_shadow_checks = true; // ignores shadow checks when determining light contribution
     bool sdf_only = false;            // tells the renderer whether or not it is rendering signed distance fields
 };
 
@@ -199,6 +199,11 @@ inline void LOG(Vec3f val)
     std::cout << val[0] << " " << val[1] << " " << val[2] << std::endl;
 }
 
+inline void LOG(Vec2f val)
+{
+    std::cout << val[0] << " " << val[1] << " " << std::endl;
+}
+
 inline void LOG(std::string val, Vec3f num)
 {
     std::cout << val << " " << num[0] << " " << num[1] << " " << num[2] << std::endl;
@@ -257,6 +262,16 @@ inline Color3f color_max(Color3f one, Color3f two)
     return Color3f(std::max(one(0), two(0)),
                    std::max(one(1), two(1)),
                    std::max(one(2), two(2)));
+}
+
+inline float interp_value(int index, int flip)
+{
+    if (index > flip)
+    {
+        return 1.f - float(index - flip) / float(flip);
+    }
+
+    return 1.f - float(flip - index) / float(flip);
 }
 
 /////////////////////////////////////////////////

@@ -10,12 +10,12 @@
 
 void SDFAccel::preProcess()
 {
-    meshes = std::vector<Shape*>();
+    sdfs = std::vector<SDFShape*>();
 }
 
 void SDFAccel::clear()
 {
-    meshes.clear();
+    sdfs.clear();
 }
 
 void SDFAccel::addShape(SDFShape* mesh)
@@ -29,7 +29,7 @@ void SDFAccel::build()
 
     for (int i = 0; i < sdfs.size(); ++i)
     {
-        scene_box.expand(sdfs[i].boundingBox());
+        scene_box.expand(sdfs[i]->boundingBox());
     }
 }
 

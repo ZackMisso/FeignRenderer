@@ -8,6 +8,11 @@
 
 #include <feign/core/accel.h>
 
+EmbreeAccel::EmbreeAccel()
+{
+    meshes = std::vector<Shape*>();
+}
+
 EmbreeAccel::~EmbreeAccel()
 {
     clear();

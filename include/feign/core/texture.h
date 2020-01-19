@@ -51,6 +51,37 @@ private:
     bool initialized;
 };
 
+class SinTexture : public Texture
+{
+public:
+    struct Params
+    {
+        Params(Vec3f amp,
+               Vec3f phase,
+               Vec3f freq,
+               Vec3f y)
+            : amp(amp), phase(phase), y(y), freq(freq) { }
+
+        Vec3f amp;
+        Vec3f freq;
+        Vec3f phase;
+        Vec3f y;
+    };
+
+    SinTexture(Vec3f amp,
+               Vec3f phase,
+               Vec3f freq,
+               Vec3f y);
+
+    virtual Color3f evaluate(const Point2f& point);
+    virtual void preProcess();
+
+    Vec3f amp;
+    Vec3f freq;
+    Vec3f phase;
+    Vec3f y;
+};
+
 class NoiseTexture : public Texture
 {
 public:

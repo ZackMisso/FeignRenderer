@@ -19,15 +19,10 @@ public:
     Material() { }
     virtual ~Material() { }
 
-    // TODO: lights should be only handled through the shader
     virtual void sample(MaterialClosure& closure) const = 0;
     virtual void evaluate(MaterialClosure& closure) const = 0;
-    virtual void evaluate_mat_only(MaterialClosure& closure) const { }
 
-    // should this get the bsdf???
-    // need to do more research on how more complicated materials work
-    // virtual BSDF* getBSDF(const Intersection& its,
-    //                       Color3f& mat_scale) const = 0;
+    virtual bool isDelta() const { return false; }
 };
 
 // a material with only one bsdf
@@ -47,114 +42,10 @@ public:
 
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
-    virtual void evaluate_mat_only(MaterialClosure& closure) const;
-
-    // virtual BSDF* getBSDF(const Intersection& its,
-    //                       Color3f& mat_scale) const;
+    virtual bool isDelta() const;
 
     BSDFNode* bsdf;
 };
-
-// well I broke it all
-// // TODO: convert this to a shader
-// // a material with different scattering properties along the edges of a mesh
-// class WireframeMaterial : public Material
-// {
-// public:
-//     struct Params
-//     {
-//         Params(std::string wireframe_bsdf,
-//                std::string mesh_bsdf,
-//                float threshold)
-//             : wireframe_bsdf(wireframe_bsdf),
-//               mesh_bsdf(mesh_bsdf),
-//               threshold(threshold) { }
-//
-//         std::string wireframe_bsdf;
-//         std::string mesh_bsdf;
-//         float threshold;
-//     };
-//
-//     WireframeMaterial(BSDFNode* wireframe_bsdf,
-//                       BSDFNode* mesh_bsdf,
-//                       float threshold);
-//     ~WireframeMaterial();
-//
-//     virtual void sample(MaterialClosure& closure) const;
-//     virtual void evaluate(MaterialClosure& closure) const;
-//
-//     // virtual BSDF* getBSDF(const Intersection& its,
-//     //                       Color3f& mat_scale) const;
-//
-//     BSDFNode* wireframe_bsdf;
-//     BSDFNode* mesh_bsdf;
-//     float threshold;
-// };
-
-// // TODO: convert this to a shader
-// // a material which creates a radar like effect across a surface based
-// // on the distance a point is to that point. It has a linear fall off
-// // initially
-// class RadarMaterial : public Material
-// {
-// public:
-//     struct Params
-//     {
-//         Params(std::string radar_bsdf,
-//                std::string mesh_bsdf,
-//                std::vector<Point3f> start_points,
-//                std::vector<Float> end_dist,
-//                std::vector<Float> start_times,
-//                std::vector<Float> end_times,
-//                float band_width,
-//                float fall_off,
-//                float proxy)
-//             : radar_bsdf(radar_bsdf),
-//               mesh_bsdf(mesh_bsdf),
-//               start_points(start_points),
-//               end_dist(end_dist),
-//               start_times(start_times),
-//               end_times(end_times),
-//               band_width(band_width),
-//               fall_off(fall_off),
-//               proxy(proxy) { }
-//
-//         std::string radar_bsdf;
-//         std::string mesh_bsdf;
-//         std::vector<Point3f> start_points;
-//         std::vector<Float> end_dist;
-//         std::vector<Float> start_times;
-//         std::vector<Float> end_times;
-//         float band_width;
-//         float fall_off;
-//         float proxy;
-//     };
-//
-//     RadarMaterial(BSDFNode* radar_bsdf,
-//                   BSDFNode* mesh_bsdf,
-//                   std::vector<Point3f> start_points,
-//                   std::vector<Float> end_dist,
-//                   std::vector<Float> start_proxy,
-//                   std::vector<Float> end_proxy,
-//                   float band_width,
-//                   float fall_off,
-//                   float proxy);
-//
-//     virtual void evaluate(MaterialClosure& closure) const
-//
-//     // virtual BSDF* getBSDF(const Intersection& its,
-//     //                       Color3f& mat_scale) const;
-//
-//     BSDFNode* radar_bsdf;
-//     BSDFNode* mesh_bsdf;
-//     std::vector<Point3f> start_points;
-//     std::vector<Float> end_dist;
-//     std::vector<Float> start_times;
-//     std::vector<Float> end_times;
-//     float band_width;
-//     float fall_off;
-//     float proxy;
-// };
 
 /////////////////////////////////////////////////
 // Material Node structure

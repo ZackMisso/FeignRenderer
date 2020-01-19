@@ -548,7 +548,7 @@ void FeignRenderer::fr_shader(std::string name,
         geom_shader->shader = new InterpVertsToSphereShader(params->prop,
                                                             params->proxy);
     }
-    if (type == "simple_material")
+    else if (type == "simple_material")
     {
         MaterialShaderNode* material_shader = getInstance()->find_material_shader(name);
 
@@ -561,9 +561,49 @@ void FeignRenderer::fr_shader(std::string name,
         MaterialNode* material = getInstance()->find_material(params->material);
         material_shader->shader = new SimpleMaterialShader(material);
     }
+    else if (type == "wireframe")
+    {
+        MaterialShaderNode* shader = getInstance()->find_material_shader(name);
+
+        if (shader->shader)
+        {
+            throw new FeignRendererException("wireframe shader already defined");
+        }
+
+        WireframeMaterialShader::Params* params = (WireframeMaterialShader::Params*)shader_data;
+        MaterialNode* wire_mat = getInstance()->find_material(params->wireframe_mat);
+        MaterialNode* mesh_mat = getInstance()->find_material(params->mesh_mat);
+
+        shader->shader = new WireframeMaterialShader(wire_mat,
+                                                     mesh_mat,
+                                                     params->threshold);
+    }
+    else if (type == "radar")
+    {
+        MaterialShaderNode* shader = getInstance()->find_material_shader(name);
+
+        if (shader->shader)
+        {
+            throw new FeignRendererException("radar shader already defined");
+        }
+
+        RadarMaterialShader::Params* params = (RadarMaterialShader::Params*)shader_data;
+        MaterialNode* radar_mat = getInstance()->find_material(params->radar_mat);
+        MaterialNode* mesh_mat = getInstance()->find_material(params->mesh_mat);
+
+        shader->shader = new RadarMaterialShader(radar_mat,
+                                                 mesh_mat,
+                                                 params->start_points,
+                                                 params->end_dist,
+                                                 params->start_times,
+                                                 params->end_times,
+                                                 params->band_width,
+                                                 params->fall_off,
+                                                 params->proxy);
+    }
     else
     {
-        throw new NotImplementedException("geometry shader type not recognized: " + type);
+        throw new NotImplementedException("shader type not recognized: " + type);
     }
 }
 
@@ -701,6 +741,14 @@ void FeignRenderer::fr_texture(std::string name,
     {
         ImageTexture::Params* params = (ImageTexture::Params*)texture_data;
         texture->texture = new ImageTexture(params->filename, params->scale);
+    }
+    else if (type == "sin")
+    {
+        SinTexture::Params* params = (SinTexture::Params*)texture_data;
+        texture->texture = new SinTexture(params->amp,
+                                          params->phase,
+                                          params->freq,
+                                          params->y);
     }
     else
     {

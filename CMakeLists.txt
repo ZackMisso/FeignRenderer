@@ -118,6 +118,7 @@ add_executable(feign
     include/feign/math/bbox.h
     include/feign/math/warp.h
     include/feign/math/coord_frame.h
+    include/feign/math/functor.h
 
     # Media header files
     include/feign/media/media.h
@@ -160,7 +161,6 @@ add_executable(feign
     src/scene.cpp
 
     # Accel implementation files
-    src/accel/accel.cpp
     src/accel/embree.cpp
     src/accel/sdf.cpp
 
@@ -203,8 +203,6 @@ add_executable(feign
 
     # Material implementation files
     src/materials/simple.cpp
-    src/materials/wireframe.cpp
-    src/materials/radar.cpp
 
     # Math implementation files
     src/math/transform.cpp
@@ -237,6 +235,8 @@ add_executable(feign
     # Shader implementation files
     src/shaders/interp_verts_to_sphere.cpp
     src/shaders/simple_material.cpp
+    src/shaders/radar_material.cpp
+    src/shaders/wireframe_material.cpp
 
     # Shapes implementation files
     src/shapes/shape.cpp
@@ -253,6 +253,7 @@ add_executable(feign
     src/textures/image_texture.cpp
     src/textures/noise_texture.cpp
     src/textures/texture.cpp
+    src/textures/sin_texture.cpp
 
     # Test implementation files
     src/tests/tester.cpp
