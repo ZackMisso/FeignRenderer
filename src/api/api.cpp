@@ -362,6 +362,14 @@ void FeignRenderer::fr_integrator(std::string name,
                                                       params->max_time,
                                                       params->max_heuristic);
     }
+    else if (type == "nice_normal")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new NiceNormalIntegrator(filter_node,
+                                                          params->location,
+                                                          params->max_time,
+                                                          params->max_heuristic);
+    }
     else if (type == "whitted")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
@@ -522,6 +530,14 @@ void FeignRenderer::fr_mesh(std::string name,
 
         mesh->mesh = new GridObj(params->resolution, terrain_texture);
         mesh->mesh->geomShader = geom_shader;
+    }
+    else if (type == "sdf_sphere")
+    {
+        SDFSphere::Params* params = (SDFSphere::Params*)mesh_data;
+
+        mesh->mesh = new SDFSphere(params->center,
+                                   params->radius,
+                                   params->interp);
     }
     else
     {
@@ -785,7 +801,17 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 // this is the big one
 void FeignRenderer::flush_renders()
 {
+    // if (global_params.sdf_only)
+    // {
+    //     LOG("should work 6");
+    // }
+
     Scene* scene_obj = getInstance()->scene->scene;
+
+    // if (global_params.sdf_only)
+    // {
+    //     LOG("should work4");
+    // }
 
     assert(scene_obj);
 
@@ -808,6 +834,11 @@ void FeignRenderer::flush_renders()
 
         inst_index++;
     }
+
+    // if (global_params.sdf_only)
+    // {
+    //     LOG("should work5");
+    // }
 
     // preprocess the scene
     scene_obj->preProcess();

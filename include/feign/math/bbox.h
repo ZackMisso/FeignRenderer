@@ -130,20 +130,9 @@ struct BBox3
         Vec3<T> min_vec = one.min.min(two.min);
         Vec3<T> max_vec = one.max.max(two.max);
 
-        // std::cout << "One:" << std::endl;
-        // one.infoDump();
-        //
-        // std::cout << "Two:" << std::endl;
-        // two.infoDump();
-
-        // std::cout << "Pre Merge" << std::endl;
-        // BBox3<T> box = BBox3<T>(min_vec, max_vec);
-        // std::cout << "Post Merge" << std::endl;
-
         return BBox3<T>(min_vec, max_vec);
     }
 
-    // TODO: ray intersection of bbox might have to happen elsewhere
     bool intersect(const Ray3f& ray) const
     {
         float nearT = -std::numeric_limits<float>::infinity();
@@ -176,7 +165,8 @@ struct BBox3
         return ray.near <= farT && nearT <= ray.far;
     }
 
-    bool intersect(const Ray3f& ray, float& near, float& far) const
+    // i hope this is correct
+    bool intersect(const Ray3f& ray, Float& near, Float& far) const
     {
         near = -std::numeric_limits<float>::infinity();
         far = std::numeric_limits<float>::infinity();
@@ -193,8 +183,8 @@ struct BBox3
             }
             else
             {
-                float t1 = (minVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
-                float t2 = (maxVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
+                Float t1 = (minVal - origin) * (1.0 / ray.dir(i));
+                Float t2 = (maxVal - origin) * (1.0 / ray.dir(i));
 
                 if (t1 > t2) std::swap(t1, t2);
 

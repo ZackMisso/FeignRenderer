@@ -8,8 +8,14 @@
 
  #include <feign/core/shape.h>
 
- SDFSphere::SDFSphere(Point3f center, Float radius)
-    : center(center), radius(radius) { }
+ SDFSphere::SDFSphere(Point3f center,
+                      Float radius,
+                      Float inter)
+    : center(center),
+      radius(radius)
+{
+    interp = inter;
+}
 
 Float SDFSphere::evaluate(Point3f pt) const
 {
@@ -31,10 +37,4 @@ Point3f SDFSphere::centroid() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     return center;
-}
-
-void SDFSphere::completeIntersectionInfo(const Ray3f& ray,
-                                         Intersection& its) const
-{
-    throw new NotImplementedException("sdf sphere completeIntersectionInfo");
 }

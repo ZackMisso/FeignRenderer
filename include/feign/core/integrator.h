@@ -124,6 +124,26 @@ public:
 };
 /////////////////////////////////////////////////
 
+// Produces nicer looking results
+/////////////////////////////////////////////////
+// Nice looking Shading Normals Integrator
+/////////////////////////////////////////////////
+class NiceNormalIntegrator : public Integrator
+{
+public:
+    NiceNormalIntegrator(FilterNode* filter,
+                     std::string location,
+                     long max_time,
+                     long max_heuristic);
+
+    virtual void preProcess();
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
 /////////////////////////////////////////////////
 // Bidirectional Path Tracer
 /////////////////////////////////////////////////

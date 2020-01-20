@@ -200,6 +200,7 @@ add_executable(feign
     src/integrators/whitted.cpp
     src/integrators/cosine_term.cpp
     src/integrators/barycentric.cpp
+    src/integrators/nice_normal.cpp
 
     # Material implementation files
     src/materials/simple.cpp

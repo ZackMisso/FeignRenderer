@@ -20,6 +20,7 @@
 #include "../scenes/month_of_shaders/jan_4_2020.h"
 #include "../scenes/month_of_shaders/jan_5_2020.h"
 #include "../scenes/month_of_shaders/jan_6_2020.h"
+#include "../scenes/month_of_shaders/jan_7_2020.h"
 
 void run_scene(std::string scene_name)
 {
@@ -59,8 +60,9 @@ int main(int argc, char* argv[])
     // jan_3_2020();          // done
     // jan_4_2020();         // done
     // jan_5_2020();          // done
-    // jan_6_2020();          // TODO
-    sphere_ground();
+    jan_6_2020();
+    jan_7_2020();
+    // sphere_ground();
     return 0;
 
     ///\\\ Month of shaders \\\/////

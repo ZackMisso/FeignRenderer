@@ -38,14 +38,21 @@ Scene::~Scene()
 
 void Scene::preProcess()
 {
+    // if (global_params.sdf_only)
+    // {
+    //     LOG("working");
+    // }
+
     if (!ray_accel)
     {
         if (global_params.sdf_only)
         {
+            // assert(false);
             ray_accel = new SDFAccel();
         }
         else
         {
+            // assert(false);
             ray_accel = new EmbreeAccel();
         }
 
@@ -55,9 +62,17 @@ void Scene::preProcess()
     for (int i = 0; i < shapes.size(); ++i)
     {
         shapes[i]->transform.print();
-        ray_accel->addShape(shapes[i]);
+        if (global_params.sdf_only)
+        {
+            ray_accel->addSDFShape((SDFShape*)shapes[i]);
+        }
+        else
+        {
+            ray_accel->addShape(shapes[i]);
+        }
     }
 
+    // assert(false);
     ray_accel->build();
 
     integrator_node->integrator->preProcess();

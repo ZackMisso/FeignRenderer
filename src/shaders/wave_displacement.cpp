@@ -11,10 +11,12 @@
 
 WaveDisplacementShader::WaveDisplacementShader(std::vector<Point2f> points,
                                                std::vector<Functor> functors,
+                                               std::vector<Float> dists,
                                                std::vector<Float> start_proxies,
                                                std::vector<Float> end_proxies)
     : points(points),
       functors(functors),
+      dists(dists),
       start_proxies(start_proxies),
       end_proxies(end_proxies) { }
 
@@ -38,11 +40,13 @@ void WaveDisplacementShader::evaluate(void* mesh)
     // process verts
     for (int i = 0; i < old_verts.size(); ++i)
     {
-        // TODO
-        Point3f start_pos = old_verts[i];
-        Point3f end_pos = old_verts[i] + old_norms[i] * functors[]
+        for (int j = 0; j < points.size(); ++j)
+        {
+            
+            Point3f start_pos = old_verts[i];
+            Point3f end_pos = old_verts[i] + old_norms[i] * functors[i];
+        }
     }
-
 
     std::vector<Normal3f> new_norms = std::vector<Normal3f>(old_norms.size());
     // process norms

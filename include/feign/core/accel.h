@@ -25,7 +25,7 @@ public:
     virtual void build() = 0;
     virtual void preProcess() = 0;
     virtual void addShape(Shape* mesh) { };
-    virtual void addShape(SDFShape* mesh) { };
+    virtual void addSDFShape(SDFShape* mesh) { };
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const = 0;
 };
@@ -95,11 +95,15 @@ class SDFAccel : public Accel
 {
     virtual void preProcess();
     virtual void clear();
-    virtual void addShape(SDFShape* mesh);
+    virtual void addSDFShape(SDFShape* mesh);
     virtual void build();
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
 
 protected:
+    Float sd_evaluate(Point3f point, int& shape_index) const;
+    Float sd_smooth_union(Float d1, Float d2, Float k) const;
+    Normal3f sd_normal(Point3f point) const;
+
     std::vector<SDFShape*> sdfs;
     BBox3f scene_box;
 };

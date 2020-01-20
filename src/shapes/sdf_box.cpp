@@ -29,9 +29,3 @@ Point3f SDFBox::centroid() const
     // TODO: how do you calculate the centroid after arbitrary deformations
     return (tlc + brc) / 2.0;
 }
-
-void SDFBox::completeIntersectionInfo(const Ray3f& ray,
-                                         Intersection& its) const
-{
-    throw new NotImplementedException("sdf box completeIntersectionInfo");
-}

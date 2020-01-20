@@ -12,11 +12,11 @@ static void jan_4_2020()
     std::string mkdir_command = "mkdir " + test_name + "/";
     std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
 
-    system(rm_command.c_str());
-    system(mkdir_command.c_str());
+    // system(rm_command.c_str());
+    // system(mkdir_command.c_str());
 
-    int start_frame = 30;
-    int end_frame = 31;
+    int start_frame = 0;
+    int end_frame = 0;
 
     for (int i = start_frame; i < end_frame; i++)
     {
@@ -122,5 +122,5 @@ static void jan_4_2020()
         FeignRenderer::clean_up();
     }
 
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
 }

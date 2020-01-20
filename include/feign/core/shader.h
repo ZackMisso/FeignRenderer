@@ -186,7 +186,7 @@ public:
         // TODO: create functor abstaction later
         //       for now this just stores max value
         Params(std::vector<Point2f> points,
-               std::vector<Float> functors,
+               std::vector<Functor*> functors,
                std::vector<Float> start_proxies,
                std::vector<Float> end_proxies)
             : points(points),
@@ -195,7 +195,7 @@ public:
               end_proxies(end_proxies) { }
 
         std::vector<Point2f> points;
-        std::vector<Float> functors;
+        std::vector<Functor*> functors;
         std::vector<Float> start_proxies;
         std::vector<Float> end_proxies;
     };
@@ -207,6 +207,11 @@ public:
 
     virtual void evaluate(void* mesh);
     virtual bool isValid(MeshType mesh_type) const;
+
+    std::vector<Point2f> points;
+    std::vector<Float> functors;
+    std::vector<Float> start_proxies;
+    std::vector<Float> end_proxies;
 };
 
 /////////////////////////////////////////////////

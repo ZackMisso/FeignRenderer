@@ -36,6 +36,9 @@
 ////////////////////
 
 #define Epsilon 1e-4f
+#define EPS_VEC_X Vector3f(Epsilon, 0.f, 0.f)
+#define EPS_VEC_Y Vector3f(0.f, Epsilon, 0.f)
+#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon)
 
 #define PI           3.14159265358979323846f
 #define INV_PI       0.31830988618379067154f
@@ -47,11 +50,17 @@
 // a list of global parameters
 struct GlobalParams
 {
-    bool ignore_shadow_checks = true; // ignores shadow checks when determining light contribution
-    bool sdf_only = false;            // tells the renderer whether or not it is rendering signed distance fields
+    GlobalParams()
+    {
+        ignore_shadow_checks = false;
+        sdf_only = true;
+    }
+
+    bool ignore_shadow_checks; // ignores shadow checks when determining light contribution
+    bool sdf_only;             // tells the renderer whether or not it is rendering signed distance fields
 };
 
-static GlobalParams global_params;
+static GlobalParams global_params = GlobalParams();
 
 // MeshTypes are used to verify that geometry shaders are valid
 enum MeshType
@@ -272,6 +281,18 @@ inline float interp_value(int index, int flip)
     }
 
     return 1.f - float(flip - index) / float(flip);
+}
+
+inline Float interp(Float x, Float y, Float proxy)
+{
+    return x * (1.0 - proxy) + proxy * y;
+}
+
+inline Float clamp(Float proxy, Float min, Float max)
+{
+    if (proxy < min) return min;
+    if (proxy > max) return max;
+    return proxy;
 }
 
 /////////////////////////////////////////////////

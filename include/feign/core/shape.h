@@ -35,7 +35,7 @@ public:
         return false;
     }
 
-    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const = 0;
+    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const { }
     virtual uint32_t primitiveCount() const = 0;
 
     virtual BBox3f boundingBox() const = 0;
@@ -69,6 +69,8 @@ public:
     ~SDFShape() { }
 
     virtual float evaluate(Point3f pt) const = 0;
+
+    Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -80,15 +82,21 @@ class SDFSphere : public SDFShape
 public:
     struct Params
     {
-        Params(Point3f center, Float radius)
-            : center(center), radius(radius) { }
+        Params(Point3f center,
+               Float radius,
+               Float interp)
+            : center(center),
+              radius(radius),
+              interp(interp) { }
 
         Point3f center;
         Float radius;
+        Float interp;
     };
 
-    SDFSphere(Point3f center, Float radius);
-    ~SDFSphere();
+    SDFSphere(Point3f center,
+              Float radius,
+              Float interp);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -96,8 +104,6 @@ public:
     virtual Point3f centroid() const;
 
     virtual uint32_t primitiveCount() const { return 1; }
-
-    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 
 protected:
     Point3f center;
@@ -129,8 +135,6 @@ public:
     virtual Point3f centroid() const;
 
     virtual uint32_t primitiveCount() const { return 1; }
-
-    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
 
 protected:
     Point3f tlc;

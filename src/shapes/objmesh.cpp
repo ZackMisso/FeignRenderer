@@ -296,10 +296,7 @@ Point3f ObjMesh::centroid(uint32_t tri) const
 
 void ObjMesh::preProcess()
 {
-    // preProcessChildren();
-
     // TODO: make these tasks multithreaded ???
-    LOG("parsing from file: " + filename);
     parseFromFile(filename);
 
     // apply the geometry shader to the mesh
@@ -309,7 +306,6 @@ void ObjMesh::preProcess()
     }
 
     // precompute the total surface area and cache it
-    LOG("calculating surface area");
     sa = 0.0;
     for (uint32_t i = 0; i < tris.size(); ++i)
     {
@@ -317,22 +313,15 @@ void ObjMesh::preProcess()
     }
 
     Point3f center = centroid();
-
-    LOG("centroid:");
-    LOG(center);
-
     // precompute the bounding box around the object
-    LOG("asserting size");
     assert(vs.size() > 0);
 
-    LOG("calculating bbox");
     bbox = BBox3f(vs[0], vs[0]);
     for (uint32_t i = 1; i < vs.size(); ++i)
     {
         bbox.expand(vs[i]);
     }
 
-    LOG("info dump");
     infoDump();
 }
 
