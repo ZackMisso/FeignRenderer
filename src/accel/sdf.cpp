@@ -95,15 +95,15 @@ bool SDFAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 
     for (; i < max_iter && !hit && dist <= far; ++i)
     {
-        // assert(false);
         Point3f p = scene_ray(dist);
         int shape_index;
 
         Float sd = sd_evaluate(p, shape_index);
-        // LOG("signed dist:",sd);
 
         if (sd <= Epsilon)
         {
+            Normal3f norm = sd_normal(p);
+
             hit = true;
             its.t = dist;
             its.uv = Vec2f(0.f, 0.f); // how to incorporate uv coordinates?
@@ -111,7 +111,7 @@ bool SDFAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
             its.intersected_mesh = sdfs[shape_index];
             its.p = p;
 
-            Normal3f norm = sd_normal(p);
+
             its.g_frame = CoordinateFrame(norm);
             its.s_frame = its.g_frame;
 

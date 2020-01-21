@@ -21,6 +21,8 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 {
     closure.is_specular = (*material)()->isDelta();
 
+    // LOG("huh");
+
     if (closure.is_specular)
     {
         return;

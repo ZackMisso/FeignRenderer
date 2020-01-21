@@ -15,29 +15,22 @@ Diffuse::Diffuse(Color3f albedo)
 {
 }
 
-// the idea is that sample returns eval() / pdf()
-// Color3f Diffuse::sample(BSDFQuery& rec, const Point2f& sample) const
 void Diffuse::sample(MaterialClosure& closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f, 0.f, 0.f);
-        // return Color3f(0.f, 0.f, 0.f);
     }
     else
     {
-
         closure.wo = WarpSpace::sqrToCosHemi(closure.sampler->next2D());
         closure.eta = 1.0f;
         closure.albedo = albedo;
     }
-
-    // return albedo;
 }
 
 void Diffuse::evaluate(MaterialClosure& closure) const
 {
-    // LOG("evaluating");
     if (CoordinateFrame::cosTheta(closure.wi) <= 0 ||
         CoordinateFrame::cosTheta(closure.wo) <= 0)
     {

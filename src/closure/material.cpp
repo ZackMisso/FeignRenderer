@@ -53,6 +53,7 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
             shader->evaluate_mat_only(*this);
             // LOG("albedo:", albedo);
             // LOG("through:", shadow_rays[i].throughput);
+            // LOG("albedo", albedo);
             shadow_rays[i].throughput *= albedo;
             // LOG("throughput_after:", shadow_rays[i].throughput);
             // LOG("albedo_after:", albedo);
