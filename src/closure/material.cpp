@@ -41,6 +41,8 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
     Vector3f tmp_wo = wo;
     Color3f tmp_albedo = albedo;
 
+    // LOG("shadow rays size:", int(shadow_rays.size()));
+
     for (int i = 0; i < shadow_rays.size(); ++i)
     {
         if (shadow_rays[i].valid)

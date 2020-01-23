@@ -1,19 +1,19 @@
 {
     "scene": {
-        "name": "cornell_box_diffuse_path",
+        "name": "cornell_box_diffuse",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
     },
     "integrator": {
         "name": "integrator",
-        "type": "path",
+        "type": "whitted",
         "filter": "default"
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 1024
+        "sample_count": 4
     },
     "camera": {
         "name": "camera",
@@ -223,9 +223,9 @@
         "name": "point_emitter",
         "type": "point",
         "intensity": [
-            2000.0,
-            1500.0,
-            1000.0
+            4000.0,
+            3000.0,
+            2000.0
         ],
         "position": [
             0.0,

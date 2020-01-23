@@ -209,7 +209,8 @@ FilterNode* FeignRenderer::find_filter(std::string name)
 
         if (name == "default")
         {
-            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
+            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
+            node->filter = new BoxFilter();
         }
 
         return node;
@@ -394,6 +395,14 @@ void FeignRenderer::fr_integrator(std::string name,
                                                            params->max_time,
                                                            params->max_heuristic);
     }
+    else if (type == "path")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new Path_Unidirectional_Integrator(filter_node,
+                                                                    params->location,
+                                                                    params->max_time,
+                                                                    params->max_heuristic);
+    }
     else
     {
         throw new NotImplementedException("unsupported integrator: " + type);
@@ -518,7 +527,7 @@ void FeignRenderer::fr_mesh(std::string name,
 
         GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
 
-        mesh->mesh = new ObjMesh(params->filename);
+        mesh->mesh = new ObjMesh(params->filename, params->flip_norms);
         mesh->mesh->geomShader = geom_shader;
     }
     else if (type == "grid")

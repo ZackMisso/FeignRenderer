@@ -63,17 +63,18 @@ int main(int argc, char* argv[])
     // jan_5_2020();          // done
     // jan_6_2020();
     // jan_7_2020();
-    jan_8_2020();
+    // jan_8_2020();
     // sphere_ground();
-    return 0;
+    // return 0;
 
     ///\\\ Month of shaders \\\/////
 
-    std::string scene = "tests/ajax_normals";
+    // std::string scene = "tests/ajax_normals";
     // std::string scene = "tests/ajax_diffuse";
     // std::string scene = "tests/ajax_mirror";
     // std::string scene = "tests/box_rotations";
     // std::string scene = "tests/ajax_bary";
+    std::string scene = "tests/cornell_box_diffuse";
 
     for (int i = 1; i < argc; ++i)
     {

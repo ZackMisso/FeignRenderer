@@ -17,8 +17,8 @@ ObjMesh::ObjMesh() : Shape()
     tris = std::vector<Triangle>();
 }
 
-ObjMesh::ObjMesh(const std::string& filename)
-    : Shape(), filename(filename)
+ObjMesh::ObjMesh(const std::string& filename, bool flip_norms)
+    : Shape(), filename(filename), flip_norms(flip_norms)
 {
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
@@ -107,8 +107,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 }
 
 // TODO: implement a better parser
-void ObjMesh::parseFromFile(const std::string& filename,
-                            bool flipNorms)
+void ObjMesh::parseFromFile(const std::string& filename)
 {
     if (filename.empty())
         return;
@@ -164,6 +163,11 @@ void ObjMesh::parseFromFile(const std::string& filename,
             line >> n[2];
 
             n = transform * n;
+
+            if (flip_norms)
+            {
+                n = -n;
+            }
 
             ns.push_back(n.normalized());
         }

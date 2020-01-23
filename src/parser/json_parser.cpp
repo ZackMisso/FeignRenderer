@@ -346,6 +346,7 @@ void JsonParser::parse(std::string filename)
             {
                 std::string filename = "default";
                 std::string geom_shader = "default";
+                bool flip_norms = false;
 
                 if (value.HasMember("filename"))
                 {
@@ -355,8 +356,12 @@ void JsonParser::parse(std::string filename)
                 {
                     geom_shader = value["geom_shader"].GetString();
                 }
+                if (value.HasMember("flip_norms"))
+                {
+                    flip_norms = value["flip_norms"].GetBool();
+                }
 
-                ObjMesh::Params params(filename, geom_shader);
+                ObjMesh::Params params(filename, geom_shader, flip_norms);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }

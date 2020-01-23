@@ -18,15 +18,20 @@ public:
     struct Params
     {
         Params(std::string filename,
-               std::string shader)
-            : filename(filename), shader(shader) { }
+               std::string shader,
+               bool flip_norms = false)
+            : filename(filename),
+              shader(shader),
+              flip_norms(flip_norms) { }
 
         std::string filename;
         std::string shader;
+        bool flip_norms;
     };
 
     ObjMesh();
-    ObjMesh(const std::string& filename);
+    ObjMesh(const std::string& filename,
+            bool flip_norms = false);
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,
             const std::vector<Vec2f>& uvs,
@@ -48,8 +53,7 @@ public:
 
     virtual void addShapeToScene(RTCScene scene, RTCDevice device);
 
-    void parseFromFile(const std::string& filename,
-                       bool flipNorms = false);
+    void parseFromFile(const std::string& filename);
 
     virtual uint32_t primitiveCount() const;
 
@@ -83,4 +87,5 @@ protected:
 
     BBox3f bbox;
     Float sa;
+    bool flip_norms;
 };

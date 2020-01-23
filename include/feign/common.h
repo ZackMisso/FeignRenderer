@@ -53,7 +53,7 @@ struct GlobalParams
     GlobalParams()
     {
         ignore_shadow_checks = false;
-        sdf_only = true;
+        sdf_only = false;
     }
 
     bool ignore_shadow_checks; // ignores shadow checks when determining light contribution

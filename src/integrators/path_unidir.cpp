@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/integrator.h>
+#include <feign/core/scene.h>
 
 Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode* filter,
                                                                std::string location,
@@ -23,14 +24,91 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
                                            const Ray3f& ray) const
 {
-    return Color3f(0.f);
+    Intersection its;
+
+    Vector3f dir = ray.dir;
+    Float rr_cont_probability = 0.95f;
+
+    if (!scene->intersect(ray, its) || ray.depth > 10)
+    {
+        return Color3f(0.f);
+    }
+
+    const MaterialShader* shader = scene->getShapeMaterialShader(its);
+
+    // create the material closure
+    MaterialClosure closure = MaterialClosure(sampler,
+                                              &its,
+                                              &ray,
+                                              scene,
+                                              false);
+
+    // evaluate the material shader
+    shader->evaluate(closure);
+
+    // accumulate the shadow rays
+    closure.accumulate_shadow_rays(shader);
+
+    // if (closure.is_specular)
+    // {
+
+    // TODO: only incoporate emission when the
+
+    // sample the next path
+    closure.wi = its.toLocal(-ray.dir);
+    shader->sample(closure);
+
+    // random termination
+    if (sampler->next1D() > rr_cont_probability ||
+        closure.pdf == 0.f)
+    {
+        return closure.emission + closure.nee;
+    }
+
+    Ray3f new_ray(its.p,
+                  its.toWorld(closure.wo),
+                  Epsilon,
+                  std::numeric_limits<Float>::infinity(),
+                  ray.depth + 1);
+
+    // LOG("albedo:", closure.albedo);
+    // LOG("nee:", closure.nee);
+    // LOG("pdf:", closure.pdf);
+    // LOG("emission:", closure.emission);
+    // LOG("cum_weight:", closure.albedo / (closure.pdf * rr_cont_probability));
+    // LOG("");
+
+    Float cosTerm = its.s_frame.n % new_ray.dir;
+    if (cosTerm < 0.f) cosTerm = -cosTerm;
+
+    Color3f recur = Li(scene, sampler, new_ray);
+
+    // if (ray.depth == 0)
+    // {
+        // LOG("albedo:", closure.albedo);
+        // LOG("nee:", closure.nee);
+        // LOG("pdf:", closure.pdf);
+        // LOG("recur:", recur);
+        // LOG("emission:", closure.emission);
+        // LOG("throughput:", closure.albedo * recur / (closure.pdf * rr_cont_probability) +
+        //        closure.nee + closure.emission);
+        // LOG("");
+    // }
+
+    return closure.albedo * recur * cosTerm /
+           (closure.pdf * rr_cont_probability) +
+           closure.nee + closure.emission;
+
+    // return closure.emission + closure.nee;
+
+    // return Color3f(0.f);
     // // TODO: continue from here
     // // return Color3f(0.f);
     //
     // Intersection its;
-    //
-    // Vector3f d = ray.d;
-    //
+    // //
+    // // Vector3f d = ray.d;
+    // //
     // if (!scene->intersect(ray, its))
     // {
     //     // TODO: environment emitter

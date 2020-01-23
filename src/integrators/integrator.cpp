@@ -39,6 +39,10 @@ void Integrator::render(const Scene* scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
+        // for (int i = 512; i < 513; ++i)
+        // {
+        //     for (int j = 512; j < 513; ++j)
+        //     {
                 // LOG("taking pixel and apeture samples");
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
@@ -104,24 +108,18 @@ void Integrator::render(const Scene* scene,
     {
         for (int j = 0; j < image.width(); ++j)
         {
-            // if (filter_weights(j, i, 0) == 0.f)
-            // {
-            //     LOG("ZERO WEIGHTS");
-            // }
-            //
-            // if (std::isnan(filter_weights(j, i, 0)))
-            // {
-            //     LOG("weight nan");
-            // }
-
-            image(j, i, 0) = image(j, i, 0) / filter_weights(j, i, 0);
-            image(j, i, 1) = image(j, i, 1) / filter_weights(j, i, 0);
-            image(j, i, 2) = image(j, i, 2) / filter_weights(j, i, 0);
-
-            // if (std::isnan(image(j, i, 0)))
-            // {
-            //     LOG(std::to_string(j) + " " + std::to_string(i) + " is nan");
-            // }
+            if (filter_weights(j, i, 0) == 0.f)
+            {
+                image(j, i, 0) = 0.f;
+                image(j, i, 1) = 0.f;
+                image(j, i, 2) = 0.f;
+            }
+            else
+            {
+                image(j, i, 0) = image(j, i, 0) / filter_weights(j, i, 0);
+                image(j, i, 1) = image(j, i, 1) / filter_weights(j, i, 0);
+                image(j, i, 2) = image(j, i, 2) / filter_weights(j, i, 0);
+            }
         }
     }
 }

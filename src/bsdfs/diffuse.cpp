@@ -20,12 +20,14 @@ void Diffuse::sample(MaterialClosure& closure) const
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f, 0.f, 0.f);
+        closure.pdf = 0.f;
     }
     else
     {
         closure.wo = WarpSpace::sqrToCosHemi(closure.sampler->next2D());
         closure.eta = 1.0f;
-        closure.albedo = albedo;
+        closure.albedo = albedo * INV_PI;
+        closure.pdf = INV_PI * CoordinateFrame::cosTheta(closure.wo);
     }
 }
 
