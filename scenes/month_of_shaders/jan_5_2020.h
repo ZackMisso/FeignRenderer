@@ -232,8 +232,6 @@ static void jan_5_2020()
 
         FeignRenderer::fr_emitter("point_emitter",
                                   "point",
-                                  "null",
-                                  "null",
                                   &emitter_params);
 
         FeignRenderer::flush_renders();

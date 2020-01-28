@@ -38,21 +38,14 @@ Scene::~Scene()
 
 void Scene::preProcess()
 {
-    // if (global_params.sdf_only)
-    // {
-    //     LOG("working");
-    // }
-
     if (!ray_accel)
     {
         if (global_params.sdf_only)
         {
-            // assert(false);
             ray_accel = new SDFAccel();
         }
         else
         {
-            // assert(false);
             ray_accel = new EmbreeAccel();
         }
 
@@ -72,11 +65,21 @@ void Scene::preProcess()
         }
     }
 
-    // assert(false);
     ray_accel->build();
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
+
+    // TODO: is this really the best place to handle this?
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        // check if the object's emitter is valid. If so,
+        // make sure the emitter's mesh matches the object's
+        if (objects[i]->emitter)
+        {
+            objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
+        }
+    }
 }
 
 void Scene::renderScene() const
@@ -109,7 +112,6 @@ void Scene::renderScene() const
                        image);
 
     image.write(integrator->location + name + ".png"); // .png writer has some issues for some scenes
-    image.write(integrator->location + name + ".hdr"); // .hdr writer has some issues for some scenes
     image.write(integrator->location + name + ".exr");
 }
 
@@ -153,7 +155,7 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
         if (!intersect(shadow_ray, tmp) ||
              global_params.ignore_shadow_checks)
         {
-            Float cos_term = closure.its->s_frame.n % eqr.wi;
+            Float cos_term = closure.its->g_frame.n % eqr.wi;
             if (cos_term < -Epsilon) cos_term = -cos_term;
 
             closure.shadow_rays[i].valid = true;
@@ -169,7 +171,6 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     closure.shadow_rays = std::vector<EmitterEval>(1);
 
     Float choice_pdf = 1.0 / Float(emitters.size());
-    // LOG("choice pdf:", choice_pdf);
 
     int emitter = closure.sampler->next1D() * emitters.size();
 

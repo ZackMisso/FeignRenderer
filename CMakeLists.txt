@@ -185,6 +185,8 @@ add_executable(feign
     src/emitters/distant.cpp
     src/emitters/directional.cpp
     src/emitters/environment.cpp
+    src/emitters/mesh.cpp
+    src/emitters/interp_env.cpp
 
     # Filter implementation files
     src/filters/box_filter.cpp

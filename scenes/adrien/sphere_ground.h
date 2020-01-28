@@ -13,7 +13,7 @@ static void sphere_ground()
     system(mkdir_command.c_str());
 
     int start_frame = 0;
-    int end_frame = 100;
+    int end_frame = 1;
 
     for (int i = start_frame; i < end_frame; i++)
     {
@@ -139,8 +139,6 @@ static void sphere_ground()
 
         FeignRenderer::fr_emitter("point_emitter",
                                   "point",
-                                  "null",
-                                  "null",
                                   &emitter_params);
 
         // TODO: implement wave displacement
@@ -150,8 +148,6 @@ static void sphere_ground()
 
         FeignRenderer::fr_emitter("point_emitter_2",
                                   "point",
-                                  "null",
-                                  "null",
                                   &emitter_params_2);
 
         FeignRenderer::flush_renders();

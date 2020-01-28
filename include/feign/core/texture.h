@@ -51,6 +51,11 @@ private:
     bool initialized;
 };
 
+// class EnvironmentMap : public Texture
+// {
+//
+// };
+
 class SinTexture : public Texture
 {
 public:

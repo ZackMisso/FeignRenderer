@@ -42,3 +42,10 @@ void DistantEmitter::preProcess()
     // throw new NotImplementedException("emitter distant ");
     // does nothing for now
 }
+
+Color3f DistantEmitter::evaluate(EmitterQuery& rec) const
+{
+    throw new NotImplementedException("distant evaluate");
+
+    return Color3f(0.f);
+}

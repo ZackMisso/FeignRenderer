@@ -31,3 +31,10 @@ void DirectionalEmitter::preProcess()
 {
     throw new NotImplementedException("emitter directional");
 }
+
+Color3f DirectionalEmitter::evaluate(EmitterQuery& rec) const
+{
+    throw new NotImplementedException("directional evaluate");
+
+    return Color3f(0.f);
+}

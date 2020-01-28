@@ -8,6 +8,8 @@
 
 #include <feign/core/emitter.h>
 
+// TODO: this entire emitter will probably have to be rewritten
+
 EnvironmentEmitter::EnvironmentEmitter()
 {
     throw new NotImplementedException("emitter environment");
@@ -30,4 +32,11 @@ Color3f EnvironmentEmitter::sample_pos(EmitterQuery& rec,
 void EnvironmentEmitter::preProcess()
 {
     throw new NotImplementedException("emitter environment");
+}
+
+Color3f EnvironmentEmitter::evaluate(EmitterQuery& rec) const
+{
+    throw new NotImplementedException("environment evaluate");
+
+    return Color3f(0.f);
 }

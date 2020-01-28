@@ -417,14 +417,6 @@ void JsonParser::parse(std::string filename)
             {
                 type = value["type"].GetString();
             }
-            if (value.HasMember("mesh"))
-            {
-                type = value["mesh"].GetString();
-            }
-            if (value.HasMember("material"))
-            {
-                type = value["material"].GetString();
-            }
 
             FeignRenderer::fr_clear_transform();
 
@@ -456,33 +448,40 @@ void JsonParser::parse(std::string filename)
 
             if (type == "point")
             {
-                // assert(false);
                 Vector3f pos = Vector3f(0.f);
                 Color3f intensity = Color3f(1.f);
 
                 if (value.HasMember("position"))
                 {
-                    // assert(false);
                     pos[0] = value["position"][0].GetFloat();
                     pos[1] = value["position"][1].GetFloat();
                     pos[2] = value["position"][2].GetFloat();
                 }
                 if (value.HasMember("intensity"))
                 {
-                    // assert(false);
                     intensity[0] = value["intensity"][0].GetFloat();
                     intensity[1] = value["intensity"][1].GetFloat();
                     intensity[2] = value["intensity"][2].GetFloat();
                 }
-                // assert(false);
 
                 PointEmitter::Params params(intensity, pos);
 
-                FeignRenderer::fr_emitter(name,
-                                          type,
-                                          mesh,
-                                          material,
-                                          &params);
+                FeignRenderer::fr_emitter(name, type, &params);
+            }
+            else if (type == "mesh")
+            {
+                Color3f intensity = Color3f(1.f);
+
+                if (value.HasMember("intensity"))
+                {
+                    intensity[0] = value["intensity"][0].GetFloat();
+                    intensity[1] = value["intensity"][1].GetFloat();
+                    intensity[2] = value["intensity"][2].GetFloat();
+                }
+
+                MeshEmitter::Params params(intensity);
+
+                FeignRenderer::fr_emitter(name, type, &params);
             }
             else
             {
@@ -520,30 +519,6 @@ void JsonParser::parse(std::string filename)
                 SimpleMaterial::Params params(bsdf);
 
                 FeignRenderer::fr_material(name, type, &params);
-            }
-            else if (type == "wireframe")
-            {
-                throw new FeignRendererException("zack broke this");
-                // std::string wireframe_bsdf = "default";
-                // std::string mesh_bsdf = "default";
-                // float threshold = 0.01f;
-                //
-                // if (value.HasMember("wireframe_bsdf"))
-                // {
-                //     wireframe_bsdf = value["wireframe_bsdf"].GetString();
-                // }
-                // if (value.HasMember("mesh_bsdf"))
-                // {
-                //     mesh_bsdf = value["mesh_bsdf"].GetString();
-                // }
-                // if (value.HasMember("threshold"))
-                // {
-                //     threshold = value["threshold"].GetFloat();
-                // }
-                //
-                // WireframeMaterial::Params params(wireframe_bsdf, mesh_bsdf, threshold);
-                //
-                // FeignRenderer::fr_material(name, type, &params);
             }
             else
             {

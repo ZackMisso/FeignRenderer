@@ -9,7 +9,9 @@
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/core/shape.h>
 
+// TODO: is this the best way of incorporating emitters
 /////////////////////////////////////////////////
 // Emitter Query Object
 /////////////////////////////////////////////////
@@ -45,6 +47,12 @@ public:
     virtual Color3f sample_pos(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const = 0;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const = 0;
+
+    // this is bad design, figure out a better way of supporting
+    // mesh emitters
+    virtual void setMeshNode(MeshNode* node) { }
 };
 /////////////////////////////////////////////////
 
@@ -63,6 +71,8 @@ public:
     virtual Color3f sample_pos(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
 
     virtual void preProcess();
 
@@ -85,6 +95,8 @@ public:
     virtual Color3f sample_pos(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
 
     virtual void preProcess();
 
@@ -119,6 +131,8 @@ public:
                                const Point2f& sample,
                                Float* pdf) const;
 
+    virtual Color3f evaluate(EmitterQuery& rec) const;
+
     virtual void preProcess();
 
 protected:
@@ -127,39 +141,79 @@ protected:
 };
 /////////////////////////////////////////////////
 
-// /////////////////////////////////////////////////
-// // Mesh Emitter
-// /////////////////////////////////////////////////
-// class MeshEmitter : public Emitter
-// {
-// public:
-//     struct Params
-//     {
-//         Params(Color3f intensity, Point3f pos)
-//             : intensity(intensity), pos(pos) { }
-//
-//         MeshNode* mesh;
-//         Color3f intensity;
-//     };
-//
-//     MeshEmitter(MeshNode* mesh,
-//                 Color3f intensity);
-//
-//     virtual Color3f sample_li(EmitterQuery& rec,
-//                               const Point2f& sample,
-//                               Float* pdf) const;
-//
-//     virtual Color3f sample_pos(EmitterQuery& rec,
-//                                const Point2f& sample,
-//                                Float* pdf) const;
-//
-//     virtual void preProcess();
-//
-// protected:
-//     MeshNode* mesh;
-//     Color3f intensity;
-// };
-// /////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// Inter Environment Emitter
+/////////////////////////////////////////////////
+// simply interpolates between two colors, based on the up direction
+// of the ray
+/////////////////////////////////////////////////
+class InterpEnvironmentEmitter : public Emitter
+{
+public:
+    struct Params
+    {
+        Params(Color3f top, Color3f bot)
+            : top(top), bot(bot) { }
+
+        Color3f top;
+        Color3f bot;
+    };
+
+    InterpEnvironmentEmitter(Color3f top,
+                             Color3f bot);
+
+    // environment emitters should not be sampled
+    virtual Color3f sample_li(EmitterQuery& rec,
+                              const Point2f& sample,
+                              Float* pdf) const;
+
+    virtual Color3f sample_pos(EmitterQuery& rec,
+                               const Point2f& sample,
+                               Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
+
+protected:
+    Color3f top;
+    Color3f bot;
+};
+
+// TODO: this needs a transform
+/////////////////////////////////////////////////
+// Mesh Emitter
+/////////////////////////////////////////////////
+class MeshEmitter : public Emitter
+{
+public:
+    struct Params
+    {
+        Params(Color3f intensity)
+            : intensity(intensity) { }
+
+        Color3f intensity;
+    };
+
+    MeshEmitter(Color3f intensity);
+
+    virtual Color3f sample_li(EmitterQuery& rec,
+                              const Point2f& sample,
+                              Float* pdf) const;
+
+    virtual Color3f sample_pos(EmitterQuery& rec,
+                               const Point2f& sample,
+                               Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
+
+    virtual void setMeshNode(MeshNode* node);
+
+    virtual void preProcess();
+
+protected:
+    MeshNode* mesh;
+    Color3f intensity;
+};
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // Environment Emitter
@@ -177,6 +231,8 @@ public:
                                const Point2f& sample,
                                Float* pdf) const;
 
+    virtual Color3f evaluate(EmitterQuery& rec) const;
+
     virtual void preProcess();
 
 protected:
@@ -189,12 +245,20 @@ protected:
 struct EmitterNode : public Node
 {
 public:
-    EmitterNode() : emitter(nullptr) { }
-    EmitterNode(std::string name) : Node(name), emitter(nullptr) { }
-    EmitterNode(Emitter* emitter) : emitter(emitter) { }
+    EmitterNode()
+        : emitter(nullptr),
+          objectNode(nullptr) { }
+    EmitterNode(std::string name)
+        : Node(name),
+          emitter(nullptr),
+          objectNode(nullptr) { }
+    EmitterNode(Emitter* emitter)
+        : emitter(emitter),
+          objectNode(nullptr) { }
 
     ~EmitterNode() { delete emitter; }
 
+    ObjectNode* objectNode;
     Emitter* emitter;
 };
 /////////////////////////////////////////////////

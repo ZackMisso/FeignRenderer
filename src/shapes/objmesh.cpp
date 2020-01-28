@@ -406,7 +406,6 @@ void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) cons
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
 
     its.bary = Point3f(bary);
-    // Vec3f bary(its.uv(0), its.uv(1), 1.0 - its.uv(0) - its.uv(1));
 
     uint32_t i0_vs = tris[its.f].vsInds(0);
     uint32_t i1_vs = tris[its.f].vsInds(1);

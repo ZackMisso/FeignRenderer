@@ -98,6 +98,7 @@ public:
     static void fr_object(std::string name,
                           std::string mesh,
                           std::string material_shader,
+                          std::string emitter = "null",
                           int index = -1); // what is this index parameter again
 
     static void fr_mesh(std::string name,
@@ -109,13 +110,8 @@ public:
                           std::string type,
                           void* shader_data);
 
-    // TODO: with the current set up ypu can not sample emissive objects which
-    //       are not emitters for NEE..... but NEE is not implemented yet so
-    //       this is a problem for the future
     static void fr_emitter(std::string name,
                            std::string type,
-                           std::string mesh,
-                           std::string material,
                            void* emitter_data);
 
     static void fr_material(std::string name,

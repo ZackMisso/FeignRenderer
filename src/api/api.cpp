@@ -154,6 +154,11 @@ EmitterNode* FeignRenderer::find_emitter(std::string name)
 {
     std::unordered_map<std::string, EmitterNode*>::const_iterator itr = emitters.find(name);
 
+    if (name == "null")
+    {
+        return nullptr;
+    }
+
     if (itr == emitters.end())
     {
         EmitterNode* node = new EmitterNode(name);
@@ -487,6 +492,7 @@ void FeignRenderer::fr_camera(std::string name,
 void FeignRenderer::fr_object(std::string name,
                               std::string mesh,
                               std::string material_shader,
+                              std::string emitter,
                               int index)
 {
     if (index >= 0) name += "_" + std::to_string(index);
@@ -500,6 +506,7 @@ void FeignRenderer::fr_object(std::string name,
         fr_object(name,
                   mesh,
                   material_shader,
+                  emitter,
                   index+1);
 
         return;
@@ -508,6 +515,12 @@ void FeignRenderer::fr_object(std::string name,
     object->transform = getInstance()->current_transform;
     object->mesh = getInstance()->find_mesh(mesh);
     object->material_shader = getInstance()->find_material_shader(material_shader);
+
+    if (emitter != "null")
+    {
+        EmitterNode* emitter_node = getInstance()->find_emitter(emitter);
+        emitter_node->objectNode = object;
+    }
 }
 
 void FeignRenderer::fr_mesh(std::string name,
@@ -634,8 +647,6 @@ void FeignRenderer::fr_shader(std::string name,
 
 void FeignRenderer::fr_emitter(std::string name,
                                std::string type,
-                               std::string mesh,
-                               std::string material,
                                void* emitter_data)
 {
     EmitterNode* emitter = getInstance()->find_emitter(name);
@@ -650,6 +661,13 @@ void FeignRenderer::fr_emitter(std::string name,
         assert(getInstance()->scene);
         PointEmitter::Params* params = (PointEmitter::Params*)emitter_data;
         emitter->emitter = new PointEmitter(params->intensity, params->pos);
+        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+    }
+    else if (type == "mesh")
+    {
+        // TODO: should the mesh logic be handled here
+        MeshEmitter::Params* params = (MeshEmitter::Params*)emitter_data;
+        emitter->emitter = new MeshEmitter(params->intensity);
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
     else
@@ -676,36 +694,6 @@ void FeignRenderer::fr_material(std::string name,
         BSDFNode* bsdf = getInstance()->find_bsdf(params->bsdf_name);
 
         material->material = new SimpleMaterial(bsdf);
-    }
-    else if (type == "wireframe")
-    {
-        throw new FeignRendererException("zack broke this too");
-        // WireframeMaterial::Params* params = (WireframeMaterial::Params*)material_data;
-        //
-        // BSDFNode* wireframe_bsdf = getInstance()->find_bsdf(params->wireframe_bsdf);
-        // BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
-        //
-        // material->material = new WireframeMaterial(wireframe_bsdf,
-        //                                            mesh_bsdf,
-        //                                            params->threshold);
-    }
-    else if (type == "radar")
-    {
-        throw new FeignRendererException("zack broke this");
-        // RadarMaterial::Params* params = (RadarMaterial::Params*)material_data;
-        //
-        // BSDFNode* radar_bsdf = getInstance()->find_bsdf(params->radar_bsdf);
-        // BSDFNode* mesh_bsdf = getInstance()->find_bsdf(params->mesh_bsdf);
-        //
-        // material->material = new RadarMaterial(radar_bsdf,
-        //                                        mesh_bsdf,
-        //                                        params->start_points,
-        //                                        params->end_dist,
-        //                                        params->start_times,
-        //                                        params->end_times,
-        //                                        params->band_width,
-        //                                        params->fall_off,
-        //                                        params->proxy);
     }
     else
     {
@@ -810,19 +798,7 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 // this is the big one
 void FeignRenderer::flush_renders()
 {
-    // if (global_params.sdf_only)
-    // {
-    //     LOG("should work 6");
-    // }
-
     Scene* scene_obj = getInstance()->scene->scene;
-
-    // if (global_params.sdf_only)
-    // {
-    //     LOG("should work4");
-    // }
-
-    assert(scene_obj);
 
     // first preprocess all meshes
     unsigned int inst_index = 0;
@@ -843,11 +819,6 @@ void FeignRenderer::flush_renders()
 
         inst_index++;
     }
-
-    // if (global_params.sdf_only)
-    // {
-    //     LOG("should work5");
-    // }
 
     // preprocess the scene
     scene_obj->preProcess();

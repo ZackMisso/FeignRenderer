@@ -43,3 +43,10 @@ Color3f PointEmitter::sample_pos(EmitterQuery& rec,
 
     return Color3f(0.f);
 }
+
+Color3f PointEmitter::evaluate(EmitterQuery& rec) const
+{
+    throw new NotImplementedException("point evaluate");
+
+    return Color3f(0.f);
+}

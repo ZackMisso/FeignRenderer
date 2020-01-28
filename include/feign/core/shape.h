@@ -16,6 +16,8 @@
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
 
+class EmitterNode;
+
 // These structs are used for passing data to embree.
 // Note: embree does not have to have normal information.
 struct e_Vertex   { float x,y,z,r;  };
@@ -164,15 +166,15 @@ public:
 struct ObjectNode : public Node
 {
 public:
-    ObjectNode() : mesh(nullptr) { }
-    ObjectNode(MeshNode* mesh) : mesh(mesh) { }
-    ObjectNode(std::string name) : Node(name), mesh(nullptr) { }
+    ObjectNode() : mesh(nullptr), emitter(nullptr) { }
+    ObjectNode(MeshNode* mesh) : mesh(mesh), emitter(nullptr) { }
+    ObjectNode(std::string name) : Node(name), mesh(nullptr), emitter(nullptr) { }
 
     ~ObjectNode() { }
 
     MeshNode* mesh;
-    // MaterialNode* material;
     MaterialShaderNode* material_shader;
+    EmitterNode* emitter;
     Transform transform;
 };
 /////////////////////////////////////////////////

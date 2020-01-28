@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "cornell_box_diffuse_path",
+        "name": "cornell_box_diffuse_whitted",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 1024
+        "sample_count": 1
     },
     "camera": {
         "name": "camera",
@@ -200,7 +200,10 @@
 
     "bsdf": {
         "name": "diffuse_bsdf",
-        "type": "diffuse"
+        "type": "diffuse",
+        "albedo": [
+            0.5, 0.5, 0.5
+        ]
     },
 
     "bsdf": {

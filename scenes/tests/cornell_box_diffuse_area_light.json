@@ -1,19 +1,19 @@
 {
     "scene": {
-        "name": "cornell_box_diffuse",
+        "name": "cornell_box_diffuse_whitted",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
     },
     "integrator": {
         "name": "integrator",
-        "type": "whitted",
+        "type": "path",
         "filter": "default"
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 4
+        "sample_count": 1
     },
     "camera": {
         "name": "camera",
@@ -200,7 +200,10 @@
 
     "bsdf": {
         "name": "diffuse_bsdf",
-        "type": "diffuse"
+        "type": "diffuse",
+        "albedo": [
+            0.5, 0.5, 0.5
+        ]
     },
 
     "bsdf": {
@@ -219,18 +222,38 @@
         ]
     },
 
-    "emitter": {
-        "name": "point_emitter",
-        "type": "point",
-        "intensity": [
-            4000.0,
-            3000.0,
-            2000.0
+    "object": {
+        "name": "area_light_obj",
+        "mesh": "plane6",
+        "scale": [
+            1.0,
+            1.0,
+            1.0
         ],
-        "position": [
+        "rotate": [
+            90.0,
+            1.0,
             0.0,
-            0.0,
+            0.0
+        ],
+        "translate": [
+            0.0, 0.0, 18.9
+        ],
+        "material_shader": "diff_shad",
+        "emitter": "area_emitter"
+    },
+    "mesh": {
+        "name": "plane6",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "emitter": {
+        "name": "area_emitter",
+        "type": "mesh",
+        "intensity": [
+            10.0,
+            10.0,
             10.0
         ]
-    }
+    },
 }
