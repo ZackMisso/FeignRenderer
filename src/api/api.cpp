@@ -812,7 +812,8 @@ void FeignRenderer::flush_renders()
         }
 
         mesh->transform = it.second->transform * mesh->transform;
-        mesh->preProcess();
+        // preprocess more information for importance sampling mesh emitters
+        mesh->preProcess(it.second->emitter != nullptr);
         scene_obj->shapes.push_back(mesh);
         scene_obj->objects.push_back(it.second);
         mesh->setInstID(inst_index);

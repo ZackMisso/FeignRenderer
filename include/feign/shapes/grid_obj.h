@@ -33,7 +33,7 @@ public:
 
     ~GridObj() { }
 
-    virtual void preProcess();
+    virtual void preProcess(bool requires_processing = false);
 
     Vec2i resolution;
     TextureNode* terrain_map;

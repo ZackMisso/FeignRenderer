@@ -119,6 +119,7 @@ add_executable(feign
     include/feign/math/warp.h
     include/feign/math/coord_frame.h
     include/feign/math/functor.h
+    include/feign/math/discrete_pdf.h
 
     # Media header files
     include/feign/media/media.h
@@ -212,6 +213,7 @@ add_executable(feign
     src/math/ray.cpp
     src/math/warp.cpp
     src/math/coord_frame.cpp
+    src/math/discrete_pdf.cpp
 
     # Media implementation files
     src/media/media.cpp

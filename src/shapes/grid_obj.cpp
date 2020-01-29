@@ -16,8 +16,9 @@ GridObj::GridObj(Vec2i res, TextureNode* terrain_map)
     : ObjMesh(),
       resolution(res), terrain_map(terrain_map) { }
 
-void GridObj::preProcess()
+void GridObj::preProcess(bool requires_processing)
 {
+    // TODO: incorporate preprocessing check
     // create the underlying mesh
     int num_verts = resolution[0] * resolution[1];
     tris = std::vector<Triangle>();
@@ -130,20 +131,25 @@ void GridObj::preProcess()
         geomShader->shader->evaluate((void*)this);
     }
 
-    // precompute the total surface area and cache it
-    sa = 0.0;
-    for (uint32_t i = 0; i < tris.size(); ++i)
+    // surface area information is typically only required for
+    // importance sampling mesh emitters
+    if (requires_processing)
     {
-        sa += surfaceArea(i);
-    }
+        // precompute the total surface area and cache it
+        sa = 0.0;
+        for (uint32_t i = 0; i < tris.size(); ++i)
+        {
+            sa += surfaceArea(i);
+        }
 
-    // calculate the centroid
-    Point3f center = centroid();
+        // calculate the centroid
+        center = centroid();
 
-    // calculate the bounding box
-    bbox = BBox3f(vs[0], vs[0]);
-    for (uint32_t i = 1; i < vs.size(); ++i)
-    {
-        bbox.expand(vs[i]);
+        // calculate the bounding box
+        bbox = BBox3f(vs[0], vs[0]);
+        for (uint32_t i = 1; i < vs.size(); ++i)
+        {
+            bbox.expand(vs[i]);
+        }
     }
 }

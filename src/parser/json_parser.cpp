@@ -274,6 +274,7 @@ void JsonParser::parse(std::string filename)
             std::string name = "obj";
             std::string mesh = "default";
             std::string material_shader = "null";
+            std::string emitter = "null";
 
             const rapidjson::Value& value = itr->value;
 
@@ -315,15 +316,18 @@ void JsonParser::parse(std::string filename)
                                              value_2[2].GetFloat(),
                                              value_2[3].GetFloat());
                 }
+                else if (strcmp(itr_2->name.GetString(), "emitter") == 0)
+                {
+                    emitter = value_2.GetString();
+                }
             }
 
             FeignRenderer::fr_object(name,
                                      mesh,
-                                     material_shader);
+                                     material_shader,
+                                     emitter);
 
             FeignRenderer::fr_clear_transform();
-
-            LOG("finished parsing object");
         }
         else if (strcmp(itr->name.GetString(), "mesh") == 0)
         {

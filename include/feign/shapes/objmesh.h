@@ -62,7 +62,7 @@ public:
     virtual Point3f centroid() const;
     virtual Point3f centroid(uint32_t tri) const;
 
-    virtual void preProcess();
+    virtual void preProcess(bool requires_processing = false);
 
     void infoDump();
 
@@ -86,6 +86,7 @@ protected:
     std::vector<Vec2f> uvs;
 
     BBox3f bbox;
+    Point3f center;
     Float sa;
     bool flip_norms;
 };

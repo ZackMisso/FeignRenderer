@@ -71,6 +71,9 @@ float ObjMesh::pdf(uint32_t index) const
 
 void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 {
+    // TODO: modify this to store vertices as e_Vertex objects to save
+    //       computation.
+    // TODO: modify this to store triangles as e_Triangle objects
     RTCGeometry e_mesh = rtcNewGeometry (device, RTC_GEOMETRY_TYPE_TRIANGLE);
 
     e_Vertex* vertices = (e_Vertex*) rtcSetNewGeometryBuffer(e_mesh,
@@ -112,16 +115,14 @@ void ObjMesh::parseFromFile(const std::string& filename)
     if (filename.empty())
         return;
 
-    std::cout << "parsing obj from file: " << filename << std::endl;
-    transform.print();
-    std::cout << std::endl;
-
     // clear current data
     vs.clear();
     ns.clear();
     uvs.clear();
     tris.clear();
 
+    // TODO: is there a better way of writing this so that it runs
+    //       faster?
     std::ifstream ifs (filename.c_str());
 
     if (ifs.fail())
@@ -236,11 +237,6 @@ void ObjMesh::infoDump()
     std::cout << "Number of Verts: " << vs.size() << std::endl;
     std::cout << "Number of Triangles: " << tris.size() << std::endl;
 
-    // for (int i = 0; i < vs.size(); ++i)
-    // {
-    //     std::cout << vs[i][0] << " " << vs[i][1] << " " << vs[i][2] << std::endl;
-    // }
-
     bbox.infoDump();
 
     LOG("post dump");
@@ -298,7 +294,7 @@ Point3f ObjMesh::centroid(uint32_t tri) const
     return (p0 + p1 + p2) * (1.0 / 3.0);
 }
 
-void ObjMesh::preProcess()
+void ObjMesh::preProcess(bool requires_processing)
 {
     // TODO: make these tasks multithreaded ???
     parseFromFile(filename);
@@ -309,24 +305,25 @@ void ObjMesh::preProcess()
         geomShader->shader->evaluate((void*)this);
     }
 
-    // precompute the total surface area and cache it
-    sa = 0.0;
-    for (uint32_t i = 0; i < tris.size(); ++i)
+    if (requires_processing && vs.size() > 0)
     {
-        sa += surfaceArea(i);
+        // precompute the total surface area and cache it
+        sa = 0.0;
+        for (uint32_t i = 0; i < tris.size(); ++i)
+        {
+            sa += surfaceArea(i);
+        }
+
+        center = centroid();
+
+        bbox = BBox3f(vs[0], vs[0]);
+        for (uint32_t i = 1; i < vs.size(); ++i)
+        {
+            bbox.expand(vs[i]);
+        }
     }
 
-    Point3f center = centroid();
-    // precompute the bounding box around the object
-    assert(vs.size() > 0);
-
-    bbox = BBox3f(vs[0], vs[0]);
-    for (uint32_t i = 1; i < vs.size(); ++i)
-    {
-        bbox.expand(vs[i]);
-    }
-
-    infoDump();
+    // infoDump();
 }
 
 bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -401,6 +398,9 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
     return its.t >= ray.near && its.t <= ray.far;
 }
 
+// TODO: is this also really necessary? All of the information,
+//       except maybe uv data, can be grabbed directly from
+//       embree
 void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));

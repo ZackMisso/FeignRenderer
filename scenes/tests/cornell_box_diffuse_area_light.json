@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "cornell_box_diffuse_whitted",
+        "name": "cornell_box_area_light",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -255,5 +255,5 @@
             10.0,
             10.0
         ]
-    },
+    }
 }

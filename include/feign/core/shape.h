@@ -43,7 +43,7 @@ public:
     virtual BBox3f boundingBox() const = 0;
     virtual Point3f centroid() const = 0;
 
-    virtual void preProcess() { }
+    virtual void preProcess(bool requires_processing = false) { }
 
     // this is only used by embree
     virtual void addShapeToScene(RTCScene scene, RTCDevice device) { }
