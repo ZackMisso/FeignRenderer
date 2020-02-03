@@ -12,37 +12,69 @@
 //  Discrete PDF 1D  //
 ///////////////////////
 
-DiscretePDF1D::DiscretePDF1D()
+DiscretePDF1D::DiscretePDF1D(int siz)
 {
-    throw new NotImplementedException("discrete pdf 1d");
-}
-
-DiscretePDF1D::~DiscretePDF1D()
-{
-    throw new NotImplementedException("discrete pdf 1d");
+    cdf = std::vector<Float>(siz + 1);
+    cdf[0] = 0.f;
+    sum = 0.0;
+    normalization = 0.0;
+    is_normalized = false;
 }
 
 void DiscretePDF1D::normalize()
 {
-    throw new NotImplementedException("discrete pdf 1d");
+    // assert(false);
+    sum = cdf[cdf.size() - 1];
+    normalization = 1.0 / sum;
+
+    for (int i = 0; i < cdf.size(); ++i)
+    {
+        cdf[i] *= normalization;
+    }
 }
 
+// TODO: make this faster
 int DiscretePDF1D::sample(Float value) const
 {
-    throw new NotImplementedException("discrete pdf 1d");
-    return -1;
+    int i = 0;
+
+    while(cdf[i] < value && i < cdf.size()-1) ++i;
+
+    return cdf[std::max(i - 1, 0)];
 }
 
 int DiscretePDF1D::sample(Float value, Float& pdf) const
 {
-    throw new NotImplementedException("discrete pdf 1d");
-    return -1;
+    int index = sample(value);
+
+    pdf = operator[](index);
+
+    return index;
+}
+
+int DiscretePDF1D::sample_reuse(Float& value) const
+{
+    int index = sample(value);
+
+    value = (value - cdf[index]) / operator[](index);
+
+    return index;
+}
+
+int DiscretePDF1D::sample_reuse(Float& value, Float& pdf) const
+{
+    int index = sample(value, pdf);
+    // LOG("value:", value);
+    // LOG("min:", cdf[index]);
+
+    value = (value - cdf[index]) / pdf;
+
+    return index;
 }
 
 Float DiscretePDF1D::operator[](int entry) const
 {
-    throw new NotImplementedException("discrete pdf 1d");
-    return 0.0;
+    return cdf[entry + 1] - cdf[entry];
 }
 
 ///////////////////////

@@ -43,13 +43,13 @@ public:
     uint32_t num_verts() const;
 
     float surfaceArea() const;
-    float surfaceArea(uint32_t index) const;
+    virtual Float surface_area(int primitive) const;
     float pdf(uint32_t index) const;
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
     bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
 
-    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const;
+    virtual void completeIntersectionInfo(Intersection& its) const;
 
     virtual void addShapeToScene(RTCScene scene, RTCDevice device);
 

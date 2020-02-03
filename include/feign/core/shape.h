@@ -37,11 +37,13 @@ public:
         return false;
     }
 
-    virtual void completeIntersectionInfo(const Ray3f& ray, Intersection& its) const { }
+    virtual void completeIntersectionInfo(Intersection& its) const { }
     virtual uint32_t primitiveCount() const = 0;
 
     virtual BBox3f boundingBox() const = 0;
     virtual Point3f centroid() const = 0;
+
+    virtual Float surface_area(int primitive) const { return 0.0; };
 
     virtual void preProcess(bool requires_processing = false) { }
 

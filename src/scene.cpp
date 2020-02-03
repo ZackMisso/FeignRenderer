@@ -75,9 +75,11 @@ void Scene::preProcess()
     {
         // check if the object's emitter is valid. If so,
         // make sure the emitter's mesh matches the object's
+        // assert(false);
         if (objects[i]->emitter)
         {
             objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
+            objects[i]->emitter->emitter->preProcess();
         }
     }
 }
@@ -170,7 +172,10 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(1);
 
-    Float choice_pdf = 1.0 / Float(emitters.size());
+    // uniform sampling of light sources
+    // TODO: later add infrastructure for different light sampling
+    //       methods
+    Float choice_pdf = Float(emitters.size());
 
     int emitter = closure.sampler->next1D() * emitters.size();
 
@@ -183,7 +188,7 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     Ray3f shadow_ray = Ray3f(closure.its->p,
                              eqr.wi,
                              Epsilon,
-                             sqrt(eqr.sqr_dist));
+                             sqrt(eqr.sqr_dist) - Epsilon);
 
     Intersection tmp;
 
@@ -191,11 +196,42 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
          global_params.ignore_shadow_checks)
     {
         Float cos_term = closure.its->s_frame.n % eqr.wi;
+
         if (cos_term < -Epsilon) cos_term = -cos_term;
 
         closure.shadow_rays[0].valid = true;
         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
-        closure.shadow_rays[0].throughput = Li * cos_term * choice_pdf / emitter_pdf;
+
+        if (emitter_pdf == 0.f)
+        {
+            closure.shadow_rays[0].throughput = Color3f(0.f);
+        }
+        else
+        {
+            closure.shadow_rays[0].throughput = Li * cos_term / (choice_pdf * emitter_pdf);
+        }
+
         // Note: bsdf_values are fully accumulated later
     }
+}
+
+void Scene::accumulate_emission(MaterialClosure& closure) const
+{
+    int id = closure.its->intersected_mesh->getInstID();
+    EmitterNode* emitter = objects[id]->emitter;
+
+    if (emitter)
+    {
+        EmitterQuery rec = EmitterQuery(closure.ray->origin);
+        rec.wi = closure.its->toLocal(closure.ray->dir);
+        rec.sh_n = closure.its->toLocal(closure.its->s_frame.n);
+        closure.emission = emitter->emitter->evaluate(rec);
+    }
+    else
+    {
+        closure.emission = Color3f(0.f);
+    }
+
+    // // DEBUG CODE
+    // closure.emission = Color3f(0.f);
 }

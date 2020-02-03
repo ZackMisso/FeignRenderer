@@ -27,7 +27,8 @@ struct MaterialClosure
                     const Intersection* its,
                     const Ray3f* ray,
                     const Scene* scene,
-                    bool sample_all_emitters = false);
+                    bool sample_all_emitters = false,
+                    bool last_bounce_specular = false);
 
     void accumulate_shadow_rays(const MaterialShader* shader);
 
@@ -49,6 +50,7 @@ struct MaterialClosure
     Float pdf;               // the pdf of the bsdf sample
     Float eta;               // how the ior changes
     bool is_specular;        // whether or not this material is discretely evaluated
+    bool last_spec;          // whether the last evaluation was specular
     // bool trace_ray;
     bool sample_all_emitters;
 };

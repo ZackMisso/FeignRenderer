@@ -13,8 +13,7 @@
 
 struct DiscretePDF1D
 {
-    DiscretePDF1D();
-    ~DiscretePDF1D();
+    DiscretePDF1D(int siz);
 
     // normalizes the cdf (why should it not be normalized??)
     void normalize();
@@ -23,10 +22,15 @@ struct DiscretePDF1D
     int sample(Float value) const;
     int sample(Float value, Float& pdf) const;
 
+    int sample_reuse(Float& value) const;
+    int sample_reuse(Float& value, Float& pdf) const;
+
     // returns the pdf
     Float operator[](int entry) const;
 
-protected:
+    // sets the pdf
+    Float& operator[](int entry);
+
     std::vector<Float> cdf;
     Float sum;
     Float normalization;

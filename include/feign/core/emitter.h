@@ -10,6 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/core/shape.h>
+#include <feign/math/discrete_pdf.h>
 
 // TODO: is this the best way of incorporating emitters
 /////////////////////////////////////////////////
@@ -20,12 +21,12 @@ struct EmitterQuery
     Vector3f p;
     Vector3f wi;
     Vector3f sh_n;
-    Vector3f g_n;
-    Point2f uv;
+    // Vector3f g_n;
+    // Point2f uv;
     Float sqr_dist;
-    Float pdf;
-    int prim_index;
-    int em_index;
+    // Float pdf;
+    // int prim_index;
+    // int em_index;
 
     EmitterQuery(const Vector3f& p) : p(p) { }
 };
@@ -49,6 +50,8 @@ public:
                                Float* pdf) const = 0;
 
     virtual Color3f evaluate(EmitterQuery& rec) const = 0;
+
+    virtual void preProcess() { }
 
     // this is bad design, figure out a better way of supporting
     // mesh emitters
@@ -194,6 +197,7 @@ public:
     };
 
     MeshEmitter(Color3f intensity);
+    ~MeshEmitter();
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -211,6 +215,7 @@ public:
 
 protected:
     MeshNode* mesh;
+    DiscretePDF1D* sa_pdf;
     Color3f intensity;
 };
 /////////////////////////////////////////////////

@@ -135,15 +135,16 @@ void GridObj::preProcess(bool requires_processing)
     // importance sampling mesh emitters
     if (requires_processing)
     {
-        // precompute the total surface area and cache it
-        sa = 0.0;
-        for (uint32_t i = 0; i < tris.size(); ++i)
-        {
-            sa += surfaceArea(i);
-        }
-
-        // calculate the centroid
-        center = centroid();
+        // TODO: is this really ever needed
+        // // precompute the total surface area and cache it
+        // sa = 0.0;
+        // for (uint32_t i = 0; i < tris.size(); ++i)
+        // {
+        //     sa += surface_area(i);
+        // }
+        //
+        // // calculate the centroid
+        // center = centroid();
 
         // calculate the bounding box
         bbox = BBox3f(vs[0], vs[0]);

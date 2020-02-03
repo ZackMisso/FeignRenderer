@@ -18,7 +18,8 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
                                  const Intersection* its,
                                  const Ray3f* ray,
                                  const Scene* scene,
-                                 bool sample_all_emitters)
+                                 bool sample_all_emitters,
+                                 bool last_bounce_specular)
     : sampler(sampler),
       its(its),
       ray(ray),
@@ -31,6 +32,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       pdf(1.f),
       eta(1.f),
       is_specular(false),
+      last_spec(last_bounce_specular),
       sample_all_emitters(sample_all_emitters)
 {
     wi = its->toLocal(-ray->dir);
@@ -45,6 +47,7 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
 
     for (int i = 0; i < shadow_rays.size(); ++i)
     {
+        assert(shadow_rays.size() == 1);
         if (shadow_rays[i].valid)
         {
             // assert(false);
@@ -61,6 +64,8 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
             // LOG("albedo_after:", albedo);
 
             nee += shadow_rays[i].throughput;
+            // nee = albedo;
+            // nee = Color3f(0.5);
         }
     }
 

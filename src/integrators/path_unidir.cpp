@@ -22,7 +22,8 @@ void Path_Unidirectional_Integrator::preProcess()
 
 Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
-                                           const Ray3f& ray) const
+                                           const Ray3f& ray,
+                                           bool last_spec) const
 {
     Intersection its;
 
@@ -41,7 +42,8 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                               &its,
                                               &ray,
                                               scene,
-                                              false);
+                                              false,
+                                              last_spec);
 
     // evaluate the material shader
     shader->evaluate(closure);
@@ -58,6 +60,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
         closure.pdf == 0.f)
     {
         return closure.emission + closure.nee;
+        // return closure.nee;
     }
 
     Ray3f new_ray(its.p,
@@ -69,9 +72,21 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
     Float cosTerm = its.s_frame.n % new_ray.dir;
     if (cosTerm < 0.f) cosTerm = -cosTerm;
 
-    Color3f recur = Li(scene, sampler, new_ray);
+    Color3f recur = Li(scene, sampler, new_ray, false);
 
     return closure.albedo * recur * cosTerm /
            (closure.pdf * rr_cont_probability) +
            closure.nee + closure.emission;
+
+    // LOG("what the frick", closure.nee);
+
+    // return closure.nee;
+}
+
+// TODO: rewrite this as a for loop instead of with recursion
+Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
+                                           Sampler* sampler,
+                                           const Ray3f& ray) const
+{
+    return Li(scene, sampler, ray, true);
 }

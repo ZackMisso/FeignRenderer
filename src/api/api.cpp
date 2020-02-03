@@ -520,6 +520,7 @@ void FeignRenderer::fr_object(std::string name,
     {
         EmitterNode* emitter_node = getInstance()->find_emitter(emitter);
         emitter_node->objectNode = object;
+        object->emitter = emitter_node;
     }
 }
 
@@ -668,6 +669,7 @@ void FeignRenderer::fr_emitter(std::string name,
         // TODO: should the mesh logic be handled here
         MeshEmitter::Params* params = (MeshEmitter::Params*)emitter_data;
         emitter->emitter = new MeshEmitter(params->intensity);
+        // assert(false);
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
     else
@@ -802,6 +804,7 @@ void FeignRenderer::flush_renders()
 
     // first preprocess all meshes
     unsigned int inst_index = 0;
+
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
@@ -819,6 +822,15 @@ void FeignRenderer::flush_renders()
         mesh->setInstID(inst_index);
 
         inst_index++;
+    }
+
+    // TODO: set this up in a more efficient way
+    for (auto it : getInstance()->emitters)
+    {
+        if (it.second->objectNode)
+        {
+            it.second->emitter->setMeshNode(it.second->objectNode->mesh);
+        }
     }
 
     // preprocess the scene

@@ -39,9 +39,9 @@ void Integrator::render(const Scene* scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
-        // for (int i = 512; i < 513; ++i)
+        // for (int i = 126; i < 127; ++i)
         // {
-        //     for (int j = 512; j < 513; ++j)
+        //     for (int j = 128; j < 129; ++j)
         //     {
                 // LOG("taking pixel and apeture samples");
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();

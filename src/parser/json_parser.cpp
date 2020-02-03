@@ -318,6 +318,7 @@ void JsonParser::parse(std::string filename)
                 }
                 else if (strcmp(itr_2->name.GetString(), "emitter") == 0)
                 {
+                    // assert(false);
                     emitter = value_2.GetString();
                 }
             }

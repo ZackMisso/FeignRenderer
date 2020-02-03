@@ -89,7 +89,7 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         // etc.
         // TODO: this is redundant and should not be used since embree already
         // handles this information for us
-        its.intersected_mesh->completeIntersectionInfo(ray, its);
+        its.intersected_mesh->completeIntersectionInfo(its);
 
         return true;
     }

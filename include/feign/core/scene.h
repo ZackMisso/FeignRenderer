@@ -49,6 +49,7 @@ public:
 
     void eval_all_emitters(MaterialClosure& closure) const;
     void eval_one_emitter(MaterialClosure& closure) const;
+    void accumulate_emission(MaterialClosure& closure) const;
 
     // TODO: should these really be public...
 public:

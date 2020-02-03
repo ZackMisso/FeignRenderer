@@ -176,6 +176,11 @@ public:
 
     virtual void preProcess();
 
+    Color3f Li(const Scene* scene,
+               Sampler* sampler,
+               const Ray3f& ray,
+               bool last_spec) const;
+
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;

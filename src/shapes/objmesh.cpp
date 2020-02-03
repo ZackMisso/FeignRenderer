@@ -49,7 +49,7 @@ float ObjMesh::surfaceArea() const
     return sa;
 }
 
-float ObjMesh::surfaceArea(uint32_t index) const
+Float ObjMesh::surface_area(int index) const
 {
     uint32_t i0 = tris[index].vsInds(0);
     uint32_t i1 = tris[index].vsInds(1);
@@ -167,7 +167,9 @@ void ObjMesh::parseFromFile(const std::string& filename)
 
             if (flip_norms)
             {
+                LOG("n before:", n);
                 n = -n;
+                LOG("n after:", n);
             }
 
             ns.push_back(n.normalized());
@@ -307,14 +309,15 @@ void ObjMesh::preProcess(bool requires_processing)
 
     if (requires_processing && vs.size() > 0)
     {
-        // precompute the total surface area and cache it
-        sa = 0.0;
-        for (uint32_t i = 0; i < tris.size(); ++i)
-        {
-            sa += surfaceArea(i);
-        }
-
-        center = centroid();
+        // TODO: is this really ever needed?
+        // // precompute the total surface area and cache it
+        // sa = 0.0;
+        // for (uint32_t i = 0; i < tris.size(); ++i)
+        // {
+        //     sa += surface_area(i);
+        // }
+        //
+        // center = centroid();
 
         bbox = BBox3f(vs[0], vs[0]);
         for (uint32_t i = 1; i < vs.size(); ++i)
@@ -322,8 +325,6 @@ void ObjMesh::preProcess(bool requires_processing)
             bbox.expand(vs[i]);
         }
     }
-
-    // infoDump();
 }
 
 bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -398,10 +399,7 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
     return its.t >= ray.near && its.t <= ray.far;
 }
 
-// TODO: is this also really necessary? All of the information,
-//       except maybe uv data, can be grabbed directly from
-//       embree
-void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) const
+void ObjMesh::completeIntersectionInfo(Intersection& its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
 
@@ -437,6 +435,10 @@ void ObjMesh::completeIntersectionInfo(const Ray3f& ray, Intersection& its) cons
         uint32_t i0_ns = tris[its.f].nsInds(0);
         uint32_t i1_ns = tris[its.f].nsInds(1);
         uint32_t i2_ns = tris[its.f].nsInds(2);
+
+        // LOG("norm:", (ns[i0_ns] * bary(0) +
+        //                                ns[i1_ns] * bary(1) +
+        //                                ns[i2_ns] * bary(2)).normalized());
 
         its.s_frame = CoordinateFrame((ns[i0_ns] * bary(0) +
                                        ns[i1_ns] * bary(1) +
