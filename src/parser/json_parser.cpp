@@ -577,6 +577,24 @@ void JsonParser::parse(std::string filename)
 
                 FeignRenderer::fr_bsdf(name, type, &params);
             }
+            else if (type == "dielectric")
+            {
+                Float i_ior = 1.0;
+                Float e_ior = 1.0;
+
+                if (value.HasMember("int_ior"))
+                {
+                    i_ior = value["int_ior"].GetFloat();
+                }
+                if (value.HasMember("ext_ior"))
+                {
+                    e_ior = value["ext_ior"].GetFloat();
+                }
+
+                Dielectric::Params params(i_ior, e_ior);
+
+                FeignRenderer::fr_bsdf(name, type, &params);
+            }
             else
             {
                 throw new FeignRendererException(type + " bsdf is not parsable yet");

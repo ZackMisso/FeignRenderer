@@ -724,6 +724,11 @@ void FeignRenderer::fr_bsdf(std::string name,
         Mirror::Params* params = (Mirror::Params*)bsdf_data;
         bsdf->bsdf = new Mirror(params->albedo);
     }
+    else if (type == "dielectric")
+    {
+        Dielectric::Params* params = (Dielectric::Params*)bsdf_data;
+        bsdf->bsdf = new Dielectric(params->int_ior, params->ext_ior);
+    }
     // TODO: there should not be two null bsdfs
     else if (type == "nullbsdf")
     {

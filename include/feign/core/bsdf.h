@@ -155,7 +155,8 @@ class Dielectric : public BSDF
 public:
     struct Params
     {
-        Params(Float int_ior, Float ext_ior);
+        Params(Float int_ior, Float ext_ior)
+            : int_ior(int_ior), ext_ior(ext_ior) { }
 
         Float int_ior;
         Float ext_ior;
@@ -163,13 +164,10 @@ public:
 
     Dielectric(Float int_ior, Float ext_ior);
 
-    // virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
-    // virtual Color3f eval(const BSDFQuery& rec) const;
-
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
 
-    virtual bool isDelta() const { return false; }
+    virtual bool isDelta() const { return true; }
 
 protected:
     Float int_ior;

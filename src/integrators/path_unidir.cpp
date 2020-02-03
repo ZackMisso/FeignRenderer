@@ -30,8 +30,9 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
     Vector3f dir = ray.dir;
     Float rr_cont_probability = 0.95f;
 
-    if (!scene->intersect(ray, its) || ray.depth > 10)
+    if (!scene->intersect(ray, its) || ray.depth > 15)
     {
+        // return Color3f(0.f, 1.f, 0.f);
         return Color3f(0.f);
     }
 
@@ -69,10 +70,13 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                   std::numeric_limits<Float>::infinity(),
                   ray.depth + 1);
 
+    // LOG("new dir:", new_ray.dir);
+
     Float cosTerm = its.s_frame.n % new_ray.dir;
     if (cosTerm < 0.f) cosTerm = -cosTerm;
+    if (closure.is_specular) cosTerm = 1.f;
 
-    Color3f recur = Li(scene, sampler, new_ray, false);
+    Color3f recur = Li(scene, sampler, new_ray, closure.is_specular);
 
     return closure.albedo * recur * cosTerm /
            (closure.pdf * rr_cont_probability) +
