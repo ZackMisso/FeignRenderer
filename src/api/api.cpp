@@ -26,6 +26,8 @@
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
 
+// stats
+#include <feign/stats/clocker.h>
 
 FeignRenderer* FeignRenderer::instance = nullptr;
 
@@ -65,6 +67,11 @@ FeignRenderer::FeignRenderer()
 
 FeignRenderer::~FeignRenderer()
 {
+    #ifdef CLOCKING
+        Clocker::printResults();
+        Clocker::deinitialize();
+    #endif
+
     for (auto it : bsdfs) delete it.second;
     for (auto it : cameras) delete it.second;
     for (auto it : emitters) delete it.second;
@@ -100,6 +107,11 @@ FeignRenderer::~FeignRenderer()
 void FeignRenderer::initialize()
 {
     FeignRenderer::instance = new FeignRenderer();
+
+    #ifdef CLOCKING
+        Clocker::initialize();
+        Clocker::addClocker("render");
+    #endif
 }
 
 BSDFNode* FeignRenderer::find_bsdf(std::string name)
@@ -841,8 +853,16 @@ void FeignRenderer::flush_renders()
     // preprocess the scene
     scene_obj->preProcess();
 
+    #if CLOCKING
+        Clocker::startClock("render");
+    #endif
+
     // render current scene
     scene_obj->renderScene();
+
+    #if CLOCKING
+        Clocker::endClock("render");
+    #endif
 
     // clean up used memory after the renders
     clean_up();

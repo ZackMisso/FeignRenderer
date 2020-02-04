@@ -47,6 +47,8 @@ int main(int argc, char* argv[])
 {
     std::cout << "UNDER CONSTRUCTION" << std::endl;
 
+    // Clocker::initialize();
+
     // //////// TEMPORARY ////////
     //
     // // ajax_cosine();
@@ -77,8 +79,8 @@ int main(int argc, char* argv[])
     // std::string scene = "tests/box_rotations";
     // std::string scene = "tests/ajax_bary";
     // std::string scene = "tests/cornell_box_diffuse";
-    // std::string scene = "tests/cornell_box_diffuse_area_light";
-    std::string scene = "tests/cornell_box_dielectrics";
+    std::string scene = "tests/cornell_box_diffuse_area_light";
+    // std::string scene = "tests/cornell_box_dielectrics";
 
     for (int i = 1; i < argc; ++i)
     {

@@ -10,11 +10,13 @@
 
 #if CLOCKING
 
+Clocker* Clocker::instance = nullptr;
+
 Clocker::Clocker()
 {
     trackings = std::vector<std::string>();
-    startTimes = std::vector<Clock>();
-    durations = std::vector<long>();
+    startTimes = std::vector<TimePt>();
+    durations = std::vector<Duration>();
     actives = std::vector<bool>();
 }
 
@@ -24,53 +26,74 @@ void Clocker::initialize()
 {
     instance = new Clocker();
 
-    addClocker("full render");
-    addClocker("embree intersect");
+    Clocker::addClocker("render");
+
+    // addClocker("full render");
+    // addClocker("embree intersect");
+    // what
     // add more soon
 }
 
 void Clocker::deinitialize()
 {
-    std::cout << "deleting clocker" << std::endl;
+    // std::cout << "deleting clocker" << std::endl;
     delete instance;
 }
 
 void Clocker::printResults()
 {
-    // TODO
+    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    {
+        std::cout << getInstance()->trackings[i] << ": " << getInstance()->durations[i].count() << " seconds" << std::endl;
+    }
 }
 
 void Clocker::startClock(std::string tracker)
 {
     // TODO: replace strings with hashes for more efficiency
-    for (int i = 0; i < trackings.size(); ++i)
+    for (int i = 0; i < getInstance()->trackings.size(); ++i)
     {
-        if (trackings[i] == tracker)
+        if (getInstance()->trackings[i] == tracker)
         {
-            if (actives[i])
+            if (getInstance()->actives[i])
             {
-                throw new ClockerException(tracker + " already active");
+                throw new FeignRendererException(tracker + " already active");
             }
 
-            actives[i] = true;
-            startTimes[i] = Clock::now();
+            getInstance()->actives[i] = true;
+            getInstance()->startTimes[i] = Clock::now();
 
-            i = trackings.size();
+            i = getInstance()->trackings.size();
         }
     }
 }
 
 void Clocker::endClock(std::string tracker)
 {
-    // TODO
+    // TODO: replace strings with hashes for more efficiency
+    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    {
+        if (getInstance()->trackings[i] == tracker)
+        {
+            if (!getInstance()->actives[i])
+            {
+                throw new FeignRendererException(tracker + " not active");
+            }
+
+            getInstance()->actives[i] = false;
+            getInstance()->durations[i] = Clock::now() - getInstance()->startTimes[i];
+
+            i = getInstance()->trackings.size();
+        }
+    }
 }
 
 void Clocker::addClocker(std::string tracker)
 {
-    trackings.push_back(tracker);
-    startTimes.push_back(Clock::now());
-    durations.push_back(0);
-    actives.push_back(false);
+    getInstance()->trackings.push_back(tracker);
+    getInstance()->startTimes.push_back(Clock::now());
+    getInstance()->durations.push_back(Duration(0));
+    getInstance()->actives.push_back(false);
 }
 
 long Clocker::getClockerDuration(std::string tracker)

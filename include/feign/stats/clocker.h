@@ -8,24 +8,28 @@
 
 #pragma once
 
+#include <feign/common.h>
+
 #if CLOCKING
 
 #include <string>
 #include <chrono>
 #include <string>
 
-#typedef std::chrono::highresolution_clock::time_point Clock;
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::high_resolution_clock::time_point TimePt;
+typedef std::chrono::duration<double> Duration;
 
 class Clocker
 {
 private:
-    Clocker* instance = nullptr;
+    static Clocker* instance;
 
     Clocker();
 
     std::vector<std::string> trackings;
-    std::vector<Clock> startTimes;
-    std::vector<long> durations;
+    std::vector<TimePt> startTimes;
+    std::vector<Duration> durations;
     std::vector<bool> actives;
 public:
     static Clocker* getInstance();
@@ -36,6 +40,6 @@ public:
     static void endClock(std::string tracker);
     static void addClocker(std::string tracker);
     static long getClockerDuration(std::string tracker);
-}
+};
 
 #endif

@@ -39,6 +39,9 @@ void Integrator::render(const Scene* scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
+                // for (int k = 0; k < sampler->getSampleCnt(); ++k)
+                // {
+                    // LOG("sample: " + std::to_string(k));
         // for (int i = 126; i < 127; ++i)
         // {
         //     for (int j = 128; j < 129; ++j)
