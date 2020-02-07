@@ -13,6 +13,8 @@
 // these are kept as separate data structures for the sole purpose
 // of improving code readability and debugging
 
+// TODO: reimplement this vector framework with simd operations
+
 #include <feign/common.h>
 #include <tgmath.h>
 
@@ -598,6 +600,22 @@ struct Vec3
         return vec;
     }
 
+    T maxValue() const
+    {
+        T val = xyz[0];
+        if (xyz[1] > val) val = xyz[1];
+        if (xyz[2] > val) val = xyz[2];
+        return val;
+    }
+
+    T minValue() const
+    {
+        T val = xyz[0];
+        if (xyz[1] < val) val = xyz[1];
+        if (xyz[2] < val) val = xyz[2];
+        return val;
+    }
+
     int maxIndex() const
     {
         if (xyz[0] > xyz[1] &&
@@ -632,6 +650,13 @@ struct Vec3
         if (std::abs(xyz[1]) < std::abs(xyz[0]) &&
             std::abs(xyz[1]) < std::abs(xyz[2])) return 1;
         return 2;
+    }
+
+    bool isZero() const
+    {
+        return (std::abs(xyz[0]) < 1e-4 &&
+                std::abs(xyz[1]) < 1e-4 &&
+                std::abs(xyz[2]) < 1e-4);
     }
 
     void info() const

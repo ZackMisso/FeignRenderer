@@ -8,6 +8,7 @@
 
 #include <feign/core/shader.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 RadarMaterialShader::RadarMaterialShader(MaterialNode* radar_mat,
                                          MaterialNode* mesh_mat,
@@ -43,6 +44,10 @@ void RadarMaterialShader::sample(MaterialClosure& closure) const
 
 void RadarMaterialShader::evaluate(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     Color3f scale;
     Material* material = choose_mat(closure, scale);
 
@@ -61,14 +66,26 @@ void RadarMaterialShader::evaluate(MaterialClosure& closure) const
     {
         closure.scene->eval_one_emitter(closure);
     }
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 void RadarMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     Color3f scale;
     Material* material = choose_mat(closure, scale);
     material->evaluate(closure);
     closure.albedo *= scale;
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 Material* RadarMaterialShader::choose_mat(MaterialClosure& closure,

@@ -67,7 +67,7 @@ FeignRenderer::FeignRenderer()
 
 FeignRenderer::~FeignRenderer()
 {
-    #ifdef CLOCKING
+    #if CLOCKING
         Clocker::printResults();
         Clocker::deinitialize();
     #endif
@@ -108,9 +108,8 @@ void FeignRenderer::initialize()
 {
     FeignRenderer::instance = new FeignRenderer();
 
-    #ifdef CLOCKING
+    #if CLOCKING
         Clocker::initialize();
-        Clocker::addClocker("render");
     #endif
 }
 
@@ -226,8 +225,8 @@ FilterNode* FeignRenderer::find_filter(std::string name)
 
         if (name == "default")
         {
-            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
-            node->filter = new BoxFilter();
+            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
+            // node->filter = new BoxFilter();
         }
 
         return node;

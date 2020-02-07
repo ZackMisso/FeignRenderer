@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/accel.h>
+#include <feign/stats/clocker.h>
 
 EmbreeAccel::EmbreeAccel()
 {
@@ -52,6 +53,10 @@ void EmbreeAccel::build()
 // the interface between the integrators and embree
 bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 {
+    #if CLOCKING
+        Clocker::startClock("scene intersect");
+    #endif
+
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
 
@@ -91,8 +96,16 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         // handles this information for us
         its.intersected_mesh->completeIntersectionInfo(its);
 
+        #if CLOCKING
+            Clocker::endClock("scene intersect");
+        #endif
+
         return true;
     }
+
+    #if CLOCKING
+        Clocker::endClock("scene intersect");
+    #endif
 
     return false;
 }

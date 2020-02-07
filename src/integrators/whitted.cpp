@@ -23,9 +23,10 @@ void WhittedIntegrator::preProcess()
 
 Color3f WhittedIntegrator::Li(const Scene* scene,
                               Sampler* sampler,
-                              const Ray3f& ray) const
+                              const Ray3f& cam_ray) const
 {
     Intersection its;
+    Ray3f ray = cam_ray;
 
     Vector3f dir = ray.dir;
     Float rr_cont_probability = 0.95f;

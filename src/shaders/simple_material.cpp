@@ -8,6 +8,7 @@
 
 #include <feign/core/shader.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 SimpleMaterialShader::SimpleMaterialShader(MaterialNode* material)
     : material(material) { }
@@ -19,6 +20,10 @@ void SimpleMaterialShader::sample(MaterialClosure& closure) const
 
 void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     closure.is_specular = (*material)()->isDelta();
 
     // LOG("huh");
@@ -38,17 +43,26 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
     }
     else
     {
-        // get contribution from emission
-
-
         // get next event estimation
         closure.scene->eval_one_emitter(closure);
     }
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     (*material)()->evaluate(closure);
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 // MaterialClosure SimpleMaterialShader::evaluate(const Intersection& its) const

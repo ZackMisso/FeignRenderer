@@ -8,6 +8,7 @@
 
 #include <feign/core/shader.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 WireframeMaterialShader::WireframeMaterialShader(MaterialNode* wireframe_mat,
                                                  MaterialNode* mesh_mat,
@@ -18,12 +19,24 @@ WireframeMaterialShader::WireframeMaterialShader(MaterialNode* wireframe_mat,
 
 void WireframeMaterialShader::sample(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     Material* material = choose_mat(closure);
     material->sample(closure);
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 void WireframeMaterialShader::evaluate(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     Material* material = choose_mat(closure);
 
     closure.is_specular = material->isDelta();
@@ -41,12 +54,24 @@ void WireframeMaterialShader::evaluate(MaterialClosure& closure) const
     {
         closure.scene->eval_one_emitter(closure);
     }
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 void WireframeMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     Material* material = choose_mat(closure);
     material->evaluate(closure);
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 Material* WireframeMaterialShader::choose_mat(MaterialClosure& closure) const

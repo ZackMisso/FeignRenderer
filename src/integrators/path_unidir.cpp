@@ -20,77 +20,223 @@ void Path_Unidirectional_Integrator::preProcess()
     Integrator::preProcess();
 }
 
-Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
-                                           Sampler* sampler,
-                                           const Ray3f& ray,
-                                           bool last_spec) const
-{
-    Intersection its;
-
-    Vector3f dir = ray.dir;
-    Float rr_cont_probability = 0.95f;
-
-    if (!scene->intersect(ray, its) || ray.depth > 15)
-    {
-        // return Color3f(0.f, 1.f, 0.f);
-        return Color3f(0.f);
-    }
-
-    const MaterialShader* shader = scene->getShapeMaterialShader(its);
-
-    // create the material closure
-    MaterialClosure closure = MaterialClosure(sampler,
-                                              &its,
-                                              &ray,
-                                              scene,
-                                              false,
-                                              last_spec);
-
-    // evaluate the material shader
-    shader->evaluate(closure);
-
-    // accumulate the shadow rays
-    closure.accumulate_shadow_rays(shader);
-
-    // sample the next path
-    closure.wi = its.toLocal(-ray.dir);
-    shader->sample(closure);
-
-    // random termination
-    if (sampler->next1D() > rr_cont_probability ||
-        closure.pdf == 0.f)
-    {
-        return closure.emission + closure.nee;
-        // return closure.nee;
-    }
-
-    Ray3f new_ray(its.p,
-                  its.toWorld(closure.wo),
-                  Epsilon,
-                  std::numeric_limits<Float>::infinity(),
-                  ray.depth + 1);
-
-    // LOG("new dir:", new_ray.dir);
-
-    Float cosTerm = its.s_frame.n % new_ray.dir;
-    if (cosTerm < 0.f) cosTerm = -cosTerm;
-    if (closure.is_specular) cosTerm = 1.f;
-
-    Color3f recur = Li(scene, sampler, new_ray, closure.is_specular);
-
-    return closure.albedo * recur * cosTerm /
-           (closure.pdf * rr_cont_probability) +
-           closure.nee + closure.emission;
-
-    // LOG("what the frick", closure.nee);
-
-    // return closure.nee;
-}
+// Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
+//                                            Sampler* sampler,
+//                                            const Ray3f& cam_ray,
+//                                            bool last_spec) const
+// {
+//     Color3f Li = Color3f(0.f);
+//     Color3f beta = Color3f(1.f);
+//     Ray3f ray = cam_ray;
+//
+//     // predefine this so it does not have to get recreated every loop
+//     MaterialClosure closure = MaterialClosure(sampler,
+//                                               scene,
+//                                               false,
+//                                               true);
+//
+//     for (int bounces = 0; bounces < 15; ++bounces)
+//     {
+//         if (beta.isZero()) break;
+//
+//         Intersection its;
+//         Vector3f dir = ray.dir;
+//
+//         if (!scene->intersect(ray, its))
+//         {
+//             break;
+//         }
+//
+//         const MaterialShader* shader = scene->getShapeMaterialShader(its);
+//
+//         closure.its = &its;
+//         closure.ray = &ray;
+//         closure.wi = its.toLocal(-ray.dir);
+//         closure.emission = COLOR_BLACK;
+//         closure.nee = COLOR_BLACK;
+//         closure.albedo = COLOR_BLACK;
+//
+//         // evaluate the material shader
+//         shader->evaluate(closure);
+//
+//         // accumulate the shadow rays
+//         closure.accumulate_shadow_rays(shader);
+//
+//         // sample the next path
+//         closure.wi = its.toLocal(-ray.dir);
+//         shader->sample(closure);
+//
+//         Float rr_prob = std::min(beta.maxValue(), 1.f);
+//
+//         // random termination
+//         if (sampler->next1D() > rr_prob ||
+//             closure.pdf == 0.f)
+//         {
+//             Li += beta * (closure.emission + closure.nee);
+//             return Li;
+//         }
+//
+//         ray = Ray3f(its.p,
+//                     its.toWorld(closure.wo),
+//                     Epsilon,
+//                     std::numeric_limits<Float>::infinity(),
+//                     ray.depth + 1);
+//
+//         Float cosTerm = its.s_frame.n % ray.dir;
+//         if (cosTerm < 0.f) cosTerm = -cosTerm;
+//         if (closure.is_specular) cosTerm = 1.f;
+//
+//         closure.last_spec = closure.is_specular;
+//
+//         Li += beta * (closure.nee + closure.emission);
+//         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+//     }
+//
+//     return Li;
+// }
+//
+// // Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
+// //                                            Sampler* sampler,
+// //                                            const Ray3f& ray,
+// //                                            bool last_spec) const
+// // {
+// //     Intersection its;
+// //
+// //     Vector3f dir = ray.dir;
+// //     Float rr_cont_probability = 0.95f;
+// //
+// //     if (!scene->intersect(ray, its) || ray.depth > 15)
+// //     {
+// //         // return Color3f(0.f, 1.f, 0.f);
+// //         return Color3f(0.f);
+// //     }
+// //
+// //     const MaterialShader* shader = scene->getShapeMaterialShader(its);
+// //
+// //     // create the material closure
+// //     MaterialClosure closure = MaterialClosure(sampler,
+// //                                               &its,
+// //                                               &ray,
+// //                                               scene,
+// //                                               false,
+// //                                               last_spec);
+// //
+// //     // evaluate the material shader
+// //     shader->evaluate(closure);
+// //
+// //     // accumulate the shadow rays
+// //     closure.accumulate_shadow_rays(shader);
+// //
+// //     // sample the next path
+// //     closure.wi = its.toLocal(-ray.dir);
+// //     shader->sample(closure);
+// //
+// //     // random termination
+// //     if (sampler->next1D() > rr_cont_probability ||
+// //         closure.pdf == 0.f)
+// //     {
+// //         return closure.emission + closure.nee;
+// //         // return closure.nee;
+// //     }
+// //
+// //     Ray3f new_ray(its.p,
+// //                   its.toWorld(closure.wo),
+// //                   Epsilon,
+// //                   std::numeric_limits<Float>::infinity(),
+// //                   ray.depth + 1);
+// //
+// //     // LOG("new dir:", new_ray.dir);
+// //
+// //     Float cosTerm = its.s_frame.n % new_ray.dir;
+// //     if (cosTerm < 0.f) cosTerm = -cosTerm;
+// //     if (closure.is_specular) cosTerm = 1.f;
+// //
+// //     Color3f recur = Li(scene, sampler, new_ray, closure.is_specular);
+// //
+// //     return closure.albedo * recur * cosTerm /
+// //            (closure.pdf * rr_cont_probability) +
+// //            closure.nee + closure.emission;
+// //
+// //     // LOG("what the frick", closure.nee);
+// //
+// //     // return closure.nee;
+// // }
 
 // TODO: rewrite this as a for loop instead of with recursion
 Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
-                                           const Ray3f& ray) const
+                                           const Ray3f& cam_ray) const
 {
-    return Li(scene, sampler, ray, true);
+    Color3f Li = Color3f(0.f);
+    Color3f beta = Color3f(1.f);
+    Ray3f ray = cam_ray;
+
+    // predefine this so it does not have to get recreated every loop
+    MaterialClosure closure = MaterialClosure(sampler,
+                                              scene,
+                                              false,
+                                              true);
+
+    for (int bounces = 0; bounces < 15; ++bounces)
+    {
+        if (beta.isZero()) break;
+
+        Intersection its;
+
+        if (!scene->intersect(ray, its))
+        {
+            break;
+        }
+
+        const MaterialShader* shader = scene->getShapeMaterialShader(its);
+
+        closure.its = &its;
+        closure.ray = &ray;
+        closure.wi = its.toLocal(-ray.dir);
+        closure.emission = COLOR_BLACK;
+        closure.nee = COLOR_BLACK;
+        closure.albedo = COLOR_BLACK;
+
+        // evaluate the material shader
+        shader->evaluate(closure);
+
+        // accumulate the shadow rays
+        closure.accumulate_shadow_rays(shader);
+
+        Float rr_prob = std::min(beta.maxValue(), 1.f);
+
+        // random termination
+        if (sampler->next1D() > rr_prob)
+        {
+            Li += beta * (closure.emission + closure.nee);
+            break;
+        }
+
+        // sample the next path
+        closure.wi = its.toLocal(-ray.dir);
+        shader->sample(closure);
+
+        if (closure.pdf == 0.f)
+        {
+            Li += beta * (closure.emission + closure.nee);
+            break;
+        }
+
+        ray = Ray3f(its.p,
+                    its.toWorld(closure.wo),
+                    Epsilon,
+                    std::numeric_limits<Float>::infinity(),
+                    ray.depth + 1);
+
+        Float cosTerm = its.s_frame.n % ray.dir;
+        if (cosTerm < 0.f) cosTerm = -cosTerm;
+        if (closure.is_specular) cosTerm = 1.f;
+
+        closure.last_spec = closure.is_specular;
+
+        Li += beta * (closure.nee + closure.emission);
+        beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+    }
+
+    return Li;
 }

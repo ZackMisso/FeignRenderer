@@ -11,46 +11,6 @@
 #include <feign/core/node.h>
 #include <feign/core/closure.h>
 
-// /////////////////////////////////////////////////
-// // BSDF Query Object
-// /////////////////////////////////////////////////
-// struct BSDFQuery
-// {
-//     Vector3f wi;
-//     Vector3f wo;
-//
-//     Point3f uvw;
-//     Point3f pos;
-//
-//     Float eta;
-//     Float pdf;
-//
-//     bool isDelta;
-//
-//     BSDFQuery(const Vector3f& wi,
-//               const Point2f& uv,
-//               const Point3f& pos)
-//         : wi(wi), uvw(Point3f(uv, 0.f)), pos(pos) { }
-//
-//     BSDFQuery(const Vector3f& wi,
-//               const Point3f& uvw,
-//               const Point3f& pos)
-//         : wi(wi), uvw(uvw), pos(pos) { }
-//
-//     BSDFQuery(const Vector3f& wi,
-//               const Vector3f& wo,
-//               const Point2f& uv,
-//               const Point3f& pos)
-//         : wi(wi), wo(wo), uvw(Point3f(uv, 0.f)), pos(pos) { }
-//
-//     BSDFQuery(const Vector3f& wi,
-//               const Vector3f& wo,
-//               const Point3f& uvw,
-//               const Point3f& pos)
-//         : wi(wi), wo(wo), uvw(uvw), pos(pos) { }
-// };
-// /////////////////////////////////////////////////
-
 /////////////////////////////////////////////////
 // BSDF
 /////////////////////////////////////////////////
@@ -59,9 +19,6 @@ class BSDF
 public:
     BSDF() { }
     virtual ~BSDF() { }
-
-    // virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const = 0;
-    // virtual Color3f eval(const BSDFQuery& rec) const = 0;
 
     virtual void sample(MaterialClosure& closure) const = 0;
     virtual void evaluate(MaterialClosure& closure) const = 0;
@@ -86,9 +43,6 @@ public:
     };
 
     Diffuse(Color3f albedo);
-
-    // virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
-    // virtual Color3f eval(const BSDFQuery& rec) const;
 
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
@@ -116,9 +70,6 @@ public:
 
     Mirror(Color3f albedo);
 
-    // virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
-    // virtual Color3f eval(const BSDFQuery& rec) const;
-
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
 
@@ -137,13 +88,39 @@ class NullBSDF : public BSDF
 public:
     NullBSDF();
 
-    // virtual Color3f sample(BSDFQuery& rec, const Point2f& sample) const;
-    // virtual Color3f eval(const BSDFQuery& rec) const;
-
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
 
     virtual bool isDelta() const { return true; }
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Phong BSDF
+/////////////////////////////////////////////////
+class Phong : public BSDF
+{
+public:
+    struct Params
+    {
+        Params(Color3f kd, Color3f ks)
+            : kd(kd), ks(ks) { }
+
+        Color3f kd;
+        Color3f ks;
+    };
+
+    Phong(Color3f kd, Color3f ks);
+
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+
+    // this is a strange middle ground
+    virtual bool isDelta() const { return false; }
+
+protected:
+    Color3f kd;
+    Color3f ks;
 };
 /////////////////////////////////////////////////
 

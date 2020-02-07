@@ -9,6 +9,7 @@
 #include <feign/core/integrator.h>
 #include <feign/core/recon_filter.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 void Integrator::preProcess()
 {
@@ -60,7 +61,15 @@ void Integrator::render(const Scene* scene,
                 // LOG(ray.dir);
 
                 // LOG("calculating radiance");
+                #if CLOCKING
+                    Clocker::startClock("integrator");
+                #endif
+
                 radiance *= Li(scene, sampler, ray);
+
+                #if CLOCKING
+                    Clocker::endClock("integrator");
+                #endif
 
                 // if (std::isnan(radiance[0]))
                 // {
@@ -75,6 +84,10 @@ void Integrator::render(const Scene* scene,
                                    Point2f(camera->getFilmSize()[0]-1, camera->getFilmSize()[1]-1));
 
                 // LOG("splatting filter");
+                #if CLOCKING
+                    Clocker::startClock("filter");
+                #endif
+
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
                 {
@@ -102,11 +115,19 @@ void Integrator::render(const Scene* scene,
                         filter_weights(fj, fi, 0) += weight;
                     }
                 }
+
+                #if CLOCKING
+                    Clocker::endClock("filter");
+                #endif
             }
         }
     }
 
-    // LOG("dividing by filter weights");
+    #if CLOCKING
+        Clocker::startClock("filter");
+    #endif
+
+
     for (int i = 0; i < image.height(); ++i)
     {
         for (int j = 0; j < image.width(); ++j)
@@ -125,4 +146,8 @@ void Integrator::render(const Scene* scene,
             }
         }
     }
+
+    #if CLOCKING
+        Clocker::endClock("filter");
+    #endif
 }

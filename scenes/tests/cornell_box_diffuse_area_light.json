@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "cornell_box_area_light",
+        "name": "cornell_box_area_light_no",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 131072
+        "sample_count": 32
     },
     "camera": {
         "name": "camera",

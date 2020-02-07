@@ -18,7 +18,7 @@
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePt;
-typedef std::chrono::duration<double> Duration;
+typedef std::chrono::duration<Float> Duration;
 
 class Clocker
 {

@@ -8,6 +8,7 @@
 
 #include <feign/core/shader.h>
 #include <feign/shapes/objmesh.h>
+#include <feign/stats/clocker.h>
 
 InterpVertsToSphereShader::InterpVertsToSphereShader(float prop_of_shortest_axis, float interp)
     : prop_of_shortest_axis(prop_of_shortest_axis), interp(interp)
@@ -21,6 +22,10 @@ bool InterpVertsToSphereShader::isValid(MeshType mesh_type) const
 
 void InterpVertsToSphereShader::evaluate(void* mesh)
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     ObjMesh* obj_mesh = (ObjMesh*)mesh;
 
     Point3f centroid = obj_mesh->centroid();
@@ -93,4 +98,8 @@ void InterpVertsToSphereShader::evaluate(void* mesh)
 
     obj_mesh->setVerts(new_verts);
     obj_mesh->setNorms(new_norms);
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }

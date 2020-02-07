@@ -12,6 +12,8 @@
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
 
+#include <feign/stats/clocker.h>
+
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/filereadstream.h>
@@ -28,6 +30,10 @@
 
 void JsonParser::parse(std::string filename)
 {
+    #if CLOCKING
+        Clocker::startClock("parse");
+    #endif
+
     FILE* file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
@@ -658,6 +664,10 @@ void JsonParser::parse(std::string filename)
             assert(false);
         }
     }
+
+    #if CLOCKING
+        Clocker::endClock("parse");
+    #endif
 
     FeignRenderer::flush_renders();
 }

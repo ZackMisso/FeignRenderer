@@ -17,8 +17,6 @@ void NullBSDF::sample(MaterialClosure& closure) const
     closure.wo = -closure.wi;
     closure.eta = 1.0f;
     closure.albedo = Color3f(1.f);
-
-    // return Color3f(1.f);
 }
 
 // Color3f NullBSDF::eval(const BSDFQuery& rec) const

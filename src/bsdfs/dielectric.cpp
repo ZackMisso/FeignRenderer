@@ -13,8 +13,6 @@
 Dielectric::Dielectric(Float int_ior, Float ext_ior)
     : BSDF(), int_ior(int_ior), ext_ior(ext_ior) { }
 
-// the idea is that sample returns eval() / pdf()
-// Color3f Dielectric::sample(BSDFQuery& rec, const Point2f& sample) const
 void Dielectric::sample(MaterialClosure& closure) const
 {
     Float sample = closure.sampler->next1D();
@@ -37,7 +35,6 @@ void Dielectric::sample(MaterialClosure& closure) const
                          int_ior);
 
     if (sample < prob)
-    // if (sample < 1.0)
     {
         // reflects
         Vector3f wr = Vector3f(-closure.wi[0],
@@ -46,9 +43,6 @@ void Dielectric::sample(MaterialClosure& closure) const
 
         closure.wo = wr;
         closure.eta = 1.f;
-        //closure.albedo += Color3f(1.f);
-
-        // return Color3f(1.f);
     }
     else
     {
@@ -56,8 +50,6 @@ void Dielectric::sample(MaterialClosure& closure) const
         Vector3f wr = Vector3f(-closure.wi[0],
                                -closure.wi[1],
                                0.0);
-
-        // LOG("eta:", closure.eta);
 
         Vector3f wtperp = wr * closure.eta;
         Vector3f wtpara = Vector3f(0.f,
@@ -67,17 +59,12 @@ void Dielectric::sample(MaterialClosure& closure) const
         closure.wo = wtperp + wtpara;
 
         if (cos_theta < -Epsilon) closure.wo[2] = -closure.wo[2];
-
-        // closure.wo = closure.wo.normalized();
-
-        // return Color3f(1.f);
     }
 
     closure.albedo = Color3f(1.f);
 }
 
-// Color3f Dielectric::eval(const BSDFQuery& rec) const
 void Dielectric::evaluate(MaterialClosure& closure) const
 {
-    closure.wo = Color3f(0.0f);
+    closure.albedo = Color3f(0.0f);
 }

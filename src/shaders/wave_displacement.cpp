@@ -8,6 +8,7 @@
 
 #include <feign/core/shader.h>
 #include <feign/shapes/objmesh.h>
+#include <feign/stats/clocker.h>
 
 WaveDisplacementShader::WaveDisplacementShader(std::vector<Point2f> points,
                                                std::vector<Functor> functors,
@@ -31,6 +32,10 @@ bool WaveDisplacementShader::isValid(MeshType mesh_type) const
 // points and normals - NOTE: this should not be the case
 void WaveDisplacementShader::evaluate(void* mesh)
 {
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
     ObjMesh* obj_mesh = (ObjMesh*)mesh;
     const std::vector<Point3f>& old_verts = obj_mesh->getVerts();
     const std::vector<Normal3f>& old_norms = obj_mesh->getNorms();
@@ -42,7 +47,7 @@ void WaveDisplacementShader::evaluate(void* mesh)
     {
         for (int j = 0; j < points.size(); ++j)
         {
-            
+
             Point3f start_pos = old_verts[i];
             Point3f end_pos = old_verts[i] + old_norms[i] * functors[i];
         }
@@ -55,4 +60,8 @@ void WaveDisplacementShader::evaluate(void* mesh)
 
     throw new FeignRendererException("wave displacement shader evaluate");
     // TODO
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }

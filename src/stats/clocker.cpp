@@ -27,6 +27,11 @@ void Clocker::initialize()
     instance = new Clocker();
 
     Clocker::addClocker("render");
+    Clocker::addClocker("parse");
+    Clocker::addClocker("scene intersect");
+    Clocker::addClocker("integrator");
+    Clocker::addClocker("shader eval");
+    Clocker::addClocker("filter");
 
     // addClocker("full render");
     // addClocker("embree intersect");
@@ -81,7 +86,7 @@ void Clocker::endClock(std::string tracker)
             }
 
             getInstance()->actives[i] = false;
-            getInstance()->durations[i] = Clock::now() - getInstance()->startTimes[i];
+            getInstance()->durations[i] += Clock::now() - getInstance()->startTimes[i];
 
             i = getInstance()->trackings.size();
         }

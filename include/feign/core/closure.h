@@ -24,24 +24,30 @@ struct MaterialClosure
     MaterialClosure();
 
     MaterialClosure(Sampler* sampler,
-                    const Intersection* its,
-                    const Ray3f* ray,
+                    Intersection* its,
+                    Ray3f* ray,
                     const Scene* scene,
                     bool sample_all_emitters = false,
                     bool last_bounce_specular = false);
 
+    MaterialClosure(Sampler* sampler,
+                    const Scene* scene,
+                    bool sample_all_emitters = false,
+                    bool last_bounce_specular = false);
+
+    // TODO: why is this a separate operation
     void accumulate_shadow_rays(const MaterialShader* shader);
 
     // always inputs
     Sampler* sampler;        // the sampler to use
-    const Intersection* its; // a reference to the intersection info
-    const Ray3f* ray;        // a reference to the incoming ray
+    Intersection* its; // a reference to the intersection info
+    Ray3f* ray;        // a reference to the incoming ray
     const Scene* scene;      // a reference to the scene
     Vector3f wi;
 
     // sometimes inputs or outputs depending on sampling
     Vector3f wo;             // the outgoing ray
-    std::vector<EmitterEval> shadow_rays;
+    std::vector<EmitterEval> shadow_rays; // TODO: get rid of this
 
     // always outputs
     Color3f albedo;          // the bsdf sample of the material

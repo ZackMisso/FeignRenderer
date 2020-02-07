@@ -15,8 +15,8 @@ MaterialClosure::MaterialClosure()
 }
 
 MaterialClosure::MaterialClosure(Sampler* sampler,
-                                 const Intersection* its,
-                                 const Ray3f* ray,
+                                 Intersection* its,
+                                 Ray3f* ray,
                                  const Scene* scene,
                                  bool sample_all_emitters,
                                  bool last_bounce_specular)
@@ -36,6 +36,25 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       sample_all_emitters(sample_all_emitters)
 {
     wi = its->toLocal(-ray->dir);
+}
+
+MaterialClosure::MaterialClosure(Sampler* sampler,
+                                 const Scene* scene,
+                                 bool sample_all_emitters,
+                                 bool last_bounce_specular)
+    : sampler(sampler),
+      scene(scene),
+      shadow_rays(std::vector<EmitterEval>()),
+      albedo(Color3f(0.f)),
+      nee(Color3f(0.f)),
+      emission(Color3f(0.f)),
+      wo(Vector3f(1.f)),
+      pdf(1.f),
+      eta(1.f),
+      is_specular(false),
+      last_spec(last_bounce_specular),
+      sample_all_emitters(sample_all_emitters)
+{
 }
 
 void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
@@ -68,6 +87,8 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
             // nee = Color3f(0.5);
         }
     }
+
+    shadow_rays.clear();
 
     wo = tmp_wo;
     albedo = tmp_albedo;
