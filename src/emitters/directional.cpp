@@ -8,16 +8,22 @@
 
 #include <feign/core/emitter.h>
 
-DirectionalEmitter::DirectionalEmitter()
+DirectionalEmitter::DirectionalEmitter(Vector3f light_dir, Color3f radiance)
+    : light_dir(light_dir), radiance(radiance)
 {
-    throw new NotImplementedException("emitter directional");
+    light_dir = light_dir.normalized();
 }
 
 Color3f DirectionalEmitter::sample_li(EmitterQuery& rec,
                                   const Point2f& sample,
                                   Float* pdf) const
 {
-    throw new NotImplementedException("emitter directional");
+    rec.wi = light_dir;
+    if (pdf) *pdf = 1.0;
+
+    // rec.sqr_dist = 1.f; // technically infinity
+
+    return radiance;
 }
 
 Color3f DirectionalEmitter::sample_pos(EmitterQuery& rec,
@@ -27,14 +33,11 @@ Color3f DirectionalEmitter::sample_pos(EmitterQuery& rec,
     throw new NotImplementedException("emitter directional");
 }
 
-void DirectionalEmitter::preProcess()
-{
-    throw new NotImplementedException("emitter directional");
-}
-
 Color3f DirectionalEmitter::evaluate(EmitterQuery& rec) const
 {
-    throw new NotImplementedException("directional evaluate");
+    // if wi is roughly == light dir return the radiance
+    if ((light_dir - rec.wi).norm() < Epsilon)
+        return radiance;
 
-    return Color3f(0.f);
+    return COLOR_BLACK;
 }

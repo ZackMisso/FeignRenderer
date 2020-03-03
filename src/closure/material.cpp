@@ -31,7 +31,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       wo(Vector3f(1.f)),
       pdf(1.f),
       eta(1.f),
-      is_specular(false),
+      is_specular(last_bounce_specular),
       last_spec(last_bounce_specular),
       sample_all_emitters(sample_all_emitters)
 {
@@ -51,7 +51,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       wo(Vector3f(1.f)),
       pdf(1.f),
       eta(1.f),
-      is_specular(false),
+      is_specular(last_bounce_specular),
       last_spec(last_bounce_specular),
       sample_all_emitters(sample_all_emitters)
 {
@@ -66,7 +66,7 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
 
     for (int i = 0; i < shadow_rays.size(); ++i)
     {
-        assert(shadow_rays.size() == 1);
+        // assert(shadow_rays.size() == 1);
         if (shadow_rays[i].valid)
         {
             // assert(false);

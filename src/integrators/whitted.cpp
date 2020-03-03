@@ -66,9 +66,12 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                       std::numeric_limits<Float>::infinity(),
                       ray.depth + 1);
 
+        Color3f beta = closure.albedo * (1.f / rr_cont_probability);
+        if (beta.isZero()) return closure.nee + closure.emission;
+
         Color3f recur = Li(scene, sampler, new_ray);
 
-        return closure.albedo * (recur * 1.f / rr_cont_probability) +
+        return beta * recur +
                closure.nee + closure.emission;
     }
 

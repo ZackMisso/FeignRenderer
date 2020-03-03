@@ -225,8 +225,8 @@ FilterNode* FeignRenderer::find_filter(std::string name)
 
         if (name == "default")
         {
-            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
-            // node->filter = new BoxFilter();
+            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
+            node->filter = new BoxFilter();
         }
 
         return node;
@@ -319,6 +319,8 @@ MaterialShaderNode* FeignRenderer::find_material_shader(std::string name)
 
 TextureNode* FeignRenderer::find_texture(std::string name)
 {
+    if (name == "") return nullptr;
+
     std::unordered_map<std::string, TextureNode*>::const_iterator itr = textures.find(name);
 
     if (itr == textures.end())
@@ -683,6 +685,21 @@ void FeignRenderer::fr_emitter(std::string name,
         // assert(false);
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
+    else if (type == "directional")
+    {
+        DirectionalEmitter::Params* params = (DirectionalEmitter::Params*)emitter_data;
+        emitter->emitter = new DirectionalEmitter(params->light_dir, params->radiance);
+        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+    }
+    else if (type == "spot")
+    {
+        SpotLightEmitter::Params* params = (SpotLightEmitter::Params*)emitter_data;
+        emitter->emitter = new SpotLightEmitter(params->light_pos,
+                                                params->light_dir,
+                                                params->radiance,
+                                                params->light_angle);
+        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+    }
     else
     {
         throw new NotImplementedException("emitter type not recognized: " + type);
@@ -748,6 +765,11 @@ void FeignRenderer::fr_bsdf(std::string name,
     else if (type == "null")
     {
         bsdf->bsdf = nullptr;
+    }
+    else if (type == "phong")
+    {
+        Phong::Params* params = (Phong::Params*)bsdf_data;
+        bsdf->bsdf = new Phong(params->kd, params->ks, params->exponent);
     }
     else
     {

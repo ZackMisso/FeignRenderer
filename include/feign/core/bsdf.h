@@ -103,14 +103,15 @@ class Phong : public BSDF
 public:
     struct Params
     {
-        Params(Color3f kd, Color3f ks)
-            : kd(kd), ks(ks) { }
+        Params(Color3f kd, Float ks, Float exponent)
+            : kd(kd), ks(ks), exponent(exponent) { }
 
         Color3f kd;
-        Color3f ks;
+        Float ks;
+        Float exponent;
     };
 
-    Phong(Color3f kd, Color3f ks);
+    Phong(Color3f kd, Float ks, Float exponent);
 
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
@@ -120,7 +121,8 @@ public:
 
 protected:
     Color3f kd;
-    Color3f ks;
+    Float ks;
+    Float exponent;
 };
 /////////////////////////////////////////////////
 

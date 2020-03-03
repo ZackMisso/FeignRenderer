@@ -176,10 +176,24 @@ public:
 
     virtual void preProcess();
 
-    // Color3f Li(const Scene* scene,
-    //            Sampler* sampler,
-    //            const Ray3f& ray,
-    //            bool last_spec) const;
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Volumetric Path Tracer
+/////////////////////////////////////////////////
+class VolPath_Integrator : public Integrator
+{
+public:
+    VolPath_Integrator(FilterNode* filter,
+                                   std::string location,
+                                   long max_time,
+                                   long max_heuristic);
+
+    virtual void preProcess();
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,

@@ -21,13 +21,6 @@
 #include <cstdio>
 #include <fstream>
 
-// TODO: maybe implement individual methods later to make the parse method not
-//       so crowded
-// void parse_independent_sampler(const rapidjson::Value& value)
-// {
-//
-// }
-
 void JsonParser::parse(std::string filename)
 {
     #if CLOCKING
@@ -494,6 +487,65 @@ void JsonParser::parse(std::string filename)
 
                 FeignRenderer::fr_emitter(name, type, &params);
             }
+            else if (type == "directional")
+            {
+                Vector3f light_dir = Color3f(1.f, 0.f, 0.f);
+                Color3f radiance = Color3f(1.f);
+
+                if (value.HasMember("light_dir"))
+                {
+                    light_dir[0] = value["light_dir"][0].GetFloat();
+                    light_dir[1] = value["light_dir"][1].GetFloat();
+                    light_dir[2] = value["light_dir"][2].GetFloat();
+                }
+                if (value.HasMember("radiance"))
+                {
+                    radiance[0] = value["radiance"][0].GetFloat();
+                    radiance[1] = value["radiance"][1].GetFloat();
+                    radiance[2] = value["radiance"][2].GetFloat();
+                }
+
+                DirectionalEmitter::Params params(light_dir, radiance);
+
+                FeignRenderer::fr_emitter(name, type, &params);
+            }
+            else if (type == "spot")
+            {
+                Point3f light_pos = Color3f(0.f);
+                Vector3f light_dir = Color3f(1.f, 0.f, 0.f);
+                Color3f radiance = Color3f(1.f);
+                Float light_angle = 25.f;
+
+                if (value.HasMember("light_pos"))
+                {
+                    light_pos[0] = value["light_pos"][0].GetFloat();
+                    light_pos[1] = value["light_pos"][1].GetFloat();
+                    light_pos[2] = value["light_pos"][2].GetFloat();
+                }
+                if (value.HasMember("light_dir"))
+                {
+                    light_dir[0] = value["light_dir"][0].GetFloat();
+                    light_dir[1] = value["light_dir"][1].GetFloat();
+                    light_dir[2] = value["light_dir"][2].GetFloat();
+                }
+                if (value.HasMember("radiance"))
+                {
+                    radiance[0] = value["radiance"][0].GetFloat();
+                    radiance[1] = value["radiance"][1].GetFloat();
+                    radiance[2] = value["radiance"][2].GetFloat();
+                }
+                if (value.HasMember("light_angle"))
+                {
+                    light_angle = value["light_angle"].GetFloat();
+                }
+
+                SpotLightEmitter::Params params(light_pos,
+                                                light_dir,
+                                                radiance,
+                                                light_angle);
+
+                FeignRenderer::fr_emitter(name, type, &params);
+            }
             else
             {
                 throw new FeignRendererException(type + " emitter not parsable yet");
@@ -598,6 +650,31 @@ void JsonParser::parse(std::string filename)
                 }
 
                 Dielectric::Params params(i_ior, e_ior);
+
+                FeignRenderer::fr_bsdf(name, type, &params);
+            }
+            else if (type == "phong")
+            {
+                Color3f kd = Color3f(0.5f, 0.5f, 0.5f);
+                Float ks = 0.5f;
+                Float exponent = 2.f;
+
+                if (value.HasMember("kd"))
+                {
+                    kd[0] = value["kd"][0].GetFloat();
+                    kd[1] = value["kd"][1].GetFloat();
+                    kd[2] = value["kd"][2].GetFloat();
+                }
+                if (value.HasMember("ks"))
+                {
+                    ks = value["ks"].GetFloat();
+                }
+                if (value.HasMember("exponent"))
+                {
+                    exponent = value["exponent"].GetFloat();
+                }
+
+                Phong::Params params(kd, ks, exponent);
 
                 FeignRenderer::fr_bsdf(name, type, &params);
             }

@@ -9,18 +9,21 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode* filter,
+// for now this will only support homogeneous global media
+// TODO
+
+VolPath_Integrator::VolPath_Integrator(FilterNode* filter,
                                                                std::string location,
                                                                long max_time,
                                                                long max_heuristic)
     : Integrator(filter, location, max_time, max_heuristic) { }
 
-void Path_Unidirectional_Integrator::preProcess()
+void VolPath_Integrator::preProcess()
 {
     Integrator::preProcess();
 }
 
-Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
+Color3f VolPath_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
                                            const Ray3f& cam_ray) const
 {

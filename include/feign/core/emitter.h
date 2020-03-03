@@ -89,7 +89,16 @@ protected:
 class DirectionalEmitter : public Emitter
 {
 public:
-    DirectionalEmitter();
+    struct Params
+    {
+        Params(Vector3f light_dir, Color3f radiance)
+            : light_dir(light_dir), radiance(radiance) { }
+
+        Vector3f light_dir;
+        Color3f radiance;
+    };
+
+    DirectionalEmitter(Vector3f light_dir, Color3f radiance);
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -101,9 +110,55 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
-    virtual void preProcess();
+protected:
+    Vector3f light_dir;
+    Color3f radiance;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// SpotLight Emitter
+/////////////////////////////////////////////////
+class SpotLightEmitter : public Emitter
+{
+public:
+    struct Params
+    {
+        Params(Point3f light_pos,
+               Vector3f light_dir,
+               Color3f radiance,
+               Float light_angle)
+            : light_pos(light_pos),
+              light_dir(light_dir),
+              radiance(radiance),
+              light_angle(light_angle) { }
+
+        Point3f light_pos;
+        Vector3f light_dir;
+        Color3f radiance;
+        Float light_angle;
+    };
+
+    SpotLightEmitter(Point3f light_pos,
+                     Vector3f light_dir,
+                     Color3f radiance,
+                     Float light_angle);
+
+    virtual Color3f sample_li(EmitterQuery& rec,
+                              const Point2f& sample,
+                              Float* pdf) const;
+
+    virtual Color3f sample_pos(EmitterQuery& rec,
+                               const Point2f& sample,
+                               Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
 
 protected:
+    Point3f light_pos;
+    Vector3f light_dir;
+    Color3f radiance;
+    Float light_angle;
 };
 /////////////////////////////////////////////////
 

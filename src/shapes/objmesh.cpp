@@ -195,6 +195,7 @@ void ObjMesh::parseFromFile(const std::string& filename)
 
             if (!f4.empty())
             {
+                std::cout << f1 << " " << f2 << " " << f3 << " " << f4 << std::endl;
                 throw new NotImplementedException("quads in obj");
             }
 

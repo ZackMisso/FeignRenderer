@@ -186,6 +186,7 @@ add_executable(feign
     src/emitters/point.cpp
     src/emitters/distant.cpp
     src/emitters/directional.cpp
+    src/emitters/spot.cpp
     src/emitters/environment.cpp
     src/emitters/mesh.cpp
     src/emitters/interp_env.cpp
@@ -205,6 +206,7 @@ add_executable(feign
     src/integrators/cosine_term.cpp
     src/integrators/barycentric.cpp
     src/integrators/nice_normal.cpp
+    src/integrators/volpath.cpp
 
     # Material implementation files
     src/materials/simple.cpp

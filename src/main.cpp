@@ -13,7 +13,9 @@
 
 #include "../scenes/adrien/ajax_cosine.h"
 #include "../scenes/adrien/neon_intro.h"
-#include "../scenes/adrien/sphere_ground.h"
+#include "../scenes/adrien/neon_take_2.h"
+// #include "../scenes/adrien/sphere_ground.h"
+#include "../scenes/adrien/sandbox.h"
 #include "../scenes/month_of_shaders/jan_1_2020.h"
 #include "../scenes/month_of_shaders/jan_2_2020.h"
 #include "../scenes/month_of_shaders/jan_3_2020.h"
@@ -54,6 +56,11 @@ int main(int argc, char* argv[])
     // // ajax_cosine();
     // neon_intro();
     // return 0;
+    // neon_intro_2();
+    // return 0;
+
+    sandbox();
+    return 0;
     //
     // /////\\\ TEMPORARY \\\/////
 
@@ -79,8 +86,10 @@ int main(int argc, char* argv[])
     // std::string scene = "tests/box_rotations";
     // std::string scene = "tests/ajax_bary";
     // std::string scene = "tests/cornell_box_diffuse";
-    std::string scene = "tests/cornell_box_diffuse_area_light";
+    // std::string scene = "tests/cornell_box_diffuse_area_light";
     // std::string scene = "tests/cornell_box_dielectrics";
+    // std::string scene = "tests/cornell_box_phong";
+    std::string scene = "tests/spot_light";
 
     for (int i = 1; i < argc; ++i)
     {
