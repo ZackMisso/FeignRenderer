@@ -1,0 +1,45 @@
+**Feign Renderer Documentation**
+
+Author: Zack Misso
+
+Current version: v.0.1.0
+
+This interactive document provides the full writeup and documentation for the
+Feign Renderer as well as its API and how to integrate it into other programs
+or pipelines. It is my goal to eventually work in animation so I have attempted
+to implement and design this hobby renderer in such a way to support integration
+into my own animation editor. I also hope to eventually get this renderer into a
+state where myself or others can utilize it for research purposes.
+
+This living document is structured into a few separate pages which explain the
+supported objects and features in this renderer as well as an overall summary of
+the api. I am also including a page describing planned features for the renderer
+and projections for when they will be completed.
+
+Contents:
+* <a href="api.html">API Brief</a>
+* <a href="accel.html">Acceleration Structures</a>
+* <a href="bsdf.html">Supported BSDFs</a>
+* <a href="camera.html">Supported Cameras</a>
+* <a href="emitter.html">Supported Emitters</a>
+* <a href="integrator.html">Supported Integrators</a>
+* <a href="material.html">Supported Materials</a>
+* <a href="media.html">Supported Media Abstractions</a>
+* <a href="recon_filter.html">Supported Reconstruction Filters</a>
+* <a href="sampler.html">Supported Samplers</a>
+* <a href="shader.html">Supported Shaders</a>
+* <a href="shape.html">Supported Geometric Shapes</a>
+* <a href="texture.html">Supported Texture</a>
+* <a href="future.html">Future Version Plans</a>
+* <a href="unit_tests.html">Unit Tests</a>
+
+<!--- Markdeep & image comparison library - probably no need to change anything below -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="resources/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="resources/jquery.event.move.js"></script>
+<script src="resources/jquery.twentytwenty.js"></script>
+<link href="resources/offcanvas.css" rel="stylesheet">
+<link href="resources/twentytwenty.css" rel="stylesheet" type="text/css" />
+<script>
+$(window).load(function(){$(".twentytwenty-container").twentytwenty({default_offset_pct: 0.5});});
+</script>
