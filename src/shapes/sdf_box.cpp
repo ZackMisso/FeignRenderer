@@ -6,10 +6,11 @@
  * acknowledgement is provided to the original author(s).
  **/
 
- #include <feign/core/shape.h>
+#include <feign/core/shape.h>
+#include <feign/math/bbox.h>
 
 SDFBox::SDFBox(Point3f tlc, Point3f brc)
-    : tlc(tlc), brc(brc) { }
+    : SDFShape(), tlc(tlc), brc(brc) { }
 
 Float SDFBox::evaluate(Point3f pt) const
 {

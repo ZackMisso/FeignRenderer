@@ -2,9 +2,191 @@
 
 Author: Zack Misso
 
-Current version: v.0.1.0
+Current version: v.0.1.1
 
 <a href="documentation.html">Home</a>
+
+Brief Summary of the Feign Renderer API
+=======================================
+
+The feign renderer is organized as a list of function which initialize the
+render settings and scenes. For example, my current json parser works by parsing
+the scene file and calling the respective functions which correspond to setting
+up whatever property the scene file dictates. So if you would like to write a
+parser for any scene file format, or extend any editor to work with the feign
+renderer, these are the functions which act as the entry point to the renderer:
+
+* FeignRenderer::initialize()
+* FeignRenderer::clean_up()
+* FeignRenderer::flush_renders()
+* FeignRenderer::fr_scene(...)
+* FeignRenderer::fr_sampler(...)
+* FeignRenderer::fr_camera(...)
+* FeignRenderer::fr_object(...)
+* FeignRenderer::fr_mesh(...)
+* FeignRenderer::fr_shader(...)
+* FeignRenderer::fr_emitter(...)
+* FeignRenderer::fr_material(...)
+* FeignRenderer::fr_bsdf(...)
+* FeignRenderer::fr_texture(...)
+* FeignRenderer::fr_clear_transform()
+* FeignRenderer::fr_scale(...)
+* FeignRenderer::fr_translate(...)
+* FeignRenderer::fr_rotate(...)
+
+initialize()
+------------
+
+This method initializes the singleton which manages the entire
+renderer. It should always be called before making any subsequent calls to the
+feign renderer api.
+
+clean_up()
+----------
+
+This method cleans up all of the allocated memory used by the renderer. If you
+are utilizing this renderer just to render single images and not fully integrate
+it into a program then you do not need to explicitly call this method since
+it is called by default at the end of flush_renders().
+
+flush_renders()
+---------------
+
+This method is used to tell the renderer to begin running its renders. It should
+be the last method that you call after setting up your scene. Before this method
+can be called you must have made these api calls with valid parameters:
+
+* initialize()
+* fr_scene(...)
+* fr_integrator(...)
+* fr_sampler(...)
+* fr_camera(...)
+
+fr_scene(...)
+-------------
+
+This method initializes the scene node which describes how to render a scene.
+Currently this renderer only supports specifying and rendering one scene
+at a time. It is required that this method gets called directly after
+initialize() but before any subsequent api calls since the scene node also acts
+as the storage container for the majority of objects.
+
+This method takes the following parameters:
+
+* std::string name
+* std::string integrator_node
+* std::string sampler_node
+* std::string camera_node
+* std::string medium_node
+
+The 'name' parameter is the unique identifier representing the name of the
+scene. Currently, it only dictates the names of the output images;
+
+The 'integrator_node' parameter is the unique identifier representing the name
+of the integrator being used. It should be the same as the 'name' parameter to
+the fr_integrator(...) call. This parameter is required to correspond to a valid
+integrator node.
+
+The 'sampler_node' parameter is the unique identifier representing the name of
+the sampler being used. It should be the same as the 'name' parameter to the
+fr_sampler(...) call. This parameter is required to correspond to a valid
+sampler node.
+
+The 'camera_node' parameter is the unique identifier representing the name of
+the camera being used. It should be the same as the 'name' parameter to the
+fr_camera(...) call. This parameter is required to correspond to a valid
+camera node.
+
+The 'medium_node' parameter is the unique identifier representing the name of
+the infinite medium being used. While participating media is not fully supported
+yet, this stands in as a place holder for when I get that feature implemented.
+This parameter is also the only optional parameter, so if you specify an empty
+string as the medium node, the renderer will ignore it.
+
+fr_sampler(...)
+---------------
+
+This method initializes the random number sampler which will be used to generate
+random samples during the rendering process.
+
+This method takes the following parameters:
+
+* std::string name
+* std::string type
+* void* sampler_data
+
+The 'name' parameter is the unique identifier representing the user defined name
+of the sampler. For the sampler that you initialize to be the active sampler
+used by the renderer, you must make sure that this parameter corresponds to the
+'sampler_node' parameter in your fr_scene(...) call.
+
+The 'type' parameter represents the type of sampler that you want to use, while
+the 'sampler_data' parameter represents a pointer to the settings for that
+specific sampler. The <a href="sampler.html">samplers</a> page has more
+information on what types of samplers are supported and their respective
+parameters.
+
+fr_camera(...)
+--------------
+
+TODO
+
+fr_object(...)
+--------------
+
+TODO
+
+fr_mesh(...)
+------------
+
+TODO
+
+fr_shader(...)
+--------------
+
+TODO
+
+fr_emitter(...)
+---------------
+
+TODO
+
+
+fr_material(...)
+----------------
+
+TODO
+
+fr_bsdf(...)
+------------
+
+TODO
+
+fr_texture(...)
+---------------
+
+TODO
+
+fr_clear_transform()
+--------------------
+
+TODO
+
+fr_scale(...)
+-------------
+
+TODO
+
+fr_translate(...)
+-----------------
+
+TODO
+
+fr_rotate(...)
+--------------
+
+Example Scene Initialization
+============================
 
 TODO
 

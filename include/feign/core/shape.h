@@ -131,7 +131,6 @@ public:
     };
 
     SDFBox(Point3f tlc, Point3f brc);
-    ~SDFBox();
 
     virtual Float evaluate(Point3f pt) const;
 

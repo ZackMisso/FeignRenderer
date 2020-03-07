@@ -149,13 +149,7 @@ add_executable(feign
     include/feign/stats/clocker.h
 
     # Tests header files
-    include/tests/test.h
     include/tests/tester.h
-    include/tests/vector_test.h
-    include/tests/transform_test.h
-    include/tests/matrix_test.h
-    include/tests/ray_intersect_test.h
-    include/tests/json_test.h
 
     # Implementation files
     src/main.cpp
@@ -264,12 +258,8 @@ add_executable(feign
     src/textures/sin_texture.cpp
 
     # Test implementation files
+    src/tests/test.cpp
     src/tests/tester.cpp
-    src/tests/vector_test.cpp
-    src/tests/transform_test.cpp
-    src/tests/matrix_test.cpp
-    src/tests/ray_intersect_test.cpp
-    src/tests/json_test.cpp
 
     # imedit implementation files
     ext/ImageEditLib/src/image.cpp

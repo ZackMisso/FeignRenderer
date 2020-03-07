@@ -45,6 +45,7 @@ public:
     Transform current_transform;
     SceneNode* scene;
 
+    // TODO: these really should not be public
     std::unordered_map<std::string, BSDFNode*> bsdfs;
     std::unordered_map<std::string, CameraNode*> cameras;
     std::unordered_map<std::string, EmitterNode*> emitters;
@@ -59,6 +60,7 @@ public:
     std::unordered_map<std::string, MaterialShaderNode*> material_shaders;
     std::unordered_map<std::string, TextureNode*> textures;
 
+    // TODO: the find methods should really not be public
     BSDFNode*           find_bsdf(std::string name);
     IntegratorNode*     find_integrator(std::string name);
     CameraNode*         find_camera(std::string name);

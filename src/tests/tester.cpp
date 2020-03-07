@@ -7,49 +7,53 @@
  **/
 
 #include <tests/tester.h>
-#include <tests/vector_test.h>
-#include <tests/matrix_test.h>
-#include <tests/transform_test.h>
-#include <tests/ray_intersect_test.h>
-#include <tests/json_test.h>
+#include <dirent.h>
+
+void UnitTestData::logReport() const
+{
+    // TODO
+}
 
 // NOTE: this is a renderer, my unit tests are going to be converted to all
 //       running and comparing renders instead of these individual unit tests
 
-UnitTestManager::UnitTestManager() {
+UnitTestManager::UnitTestManager()
+{
+    reference_run = false;
     // does nothing for now
 }
 
-bool UnitTestManager::runUnitTests() {
-    TransformTestData transformTestData = TransformTestData();
-    TransformTest transformTest = TransformTest();
-    bool transformTestPassed = transformTest.evaluateTest(transformTestData);
+bool UnitTestManager::run_all_tests()
+{
+    // parse all of the scenes in the test scenes folder
 
-    VectorTestData vectorTestData = VectorTestData();
-    VectorTest vectorTest = VectorTest();
-    bool vectorTestPassed = vectorTest.evaluateTest(vectorTestData);
+    std::vector<std::string> paths = std::vector<std::string>();
 
-    MatrixTestData matrixTestData = MatrixTestData();
-    MatrixTest matrixTest = MatrixTest();
-    bool matrixTestPassed = matrixTest.evaluateTest(matrixTestData);
+    DIR *dir;
+    struct dirent* ent;
 
-    RayIntersectTestData rayIntersectTestData = RayIntersectTestData();
-    RayIntersectTest rayTest = RayIntersectTest();
-    bool rayTestPassed = rayTest.evaluateTest(rayIntersectTestData);
+    if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            std::string str = std::string(ent->d_name);
+            if (str.length() > 5 && str.substr(str.length()-5) == ".json")
+                paths.push_back(str);
+        }
+    }
 
-    JsonTestData jsonTestData = JsonTestData();
-    JsonTest jsonTest = JsonTest();
-    bool jsonTestPassed = jsonTest.evaluateTest(jsonTestData);
+    for (int i = 0; i < paths.size(); ++i)
+    {
+        UnitTestData testLog = UnitTestData(paths[i]);
 
-    transformTestData.logReport();
-    vectorTestData.logReport();
-    matrixTestData.logReport();
-    rayIntersectTestData.logReport();
-    jsonTestData.logReport();
-
-    return transformTestPassed &&
-           vectorTestPassed &&
-           matrixTestPassed &&
-           rayTestPassed &&
-           jsonTestPassed;
+        if (reference_run)
+        {
+            replace_reference(testLog);
+        }
+        else
+        {
+            evaluate_unit_test(testLog);
+            testLog.logReport();
+        }
+    }
 }

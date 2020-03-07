@@ -59,8 +59,8 @@ int main(int argc, char* argv[])
     // neon_intro_2();
     // return 0;
 
-    sandbox();
-    return 0;
+    // sandbox();
+    // return 0;
     //
     // /////\\\ TEMPORARY \\\/////
 
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
             std::cout << "Beginning Unit Tests" << std::endl;
             UnitTestManager* unitTests = new UnitTestManager();
 
-            if (!unitTests->runUnitTests())
+            if (!unitTests->run_all_tests())
             {
                 delete unitTests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;

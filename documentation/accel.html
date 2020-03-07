@@ -2,7 +2,7 @@
 
 Author: Zack Misso
 
-Current version: v.0.1.0
+Current version: v.0.1.1
 
 <a href="documentation.html">Home</a>
 
@@ -40,15 +40,22 @@ transformed differently, the current behaviour of my renderer is to precompute
 the vertex positions after performing the transform, then it feeds the transformed
 mesh to embree which takes over from there.
 
-There is currently no special setup required with embree other than its default
+There is currently no special setup required with embree from its default
 behaviour, other than the Number of threads is currently hardcoded to 1.
 Implementing efficient multithreading into the renderer and the subsequent
-interactions wit
+interactions with embree is also on the todo
+
+If you are interested in the embree library, you can find more information on
+it <a href="https://www.embree.org/">here</a>.
 
 SDFAccel
 --------
 
-
+For scenes which contain only signed distance fields, I have my own acceleration
+structure which is at the moment a brute force approach. It evaluates all signed
+distance fields with no actual acceleration at the moment. In the future, I plan
+on implementing some form of local object grouping to cull out the unnecessary
+signed distance evaluations.
 
 <!--- Markdeep & image comparison library - probably no need to change anything below -->
 <style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="resources/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
