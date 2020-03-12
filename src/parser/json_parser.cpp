@@ -21,6 +21,11 @@
 #include <cstdio>
 #include <fstream>
 
+void JsonParser::parse(std::string filename, Imagef& image)
+{
+    
+}
+
 void JsonParser::parse(std::string filename)
 {
     #if CLOCKING

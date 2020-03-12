@@ -20,4 +20,7 @@ class JsonParser
 {
 public:
     static void parse(std::string filename);
+    static void parse(std::string, Imagef& image);
+
+protected:
 };
