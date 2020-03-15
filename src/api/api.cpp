@@ -113,6 +113,17 @@ void FeignRenderer::initialize()
     #endif
 }
 
+void FeignRenderer::initialize(Imagef* target)
+{
+    FeignRenderer::instance = new FeignRenderer();
+
+    #if CLOCKING
+        Clocker::initialize();
+    #endif
+
+    throw new NotImplementedException("blah");
+}
+
 BSDFNode* FeignRenderer::find_bsdf(std::string name)
 {
     std::unordered_map<std::string, BSDFNode*>::const_iterator itr = bsdfs.find(name);

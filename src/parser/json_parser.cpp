@@ -23,11 +23,8 @@
 
 void JsonParser::parse(std::string filename, Imagef& image)
 {
-    
-}
+    FeignRenderer::initialize(image);
 
-void JsonParser::parse(std::string filename)
-{
     #if CLOCKING
         Clocker::startClock("parse");
     #endif
@@ -41,6 +38,31 @@ void JsonParser::parse(std::string filename)
     document.ParseStream(input_stream);
     fclose(file);
 
+    actually_parse(document);
+}
+
+void JsonParser::parse(std::string filename)
+{
+    FeignRenderer::initialize();
+    
+    #if CLOCKING
+        Clocker::startClock("parse");
+    #endif
+
+    FILE* file = fopen(filename.c_str(), "r");
+    char read_buffer[65536];
+    rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
+
+    LOG(filename);
+    rapidjson::Document document;
+    document.ParseStream(input_stream);
+    fclose(file);
+
+    actually_parse(document);
+}
+
+void JsonParser::actually_parse(rapidjson::Document& document)
+{
     // TODO: parallelize this
 
     // still need to figure out what is the best way of building the scene

@@ -28,8 +28,6 @@
 
 void run_scene(std::string scene_name)
 {
-    FeignRenderer::initialize();
-
     JsonParser::parse(SCENES_PATH + scene_name + ".json");
 
     FeignRenderer::clean_up();

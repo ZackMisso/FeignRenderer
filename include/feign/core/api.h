@@ -76,6 +76,9 @@ public:
     TextureNode*        find_texture(std::string name);
 
     static void initialize();
+    static void initialize(Imagef* image); // initialize the renderer to render
+                                           // to an image container instead of
+                                           // a file directly
     static void clean_up();
 
     static void fr_scene(std::string name,
