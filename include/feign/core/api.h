@@ -32,7 +32,7 @@
 class FeignRenderer
 {
 private:
-    FeignRenderer();
+    FeignRenderer(Imagef* target = nullptr);
     ~FeignRenderer();
 
     static FeignRenderer* instance;
@@ -44,6 +44,7 @@ public:
 
     Transform current_transform;
     SceneNode* scene;
+    Imagef* target;
 
     // TODO: these really should not be public
     std::unordered_map<std::string, BSDFNode*> bsdfs;
@@ -75,10 +76,10 @@ public:
     MaterialShaderNode* find_material_shader(std::string name);
     TextureNode*        find_texture(std::string name);
 
-    static void initialize();
-    static void initialize(Imagef* image); // initialize the renderer to render
-                                           // to an image container instead of
-                                           // a file directly
+    // if image_target is specified, the renderer will render to the
+    // image, otherwise it will output to a file
+    static void initialize(Imagef* image_target = nullptr);
+
     static void clean_up();
 
     static void fr_scene(std::string name,

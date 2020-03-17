@@ -10,14 +10,18 @@
 
 #include <feign/common.h>
 
-struct UnitTestData {
+struct UnitTestData
+{
     UnitTestData(std::string test_name)
-        : test_name(test_name) { }
+        : test_name(test_name),
+          image_error(0.f),
+          threshold(1.f) { }
 
     void logReport() const;
+    bool does_it_fail() const { return image_error > threshold; }
 
     std::string test_name;
-    float image_variance;
+    float image_error;
     float threshold;
 };
 

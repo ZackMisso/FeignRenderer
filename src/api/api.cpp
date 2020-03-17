@@ -31,7 +31,8 @@
 
 FeignRenderer* FeignRenderer::instance = nullptr;
 
-FeignRenderer::FeignRenderer()
+FeignRenderer::FeignRenderer(Imagef* target)
+    : target(target)
 {
     bsdfs = std::unordered_map<std::string, BSDFNode*>();
     cameras = std::unordered_map<std::string, CameraNode*>();
@@ -88,6 +89,7 @@ FeignRenderer::~FeignRenderer()
 
     delete scene;
     scene = nullptr;
+    target = nullptr;
 
     bsdfs.clear();
     cameras.clear();
@@ -104,24 +106,13 @@ FeignRenderer::~FeignRenderer()
     material_shaders.clear();
 }
 
-void FeignRenderer::initialize()
+void FeignRenderer::initialize(Imagef* image)
 {
-    FeignRenderer::instance = new FeignRenderer();
+    FeignRenderer::instance = new FeignRenderer(image);
 
     #if CLOCKING
         Clocker::initialize();
     #endif
-}
-
-void FeignRenderer::initialize(Imagef* target)
-{
-    FeignRenderer::instance = new FeignRenderer();
-
-    #if CLOCKING
-        Clocker::initialize();
-    #endif
-
-    throw new NotImplementedException("blah");
 }
 
 BSDFNode* FeignRenderer::find_bsdf(std::string name)
@@ -364,11 +355,15 @@ void FeignRenderer::fr_scene(std::string name,
 
     if (!medium_node.empty()) media = getInstance()->find_media(medium_node);
 
-    getInstance()->scene = new SceneNode(name, new Scene(name,
-                                                         integrator,
-                                                         sampler,
-                                                         camera,
-                                                         media));
+    Scene* scene = new Scene(name,
+                             integrator,
+                             sampler,
+                             camera,
+                             media);
+
+    scene->target = getInstance()->target;
+
+    getInstance()->scene = new SceneNode(name, scene);
 }
 
 void FeignRenderer::fr_integrator(std::string name,

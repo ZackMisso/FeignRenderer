@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "ajax_normals",
+        "name": "test_000",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 16
+        "sample_count": 4
     },
     "camera": {
         "name": "camera",
@@ -30,8 +30,8 @@
             -0.190177
         ],
         "fov": 30.0,
-        "width": 768,
-        "height": 768
+        "width": 256,
+        "height": 256
     },
     "object": {
         "name": "floor",

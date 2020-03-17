@@ -20,7 +20,6 @@ void UnitTestData::logReport() const
 UnitTestManager::UnitTestManager()
 {
     reference_run = false;
-    // does nothing for now
 }
 
 bool UnitTestManager::run_all_tests()

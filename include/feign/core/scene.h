@@ -61,6 +61,8 @@ public:
     SamplerNode* sampler_node;
     CameraNode* camera_node;
     Accel* ray_accel;
+    Imagef* target; // the target to render the image to, if not
+                    // offline rendering
 
     // pre-processed structures
     std::vector<Emitter*> emitters;

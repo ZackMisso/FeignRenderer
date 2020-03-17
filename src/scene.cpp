@@ -23,6 +23,7 @@ Scene::Scene(std::string name,
     shapes = std::vector<Shape*>();
     objects = std::vector<ObjectNode*>();
     ray_accel = nullptr;
+    target = nullptr;
 }
 
 Scene::~Scene()
@@ -31,6 +32,7 @@ Scene::~Scene()
     integrator_node = nullptr;
     sampler_node = nullptr;
     camera_node = nullptr;
+    target = nullptr;
     shapes.clear();
     objects.clear();
     emitters.clear();
@@ -103,18 +105,31 @@ void Scene::renderScene() const
         throw new FeignRendererException("scene: no specified sampler");
     }
 
-    // TODO: this will need to be changed for parallelization
-    Imagef image = Imagef(camera->getFilmSize()[0],
-                          camera->getFilmSize()[1],
-                          3);
+    Imagef* image;
 
+    if (target)
+    {
+        image = target;
+        camera->setFilmSize(Vec2i(image->width(), image->height()));
+    }
+    else
+    {
+        image = new Imagef(camera->getFilmSize()[0],
+                           camera->getFilmSize()[1],
+                           3);
+    }
+
+    // TODO: this will need to be changed for parallelization
     integrator->render(this,
                        camera,
                        sampler,
-                       image);
+                       *image);
 
-    image.write(integrator->location + name + ".png"); // .png writer has some issues for some scenes
-    image.write(integrator->location + name + ".exr");
+    if (!target)
+    {
+        image->write(integrator->location + name + ".png"); // .png writer has some issues for some scenes
+        image->write(integrator->location + name + ".exr");
+    }
 }
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
@@ -175,6 +190,7 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     // uniform sampling of light sources
     // TODO: later add infrastructure for different light sampling
     //       methods
+    LOG(std::to_string(emitters.size()));
     Float choice_pdf = Float(emitters.size());
 
     int emitter = closure.sampler->next1D() * emitters.size();

@@ -21,7 +21,7 @@
 #include <cstdio>
 #include <fstream>
 
-void JsonParser::parse(std::string filename, Imagef& image)
+void JsonParser::parse(std::string filename, Imagef* image)
 {
     FeignRenderer::initialize(image);
 
@@ -44,7 +44,7 @@ void JsonParser::parse(std::string filename, Imagef& image)
 void JsonParser::parse(std::string filename)
 {
     FeignRenderer::initialize();
-    
+
     #if CLOCKING
         Clocker::startClock("parse");
     #endif
@@ -175,6 +175,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 if (value.HasMember("sample_count"))
                 {
                     spp = value["sample_count"].GetInt();
+                    LOG("sample count: " + std::to_string(spp));
                 }
                 if (value.HasMember("seed"))
                 {

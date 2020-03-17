@@ -31,10 +31,11 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
     // predefine this so it does not have to get recreated every loop
     MaterialClosure closure = MaterialClosure(sampler,
                                               scene,
-                                              false,
+                                              true,
                                               true);
 
-    for (int bounces = 0; bounces < 15; ++bounces)
+    // for (int bounces = 0; bounces < 15; ++bounces)
+    for (int bounces = 0; bounces < 1; ++bounces)
     {
         if (beta.isZero()) break;
 

@@ -105,6 +105,23 @@ int main(int argc, char* argv[])
             delete unitTests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
+            return 0;
+        }
+        if (strcmp(argv[i], "-ur") == 0)
+        {
+            UnitTestManager* unitTests = new UnitTestManager();
+            unitTests->reference_run = true;
+
+            if (!unitTests->run_all_tests())
+            {
+                delete unitTests;
+                std::cout << "Unit Tests Failed -> terminating early" << std::endl;
+                return -1;
+            }
+            delete unitTests;
+
+            std::cout << "All Unit Tests Passed" << std::endl;
+            return 0;
         }
         if (strcmp(argv[i], "-s") == 0)
         {

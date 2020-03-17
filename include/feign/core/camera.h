@@ -31,6 +31,7 @@ public:
     virtual void preProcess() { }
 
     Vec2i getFilmSize() const { return filmSize; }
+    void setFilmSize(Vec2i param) { filmSize = param; }
 
     void setCameraToWorld(const Transform& param) { cameraToWorld = param; }
 
