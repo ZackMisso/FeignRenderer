@@ -26,7 +26,6 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 
     closure.is_specular = (*material)()->isDelta();
 
-    // LOG("huh");
     if (closure.last_spec)
     {
         closure.scene->accumulate_emission(closure);
@@ -34,6 +33,7 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 
     if (closure.is_specular)
     {
+        // LOG("FUC");
         return;
     }
 
@@ -46,6 +46,8 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
         // get next event estimation
         closure.scene->eval_one_emitter(closure);
     }
+
+    closure.last_spec = closure.is_specular;
 
     #if CLOCKING
         Clocker::endClock("shader eval");

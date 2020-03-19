@@ -31,11 +31,10 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
     // predefine this so it does not have to get recreated every loop
     MaterialClosure closure = MaterialClosure(sampler,
                                               scene,
-                                              true,
+                                              false,
                                               true);
 
-    // for (int bounces = 0; bounces < 15; ++bounces)
-    for (int bounces = 0; bounces < 1; ++bounces)
+    for (int bounces = 0; bounces < 15; ++bounces)
     {
         if (beta.isZero()) break;
 
@@ -54,7 +53,6 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
         closure.emission = COLOR_BLACK;
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
-        closure.last_spec = closure.is_specular;
 
         // evaluate the material shader
         shader->evaluate(closure);

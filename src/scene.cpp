@@ -190,8 +190,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     // uniform sampling of light sources
     // TODO: later add infrastructure for different light sampling
     //       methods
-    LOG(std::to_string(emitters.size()));
-    Float choice_pdf = Float(emitters.size());
+
+    Float choice_pdf = 1.f / Float(emitters.size());
 
     int emitter = closure.sampler->next1D() * emitters.size();
 
