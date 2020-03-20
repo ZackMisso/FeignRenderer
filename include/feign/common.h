@@ -176,7 +176,7 @@ struct EmitterEval
     bool valid = false;
 };
 
-#define COLOR_BLACK Color3f(0.f);
+#define COLOR_BLACK Color3f(0.f)
 
 inline Float degToRad(Float value)
 {

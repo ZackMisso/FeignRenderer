@@ -13,16 +13,19 @@
 Mirror::Mirror(Color3f albedo)
     : BSDF(), albedo(albedo) { }
 
-// Color3f Mirror::sample(BSDFQuery& rec, const Point2f& sample) const
 void Mirror::sample(MaterialClosure& closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f);
+        closure.pdf = 0.f;
     }
     else
     {
-        // assert(false);
+        // technically the pdf should not be defined, but it works out better
+        // implementation wise if we just set it to 1
+        closure.pdf = 1.f;
+
         closure.wo = Vector3f(
             -closure.wi(0),
             -closure.wi(1),
@@ -34,8 +37,14 @@ void Mirror::sample(MaterialClosure& closure) const
     }
 }
 
-// Color3f Mirror::eval(const BSDFQuery& rec) const
 void Mirror::evaluate(MaterialClosure& closure) const
 {
-    closure.albedo = Color3f(0.f);
+    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+    {
+        closure.albedo = Color3f(0.f);
+    }
+    else
+    {
+        closure.albedo = albedo;
+    }
 }

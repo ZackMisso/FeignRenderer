@@ -56,7 +56,6 @@ void Scene::preProcess()
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        shapes[i]->transform.print();
         if (global_params.sdf_only)
         {
             ray_accel->addSDFShape((SDFShape*)shapes[i]);
@@ -77,7 +76,6 @@ void Scene::preProcess()
     {
         // check if the object's emitter is valid. If so,
         // make sure the emitter's mesh matches the object's
-        // assert(false);
         if (objects[i]->emitter)
         {
             objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
@@ -247,7 +245,4 @@ void Scene::accumulate_emission(MaterialClosure& closure) const
     {
         closure.emission = Color3f(0.f);
     }
-
-    // // DEBUG CODE
-    // closure.emission = Color3f(0.f);
 }

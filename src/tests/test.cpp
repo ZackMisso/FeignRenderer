@@ -20,12 +20,12 @@ bool evaluate_unit_test(UnitTestData& testLog)
 
     testLog.image_error = imedit::mean_sqr_error(image, ref_image);
 
+    image.write("../scenes/unit_tests/scenes/" + result_image_name);
+
     if (testLog.does_it_fail())
     {
         return false;
     }
-
-    image.write("../scenes/unit_tests/scenes/" + result_image_name);
 
     return true;
 }

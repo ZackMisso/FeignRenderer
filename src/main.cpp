@@ -6,10 +6,10 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <iostream>
 #include <feign/parser/json_parser.h>
 #include <feign/core/scene.h>
 #include <tests/tester.h>
+#include <iostream>
 
 #include "../scenes/adrien/ajax_cosine.h"
 #include "../scenes/adrien/neon_intro.h"
@@ -45,10 +45,6 @@ void run_all_scenes()
 
 int main(int argc, char* argv[])
 {
-    std::cout << "UNDER CONSTRUCTION" << std::endl;
-
-    // Clocker::initialize();
-
     // //////// TEMPORARY ////////
     //
     // // ajax_cosine();
@@ -107,12 +103,48 @@ int main(int argc, char* argv[])
             std::cout << "All Unit Tests Passed" << std::endl;
             return 0;
         }
+        if (strcmp(argv[i], "-ui") == 0)
+        {
+            std::cout << "Beginning Unit Tests" << std::endl;
+            UnitTestManager* unitTests = new UnitTestManager();
+
+            int index = std::stoi(argv[i+1]);
+
+            if (!unitTests->run_test(index))
+            {
+                delete unitTests;
+                std::cout << "Unit Tests Failed -> terminating early" << std::endl;
+                return -1;
+            }
+            delete unitTests;
+
+            std::cout << "All Unit Tests Passed" << std::endl;
+            return 0;
+        }
         if (strcmp(argv[i], "-ur") == 0)
         {
             UnitTestManager* unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 
             if (!unitTests->run_all_tests())
+            {
+                delete unitTests;
+                std::cout << "Unit Tests Failed -> terminating early" << std::endl;
+                return -1;
+            }
+            delete unitTests;
+
+            std::cout << "All Unit Tests Passed" << std::endl;
+            return 0;
+        }
+        if (strcmp(argv[i], "-uri") == 0)
+        {
+            UnitTestManager* unitTests = new UnitTestManager();
+            unitTests->reference_run = true;
+
+            int index = std::stoi(argv[i+1]);
+
+            if (!unitTests->run_test(index))
             {
                 delete unitTests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;

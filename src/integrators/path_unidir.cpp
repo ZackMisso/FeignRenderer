@@ -10,10 +10,8 @@
 #include <feign/core/scene.h>
 
 Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode* filter,
-                                                               std::string location,
-                                                               long max_time,
-                                                               long max_heuristic)
-    : Integrator(filter, location, max_time, max_heuristic) { }
+                                                               Integrator::Params* params)
+    : Integrator(filter, params) { }
 
 void Path_Unidirectional_Integrator::preProcess()
 {
@@ -34,7 +32,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                               false,
                                               true);
 
-    for (int bounces = 0; bounces < 15; ++bounces)
+    for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
         if (beta.isZero()) break;
 
@@ -88,6 +86,8 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
         Float cosTerm = its.s_frame.n % ray.dir;
         if (cosTerm < 0.f) cosTerm = -cosTerm;
         if (closure.is_specular) cosTerm = 1.f;
+
+        assert(!(closure.is_specular && closure.nee != COLOR_BLACK));
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);

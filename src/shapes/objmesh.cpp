@@ -437,10 +437,6 @@ void ObjMesh::completeIntersectionInfo(Intersection& its) const
         uint32_t i1_ns = tris[its.f].nsInds(1);
         uint32_t i2_ns = tris[its.f].nsInds(2);
 
-        // LOG("norm:", (ns[i0_ns] * bary(0) +
-        //                                ns[i1_ns] * bary(1) +
-        //                                ns[i2_ns] * bary(2)).normalized());
-
         its.s_frame = CoordinateFrame((ns[i0_ns] * bary(0) +
                                        ns[i1_ns] * bary(1) +
                                        ns[i2_ns] * bary(2)).normalized());

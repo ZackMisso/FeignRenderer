@@ -8,12 +8,13 @@
     "integrator": {
         "name": "integrator",
         "type": "path",
-        "filter": "default"
+        "filter": "default",
+        "max_bounces": 1
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 1024
+        "sample_count": 16
     },
     "camera": {
         "name": "camera",

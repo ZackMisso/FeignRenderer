@@ -13,10 +13,8 @@
 // TODO
 
 VolPath_Integrator::VolPath_Integrator(FilterNode* filter,
-                                                               std::string location,
-                                                               long max_time,
-                                                               long max_heuristic)
-    : Integrator(filter, location, max_time, max_heuristic) { }
+                                       Integrator::Params* params)
+    : Integrator(filter, params) { }
 
 void VolPath_Integrator::preProcess()
 {
@@ -24,8 +22,8 @@ void VolPath_Integrator::preProcess()
 }
 
 Color3f VolPath_Integrator::Li(const Scene* scene,
-                                           Sampler* sampler,
-                                           const Ray3f& cam_ray) const
+                               Sampler* sampler,
+                               const Ray3f& cam_ray) const
 {
     Color3f Li = Color3f(0.f);
     Color3f beta = Color3f(1.f);

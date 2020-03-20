@@ -379,53 +379,40 @@ void FeignRenderer::fr_integrator(std::string name,
         throw new FeignRendererException("integrator already defined");
     }
 
-    if (type == "normal")
+    if (type == "ao")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new NormalIntegrator(filter_node,
-                                                      params->location,
-                                                      params->max_time,
-                                                      params->max_heuristic);
+        integrator->integrator = new Ambient_Occlusion_Integrator(filter_node, params);
+    }
+    else if (type == "normal")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new NormalIntegrator(filter_node, params);
     }
     else if (type == "nice_normal")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new NiceNormalIntegrator(filter_node,
-                                                          params->location,
-                                                          params->max_time,
-                                                          params->max_heuristic);
+        integrator->integrator = new NiceNormalIntegrator(filter_node, params);
     }
     else if (type == "whitted")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new WhittedIntegrator(filter_node,
-                                                       params->location,
-                                                       params->max_time,
-                                                       params->max_heuristic);
+        integrator->integrator = new WhittedIntegrator(filter_node, params);
     }
     else if (type == "cosine_term")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new CosineTermIntegrator(filter_node,
-                                                          params->location,
-                                                          params->max_time,
-                                                          params->max_heuristic);
+        integrator->integrator = new CosineTermIntegrator(filter_node, params);
     }
     else if (type == "barycentric")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new BarycentricIntegrator(filter_node,
-                                                           params->location,
-                                                           params->max_time,
-                                                           params->max_heuristic);
+        integrator->integrator = new BarycentricIntegrator(filter_node, params);
     }
     else if (type == "path")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
-        integrator->integrator = new Path_Unidirectional_Integrator(filter_node,
-                                                                    params->location,
-                                                                    params->max_time,
-                                                                    params->max_heuristic);
+        integrator->integrator = new Path_Unidirectional_Integrator(filter_node, params);
     }
     else
     {
@@ -437,7 +424,6 @@ void FeignRenderer::fr_sampler(std::string name,
                                std::string type,
                                void* sampler_data)
 {
-    LOG("samplers: " + std::to_string(getInstance()->samplers.size()));
     SamplerNode* sampler = getInstance()->find_sampler(name);
 
     if (sampler->sampler)

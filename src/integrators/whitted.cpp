@@ -8,11 +8,8 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-WhittedIntegrator::WhittedIntegrator(FilterNode* filter,
-                                     std::string location,
-                                     long max_time,
-                                     long max_heuristic)
-    : Integrator(filter, location, max_time, max_heuristic)
+WhittedIntegrator::WhittedIntegrator(FilterNode* filter, Integrator::Params* params)
+    : Integrator(filter, params)
 {
 }
 

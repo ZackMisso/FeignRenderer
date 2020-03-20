@@ -10,10 +10,8 @@
 #include <feign/math/warp.h>
 
 Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode* filter,
-                                                           std::string location,
-                                                           long max_time,
-                                                           long max_heuristic)
-    : Integrator(filter, location, max_time, max_heuristic)
+                                                           Integrator::Params* params)
+    : Integrator(filter, params)
 {
     // does nothing
 }
@@ -24,8 +22,8 @@ void Ambient_Occlusion_Integrator::preProcess()
 }
 
 Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
-                                           Sampler* sampler,
-                                           const Ray3f& ray) const
+                                         Sampler* sampler,
+                                         const Ray3f& ray) const
 {
     Intersection its;
 

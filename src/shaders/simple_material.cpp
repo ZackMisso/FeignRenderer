@@ -33,7 +33,12 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 
     if (closure.is_specular)
     {
-        // LOG("FUC");
+        #if CLOCKING
+            Clocker::endClock("shader eval");
+        #endif
+
+        closure.last_spec = closure.is_specular;
+
         return;
     }
 

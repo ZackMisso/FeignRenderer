@@ -30,6 +30,7 @@ struct UnitTestManager
     UnitTestManager();
 
     bool run_all_tests();
+    bool run_test(int index);
 
     bool reference_run;            // replace the current references
 };

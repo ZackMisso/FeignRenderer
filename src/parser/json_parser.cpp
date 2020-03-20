@@ -33,7 +33,6 @@ void JsonParser::parse(std::string filename, Imagef* image)
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
 
-    LOG(filename);
     rapidjson::Document document;
     document.ParseStream(input_stream);
     fclose(file);
@@ -53,7 +52,6 @@ void JsonParser::parse(std::string filename)
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
 
-    LOG(filename);
     rapidjson::Document document;
     document.ParseStream(input_stream);
     fclose(file);
@@ -114,6 +112,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string location = "";
             long max_time = -1;
             long max_heuristic = -1;
+            int max_bounces = 10;
 
             const rapidjson::Value& value = itr->value;
 
@@ -137,6 +136,10 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             {
                 max_heuristic = value["max_heuristic"].GetInt();
             }
+            if (value.HasMember("max_bounces"))
+            {
+                max_bounces = value["max_bounces"].GetInt();
+            }
             if (value.HasMember("location"))
             {
                 location = value["location"].GetString();
@@ -144,7 +147,10 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
             // all integrators share the same set of params unless there are
             // future exceptions
-            Integrator::Params params(max_time, max_heuristic, location);
+            Integrator::Params params(max_time,
+                                      max_heuristic,
+                                      location,
+                                      max_bounces);
 
             FeignRenderer::fr_integrator(name,
                                          type,
@@ -175,7 +181,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 if (value.HasMember("sample_count"))
                 {
                     spp = value["sample_count"].GetInt();
-                    LOG("sample count: " + std::to_string(spp));
                 }
                 if (value.HasMember("seed"))
                 {
@@ -193,8 +198,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "camera") == 0)
         {
-            LOG("parsing camera");
-
             std::string name = "camera";
             std::string type = "perspective";
 
@@ -297,7 +300,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "object") == 0)
         {
-            LOG("parsing object");
             std::string name = "obj";
             std::string mesh = "default";
             std::string material_shader = "null";
@@ -359,7 +361,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "mesh") == 0)
         {
-            LOG("parsing mesh");
             std::string name = "mesh";
             std::string type = "default";
 
@@ -430,8 +431,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "emitter") == 0)
         {
-            // assert(false);
-            LOG("parsing emitter");
             std::string name = "emitter";
             std::string type = "point";
             std::string mesh = "null";
@@ -583,7 +582,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "material") == 0)
         {
-            LOG("parsing material");
             std::string name = "material";
             std::string type = "simple";
 
@@ -618,7 +616,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "bsdf") == 0)
         {
-            LOG("parsing bsdf");
             std::string name = "bsdf";
             std::string type = "diffuse";
 
@@ -635,7 +632,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
             if (type == "diffuse")
             {
-                Color3f albedo = Color3f(1.0f);
+                Color3f albedo = Color3f(0.8f);
 
                 if (value.HasMember("albedo"))
                 {
@@ -713,7 +710,6 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "shader") == 0)
         {
-            LOG("parsing shader");
             std::string name = "shader";
             std::string type = "none";
 

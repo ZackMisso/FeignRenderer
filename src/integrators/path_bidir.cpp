@@ -9,10 +9,8 @@
 #include <feign/core/integrator.h>
 
 Path_Bidirectional_Integrator::Path_Bidirectional_Integrator(FilterNode* filter,
-                                                             std::string location,
-                                                             long max_time,
-                                                             long max_heuristic)
-    : Integrator(filter, location, max_time, max_heuristic)
+                                                             Integrator::Params* params)
+    : Integrator(filter, params)
 {
     throw new NotImplementedException("path bidir constructor");
 }
