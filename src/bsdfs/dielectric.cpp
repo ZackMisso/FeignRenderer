@@ -61,10 +61,11 @@ void Dielectric::sample(MaterialClosure& closure) const
         if (cos_theta < -Epsilon) closure.wo[2] = -closure.wo[2];
     }
 
+    closure.pdf = 1.f;
     closure.albedo = Color3f(1.f);
 }
 
 void Dielectric::evaluate(MaterialClosure& closure) const
 {
-    closure.albedo = Color3f(0.0f);
+    closure.albedo = Color3f(1.f);
 }

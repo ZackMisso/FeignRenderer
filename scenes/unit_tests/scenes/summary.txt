@@ -1,0 +1,49 @@
+Until the proper infrastructure is implemented, this document will
+serve as the summary of what features each unit test is supposed to
+cover
+
+test_000
+
+tests the normal integrator, and loading of triangle meshes
+
+test_001
+
+tests the whitted integrator on a scene of only diffuse objects
+
+test_002
+
+tests the unidirectional path tracing integrator when the max number
+of bounces has been set to 1. This should give similar results to
+test_001, except there may be added noise.
+
+test_003
+
+This tests the full unidirectional path tracing integrator on a scene
+with only diffuse objects
+
+test_004
+
+This tests the ambient occlusion integrator on a simple scene
+
+test_005
+
+This tests the mirror bsdf when using the whitted integrator.
+
+test_006
+
+This tests the mirror bsdf when using the unidirectional path tracing
+integrator
+
+test_007
+
+This tests the phong bsdf when using the unidirectional path tracing
+integrator
+
+test_008
+
+This tests the phong bsdf when using the whitted integrator
+
+test_009
+
+This scene tests the dielectric bsdf when using the unidirectional path tracing
+integrator

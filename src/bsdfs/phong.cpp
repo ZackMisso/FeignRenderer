@@ -48,7 +48,10 @@ void Phong::sample(MaterialClosure& closure) const
         Vector3f val = frame.toWorld(WarpSpace::sqrToCosPowHemi(sample, exponent));
 
         closure.wo = val;
-        closure.is_specular = true;
+        
+        // is_specular stores if this is a delta function, while this is technically
+        // a specularity, it is not a delta function
+        closure.is_specular = false;
     }
     else
     {

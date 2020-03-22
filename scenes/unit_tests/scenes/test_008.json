@@ -7,13 +7,12 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "path",
-        "max_bounces": 10
+        "type": "whitted"
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 16534
+        "sample_count": 8
     },
     "camera": {
         "name": "camera",
@@ -52,6 +51,11 @@
         "name": "simple_shader",
         "type": "simple_material",
         "material": "diffuse_material"
+    },
+    "shader": {
+        "name": "mirror_shader",
+        "type": "simple_material",
+        "material": "mirror_material"
     },
     "mesh": {
         "name": "plane",
@@ -92,7 +96,7 @@
             0.2
         ],
         "ks": 0.8,
-        "exponent": 500.0
+        "exponent": 100.0
     },
     "material": {
         "name": "floor_material",

@@ -87,8 +87,6 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
         if (cosTerm < 0.f) cosTerm = -cosTerm;
         if (closure.is_specular) cosTerm = 1.f;
 
-        assert(!(closure.is_specular && closure.nee != COLOR_BLACK));
-
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
     }

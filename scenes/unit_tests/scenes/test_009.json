@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 16534
+        "sample_count": 16
     },
     "camera": {
         "name": "camera",
@@ -85,14 +85,9 @@
     },
     "bsdf": {
         "name": "diffuse_bsdf",
-        "type": "phong",
-        "kd": [
-            0.8,
-            0.3,
-            0.2
-        ],
-        "ks": 0.8,
-        "exponent": 500.0
+        "type": "dielectric",
+        "int_ior": 1.5,
+        "ext_ior": 1.0
     },
     "material": {
         "name": "floor_material",
