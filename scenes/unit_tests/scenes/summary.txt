@@ -47,3 +47,46 @@ test_009
 
 This scene tests the dielectric bsdf when using the unidirectional path tracing
 integrator
+
+test_010
+
+This scene tests the dielectric bsdf when using the whitted integrator
+
+test_011
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and only terminating after one bounce.
+
+test_012
+
+This scene tests the whitted integrator when using are light sources
+
+test_013
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and evaluating up to at most 10 bounces
+
+test_014
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and the phong bsdf
+
+test_015
+
+This scene tests the whitted integrator when using area light sources and the
+phong bsdf
+
+test_016
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and the blinn bsdf
+
+test_017
+
+This scene tests the whitted integrator when using area light sources and the
+dielectric bsdfs
+
+test_018
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and the dielectric bsdfs

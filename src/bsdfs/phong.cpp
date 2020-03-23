@@ -32,14 +32,6 @@ void Phong::sample(MaterialClosure& closure) const
     if (sample(0) < ks)
     {
         sample[0] /= ks;
-        sample[0] = (sample(0) - ks) / (1.f - ks);
-
-        if (CoordinateFrame::cosTheta(closure.wi) <= 0)
-        {
-            closure.albedo = COLOR_BLACK;
-            closure.pdf = 0.f;
-            return;
-        }
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
@@ -48,7 +40,7 @@ void Phong::sample(MaterialClosure& closure) const
         Vector3f val = frame.toWorld(WarpSpace::sqrToCosPowHemi(sample, exponent));
 
         closure.wo = val;
-        
+
         // is_specular stores if this is a delta function, while this is technically
         // a specularity, it is not a delta function
         closure.is_specular = false;
@@ -56,13 +48,6 @@ void Phong::sample(MaterialClosure& closure) const
     else
     {
         sample[0] = (sample(0) - ks) / (1.f - ks);
-
-        if (CoordinateFrame::cosTheta(closure.wi) <= 0)
-        {
-            closure.albedo = COLOR_BLACK;
-            closure.pdf = 0.f;
-            return;
-        }
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
@@ -78,12 +63,15 @@ void Phong::sample(MaterialClosure& closure) const
     CoordinateFrame frame(wr);
     Vector3f val = frame.toLocal(closure.wo);
 
+    Float dotProd = std::max(wr % closure.wo, Epsilon);
+
     float diffPdf = (1.f - ks) * WarpSpace::sqrToCosHemiPdf(closure.wo);
-    float specPdf = (ks) * WarpSpace::sqrToCosPowHemiPdf(val, exponent);
+    // I forget, what is this 1.f / 4 * cos term again?
+    float specPdf = (ks) * WarpSpace::sqrToCosPowHemiPdf(val, exponent);// * (1.f / (4.f * dotProd));
 
     closure.pdf = diffPdf + specPdf;
     closure.albedo = kd * INV_PI +
-                     ks * (exponent + 2.f) * INV_TWOPI * powf(closure.wo % wr, exponent);
+                     ks * (exponent + 2.f) * INV_TWOPI * powf(dotProd, exponent);
 }
 
 void Phong::evaluate(MaterialClosure& closure) const

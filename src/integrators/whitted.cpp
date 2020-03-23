@@ -40,6 +40,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                                               &its,
                                               &ray,
                                               scene,
+                                              false,
                                               true);
 
     // evaluate the material shader
@@ -72,5 +73,5 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                closure.nee + closure.emission;
     }
 
-    return closure.emission + closure.nee;
+    return closure.emission + closure.nee + closure.emission;
 }

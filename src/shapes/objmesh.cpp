@@ -165,12 +165,7 @@ void ObjMesh::parseFromFile(const std::string& filename)
 
             n = transform * n;
 
-            if (flip_norms)
-            {
-                LOG("n before:", n);
-                n = -n;
-                LOG("n after:", n);
-            }
+            if (flip_norms) n = -n;
 
             ns.push_back(n.normalized());
         }

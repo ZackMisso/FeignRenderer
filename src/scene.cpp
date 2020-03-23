@@ -147,6 +147,7 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
     return (*(*objects[id]).material_shader)();
 }
 
+// TODO: make these eval methods call the same function
 // TODO: this should also work for media closures...
 void Scene::eval_all_emitters(MaterialClosure& closure) const
 {
@@ -163,7 +164,7 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,
                                  Epsilon,
-                                 sqrt(eqr.sqr_dist));
+                                 sqrt(eqr.sqr_dist) - Epsilon);
 
         Intersection tmp;
 
@@ -171,11 +172,21 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
              global_params.ignore_shadow_checks)
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
+
             if (cos_term < -Epsilon) cos_term = -cos_term;
 
             closure.shadow_rays[i].valid = true;
             closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
-            closure.shadow_rays[i].throughput = Li * cos_term;
+
+            if (emitter_pdf == 0.f)
+            {
+                closure.shadow_rays[i].throughput = Li * cos_term;
+            }
+            else
+            {
+                closure.shadow_rays[0].throughput = Li * cos_term / (emitter_pdf);
+            }
+
             // Note: bsdf_values are fully accumulated later
         }
     }

@@ -39,6 +39,8 @@ public:
         long max_heuristic;
         int max_bounces;
         std::string location;
+        // bool eval_all_emitters; // TODO: in a future update make this
+                                   //       configurable
         bool verbose;
     };
 

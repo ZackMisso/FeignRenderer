@@ -703,6 +703,33 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 FeignRenderer::fr_bsdf(name, type, &params);
             }
+            else if (type == "blinn")
+            {
+                Color3f kd = Color3f(0.5f, 0.5f, 0.5f);
+                Color3f ks = Color3f(0.5f);
+                Float exponent = 2.f;
+
+                if (value.HasMember("kd"))
+                {
+                    kd[0] = value["kd"][0].GetFloat();
+                    kd[1] = value["kd"][1].GetFloat();
+                    kd[2] = value["kd"][2].GetFloat();
+                }
+                if (value.HasMember("ks"))
+                {
+                    ks[0] = value["ks"][0].GetFloat();
+                    ks[1] = value["ks"][1].GetFloat();
+                    ks[2] = value["ks"][2].GetFloat();
+                }
+                if (value.HasMember("exponent"))
+                {
+                    exponent = value["exponent"].GetFloat();
+                }
+
+                Blinn::Params params(kd, ks, exponent);
+
+                FeignRenderer::fr_bsdf(name, type, &params);
+            }
             else
             {
                 throw new FeignRendererException(type + " bsdf is not parsable yet");

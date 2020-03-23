@@ -127,6 +127,36 @@ protected:
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
+// Blinn BSDF
+/////////////////////////////////////////////////
+class Blinn : public BSDF
+{
+public:
+    struct Params
+    {
+        Params(Color3f kd, Color3f ks, Float exponent)
+            : kd(kd), ks(ks), exponent(exponent) { }
+
+        Color3f kd;
+        Color3f ks;
+        Float exponent;
+    };
+
+    Blinn(const Blinn::Params* params);
+
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+
+    virtual bool isDelta() const { return false; }
+
+protected:
+    Color3f kd;
+    Color3f ks;
+    Float exponent;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 // Dielectric BSDF
 /////////////////////////////////////////////////
 class Dielectric : public BSDF

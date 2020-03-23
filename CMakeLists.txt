@@ -168,6 +168,7 @@ add_executable(feign
     src/bsdfs/null.cpp
     src/bsdfs/dielectric.cpp
     src/bsdfs/phong.cpp
+    src/bsdfs/blinn.cpp
 
     # Camera implementation files
     src/cameras/perspective.cpp

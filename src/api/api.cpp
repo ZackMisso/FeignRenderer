@@ -763,6 +763,11 @@ void FeignRenderer::fr_bsdf(std::string name,
         Phong::Params* params = (Phong::Params*)bsdf_data;
         bsdf->bsdf = new Phong(params->kd, params->ks, params->exponent);
     }
+    else if (type == "blinn")
+    {
+        Blinn::Params* params = (Blinn::Params*)bsdf_data;
+        bsdf->bsdf = new Blinn(params);
+    }
     else
     {
         // unrecognized bsdf
