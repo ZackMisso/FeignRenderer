@@ -52,14 +52,17 @@ void Blinn::sample(MaterialClosure& closure) const
     }
 
     Vector3f wh = closure.wi + closure.wo;
+
+    // sometimes the norm is extremely small causing fireflies, this probably isn't
+    // correct, but this material is not going to be used on the realistic side of
+    // this renderer and more for the animation side so I don't mind all that much
     if (wh.norm() < Epsilon)
     {
-        LOG("wh norm:", wh.norm());
         closure.albedo = COLOR_BLACK;
         closure.pdf = 0.f;
         return;
     }
-    
+
     wh = wh.normalized();
 
     CoordinateFrame frame(wh);

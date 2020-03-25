@@ -90,3 +90,13 @@ test_018
 
 This scene tests the unidirectional path tracing integrator when using area
 light sources and the dielectric bsdfs
+
+test_019
+
+This scene tests the whitted integrator when using area light sources and the
+mirror bsdfs
+
+test_020
+
+This scene tests the unidirectional path tracing integrator when using area
+light sources and the mirror bsdfs

@@ -7,7 +7,7 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "path",
+        "type": "whitted",
         "filter": "default"
     },
     "sampler": {
@@ -274,9 +274,7 @@
 
     "bsdf": {
         "name": "dielec_bsdf",
-        "type": "dielectric",
-        "ext_ior": 1.0,
-        "int_ior": 1.5
+        "type": "mirror"
     },
 
     "object": {
