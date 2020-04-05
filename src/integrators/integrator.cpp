@@ -32,6 +32,10 @@ void Integrator::render(const Scene* scene,
     {
         if (verbose) LOG("sample: " + std::to_string(k));
 
+        // for (int i = 141; i < 146; ++i)
+        // {
+        //     for (int j = 112; j < 118; ++j)
+
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)

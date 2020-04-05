@@ -116,6 +116,43 @@ protected:
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
+// Signed Distance Function Plane shape
+/////////////////////////////////////////////////
+class SDFPlane : public SDFShape
+{
+public:
+    struct Params
+    {
+        Params(Point3f center,
+               Normal3f normal,
+               Float interp)
+            : center(center),
+              normal(normal),
+              interp(interp) { }
+
+        Point3f center;
+        Normal3f normal;
+        Float interp;
+    };
+
+    SDFPlane(Point3f center,
+             Normal3f normal,
+             Float interp);
+
+    virtual Float evaluate(Point3f pt) const;
+
+    virtual BBox3f boundingBox() const;
+    virtual Point3f centroid() const;
+
+    virtual uint32_t primitiveCount() const { return 1; }
+
+protected:
+    Point3f center;
+    Normal3f normal;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 // Signed Distance Function Box shape
 /////////////////////////////////////////////////
 class SDFBox : public SDFShape

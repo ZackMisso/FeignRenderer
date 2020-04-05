@@ -14,8 +14,14 @@ SDFBox::SDFBox(Point3f tlc, Point3f brc)
 
 Float SDFBox::evaluate(Point3f pt) const
 {
-    throw new NotImplementedException("sdf box evaluate");
-    return 0.0;
+    // tODO: store these instead of the current data
+    Vector3f half_bounds = (tlc - brc) / 2.f;
+    Vector3f center = (tlc + brc) / 2.f;
+    Vector3f q = (pt - center).abs() - (half_bounds);
+    // length(max(q,0.0)) + fmin(fmax(q.x,fmax(q.y,q.z)),0.0);
+    return q.max(0.f).norm() + fmin(fmax(q(0),fmax(q(1),q(2))),0.f);
+    // throw new NotImplementedException("sdf box evaluate");
+    // return 0.0;
 }
 
 BBox3f SDFBox::boundingBox() const

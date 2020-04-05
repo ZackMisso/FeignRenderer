@@ -248,6 +248,7 @@ add_executable(feign
     src/shapes/grid_obj.cpp
     src/shapes/sdf_sphere.cpp
     src/shapes/sdf_box.cpp
+    src/shapes/sdf_plane.cpp
 
     # Stats implementation files
     src/stats/clocker.cpp

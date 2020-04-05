@@ -584,6 +584,22 @@ struct Vec3
         return vec;
     }
 
+    Vec3<T> min(T val) const
+    {
+        Vec3<T> vec;
+
+        if (xyz[0] < val) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = val;
+
+        if (xyz[1] < val) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = val;
+
+        if (xyz[2] < val) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = val;
+
+        return vec;
+    }
+
     Vec3<T> max(const Vec3<T>& other) const
     {
         Vec3<T> vec;
@@ -598,6 +614,36 @@ struct Vec3
         else vec.xyz[2] = other.xyz[2];
 
         return vec;
+    }
+
+    Vec3<T> max(T val) const
+    {
+        Vec3<T> vec;
+
+        if (xyz[0] > val) vec.xyz[0] = xyz[0];
+        else vec.xyz[0] = val;
+
+        if (xyz[1] > val) vec.xyz[1] = xyz[1];
+        else vec.xyz[1] = val;
+
+        if (xyz[2] > val) vec.xyz[2] = xyz[2];
+        else vec.xyz[2] = val;
+
+        return vec;
+    }
+
+    Vec3<T> abs() const
+    {
+        return Vec3<T>(std::abs(xyz[0]),
+                       std::abs(xyz[1]),
+                       std::abs(xyz[2]));
+    }
+
+    bool isnan() const
+    {
+        return std::isnan(xyz[0]) ||
+               std::isnan(xyz[1]) ||
+               std::isnan(xyz[2]);
     }
 
     T maxValue() const

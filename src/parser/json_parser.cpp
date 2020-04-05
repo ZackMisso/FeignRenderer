@@ -74,6 +74,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string sampler = "default";
             std::string camera = "default";
             std::string medium = "default";
+            bool sdf_mode = false;
 
             const rapidjson::Value& value = itr->value;
 
@@ -97,12 +98,19 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             {
                 medium = (value["medium"].GetString());
             }
+            if (value.HasMember("sdf_mode"))
+            {
+                // assert(false);
+                sdf_mode = value["sdf_mode"].GetBool();
+                std::cout << "SDF_MODE: " << sdf_mode << std::endl;
+            }
 
             FeignRenderer::fr_scene(name,
                                     integrator,
                                     sampler,
                                     camera,
-                                    medium);
+                                    medium,
+                                    sdf_mode);
         }
         else if (strcmp(itr->name.GetString(), "integrator") == 0)
         {
@@ -421,6 +429,89 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 GridObj::Params params(texture,
                                        geom_shader,
                                        resolution);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else if (type == "sdf_sphere")
+            {
+                Point3f center = Point3f(0.f);
+                float radius = 1.f;
+                float interp = 0.f;
+
+                if (value.HasMember("center"))
+                {
+                    center[0] = value["center"][0].GetFloat();
+                    center[1] = value["center"][1].GetFloat();
+                    center[2] = value["center"][2].GetFloat();
+                }
+                if (value.HasMember("radius"))
+                {
+                    radius = value["radius"].GetFloat();
+                }
+                if (value.HasMember("interp"))
+                {
+                    interp = value["interp"].GetFloat();
+                }
+
+                SDFSphere::Params params = SDFSphere::Params(center,
+                                                             radius,
+                                                             interp);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else if (type == "sdf_plane")
+            {
+                Point3f center = Point3f(0.f);
+                Normal3f norm = Normal3f(0.f, 1.f, 0.f);
+                float interp = 0.f;
+
+                if (value.HasMember("center"))
+                {
+                    center[0] = value["center"][0].GetFloat();
+                    center[1] = value["center"][1].GetFloat();
+                    center[2] = value["center"][2].GetFloat();
+                }
+                if (value.HasMember("normal"))
+                {
+                    norm[0] = value["normal"][0].GetFloat();
+                    norm[1] = value["normal"][1].GetFloat();
+                    norm[2] = value["normal"][2].GetFloat();
+                }
+                if (value.HasMember("interp"))
+                {
+                    interp = value["interp"].GetFloat();
+                }
+
+                SDFPlane::Params params = SDFPlane::Params(center,
+                                                           norm,
+                                                           interp);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else if (type == "sdf_box")
+            {
+                Point3f tlc = Point3f(1.f);
+                Point3f brc = Point3f(0.f);
+                float interp = 0.f; // TODO maybe
+
+                if (value.HasMember("tlc"))
+                {
+                    tlc[0] = value["tlc"][0].GetFloat();
+                    tlc[1] = value["tlc"][1].GetFloat();
+                    tlc[2] = value["tlc"][2].GetFloat();
+                }
+                if (value.HasMember("brc"))
+                {
+                    brc[0] = value["brc"][0].GetFloat();
+                    brc[1] = value["brc"][1].GetFloat();
+                    brc[2] = value["brc"][2].GetFloat();
+                }
+                if (value.HasMember("interp"))
+                {
+                    interp = value["interp"].GetFloat();
+                }
+
+                SDFBox::Params params = SDFBox::Params(tlc, brc);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }

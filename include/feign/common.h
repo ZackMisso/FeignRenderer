@@ -36,9 +36,10 @@
 ////////////////////
 
 #define Epsilon 1e-4f
-#define EPS_VEC_X Vector3f(Epsilon, 0.f, 0.f)
-#define EPS_VEC_Y Vector3f(0.f, Epsilon, 0.f)
-#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon)
+#define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
+#define EPS_VEC_Y Vector3f(0.f, Epsilon * 100.f, 0.f)
+#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 100.f)
+#define SDF_STEPS 2000
 
 #define PI           3.14159265358979323846f
 #define INV_PI       0.31830988618379067154f
@@ -52,8 +53,8 @@ struct GlobalParams
 {
     GlobalParams()
     {
+        sdf_only = true;
         ignore_shadow_checks = false;
-        sdf_only = false;
     }
 
     bool ignore_shadow_checks; // ignores shadow checks when determining light contribution

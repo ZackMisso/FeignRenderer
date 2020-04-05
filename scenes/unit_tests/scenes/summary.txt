@@ -100,3 +100,25 @@ test_020
 
 This scene tests the unidirectional path tracing integrator when using area
 light sources and the mirror bsdfs
+
+test_021
+
+This scene tests the sphere sdf by rendering surface normals
+
+test_022
+
+This scene tests the plane sdf by rendering surface normals with a plane and
+sphere object
+
+test_023
+
+This scene tests the box sdf by rendering surface normals with a plane and box
+object
+
+test_024
+
+This scene tests how the sdf rendering mode works with the phong bsdf
+
+test_025
+
+This scene tests how the sdf rendering mode works with the diffuse bsdf

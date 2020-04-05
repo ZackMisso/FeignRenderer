@@ -1,0 +1,113 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "sdf_mode": true
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "normal",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -60,
+            10.0,
+            24.3583,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "material": "diffuse_material"
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "sdf_sphere",
+        "center": [
+            0.0,
+            10.0,
+            0.0
+        ],
+        "radius": 10.0,
+        "interp": 0.0
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "mesh": {
+        "name": "plane_obj",
+        "type": "sdf_plane",
+        "center": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "normal": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "interp": 0.0
+    },
+    "object": {
+        "name": "plane",
+        "mesh": "plane_obj",
+        "material_shader": "simple_shader"
+    },
+    "material": {
+        "name": "diffuse_material",
+        "type": "simple",
+        "bsdf": "diffuse_bsdf"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "phong",
+        "kd": [
+            0.8,
+            0.3,
+            0.2
+        ],
+        "ks": 0.8,
+        "exponent": 500.0
+    },
+    "material": {
+        "name": "floor_material",
+        "type": "simple",
+        "bsdf": "floor_bsdf"
+    },
+    "bsdf": {
+        "name": "floor_bsdf",
+        "type": "diffuse"
+    }
+}

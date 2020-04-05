@@ -341,8 +341,13 @@ void FeignRenderer::fr_scene(std::string name,
                              std::string integrator_node,
                              std::string sampler_node,
                              std::string camera_node,
-                             std::string medium_node)
+                             std::string medium_node,
+                             bool sdf_mode)
 {
+    std::cout << "sdf_mode: " << sdf_mode << std::endl;
+    global_params.sdf_only = sdf_mode;
+    std::cout << global_params.sdf_only << std::endl;
+
     if (getInstance()->scene)
     {
         throw new FeignRendererException("currently only one scene may be constructed");
@@ -566,6 +571,20 @@ void FeignRenderer::fr_mesh(std::string name,
         mesh->mesh = new SDFSphere(params->center,
                                    params->radius,
                                    params->interp);
+    }
+    else if (type == "sdf_plane")
+    {
+        SDFPlane::Params* params = (SDFPlane::Params*)mesh_data;
+
+        mesh->mesh = new SDFPlane(params->center,
+                                  params->normal,
+                                  params->interp);
+    }
+    else if (type == "sdf_box")
+    {
+        SDFBox::Params* params = (SDFBox::Params*)mesh_data;
+
+        mesh->mesh = new SDFBox(params->tlc, params->brc);
     }
     else
     {
