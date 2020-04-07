@@ -8,23 +8,23 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "path",
+        "type": "normal",
         "max_bounces": 10
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 256000
+        "sample_count": 16
     },
     "camera": {
         "name": "camera",
         "type": "perspective",
         "lookat": [
             -60,
-            10.0,
+            14.5,
             24.3583,
             0.0,
-            10.0,
+            12,
             0.0,
             0.0,
             1.0,
@@ -40,30 +40,26 @@
         "material": "diffuse_material"
     },
     "mesh": {
-        "name": "sphere_obj",
-        "type": "sdf_sphere",
-        "center": [
+        "name": "box_obj",
+        "type": "sdf_cone",
+        "first": [
             0.0,
-            10.0,
+            25.0,
             0.0
         ],
-        "radius": 10.0,
+        "second": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "radius_1": 1.2,
+        "radius_2": 7.0,
         "interp": 0.0
     },
     "object": {
-        "name": "sphere",
-        "mesh": "sphere_obj",
-        "material_shader": "simple_shader",
-        "scale": [
-            10.0,
-            10.0,
-            10.0
-        ],
-        "translate": [
-            0.0,
-            10.0,
-            0.0
-        ]
+        "name": "box",
+        "mesh": "box_obj",
+        "material_shader": "simple_shader"
     },
     "mesh": {
         "name": "plane_obj",
@@ -109,33 +105,5 @@
     "bsdf": {
         "name": "floor_bsdf",
         "type": "diffuse"
-    },
-    "emitter": {
-        "name": "point_emitter",
-        "type": "point",
-        "intensity": [
-            40000.0,
-            30000.0,
-            20000.0
-        ],
-        "position": [
-            -80,
-            80,
-            -10
-        ]
-    },
-    "emitter": {
-        "name": "point_emitter2",
-        "type": "point",
-        "intensity": [
-            22500.0,
-            30000.0,
-            37500.0
-        ],
-        "position": [
-            -20,
-            40,
-            20
-        ]
     }
 }

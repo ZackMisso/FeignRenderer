@@ -298,6 +298,12 @@ inline Float clamp(Float proxy, Float min, Float max)
     return proxy;
 }
 
+inline Float sign(Float val)
+{
+    if (val < 0.0) return -1.0;
+    return 1.0;
+}
+
 /////////////////////////////////////////////////
 // EXCEPTIONS
 /////////////////////////////////////////////////

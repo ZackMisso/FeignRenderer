@@ -586,6 +586,23 @@ void FeignRenderer::fr_mesh(std::string name,
 
         mesh->mesh = new SDFBox(params->tlc, params->brc);
     }
+    else if (type == "sdf_cylinder")
+    {
+        SDFCylinder::Params* params = (SDFCylinder::Params*)mesh_data;
+
+        mesh->mesh = new SDFCylinder(params->first,
+                                     params->second,
+                                     params->radius);
+    }
+    else if (type == "sdf_cone")
+    {
+        SDFCone::Params* params = (SDFCone::Params*)mesh_data;
+
+        mesh->mesh = new SDFCone(params->first,
+                                 params->second,
+                                 params->radius_1,
+                                 params->radius_2);
+    }
     else
     {
         throw new NotImplementedException("mesh type not recognized: " + type);

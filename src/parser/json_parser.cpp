@@ -515,6 +515,70 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
+            else if (type == "sdf_cylinder")
+            {
+                Point3f first = Point3f(1.f);
+                Point3f second = Point3f(0.f);
+                float radius = 0.f;
+
+                if (value.HasMember("first"))
+                {
+                    first[0] = value["first"][0].GetFloat();
+                    first[1] = value["first"][1].GetFloat();
+                    first[2] = value["first"][2].GetFloat();
+                }
+                if (value.HasMember("second"))
+                {
+                    second[0] = value["second"][0].GetFloat();
+                    second[1] = value["second"][1].GetFloat();
+                    second[2] = value["second"][2].GetFloat();
+                }
+                if (value.HasMember("radius"))
+                {
+                    radius = value["radius"].GetFloat();
+                }
+
+                SDFCylinder::Params params = SDFCylinder::Params(first,
+                                                                 second,
+                                                                 radius);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
+            else if (type == "sdf_cone")
+            {
+                Point3f first = Point3f(1.f);
+                Point3f second = Point3f(0.f);
+                float radius_1 = 0.f;
+                float radius_2 = 0.f;
+
+                if (value.HasMember("first"))
+                {
+                    first[0] = value["first"][0].GetFloat();
+                    first[1] = value["first"][1].GetFloat();
+                    first[2] = value["first"][2].GetFloat();
+                }
+                if (value.HasMember("second"))
+                {
+                    second[0] = value["second"][0].GetFloat();
+                    second[1] = value["second"][1].GetFloat();
+                    second[2] = value["second"][2].GetFloat();
+                }
+                if (value.HasMember("radius_1"))
+                {
+                    radius_1 = value["radius_1"].GetFloat();
+                }
+                if (value.HasMember("radius_2"))
+                {
+                    radius_2 = value["radius_2"].GetFloat();
+                }
+
+                SDFCone::Params params = SDFCone::Params(first,
+                                                         second,
+                                                         radius_1,
+                                                         radius_2);
+
+                FeignRenderer::fr_mesh(name, type, &params);
+            }
             else
             {
                 throw new FeignRendererException(type + " mesh not recognized");

@@ -122,3 +122,13 @@ This scene tests how the sdf rendering mode works with the phong bsdf
 test_025
 
 This scene tests how the sdf rendering mode works with the diffuse bsdf
+
+test_026
+
+This scene tests the cylinder sdf by rendering surface normals with a plane and
+cylinder object
+
+test_027
+
+This scene tests the cone sdf by rendering surface normals with a plane and
+cone object

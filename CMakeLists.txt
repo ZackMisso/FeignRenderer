@@ -249,6 +249,8 @@ add_executable(feign
     src/shapes/sdf_sphere.cpp
     src/shapes/sdf_box.cpp
     src/shapes/sdf_plane.cpp
+    src/shapes/sdf_cylinder.cpp
+    src/shapes/sdf_cone.cpp
 
     # Stats implementation files
     src/stats/clocker.cpp

@@ -183,6 +183,87 @@ protected:
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
+// Signed Distance Function Cylinder shape
+/////////////////////////////////////////////////
+class SDFCylinder : public SDFShape
+{
+public:
+    struct Params
+    {
+        Params(Point3f first,
+               Point3f second,
+               float radius)
+            : first(first),
+              second(second),
+              radius(radius) { }
+
+        Point3f first;
+        Point3f second;
+        float radius;
+    };
+
+    SDFCylinder(Point3f first,
+                Point3f second,
+                float radius);
+
+    virtual Float evaluate(Point3f pt) const;
+
+    virtual BBox3f boundingBox() const;
+    virtual Point3f centroid() const;
+
+    virtual uint32_t primitiveCount() const { return 1; }
+
+protected:
+    Point3f first;
+    Point3f second;
+    float radius;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Function Cone shape
+/////////////////////////////////////////////////
+class SDFCone : public SDFShape
+{
+public:
+    struct Params
+    {
+        Params(Point3f first,
+               Point3f second,
+               Float radius_1,
+               Float radius_2)
+            : first(first),
+              second(second),
+              radius_1(radius_1),
+              radius_2(radius_2) { }
+
+        Point3f first;
+        Point3f second;
+        Float radius_1;
+        Float radius_2;
+    };
+
+    SDFCone(Point3f first,
+            Point3f second,
+            Float radius_1,
+            Float radius_2);
+
+    virtual Float evaluate(Point3f pt) const;
+
+    virtual BBox3f boundingBox() const;
+    virtual Point3f centroid() const;
+
+    virtual uint32_t primitiveCount() const { return 1; }
+
+protected:
+    Point3f first;
+    Point3f second;
+    Float radius_1;
+    Float radius_2;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 // Mesh Node structure
 /////////////////////////////////////////////////
 struct MeshNode : public Node
