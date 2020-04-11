@@ -38,12 +38,16 @@ Scene::~Scene()
     emitters.clear();
 }
 
-void Scene::preProcess()
+void Scene::preProcess(const GlobalParams& globals)
 {
+    LOG("debug: " + globals.name);
+    LOG("global_params.sdf_only: " + std::to_string(globals.sdf_only));
+
     if (!ray_accel)
     {
-        if (global_params.sdf_only)
+        if (globals.sdf_only)
         {
+            LOG("what the fuck");
             ray_accel = new SDFAccel();
         }
         else
@@ -56,7 +60,7 @@ void Scene::preProcess()
 
     for (int i = 0; i < shapes.size(); ++i)
     {
-        if (global_params.sdf_only)
+        if (globals.sdf_only)
         {
             ray_accel->addSDFShape((SDFShape*)shapes[i]);
         }

@@ -55,8 +55,10 @@ struct GlobalParams
     {
         sdf_only = true;
         ignore_shadow_checks = false;
+        name = "what";
     }
 
+    std::string name;
     bool ignore_shadow_checks; // ignores shadow checks when determining light contribution
     bool sdf_only;             // tells the renderer whether or not it is rendering signed distance fields
 };

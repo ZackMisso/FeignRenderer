@@ -37,6 +37,7 @@ Float SDFCone::evaluate(Point3f pt) const
 	Float cbx = x - radius_1 - f * rba;
 	Float cby = paba - f;
 	Float s = (cbx<0.0 && cay<0.0) ? -1.0 : 1.0;
+
 	return s*sqrt(fmin(cax*cax+cay*cay*baba, cbx*cbx+cby*cby*baba));
 }
 

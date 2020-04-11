@@ -37,7 +37,7 @@ public:
 
     ~Scene();
 
-    virtual void preProcess();
+    virtual void preProcess(const GlobalParams& globals);
 
     void renderScene() const;
 

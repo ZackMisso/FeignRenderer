@@ -267,6 +267,9 @@ add_executable(feign
 
     # imedit implementation files
     ext/ImageEditLib/src/image.cpp
+
+    # scene implementation files
+    scenes/cool_renders/hall_of_tiles/hall_of_tiles.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

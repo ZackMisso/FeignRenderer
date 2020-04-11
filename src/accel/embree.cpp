@@ -90,15 +90,19 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
             }
         }
 
+        #if CLOCKING
+            Clocker::endClock("scene intersect");
+        #endif
+
         // complete the intersection information by calculating normals / uv's /
         // etc.
         // TODO: this is redundant and should not be used since embree already
         // handles this information for us
         its.intersected_mesh->completeIntersectionInfo(its);
 
-        #if CLOCKING
-            Clocker::endClock("scene intersect");
-        #endif
+        // #if CLOCKING
+        //     Clocker::endClock("scene intersect");
+        // #endif
 
         return true;
     }

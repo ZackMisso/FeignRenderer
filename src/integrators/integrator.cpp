@@ -32,6 +32,8 @@ void Integrator::render(const Scene* scene,
     {
         if (verbose) LOG("sample: " + std::to_string(k));
 
+        // LOG("rendering");
+
         // for (int i = 141; i < 146; ++i)
         // {
         //     for (int j = 112; j < 118; ++j)
@@ -49,6 +51,8 @@ void Integrator::render(const Scene* scene,
                 #if CLOCKING
                     Clocker::startClock("integrator");
                 #endif
+
+                // LOG("pre radiance");
 
                 radiance *= Li(scene, sampler, ray);
 

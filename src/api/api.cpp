@@ -526,7 +526,7 @@ void FeignRenderer::fr_object(std::string name,
     object->mesh = getInstance()->find_mesh(mesh);
     object->material_shader = getInstance()->find_material_shader(material_shader);
 
-    if (emitter != "null")
+    if (emitter != "null" && emitter != "")
     {
         EmitterNode* emitter_node = getInstance()->find_emitter(emitter);
         emitter_node->objectNode = object;
@@ -871,6 +871,7 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 // this is the big one
 void FeignRenderer::flush_renders()
 {
+    LOG("global_params.sdf_only flush: " + std::to_string(global_params.sdf_only));
     Scene* scene_obj = getInstance()->scene->scene;
 
     // first preprocess all meshes
@@ -904,8 +905,17 @@ void FeignRenderer::flush_renders()
         }
     }
 
+    // LOG("global_params.sdf_only [pre]: " + std::to_string(global_params.sdf_only));
+    // LOG("debug: " + global_params.name);
+    global_params.name = "blah";
+
     // preprocess the scene
-    scene_obj->preProcess();
+    scene_obj->preProcess(global_params);
+
+    // LOG("debug: " + global_params.name);
+    global_params.name = "blah";
+
+    // LOG("global_params.sdf_only [post]: " + std::to_string(global_params.sdf_only));
 
     #if CLOCKING
         Clocker::startClock("render");
