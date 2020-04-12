@@ -7,7 +7,6 @@
  **/
 
 #include <feign/core/scene.h>
-#include <feign/core/accel.h>
 
 Scene::Scene(std::string name,
              IntegratorNode* integrator,

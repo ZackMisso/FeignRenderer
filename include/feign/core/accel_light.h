@@ -1,0 +1,99 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.1.1
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
+#pragma once
+
+#include <feign/core/node.h>
+#include <feign/core/emitter.h>
+#include <feign/core/sampler.h>
+#include <feign/math/discrete_pdf.h>
+
+/////////////////////////////////////////////////
+// Light Sampling Acceleration Structure
+/////////////////////////////////////////////////
+class LightAccel
+{
+public:
+    virtual ~LightAccel() { }
+
+    virtual void clear() = 0;
+    virtual void build(const BBox3f& scene_bounds,
+                       const std::vector<Emitter*>& emitters);
+
+    virtual void sampleEmitter(Sampler* sampler,
+                               int& index,
+                               Float& pdf) = 0;
+
+    virtual void sampleEmitters(Sampler* sampler,
+                                std::vector<int>& indices,
+                                std::vector<Float>& pdf) = 0;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Naive Uniform Light Sampling Acceleration Structure
+/////////////////////////////////////////////////
+class NaiveLightAccel
+{
+public:
+    NaiveLightAccel();
+
+    virtual void clear();
+    virtual void build(const BBox3f& scene_bounds,
+                       const std::vector<Emitter*>& emitters);
+
+    virtual void sampleEmitter(Sampler* sampler,
+                               int& index,
+                               Float& pdf);
+
+    virtual void sampleEmitters(Sampler* sampler,
+                                std::vector<int>& indices,
+                                std::vector<Float>& pdf);
+
+protected:
+    int number_of_emitters;
+    float pmf;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Spatial Partitioning Light Sampling Acceleration Structure
+/////////////////////////////////////////////////
+class SpatialLightAccel
+{
+public:
+    struct SpatialLightBounds
+    {
+        BBox3f bbox;
+        DiscretePDF1D* emitter_pdf;
+    };
+
+    SpatialLightAccel(int width, int height, int depth);
+
+    virtual void clear();
+    virtual void build(const BBox3f& scene_bounds,
+                       const std::vector<Emitter*>& emitters);
+
+    virtual void sampleEmitter(Sampler* sampler,
+                               int& index,
+                               Float& pdf);
+
+    virtual void sampleEmitters(Sampler* sampler,
+                                std::vector<int>& indices,
+                                std::vector<Float>& pdf);
+
+protected:
+    SpatialLightBounds* bounds;
+
+    int width;  // x
+    int height; // y
+    int depth;  // z
+};
+/////////////////////////////////////////////////
+
+// TODO: maybe add more in the future

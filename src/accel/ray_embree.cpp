@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/core/accel.h>
+#include <feign/core/accel_ray.h>
 #include <feign/stats/clocker.h>
 
 EmbreeAccel::EmbreeAccel()
@@ -21,8 +21,6 @@ EmbreeAccel::~EmbreeAccel()
 
 void EmbreeAccel::preProcess()
 {
-    // preProcessChisldren();
-
     // initialize embree datastructures
     rtcore = "start_threads=1,set_affinity=1";
     device = rtcNewDevice(rtcore.c_str());
@@ -68,8 +66,16 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
     hit.hit.primID = RTC_INVALID_GEOMETRY_ID;
     hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
+    #if CLOCKING
+        Clocker::startClock("embree");
+    #endif
+
     /* intersect ray with scene */
     rtcIntersect1(scene, &context, &hit);
+
+    #if CLOCKING
+        Clocker::endClock("embree");
+    #endif
 
     if (hit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {
@@ -81,28 +87,18 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         Ray3f ray(scene_ray);
         ray.far = its.t;
 
-        // TODO: this is inefficient
-        for (int i = 0; i < meshes.size(); i++)
-        {
-            if (meshes[i]->getGeomID() == hit.hit.geomID)
-            {
-                its.intersected_mesh = meshes[i];
-            }
-        }
+        // TODO: note in the future the geom id might be different from the index
+        //       if instancing is implemented in the future
+
+        its.intersected_mesh = meshes[hit.hit.geomID];
+
+        // complete the intersection information by calculating smooth normals /
+        // uv's // etc.
+        its.intersected_mesh->completeIntersectionInfo(its);
 
         #if CLOCKING
             Clocker::endClock("scene intersect");
         #endif
-
-        // complete the intersection information by calculating normals / uv's /
-        // etc.
-        // TODO: this is redundant and should not be used since embree already
-        // handles this information for us
-        its.intersected_mesh->completeIntersectionInfo(its);
-
-        // #if CLOCKING
-        //     Clocker::endClock("scene intersect");
-        // #endif
 
         return true;
     }

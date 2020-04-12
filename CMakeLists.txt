@@ -97,7 +97,8 @@ add_executable(feign
     # Core header files
     include/feign/core/scene.h
     include/feign/core/node.h
-    include/feign/core/accel.h
+    include/feign/core/accel_ray.h
+    include/feign/core/accel_light.h
     include/feign/core/api.h
     include/feign/core/bsdf.h
     include/feign/core/camera.h
@@ -155,9 +156,13 @@ add_executable(feign
     src/main.cpp
     src/scene.cpp
 
-    # Accel implementation files
-    src/accel/embree.cpp
-    src/accel/sdf.cpp
+    # LightAccel implementation files
+    src/accel/light_naive.cpp
+    src/accel/light_spatial.cpp
+
+    # RayAccel implementation files
+    src/accel/ray_embree.cpp
+    src/accel/ray_sdf.cpp
 
     # Api implementation files
     src/api/api.cpp

@@ -50,3 +50,8 @@ Color3f PointEmitter::evaluate(EmitterQuery& rec) const
 
     return Color3f(0.f);
 }
+
+Point3f PointEmitter::getCenter() const
+{
+    return pos;
+}

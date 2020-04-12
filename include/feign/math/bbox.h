@@ -33,14 +33,10 @@ struct BBox3
         max = tlc + Vec3<T>(w, h, d);
     }
 
-    // TODO: blc should be renamed to brc
-    BBox3(Vec3<T> tlc, Vec3<T> blc)
+    BBox3(Vec3<T> tlc, Vec3<T> brc)
     {
-        // The following assert breaks when both min and max have been reset
-        // assert(blc[0] >= tlc[0] && blc[1] >= tlc[1] && blc[2] >= tlc[2]);
-
         min = tlc;
-        max = blc;
+        max = brc;
     }
 
     T volume() const
@@ -198,6 +194,33 @@ struct BBox3
         return ray.near <= far && near <= ray.far;
     }
 
+    Vec3f operator()(Vec3f sample) const
+    {
+        return (max - min) * sample;
+    }
+
+    Vec3f operator()(Float x, Float y, Float z) const
+    {
+        return Vec3f((max(0) - min(0)) * x,
+                     (max(1) - min(1)) * y,
+                     (max(2) - min(2)) * z);
+    }
+
+    Float sample_x(Float x) const
+    {
+        return (max(0) - min(0)) * x;
+    }
+
+    Float sample_y(Float y) const
+    {
+        return (max(0) - min(0)) * y;
+    }
+
+    Float sample_z(Float z) const
+    {
+        return (max(0) - min(0)) * z;
+    }
+
     void reset()
     {
         min = Vec3<T>(std::numeric_limits<T>::infinity());
@@ -236,10 +259,10 @@ struct BBox2
         max = tlc + Vec2<T>(w, h);
     }
 
-    BBox2(Vec2<T> tlc, Vec2<T> blc)
+    BBox2(Vec2<T> tlc, Vec2<T> brc)
     {
         min = tlc;
-        max = blc;
+        max = brc;
     }
 
     T area() const

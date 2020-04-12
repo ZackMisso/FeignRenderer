@@ -51,6 +51,9 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const = 0;
 
+    virtual bool isSpatial() const = 0;
+    virtual Point3f getCenter() const = 0;
+
     virtual void preProcess() { }
 
     // this is bad design, figure out a better way of supporting
@@ -77,6 +80,9 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
+    virtual Point3f getCenter() const;
+
+    virtual bool isSpatial() const { return false; }
     virtual void preProcess();
 
 protected:
@@ -109,6 +115,9 @@ public:
                                Float* pdf) const;
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
+
+    virtual bool isSpatial() const { return false; }
+    virtual Point3f getCenter() const { return Point3f(0.f); }
 
 protected:
     Vector3f light_dir;
@@ -154,6 +163,9 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
+    virtual bool isSpatial() const { return true; }
+    virtual Point3f getCenter() const;
+
 protected:
     Point3f light_pos;
     Vector3f light_dir;
@@ -193,6 +205,9 @@ public:
 
     virtual void preProcess();
 
+    virtual bool isSpatial() const { return true; }
+    virtual Point3f getCenter() const;
+
 protected:
     Color3f I;
     Point3f pos;
@@ -231,6 +246,9 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
+    virtual bool isSpatial() const { return false; }
+    virtual Point3f getCenter() const { return Point3f(0.f); }
+
 protected:
     Color3f top;
     Color3f bot;
@@ -268,6 +286,9 @@ public:
 
     virtual void preProcess();
 
+    virtual bool isSpatial() const { return true; }
+    virtual Point3f getCenter() const;
+
 protected:
     MeshNode* mesh;
     DiscretePDF1D* sa_pdf;
@@ -294,6 +315,9 @@ public:
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
     virtual void preProcess();
+
+    virtual bool isSpatial() const { return false; }
+    virtual Point3f getCenter() const { return Point3f(0.f); }
 
 protected:
 };

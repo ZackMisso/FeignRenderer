@@ -32,6 +32,7 @@ void Clocker::initialize()
     Clocker::addClocker("integrator");
     Clocker::addClocker("shader eval");
     Clocker::addClocker("filter");
+    Clocker::addClocker("embree");
 
     // addClocker("full render");
     // addClocker("embree intersect");

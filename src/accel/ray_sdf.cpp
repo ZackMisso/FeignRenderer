@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/core/accel.h>
+#include <feign/core/accel_ray.h>
 
 void SDFAccel::preProcess()
 {

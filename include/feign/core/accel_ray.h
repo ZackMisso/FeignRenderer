@@ -16,10 +16,10 @@
 /////////////////////////////////////////////////
 // Ray Tracing Acceleration Structure
 /////////////////////////////////////////////////
-class Accel
+class RayAccel
 {
 public:
-    virtual ~Accel() { }
+    virtual ~RayAccel() { }
 
     virtual void clear() = 0;
     virtual void build() = 0;
@@ -38,7 +38,7 @@ public:
 #include <embree3/rtcore_ray.h>
 #include <embree3/rtcore_scene.h>
 
-class EmbreeAccel : public Accel
+class EmbreeAccel : public RayAccel
 {
 public:
     EmbreeAccel();
@@ -91,7 +91,7 @@ protected:
 // This acceleration structure is used in scenes where only sign distance
 // functions exist
 /////////////////////////////////////////////////
-class SDFAccel : public Accel
+class SDFAccel : public RayAccel
 {
     virtual void preProcess();
     virtual void clear();
@@ -113,13 +113,13 @@ protected:
 // Accel Node structure
 /////////////////////////////////////////////////
 // TODO: actually use this somewhere
-struct AccelNode : public Node
+struct RayAccelNode : public Node
 {
 public:
-    AccelNode() : accel(nullptr) { }
-    AccelNode(std::string name) : Node(name), accel(nullptr) { }
-    AccelNode(Accel* accel) : accel(accel) { }
+    RayAccelNode() : accel(nullptr) { }
+    RayAccelNode(std::string name) : Node(name), accel(nullptr) { }
+    RayAccelNode(RayAccel* accel) : accel(accel) { }
 
-    Accel* accel;
+    RayAccel* accel;
 };
 /////////////////////////////////////////////////

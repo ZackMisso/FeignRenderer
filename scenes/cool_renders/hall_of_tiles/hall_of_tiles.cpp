@@ -36,7 +36,7 @@ void HallOfTiles::initialize_materials(int frame)
                                &mirror_mat_params);
 
     Diffuse::Params dark_diffuse_bsdf(Color3f(0.3f, 0.3f, 0.3f));
-    Mirror::Params mirror_bsdf(Color3f(0.90f));
+    Mirror::Params mirror_bsdf(Color3f(1.f));
 
     FeignRenderer::fr_bsdf("dark_diffuse_bsdf",
                            "diffuse",
@@ -169,7 +169,8 @@ void HallOfTiles::initialize_hallway(int frame)
                 material = "dark_diffuse_shad";
                 emitter = "tile_emitter_" + std::to_string(index);
 
-                MeshEmitter::Params mesh_emitter_params(Color3f(6.f, 7.f, 0.f) * mesh_light_intensity * 2.f);
+                MeshEmitter::Params mesh_emitter_params(Color3f(2.f * rng.nextFloat() + 4.f,
+                                                                2.f * rng.nextFloat() + 5.f, 0.f) * mesh_light_intensity * 2.f);
 
                 FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
             }
@@ -355,7 +356,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(16, 0x12345);
+    Independent::Params samp_params(1024, 0x12345);
 
     FeignRenderer::fr_sampler("sampler",
                               "independent",

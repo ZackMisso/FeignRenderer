@@ -10,7 +10,7 @@
 
 #include <feign/common.h>
 #include <feign/core/node.h>
-#include <feign/core/accel.h>
+#include <feign/core/accel_ray.h>
 #include <feign/core/integrator.h>
 #include <feign/core/emitter.h>
 #include <feign/core/sampler.h>
@@ -22,7 +22,7 @@
 class IntegratorNode;
 class SamplerNode;
 class MediaNode;
-class AccelNode;
+class RayAccelNode;
 class CameraNode;
 
 // TODO: scene should not be an observable data structure externally
@@ -60,7 +60,7 @@ public:
     IntegratorNode* integrator_node;
     SamplerNode* sampler_node;
     CameraNode* camera_node;
-    Accel* ray_accel;
+    RayAccel* ray_accel;
     Imagef* target; // the target to render the image to, if not
                     // offline rendering
 

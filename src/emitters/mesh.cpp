@@ -93,3 +93,8 @@ void MeshEmitter::setMeshNode(MeshNode* node)
 {
     mesh = node;
 }
+
+Point3f MeshEmitter::getCenter() const
+{
+    return mesh->mesh->centroid();
+}

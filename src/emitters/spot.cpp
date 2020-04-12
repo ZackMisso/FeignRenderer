@@ -66,3 +66,8 @@ Color3f SpotLightEmitter::evaluate(EmitterQuery& rec) const
 
     return COLOR_BLACK;
 }
+
+Point3f SpotLightEmitter::getCenter() const
+{
+    return light_pos;
+}
