@@ -11,6 +11,7 @@
 #include <feign/common.h>
 #include <feign/core/node.h>
 #include <feign/core/accel_ray.h>
+#include <feign/core/accel_light.h>
 #include <feign/core/integrator.h>
 #include <feign/core/emitter.h>
 #include <feign/core/sampler.h>
@@ -59,6 +60,7 @@ public:
     // required structures
     IntegratorNode* integrator_node;
     SamplerNode* sampler_node;
+    LightAccel* light_selection;
     CameraNode* camera_node;
     RayAccel* ray_accel;
     Imagef* target; // the target to render the image to, if not

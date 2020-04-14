@@ -206,6 +206,13 @@ struct BBox3
                      (max(2) - min(2)) * z);
     }
 
+    Point3f local_space(Point3f& point)
+    {
+        return Point3f((point(0) - min(0)) / (max(0) - min(0)),
+                       (point(1) - min(1)) / (max(1) - min(1)),
+                       (point(2) - min(2)) / (max(2) - min(2)));
+    }
+
     Float sample_x(Float x) const
     {
         return (max(0) - min(0)) * x;

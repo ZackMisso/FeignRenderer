@@ -59,6 +59,7 @@ public:
 
     virtual BBox3f boundingBox() const;
     virtual BBox3f boundingBox(uint32_t tri) const;
+    virtual Point3f compute_centroid() const;
     virtual Point3f centroid() const;
     virtual Point3f centroid(uint32_t tri) const;
 

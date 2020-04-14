@@ -8,6 +8,8 @@
 
 // core includes
 #include <feign/core/api.h>
+#include <feign/core/accel_light.h>
+#include <feign/core/accel_ray.h>
 #include <feign/core/bsdf.h>
 #include <feign/core/camera.h>
 #include <feign/core/emitter.h>
@@ -334,6 +336,45 @@ TextureNode* FeignRenderer::find_texture(std::string name)
     else
     {
         return itr->second;
+    }
+}
+
+void FeignRenderer::fr_accel(std::string name,
+                             std::string type,
+                             void* accel_properties)
+{
+    assert(getInstance()->scene);
+
+    // TODO: incorporate spatial partitioning methods here
+
+    if (type == "light_naive")
+    {
+        if (getInstance()->scene->scene->light_selection)
+        {
+            delete getInstance()->scene->scene->light_selection;
+        }
+
+        getInstance()->scene->scene->light_selection = new NaiveLightAccel();
+    }
+    else if (type == "light_spatial")
+    {
+        if (getInstance()->scene->scene->light_selection)
+        {
+            delete getInstance()->scene->scene->light_selection;
+        }
+
+        SpatialLightAccel::Params* params = (SpatialLightAccel::Params*)accel_properties;
+
+        getInstance()->scene->scene->light_selection = new SpatialLightAccel
+        (
+            params->width,
+            params->height,
+            params->depth
+        );
+    }
+    else
+    {
+        throw new NotImplementedException("unsupported accelerator: " + type);
     }
 }
 

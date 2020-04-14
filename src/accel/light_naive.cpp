@@ -8,7 +8,7 @@
 
  #include <feign/core/accel_light.h>
 
-NaiveLightAccel::NaiveLightAccel() { }
+NaiveLightAccel::NaiveLightAccel() : LightAccel() { }
 
 void NaiveLightAccel::clear() { }
 
@@ -19,7 +19,8 @@ void NaiveLightAccel::build(const BBox3f& scene_bounds,
     pmf = 1.f / float(emitters.size());
 }
 
-void NaiveLightAccel::sampleEmitter(Sampler* sampler,
+void NaiveLightAccel::sampleEmitter(Point3f pos,
+                                    Sampler* sampler,
                                     int& index,
                                     Float& pdf)
 {
@@ -27,7 +28,8 @@ void NaiveLightAccel::sampleEmitter(Sampler* sampler,
     pdf = pmf;
 }
 
-void NaiveLightAccel::sampleEmitters(Sampler* sampler,
+void NaiveLightAccel::sampleEmitters(Point3f pos,
+                                     Sampler* sampler,
                                      std::vector<int>& indices,
                                      std::vector<Float>& pdf)
 {

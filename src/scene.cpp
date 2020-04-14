@@ -28,6 +28,7 @@ Scene::Scene(std::string name,
 Scene::~Scene()
 {
     delete ray_accel;
+    delete light_selection;
     integrator_node = nullptr;
     sampler_node = nullptr;
     camera_node = nullptr;
@@ -41,6 +42,8 @@ void Scene::preProcess(const GlobalParams& globals)
 {
     LOG("debug: " + globals.name);
     LOG("global_params.sdf_only: " + std::to_string(globals.sdf_only));
+
+    sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
 
     if (!ray_accel)
     {
@@ -67,9 +70,12 @@ void Scene::preProcess(const GlobalParams& globals)
         {
             ray_accel->addShape(shapes[i]);
         }
+
+        sceneBounds.expand(shapes[i]->boundingBox());
     }
 
     ray_accel->build();
+    light_selection->build(sceneBounds, emitters);
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
@@ -203,9 +209,21 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     // TODO: later add infrastructure for different light sampling
     //       methods
 
-    Float choice_pdf = 1.f / Float(emitters.size());
+    Float choice_pdf;
+    int emitter;
 
-    int emitter = closure.sampler->next1D() * emitters.size();
+    // LOG("pre samp");
+
+    light_selection->sampleEmitter(closure.its->p,
+                                   closure.sampler,
+                                   emitter,
+                                   choice_pdf);
+
+    // LOG("post samp");
+
+    // Float choice_pdf = 1.f / Float(emitters.size());
+    //
+    // int emitter = closure.sampler->next1D() * emitters.size();
 
     EmitterQuery eqr(closure.its->p);
     Float emitter_pdf = 0.f;

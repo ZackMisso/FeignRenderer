@@ -19,17 +19,20 @@
 class LightAccel
 {
 public:
+    LightAccel() { }
     virtual ~LightAccel() { }
 
     virtual void clear() = 0;
     virtual void build(const BBox3f& scene_bounds,
-                       const std::vector<Emitter*>& emitters);
+                       const std::vector<Emitter*>& emitters) = 0;
 
-    virtual void sampleEmitter(Sampler* sampler,
+    virtual void sampleEmitter(Point3f pos,
+                               Sampler* sampler,
                                int& index,
                                Float& pdf) = 0;
 
-    virtual void sampleEmitters(Sampler* sampler,
+    virtual void sampleEmitters(Point3f pos,
+                                Sampler* sampler,
                                 std::vector<int>& indices,
                                 std::vector<Float>& pdf) = 0;
 };
@@ -38,7 +41,7 @@ public:
 /////////////////////////////////////////////////
 // Naive Uniform Light Sampling Acceleration Structure
 /////////////////////////////////////////////////
-class NaiveLightAccel
+class NaiveLightAccel : public LightAccel
 {
 public:
     NaiveLightAccel();
@@ -47,11 +50,13 @@ public:
     virtual void build(const BBox3f& scene_bounds,
                        const std::vector<Emitter*>& emitters);
 
-    virtual void sampleEmitter(Sampler* sampler,
+    virtual void sampleEmitter(Point3f pos,
+                               Sampler* sampler,
                                int& index,
                                Float& pdf);
 
-    virtual void sampleEmitters(Sampler* sampler,
+    virtual void sampleEmitters(Point3f pos,
+                                Sampler* sampler,
                                 std::vector<int>& indices,
                                 std::vector<Float>& pdf);
 
@@ -64,11 +69,26 @@ protected:
 /////////////////////////////////////////////////
 // Spatial Partitioning Light Sampling Acceleration Structure
 /////////////////////////////////////////////////
-class SpatialLightAccel
+class SpatialLightAccel : public LightAccel
 {
 public:
+    struct Params
+    {
+        Params(int width, int height, int depth)
+            : width(width), height(height), depth(depth) { }
+
+        int width;
+        int height;
+        int depth;
+    };
+
     struct SpatialLightBounds
     {
+        ~SpatialLightBounds()
+        {
+            delete emitter_pdf;
+        }
+
         BBox3f bbox;
         DiscretePDF1D* emitter_pdf;
     };
@@ -79,16 +99,19 @@ public:
     virtual void build(const BBox3f& scene_bounds,
                        const std::vector<Emitter*>& emitters);
 
-    virtual void sampleEmitter(Sampler* sampler,
+    virtual void sampleEmitter(Point3f pos,
+                               Sampler* sampler,
                                int& index,
                                Float& pdf);
 
-    virtual void sampleEmitters(Sampler* sampler,
+    virtual void sampleEmitters(Point3f pos,
+                                Sampler* sampler,
                                 std::vector<int>& indices,
                                 std::vector<Float>& pdf);
 
 protected:
     SpatialLightBounds* bounds;
+    BBox3f light_area_bounds;
 
     int width;  // x
     int height; // y

@@ -82,6 +82,10 @@ public:
 
     static void clean_up();
 
+    static void fr_accel(std::string name,
+                         std::string type,
+                         void* accel_properties);
+
     static void fr_scene(std::string name,
                          std::string integrator_node,
                          std::string sampler_node,

@@ -9,7 +9,7 @@
  #include <feign/core/accel_light.h>
 
 SpatialLightAccel::SpatialLightAccel(int width, int height, int depth)
-    : width(width), height(height), depth(depth)
+    : LightAccel(), width(width), height(height), depth(depth)
 {
     bounds = nullptr;
 }
@@ -34,6 +34,9 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
 
     int size = width * height * depth;
 
+    // TODO: maybe make this configurable to light groups in the future
+    light_area_bounds = scene_bounds;
+
     bounds = new SpatialLightBounds[size];
 
     for (int k = 0; k < depth; ++k)
@@ -53,12 +56,16 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
 
                 int index = ((k * height) + i) * width + j;
 
+                // LOG("creating disc pdf");
                 bounds[index].emitter_pdf = new DiscretePDF1D(emitters.size());
+                // LOG("post creating disc pdf");
 
                 bounds[index].bbox = BBox3f(Vec3f(min_x, min_y, min_z),
                                             Vec3f(max_x, max_y, max_z));
 
                 Point3f center = bounds[index].bbox.center();
+
+                LOG("number of emitters: " + std::to_string(emitters.size()));
 
                 for (int l = 0; l < emitters.size(); ++l)
                 {
@@ -68,37 +75,58 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
                             "infinite emitters for spatial acceleration");
                     }
 
+                    LOG("l:" + std::to_string(l));
+
                     bounds[index].emitter_pdf[l] = 1.f /
                         ((center - emitters[l]->getCenter()).sqrNorm());
+
+                    LOG("l-:" + std::to_string(l));
                 }
 
+                LOG("pre_norm");
+
                 bounds[index].emitter_pdf->normalize();
+                LOG("post_norm");
             }
         }
     }
 }
 
-void SpatialLightAccel::sampleEmitter(Sampler* sampler,
+void SpatialLightAccel::sampleEmitter(Point3f pos,
+                                      Sampler* sampler,
                                       int& index,
                                       Float& pdf)
 {
-    // TODO: this can always be improved, but right now it is very naively
-    //       implemented
-    
-    throw new NotImplementedException("spatial light accel sample");
-    // index = sampler->next1D() * number_of_emitters;
-    // pdf = pmf;
+    Point3f local = light_area_bounds.local_space(pos).min(0.f).max(0.f);
+
+    int x = floor(local(0) * width);
+    int y = floor(local(1) * height);
+    int z = floor(local(2) * depth);
+
+    index = bounds[((z * height) + y) * width + x].emitter_pdf->sample
+    (
+        sampler->next1D(),
+        pdf
+    );
 }
 
-void SpatialLightAccel::sampleEmitters(Sampler* sampler,
+void SpatialLightAccel::sampleEmitters(Point3f pos,
+                                       Sampler* sampler,
                                        std::vector<int>& indices,
                                        std::vector<Float>& pdf)
 {
-    throw new NotImplementedException("spatial light accel sample");
+    for (int i = 0; i < indices.size(); ++i)
+    {
+        Point3f local = light_area_bounds.local_space(pos).min(0.f).max(0.f);
 
-    // for (int i = 0; i < indices.size(); ++i)
-    // {
-    //     indices[i] = sampler->next1D() * number_of_emitters;
-    //     pdf[i] = pmf;
-    // }
+        int x = floor(local(0) * width);
+        int y = floor(local(1) * height);
+        int z = floor(local(2) * depth);
+
+        indices[i] = bounds[((z * height) + y) * width + x].emitter_pdf->sample
+        (
+            sampler->next1D(),
+            pdf[i]
+        );
+    }
 }

@@ -347,6 +347,12 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                             "",
                             false);
 
+    SpatialLightAccel::Params light_accel_params(1, 1, 10);
+
+    FeignRenderer::fr_accel("light_accel",
+                            "light_spatial",
+                            &light_accel_params);
+
     Integrator::Params int_params(256,
                                   256,
                                   test_name + "/");
@@ -390,8 +396,8 @@ void HallOfTiles::run()
     system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 0;
-    int end_frame = 1;
+    int start_frame = 1;
+    int end_frame = 2;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

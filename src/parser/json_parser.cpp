@@ -112,6 +112,50 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                                     medium,
                                     sdf_mode);
         }
+        else if (strcmp(itr->name.GetString(), "accel") == 0)
+        {
+            std::string name = "light_accel";
+            std::string type = "light_naive";
+
+            const rapidjson::Value& value = itr->value;
+
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+
+            if (type == "light_naive")
+            {
+                FeignRenderer::fr_accel(name, type, nullptr);
+            }
+            else if (type == "light_spatial")
+            {
+                int width = 1;
+                int height = 1;
+                int depth = 1;
+
+                if (value.HasMember("width"))
+                {
+                    width = value["width"].GetInt();
+                }
+                if (value.HasMember("height"))
+                {
+                    height = value["height"].GetInt();
+                }
+                if (value.HasMember("depth"))
+                {
+                    depth = value["depth"].GetInt();
+                }
+
+                SpatialLightAccel::Params params(width, height, depth);
+
+                FeignRenderer::fr_accel(name, type, &params);
+            }
+        }
         else if (strcmp(itr->name.GetString(), "integrator") == 0)
         {
             std::string name = "integrator";

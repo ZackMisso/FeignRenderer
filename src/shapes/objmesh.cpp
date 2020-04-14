@@ -266,16 +266,22 @@ BBox3f ObjMesh::boundingBox(uint32_t tri) const
     return box;
 }
 
-Point3f ObjMesh::centroid() const
+Point3f ObjMesh::compute_centroid() const
 {
-    Point3f center = Point3f(0.0);
+    Point3f point = Point3f(0.0);
 
     for (int i = 0; i < vs.size(); ++i)
     {
-        center += vs[i];
+        point += vs[i];
     }
-    center /= double(vs.size());
+    point /= double(vs.size());
 
+    return point;
+}
+
+Point3f ObjMesh::centroid() const
+{
+    LOG("inside centroid");
     return center;
 }
 
@@ -303,6 +309,8 @@ void ObjMesh::preProcess(bool requires_processing)
         geomShader->shader->evaluate((void*)this);
     }
 
+    center = compute_centroid();
+
     if (requires_processing && vs.size() > 0)
     {
         // TODO: is this really ever needed?
@@ -313,7 +321,7 @@ void ObjMesh::preProcess(bool requires_processing)
         //     sa += surface_area(i);
         // }
         //
-        // center = centroid();
+        //
 
         bbox = BBox3f(vs[0], vs[0]);
         for (uint32_t i = 1; i < vs.size(); ++i)
