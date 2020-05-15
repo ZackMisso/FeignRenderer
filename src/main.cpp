@@ -35,14 +35,14 @@ void run_scene(std::string scene_name)
 }
 
 // these are all the base debug scenes
-void run_all_scenes()
-{
-    run_scene("tests/ajax_normals");
-    run_scene("tests/ajax_diffuse");
-    run_scene("tests/ajax_mirror");
-    // run_scene("tests/box_distant");
-    run_scene("tests/box_rotations");
-}
+// void run_all_scenes()
+// {
+//     // run_scene("tests/ajax_normals");
+//     // run_scene("tests/ajax_diffuse");
+//     // run_scene("tests/ajax_mirror");
+//     // // run_scene("tests/box_distant");
+//     // run_scene("tests/box_rotations");
+// }
 
 int main(int argc, char* argv[])
 {
@@ -163,11 +163,11 @@ int main(int argc, char* argv[])
         {
             scene = std::string(argv[++i]);
         }
-        if (strcmp(argv[i], "-a") == 0)
-        {
-            run_all_scenes();
-            return 0;
-        }
+        // if (strcmp(argv[i], "-a") == 0)
+        // {
+        //     // run_all_scenes();
+        //     // return 0;
+        // }
     }
 
     std::cout << SCENES_PATH << scene << ".json" << std::endl;

@@ -11,12 +11,15 @@
 #include <feign/common.h>
 #include <feign/math/vector.h>
 #include <feign/math/coord_frame.h>
+#include <feign/media/media.h>
 
 class Shape;
+class Media;
 
 // TODO: add an intersection data struct for applying shaders
 struct Intersection
 {
+    Media* medium;
     Point3f p;
     Point2f uv;
     float t;

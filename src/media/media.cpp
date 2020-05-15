@@ -8,14 +8,8 @@
 
 #include <feign/media/media.h>
 
-Media::Media()
-{
-    throw new NotImplementedException("media constructore");
-    // TODO
-}
+// TODO
 
-Media::~Media()
-{
-    std::cout << "deleting media" << std::endl;
-    // TODO
-}
+Media::Media() { }
+
+Media::~Media() { }

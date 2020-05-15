@@ -21,6 +21,35 @@ DiscretePDF1D::DiscretePDF1D(int siz)
     is_normalized = false;
 }
 
+void DiscretePDF1D::convert_pdf_to_cdf()
+{
+    std::vector<Float> pdf = std::vector<Float>(cdf.size());
+
+    sum = 0.0;
+    for (int i = 0; i < cdf.size(); ++i)
+    {
+        sum += cdf[i];
+    }
+
+    for (int i = 0; i < cdf.size(); ++i)
+    {
+        pdf[i] = cdf[i] / sum;
+    }
+
+    normalization = 1.f / sum;
+
+    Float total = 0.f;
+    for (int i = 0; i < pdf.size(); ++i)
+    {
+        cdf[i] = total;
+        total += pdf[i];
+    }
+    
+    assert(std::abs(total - 1.0) < Epsilon);
+
+    cdf.push_back(total);
+}
+
 void DiscretePDF1D::normalize()
 {
     // assert(false);
@@ -72,9 +101,29 @@ int DiscretePDF1D::sample_reuse(Float& value, Float& pdf) const
     return index;
 }
 
-Float DiscretePDF1D::operator[](int entry) const
+Float DiscretePDF1D::get_pmf(int entry) const
 {
     return cdf[entry + 1] - cdf[entry];
+}
+
+// this assumes the cdf is temporarily storing the pmf,
+// and a call to convert_pdf_to_cdf will be made after all
+// pdf/pmf values have been set
+void DiscretePDF1D::set_pmf(int entry, Float value)
+{
+    cdf[entry] = value;
+}
+
+Float DiscretePDF1D::operator[](int entry) const
+{
+    // LOG("AHHH");
+    return cdf[entry + 1] - cdf[entry];
+}
+
+Float& DiscretePDF1D::operator[](int entry)
+{
+    // LOG("AHHH");
+    return cdf[entry];
 }
 
 ///////////////////////

@@ -121,6 +121,10 @@ public:
                           std::string type,
                           void* shader_data);
 
+    static void fr_media(std::string name,
+                         std::string type,
+                         void* shader_data);
+
     static void fr_emitter(std::string name,
                            std::string type,
                            void* emitter_data);

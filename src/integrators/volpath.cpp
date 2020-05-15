@@ -46,53 +46,70 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
             break;
         }
 
-        const MaterialShader* shader = scene->getShapeMaterialShader(its);
+        // TODO: how to create shaders out of a medium?
+        MediaClosure medium_closure(its.medium,
+                                    its.t);
 
-        closure.its = &its;
-        closure.ray = &ray;
-        closure.wi = its.toLocal(-ray.dir);
-        closure.emission = COLOR_BLACK;
-        closure.nee = COLOR_BLACK;
-        closure.albedo = COLOR_BLACK;
-        closure.last_spec = closure.is_specular;
-
-        // evaluate the material shader
-        shader->evaluate(closure);
-
-        // accumulate the shadow rays
-        closure.accumulate_shadow_rays(shader);
-
-        Float rr_prob = std::min(beta.maxValue(), 1.f);
-
-        // random termination
-        if (sampler->next1D() > rr_prob)
+        if (its.medium)
         {
-            Li += beta * (closure.emission + closure.nee);
-            break;
+            beta *= its.medium->sample(ray, sampler, medium_closure);
         }
 
-        // sample the next path
-        closure.wi = its.toLocal(-ray.dir);
-        shader->sample(closure);
+        if (beta.isZero()) break;
 
-        if (closure.pdf == 0.f)
+        if (medium_closure.handleScatter())
         {
-            Li += beta * (closure.emission + closure.nee);
-            break;
+            // TODO - will be done later
         }
+        else
+        {
+            const MaterialShader* shader = scene->getShapeMaterialShader(its);
 
-        ray = Ray3f(its.p,
-                    its.toWorld(closure.wo),
-                    Epsilon,
-                    std::numeric_limits<Float>::infinity(),
-                    ray.depth + 1);
+            closure.its = &its;
+            closure.ray = &ray;
+            closure.wi = its.toLocal(-ray.dir);
+            closure.emission = COLOR_BLACK;
+            closure.nee = COLOR_BLACK;
+            closure.albedo = COLOR_BLACK;
 
-        Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < 0.f) cosTerm = -cosTerm;
-        if (closure.is_specular) cosTerm = 1.f;
+            // evaluate the material shader
+            shader->evaluate(closure);
 
-        Li += beta * (closure.nee + closure.emission);
-        beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+            // accumulate the shadow rays
+            closure.accumulate_shadow_rays(shader);
+
+            Float rr_prob = std::min(beta.maxValue(), 1.f);
+
+            // random termination
+            if (sampler->next1D() > rr_prob)
+            {
+                Li += beta * (closure.emission + closure.nee);
+                break;
+            }
+
+            // sample the next path
+            closure.wi = its.toLocal(-ray.dir);
+            shader->sample(closure);
+
+            if (closure.pdf == 0.f)
+            {
+                Li += beta * (closure.emission + closure.nee);
+                break;
+            }
+
+            ray = Ray3f(its.p,
+                        its.toWorld(closure.wo),
+                        Epsilon,
+                        std::numeric_limits<Float>::infinity(),
+                        ray.depth + 1);
+
+            Float cosTerm = its.s_frame.n % ray.dir;
+            if (cosTerm < 0.f) cosTerm = -cosTerm;
+            if (closure.is_specular) cosTerm = 1.f;
+
+            Li += beta * (closure.nee + closure.emission);
+            beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+        }
     }
 
     return Li;

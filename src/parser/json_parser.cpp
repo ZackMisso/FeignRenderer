@@ -112,6 +112,36 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                                     medium,
                                     sdf_mode);
         }
+        else if (strcmp(itr->name.GetString(), "media") == 0)
+        {
+            std::string name = "env_medium";
+            std::string type = "homo_abs";
+
+            const rapidjson::Value& value = itr->value;
+
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+
+            if (type == "homo_abs")
+            {
+                Float avg_density = 0.01;
+
+                if (value.HasMember("avg_density"))
+                {
+                    avg_density = value["avg_density"].GetFloat();
+                }
+
+                HomogeneousAbsorbingMedia::Params params(avg_density);
+
+                FeignRenderer::fr_media(name, type, &params);
+            }
+        }
         else if (strcmp(itr->name.GetString(), "accel") == 0)
         {
             std::string name = "light_accel";

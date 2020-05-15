@@ -17,6 +17,7 @@ struct DiscretePDF1D
 
     // normalizes the cdf (why should it not be normalized??)
     void normalize();
+    void convert_pdf_to_cdf();
 
     // samples a location in the discrete pdf based on the value
     int sample(Float value) const;
@@ -24,6 +25,9 @@ struct DiscretePDF1D
 
     int sample_reuse(Float& value) const;
     int sample_reuse(Float& value, Float& pdf) const;
+
+    Float get_pmf(int entry) const;
+    void set_pmf(int entry, Float value);
 
     // returns the pdf
     Float operator[](int entry) const;

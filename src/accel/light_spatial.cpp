@@ -65,8 +65,6 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
 
                 Point3f center = bounds[index].bbox.center();
 
-                LOG("number of emitters: " + std::to_string(emitters.size()));
-
                 for (int l = 0; l < emitters.size(); ++l)
                 {
                     if (!emitters[l]->isSpatial())
@@ -75,18 +73,12 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
                             "infinite emitters for spatial acceleration");
                     }
 
-                    LOG("l:" + std::to_string(l));
+                    Float norm = ((center - emitters[l]->getCenter()).sqrNorm());
 
-                    bounds[index].emitter_pdf[l] = 1.f /
-                        ((center - emitters[l]->getCenter()).sqrNorm());
-
-                    LOG("l-:" + std::to_string(l));
+                    bounds[index].emitter_pdf->set_pmf(l, 1.f / norm);
                 }
 
-                LOG("pre_norm");
-
-                bounds[index].emitter_pdf->normalize();
-                LOG("post_norm");
+                bounds[index].emitter_pdf->convert_pdf_to_cdf();
             }
         }
     }

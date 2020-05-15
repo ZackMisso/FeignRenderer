@@ -13,7 +13,7 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 32
+        "sample_count": 16
     },
     "camera": {
         "name": "camera",

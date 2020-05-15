@@ -78,7 +78,9 @@ FeignRenderer::~FeignRenderer()
     for (auto it : bsdfs) delete it.second;
     for (auto it : cameras) delete it.second;
     for (auto it : emitters) delete it.second;
+    LOG("deleting medias");
     for (auto it : medias) delete it.second;
+    LOG("deleting integrators");
     for (auto it : integrators) delete it.second;
     for (auto it : samplers) delete it.second;
     for (auto it : filters) delete it.second;
@@ -460,6 +462,11 @@ void FeignRenderer::fr_integrator(std::string name,
         Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new Path_Unidirectional_Integrator(filter_node, params);
     }
+    else if (type == "volpath")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new VolPath_Integrator(filter_node, params);
+    }
     else
     {
         throw new NotImplementedException("unsupported integrator: " + type);
@@ -728,6 +735,30 @@ void FeignRenderer::fr_shader(std::string name,
     }
 }
 
+void FeignRenderer::fr_media(std::string name,
+                             std::string type,
+                             void* medium_data)
+{
+    MediaNode* medium = getInstance()->find_media(name);
+
+    if (medium->media)
+    {
+        throw new FeignRendererException("media already defined");
+    }
+
+    if (type == "homo_abs")
+    {
+        HomogeneousAbsorbingMedia::Params* params =
+            (HomogeneousAbsorbingMedia::Params*)medium_data;
+
+        medium->media = new HomogeneousAbsorbingMedia(params->avg_density);
+    }
+    else
+    {
+        throw new NotImplementedException("medium type not recognized: " + type);
+    }
+}
+
 void FeignRenderer::fr_emitter(std::string name,
                                std::string type,
                                void* emitter_data)
@@ -918,6 +949,8 @@ void FeignRenderer::flush_renders()
     // first preprocess all meshes
     unsigned int inst_index = 0;
 
+    LOG("preprocessing objects");
+
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
@@ -937,6 +970,8 @@ void FeignRenderer::flush_renders()
         inst_index++;
     }
 
+    LOG("setting meshes");
+
     // TODO: set this up in a more efficient way
     for (auto it : getInstance()->emitters)
     {
@@ -945,6 +980,8 @@ void FeignRenderer::flush_renders()
             it.second->emitter->setMeshNode(it.second->objectNode->mesh);
         }
     }
+
+    LOG("pre processing");
 
     // LOG("global_params.sdf_only [pre]: " + std::to_string(global_params.sdf_only));
     // LOG("debug: " + global_params.name);
@@ -961,6 +998,8 @@ void FeignRenderer::flush_renders()
     #if CLOCKING
         Clocker::startClock("render");
     #endif
+
+    LOG("entering render");
 
     // render current scene
     scene_obj->renderScene();

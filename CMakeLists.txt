@@ -220,6 +220,7 @@ add_executable(feign
 
     # Media implementation files
     src/media/media.cpp
+    src/media/homo_abs.cpp
 
     # Media Density implementation files
 

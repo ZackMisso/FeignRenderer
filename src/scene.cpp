@@ -22,17 +22,19 @@ Scene::Scene(std::string name,
     shapes = std::vector<Shape*>();
     objects = std::vector<ObjectNode*>();
     ray_accel = nullptr;
+    light_selection = nullptr;
     target = nullptr;
 }
 
 Scene::~Scene()
 {
-    delete ray_accel;
-    delete light_selection;
+    if (ray_accel) delete ray_accel;
+    if (light_selection) delete light_selection;
     integrator_node = nullptr;
     sampler_node = nullptr;
     camera_node = nullptr;
     target = nullptr;
+    env_medium_node = nullptr;
     shapes.clear();
     objects.clear();
     emitters.clear();
@@ -40,16 +42,17 @@ Scene::~Scene()
 
 void Scene::preProcess(const GlobalParams& globals)
 {
-    LOG("debug: " + globals.name);
-    LOG("global_params.sdf_only: " + std::to_string(globals.sdf_only));
+    // LOG("debug: " + globals.name);
+    // LOG("global_params.sdf_only: " + std::to_string(globals.sdf_only));
 
     sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
+
+    // LOG("pre ray accel");
 
     if (!ray_accel)
     {
         if (globals.sdf_only)
         {
-            LOG("what the fuck");
             ray_accel = new SDFAccel();
         }
         else
@@ -59,6 +62,15 @@ void Scene::preProcess(const GlobalParams& globals)
 
         ray_accel->preProcess();
     }
+
+    // LOG("pre light accel");
+
+    if (!light_selection)
+    {
+        light_selection = new NaiveLightAccel();
+    }
+
+    // LOG("pre ray init");
 
     for (int i = 0; i < shapes.size(); ++i)
     {
@@ -74,8 +86,11 @@ void Scene::preProcess(const GlobalParams& globals)
         sceneBounds.expand(shapes[i]->boundingBox());
     }
 
+    // LOG("pre ray build");
     ray_accel->build();
+    // LOG("pre light build");
     light_selection->build(sceneBounds, emitters);
+    // LOG("post");
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
@@ -141,7 +156,16 @@ void Scene::renderScene() const
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
-    return ray_accel->intersect(ray, its);
+    its.medium = nullptr;
+
+    bool intersected = ray_accel->intersect(ray, its);
+    if (env_medium_node && !its.medium)
+    {
+        // LOG("setting medium");
+        its.medium = env_medium_node->media;
+    }
+
+    return intersected;
 }
 
 void Scene::addEmitter(Emitter* emitter)
@@ -187,13 +211,21 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
             closure.shadow_rays[i].valid = true;
             closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
 
+            Float transmittance = 1.f;
+            if (tmp.medium)
+            {
+                transmittance = tmp.medium->transmittance(shadow_ray,
+                                                          shadow_ray.near,
+                                                          shadow_ray.far);
+            }
+
             if (emitter_pdf == 0.f)
             {
-                closure.shadow_rays[i].throughput = Li * cos_term;
+                closure.shadow_rays[i].throughput = Li * cos_term * transmittance;
             }
             else
             {
-                closure.shadow_rays[0].throughput = Li * cos_term / (emitter_pdf);
+                closure.shadow_rays[0].throughput = Li * cos_term / (emitter_pdf) * transmittance;
             }
 
             // Note: bsdf_values are fully accumulated later
@@ -248,13 +280,23 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
         closure.shadow_rays[0].valid = true;
         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
 
+        Float transmittance = 1.f;
+        // LOG("huh");
+        if (tmp.medium)
+        {
+            transmittance = tmp.medium->transmittance(shadow_ray,
+                                                      shadow_ray.near,
+                                                      shadow_ray.far);
+            // LOG("transmittance: " + std::to_string(transmittance));
+        }
+
         if (emitter_pdf == 0.f)
         {
             closure.shadow_rays[0].throughput = Color3f(0.f);
         }
         else
         {
-            closure.shadow_rays[0].throughput = Li * cos_term / (choice_pdf * emitter_pdf);
+            closure.shadow_rays[0].throughput = Li * cos_term / (choice_pdf * emitter_pdf) * transmittance;
         }
 
         // Note: bsdf_values are fully accumulated later

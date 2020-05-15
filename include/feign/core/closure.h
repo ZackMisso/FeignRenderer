@@ -9,6 +9,7 @@
 #pragma once
 
 #include <feign/common.h>
+#include <feign/media/media.h>
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
 
@@ -16,6 +17,7 @@
 class Scene;
 class Sampler;
 class MaterialShader;
+class Media;
 
 // this struct represents what is returned from the material shader when it
 // gets evaluated
@@ -61,9 +63,25 @@ struct MaterialClosure
     bool sample_all_emitters;
 };
 
-// // this struct represents what is returned from a media shader when it gets
-// // evaluated
-// struct MediaClosure
-// {
-//     // TODO
-// };
+// this struct represents what is returned from a media shader when it gets
+// evaluated
+struct MediaClosure
+{
+    MediaClosure(Media* medium,
+                 Float max_t)
+        : medium(medium),
+          max_t(max_t),
+          sampled_t(max_t) { }
+
+    bool handleScatter()
+    {
+        return sampled_t < max_t;
+    }
+
+    // input
+    Media* medium;
+    Float max_t;
+
+    // output
+    Float sampled_t;
+};

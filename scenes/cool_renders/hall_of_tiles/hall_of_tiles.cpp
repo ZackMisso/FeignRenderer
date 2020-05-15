@@ -35,7 +35,7 @@ void HallOfTiles::initialize_materials(int frame)
                                "simple",
                                &mirror_mat_params);
 
-    Diffuse::Params dark_diffuse_bsdf(Color3f(0.3f, 0.3f, 0.3f));
+    Diffuse::Params dark_diffuse_bsdf(Color3f(0.5f, 0.5f, 0.5f));
     Mirror::Params mirror_bsdf(Color3f(1.f));
 
     FeignRenderer::fr_bsdf("dark_diffuse_bsdf",
@@ -45,42 +45,6 @@ void HallOfTiles::initialize_materials(int frame)
     FeignRenderer::fr_bsdf("mirror_bsdf",
                            "mirror",
                            &mirror_bsdf);
-
-    // Float proxy = 0.34f;
-    //
-    // if (frame >= 100)
-    // {
-    //     proxy = (1.f - interp_value(frame - 100, 310)) * 0.34 + 0.01;
-    // }
-    //
-    // WireframeMaterialShader::Params shad_params("wireframe_mat", "mesh_mat", proxy);
-    //
-    // FeignRenderer::fr_shader("wireframe_mat_shad",
-    //                          "wireframe",
-    //                          &shad_params);
-    //
-    // SimpleMaterial::Params wireframe_mat_params("wireframe_bsdf");
-    // SimpleMaterial::Params mesh_mat_params("mesh_bsdf");
-    //
-    // FeignRenderer::fr_material("wireframe_mat",
-    //                            "simple",
-    //                            &wireframe_mat_params);
-    //
-    // FeignRenderer::fr_material("mesh_mat",
-    //                           "simple",
-    //                           &mesh_mat_params);
-    //
-    // Diffuse::Params wireframe_bsdf_params(Color3f(0.9f, 0.1f, 0.1f));
-    //
-    // FeignRenderer::fr_bsdf("wireframe_bsdf",
-    //                        "diffuse",
-    //                        &wireframe_bsdf_params);
-    //
-    // Diffuse::Params mesh_bsdf_params(Color3f(0.02f, 0.02f, 0.02f));
-    //
-    // FeignRenderer::fr_bsdf("mesh_bsdf",
-    //                        "diffuse",
-    //                        &mesh_bsdf_params);
 }
 
 void HallOfTiles::initialize_hallway(int frame)
@@ -316,8 +280,12 @@ void HallOfTiles::initialize_hallway(int frame)
 
 void HallOfTiles::initialize_camera(int frame)
 {
-    Perspective::Params cam_params(Vector3f(0.0, -0.2, 0.0),
-                                   Vector3f(0.0, -0.2, 1.0),
+    Perspective::Params cam_params(Vector3f(0.0 + 0.45 * cos(0.04f * frame),
+                                            -0.2 - 0.3 * std::abs(cos(0.04f * frame)),
+                                            0.0 + 0.1 * float(frame)),
+                                   Vector3f(0.0 + 0.45 * cos(0.04f * frame),
+                                            -0.2 - 0.3 * std::abs(cos(0.04f * frame)),
+                                            1.0 + 0.1 * float(frame)),
                                    Vector3f(0, 1, 0),
                                    50.f,
                                    1e-4f,
@@ -338,32 +306,43 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
     snprintf(str, 5, "%04d", frame);
     std::string name = test_name + "_" + std::string(str);
 
+    LOG("initializing");
     FeignRenderer::initialize();
 
+    LOG("scene");
     FeignRenderer::fr_scene(name,
                             "integrator",
                             "sampler",
                             "camera",
-                            "",
+                            "env_medium",
                             false);
 
+    LOG("light accel");
     SpatialLightAccel::Params light_accel_params(1, 1, 10);
 
     FeignRenderer::fr_accel("light_accel",
                             "light_spatial",
                             &light_accel_params);
 
-    Integrator::Params int_params(256,
-                                  256,
+    LOG("media");
+    HomogeneousAbsorbingMedia::Params media_params(0.02);
+    FeignRenderer::fr_media("env_medium",
+                            "homo_abs",
+                            &media_params);
+
+    Integrator::Params int_params(512,
+                                  512,
                                   test_name + "/");
 
+    LOG("integrator");
     FeignRenderer::fr_integrator("integrator",
-                                 "path",
+                                 "volpath",
                                  "default",
                                  &int_params);
 
     Independent::Params samp_params(1024, 0x12345);
 
+    LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
                               "independent",
                               &samp_params);
@@ -393,31 +372,37 @@ void HallOfTiles::run()
     std::string mkdir_command = "mkdir " + test_name + "/";
     std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
 
-    system(rm_command.c_str());
-    system(mkdir_command.c_str());
+    // system(rm_command.c_str());
+    // system(mkdir_command.c_str());
 
-    int start_frame = 1;
-    int end_frame = 2;
+    int start_frame = 0;
+    int end_frame = 400;
 
-    for (int frame = start_frame; frame < end_frame; frame++)
-    {
-        // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
-        // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));
+    // for (int frame = start_frame; frame < end_frame; frame++)
+    // {
+    //     LOG("Rendering Frame: " + std::to_string(frame));
+    //     // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
+    //     // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));
+    //
+    //     LOG("initializing base structs");
+    //     initialize_base_structs(test_name, frame);
+    //
+    //     LOG("initislizing camera");
+    //     initialize_camera(frame);
+    //
+    //     LOG("initializing hallway");
+    //     initialize_hallway(frame);
+    //
+    //     LOG("initializing the materials");
+    //     initialize_materials(frame);
+    //
+    //     LOG("initializing lighting");
+    //     initialize_lighting(frame);
+    //
+    //     LOG("rendering frame: " + std::to_string(frame));
+    //
+    //     flush_render();
+    // }
 
-        initialize_base_structs(test_name, frame);
-
-        initialize_camera(frame);
-
-        initialize_hallway(frame);
-
-        initialize_materials(frame);
-
-        initialize_lighting(frame);
-
-        LOG("rendering frame: " + std::to_string(frame));
-
-        flush_render();
-    }
-
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
 }

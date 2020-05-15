@@ -73,6 +73,7 @@ bool UnitTestManager::run_all_tests()
     // TODO: make this multithreaded
     for (int i = 0; i < paths.size(); ++i)
     {
+        LOG("RUNNING TEST: " + std::to_string(i));
         UnitTestData testLog = UnitTestData(paths[i]);
 
         if (reference_run)

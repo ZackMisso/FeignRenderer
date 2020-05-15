@@ -34,7 +34,8 @@ Ray3f::Ray3f(Point3f o, Vector3f d) : origin(o), dir(d)
 
 Ray3f::Ray3f(Point3f o, Vector3f d, Float n, Float f, uint32_t depth)
     : origin(o), dir(d), near(n), far(f), depth(depth)
-{ }
+{
+}
 
 Ray3f::Ray3f(const Ray3f& other)
 {

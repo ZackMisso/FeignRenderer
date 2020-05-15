@@ -1,5 +1,7 @@
 TODO notes:
 
+create a way of telling feign to save the scene graph to a file
+    after every render to quickly recreate renders after making changes.
 need to add namespace parameters
 need to write a blender scene file to feign scene file parser
 really need to make that 3D editor

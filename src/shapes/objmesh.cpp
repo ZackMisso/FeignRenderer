@@ -281,7 +281,6 @@ Point3f ObjMesh::compute_centroid() const
 
 Point3f ObjMesh::centroid() const
 {
-    LOG("inside centroid");
     return center;
 }
 
