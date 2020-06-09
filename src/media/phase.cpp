@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/media/phase/phase.h>
+#include <feign/media/phase.h>
 
 PhaseFunction::PhaseFunction()
 {

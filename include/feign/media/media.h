@@ -11,6 +11,10 @@
 #include <feign/core/node.h>
 #include <feign/core/sampler.h>
 #include <feign/math/ray.h>
+#include <feign/media/density_func.h>
+#include <feign/media/phase.h>
+#include <feign/media/sampling.h>
+#include <feign/media/trans_est.h>
 
 class MediaClosure;
 
@@ -29,6 +33,36 @@ public:
                                 Float max_t) const = 0;
 
     virtual bool isGlobal() const { return false; }
+};
+
+// a generalized medium class to avoid writing all these extensions
+class StandardMedium
+{
+public:
+    StandardMedium();
+    StandardMedium(DensityFunction* density,
+                   MediumSampling* sampling,
+                   PhaseFunction* phase,
+                   TransmittanceEstimator* trans_est,
+                   Color3f abs,
+                   Color3f sca);
+
+    virtual Float sample(Ray3f ray,
+                        Sampler* sampler,
+                        MediaClosure& closure) const = 0;
+
+    virtual Float transmittance(Ray3f ray,
+                               Float min_t,
+                               Float max_t) const = 0;
+
+    virtual bool isGlobal() const { return false; }
+
+    DensityFunction* density;
+    MediumSampling* sampling;
+    PhaseFunction* phase;
+    TransmittanceEstimator* trans_est;
+    Color3f abs_coeff;
+    Color3f sca_coeff;
 };
 
 class HomogeneousAbsorbingMedia : public Media

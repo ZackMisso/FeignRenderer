@@ -22,7 +22,10 @@
 
 // media includes
 #include <feign/media/media.h>
-#include <feign/media/phase/phase.h>
+#include <feign/media/phase.h>
+#include <feign/media/density_func.h>
+#include <feign/media/sampling.h>
+#include <feign/media/trans_est.h>
 
 // shapes
 #include <feign/shapes/objmesh.h>

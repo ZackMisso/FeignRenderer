@@ -124,12 +124,10 @@ add_executable(feign
 
     # Media header files
     include/feign/media/media.h
-
-    # Media Density header files
-    include/feign/media/density/density_func.h
-
-    # Media Transmittance Estimator header files
-    include/feign/media/trans_ests/trans_est.h
+    include/feign/media/density_func.h
+    include/feign/media/phase.h
+    include/feign/media/sampling.h
+    include/feign/media/trans_est.h
 
     # Misc header files
     include/feign/misc/intersection.h
@@ -137,9 +135,6 @@ add_executable(feign
 
     # Parser header files
     include/feign/parser/json_parser.h
-
-    # Phase Function header files
-    include/feign/media/phase/phase.h
 
     # Shapes header files
     include/feign/shapes/objmesh.h
@@ -221,13 +216,7 @@ add_executable(feign
     # Media implementation files
     src/media/media.cpp
     src/media/homo_abs.cpp
-
-    # Media Density implementation files
-
-    # Media Transmittance Estimator implementation files
-
-    # Phase Function implementation files
-    src/media/phase/phase.cpp
+    src/media/phase.cpp
 
     # Misc implementation files
     src/misc/intersection.cpp
