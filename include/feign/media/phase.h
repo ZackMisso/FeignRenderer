@@ -20,3 +20,19 @@ public:
 
     // TODO
 };
+
+/////////////////////////////////////////////////
+// PhaseFunction Node structure
+/////////////////////////////////////////////////
+struct PhaseFunctionNode : public Node
+{
+public:
+    PhaseFunctionNode() : phase(nullptr) { }
+    PhaseFunctionNode(std::string name) : Node(name), phase(nullptr) { }
+    PhaseFunctionNode(PhaseFunction* phase) : phase(phase) { }
+
+    ~PhaseFunctionNode() { delete phase; }
+
+    PhaseFunction* phase;
+};
+/////////////////////////////////////////////////

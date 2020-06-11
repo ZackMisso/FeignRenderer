@@ -8,13 +8,14 @@
 
 #pragma once
 
-#include <feign/common.h>
+#include <feign/core/node.h>
 
 // should this have access to the media closure???
 
 class MediumSampling
 {
 public:
+    virtual ~MediumSampling() { }
     // virtual Float sample(Ray3f ray,
     //                      Sampler* sampler,
     //                      MediaClosure& closure) const = 0;
@@ -50,3 +51,19 @@ class Equidistant_Sampling : public MediumSampling
     //     return 0.f;
     // }
 };
+
+/////////////////////////////////////////////////
+// MediumSampling Node structure
+/////////////////////////////////////////////////
+struct MediumSamplingNode : public Node
+{
+public:
+    MediumSamplingNode() : sampling(nullptr) { }
+    MediumSamplingNode(std::string name) : Node(name), sampling(nullptr) { }
+    MediumSamplingNode(MediumSampling* sampling) : sampling(sampling) { }
+
+    ~MediumSamplingNode() { delete sampling; }
+
+    MediumSampling* sampling;
+};
+/////////////////////////////////////////////////

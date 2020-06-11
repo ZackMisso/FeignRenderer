@@ -217,6 +217,10 @@ add_executable(feign
     src/media/media.cpp
     src/media/homo_abs.cpp
     src/media/phase.cpp
+    src/media/standard.cpp
+    src/media/trans_ests/delta.cpp
+    src/media/trans_ests/pseries_cmf.cpp
+    src/media/trans_ests/ratio.cpp
 
     # Misc implementation files
     src/misc/intersection.cpp

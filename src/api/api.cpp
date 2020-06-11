@@ -52,6 +52,10 @@ FeignRenderer::FeignRenderer(Imagef* target)
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode*>();
     material_shaders = std::unordered_map<std::string, MaterialShaderNode*>();
     textures = std::unordered_map<std::string, TextureNode*>();
+    density_funcs = std::unordered_map<std::string, DensityFunctionNode*>();
+    phase_funcs = std::unordered_map<std::string, PhaseFunctionNode*>();
+    medium_samplings = std::unordered_map<std::string, MediumSamplingNode*>();
+    trans_ests = std::unordered_map<std::string, TransmittanceEstimatorNode*>();
 
     bsdfs.clear();
     cameras.clear();
@@ -66,6 +70,10 @@ FeignRenderer::FeignRenderer(Imagef* target)
     geom_shaders.clear();
     material_shaders.clear();
     textures.clear();
+    density_funcs.clear();
+    phase_funcs.clear();
+    medium_samplings.clear();
+    trans_ests.clear();
 
     current_transform = Transform();
     scene = nullptr;
@@ -81,9 +89,7 @@ FeignRenderer::~FeignRenderer()
     for (auto it : bsdfs) delete it.second;
     for (auto it : cameras) delete it.second;
     for (auto it : emitters) delete it.second;
-    LOG("deleting medias");
     for (auto it : medias) delete it.second;
-    LOG("deleting integrators");
     for (auto it : integrators) delete it.second;
     for (auto it : samplers) delete it.second;
     for (auto it : filters) delete it.second;
@@ -93,6 +99,10 @@ FeignRenderer::~FeignRenderer()
     for (auto it : geom_shaders) delete it.second;
     for (auto it : material_shaders) delete it.second;
     for (auto it : textures) delete it.second;
+    for (auto it : density_funcs) delete it.second;
+    for (auto it : phase_funcs) delete it.second;
+    for (auto it : medium_samplings) delete it.second;
+    for (auto it : trans_ests) delete it.second;
 
     delete scene;
     scene = nullptr;
@@ -111,6 +121,10 @@ FeignRenderer::~FeignRenderer()
     geom_shaders.clear();
     textures.clear();
     material_shaders.clear();
+    density_funcs.clear();
+    phase_funcs.clear();
+    medium_samplings.clear();
+    trans_ests.clear();
 }
 
 void FeignRenderer::initialize(Imagef* image)
@@ -336,6 +350,78 @@ TextureNode* FeignRenderer::find_texture(std::string name)
     {
         TextureNode* node = new TextureNode(name);
         textures.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+DensityFunctionNode* FeignRenderer::find_density_func(std::string name)
+{
+    if (name == "") return nullptr;
+
+    std::unordered_map<std::string, DensityFunctionNode*>::const_iterator itr = density_funcs.find(name);
+
+    if (itr == density_funcs.end())
+    {
+        DensityFunctionNode* node = new DensityFunctionNode(name);
+        density_funcs.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+PhaseFunctionNode* FeignRenderer::find_phase_func(std::string name)
+{
+    if (name == "") return nullptr;
+
+    std::unordered_map<std::string, PhaseFunctionNode*>::const_iterator itr = phase_funcs.find(name);
+
+    if (itr == phase_funcs.end())
+    {
+        PhaseFunctionNode* node = new PhaseFunctionNode(name);
+        phase_funcs.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+MediumSamplingNode* FeignRenderer::find_medium_sampling(std::string name)
+{
+    if (name == "") return nullptr;
+
+    std::unordered_map<std::string, MediumSamplingNode*>::const_iterator itr = medium_samplings.find(name);
+
+    if (itr == medium_samplings.end())
+    {
+        MediumSamplingNode* node = new MediumSamplingNode(name);
+        medium_samplings.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+TransmittanceEstimatorNode* FeignRenderer::find_transmittance_estimator(std::string name)
+{
+    if (name == "") return nullptr;
+
+    std::unordered_map<std::string, TransmittanceEstimatorNode*>::const_iterator itr = trans_ests.find(name);
+
+    if (itr == trans_ests.end())
+    {
+        TransmittanceEstimatorNode* node = new TransmittanceEstimatorNode(name);
+        trans_ests.insert({name, node});
         return node;
     }
     else
@@ -756,10 +842,91 @@ void FeignRenderer::fr_media(std::string name,
 
         medium->media = new HomogeneousAbsorbingMedia(params->avg_density);
     }
+    else if (type == "standard")
+    {
+        medium->media = new StandardMedium((StandardMedium::Params*)medium_data);
+    }
     else
     {
         throw new NotImplementedException("medium type not recognized: " + type);
     }
+}
+
+void FeignRenderer::fr_medium_density(std::string name,
+                                      std::string type,
+                                      void* density_data)
+{
+    DensityFunctionNode* density_func = getInstance()->find_density_func(name);
+
+    if (density_func->density)
+    {
+        throw new FeignRendererException("density function already defined");
+    }
+
+    if (type == "constant")
+    {
+        // TODO
+        throw new NotImplementedException("api constant density");
+    }
+    else if (type == "openvdb")
+    {
+        // TODO
+        throw new NotImplementedException("api openvdb density");
+    }
+    else if (type == "noise")
+    {
+        // TODO
+        throw new NotImplementedException("api noise denstiy");
+    }
+    else
+    {
+        throw new NotImplementedException("medium density not recognized: " + type);
+    }
+}
+
+void FeignRenderer::fr_medium_phase(std::string name,
+                                    std::string type,
+                                    void* phase_data)
+{
+    // TODO
+
+    throw new NotImplementedException("medium phase type not recognized: " + type);
+}
+
+void FeignRenderer::fr_medium_sampling(std::string name,
+                                       std::string type,
+                                       void* sample_data)
+{
+    MediumSamplingNode* medium_sampling = getInstance()->find_medium_sampling(name);
+
+    if (medium_sampling->sampling)
+    {
+        throw new FeignRendererException("medium sampling already defined");
+    }
+
+    if (type == "delta")
+    {
+        // TODO
+        throw new NotImplementedException("api delta sampling");
+    }
+    else if (type == "equi")
+    {
+        // TODO
+        throw new NotImplementedException("api equi sampling");
+    }
+    else
+    {
+        throw new NotImplementedException("medium sampling not recognized: " + type);
+    }
+}
+
+void FeignRenderer::fr_medium_transmittance(std::string name,
+                                            std::string type,
+                                            void* trans_est_data)
+{
+    // TODO
+
+    throw new NotImplementedException("medium transmittance type not recognized: " + type);
 }
 
 void FeignRenderer::fr_emitter(std::string name,

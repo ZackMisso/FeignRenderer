@@ -8,19 +8,21 @@
 
 #pragma once
 
-#include <feign/common.h>
+#include <feign/core/node.h>
 
 class DensityFunction
 {
+public:
+    virtual ~DensityFunction() { }
     virtual Float D(const Point3f& p) const = 0;
     virtual Color3f SpectralD(const Point3f& p) const = 0;
 };
 
-class HomogeneousDensity : public DensityFunction
+class ConstantDensity : public DensityFunction
 {
 public:
-    HomogeneousDensity(Color3f density) : density(density) { }
-    HomogeneousDensity(Float density_val) : density(Color3f(density_val)) { }
+    ConstantDensity(Color3f density) : density(density) { }
+    ConstantDensity(Float density_val) : density(Color3f(density_val)) { }
 
     virtual Float D(const Point3f& p) const
     {
@@ -77,3 +79,19 @@ public:
         return Color3f(0.f);
     }
 };
+
+/////////////////////////////////////////////////
+// DensityFunction Node structure
+/////////////////////////////////////////////////
+struct DensityFunctionNode : public Node
+{
+public:
+    DensityFunctionNode() : density(nullptr) { }
+    DensityFunctionNode(std::string name) : Node(name), density(nullptr) { }
+    DensityFunctionNode(DensityFunction* density) : density(density) { }
+
+    ~DensityFunctionNode() { delete density; }
+
+    DensityFunction* density;
+};
+/////////////////////////////////////////////////

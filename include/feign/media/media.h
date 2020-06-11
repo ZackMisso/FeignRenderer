@@ -36,24 +36,45 @@ public:
 };
 
 // a generalized medium class to avoid writing all these extensions
-class StandardMedium
+class StandardMedium : public Media
 {
 public:
-    StandardMedium();
-    StandardMedium(DensityFunction* density,
-                   MediumSampling* sampling,
-                   PhaseFunction* phase,
-                   TransmittanceEstimator* trans_est,
-                   Color3f abs,
-                   Color3f sca);
+    struct Params
+    {
+    public:
+        Params
+        (
+            TransmittanceEstimatorNode* trans_node,
+            PhaseFunctionNode* phase_node,
+            MediumSamplingNode* sampling_node,
+            DensityFunctionNode* density_func_node,
+            Color3f abs,
+            Color3f scat
+        ) : trans_node(trans_node),
+            phase_node(phase_node),
+            sampling_node(sampling_node),
+            density_func_node(density_func_node),
+            abs(abs),
+            scat(scat) { }
+
+        TransmittanceEstimatorNode* trans_node;
+        PhaseFunctionNode* phase_node;
+        MediumSamplingNode* sampling_node;
+        DensityFunctionNode* density_func_node;
+
+        Color3f abs;
+        Color3f scat;
+    };
+
+    StandardMedium(Params* params);
 
     virtual Float sample(Ray3f ray,
-                        Sampler* sampler,
-                        MediaClosure& closure) const = 0;
+                         Sampler* sampler,
+                         MediaClosure& closure) const;
 
     virtual Float transmittance(Ray3f ray,
                                Float min_t,
-                               Float max_t) const = 0;
+                               Float max_t) const;
 
     virtual bool isGlobal() const { return false; }
 
@@ -92,7 +113,7 @@ public:
 };
 
 /////////////////////////////////////////////////
-// Material Node structure
+// Media Node structure
 /////////////////////////////////////////////////
 struct MediaNode : public Node
 {

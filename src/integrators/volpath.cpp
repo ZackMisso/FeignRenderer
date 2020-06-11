@@ -9,8 +9,7 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 
-// for now this will only support homogeneous global media
-// TODO
+// TODO: for now this will only support homogeneous global media
 
 VolPath_Integrator::VolPath_Integrator(FilterNode* filter,
                                        Integrator::Params* params)

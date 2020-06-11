@@ -60,21 +60,29 @@ public:
     std::unordered_map<std::string, GeometryShaderNode*> geom_shaders;
     std::unordered_map<std::string, MaterialShaderNode*> material_shaders;
     std::unordered_map<std::string, TextureNode*> textures;
+    std::unordered_map<std::string, DensityFunctionNode*> density_funcs;
+    std::unordered_map<std::string, PhaseFunctionNode*> phase_funcs;
+    std::unordered_map<std::string, MediumSamplingNode*> medium_samplings;
+    std::unordered_map<std::string, TransmittanceEstimatorNode*> trans_ests;
 
     // TODO: the find methods should really not be public
-    BSDFNode*           find_bsdf(std::string name);
-    IntegratorNode*     find_integrator(std::string name);
-    CameraNode*         find_camera(std::string name);
-    EmitterNode*        find_emitter(std::string name);
-    MediaNode*          find_media(std::string name);
-    SamplerNode*        find_sampler(std::string name);
-    FilterNode*         find_filter(std::string name);
-    MaterialNode*       find_material(std::string name);
-    ObjectNode*         find_object(std::string name);
-    MeshNode*           find_mesh(std::string name);
-    GeometryShaderNode* find_geometry_shader(std::string name);
-    MaterialShaderNode* find_material_shader(std::string name);
-    TextureNode*        find_texture(std::string name);
+    BSDFNode*                   find_bsdf(std::string name);
+    IntegratorNode*             find_integrator(std::string name);
+    CameraNode*                 find_camera(std::string name);
+    EmitterNode*                find_emitter(std::string name);
+    MediaNode*                  find_media(std::string name);
+    SamplerNode*                find_sampler(std::string name);
+    FilterNode*                 find_filter(std::string name);
+    MaterialNode*               find_material(std::string name);
+    ObjectNode*                 find_object(std::string name);
+    MeshNode*                   find_mesh(std::string name);
+    GeometryShaderNode*         find_geometry_shader(std::string name);
+    MaterialShaderNode*         find_material_shader(std::string name);
+    TextureNode*                find_texture(std::string name);
+    DensityFunctionNode*        find_density_func(std::string name);
+    PhaseFunctionNode*          find_phase_func(std::string name);
+    MediumSamplingNode*         find_medium_sampling(std::string name);
+    TransmittanceEstimatorNode* find_transmittance_estimator(std::string name);
 
     // if image_target is specified, the renderer will render to the
     // image, otherwise it will output to a file
@@ -124,6 +132,22 @@ public:
     static void fr_media(std::string name,
                          std::string type,
                          void* shader_data);
+
+    static void fr_medium_density(std::string name,
+                                  std::string type,
+                                  void* density_data);
+
+    static void fr_medium_phase(std::string name,
+                                std::string type,
+                                void* phase_data);
+
+    static void fr_medium_sampling(std::string name,
+                                   std::string type,
+                                   void* sample_data);
+
+    static void fr_medium_transmittance(std::string name,
+                                        std::string type,
+                                        void* trans_est_data);
 
     static void fr_emitter(std::string name,
                            std::string type,
