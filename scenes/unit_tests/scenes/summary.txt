@@ -132,3 +132,7 @@ test_027
 
 This scene tests the cone sdf by rendering surface normals with a plane and
 cone object
+
+test_028
+
+This scene tests rendering a homogeneous fully absorbing sphere medium 

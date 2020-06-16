@@ -844,7 +844,25 @@ void FeignRenderer::fr_media(std::string name,
     }
     else if (type == "standard")
     {
-        medium->media = new StandardMedium((StandardMedium::Params*)medium_data);
+        StandardMedium::Params* params =
+            (StandardMedium::Params*)medium_data;
+
+        TransmittanceEstimatorNode* trans_node =
+            getInstance()->find_transmittance_estimator(params->trans_node);
+        PhaseFunctionNode* phase_node =
+            getInstance()->find_phase_func(params->phase_node);
+        MediumSamplingNode* med_samp_node =
+            getInstance()->find_medium_sampling(params->sampling_node);
+        DensityFunctionNode* density_node =
+            getInstance()->find_density_func(params->density_func_node);
+
+        medium->media = new StandardMedium(trans_node,
+                                           phase_node,
+                                           med_samp_node,
+                                           density_node,
+                                           params->transform,
+                                           params->abs,
+                                           params->scat);
     }
     else
     {
@@ -877,6 +895,11 @@ void FeignRenderer::fr_medium_density(std::string name,
     {
         // TODO
         throw new NotImplementedException("api noise denstiy");
+    }
+    else if (type == "sphere")
+    {
+        SphereDensity::Params* params = (SphereDensity::Params*)density_data;
+        density_func->density = new SphereDensity(params);
     }
     else
     {
@@ -914,6 +937,10 @@ void FeignRenderer::fr_medium_sampling(std::string name,
         // TODO
         throw new NotImplementedException("api equi sampling");
     }
+    else if (type == "analytic")
+    {
+        medium_sampling->sampling = new AnalyticalTrans_Samp();
+    }
     else
     {
         throw new NotImplementedException("medium sampling not recognized: " + type);
@@ -924,9 +951,33 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
                                             std::string type,
                                             void* trans_est_data)
 {
-    // TODO
+    TransmittanceEstimatorNode* trans_est = getInstance()->find_transmittance_estimator(name);
 
-    throw new NotImplementedException("medium transmittance type not recognized: " + type);
+    if (trans_est->trans_est)
+    {
+        throw new FeignRendererException("transmittance estimator already defined");
+    }
+
+    if (type == "homo")
+    {
+        trans_est->trans_est = new Trans_Homogenous();
+    }
+    else if (type == "delta")
+    {
+        trans_est->trans_est = new Trans_DeltaTracking();
+    }
+    else if (type == "ratio")
+    {
+        trans_est->trans_est = new Trans_RatioTracking();
+    }
+    else if (type == "pseries")
+    {
+        trans_est->trans_est = new Trans_PseriesCMF();
+    }
+    else
+    {
+        throw new NotImplementedException("transmittance estimator not recognized: " + type);
+    }
 }
 
 void FeignRenderer::fr_emitter(std::string name,

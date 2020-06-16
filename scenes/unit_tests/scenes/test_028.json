@@ -1,0 +1,139 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "medium": "sphere_medium"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "volpath",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 32
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -6.56055,
+            4.75762,
+            2.43583,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "media": {
+        "name": "sphere_medium",
+        "type": "standard"
+        "density": "sphere_density",
+    },
+    "media_density": {
+        "name": "sphere_density",
+        "type": "sphere"
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane",
+        "material_shader": "floor_shader",
+        "scale": [
+            100.0,
+            1.0,
+            100.0
+        ]
+    },
+    "shader": {
+        "name": "floor_shader",
+        "type": "simple_material",
+        "material": "floor_material"
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "material": "diffuse_material"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "translate": [
+            0.0,
+            1.0,
+            0.0
+        ]
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "material": {
+        "name": "diffuse_material",
+        "type": "simple",
+        "bsdf": "diffuse_bsdf"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "dielectric",
+        "int_ior": 1.5,
+        "ext_ior": 1.0
+    },
+    "material": {
+        "name": "floor_material",
+        "type": "simple",
+        "bsdf": "floor_bsdf"
+    },
+    "bsdf": {
+        "name": "floor_bsdf",
+        "type": "diffuse"
+    },
+    "emitter": {
+        "name": "point_emitter",
+        "type": "point",
+        "intensity": [
+            400.0,
+            300.0,
+            200.0
+        ],
+        "position": [
+            -8,
+            8,
+            -1
+        ]
+    },
+    "emitter": {
+        "name": "point_emitter2",
+        "type": "point",
+        "intensity": [
+            225.0,
+            300.0,
+            375.0
+        ],
+        "position": [
+            -2,
+            4,
+            2
+        ]
+    }
+}

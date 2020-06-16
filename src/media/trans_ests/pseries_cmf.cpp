@@ -1,9 +1,9 @@
 #include <feign/media/trans_est.h>
 
-Float Trans_PseriesCMF::Tr(const Ray3f& ray,
-                           Sampler* sampler,
-                           Float tMin,
-                           Float tMax) const
+Float Trans_PseriesCMF::transmittance(const Ray3f& ray,
+                                      Sampler* sampler,
+                                      Float tMin,
+                                      Float tMax) const
 {
     throw new NotImplementedException("delta tracking tr");
 
@@ -12,10 +12,10 @@ Float Trans_PseriesCMF::Tr(const Ray3f& ray,
     return 0.f;
 }
 
-Color3f Trans_PseriesCMF::SpectralTr(const Ray3f& ray,
-                                     Sampler* sampler,
-                                     Float tMin,
-                                     Float tMax) const
+Color3f Trans_PseriesCMF::spectral_transmittance(const Ray3f& ray,
+                                                 Sampler* sampler,
+                                                 Float tMin,
+                                                 Float tMax) const
 {
     throw new NotImplementedException("delta tracking spectral tr");
 

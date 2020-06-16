@@ -16,40 +16,82 @@ class MediumSampling
 {
 public:
     virtual ~MediumSampling() { }
-    // virtual Float sample(Ray3f ray,
-    //                      Sampler* sampler,
-    //                      MediaClosure& closure) const = 0;
+    virtual Float sample(Ray3f ray,
+                         Sampler* sampler,
+                         Float& t,
+                         Float min_t,
+                         Float max_t) const = 0;
+
+    DensityFunction* density;
+};
+
+// TODO: should ray marching be its own medium implementation???
+class Ray_Marching_Samp : public MediumSampling
+{
+    Ray_Marching_Samp() { }
+
+    virtual Float sample(Ray3f ray,
+                         Sampler* sampler,
+                         Float& t,
+                         Float min_t,
+                         Float max_t) const = 0;
+};
+
+// this assumes the medium is fully homogeneous
+class AnalyticalTrans_Samp : public MediumSampling
+{
+public:
+    AnalyticalTrans_Samp() { }
+
+    virtual Float sample(Ray3f ray,
+                         Sampler* sampler,
+                         Float& t,
+                         Float min_t,
+                         Float max_t) const
+    {
+        Float transmittance = sampler->next1D();
+        Float goal_dens = -log(transmittance);
+
+        Float dense = density->D(ray((max_t + min_t) / 2.f + min_t));
+        Float dist = goal_dens / dense;
+        t = min_t + dist;
+
+        return 1.f;
+    }
 };
 
 class Delta_Tracking : public MediumSampling
 {
 public:
-    Delta_Tracking();
+    Delta_Tracking() { }
 
-    // virtual Float sample(Ray3f ray,
-    //                      Sampler* sampler,
-    //                      MediaClosure& closure) const
-    // {
-    //     throw new NotImplementedException("delta tracking sampler");
-    //     // TODO
-    //     return 0.f;
-    // }
-
-    DensityFunction* density_ref;
+    virtual Float sample(Ray3f ray,
+                         Sampler* sampler,
+                         Float& t,
+                         Float min_t,
+                         Float max_t) const
+    {
+        throw new NotImplementedException("delta tracking sampler");
+        // TODO
+        return 0.f;
+    }
 };
 
 class Equidistant_Sampling : public MediumSampling
 {
-    Equidistant_Sampling();
+public:
+    Equidistant_Sampling() { }
 
-    // virtual Float sample(Ray3f ray,
-    //                      Sampler* sampler,
-    //                      MediaClosure& closure) const
-    // {
-    //     throw new NotImplementedException("equi-distant sampler");
-    //     // TODO
-    //     return 0.f;
-    // }
+    virtual Float sample(Ray3f ray,
+                         Sampler* sampler,
+                         Float& t,
+                         Float min_t,
+                         Float max_t) const
+    {
+        throw new NotImplementedException("equi-distant sampler");
+        // TODO
+        return 0.f;
+    }
 };
 
 /////////////////////////////////////////////////

@@ -30,60 +30,81 @@ public:
 
     TransmittanceEstimator(DensityFunction* density) : density(density) { }
 
-    virtual Float Tr(const Ray3f& ray,
-                     Sampler* sampler,
-                     Float tMin,
-                     Float tMax) const = 0;
+    virtual Float transmittance(const Ray3f& ray,
+                                Sampler* sampler,
+                                Float tMin,
+                                Float tMax) const = 0;
 
-    virtual Color3f SpectralTr(const Ray3f& ray,
-                               Sampler* sampler,
-                               Float tMin,
-                               Float tMax) const = 0;
+    virtual Color3f spectral_transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const = 0;
 
-protected:
     DensityFunction* density;
+};
+
+class Trans_Homogenous : public TransmittanceEstimator
+{
+public:
+    virtual Float transmittance(const Ray3f& ray,
+                                Sampler* sampler,
+                                Float tMin,
+                                Float tMax) const
+    {
+        return exp(-(tMax-tMin) *
+               density->D(ray((tMax-tMin / 2.f) + tMin)));
+    }
+
+    virtual Color3f spectral_transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const
+    {
+        return exp(-(tMax-tMin) *
+               density->D(ray((tMax-tMin / 2.f) + tMin)));
+    }
 };
 
 class Trans_DeltaTracking : public TransmittanceEstimator
 {
 public:
-    virtual Float Tr(const Ray3f& ray,
-                     Sampler* sampler,
-                     Float tMin,
-                     Float tMax) const;
+    virtual Float transmittance(const Ray3f& ray,
+                                Sampler* sampler,
+                                Float tMin,
+                                Float tMax) const;
 
-    virtual Color3f SpectralTr(const Ray3f& ray,
-                               Sampler* sampler,
-                               Float tMin,
-                               Float tMax) const;
+    virtual Color3f spectral_transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const;
 };
 
 class Trans_RatioTracking : public TransmittanceEstimator
 {
 public:
-    virtual Float Tr(const Ray3f& ray,
-                     Sampler* sampler,
-                     Float tMin,
-                     Float tMax) const;
+    virtual Float transmittance(const Ray3f& ray,
+                                Sampler* sampler,
+                                Float tMin,
+                                Float tMax) const;
 
-    virtual Color3f SpectralTr(const Ray3f& ray,
-                               Sampler* sampler,
-                               Float tMin,
-                               Float tMax) const;
+    virtual Color3f spectral_transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const;
 };
 
 class Trans_PseriesCMF : public TransmittanceEstimator
 {
 public:
-    virtual Float Tr(const Ray3f& ray,
-                     Sampler* sampler,
-                     Float tMin,
-                     Float tMax) const;
+    virtual Float transmittance(const Ray3f& ray,
+                                Sampler* sampler,
+                                Float tMin,
+                                Float tMax) const;
 
-    virtual Color3f SpectralTr(const Ray3f& ray,
-                               Sampler* sampler,
-                               Float tMin,
-                               Float tMax) const;
+    virtual Color3f spectral_transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const;
 };
 
 /////////////////////////////////////////////////

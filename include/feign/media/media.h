@@ -11,6 +11,7 @@
 #include <feign/core/node.h>
 #include <feign/core/sampler.h>
 #include <feign/math/ray.h>
+#include <feign/math/transform.h>
 #include <feign/media/density_func.h>
 #include <feign/media/phase.h>
 #include <feign/media/sampling.h>
@@ -29,8 +30,7 @@ public:
                          MediaClosure& closure) const = 0;
 
     virtual Float transmittance(Ray3f ray,
-                                Float min_t,
-                                Float max_t) const = 0;
+                                Sampler* sampler) const = 0;
 
     virtual bool isGlobal() const { return false; }
 };
@@ -44,37 +44,44 @@ public:
     public:
         Params
         (
-            TransmittanceEstimatorNode* trans_node,
-            PhaseFunctionNode* phase_node,
-            MediumSamplingNode* sampling_node,
-            DensityFunctionNode* density_func_node,
+            std::string trans_node,
+            std::string phase_node,
+            std::string sampling_node,
+            std::string density_func_node,
+            Transform& transform,
             Color3f abs,
             Color3f scat
         ) : trans_node(trans_node),
             phase_node(phase_node),
             sampling_node(sampling_node),
             density_func_node(density_func_node),
+            transform(transform),
             abs(abs),
             scat(scat) { }
 
-        TransmittanceEstimatorNode* trans_node;
-        PhaseFunctionNode* phase_node;
-        MediumSamplingNode* sampling_node;
-        DensityFunctionNode* density_func_node;
-
+        std::string trans_node;
+        std::string phase_node;
+        std::string sampling_node;
+        std::string density_func_node;
+        Transform transform;
         Color3f abs;
         Color3f scat;
     };
 
-    StandardMedium(Params* params);
+    StandardMedium(TransmittanceEstimatorNode* trans_node,
+                   PhaseFunctionNode* phase_node,
+                   MediumSamplingNode* sampling_node,
+                   DensityFunctionNode* density_func_node,
+                   Transform& transform,
+                   Color3f abs,
+                   Color3f scat);
 
     virtual Float sample(Ray3f ray,
                          Sampler* sampler,
                          MediaClosure& closure) const;
 
     virtual Float transmittance(Ray3f ray,
-                               Float min_t,
-                               Float max_t) const;
+                                Sampler* sampler) const;
 
     virtual bool isGlobal() const { return false; }
 
@@ -82,6 +89,7 @@ public:
     MediumSampling* sampling;
     PhaseFunction* phase;
     TransmittanceEstimator* trans_est;
+    Transform transform;
     Color3f abs_coeff;
     Color3f sca_coeff;
 };
@@ -104,8 +112,7 @@ public:
                          MediaClosure& closure) const;
 
     virtual Float transmittance(Ray3f ray,
-                                Float min_t,
-                                Float max_t) const;
+                                Sampler* sampler) const;
 
     virtual bool isGlobal() const;
 

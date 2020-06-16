@@ -80,6 +80,40 @@ public:
     }
 };
 
+// this is just a simple density which is going to be used to test
+class SphereDensity : public DensityFunction
+{
+public:
+    struct Params
+    {
+        Params(Float density, Float radius)
+            : density(density), radius(radius) { }
+        Params(Color3f density, Float radius)
+            : density(density), radius(radius) { }
+
+        Color3f density;
+        Float radius;
+    };
+
+    SphereDensity(Params* params)
+        : density(params->density), radius(params->radius) { }
+
+    virtual Float D(const Point3f& p) const
+    {
+        if (p.sqrNorm() < radius*radius) return density(0);
+        return 0.f;
+    }
+
+    virtual Color3f SpectralD(const Point3f& p) const
+    {
+        if (p.sqrNorm() < radius*radius) return density;
+        return Color3f(0.f);
+    }
+
+    Color3f density;
+    Float radius;
+};
+
 /////////////////////////////////////////////////
 // DensityFunction Node structure
 /////////////////////////////////////////////////

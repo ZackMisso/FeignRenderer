@@ -141,7 +141,81 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 FeignRenderer::fr_media(name, type, &params);
             }
+            else if (type == "standard")
+            {
+                std::string density = "default";
+                std::string sampling = "default";
+                std::string phase = "default";
+                std::string trans_est = "default";
+                Color3f abs = Color3f(1.f);
+                Color3f scat = Color3f(0.f);
+                Transform media_transform = Transform();
+
+                if (value.HasMember("density"))
+                {
+                    density = value["density"].GetString();
+                }
+                if (value.HasMember("sampling"))
+                {
+                    sampling = value["sampling"].GetString();
+                }
+                if (value.HasMember("phase"))
+                {
+                    phase = value["phase"].GetString();
+                }
+                if (value.HasMember("trans_est"))
+                {
+                    trans_est = value["trans_est"].GetString();
+                }
+
+                StandardMedium::Params params(trans_est,
+                                              phase,
+                                              sampling,
+                                              density,
+                                              media_transform,
+                                              abs,
+                                              scat);
+
+                FeignRenderer::fr_media(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " medium can not be parsed through json");
+            }
         }
+        else if (strcmp(itr->name.GetString(), "media_density") == 0)
+        {
+            std::string name = "media_density";
+            std::string type = "sphere";
+
+            const rapidjson::Value& value = itr->value;
+
+            if (type == "sphere")
+            {
+                Float dense = 1.0;
+                Float radius = 1.0;
+
+                if (value.HasMember("density"))
+                {
+                    dense = value["density"].GetFloat();
+                }
+                if (value.HasMember("radius"))
+                {
+                    radius = value["radius"].GetFloat();
+                }
+
+                SphereDensity::Params params(dense, radius);
+
+                FeignRenderer::fr_medium_density(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " medium density can not be parsed through json");
+            }
+        }
+        // TODO media transmittance
+        // TODO media sampling
+        // TODO media phase
         else if (strcmp(itr->name.GetString(), "accel") == 0)
         {
             std::string name = "light_accel";

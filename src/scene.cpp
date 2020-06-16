@@ -42,12 +42,7 @@ Scene::~Scene()
 
 void Scene::preProcess(const GlobalParams& globals)
 {
-    // LOG("debug: " + globals.name);
-    // LOG("global_params.sdf_only: " + std::to_string(globals.sdf_only));
-
     sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
-
-    // LOG("pre ray accel");
 
     if (!ray_accel)
     {
@@ -62,15 +57,10 @@ void Scene::preProcess(const GlobalParams& globals)
 
         ray_accel->preProcess();
     }
-
-    // LOG("pre light accel");
-
     if (!light_selection)
     {
         light_selection = new NaiveLightAccel();
     }
-
-    // LOG("pre ray init");
 
     for (int i = 0; i < shapes.size(); ++i)
     {
@@ -86,11 +76,8 @@ void Scene::preProcess(const GlobalParams& globals)
         sceneBounds.expand(shapes[i]->boundingBox());
     }
 
-    // LOG("pre ray build");
     ray_accel->build();
-    // LOG("pre light build");
     light_selection->build(sceneBounds, emitters);
-    // LOG("post");
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
@@ -215,8 +202,7 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
             if (tmp.medium)
             {
                 transmittance = tmp.medium->transmittance(shadow_ray,
-                                                          shadow_ray.near,
-                                                          shadow_ray.far);
+                                                          closure.sampler);
             }
 
             if (emitter_pdf == 0.f)
@@ -244,18 +230,10 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
     Float choice_pdf;
     int emitter;
 
-    // LOG("pre samp");
-
     light_selection->sampleEmitter(closure.its->p,
                                    closure.sampler,
                                    emitter,
                                    choice_pdf);
-
-    // LOG("post samp");
-
-    // Float choice_pdf = 1.f / Float(emitters.size());
-    //
-    // int emitter = closure.sampler->next1D() * emitters.size();
 
     EmitterQuery eqr(closure.its->p);
     Float emitter_pdf = 0.f;
@@ -281,13 +259,11 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
 
         Float transmittance = 1.f;
-        // LOG("huh");
+
         if (tmp.medium)
         {
             transmittance = tmp.medium->transmittance(shadow_ray,
-                                                      shadow_ray.near,
-                                                      shadow_ray.far);
-            // LOG("transmittance: " + std::to_string(transmittance));
+                                                      closure.sampler);
         }
 
         if (emitter_pdf == 0.f)

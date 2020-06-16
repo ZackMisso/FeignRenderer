@@ -1,40 +1,59 @@
 #include <feign/media/media.h>
 
-StandardMedium::StandardMedium(Params* params)
-    : density(params->density_func_node->density),
-      sampling(params->sampling_node->sampling),
-      phase(params->phase_node->phase),
-      trans_est(params->trans_node->trans_est),
-      abs_coeff(params->abs),
-      sca_coeff(params->scat)
+StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
+                               PhaseFunctionNode* phase_node,
+                               MediumSamplingNode* sampling_node,
+                               DensityFunctionNode* density_func_node,
+                               Transform& transform,
+                               Color3f abs,
+                               Color3f scat)
+    : density(density_func_node->density),
+      sampling(sampling_node->sampling),
+      phase(phase_node->phase),
+      trans_est(trans_node->trans_est),
+      transform(transform),
+      abs_coeff(abs),
+      sca_coeff(scat)
 {
-    // TODO
-    throw new NotImplementedException("standard medium");
+    sampling->density = density;
+    trans_est->density = density;
 }
 
-Float StandardMedium::sample(Ray3f ray,
+Float StandardMedium::sample(Ray3f world_ray,
                              Sampler* sampler,
                              MediaClosure& closure) const
 {
+    const Ray3f ray = transform * world_ray;
+    Float min_t = ray.near;
+    Float max_t = ray.far;
+
     if (sca_coeff == COLOR_BLACK)
     {
-        // figure out min_t and max_t
-        // only return transmittance
-        // return transmittance(ray)
+        return trans_est->transmittance(ray,
+                                        sampler,
+                                        min_t,
+                                        max_t);
     }
 
-    // TODO
+    Float sample_pos;
+    Float samp_val = sampling->sample(ray,
+                                      sampler,
+                                      sample_pos,
+                                      min_t,
+                                      max_t);
 
-    throw new NotImplementedException("sample standard medium");
-    return 0.f;
+    // TODO: set stuff in MediumClosure
+
+    return samp_val;
 }
 
-Float StandardMedium::transmittance(Ray3f ray,
-                                    Float min_t,
-                                    Float max_t) const
+Float StandardMedium::transmittance(Ray3f world_ray,
+                                    Sampler* sampler) const
 {
-    // TODO
+    const Ray3f ray = transform * world_ray;
 
-    throw new NotImplementedException("transmittance standard medium");
-    return 0.f;
+    return trans_est->transmittance(ray,
+                                    sampler,
+                                    ray.near,
+                                    ray.far);
 }
