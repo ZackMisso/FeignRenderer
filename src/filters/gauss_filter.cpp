@@ -30,7 +30,7 @@ void GaussFilter::preProcess()
 
     Float xrad = size[0];
     Float yrad = size[1];
-    std_dev = 0.5;
+    // std_dev = 0.5;
     alpha = -1.0 / (2.0 * std_dev * std_dev);
 
     expCoeff[0] = std::exp(alpha * xrad * xrad);

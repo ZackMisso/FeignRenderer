@@ -44,6 +44,37 @@ public:
         bool verbose;
     };
 
+    struct RenderTile
+    {
+        RenderTile(int min_x, int min_y, int max_x, int max_y)
+            : min_x(min_x),
+              min_y(min_y),
+              max_x(max_x),
+              max_y(max_y)
+        {
+            int size = (max_x - min_x) * (max_y - min_y);
+            pixels = std::vector<Color3f>(size);
+            weights = std::vector<Float>(size);
+        }
+
+        // void render(const Scene* scene,
+        //             const Camera* camera,
+        //             const ReconstructionFilter* filter,
+        //             Sampler* sampler);
+
+        void add_radiance(Color3f rad, int i, int j);
+        void add_weight(Float wei, int i, int j);
+        void finalize(Imagef& image);
+
+        std::vector<Color3f> pixels;
+        std::vector<Float> weights;
+        // this is not inclusive
+        int min_x;
+        int min_y;
+        int max_x;
+        int max_y;
+    };
+
     Integrator(FilterNode* filter,
                Integrator::Params* params)
         : filter(filter),
@@ -61,6 +92,11 @@ public:
                         const Camera* camera,
                         Sampler* sampler,
                         Imagef& image) const;
+
+    virtual void renderTile(const Scene* scene,
+                            const Camera* camera,
+                            Sampler* sampler,
+                            RenderTile& tile) const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,

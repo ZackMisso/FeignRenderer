@@ -100,6 +100,8 @@ public:
 
     virtual Float D(const Point3f& p) const
     {
+        // LOG(std::to_string(density(0)));
+        // LOG("density eval");
         if (p.sqrNorm() < radius*radius) return density(0);
         return 0.f;
     }

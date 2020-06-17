@@ -1,15 +1,32 @@
 #include <feign/media/trans_est.h>
 
+Trans_RatioTracking::Trans_RatioTracking()
+{
+    maj = 1.0;
+}
+
+Trans_RatioTracking::Trans_RatioTracking(Float maj)
+    : maj(maj) { }
+
 Float Trans_RatioTracking::transmittance(const Ray3f& ray,
                                          Sampler* sampler,
                                          Float tMin,
                                          Float tMax) const
 {
-    throw new NotImplementedException("delta tracking tr");
+    Float t = tMin;
+    Float tr = 1.0;
 
-    // TODO
+    while(true)
+    {
+        t -= log(1.f - sampler->next1D()) / maj;
 
-    return 0.f;
+        if (t >= tMax) break;
+
+        Float ext = density->D(ray(t));
+        tr *= (maj - ext) / maj;
+    }
+
+    return tr;
 }
 
 Color3f Trans_RatioTracking::spectral_transmittance(const Ray3f& ray,

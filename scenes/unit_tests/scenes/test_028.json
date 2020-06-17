@@ -14,21 +14,21 @@
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 32
+        "sample_count": 512
     },
     "camera": {
         "name": "camera",
         "type": "perspective",
         "lookat": [
-            -6.56055,
-            4.75762,
-            2.43583,
+            0,
+            8.55,
+            2.75,
             0.0,
-            1.0,
+            0.00,
             0.0,
             0.0,
-            1.0,
-            0.0
+            0.0,
+            1.0
         ],
         "fov": 30.0,
         "width": 256,
@@ -36,8 +36,8 @@
     },
     "media": {
         "name": "sphere_medium",
-        "type": "standard"
-        "density": "sphere_density",
+        "type": "standard",
+        "density": "sphere_density"
     },
     "media_density": {
         "name": "sphere_density",
@@ -67,21 +67,6 @@
         "name": "plane",
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/plane.obj"
-    },
-    "object": {
-        "name": "sphere",
-        "mesh": "sphere_obj",
-        "material_shader": "simple_shader",
-        "scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "translate": [
-            0.0,
-            1.0,
-            0.0
-        ]
     },
     "mesh": {
         "name": "sphere_obj",
@@ -117,9 +102,9 @@
             200.0
         ],
         "position": [
-            -8,
+            0,
             8,
-            -1
+            0
         ]
     },
     "emitter": {
@@ -131,9 +116,9 @@
             375.0
         ],
         "position": [
-            -2,
+            0,
             4,
-            2
+            0
         ]
     }
 }

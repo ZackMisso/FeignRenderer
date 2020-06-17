@@ -51,6 +51,13 @@ public:
                                 Float tMin,
                                 Float tMax) const
     {
+        // Float dense = density->D(ray((tMax-tMin / 2.f) + tMin));
+        // Float trans = exp(-(tMax-tMin) * dense);
+        // LOG(std::to_string(exp(-0)));
+        // LOG("tMax: " + std::to_string(tMax));
+        // LOG("dense: " + std::to_string(dense));
+        // LOG("trans: " + std::to_string(trans));
+        // LOG("eval transmittance");
         return exp(-(tMax-tMin) *
                density->D(ray((tMax-tMin / 2.f) + tMin)));
     }
@@ -82,6 +89,9 @@ public:
 class Trans_RatioTracking : public TransmittanceEstimator
 {
 public:
+    Trans_RatioTracking();
+    Trans_RatioTracking(Float maj);
+
     virtual Float transmittance(const Ray3f& ray,
                                 Sampler* sampler,
                                 Float tMin,
@@ -91,6 +101,8 @@ public:
                                            Sampler* sampler,
                                            Float tMin,
                                            Float tMax) const;
+
+    Float maj;
 };
 
 class Trans_PseriesCMF : public TransmittanceEstimator

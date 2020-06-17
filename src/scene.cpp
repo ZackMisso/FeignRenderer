@@ -81,6 +81,10 @@ void Scene::preProcess(const GlobalParams& globals)
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
+    LOG("preprocessing medium");
+    if (env_medium_node)
+        env_medium_node->media->preProcess();
+    LOG("post preprocess medium");
 
     // TODO: is this really the best place to handle this?
     for (int i = 0; i < objects.size(); ++i)

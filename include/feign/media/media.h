@@ -25,6 +25,8 @@ public:
     Media();
     virtual ~Media();
 
+    virtual void preProcess() { }
+
     virtual Float sample(Ray3f ray,
                          Sampler* sampler,
                          MediaClosure& closure) const = 0;
@@ -76,6 +78,8 @@ public:
                    Color3f abs,
                    Color3f scat);
 
+    virtual void preProcess();
+
     virtual Float sample(Ray3f ray,
                          Sampler* sampler,
                          MediaClosure& closure) const;
@@ -85,10 +89,10 @@ public:
 
     virtual bool isGlobal() const { return false; }
 
-    DensityFunction* density;
-    MediumSampling* sampling;
-    PhaseFunction* phase;
-    TransmittanceEstimator* trans_est;
+    DensityFunctionNode* density;
+    MediumSamplingNode* sampling;
+    PhaseFunctionNode* phase;
+    TransmittanceEstimatorNode* trans_est;
     Transform transform;
     Color3f abs_coeff;
     Color3f sca_coeff;

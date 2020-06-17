@@ -143,6 +143,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             }
             else if (type == "standard")
             {
+                LOG("parsing standard media");
                 std::string density = "default";
                 std::string sampling = "default";
                 std::string phase = "default";
@@ -168,6 +169,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                     trans_est = value["trans_est"].GetString();
                 }
 
+                LOG("WHAT: " + density);
+
                 StandardMedium::Params params(trans_est,
                                               phase,
                                               sampling,
@@ -185,10 +188,20 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
         else if (strcmp(itr->name.GetString(), "media_density") == 0)
         {
+            LOG("parsing media density");
             std::string name = "media_density";
             std::string type = "sphere";
 
             const rapidjson::Value& value = itr->value;
+
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
 
             if (type == "sphere")
             {
@@ -203,6 +216,10 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 {
                     radius = value["radius"].GetFloat();
                 }
+
+                // LOG("WHATWHAT: " + name);
+
+                // assert(false);
 
                 SphereDensity::Params params(dense, radius);
 

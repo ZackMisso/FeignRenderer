@@ -248,8 +248,9 @@ FilterNode* FeignRenderer::find_filter(std::string name)
 
         if (name == "default")
         {
-            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 2.0);
-            node->filter = new BoxFilter();
+            // assert(false);
+            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
+            // node->filter = new BoxFilter();
         }
 
         return node;
@@ -366,12 +367,14 @@ DensityFunctionNode* FeignRenderer::find_density_func(std::string name)
 
     if (itr == density_funcs.end())
     {
+        LOG("did not find");
         DensityFunctionNode* node = new DensityFunctionNode(name);
         density_funcs.insert({name, node});
         return node;
     }
     else
     {
+        LOG("found");
         return itr->second;
     }
 }
@@ -385,6 +388,13 @@ PhaseFunctionNode* FeignRenderer::find_phase_func(std::string name)
     if (itr == phase_funcs.end())
     {
         PhaseFunctionNode* node = new PhaseFunctionNode(name);
+
+        if (name == "default")
+        {
+            // TODO
+            // node->sampling = new AnalyticalTrans_Samp();
+        }
+
         phase_funcs.insert({name, node});
         return node;
     }
@@ -403,6 +413,12 @@ MediumSamplingNode* FeignRenderer::find_medium_sampling(std::string name)
     if (itr == medium_samplings.end())
     {
         MediumSamplingNode* node = new MediumSamplingNode(name);
+
+        if (name == "default")
+        {
+            node->sampling = new AnalyticalTrans_Samp();
+        }
+
         medium_samplings.insert({name, node});
         return node;
     }
@@ -421,6 +437,12 @@ TransmittanceEstimatorNode* FeignRenderer::find_transmittance_estimator(std::str
     if (itr == trans_ests.end())
     {
         TransmittanceEstimatorNode* node = new TransmittanceEstimatorNode(name);
+
+        if (name == "default")
+        {
+            node->trans_est = new Trans_RatioTracking(1.0);
+        }
+
         trans_ests.insert({name, node});
         return node;
     }
@@ -847,14 +869,24 @@ void FeignRenderer::fr_media(std::string name,
         StandardMedium::Params* params =
             (StandardMedium::Params*)medium_data;
 
+        LOG("trans node");
         TransmittanceEstimatorNode* trans_node =
             getInstance()->find_transmittance_estimator(params->trans_node);
+        LOG("phase node");
         PhaseFunctionNode* phase_node =
             getInstance()->find_phase_func(params->phase_node);
+        LOG("medium sampling node");
         MediumSamplingNode* med_samp_node =
             getInstance()->find_medium_sampling(params->sampling_node);
+        LOG("density node");
         DensityFunctionNode* density_node =
             getInstance()->find_density_func(params->density_func_node);
+        LOG("medium constructor");
+
+        // if (density_node)
+        // {
+        //     assert(false);
+        // }
 
         medium->media = new StandardMedium(trans_node,
                                            phase_node,
@@ -874,6 +906,7 @@ void FeignRenderer::fr_medium_density(std::string name,
                                       std::string type,
                                       void* density_data)
 {
+    LOG("medium_density: " + name);
     DensityFunctionNode* density_func = getInstance()->find_density_func(name);
 
     if (density_func->density)
@@ -898,8 +931,10 @@ void FeignRenderer::fr_medium_density(std::string name,
     }
     else if (type == "sphere")
     {
+        // assert(false);
         SphereDensity::Params* params = (SphereDensity::Params*)density_data;
         density_func->density = new SphereDensity(params);
+        // if (!density_func->density) assert(false);
     }
     else
     {
