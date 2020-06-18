@@ -102,6 +102,7 @@ public:
     {
         // LOG(std::to_string(density(0)));
         // LOG("density eval");
+        // if (p(1) < 0.f) LOG("WHAT: " + std::to_string(p(1)));
         if (p.sqrNorm() < radius*radius) return density(0);
         return 0.f;
     }

@@ -25,7 +25,10 @@
 #include "../scenes/month_of_shaders/jan_7_2020.h"
 #include "../scenes/month_of_shaders/jan_8_2020.h"
 #include "../scenes/month_of_shaders/jan_9_2020.h"
+
 #include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
+
+#include "../scenes/debugging/medium_testing.h"
 
 void run_scene(std::string scene_name)
 {
@@ -56,6 +59,9 @@ int main(int argc, char* argv[])
 
     // sandbox();
     // return 0;
+
+    MediumTesting_Debug();
+    return 0;
 
     // HallOfTiles();
     // return 0;

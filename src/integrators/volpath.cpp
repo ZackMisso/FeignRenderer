@@ -51,6 +51,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
         if (its.medium)
         {
+            ray.far = its.t;
             beta *= its.medium->sample(ray, sampler, medium_closure);
         }
 

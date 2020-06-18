@@ -82,7 +82,7 @@ void Scene::preProcess(const GlobalParams& globals)
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
     LOG("preprocessing medium");
-    if (env_medium_node)
+    if (env_medium_node->media)
         env_medium_node->media->preProcess();
     LOG("post preprocess medium");
 

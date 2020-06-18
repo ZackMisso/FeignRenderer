@@ -269,6 +269,9 @@ add_executable(feign
 
     # scene implementation files
     scenes/cool_renders/hall_of_tiles/hall_of_tiles.cpp
+
+    # debug scene implementation files
+    scenes/debugging/medium_testing.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS
