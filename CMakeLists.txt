@@ -132,6 +132,7 @@ add_executable(feign
     # Misc header files
     include/feign/misc/intersection.h
     include/feign/misc/embree_util.h
+    include/feign/misc/render_pool.h
 
     # Parser header files
     include/feign/parser/json_parser.h
@@ -224,6 +225,7 @@ add_executable(feign
 
     # Misc implementation files
     src/misc/intersection.cpp
+    src/misc/render_pool.cpp
 
     # Parser implementation files
     src/parser/json_parser.cpp

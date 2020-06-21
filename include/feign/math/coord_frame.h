@@ -28,6 +28,12 @@ struct CoordinateFrame
     Vector3f toWorld(const Vector3f& vec) const;
 
     static void coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c);
+    static Vector3f sphericalDirection(Float cos_theta,
+                                       Float sin_theta,
+                                       Float phi,
+                                       const Vector3f& x,
+                                       const Vector3f& y,
+                                       const Vector3f& z);
 
     static Float cosTheta(const Vector3f& vec);
     static Float sinTheta(const Vector3f& vec);

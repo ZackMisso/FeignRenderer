@@ -32,7 +32,7 @@ void Integrator::preProcess()
 void Integrator::renderTile(const Scene* scene,
                             const Camera* camera,
                             Sampler* sampler,
-                            Integrator::RenderTile& tile) const
+                            RenderTile& tile) const
 {
     int index = 0;
 
@@ -172,44 +172,44 @@ void Integrator::renderTile(const Scene* scene,
 //     // TODO
 // }
 
-void Integrator::RenderTile::add_radiance(Color3f rad, int i, int j)
-{
-    int wid = max_x - min_x;
-    int hei = max_y - min_y;
-
-    int index = (i - min_y) * wid + (j - min_x);
-
-    pixels[index] += rad;
-}
-
-void Integrator::RenderTile::add_weight(Float wei, int i, int j)
-{
-    int wid = max_x - min_x;
-    int hei = max_y - min_y;
-
-    int index = (i - min_y) * wid + (j - min_x);
-
-    weights[index] += wei;
-}
-
-void Integrator::RenderTile::finalize(Imagef& image)
-{
-    int wid = max_x - min_x;
-    int hei = max_y - min_y;
-    int index = 0;
-
-    for (int i = min_y; i < max_y; ++i)
-    {
-        for (int j = min_x; j < max_x; ++j)
-        {
-            image(j, i, 0) = pixels[index](0) / weights[index];
-            image(j, i, 1) = pixels[index](1) / weights[index];
-            image(j, i, 2) = pixels[index](2) / weights[index];
-
-            ++index;
-        }
-    }
-}
+// void Integrator::RenderTile::add_radiance(Color3f rad, int i, int j)
+// {
+//     int wid = max_x - min_x;
+//     int hei = max_y - min_y;
+//
+//     int index = (i - min_y) * wid + (j - min_x);
+//
+//     pixels[index] += rad;
+// }
+//
+// void Integrator::RenderTile::add_weight(Float wei, int i, int j)
+// {
+//     int wid = max_x - min_x;
+//     int hei = max_y - min_y;
+//
+//     int index = (i - min_y) * wid + (j - min_x);
+//
+//     weights[index] += wei;
+// }
+//
+// void Integrator::RenderTile::finalize(Imagef& image)
+// {
+//     int wid = max_x - min_x;
+//     int hei = max_y - min_y;
+//     int index = 0;
+//
+//     for (int i = min_y; i < max_y; ++i)
+//     {
+//         for (int j = min_x; j < max_x; ++j)
+//         {
+//             image(j, i, 0) = pixels[index](0) / weights[index];
+//             image(j, i, 1) = pixels[index](1) / weights[index];
+//             image(j, i, 2) = pixels[index](2) / weights[index];
+//
+//             ++index;
+//         }
+//     }
+// }
 
 // TODO: multithreading
 void Integrator::render(const Scene* scene,
@@ -217,15 +217,18 @@ void Integrator::render(const Scene* scene,
                         Sampler* sampler,
                         Imagef& image) const
 {
-    // // TODO: before testing multithreading - I need to get automatic unit
-    // //       testing working to verify nothing breaks
-    //
+    // RenderPool* pool = new RenderPool(1);
+
+
+    // TODO: before testing multithreading - I need to get automatic unit
+    //       testing working to verify nothing breaks
+
     // image.clear();
     //
     // int tile_width = 32;
     //
-    // std::vector<Integrator::RenderTile> tiles =
-    //     std::vector<Integrator::RenderTile>();
+    // std::vector<RenderTile> tiles =
+    //     std::vector<RenderTile>();
     //
     // int wid = camera->getFilmSize()[0];
     // int hei = camera->getFilmSize()[1];
@@ -234,14 +237,14 @@ void Integrator::render(const Scene* scene,
     // {
     //     for (int j = 0; j < wid; j += tile_width)
     //     {
-    //         tiles.push_back(Integrator::RenderTile(j,
-    //                                                i,
-    //                                                std::min(j+tile_width, wid),
-    //                                                std::max(i+tile_width, hei)));
+    //         tiles.push_back(RenderTile(j,
+    //                                    i,
+    //                                    std::min(j+tile_width, wid),
+    //                                    std::max(i+tile_width, hei)));
     //     }
     // }
-    //
-    // // TODO: create and start jobs
+
+    // TODO: create and start jobs
 
     image.clear();
     Imagef filter_weights = Imagef(image.width(), image.height(), 1);

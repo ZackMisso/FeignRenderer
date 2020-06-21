@@ -104,3 +104,15 @@ void CoordinateFrame::coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f 
     }
     b = c ^ a;
 }
+
+Vector3f CoordinateFrame::sphericalDirection(Float cos_theta,
+                                             Float sin_theta,
+                                             Float phi,
+                                             const Vector3f& x,
+                                             const Vector3f& y,
+                                             const Vector3f& z)
+{
+    return x * std::cos(phi) * sin_theta +
+           y * std::sin(phi) * sin_theta +
+           z * cos_theta;
+}

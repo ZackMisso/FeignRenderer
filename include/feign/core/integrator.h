@@ -12,6 +12,7 @@
 #include <feign/core/camera.h>
 #include <feign/core/sampler.h>
 #include <feign/core/recon_filter.h>
+#include <feign/misc/render_pool.h>
 
 // needed forward declaration
 class Scene;
@@ -44,37 +45,6 @@ public:
         bool verbose;
     };
 
-    struct RenderTile
-    {
-        RenderTile(int min_x, int min_y, int max_x, int max_y)
-            : min_x(min_x),
-              min_y(min_y),
-              max_x(max_x),
-              max_y(max_y)
-        {
-            int size = (max_x - min_x) * (max_y - min_y);
-            pixels = std::vector<Color3f>(size);
-            weights = std::vector<Float>(size);
-        }
-
-        // void render(const Scene* scene,
-        //             const Camera* camera,
-        //             const ReconstructionFilter* filter,
-        //             Sampler* sampler);
-
-        void add_radiance(Color3f rad, int i, int j);
-        void add_weight(Float wei, int i, int j);
-        void finalize(Imagef& image);
-
-        std::vector<Color3f> pixels;
-        std::vector<Float> weights;
-        // this is not inclusive
-        int min_x;
-        int min_y;
-        int max_x;
-        int max_y;
-    };
-
     Integrator(FilterNode* filter,
                Integrator::Params* params)
         : filter(filter),
@@ -103,8 +73,9 @@ public:
                        const Ray3f& ray) const = 0;
 
     std::string location;
-protected:
     FilterNode* filter;
+
+protected:
     long max_time;
     long max_heuristic;
     int max_bounces;

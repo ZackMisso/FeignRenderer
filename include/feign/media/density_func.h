@@ -10,17 +10,30 @@
 
 #include <feign/core/node.h>
 
+// TODO: need to redesign entire renderer to run off macros instead of having
+//       both spectral and normal support
 class DensityFunction
 {
 public:
     virtual ~DensityFunction() { }
     virtual Float D(const Point3f& p) const = 0;
     virtual Color3f SpectralD(const Point3f& p) const = 0;
+    virtual Float maxDensity() const = ;
 };
 
 class ConstantDensity : public DensityFunction
 {
 public:
+    struct Params
+    {
+        Params(Float density)
+            : density(density) { }
+        Params(Color3f density)
+            : density(density) { }
+
+        Color3f density;
+    };
+
     ConstantDensity(Color3f density) : density(density) { }
     ConstantDensity(Float density_val) : density(Color3f(density_val)) { }
 
@@ -32,6 +45,11 @@ public:
     virtual Color3f SpectralD(const Point3f& p) const
     {
         return density;
+    }
+
+    virtual Float maxDensity() const
+    {
+        return std::max(density(0), std::max(density(1), density(2)));
     }
 
     Color3f density;
@@ -57,6 +75,12 @@ public:
         throw new NotImplementedException("openvdb density");
         return Color3f(0.f);
     }
+
+    virtual Float maxDensity() const
+    {
+        throw new NotImplementedException("openvdb density");
+        return 0.f;
+    }
 };
 
 class NoiseDensity : public DensityFunction
@@ -77,6 +101,12 @@ public:
     {
         throw new NotImplementedException("noise density");
         return Color3f(0.f);
+    }
+
+    virtual Float maxDensity() const
+    {
+        throw new NotImplementedException("noise density");
+        return 0.f;
     }
 };
 
@@ -100,9 +130,6 @@ public:
 
     virtual Float D(const Point3f& p) const
     {
-        // LOG(std::to_string(density(0)));
-        // LOG("density eval");
-        // if (p(1) < 0.f) LOG("WHAT: " + std::to_string(p(1)));
         if (p.sqrNorm() < radius*radius) return density(0);
         return 0.f;
     }
@@ -111,6 +138,11 @@ public:
     {
         if (p.sqrNorm() < radius*radius) return density;
         return Color3f(0.f);
+    }
+
+    virtual Float maxDensity() const
+    {
+        return std::max(density(0), std::max(density(1), density(2)));
     }
 
     Color3f density;

@@ -24,6 +24,7 @@ bool evaluate_unit_test(UnitTestData& testLog)
 
     if (testLog.does_it_fail())
     {
+        LOG("IMAGE ERROR: " + std::to_string(testLog.image_error));
         return false;
     }
 

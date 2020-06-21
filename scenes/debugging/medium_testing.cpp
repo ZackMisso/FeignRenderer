@@ -14,43 +14,22 @@ void MediumTesting_Debug::initialize_materials(int frame)
     // and a light material
 
     SimpleMaterialShader::Params diffuse_params("diffuse_mat");
-    // SimpleMaterialShader::Params mirror_params("mirror_mat");
 
     SimpleMaterial::Params diffuse_mat_params("diffuse_bsdf");
-    // SimpleMaterial::Params mirror_mat_params("mirror_bsdf");
 
     FeignRenderer::fr_shader("diffuse_shad",
                              "simple_material",
-                             &diffuse_params);
-
-    // FeignRenderer::fr_shader("mirror_shad",
-    //                          "simple_material",
-    //                          &mirror_params);
+                             &diffuse_params)
 
     FeignRenderer::fr_material("diffuse_mat",
                                "simple",
                                &diffuse_mat_params);
 
-    // FeignRenderer::fr_material("mirror_mat",
-    //                            "simple",
-    //                            &mirror_mat_params);
-
     Diffuse::Params diffuse_bsdf(Color3f(0.5f, 0.5f, 0.5f));
-    // Mirror::Params mirror_bsdf(Color3f(1.f));
 
     FeignRenderer::fr_bsdf("diffuse_bsdf",
                            "diffuse",
                            &diffuse_bsdf);
-
-    // FeignRenderer::fr_bsdf("mirror_bsdf",
-    //                        "mirror",
-    //                        &mirror_bsdf);
-
-    // SimpleMaterialShader::Params shad_params("diffuse_mat");
-    //
-    // FeignRenderer::fr_shader("diffuse_shad",
-    //                          "simple_material",
-    //                          &shad_params);
 }
 
 void MediumTesting_Debug::initialize_scene(int frame)
@@ -140,10 +119,9 @@ void MediumTesting_Debug::initialize_scene(int frame)
     ////////////////
 }
 
-void MediumTesting_Debug::initialize_medium(int frame)
+void MediumTesting_Debug::initialize_sphere_medium(int frame)
 {
     Transform identity = Transform();
-    // LOG("media");
     StandardMedium::Params media_params("default",
                                         "default",
                                         "default",
@@ -152,7 +130,6 @@ void MediumTesting_Debug::initialize_medium(int frame)
                                         Color3f(1.f),
                                         COLOR_BLACK);
 
-    // HomogeneousAbsorbingMedia::Params media_params(0.02);
     FeignRenderer::fr_media("env_medium",
                             "standard",
                             &media_params);
@@ -162,6 +139,33 @@ void MediumTesting_Debug::initialize_medium(int frame)
     FeignRenderer::fr_medium_density("sphere_density",
                                      "sphere",
                                      &medium_density_params);
+}
+
+void MediumTesting_Debug::initializing_box_medium(int frame)
+{
+    Transform identity = Transform();
+
+    StandardMedium::Params media_params("default",
+                                        "default",
+                                        "default",
+                                        "const_density",
+                                        identity,
+                                        Color3f(1.f),
+                                        COLOR_BLACK);
+
+    FeignRenderer::fr_media("box_medium",
+                            "standard",
+                            &media_params);
+
+    ConstantDensity::Params constant_density_params(1.f);
+
+    FeignRenderer::fr_medium_density("const_density",
+                                     "constant",
+                                     &medium_params);
+
+    FeignRenderer::fr_medium_sampling("const_sampler",
+                                      "constant",
+                                      nullptr);
 }
 
 void MediumTesting_Debug::initialize_camera(int frame)
@@ -193,10 +197,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     snprintf(str, 5, "%04d", frame);
     std::string name = test_name + "_" + std::string(str);
 
-    // LOG("initializing");
     FeignRenderer::initialize();
 
-    // LOG("scene");
     FeignRenderer::fr_scene(name,
                             "integrator",
                             "sampler",
@@ -204,18 +206,10 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                             "env_medium",
                             false);
 
-    // LOG("light accel");
-    // SpatialLightAccel::Params light_accel_params(1, 1, 10);
-
-    // FeignRenderer::fr_accel("light_accel",
-    //                         "light_spatial",
-    //                         &light_accel_params);
-
     Integrator::Params int_params(512,
                                   512,
                                   test_name + "/");
 
-    // LOG("integrator");
     FeignRenderer::fr_integrator("integrator",
                                  "volpath",
                                  "default",
@@ -223,7 +217,6 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
 
     Independent::Params samp_params(512, 0x12345);
 
-    // LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
                               "independent",
                               &samp_params);

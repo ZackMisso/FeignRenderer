@@ -391,8 +391,7 @@ PhaseFunctionNode* FeignRenderer::find_phase_func(std::string name)
 
         if (name == "default")
         {
-            // TODO
-            // node->sampling = new AnalyticalTrans_Samp();
+            node->phase = new HenyeyGreenstein(1.f);
         }
 
         phase_funcs.insert({name, node});
