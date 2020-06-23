@@ -40,19 +40,27 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
         Intersection its;
 
+        // LOG("pre intersect");
+
+        // TODO: medium needs to be set at the end, not during intersection
         if (!scene->intersect(ray, its))
         {
             break;
         }
 
+        // LOG("post intersect");
+
         // TODO: how to create shaders out of a medium?
         MediaClosure medium_closure(its.medium,
                                     its.t);
 
+        // medium should be set by closure since not all materials refract
         if (its.medium)
         {
             ray.far = its.t;
+            // LOG("medium exists");
             beta *= its.medium->sample(ray, sampler, medium_closure);
+            // LOG("medium sample");
         }
 
         if (beta.isZero()) break;

@@ -36,6 +36,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       sample_all_emitters(sample_all_emitters)
 {
     wi = its->toLocal(-ray->dir);
+    media = nullptr;
 }
 
 MaterialClosure::MaterialClosure(Sampler* sampler,
@@ -55,6 +56,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       last_spec(last_bounce_specular),
       sample_all_emitters(sample_all_emitters)
 {
+    media = nullptr;
 }
 
 void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)

@@ -35,10 +35,11 @@ Float StandardMedium::sample(Ray3f world_ray,
 
     if (sca_coeff == COLOR_BLACK)
     {
-        Float trans = trans_est->trans_est->transmittance(ray,
-                                                   sampler,
-                                                   min_t,
-                                                   max_t);
+        // LOG("transmittancing");
+        // Float trans = trans_est->trans_est->transmittance(ray,
+        //                                            sampler,
+        //                                            min_t,
+        //                                            max_t);
 
         // LOG("transmittance: " + std::to_string(trans));
         // LOG("transmittance");

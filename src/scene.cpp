@@ -81,10 +81,8 @@ void Scene::preProcess(const GlobalParams& globals)
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
-    LOG("preprocessing medium");
     if (env_medium_node->media)
         env_medium_node->media->preProcess();
-    LOG("post preprocess medium");
 
     // TODO: is this really the best place to handle this?
     for (int i = 0; i < objects.size(); ++i)
@@ -95,6 +93,12 @@ void Scene::preProcess(const GlobalParams& globals)
         {
             objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
             objects[i]->emitter->emitter->preProcess();
+        }
+
+        // if the object contains a medium, make sure to preprocess it
+        if (objects[i]->medium)
+        {
+            objects[i]->medium->media->preProcess();
         }
     }
 }
@@ -150,9 +154,16 @@ bool Scene::intersect(const Ray3f& ray, Intersection& its) const
     its.medium = nullptr;
 
     bool intersected = ray_accel->intersect(ray, its);
+
+    if (intersected)
+    {
+        // LOG("getting shape medium");
+        its.medium = getShapeMedium(its);
+        // LOG("got shape medium");
+    }
+
     if (env_medium_node && !its.medium)
     {
-        // LOG("setting medium");
         its.medium = env_medium_node->media;
     }
 
@@ -169,6 +180,16 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
     int id = its.intersected_mesh->getInstID();
 
     return (*(*objects[id]).material_shader)();
+}
+
+const Media* Scene::getShapeMedium(const Intersection& its) const
+{
+    int id = its.intersected_mesh->getInstID();
+
+    if ((*objects[id]).medium)
+        return (*(*objects[id]).medium)();
+
+    return nullptr;
 }
 
 // TODO: make these eval methods call the same function

@@ -118,6 +118,7 @@ public:
                           std::string mesh,
                           std::string material_shader,
                           std::string emitter = "null",
+                          std::string medium = "null",
                           int index = -1); // what is this index parameter again
 
     static void fr_mesh(std::string name,

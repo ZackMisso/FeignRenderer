@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/bsdf.h>
+#include <feign/core/scene.h>
 
 NullBSDF::NullBSDF() : BSDF() { }
 
@@ -17,6 +18,8 @@ void NullBSDF::sample(MaterialClosure& closure) const
     closure.wo = -closure.wi;
     closure.eta = 1.0f;
     closure.albedo = Color3f(1.f);
+
+    closure.media = closure.scene->getShapeMedium(*(closure.its));
 }
 
 // Color3f NullBSDF::eval(const BSDFQuery& rec) const

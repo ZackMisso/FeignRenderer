@@ -11,6 +11,7 @@
 #include <feign/core/node.h>
 #include <feign/core/material.h>
 #include <feign/core/shader.h>
+#include <feign/media/media.h>
 #include <feign/math/bbox.h>
 #include <feign/math/transform.h>
 #include <feign/misc/intersection.h>
@@ -285,15 +286,23 @@ public:
 struct ObjectNode : public Node
 {
 public:
-    ObjectNode() : mesh(nullptr), emitter(nullptr) { }
-    ObjectNode(MeshNode* mesh) : mesh(mesh), emitter(nullptr) { }
-    ObjectNode(std::string name) : Node(name), mesh(nullptr), emitter(nullptr) { }
+    ObjectNode() : mesh(nullptr),
+                   emitter(nullptr),
+                   medium(nullptr) { }
+    ObjectNode(MeshNode* mesh) : mesh(mesh),
+                                 emitter(nullptr),
+                                 medium(nullptr) { }
+    ObjectNode(std::string name) : Node(name),
+                                   mesh(nullptr),
+                                   emitter(nullptr),
+                                   medium(nullptr) { }
 
     ~ObjectNode() { }
 
     MeshNode* mesh;
     MaterialShaderNode* material_shader;
     EmitterNode* emitter;
+    MediaNode* medium;
     Transform transform;
 };
 /////////////////////////////////////////////////

@@ -133,6 +133,8 @@ public:
     MediaNode(std::string name) : Node(name), media(nullptr) { }
     MediaNode(Media* media) : media(media) { }
 
+    Media* operator()() { return media; }
+
     ~MediaNode() { delete media; }
 
     Media* media;

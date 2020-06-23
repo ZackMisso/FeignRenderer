@@ -144,6 +144,12 @@ BSDFNode* FeignRenderer::find_bsdf(std::string name)
     {
         BSDFNode* node = new BSDFNode(name);
         bsdfs.insert({name, node});
+
+        if (name == "default")
+        {
+            node->bsdf = new NullBSDF();
+        }
+
         return node;
     }
     else
@@ -209,6 +215,11 @@ MediaNode* FeignRenderer::find_media(std::string name)
 {
     std::unordered_map<std::string, MediaNode*>::const_iterator itr = medias.find(name);
 
+    if (name == "null")
+    {
+        return nullptr;
+    }
+
     if (itr == medias.end())
     {
         MediaNode* node = new MediaNode(name);
@@ -269,6 +280,13 @@ MaterialNode* FeignRenderer::find_material(std::string name)
     {
         MaterialNode* node = new MaterialNode(name);
         materials.insert({name, node});
+
+        if (name == "default")
+        {
+            BSDFNode* bsdf = getInstance()->find_bsdf("default");
+            node->material = new SimpleMaterial(bsdf);
+        }
+
         return node;
     }
     else
@@ -333,6 +351,13 @@ MaterialShaderNode* FeignRenderer::find_material_shader(std::string name)
     {
         MaterialShaderNode* node = new MaterialShaderNode(name);
         material_shaders.insert({name, node});
+
+        if (name == "default")
+        {
+            MaterialNode* material = getInstance()->find_material("default");
+            node->shader = new SimpleMaterialShader(material);
+        }
+
         return node;
     }
     else
@@ -439,7 +464,8 @@ TransmittanceEstimatorNode* FeignRenderer::find_transmittance_estimator(std::str
 
         if (name == "default")
         {
-            node->trans_est = new Trans_RatioTracking(1.0);
+            // node->trans_est = new Trans_RatioTracking(1.0);
+            node->trans_est = new Trans_Homogenous();
         }
 
         trans_ests.insert({name, node});
@@ -661,6 +687,7 @@ void FeignRenderer::fr_object(std::string name,
                               std::string mesh,
                               std::string material_shader,
                               std::string emitter,
+                              std::string medium,
                               int index)
 {
     if (index >= 0) name += "_" + std::to_string(index);
@@ -675,6 +702,7 @@ void FeignRenderer::fr_object(std::string name,
                   mesh,
                   material_shader,
                   emitter,
+                  medium,
                   index+1);
 
         return;
@@ -683,6 +711,7 @@ void FeignRenderer::fr_object(std::string name,
     object->transform = getInstance()->current_transform;
     object->mesh = getInstance()->find_mesh(mesh);
     object->material_shader = getInstance()->find_material_shader(material_shader);
+    object->medium = getInstance()->find_media(medium);
 
     if (emitter != "null" && emitter != "")
     {
@@ -915,8 +944,9 @@ void FeignRenderer::fr_medium_density(std::string name,
 
     if (type == "constant")
     {
-        // TODO
-        throw new NotImplementedException("api constant density");
+        // LOG("WHOOP WHOO{}");
+        ConstantDensity::Params* params = (ConstantDensity::Params*)density_data;
+        density_func->density = new ConstantDensity(params->density);
     }
     else if (type == "openvdb")
     {
@@ -971,7 +1001,7 @@ void FeignRenderer::fr_medium_sampling(std::string name,
         // TODO
         throw new NotImplementedException("api equi sampling");
     }
-    else if (type == "analytic")
+    else if (type == "constant")
     {
         medium_sampling->sampling = new AnalyticalTrans_Samp();
     }

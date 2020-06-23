@@ -47,6 +47,7 @@ public:
     void addEmitter(Emitter* emitter);
 
     const MaterialShader* getShapeMaterialShader(const Intersection& its) const;
+    const Media* getShapeMedium(const Intersection& its) const;
 
     void eval_all_emitters(MaterialClosure& closure) const;
     void eval_one_emitter(MaterialClosure& closure) const;

@@ -19,7 +19,7 @@ class Media;
 // TODO: add an intersection data struct for applying shaders
 struct Intersection
 {
-    Media* medium;
+    const Media* medium;
     Point3f p;
     Point2f uv;
     float t;

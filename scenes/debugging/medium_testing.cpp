@@ -19,7 +19,7 @@ void MediumTesting_Debug::initialize_materials(int frame)
 
     FeignRenderer::fr_shader("diffuse_shad",
                              "simple_material",
-                             &diffuse_params)
+                             &diffuse_params);
 
     FeignRenderer::fr_material("diffuse_mat",
                                "simple",
@@ -141,7 +141,7 @@ void MediumTesting_Debug::initialize_sphere_medium(int frame)
                                      &medium_density_params);
 }
 
-void MediumTesting_Debug::initializing_box_medium(int frame)
+void MediumTesting_Debug::initialize_box_medium(int frame)
 {
     Transform identity = Transform();
 
@@ -161,11 +161,23 @@ void MediumTesting_Debug::initializing_box_medium(int frame)
 
     FeignRenderer::fr_medium_density("const_density",
                                      "constant",
-                                     &medium_params);
+                                     &media_params);
 
     FeignRenderer::fr_medium_sampling("const_sampler",
                                       "constant",
                                       nullptr);
+
+    FeignRenderer::fr_object("medium_bounds",
+                             "box_mesh",
+                             "default",
+                             "null",
+                             "box_medium");
+
+    ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj", "");
+
+    FeignRenderer::fr_mesh("box_mesh",
+                           "triangle_mesh",
+                           &box_mesh);
 }
 
 void MediumTesting_Debug::initialize_camera(int frame)
@@ -215,7 +227,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(512, 0x12345);
+    Independent::Params samp_params(16, 0x12345);
 
     FeignRenderer::fr_sampler("sampler",
                               "independent",
@@ -244,13 +256,13 @@ void MediumTesting_Debug::run()
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
-    std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
+    // std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
 
     // system(rm_command.c_str());
     // system(mkdir_command.c_str());
 
     int start_frame = 0;
-    int end_frame = 60;
+    int end_frame = 1;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
@@ -262,7 +274,7 @@ void MediumTesting_Debug::run()
 
         initialize_scene(frame);
 
-        initialize_medium(frame);
+        initialize_box_medium(frame);
 
         initialize_lighting(frame);
 
@@ -271,5 +283,5 @@ void MediumTesting_Debug::run()
         flush_render();
     }
 
-    system(publish_command.c_str());
+    // system(publish_command.c_str());
 }

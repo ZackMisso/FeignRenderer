@@ -18,7 +18,7 @@ public:
     virtual ~DensityFunction() { }
     virtual Float D(const Point3f& p) const = 0;
     virtual Color3f SpectralD(const Point3f& p) const = 0;
-    virtual Float maxDensity() const = ;
+    virtual Float maxDensity() const = 0;
 };
 
 class ConstantDensity : public DensityFunction

@@ -46,6 +46,7 @@ struct MaterialClosure
     Ray3f* ray;        // a reference to the incoming ray
     const Scene* scene;      // a reference to the scene
     Vector3f wi;
+    const Media* media;
 
     // sometimes inputs or outputs depending on sampling
     Vector3f wo;             // the outgoing ray
@@ -67,7 +68,7 @@ struct MaterialClosure
 // evaluated
 struct MediaClosure
 {
-    MediaClosure(Media* medium,
+    MediaClosure(const Media* medium,
                  Float max_t)
         : medium(medium),
           max_t(max_t),
@@ -79,7 +80,7 @@ struct MediaClosure
     }
 
     // input
-    Media* medium;
+    const Media* medium;
     Float max_t;
 
     // output
