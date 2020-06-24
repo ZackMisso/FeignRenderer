@@ -19,7 +19,11 @@ void NullBSDF::sample(MaterialClosure& closure) const
     closure.eta = 1.0f;
     closure.albedo = Color3f(1.f);
 
-    closure.media = closure.scene->getShapeMedium(*(closure.its));
+    closure.material_accepts_shadows = false;
+
+    // TODO: getShapeMedium is slow.. is there a better way of doing this to not
+    //       slow down the rest of the renders?
+    // closure.media = closure.scene->getShapeMedium(*(closure.its));
 }
 
 // Color3f NullBSDF::eval(const BSDFQuery& rec) const

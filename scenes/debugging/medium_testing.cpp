@@ -50,72 +50,72 @@ void MediumTesting_Debug::initialize_scene(int frame)
     FeignRenderer::fr_clear_transform();
     ////////////////
 
-    // front wall //
-    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    FeignRenderer::fr_rotate(-90.f, 1.f, 0.f, 0.f);
-    FeignRenderer::fr_translate(0.f, 0.f, -10.f);
-
-    FeignRenderer::fr_object("front_wall",
-                             "front_wall_plane",
-                             "diffuse_shad");
-
-    ObjMesh::Params params_front_wall("../scenes/meshes/plane.obj", "");
-
-    FeignRenderer::fr_mesh("front_wall_plane",
-                           "triangle_mesh",
-                           &params_front_wall);
-    FeignRenderer::fr_clear_transform();
-    ////////////////
-
-    // back wall //
-    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    FeignRenderer::fr_rotate(90.f, 1.f, 0.f, 0.f);
-    FeignRenderer::fr_translate(0.f, 0.f, 10.f);
-
-    FeignRenderer::fr_object("back_wall",
-                             "back_wall_plane",
-                             "diffuse_shad");
-
-    ObjMesh::Params params_back_wall("../scenes/meshes/plane.obj", "");
-
-    FeignRenderer::fr_mesh("back_wall_plane",
-                           "triangle_mesh",
-                           &params_back_wall);
-    FeignRenderer::fr_clear_transform();
-    ////////////////
-
-    // left wall //
-    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    FeignRenderer::fr_rotate(90.f, 0.f, 0.f, 1.f);
-    FeignRenderer::fr_translate(-10.f, 0.f, 0.f);
-
-    FeignRenderer::fr_object("left_wall",
-                             "left_wall_plane",
-                             "diffuse_shad");
-
-    ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
-
-    FeignRenderer::fr_mesh("left_wall_plane",
-                           "triangle_mesh",
-                           &params_left_wall);
-    FeignRenderer::fr_clear_transform();
-    ////////////////
-
-    // back wall //
-    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    FeignRenderer::fr_rotate(-90.f, 0.f, 0.f, 1.f);
-    FeignRenderer::fr_translate(10.f, 0.f, 0.f);
-
-    FeignRenderer::fr_object("right_wall",
-                             "right_wall_plane",
-                             "diffuse_shad");
-
-    ObjMesh::Params params_right_wall("../scenes/meshes/plane.obj", "");
-
-    FeignRenderer::fr_mesh("right_wall_plane",
-                           "triangle_mesh",
-                           &params_right_wall);
-    FeignRenderer::fr_clear_transform();
+    // // front wall //
+    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    // FeignRenderer::fr_rotate(-90.f, 1.f, 0.f, 0.f);
+    // FeignRenderer::fr_translate(0.f, 0.f, -10.f);
+    //
+    // FeignRenderer::fr_object("front_wall",
+    //                          "front_wall_plane",
+    //                          "diffuse_shad");
+    //
+    // ObjMesh::Params params_front_wall("../scenes/meshes/plane.obj", "");
+    //
+    // FeignRenderer::fr_mesh("front_wall_plane",
+    //                        "triangle_mesh",
+    //                        &params_front_wall);
+    // FeignRenderer::fr_clear_transform();
+    // ////////////////
+    //
+    // // back wall //
+    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    // FeignRenderer::fr_rotate(90.f, 1.f, 0.f, 0.f);
+    // FeignRenderer::fr_translate(0.f, 0.f, 10.f);
+    //
+    // FeignRenderer::fr_object("back_wall",
+    //                          "back_wall_plane",
+    //                          "diffuse_shad");
+    //
+    // ObjMesh::Params params_back_wall("../scenes/meshes/plane.obj", "");
+    //
+    // FeignRenderer::fr_mesh("back_wall_plane",
+    //                        "triangle_mesh",
+    //                        &params_back_wall);
+    // FeignRenderer::fr_clear_transform();
+    // ////////////////
+    //
+    // // left wall //
+    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    // FeignRenderer::fr_rotate(90.f, 0.f, 0.f, 1.f);
+    // FeignRenderer::fr_translate(-10.f, 0.f, 0.f);
+    //
+    // FeignRenderer::fr_object("left_wall",
+    //                          "left_wall_plane",
+    //                          "diffuse_shad");
+    //
+    // ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
+    //
+    // FeignRenderer::fr_mesh("left_wall_plane",
+    //                        "triangle_mesh",
+    //                        &params_left_wall);
+    // FeignRenderer::fr_clear_transform();
+    // ////////////////
+    //
+    // // back wall //
+    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    // FeignRenderer::fr_rotate(-90.f, 0.f, 0.f, 1.f);
+    // FeignRenderer::fr_translate(10.f, 0.f, 0.f);
+    //
+    // FeignRenderer::fr_object("right_wall",
+    //                          "right_wall_plane",
+    //                          "diffuse_shad");
+    //
+    // ObjMesh::Params params_right_wall("../scenes/meshes/plane.obj", "");
+    //
+    // FeignRenderer::fr_mesh("right_wall_plane",
+    //                        "triangle_mesh",
+    //                        &params_right_wall);
+    // FeignRenderer::fr_clear_transform();
     ////////////////
 }
 
@@ -143,41 +143,76 @@ void MediumTesting_Debug::initialize_sphere_medium(int frame)
 
 void MediumTesting_Debug::initialize_box_medium(int frame)
 {
-    Transform identity = Transform();
+    // Transform identity = Transform();
 
-    StandardMedium::Params media_params("default",
-                                        "default",
-                                        "default",
-                                        "const_density",
-                                        identity,
-                                        Color3f(1.f),
-                                        COLOR_BLACK);
+    // StandardMedium::Params media_params("default",
+    //                                     "default",
+    //                                     "default",
+    //                                     "const_density",
+    //                                     identity,
+    //                                     Color3f(1.f),
+    //                                     COLOR_BLACK);
 
-    FeignRenderer::fr_media("box_medium",
-                            "standard",
-                            &media_params);
+    // FeignRenderer::fr_media("box_medium",
+    //                         "standard",
+    //                         &media_params);
 
-    ConstantDensity::Params constant_density_params(1.f);
+    // ConstantDensity::Params constant_density_params(1.0f);
 
-    FeignRenderer::fr_medium_density("const_density",
-                                     "constant",
-                                     &media_params);
-
-    FeignRenderer::fr_medium_sampling("const_sampler",
-                                      "constant",
-                                      nullptr);
+    // FeignRenderer::fr_medium_density("const_density",
+    //                                  "constant",
+    //                                  &constant_density_params);
+    //
+    // FeignRenderer::fr_medium_sampling("const_sampler",
+    //                                   "constant",
+    //                                   nullptr);
 
     FeignRenderer::fr_object("medium_bounds",
                              "box_mesh",
                              "default",
                              "null",
-                             "box_medium");
+                             "null");
 
     ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj", "");
 
     FeignRenderer::fr_mesh("box_mesh",
                            "triangle_mesh",
                            &box_mesh);
+}
+
+void MediumTesting_Debug::initialize_fully_absorbing_global_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_bounded_fully_absorbing_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_absorb_scat_global_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_absorb_scat_bounded_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_varying_absorb_scat_global_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_varying_absorb_scat_bounded_media(int frame)
+{
+    // TODO
+}
+
+void MediumTesting_Debug::initialize_final_media(int frame)
+{
+    // TODO
 }
 
 void MediumTesting_Debug::initialize_camera(int frame)
@@ -215,7 +250,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                             "integrator",
                             "sampler",
                             "camera",
-                            "env_medium",
+                            "default",
                             false);
 
     Integrator::Params int_params(512,
@@ -223,7 +258,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                                   test_name + "/");
 
     FeignRenderer::fr_integrator("integrator",
-                                 "volpath",
+                                 "path",
                                  "default",
                                  &int_params);
 

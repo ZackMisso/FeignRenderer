@@ -151,23 +151,25 @@ void Scene::renderScene() const
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
-    its.medium = nullptr;
+    // its.medium = nullptr;
+    //
+    // bool intersected = ray_accel->intersect(ray, its);
+    //
+    // if (intersected)
+    // {
+    //     // LOG("getting shape medium");
+    //     its.medium = getShapeMedium(its);
+    //     // LOG("got shape medium");
+    // }
+    //
+    // if (env_medium_node && !its.medium)
+    // {
+    //     its.medium = env_medium_node->media;
+    // }
+    //
+    // return intersected;
 
-    bool intersected = ray_accel->intersect(ray, its);
-
-    if (intersected)
-    {
-        // LOG("getting shape medium");
-        its.medium = getShapeMedium(its);
-        // LOG("got shape medium");
-    }
-
-    if (env_medium_node && !its.medium)
-    {
-        its.medium = env_medium_node->media;
-    }
-
-    return intersected;
+    return ray_accel->intersect(ray, its);
 }
 
 void Scene::addEmitter(Emitter* emitter)
@@ -187,7 +189,10 @@ const Media* Scene::getShapeMedium(const Intersection& its) const
     int id = its.intersected_mesh->getInstID();
 
     if ((*objects[id]).medium)
+    {
+        // assert(false);
         return (*(*objects[id]).medium)();
+    }
 
     return nullptr;
 }

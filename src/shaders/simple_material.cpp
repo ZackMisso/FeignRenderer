@@ -44,15 +44,27 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 
     if (closure.sample_all_emitters)
     {
-        closure.scene->eval_all_emitters(closure);
+        // if ((*material)->accepts_shadows)
+        // TODO: make this specified by the user
+        if (closure.material_accepts_shadows)
+        {
+            // assert(false);
+            closure.scene->eval_all_emitters(closure);
+        }
     }
     else
     {
-        // get next event estimation
-        closure.scene->eval_one_emitter(closure);
+        // if ((*material)->accepts_shadows)
+        // TODO: fix this hack with above
+        if (closure.material_accepts_shadows)
+        {
+            // assert(false);
+            closure.scene->eval_one_emitter(closure);
+        }
     }
 
     closure.last_spec = closure.is_specular;
+    closure.material_accepts_shadows = true;
 
     #if CLOCKING
         Clocker::endClock("shader eval");

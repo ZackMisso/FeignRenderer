@@ -62,6 +62,10 @@ struct MaterialClosure
     bool last_spec;          // whether the last evaluation was specular
     // bool trace_ray;
     bool sample_all_emitters;
+    bool material_accepts_shadows;
+
+    // TODO: implement this for transitioning between environment and bounded media
+    // int internal_count;
 };
 
 // this struct represents what is returned from a media shader when it gets

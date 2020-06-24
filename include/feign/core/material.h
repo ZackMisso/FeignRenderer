@@ -16,13 +16,15 @@
 class Material
 {
 public:
-    Material() { }
+    Material() : accepts_shadows(true) { }
     virtual ~Material() { }
 
     virtual void sample(MaterialClosure& closure) const = 0;
     virtual void evaluate(MaterialClosure& closure) const = 0;
 
     virtual bool isDelta() const { return false; }
+
+    bool accepts_shadows;
 };
 
 // a material with only one bsdf

@@ -33,7 +33,8 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       eta(1.f),
       is_specular(last_bounce_specular),
       last_spec(last_bounce_specular),
-      sample_all_emitters(sample_all_emitters)
+      sample_all_emitters(sample_all_emitters),
+      material_accepts_shadows(true)
 {
     wi = its->toLocal(-ray->dir);
     media = nullptr;
@@ -54,7 +55,8 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       eta(1.f),
       is_specular(last_bounce_specular),
       last_spec(last_bounce_specular),
-      sample_all_emitters(sample_all_emitters)
+      sample_all_emitters(sample_all_emitters),
+      material_accepts_shadows(true)
 {
     media = nullptr;
 }

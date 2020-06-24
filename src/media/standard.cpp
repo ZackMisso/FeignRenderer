@@ -27,21 +27,22 @@ Float StandardMedium::sample(Ray3f world_ray,
                              Sampler* sampler,
                              MediaClosure& closure) const
 {
-    // LOG("sampling medium");
-
     const Ray3f ray = transform * world_ray;
     Float min_t = ray.near;
     Float max_t = std::min(ray.far, 20.f);
 
+    // LOG("  min_t: " + std::to_string(min_t));
+    // LOG("  max_t: " + std::to_string(max_t));
+
     if (sca_coeff == COLOR_BLACK)
     {
-        // LOG("transmittancing");
+        // LOG("  transmittancing");
         // Float trans = trans_est->trans_est->transmittance(ray,
         //                                            sampler,
         //                                            min_t,
         //                                            max_t);
 
-        // LOG("transmittance: " + std::to_string(trans));
+        // LOG("  transmittance: " + std::to_string(trans));
         // LOG("transmittance");
         return trans_est->trans_est->transmittance(ray,
                                                    sampler,

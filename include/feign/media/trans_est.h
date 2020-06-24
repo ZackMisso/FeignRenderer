@@ -51,15 +51,15 @@ public:
                                 Float tMin,
                                 Float tMax) const
     {
-        // Float dense = density->D(ray((tMax-tMin / 2.f) + tMin));
-        // Float trans = exp(-(tMax-tMin) * dense);
+        Float dense = density->D(ray((tMax-tMin) / 2.f + tMin));
+        Float trans = exp(-(tMax-tMin) * dense);
         // LOG(std::to_string(exp(-0)));
-        // LOG("tMax: " + std::to_string(tMax));
-        // LOG("dense: " + std::to_string(dense));
-        // LOG("trans: " + std::to_string(trans));
+        // LOG("    tMax: " + std::to_string(tMax));
+        // LOG("    dense: " + std::to_string(dense));
+        // LOG("    trans: " + std::to_string(trans));
+        if (trans > 1.0) assert(false);
         // LOG("eval transmittance");
-        return exp(-(tMax-tMin) *
-               density->D(ray((tMax-tMin / 2.f) + tMin)));
+        return trans;
     }
 
     virtual Color3f spectral_transmittance(const Ray3f& ray,

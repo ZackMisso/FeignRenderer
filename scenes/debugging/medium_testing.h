@@ -1,5 +1,16 @@
 #include <feign/core/api.h>
 
+// plan for volumetric media video:
+//
+// 10 seconds of fully absorbing global media
+// 10 seconds of bounded fully absorbing media
+// 10 seconds of absorbing + scattering global media
+// 10 seconds of absorbing + scattering bounded media
+// 20 seconds of varying absorbing to scattering for a global medium
+// 20 seconds of varying absorbing to scattering for a bounded medium
+// 30 seconds final medium show off
+//
+
 class MediumTesting_Debug
 {
 protected:
@@ -11,6 +22,15 @@ protected:
     void initialize_lighting(int frame);
     void initialize_box_medium(int frame);
     void initialize_sphere_medium(int frame);
+
+    void initialize_fully_absorbing_global_media(int frame);
+    void initialize_bounded_fully_absorbing_media(int frame);
+    void initialize_absorb_scat_global_media(int frame);
+    void initialize_absorb_scat_bounded_media(int frame);
+    void initialize_varying_absorb_scat_global_media(int frame);
+    void initialize_varying_absorb_scat_bounded_media(int frame);
+    void initialize_final_media(int frame);
+
     void flush_render();
     void run();
 

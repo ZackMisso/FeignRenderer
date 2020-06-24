@@ -40,30 +40,36 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
         Intersection its;
 
-        // LOG("pre intersect");
-
         // TODO: medium needs to be set at the end, not during intersection
-        if (!scene->intersect(ray, its))
-        {
-            break;
-        }
+        if (!scene->intersect(ray, its)) break;
 
-        // LOG("post intersect");
+        // if (closure->media)
+        // {
 
         // TODO: how to create shaders out of a medium?
-        MediaClosure medium_closure(its.medium,
-                                    its.t);
+        // MediaClosure medium_closure(closure.medium,
+        //                             its.t);
 
         // medium should be set by closure since not all materials refract
-        if (its.medium)
-        {
-            ray.far = its.t;
-            // LOG("medium exists");
-            beta *= its.medium->sample(ray, sampler, medium_closure);
-            // LOG("medium sample");
-        }
+        // if (its.medium)
+        // {
+        //     ray.far = its.t;
+        //     // LOG("medium exists");
+        //     beta *= its.medium->sample(ray, sampler, medium_closure);
+        //     // LOG("medium sample");
+        // }
 
-        if (beta.isZero()) break;
+        MediaClosure medium_closure(closure.media, its.t);
+
+        // if (closure.media)
+        // {
+        //     ray.far = its.t;
+        //     // LOG("beta: " + std::to_string(beta(0)));
+        //     beta *= closure.media->sample(ray, sampler, medium_closure);
+        //     // LOG("beta 2: " + std::to_string(beta(0)));
+        //
+        //     if (beta.isZero()) break;
+        // }
 
         if (medium_closure.handleScatter())
         {
@@ -117,6 +123,14 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
             Li += beta * (closure.nee + closure.emission);
             beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+
+            // TODO: replace this check with an inside/outside/counter
+            // if there is no active medium, but a global medium exists,
+            // set the active medium to the global medium
+            if (!closure.media)
+            {
+                closure.media = scene->env_medium_node->media;
+            }
         }
     }
 

@@ -39,6 +39,8 @@ public:
 
     virtual Float D(const Point3f& p) const
     {
+        // LOG("      DENSITY:");
+        // LOG("      ", density);
         return density(0);
     }
 
