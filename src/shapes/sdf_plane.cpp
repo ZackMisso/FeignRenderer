@@ -10,9 +10,11 @@
 
  SDFPlane::SDFPlane(Point3f center,
                     Normal3f normal,
-                    Float inter)
+                    Float inter,
+                    bool is_null)
     : center(center),
-      normal(normal)
+      normal(normal),
+      is_null(is_null)
 {
     interp = inter;
 }

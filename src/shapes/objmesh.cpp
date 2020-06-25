@@ -17,8 +17,13 @@ ObjMesh::ObjMesh() : Shape()
     tris = std::vector<Triangle>();
 }
 
-ObjMesh::ObjMesh(const std::string& filename, bool flip_norms)
-    : Shape(), filename(filename), flip_norms(flip_norms)
+ObjMesh::ObjMesh(const std::string& filename,
+                 bool flip_norms,
+                 bool is_null)
+    : Shape(),
+      filename(filename),
+      flip_norms(flip_norms),
+      is_null(is_null)
 {
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();

@@ -8,7 +8,7 @@
 
 #include <feign/core/shape.h>
 
-Shape::Shape() : geomShader(nullptr)
+Shape::Shape() : geomShader(nullptr), is_null(false)
 {
     instID = 0;
     transform = Transform();

@@ -721,6 +721,8 @@ void FeignRenderer::fr_object(std::string name,
     }
 }
 
+// TODO: rename this to shape... since not just meshes are supported
+// TODO: make a better way of storing all of these TODOs.
 void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
                             void* mesh_data)
@@ -738,7 +740,9 @@ void FeignRenderer::fr_mesh(std::string name,
 
         GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
 
-        mesh->mesh = new ObjMesh(params->filename, params->flip_norms);
+        mesh->mesh = new ObjMesh(params->filename,
+                                 params->flip_norms,
+                                 params->is_null);
         mesh->mesh->geomShader = geom_shader;
     }
     else if (type == "grid")
@@ -757,7 +761,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         mesh->mesh = new SDFSphere(params->center,
                                    params->radius,
-                                   params->interp);
+                                   params->interp,
+                                   params->is_null);
     }
     else if (type == "sdf_plane")
     {
@@ -765,13 +770,16 @@ void FeignRenderer::fr_mesh(std::string name,
 
         mesh->mesh = new SDFPlane(params->center,
                                   params->normal,
-                                  params->interp);
+                                  params->interp,
+                                  params->is_null);
     }
     else if (type == "sdf_box")
     {
         SDFBox::Params* params = (SDFBox::Params*)mesh_data;
 
-        mesh->mesh = new SDFBox(params->tlc, params->brc);
+        mesh->mesh = new SDFBox(params->tlc,
+                                params->brc,
+                                params->is_null);
     }
     else if (type == "sdf_cylinder")
     {
@@ -779,7 +787,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         mesh->mesh = new SDFCylinder(params->first,
                                      params->second,
-                                     params->radius);
+                                     params->radius,
+                                     params->is_null);
     }
     else if (type == "sdf_cone")
     {
@@ -788,7 +797,8 @@ void FeignRenderer::fr_mesh(std::string name,
         mesh->mesh = new SDFCone(params->first,
                                  params->second,
                                  params->radius_1,
-                                 params->radius_2);
+                                 params->radius_2,
+                                 params->is_null);
     }
     else
     {

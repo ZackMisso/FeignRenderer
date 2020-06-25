@@ -55,9 +55,12 @@ public:
     unsigned int getInstID() const { return instID; }
 
     void setInstID(unsigned int val) { instID = val; }
+    void
 
     Transform transform;
     GeometryShaderNode* geomShader;
+
+    bool is_null;
 protected:
     unsigned int geomID;
     unsigned int instID;
@@ -89,19 +92,23 @@ public:
     {
         Params(Point3f center,
                Float radius,
-               Float interp)
+               Float interp,
+               bool is_null)
             : center(center),
               radius(radius),
-              interp(interp) { }
+              interp(interp),
+              is_null(is_null) { }
 
         Point3f center;
         Float radius;
         Float interp;
+        bool is_null;
     };
 
     SDFSphere(Point3f center,
               Float radius,
-              Float interp);
+              Float interp,
+              bool is_null);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -126,19 +133,23 @@ public:
     {
         Params(Point3f center,
                Normal3f normal,
-               Float interp)
+               Float interp,
+               bool is_null)
             : center(center),
               normal(normal),
-              interp(interp) { }
+              interp(interp),
+              is_null(is_null){ }
 
         Point3f center;
         Normal3f normal;
         Float interp;
+        bool is_null;
     };
 
     SDFPlane(Point3f center,
              Normal3f normal,
-             Float interp);
+             Float interp,
+             bool is_null);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -161,14 +172,15 @@ class SDFBox : public SDFShape
 public:
     struct Params
     {
-        Params(Point3f tlc, Point3f brc)
-            : tlc(tlc), brc(brc) { }
+        Params(Point3f tlc, Point3f brc, bool is_null)
+            : tlc(tlc), brc(brc), is_null(is_null) { }
 
         Point3f tlc;
         Point3f brc;
+        bool is_null;
     };
 
-    SDFBox(Point3f tlc, Point3f brc);
+    SDFBox(Point3f tlc, Point3f brc, bool is_null);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -193,19 +205,23 @@ public:
     {
         Params(Point3f first,
                Point3f second,
-               float radius)
+               float radius,
+               bool is_null)
             : first(first),
               second(second),
-              radius(radius) { }
+              radius(radius),
+              is_null(is_null){ }
 
         Point3f first;
         Point3f second;
         float radius;
+        bool is_null;
     };
 
     SDFCylinder(Point3f first,
                 Point3f second,
-                float radius);
+                float radius
+                bool is_null);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -232,22 +248,26 @@ public:
         Params(Point3f first,
                Point3f second,
                Float radius_1,
-               Float radius_2)
+               Float radius_2,
+               bool is_null)
             : first(first),
               second(second),
               radius_1(radius_1),
-              radius_2(radius_2) { }
+              radius_2(radius_2),
+              is_null(is_null) { }
 
         Point3f first;
         Point3f second;
         Float radius_1;
         Float radius_2;
+        bool is_null;
     };
 
     SDFCone(Point3f first,
             Point3f second,
             Float radius_1,
-            Float radius_2);
+            Float radius_2,
+            bool is_null);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -302,6 +322,8 @@ public:
     MeshNode* mesh;
     MaterialShaderNode* material_shader;
     EmitterNode* emitter;
+    // TODO: I need to rething this design... should media be a parameter of
+    //       shape or just exist in the object node
     MediaNode* medium;
     Transform transform;
 };

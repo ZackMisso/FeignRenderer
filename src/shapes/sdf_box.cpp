@@ -9,8 +9,11 @@
 #include <feign/core/shape.h>
 #include <feign/math/bbox.h>
 
-SDFBox::SDFBox(Point3f tlc, Point3f brc)
-    : SDFShape(), tlc(tlc), brc(brc) { }
+SDFBox::SDFBox(Point3f tlc, Point3f brc, bool is_null)
+    : SDFShape(),
+      tlc(tlc),
+      brc(brc),
+      is_null(is_null) { }
 
 Float SDFBox::evaluate(Point3f pt) const
 {
@@ -18,7 +21,7 @@ Float SDFBox::evaluate(Point3f pt) const
     Vector3f half_bounds = (tlc - brc) / 2.f;
     Vector3f center = (tlc + brc) / 2.f;
     Vector3f q = (pt - center).abs() - (half_bounds);
-    
+
     return q.max(0.f).norm() + fmin(fmax(q(0),fmax(q(1),q(2))),0.f);
 }
 

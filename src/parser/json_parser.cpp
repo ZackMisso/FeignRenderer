@@ -536,6 +536,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         {
             std::string name = "mesh";
             std::string type = "default";
+            bool is_null = false;
 
             const rapidjson::Value& value = itr->value;
 
@@ -546,6 +547,10 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             if (value.HasMember("type"))
             {
                 type = value["type"].GetString();
+            }
+            if (value.HasMember("is_null"))
+            {
+                is_null = value["is_null"].GetBool();
             }
 
             if (type == "triangle_mesh")
@@ -567,7 +572,10 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                     flip_norms = value["flip_norms"].GetBool();
                 }
 
-                ObjMesh::Params params(filename, geom_shader, flip_norms);
+                ObjMesh::Params params(filename,
+                                       geom_shader,
+                                       flip_norms,
+                                       is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -620,7 +628,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 SDFSphere::Params params = SDFSphere::Params(center,
                                                              radius,
-                                                             interp);
+                                                             interp,
+                                                             is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -649,7 +658,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 SDFPlane::Params params = SDFPlane::Params(center,
                                                            norm,
-                                                           interp);
+                                                           interp,
+                                                           is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -676,7 +686,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                     interp = value["interp"].GetFloat();
                 }
 
-                SDFBox::Params params = SDFBox::Params(tlc, brc);
+                SDFBox::Params params = SDFBox::Params(tlc, brc, is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -705,7 +715,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 SDFCylinder::Params params = SDFCylinder::Params(first,
                                                                  second,
-                                                                 radius);
+                                                                 radius,
+                                                                 is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -740,7 +751,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 SDFCone::Params params = SDFCone::Params(first,
                                                          second,
                                                          radius_1,
-                                                         radius_2);
+                                                         radius_2,
+                                                         is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }

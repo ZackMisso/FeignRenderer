@@ -11,11 +11,13 @@
 
 SDFCylinder::SDFCylinder(Point3f first,
                          Point3f second,
-                         float radius)
+                         float radius,
+                         bool is_null)
     : SDFShape(),
       first(first),
       second(second),
-      radius(radius) { }
+      radius(radius),
+      is_null(is_null) { }
 
 Float SDFCylinder::evaluate(Point3f pt) const
 {

@@ -10,9 +10,11 @@
 
  SDFSphere::SDFSphere(Point3f center,
                       Float radius,
-                      Float inter)
+                      Float inter,
+                      bool is_null)
     : center(center),
-      radius(radius)
+      radius(radius),
+      is_null(is_null)
 {
     interp = inter;
 }

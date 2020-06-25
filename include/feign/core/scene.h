@@ -42,7 +42,12 @@ public:
 
     void renderScene() const;
 
-    bool intersect(const Ray3f& ray, Intersection& its) const;
+    bool intersect_full(const Ray3f& ray, Intersection& its) const;
+    bool intersect_non_null(const Ray3f& ray, Intersection& its) const;
+    bool intersect_transmittance(const Ray3f& ray,
+                                 Intersection& its,
+                                 Sampler* sampler,
+                                 Color3f& beta) const;
 
     void addEmitter(Emitter* emitter);
 

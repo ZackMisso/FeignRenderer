@@ -6,6 +6,8 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+// TODO: I also need to write a ply parser
+
 #pragma once
 
 #include <feign/core/shape.h>
@@ -22,16 +24,19 @@ public:
                bool flip_norms = false)
             : filename(filename),
               shader(shader),
-              flip_norms(flip_norms) { }
+              flip_norms(flip_norms),
+              is_null(is_null) { }
 
         std::string filename;
         std::string shader;
         bool flip_norms;
+        bool is_null;
     };
 
     ObjMesh();
     ObjMesh(const std::string& filename,
-            bool flip_norms = false);
+            bool flip_norms = false,
+            bool is_null = false);
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,
             const std::vector<Vec2f>& uvs,

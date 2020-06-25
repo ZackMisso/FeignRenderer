@@ -151,25 +151,94 @@ void Scene::renderScene() const
 
 bool Scene::intersect(const Ray3f& ray, Intersection& its) const
 {
-    // its.medium = nullptr;
-    //
-    // bool intersected = ray_accel->intersect(ray, its);
-    //
-    // if (intersected)
-    // {
-    //     // LOG("getting shape medium");
-    //     its.medium = getShapeMedium(its);
-    //     // LOG("got shape medium");
-    // }
-    //
-    // if (env_medium_node && !its.medium)
-    // {
-    //     its.medium = env_medium_node->media;
-    // }
-    //
-    // return intersected;
-
     return ray_accel->intersect(ray, its);
+}
+
+// bounaded mediums are represented by null objects, which should be skipped
+// during certain processes. Which is why this method exists
+bool Scene::intersect_non_null(const Ray3f& ray, Intersection& its) const
+{
+    Ray3f tmp_ray = ray;
+
+    while (ray_accel->intersect(tmp_ray, its))
+    {
+        if (its.intersected_mesh->is_null)
+        {
+            // update the near t on the ray and continue traversal
+            tmp_ray.near = its.t + Epsilon;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// the intersect method used for intersection calls where transmittance should
+// also be computed. This is used for emitter sampling of light sources in the
+// volpath integrator.
+bool Scene::intersect_transmittance(const Ray3f& ray,
+                                    Intersection& its,
+                                    Sampler* sampler,
+                                    Color3f& beta) const
+{
+    // this method assumes beta is set before being called
+    Ray3f tmp_ray = ray;
+
+    std::vector<Ray3f> rays = std::vector<Ray3f>();
+    std::vector<const Media*> mediums = std::vector<const Media*>();
+
+    while (ray_accel->intersect(tmp_ray, its))
+    {
+        if (its.intersected_mesh->is_null)
+        {
+            const Media* media = getShapeMedium(its);
+            media = (!media) ? env_medium_node->media : media;
+
+            if (media)
+            {
+                // append the medium to the running list of media and rays, and
+                // continue the intersection. If the intersection turns out to
+                // never hit anything the various transmittance calls will be
+                // evaluated as a post process.
+                Ray3f medium_ray = tmp_ray;
+
+                // do a second intersection call to get the far bounds of the
+                // bounding medium.... TODO: this implementation will be bugged
+                // when the two different mediums overlap.
+                if (ray_accel->intersect(tmp_ray, its))
+                {
+                    // return false if an intersection actually occurs with
+                    // something that is not apart of the medium.
+                    if (!its.intersected_mesh->is_null) return true;
+
+                    rays.push_back(tmp_ray);
+                    mediums.push_back(media);
+
+                    if (its.t > tmp_ray.far) break;
+                }
+            }
+            else
+            {
+                // update the near t on the ray and continue traversal
+                tmp_ray.near = its.t + Epsilon;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    // accumulate transmittance
+    for (int i = 0; i < rays.size(); ++i)
+    {
+        beta *= mediums[i]->transmittance(rays[i], sampler);
+    }
+
+    return false;
 }
 
 void Scene::addEmitter(Emitter* emitter)
@@ -190,7 +259,10 @@ const Media* Scene::getShapeMedium(const Intersection& its) const
 
     if ((*objects[id]).medium)
     {
-        // assert(false);
+        // TODO: rethink this whole storing everything in nodes malarky... there
+        //       should be a better way of doing this that will still support
+        //       my future plans of a node-based graph editor for input to the
+        //       renderer
         return (*(*objects[id]).medium)();
     }
 
@@ -218,8 +290,13 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
 
         Intersection tmp;
 
-        if (!intersect(shadow_ray, tmp) ||
-             global_params.ignore_shadow_checks)
+        Color3f transmittance = Color3f(1.f);
+
+        if (!intersect_transmittance(shadow_ray,
+                                     tmp,
+                                     transmittance,
+                                     closure.sampler) ||
+            global_params.ignore_shadow_checks)
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
 
@@ -228,12 +305,13 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
             closure.shadow_rays[i].valid = true;
             closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
 
-            Float transmittance = 1.f;
-            if (tmp.medium)
-            {
-                transmittance = tmp.medium->transmittance(shadow_ray,
-                                                          closure.sampler);
-            }
+            // this implementation of transmittance is now deprecated
+            // Float transmittance = 1.f;
+            // if (tmp.medium)
+            // {
+            //     transmittance = tmp.medium->transmittance(shadow_ray,
+            //                                               closure.sampler);
+            // }
 
             if (emitter_pdf == 0.f)
             {
@@ -252,10 +330,6 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
 void Scene::eval_one_emitter(MaterialClosure& closure) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(1);
-
-    // uniform sampling of light sources
-    // TODO: later add infrastructure for different light sampling
-    //       methods
 
     Float choice_pdf;
     int emitter;
@@ -278,8 +352,13 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
 
     Intersection tmp;
 
-    if (!intersect(shadow_ray, tmp) ||
-         global_params.ignore_shadow_checks)
+    Color3f transmittance = Color3f(1.f);
+
+    if (!intersect_transmittance(shadow_ray,
+                                 tmp,
+                                 transmittance,
+                                 closure.sampler) ||
+        global_params.ignore_shadow_checks)
     {
         Float cos_term = closure.its->s_frame.n % eqr.wi;
 
@@ -290,11 +369,13 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
 
         Float transmittance = 1.f;
 
-        if (tmp.medium)
-        {
-            transmittance = tmp.medium->transmittance(shadow_ray,
-                                                      closure.sampler);
-        }
+        // this implementation of transmittance is now deprecated
+        // Float transmittance = 1.f;
+        // if (tmp.medium)
+        // {
+        //     transmittance = tmp.medium->transmittance(shadow_ray,
+        //                                               closure.sampler);
+        // }
 
         if (emitter_pdf == 0.f)
         {
