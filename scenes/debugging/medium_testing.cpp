@@ -50,56 +50,56 @@ void MediumTesting_Debug::initialize_scene(int frame)
     FeignRenderer::fr_clear_transform();
     ////////////////
 
-    // // front wall //
-    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    // FeignRenderer::fr_rotate(-90.f, 1.f, 0.f, 0.f);
-    // FeignRenderer::fr_translate(0.f, 0.f, -10.f);
-    //
-    // FeignRenderer::fr_object("front_wall",
-    //                          "front_wall_plane",
-    //                          "diffuse_shad");
-    //
-    // ObjMesh::Params params_front_wall("../scenes/meshes/plane.obj", "");
-    //
-    // FeignRenderer::fr_mesh("front_wall_plane",
-    //                        "triangle_mesh",
-    //                        &params_front_wall);
-    // FeignRenderer::fr_clear_transform();
-    // ////////////////
-    //
-    // // back wall //
-    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    // FeignRenderer::fr_rotate(90.f, 1.f, 0.f, 0.f);
-    // FeignRenderer::fr_translate(0.f, 0.f, 10.f);
-    //
-    // FeignRenderer::fr_object("back_wall",
-    //                          "back_wall_plane",
-    //                          "diffuse_shad");
-    //
-    // ObjMesh::Params params_back_wall("../scenes/meshes/plane.obj", "");
-    //
-    // FeignRenderer::fr_mesh("back_wall_plane",
-    //                        "triangle_mesh",
-    //                        &params_back_wall);
-    // FeignRenderer::fr_clear_transform();
-    // ////////////////
-    //
-    // // left wall //
-    // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
-    // FeignRenderer::fr_rotate(90.f, 0.f, 0.f, 1.f);
-    // FeignRenderer::fr_translate(-10.f, 0.f, 0.f);
-    //
-    // FeignRenderer::fr_object("left_wall",
-    //                          "left_wall_plane",
-    //                          "diffuse_shad");
-    //
-    // ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
-    //
-    // FeignRenderer::fr_mesh("left_wall_plane",
-    //                        "triangle_mesh",
-    //                        &params_left_wall);
-    // FeignRenderer::fr_clear_transform();
-    // ////////////////
+    // front wall //
+    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    FeignRenderer::fr_rotate(-90.f, 1.f, 0.f, 0.f);
+    FeignRenderer::fr_translate(0.f, 0.f, -10.f);
+
+    FeignRenderer::fr_object("front_wall",
+                             "front_wall_plane",
+                             "diffuse_shad");
+
+    ObjMesh::Params params_front_wall("../scenes/meshes/plane.obj", "");
+
+    FeignRenderer::fr_mesh("front_wall_plane",
+                           "triangle_mesh",
+                           &params_front_wall);
+    FeignRenderer::fr_clear_transform();
+    //////////////
+
+    // back wall //
+    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    FeignRenderer::fr_rotate(90.f, 1.f, 0.f, 0.f);
+    FeignRenderer::fr_translate(0.f, 0.f, 10.f);
+
+    FeignRenderer::fr_object("back_wall",
+                             "back_wall_plane",
+                             "diffuse_shad");
+
+    ObjMesh::Params params_back_wall("../scenes/meshes/plane.obj", "");
+
+    FeignRenderer::fr_mesh("back_wall_plane",
+                           "triangle_mesh",
+                           &params_back_wall);
+    FeignRenderer::fr_clear_transform();
+    //////////////
+
+    // left wall //
+    FeignRenderer::fr_scale(10.f, 1.f, 10.f);
+    FeignRenderer::fr_rotate(90.f, 0.f, 0.f, 1.f);
+    FeignRenderer::fr_translate(-10.f, 0.f, 0.f);
+
+    FeignRenderer::fr_object("left_wall",
+                             "left_wall_plane",
+                             "diffuse_shad");
+
+    ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
+
+    FeignRenderer::fr_mesh("left_wall_plane",
+                           "triangle_mesh",
+                           &params_left_wall);
+    FeignRenderer::fr_clear_transform();
+    ////////////////
     //
     // // back wall //
     // FeignRenderer::fr_scale(10.f, 1.f, 10.f);
