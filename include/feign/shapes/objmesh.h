@@ -21,7 +21,8 @@ public:
     {
         Params(std::string filename,
                std::string shader,
-               bool flip_norms = false)
+               bool flip_norms = false,
+               bool is_null = false)
             : filename(filename),
               shader(shader),
               flip_norms(flip_norms),

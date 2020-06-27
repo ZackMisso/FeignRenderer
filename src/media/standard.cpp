@@ -1,4 +1,5 @@
 #include <feign/media/media.h>
+#include <feign/core/closure.h>
 
 StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
                                PhaseFunctionNode* phase_node,
@@ -23,19 +24,20 @@ void StandardMedium::preProcess()
     trans_est->trans_est->density = density->density;
 }
 
-Float StandardMedium::sample(Ray3f world_ray,
-                             Sampler* sampler,
-                             MediaClosure& closure) const
+Color3f StandardMedium::sample(Ray3f world_ray,
+                               Sampler* sampler,
+                               MediaClosure& closure) const
 {
     const Ray3f ray = transform * world_ray;
-    Float min_t = ray.near;
-    Float max_t = std::min(ray.far, 20.f);
+    // Float min_t = ray.near;
+    // Float max_t = std::min(ray.far, 20.f);
 
     // LOG("  min_t: " + std::to_string(min_t));
     // LOG("  max_t: " + std::to_string(max_t));
 
     if (sca_coeff == COLOR_BLACK)
     {
+        assert(false);
         // LOG("  transmittancing");
         // Float trans = trans_est->trans_est->transmittance(ray,
         //                                            sampler,
@@ -44,35 +46,36 @@ Float StandardMedium::sample(Ray3f world_ray,
 
         // LOG("  transmittance: " + std::to_string(trans));
         // LOG("transmittance");
+        // LOG("tMin: " + std::to_string(closure.t_min));
+        // LOG("tMax: " + std::to_string(closure.t_max));
         return trans_est->trans_est->transmittance(ray,
                                                    sampler,
-                                                   min_t,
-                                                   max_t);
+                                                   closure.t_min,
+                                                   closure.t_max);
     }
 
-    // LOG("post transmittance");
-
-    Float sample_pos;
     Float samp_val = sampling->sampling->sample(ray,
                                                 sampler,
-                                                sample_pos,
-                                                min_t,
-                                                max_t);
+                                                closure.sampled_t,
+                                                closure.t_min,
+                                                closure.t_max);
 
-    // TODO: set stuff in MediumClosure
+    return sca_coeff / (abs_coeff + sca_coeff) * samp_val;
 
-    return samp_val;
+    // // TODO: set stuff in MediumClosure
+    //
+    // return samp_val;
 }
 
-Float StandardMedium::transmittance(Ray3f world_ray,
-                                    Sampler* sampler) const
+Color3f StandardMedium::transmittance(Ray3f world_ray,
+                                      Sampler* sampler,
+                                      Float t_min,
+                                      Float t_max) const
 {
-    // LOG("transmittance medium");
-
     const Ray3f ray = transform * world_ray;
 
     return trans_est->trans_est->transmittance(ray,
                                                sampler,
-                                               ray.near,
-                                               std::min(ray.far, 20.f));
+                                               t_min,
+                                               t_max);
 }

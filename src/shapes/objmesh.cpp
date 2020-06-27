@@ -20,11 +20,11 @@ ObjMesh::ObjMesh() : Shape()
 ObjMesh::ObjMesh(const std::string& filename,
                  bool flip_norms,
                  bool is_null)
-    : Shape(),
+    : Shape(is_null),
       filename(filename),
-      flip_norms(flip_norms),
-      is_null(is_null)
+      flip_norms(flip_norms)
 {
+    // if (is_null) assert(false);
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
     uvs = std::vector<Vec2f>();

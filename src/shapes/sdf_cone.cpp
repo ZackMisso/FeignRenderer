@@ -14,12 +14,11 @@ SDFCone::SDFCone(Point3f first,
                  Float radius_1,
                  Float radius_2,
                  bool is_null)
-    : SDFShape(),
+    : SDFShape(is_null),
       first(first),
       second(second),
       radius_1(radius_1),
-      radius_2(radius_2),
-      is_null(is_null) { }
+      radius_2(radius_2) { }
 
 Float SDFCone::evaluate(Point3f pt) const
 {

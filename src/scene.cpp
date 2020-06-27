@@ -149,8 +149,9 @@ void Scene::renderScene() const
     }
 }
 
-bool Scene::intersect(const Ray3f& ray, Intersection& its) const
+bool Scene::intersect_full(const Ray3f& ray, Intersection& its) const
 {
+    // assert(false);
     return ray_accel->intersect(ray, its);
 }
 
@@ -160,15 +161,18 @@ bool Scene::intersect_non_null(const Ray3f& ray, Intersection& its) const
 {
     Ray3f tmp_ray = ray;
 
-    while (ray_accel->intersect(tmp_ray, its))
+    Intersection tmp = its;
+
+    while (ray_accel->intersect(tmp_ray, tmp))
     {
-        if (its.intersected_mesh->is_null)
+        if (tmp.intersected_mesh->is_null)
         {
             // update the near t on the ray and continue traversal
-            tmp_ray.near = its.t + Epsilon;
+            tmp_ray.near = tmp.t + Epsilon;
         }
         else
         {
+            its = tmp;
             return true;
         }
     }
@@ -190,6 +194,8 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     std::vector<Ray3f> rays = std::vector<Ray3f>();
     std::vector<const Media*> mediums = std::vector<const Media*>();
 
+    // LOG("intersecting with transmittance");
+
     while (ray_accel->intersect(tmp_ray, its))
     {
         if (its.intersected_mesh->is_null)
@@ -203,18 +209,25 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                 // continue the intersection. If the intersection turns out to
                 // never hit anything the various transmittance calls will be
                 // evaluated as a post process.
-                Ray3f medium_ray = tmp_ray;
+                tmp_ray = Ray3f(its.p,
+                                tmp_ray.dir,
+                                Epsilon,
+                                std::numeric_limits<Float>::infinity(),
+                                tmp_ray.depth);
 
                 // do a second intersection call to get the far bounds of the
                 // bounding medium.... TODO: this implementation will be bugged
                 // when the two different mediums overlap.
                 if (ray_accel->intersect(tmp_ray, its))
                 {
+                    Ray3f medium_ray = tmp_ray;
+                    medium_ray.far = its.t;
+
                     // return false if an intersection actually occurs with
                     // something that is not apart of the medium.
                     if (!its.intersected_mesh->is_null) return true;
 
-                    rays.push_back(tmp_ray);
+                    rays.push_back(medium_ray);
                     mediums.push_back(media);
 
                     if (its.t > tmp_ray.far) break;
@@ -235,8 +248,13 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     // accumulate transmittance
     for (int i = 0; i < rays.size(); ++i)
     {
-        beta *= mediums[i]->transmittance(rays[i], sampler);
+        beta *= mediums[i]->transmittance(rays[i],
+                                          sampler,
+                                          rays[i].near,
+                                          rays[i].far);
     }
+
+    // LOG("intersecting with transmittance finished");
 
     return false;
 }
@@ -294,8 +312,8 @@ void Scene::eval_all_emitters(MaterialClosure& closure) const
 
         if (!intersect_transmittance(shadow_ray,
                                      tmp,
-                                     transmittance,
-                                     closure.sampler) ||
+                                     closure.sampler,
+                                     transmittance) ||
             global_params.ignore_shadow_checks)
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
@@ -356,8 +374,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure) const
 
     if (!intersect_transmittance(shadow_ray,
                                  tmp,
-                                 transmittance,
-                                 closure.sampler) ||
+                                 closure.sampler,
+                                 transmittance) ||
         global_params.ignore_shadow_checks)
     {
         Float cos_term = closure.its->s_frame.n % eqr.wi;

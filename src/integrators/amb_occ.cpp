@@ -29,7 +29,7 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
 
     Vector3f dir = ray.dir;
 
-    if (!scene->intersect(ray, its))
+    if (!scene->intersect_non_null(ray, its))
     {
         return Color3f(0.f);
     }
@@ -44,7 +44,7 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
                      std::numeric_limits<Float>::infinity());
 
     Intersection shadow_its;
-    if (!scene->intersect(shadow_ray, shadow_its))
+    if (!scene->intersect_non_null(shadow_ray, shadow_its))
     {
         return Color3f(1.f);
     }

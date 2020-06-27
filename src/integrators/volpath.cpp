@@ -34,14 +34,119 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                                               false,
                                               true);
 
-    for (int bounces = 0; bounces < 15; ++bounces)
+    for (int bounces = 0; bounces < 1; ++bounces)
     {
         if (beta.isZero()) break;
 
         Intersection its;
 
         // TODO: medium needs to be set at the end, not during intersection
-        if (!scene->intersect(ray, its)) break;
+        // LOG("initial intersect");
+        if (!scene->intersect_full(ray, its)) break;
+
+        // LOG("checking if null");
+        // media_check
+        // TODO: this will be broken for media inside glass
+        if (its.intersected_mesh->is_null)
+        {
+            // LOG("getting shape medium");
+            closure.media = scene->getShapeMedium(its);
+
+            // LOG("creating ray");
+
+            ray = Ray3f(its.p,
+                        ray.dir,
+                        Epsilon,
+                        std::numeric_limits<Float>::infinity(),
+                        ray.depth);
+
+            // LOG("intersecting full again");
+            bool intersected = scene->intersect_full(ray, its);
+
+
+
+            if (closure.media)
+            {
+                // LOG("closure media defined");
+                MediaClosure medium_closure(closure.media, ray.near, its.t);
+
+                // LOG("sampling medium");
+                beta *= closure.media->sample(ray, sampler, medium_closure);
+                // LOG("post sample medium");
+
+                if (medium_closure.handleScatter())
+                {
+                    // sample lighting
+                    // Point3f actual_p = its.p;
+                    its.p = ray(medium_closure.sampled_t);
+
+                    closure.its = &its;
+                    closure.ray = &ray;
+                    closure.wi = its.toLocal(-ray.dir);
+                    closure.emission = COLOR_BLACK;
+                    closure.nee = COLOR_BLACK;
+                    closure.albedo = COLOR_BLACK;
+
+                    if (closure.sample_all_emitters)
+                    {
+                        scene->eval_all_emitters(closure);
+                    }
+                    else
+                    {
+                        scene->eval_one_emitter(closure);
+                    }
+
+                    // maybe accumulate shadow rays in closure in the future
+                    for (int i = 0; i < closure.shadow_rays.size(); ++i)
+                    {
+                        if (closure.shadow_rays[i].valid)
+                        {
+                            // Vector3f wo = shadow_rays[i].shadow_ray.normalized();
+                            // The pdf of choosing a specific scattering direction
+                            // should be equal to the evaluated phase... so they
+                            // will end up canceling out.. though I am leaving this
+                            // here to be incorporated with MIS in the future.
+                            //
+                            //shadow_rays[i].throughput *=
+                            //    medium_closure.media->eval_phase(wo, ray.dir);
+                            //
+                            closure.nee += beta * closure.shadow_rays[i].throughput;
+                        }
+                    }
+
+                    Vector3f wo = -ray.dir;
+                    Vector3f wi;
+                    closure.media->sample_phase(wo, wi, sampler->next2D());
+
+                    ray = Ray3f(its.p,
+                                wi,
+                                Epsilon,
+                                std::numeric_limits<Float>::infinity(),
+                                ray.depth + 1);
+                    closure.last_spec = closure.is_specular;
+                    closure.is_specular = false;
+
+                    Li += closure.nee;
+
+                    continue;
+                }
+
+                if (!intersected) break;
+            }
+            else
+            {
+                if (!intersected) break;
+
+                // LOG("skipping null object");
+                ray = Ray3f(its.p,
+                            ray.dir,
+                            Epsilon,
+                            std::numeric_limits<Float>::infinity(),
+                            ray.depth);
+
+                continue;
+            }
+        }
 
         // if (closure->media)
         // {
@@ -59,8 +164,6 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
         //     // LOG("medium sample");
         // }
 
-        MediaClosure medium_closure(closure.media, its.t);
-
         // if (closure.media)
         // {
         //     ray.far = its.t;
@@ -71,12 +174,23 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
         //     if (beta.isZero()) break;
         // }
 
-        if (medium_closure.handleScatter())
-        {
-            // TODO - will be done later
-        }
-        else
-        {
+        // if (medium_closure.handleScatter())
+        // {
+        //     // TODO - will be done later
+        // }
+        // else
+        // {
+            if (its.intersected_mesh->is_null)
+            {
+                ray = Ray3f(its.p,
+                            ray.dir,
+                            Epsilon,
+                            std::numeric_limits<Float>::infinity(),
+                            ray.depth);
+
+                continue;
+            }
+
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
 
             closure.its = &its;
@@ -127,11 +241,11 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
             // TODO: replace this check with an inside/outside/counter
             // if there is no active medium, but a global medium exists,
             // set the active medium to the global medium
-            if (!closure.media)
-            {
-                closure.media = scene->env_medium_node->media;
-            }
-        }
+            // if (!closure.media)
+            // {
+            //     closure.media = scene->env_medium_node->media;
+            // }
+        // }
     }
 
     return Li;

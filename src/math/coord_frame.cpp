@@ -10,10 +10,19 @@
 
 CoordinateFrame::CoordinateFrame() { }
 
-CoordinateFrame::CoordinateFrame(const Vector3f& s, const Vector3f& t, const Normal3f& n)
+CoordinateFrame::CoordinateFrame(const CoordinateFrame& frame)
+    : s(frame.s),
+      t(frame.t),
+      n(frame.n) { }
+
+CoordinateFrame::CoordinateFrame(const Vector3f& s,
+                                 const Vector3f& t,
+                                 const Normal3f& n)
             : s(s), t(t), n(n) { }
 
-CoordinateFrame::CoordinateFrame(const Vector3f& x, const Vector3f& y, const Vector3f& z)
+CoordinateFrame::CoordinateFrame(const Vector3f& x,
+                                 const Vector3f& y,
+                                 const Vector3f& z)
             : s(x), t(y), n(z) { }
 
 CoordinateFrame::CoordinateFrame(const Normal3f& n)

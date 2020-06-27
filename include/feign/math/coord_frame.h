@@ -20,6 +20,7 @@ struct CoordinateFrame
     Normal3f n;
 
     CoordinateFrame();
+    CoordinateFrame(const CoordinateFrame& frame);
     CoordinateFrame(const Vector3f& s, const Vector3f& t, const Normal3f& n);
     CoordinateFrame(const Vector3f& x, const Vector3f& y, const Vector3f& z);
     CoordinateFrame(const Normal3f& n);

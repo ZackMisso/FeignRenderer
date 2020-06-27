@@ -43,6 +43,13 @@ void DistantEmitter::preProcess()
     // does nothing for now
 }
 
+Point3f DistantEmitter::getCenter() const
+{
+    throw new NotImplementedException("distant get center");
+
+    return Point3f(0.f);
+}
+
 Color3f DistantEmitter::evaluate(EmitterQuery& rec) const
 {
     throw new NotImplementedException("distant evaluate");

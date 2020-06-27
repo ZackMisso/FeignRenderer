@@ -73,20 +73,32 @@ struct MaterialClosure
 struct MediaClosure
 {
     MediaClosure(const Media* medium,
-                 Float max_t)
+                 Float t_min,
+                 Float t_max)
         : medium(medium),
-          max_t(max_t),
-          sampled_t(max_t) { }
+          t_min(t_min),
+          t_max(t_max),
+          sampled_t(t_max) { }
 
     bool handleScatter()
     {
-        return sampled_t < max_t;
+        return sampled_t < t_max;
     }
+
+    // void accumulate_shadow_rays()
+    // {
+    //     nee = Color3f(1.f);
+    //
+    //
+    // }
 
     // input
     const Media* medium;
-    Float max_t;
+    Float t_max;
+    Float t_min;
 
+    // TODO: allow for multiple sampled t's
     // output
     Float sampled_t;
+    Color3f nee;
 };

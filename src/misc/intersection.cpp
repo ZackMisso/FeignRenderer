@@ -9,8 +9,17 @@
 #include <feign/misc/intersection.h>
 
 Intersection::Intersection()
-    : intersected_mesh(nullptr),
-      medium(nullptr) { }
+    : intersected_mesh(nullptr) { }
+
+Intersection::Intersection(const Intersection& its)
+    : p(its.p),
+      uv(its.uv),
+      t(its.t),
+      f(its.f),
+      bary(its.bary),
+      s_frame(its.s_frame),
+      g_frame(its.g_frame),
+      intersected_mesh(its.intersected_mesh) { }
 
 Vector3f Intersection::toLocal(const Vector3f& vec) const
 {

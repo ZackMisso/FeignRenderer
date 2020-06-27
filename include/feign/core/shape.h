@@ -31,6 +31,7 @@ class Shape
 {
 public:
     Shape();
+    Shape(bool is_null);
     virtual ~Shape() { }
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -55,7 +56,7 @@ public:
     unsigned int getInstID() const { return instID; }
 
     void setInstID(unsigned int val) { instID = val; }
-    void
+    void setGeomID(unsigned int val) { geomID = val; }
 
     Transform transform;
     GeometryShaderNode* geomShader;
@@ -73,12 +74,13 @@ protected:
 class SDFShape : public Shape
 {
 public:
-    SDFShape() { }
+    SDFShape() : Shape() { }
+    SDFShape(bool is_null) : Shape(is_null) { }
     ~SDFShape() { }
 
     virtual float evaluate(Point3f pt) const = 0;
 
-    Float interp;
+    Float interp; // TODO: how to represent interp across all objects??
 };
 /////////////////////////////////////////////////
 
@@ -93,7 +95,7 @@ public:
         Params(Point3f center,
                Float radius,
                Float interp,
-               bool is_null)
+               bool is_null = false)
             : center(center),
               radius(radius),
               interp(interp),
@@ -108,7 +110,7 @@ public:
     SDFSphere(Point3f center,
               Float radius,
               Float interp,
-              bool is_null);
+              bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -134,7 +136,7 @@ public:
         Params(Point3f center,
                Normal3f normal,
                Float interp,
-               bool is_null)
+               bool is_null = false)
             : center(center),
               normal(normal),
               interp(interp),
@@ -149,7 +151,7 @@ public:
     SDFPlane(Point3f center,
              Normal3f normal,
              Float interp,
-             bool is_null);
+             bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -172,7 +174,7 @@ class SDFBox : public SDFShape
 public:
     struct Params
     {
-        Params(Point3f tlc, Point3f brc, bool is_null)
+        Params(Point3f tlc, Point3f brc, bool is_null = false)
             : tlc(tlc), brc(brc), is_null(is_null) { }
 
         Point3f tlc;
@@ -180,7 +182,7 @@ public:
         bool is_null;
     };
 
-    SDFBox(Point3f tlc, Point3f brc, bool is_null);
+    SDFBox(Point3f tlc, Point3f brc, bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -206,7 +208,7 @@ public:
         Params(Point3f first,
                Point3f second,
                float radius,
-               bool is_null)
+               bool is_null = false)
             : first(first),
               second(second),
               radius(radius),
@@ -220,8 +222,8 @@ public:
 
     SDFCylinder(Point3f first,
                 Point3f second,
-                float radius
-                bool is_null);
+                float radius,
+                bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -249,7 +251,7 @@ public:
                Point3f second,
                Float radius_1,
                Float radius_2,
-               bool is_null)
+               bool is_null = false)
             : first(first),
               second(second),
               radius_1(radius_1),
@@ -267,7 +269,7 @@ public:
             Point3f second,
             Float radius_1,
             Float radius_2,
-            bool is_null);
+            bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 

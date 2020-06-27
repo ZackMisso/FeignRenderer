@@ -13,3 +13,9 @@ Shape::Shape() : geomShader(nullptr), is_null(false)
     instID = 0;
     transform = Transform();
 }
+
+Shape::Shape(bool is_null) : geomShader(nullptr), is_null(is_null)
+{
+    instID = 0;
+    transform = Transform();
+}

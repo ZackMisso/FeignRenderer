@@ -18,6 +18,7 @@ void WhittedIntegrator::preProcess()
     Integrator::preProcess();
 }
 
+// TODO: create a volumetric version of a direct integrator
 Color3f WhittedIntegrator::Li(const Scene* scene,
                               Sampler* sampler,
                               const Ray3f& cam_ray) const
@@ -32,7 +33,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     // LOG("scene intersect");
 
-    if (!scene->intersect(ray, its))
+    if (!scene->intersect_non_null(ray, its))
     {
         return Color3f(0.f);
     }

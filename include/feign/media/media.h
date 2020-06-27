@@ -27,12 +27,18 @@ public:
 
     virtual void preProcess() { }
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         MediaClosure& closure) const = 0;
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           MediaClosure& closure) const = 0;
 
-    virtual Float transmittance(Ray3f ray,
-                                Sampler* sampler) const = 0;
+    virtual Color3f transmittance(Ray3f ray,
+                                  Sampler* sampler,
+                                  Float t_min,
+                                  Float t_max) const = 0;
+
+    virtual void sample_phase(Vector3f wo,
+                              Vector3f wi,
+                              Point2f samp) const = 0;
 
     virtual bool isGlobal() const { return false; }
 };
@@ -80,12 +86,21 @@ public:
 
     virtual void preProcess();
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         MediaClosure& closure) const;
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           MediaClosure& closure) const;
 
-    virtual Float transmittance(Ray3f ray,
-                                Sampler* sampler) const;
+    virtual Color3f transmittance(Ray3f ray,
+                                  Sampler* sampler,
+                                  Float t_min,
+                                  Float t_max) const;
+
+    virtual void sample_phase(Vector3f wo,
+                              Vector3f wi,
+                              Point2f samp) const
+    {
+        phase->phase->sample(samp, wo, wi);
+    }
 
     virtual bool isGlobal() const { return false; }
 
@@ -111,12 +126,18 @@ public:
 
     HomogeneousAbsorbingMedia(Float avg_density);
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         MediaClosure& closure) const;
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           MediaClosure& closure) const;
 
-    virtual Float transmittance(Ray3f ray,
-                                Sampler* sampler) const;
+    virtual Color3f transmittance(Ray3f ray,
+                                  Sampler* sampler,
+                                  Float t_min,
+                                  Float t_max) const;
+
+    virtual void sample_phase(Vector3f wo,
+                              Vector3f wi,
+                              Point2f samp) const { }
 
     virtual bool isGlobal() const;
 

@@ -10,10 +10,9 @@
 #include <feign/math/bbox.h>
 
 SDFBox::SDFBox(Point3f tlc, Point3f brc, bool is_null)
-    : SDFShape(),
+    : SDFShape(is_null),
       tlc(tlc),
-      brc(brc),
-      is_null(is_null) { }
+      brc(brc) { }
 
 Float SDFBox::evaluate(Point3f pt) const
 {

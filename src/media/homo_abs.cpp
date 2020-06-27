@@ -17,18 +17,23 @@
 HomogeneousAbsorbingMedia::HomogeneousAbsorbingMedia(Float avg_density)
     : avg_density(avg_density) { }
 
-Float HomogeneousAbsorbingMedia::sample(Ray3f ray,
-                                        Sampler* sampler,
-                                        MediaClosure& closure) const
+Color3f HomogeneousAbsorbingMedia::sample(Ray3f ray,
+                                          Sampler* sampler,
+                                          MediaClosure& closure) const
 {
-    closure.sampled_t = closure.max_t + 1;
-    return transmittance(ray, sampler);
+    closure.sampled_t = closure.t_max + 1;
+    return transmittance(ray,
+                         sampler,
+                         closure.t_min,
+                         closure.t_max);
 }
 
-Float HomogeneousAbsorbingMedia::transmittance(Ray3f ray,
-                                               Sampler* sampler) const
+Color3f HomogeneousAbsorbingMedia::transmittance(Ray3f ray,
+                                                 Sampler* sampler,
+                                                 Float t_min,
+                                                 Float t_max) const
 {
-    return exp(-avg_density * (ray.near - ray.far));
+    return exp(-avg_density * (t_max - t_min));
 }
 
 bool HomogeneousAbsorbingMedia::isGlobal() const

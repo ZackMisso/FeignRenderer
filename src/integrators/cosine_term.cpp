@@ -26,7 +26,7 @@ Color3f CosineTermIntegrator::Li(const Scene* scene,
 {
     Intersection its;
 
-    if (!scene->intersect(ray, its))
+    if (!scene->intersect_non_null(ray, its))
     {
         return Color3f(-2.f);
     }

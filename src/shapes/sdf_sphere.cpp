@@ -12,9 +12,9 @@
                       Float radius,
                       Float inter,
                       bool is_null)
-    : center(center),
-      radius(radius),
-      is_null(is_null)
+    : SDFShape(is_null),
+      center(center),
+      radius(radius)
 {
     interp = inter;
 }

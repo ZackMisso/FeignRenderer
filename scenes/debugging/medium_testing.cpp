@@ -143,37 +143,40 @@ void MediumTesting_Debug::initialize_sphere_medium(int frame)
 
 void MediumTesting_Debug::initialize_box_medium(int frame)
 {
-    // Transform identity = Transform();
+    Transform identity = Transform();
 
-    // StandardMedium::Params media_params("default",
-    //                                     "default",
-    //                                     "default",
-    //                                     "const_density",
-    //                                     identity,
-    //                                     Color3f(1.f),
-    //                                     COLOR_BLACK);
+    StandardMedium::Params media_params("default",
+                                        "default",
+                                        "default",
+                                        "const_density",
+                                        identity,
+                                        Color3f(0.5f),
+                                        Color3f(0.5f));
 
-    // FeignRenderer::fr_media("box_medium",
-    //                         "standard",
-    //                         &media_params);
+    FeignRenderer::fr_media("box_medium",
+                            "standard",
+                            &media_params);
 
-    // ConstantDensity::Params constant_density_params(1.0f);
+    ConstantDensity::Params constant_density_params(1.0f);
 
-    // FeignRenderer::fr_medium_density("const_density",
-    //                                  "constant",
-    //                                  &constant_density_params);
-    //
-    // FeignRenderer::fr_medium_sampling("const_sampler",
-    //                                   "constant",
-    //                                   nullptr);
+    FeignRenderer::fr_medium_density("const_density",
+                                     "constant",
+                                     &constant_density_params);
+
+    FeignRenderer::fr_medium_sampling("const_sampler",
+                                      "constant",
+                                      nullptr);
 
     FeignRenderer::fr_object("medium_bounds",
                              "box_mesh",
                              "default",
                              "null",
-                             "null");
+                             "box_medium");
 
-    ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj", "");
+    ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
+                             "",
+                             false,
+                             true);
 
     FeignRenderer::fr_mesh("box_mesh",
                            "triangle_mesh",
@@ -258,11 +261,11 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                                   test_name + "/");
 
     FeignRenderer::fr_integrator("integrator",
-                                 "path",
+                                 "volpath",
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(16, 0x12345);
+    Independent::Params samp_params(512, 0x12345);
 
     FeignRenderer::fr_sampler("sampler",
                               "independent",
@@ -307,7 +310,7 @@ void MediumTesting_Debug::run()
 
         initialize_materials(frame);
 
-        initialize_scene(frame);
+        // initialize_scene(frame);
 
         initialize_box_medium(frame);
 

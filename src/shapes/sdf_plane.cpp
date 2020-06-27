@@ -12,9 +12,9 @@
                     Normal3f normal,
                     Float inter,
                     bool is_null)
-    : center(center),
-      normal(normal),
-      is_null(is_null)
+    : SDFShape(is_null),
+      center(center),
+      normal(normal)
 {
     interp = inter;
 }

@@ -15,7 +15,8 @@ struct RenderTile
         : min_x(min_x),
           min_y(min_y),
           max_x(max_x),
-          max_y(max_y)
+          max_y(max_y),
+          done(false)
     {
         int size = (max_x - min_x) * (max_y - min_y);
         pixels = std::vector<Color3f>(size);
@@ -24,15 +25,20 @@ struct RenderTile
 
     void add_radiance(Color3f rad, int i, int j);
     void add_weight(Float wei, int i, int j);
-    void evaluate(const Scene* scene,
-                  const Integrator* intergator,
-                  const Camera* camera,
-                  Sampler* sampler);
+
+    static void evaluate(RenderTile* tile,
+                         const Scene* scene,
+                         const Integrator* intergator,
+                         const Camera* camera,
+                         Sampler* sampler);
+
     void finalize(Imagef& image);
 
     std::vector<Color3f> pixels;
     std::vector<Float> weights;
-    // this is not inclusive
+
+    // this tile represents all pixels in the range [min, max)
+    bool done;
     int min_x;
     int min_y;
     int max_x;
@@ -46,7 +52,7 @@ struct RenderTile
 struct RenderPool
 {
 public:
-    RenderPool(int num_threads);
+    RenderPool(int num_threads, int tile_width);
     ~RenderPool();
 
     void initialize_pool(int im_w, int im_h, int dim);
@@ -54,11 +60,17 @@ public:
                        const Integrator* integrator,
                        const Camera* camera,
                        Sampler* sampler);
-    Imagef accumulate_result();
+    void accumulate_result(Imagef& image);
 
 protected:
+
+    // int get_next_free_index() const;
+
     std::vector<std::thread> threads;
     std::vector<RenderTile*> tiles;
-    std::vector<RenderTile*> activeTiles;
-    bool* freeThreads;
+    std::vector<RenderTile*> active_tiles;
+    // bool* free_threads;
+    int tile_width;
+    int width;
+    int height;
 };
