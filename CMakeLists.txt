@@ -203,6 +203,7 @@ add_executable(feign
     src/integrators/barycentric.cpp
     src/integrators/nice_normal.cpp
     src/integrators/volpath.cpp
+    src/integrators/volpath_trans.cpp
 
     # Material implementation files
     src/materials/simple.cpp

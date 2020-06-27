@@ -205,6 +205,24 @@ public:
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
+// Volumetric Transmittance Integrator
+// used for debugging, just returns transmittance
+/////////////////////////////////////////////////
+class VolPathTrans_Integrator : public Integrator
+{
+public:
+    VolPathTrans_Integrator(FilterNode* filter,
+                       Integrator::Params* params);
+
+    virtual void preProcess();
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 // Whitted Integrator
 /////////////////////////////////////////////////
 class WhittedIntegrator : public Integrator

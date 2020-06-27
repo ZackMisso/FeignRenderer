@@ -36,9 +36,9 @@ public:
                                   Float t_min,
                                   Float t_max) const = 0;
 
-    virtual void sample_phase(Vector3f wo,
-                              Vector3f wi,
-                              Point2f samp) const = 0;
+    virtual Float sample_phase(const Vector3f& wo,
+                               Vector3f& wi,
+                               Point2f samp) const = 0;
 
     virtual bool isGlobal() const { return false; }
 };
@@ -95,11 +95,11 @@ public:
                                   Float t_min,
                                   Float t_max) const;
 
-    virtual void sample_phase(Vector3f wo,
-                              Vector3f wi,
-                              Point2f samp) const
+    virtual Float sample_phase(const Vector3f& wo,
+                               Vector3f& wi,
+                               Point2f samp) const
     {
-        phase->phase->sample(samp, wo, wi);
+        return phase->phase->sample(samp, wo, wi);
     }
 
     virtual bool isGlobal() const { return false; }
@@ -111,6 +111,7 @@ public:
     Transform transform;
     Color3f abs_coeff;
     Color3f sca_coeff;
+    Color3f sigma_t;
 };
 
 class HomogeneousAbsorbingMedia : public Media
@@ -135,9 +136,9 @@ public:
                                   Float t_min,
                                   Float t_max) const;
 
-    virtual void sample_phase(Vector3f wo,
-                              Vector3f wi,
-                              Point2f samp) const { }
+    virtual Float sample_phase(const Vector3f& wo,
+                               Vector3f& wi,
+                               Point2f samp) const { return 0.f; }
 
     virtual bool isGlobal() const;
 

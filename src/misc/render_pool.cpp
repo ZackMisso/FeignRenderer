@@ -2,6 +2,7 @@
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 #include <feign/math/bbox.h>
+#include <unistd.h>
 
 void RenderTile::add_radiance(Color3f rad, int i, int j)
 {
@@ -37,6 +38,7 @@ void RenderTile::evaluate(RenderTile* tile,
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
             {
+                // std::cout << sampler->getSampleCnt() << std::endl;
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
@@ -59,7 +61,7 @@ void RenderTile::evaluate(RenderTile* tile,
                                               pixelSample + integrator->filter->filter->getSize());
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
-                                   Point2f(camera->getFilmSize()[0]-1, camera->getFilmSize()[1]-1));
+                                   Point2f(tile->max_x, tile->max_y));
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -180,7 +182,7 @@ void RenderPool::evaluate_pool(const Scene* scene,
         tiles_to_do.pop_back();
         // free_threads[i] = false;
         active_tiles[i] = tile;
-        Sampler* tile_sampler = sampler->copy();
+        Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
         threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                            tile,
                                            scene,
@@ -188,26 +190,35 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                            camera,
                                            tile_sampler));
     }
-    //
-    // while (tiles_to_do.size())
-    // {
-    //     sleep(60);
-    //
-    //     for (int i = 0; i < active_tiles.size(); ++i)
-    //     {
-    //         if (active_tiles[i]->done)
-    //         {
-    //             RenderTile* tile = tiles_to_do.pop_back();
-    //             active_tiles[i] = tile;
-    //             Sampler* tile_sampler = samler->clone();
-    //             threads[i] = std::thread(std::bind(&tile->evaluate,
-    //                                                scene,
-    //                                                integrator,
-    //                                                camera,
-    //                                                tile_sampler));
-    //         }
-    //     }
-    // }
+
+    // std::cout << "HERE" << std::endl;
+
+    while (tiles_to_do.size())
+    {
+        // std::cout << "HERE" << std::endl;
+        sleep(1);
+        // std::cout << "ack" << std::endl;
+
+        std::cout << "tiles remaining: " << tiles_to_do.size() << std::endl;
+
+        for (int i = 0; i < active_tiles.size(); ++i)
+        {
+            if (active_tiles[i]->done)
+            {
+                threads[i].join();
+                RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
+                tiles_to_do.pop_back();
+                active_tiles[i] = tile;
+                Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+                threads[i] = std::thread(std::bind(&RenderTile::evaluate,
+                                                   tile,
+                                                   scene,
+                                                   integrator,
+                                                   camera,
+                                                   tile_sampler));
+            }
+        }
+    }
 
     for (int i = 0; i < threads.size(); ++i)
     {

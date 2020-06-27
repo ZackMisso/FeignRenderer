@@ -34,9 +34,17 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                                               false,
                                               true);
 
-    for (int bounces = 0; bounces < 1; ++bounces)
+    for (int bounces = 0; bounces < 2; ++bounces)
     {
+        // if (bounces != 0)
+        //     LOG("Number of bounces: " + std::to_string(bounces));
+
         if (beta.isZero()) break;
+
+        // LOG("bounce: " + std::to_string(bounces));
+        // LOG("beta: ");
+        // LOG(beta);
+        // LOG("");
 
         Intersection its;
 
@@ -47,23 +55,27 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
         // LOG("checking if null");
         // media_check
         // TODO: this will be broken for media inside glass
+        // TODO: this is broken for multiple bounces
         if (its.intersected_mesh->is_null)
         {
             // LOG("getting shape medium");
-            closure.media = scene->getShapeMedium(its);
+
 
             // LOG("creating ray");
 
-            ray = Ray3f(its.p,
-                        ray.dir,
-                        Epsilon,
-                        std::numeric_limits<Float>::infinity(),
-                        ray.depth);
+            // if (!closure.media)
+            // {
+                closure.media = scene->getShapeMedium(its);
 
-            // LOG("intersecting full again");
-            bool intersected = scene->intersect_full(ray, its);
+                ray = Ray3f(its.p,
+                            ray.dir,
+                            Epsilon,
+                            std::numeric_limits<Float>::infinity(),
+                            ray.depth);
 
-
+                // LOG("intersecting full again");
+                bool intersected = scene->intersect_full(ray, its);
+            // }
 
             if (closure.media)
             {
@@ -71,8 +83,12 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                 MediaClosure medium_closure(closure.media, ray.near, its.t);
 
                 // LOG("sampling medium");
-                beta *= closure.media->sample(ray, sampler, medium_closure);
+                Color3f val = closure.media->sample(ray, sampler, medium_closure);
+                // beta *= closure.media->sample(ray, sampler, medium_closure);
+                // LOG(val);
+                beta *= val;
                 // LOG("post sample medium");
+                // LOG(beta);
 
                 if (medium_closure.handleScatter())
                 {
@@ -82,19 +98,26 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
                     closure.its = &its;
                     closure.ray = &ray;
-                    closure.wi = its.toLocal(-ray.dir);
+                    closure.wi = -ray.dir;
                     closure.emission = COLOR_BLACK;
                     closure.nee = COLOR_BLACK;
                     closure.albedo = COLOR_BLACK;
 
                     if (closure.sample_all_emitters)
                     {
-                        scene->eval_all_emitters(closure);
+                        scene->eval_all_emitters(closure, true);
                     }
                     else
                     {
-                        scene->eval_one_emitter(closure);
+                        scene->eval_one_emitter(closure, true);
                     }
+
+                    Vector3f wo = -ray.dir;
+                    Vector3f wi;
+                    Float phase = closure.media->sample_phase(wo, wi, sampler->next2D());
+                    // phase = 1;
+
+                    // LOG("phase: " + std::to_string(phase));
 
                     // maybe accumulate shadow rays in closure in the future
                     for (int i = 0; i < closure.shadow_rays.size(); ++i)
@@ -110,23 +133,33 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                             //shadow_rays[i].throughput *=
                             //    medium_closure.media->eval_phase(wo, ray.dir);
                             //
-                            closure.nee += beta * closure.shadow_rays[i].throughput;
+                            // LOG("throughput: ");
+                            // LOG(closure.shadow_rays[i].throughput);
+                            closure.nee += beta * phase * closure.shadow_rays[i].throughput;
                         }
                     }
 
-                    Vector3f wo = -ray.dir;
-                    Vector3f wi;
-                    closure.media->sample_phase(wo, wi, sampler->next2D());
+                    // LOG("prev dir: ");
+                    // LOG(ray.dir);
+                    // LOG("new dir: ");
+                    // LOG(wi);
 
-                    ray = Ray3f(its.p,
-                                wi,
+                    ray = Ray3f(ray(medium_closure.sampled_t),
+                                wi.normalized(),
                                 Epsilon,
                                 std::numeric_limits<Float>::infinity(),
                                 ray.depth + 1);
+
                     closure.last_spec = closure.is_specular;
                     closure.is_specular = false;
 
+                    Float rr_prob = std::min(beta.maxValue(), 1.f);
+
                     Li += closure.nee;
+
+                    if (sampler->next1D() > rr_prob) break;
+
+                    beta /= rr_prob;
 
                     continue;
                 }
@@ -135,6 +168,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
             }
             else
             {
+                // closure.media = nullptr;
                 if (!intersected) break;
 
                 // LOG("skipping null object");
@@ -190,6 +224,8 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
                 continue;
             }
+
+            // assert(false);
 
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
 

@@ -52,7 +52,7 @@ public:
         Float transmittance = sampler->next1D();
         Float goal_dens = -log(transmittance);
 
-        Float dense = density->D(ray((max_t + min_t) / 2.f + min_t));
+        Float dense = density->D(ray((max_t - min_t) / 2.f + min_t));
         Float dist = goal_dens / dense;
         t = min_t + dist;
 
@@ -63,7 +63,8 @@ public:
 class Delta_Tracking : public MediumSampling
 {
 public:
-    Delta_Tracking() { }
+    Delta_Tracking(Float majorant)
+        : majorant(majorant) { }
 
     virtual Float sample(Ray3f ray,
                          Sampler* sampler,
@@ -75,6 +76,8 @@ public:
         // TODO
         return 0.f;
     }
+
+    Float majorant;
 };
 
 class Equidistant_Sampling : public MediumSampling

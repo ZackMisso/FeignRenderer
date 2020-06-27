@@ -416,7 +416,7 @@ PhaseFunctionNode* FeignRenderer::find_phase_func(std::string name)
 
         if (name == "default")
         {
-            node->phase = new HenyeyGreenstein(1.f);
+            node->phase = new HenyeyGreenstein(0.f);
         }
 
         phase_funcs.insert({name, node});
@@ -602,6 +602,11 @@ void FeignRenderer::fr_integrator(std::string name,
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new VolPath_Integrator(filter_node, params);
+    }
+    else if (type == "volpath_trans")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new VolPathTrans_Integrator(filter_node, params);
     }
     else
     {

@@ -45,6 +45,7 @@ public:
     bool intersect_full(const Ray3f& ray, Intersection& its) const;
     bool intersect_non_null(const Ray3f& ray, Intersection& its) const;
     bool intersect_transmittance(const Ray3f& ray,
+                                 const Media* initial_media,
                                  Intersection& its,
                                  Sampler* sampler,
                                  Color3f& beta) const;
@@ -54,8 +55,8 @@ public:
     const MaterialShader* getShapeMaterialShader(const Intersection& its) const;
     const Media* getShapeMedium(const Intersection& its) const;
 
-    void eval_all_emitters(MaterialClosure& closure) const;
-    void eval_one_emitter(MaterialClosure& closure) const;
+    void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
+    void eval_one_emitter(MaterialClosure& closur, bool in_mediae = false) const;
     void accumulate_emission(MaterialClosure& closure) const;
 
     // TODO: should these really be public...

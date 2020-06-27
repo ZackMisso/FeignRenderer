@@ -14,7 +14,10 @@ StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
       trans_est(trans_node),
       transform(transform),
       abs_coeff(abs),
-      sca_coeff(scat) { }
+      sca_coeff(scat)
+{
+    sigma_t = abs + scat;
+}
 
 void StandardMedium::preProcess()
 {
@@ -22,13 +25,15 @@ void StandardMedium::preProcess()
     // assert(false);
     sampling->sampling->density = density->density;
     trans_est->trans_est->density = density->density;
+    density->density->sigma_t = sigma_t;
 }
 
 Color3f StandardMedium::sample(Ray3f world_ray,
                                Sampler* sampler,
                                MediaClosure& closure) const
 {
-    const Ray3f ray = transform * world_ray;
+    // const Ray3f ray = transform * world_ray;
+    const Ray3f ray = world_ray;
     // Float min_t = ray.near;
     // Float max_t = std::min(ray.far, 20.f);
 
@@ -37,7 +42,7 @@ Color3f StandardMedium::sample(Ray3f world_ray,
 
     if (sca_coeff == COLOR_BLACK)
     {
-        assert(false);
+        // assert(false);
         // LOG("  transmittancing");
         // Float trans = trans_est->trans_est->transmittance(ray,
         //                                            sampler,
@@ -60,7 +65,16 @@ Color3f StandardMedium::sample(Ray3f world_ray,
                                                 closure.t_min,
                                                 closure.t_max);
 
-    return sca_coeff / (abs_coeff + sca_coeff) * samp_val;
+    if (closure.handleScatter())
+        return sca_coeff / (sigma_t) * samp_val;
+
+    // TODO: this may be incorrect when non-transmittance based sampling gets
+    //       implemented but for now it is assumed that if this point is reached
+    //       then the point sampled has surpassed the max_t
+
+    // assert(false);
+
+    return Color3f(1.f);
 
     // // TODO: set stuff in MediumClosure
     //

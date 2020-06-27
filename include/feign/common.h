@@ -32,7 +32,7 @@
 
 // TODO: incorporate clocking throughout renderer
 // Stats tracking //
-#define CLOCKING true
+#define CLOCKING false
 ////////////////////
 
 #define Epsilon 1e-4f

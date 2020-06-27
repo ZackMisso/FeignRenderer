@@ -9,6 +9,7 @@
 #include <feign/core/sampler.h>
 
 // TODO: maybe keep track of dimensions
+// TODO: add next1U for use in making copies of samplers
 
 Independent::Independent() : Sampler() { }
 
@@ -69,7 +70,7 @@ Sampler* Independent::copy()
 
 Sampler* Independent::copy(uint32_t seed)
 {
-    Independent* newSamp = new Independent();
+    Independent* newSamp = new Independent(seed, sampleCnt);
     newSamp->reseed(seed);
 
     return newSamp;

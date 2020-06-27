@@ -19,6 +19,8 @@ public:
     virtual Float D(const Point3f& p) const = 0;
     virtual Color3f SpectralD(const Point3f& p) const = 0;
     virtual Float maxDensity() const = 0;
+
+    Color3f sigma_t;
 };
 
 class ConstantDensity : public DensityFunction
@@ -39,19 +41,22 @@ public:
 
     virtual Float D(const Point3f& p) const
     {
-        // LOG("      DENSITY:");
-        // LOG("      ", density);
-        return density(0);
+        // assert(false);
+        return std::max(density(0) * sigma_t(0),
+               std::max(density(1) * sigma_t(1),
+                        density(2) * sigma_t(2)));
     }
 
     virtual Color3f SpectralD(const Point3f& p) const
     {
-        return density;
+        return density * sigma_t;
     }
 
     virtual Float maxDensity() const
     {
-        return std::max(density(0), std::max(density(1), density(2)));
+        return std::max(density(0) * sigma_t(0),
+               std::max(density(1) * sigma_t(1),
+                        density(2) * sigma_t(2)));
     }
 
     Color3f density;
