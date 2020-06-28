@@ -16,12 +16,13 @@
 #include <feign/math/transform.h>
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
+#include <feign/misc/medium_boundry.h>
 
 class EmitterNode;
 
 // These structs are used for passing data to embree.
 // Note: embree does not have to have normal information.
-struct e_Vertex   { float x,y,z,r;  };
+struct e_Vertex   { float x,y,z,r; };
 struct e_Triangle { int v0, v1, v2; };
 
 /////////////////////////////////////////////////
@@ -30,8 +31,8 @@ struct e_Triangle { int v0, v1, v2; };
 class Shape
 {
 public:
-    Shape();
-    Shape(bool is_null);
+    // Shape();
+    Shape(const MediumBoundry* boundry, bool is_null);
     virtual ~Shape() { }
 
     virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const
@@ -60,6 +61,7 @@ public:
 
     Transform transform;
     GeometryShaderNode* geomShader;
+    const MediumBoundry* boundry;
 
     bool is_null;
 protected:
@@ -74,8 +76,9 @@ protected:
 class SDFShape : public Shape
 {
 public:
-    SDFShape() : Shape() { }
-    SDFShape(bool is_null) : Shape(is_null) { }
+    // SDFShape() : Shape() { }
+    SDFShape(const MediumBoundry* boundry, bool is_null)
+        : Shape(boundry, is_null) { }
     ~SDFShape() { }
 
     virtual float evaluate(Point3f pt) const = 0;
@@ -95,12 +98,18 @@ public:
         Params(Point3f center,
                Float radius,
                Float interp,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
                bool is_null = false)
-            : center(center),
+            : inside_media(inside_media),
+              outside_media(outside_media),
+              is_null(is_null),
+              center(center),
               radius(radius),
-              interp(interp),
-              is_null(is_null) { }
+              interp(interp) { }
 
+        std::string inside_media;
+        std::string outside_media;
         Point3f center;
         Float radius;
         Float interp;
@@ -110,6 +119,7 @@ public:
     SDFSphere(Point3f center,
               Float radius,
               Float interp,
+              const MediumBoundry* boundry = nullptr,
               bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
@@ -136,12 +146,18 @@ public:
         Params(Point3f center,
                Normal3f normal,
                Float interp,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
                bool is_null = false)
             : center(center),
               normal(normal),
               interp(interp),
+              inside_media(inside_media),
+              outside_media(outside_media),
               is_null(is_null){ }
 
+        std::string inside_media;
+        std::string outside_media;
         Point3f center;
         Normal3f normal;
         Float interp;
@@ -151,6 +167,7 @@ public:
     SDFPlane(Point3f center,
              Normal3f normal,
              Float interp,
+             const MediumBoundry* boundry = nullptr,
              bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
@@ -174,15 +191,28 @@ class SDFBox : public SDFShape
 public:
     struct Params
     {
-        Params(Point3f tlc, Point3f brc, bool is_null = false)
-            : tlc(tlc), brc(brc), is_null(is_null) { }
+        Params(Point3f tlc,
+               Point3f brc,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
+               bool is_null = false)
+            : tlc(tlc),
+              brc(brc),
+              inside_media(inside_media),
+              outside_media(outside_media),
+              is_null(is_null) { }
 
+        std::string inside_media;
+        std::string outside_media;
         Point3f tlc;
         Point3f brc;
         bool is_null;
     };
 
-    SDFBox(Point3f tlc, Point3f brc, bool is_null = false);
+    SDFBox(Point3f tlc,
+           Point3f brc,
+           const MediumBoundry* boundry = nullptr,
+           bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
 
@@ -208,12 +238,18 @@ public:
         Params(Point3f first,
                Point3f second,
                float radius,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
                bool is_null = false)
             : first(first),
               second(second),
               radius(radius),
+              inside_media(inside_media),
+              outside_media(outside_media),
               is_null(is_null){ }
 
+        std::string inside_media;
+        std::string outside_media;
         Point3f first;
         Point3f second;
         float radius;
@@ -223,6 +259,7 @@ public:
     SDFCylinder(Point3f first,
                 Point3f second,
                 float radius,
+                const MediumBoundry* boundry = nullptr,
                 bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
@@ -251,13 +288,19 @@ public:
                Point3f second,
                Float radius_1,
                Float radius_2,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
                bool is_null = false)
             : first(first),
               second(second),
               radius_1(radius_1),
               radius_2(radius_2),
+              inside_media(inside_media),
+              outside_media(outside_media),
               is_null(is_null) { }
 
+        std::string inside_media;
+        std::string outside_media;
         Point3f first;
         Point3f second;
         Float radius_1;
@@ -269,6 +312,7 @@ public:
             Point3f second,
             Float radius_1,
             Float radius_2,
+            const MediumBoundry* boundry = nullptr,
             bool is_null = false);
 
     virtual Float evaluate(Point3f pt) const;
@@ -309,15 +353,12 @@ struct ObjectNode : public Node
 {
 public:
     ObjectNode() : mesh(nullptr),
-                   emitter(nullptr),
-                   medium(nullptr) { }
+                   emitter(nullptr) { }
     ObjectNode(MeshNode* mesh) : mesh(mesh),
-                                 emitter(nullptr),
-                                 medium(nullptr) { }
+                                 emitter(nullptr) { }
     ObjectNode(std::string name) : Node(name),
                                    mesh(nullptr),
-                                   emitter(nullptr),
-                                   medium(nullptr) { }
+                                   emitter(nullptr) { }
 
     ~ObjectNode() { }
 
@@ -326,7 +367,7 @@ public:
     EmitterNode* emitter;
     // TODO: I need to rething this design... should media be a parameter of
     //       shape or just exist in the object node
-    MediaNode* medium;
+    // MediaNode* medium;
     Transform transform;
 };
 /////////////////////////////////////////////////

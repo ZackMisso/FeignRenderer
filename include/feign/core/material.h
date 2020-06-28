@@ -13,6 +13,9 @@
 #include <feign/core/closure.h>
 #include <feign/misc/intersection.h>
 
+// TODO: should materials and shaders be the same abstraction instead of separate?
+//       this really seems annoying that materials do not seem to do much and to me
+//       appears like they are just lower level shaders.
 class Material
 {
 public:

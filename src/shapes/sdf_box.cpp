@@ -9,8 +9,11 @@
 #include <feign/core/shape.h>
 #include <feign/math/bbox.h>
 
-SDFBox::SDFBox(Point3f tlc, Point3f brc, bool is_null)
-    : SDFShape(is_null),
+SDFBox::SDFBox(Point3f tlc,
+               Point3f brc,
+               const MediumBoundry* boundry,
+               bool is_null)
+    : SDFShape(boundry, is_null),
       tlc(tlc),
       brc(brc) { }
 

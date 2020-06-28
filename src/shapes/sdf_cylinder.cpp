@@ -12,8 +12,9 @@
 SDFCylinder::SDFCylinder(Point3f first,
                          Point3f second,
                          float radius,
+                         const MediumBoundry* boundry,
                          bool is_null)
-    : SDFShape(is_null),
+    : SDFShape(boundry, is_null),
       first(first),
       second(second),
       radius(radius) { }

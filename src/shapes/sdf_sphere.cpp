@@ -11,8 +11,9 @@
  SDFSphere::SDFSphere(Point3f center,
                       Float radius,
                       Float inter,
+                      const MediumBoundry* boundry,
                       bool is_null)
-    : SDFShape(is_null),
+    : SDFShape(boundry, is_null),
       center(center),
       radius(radius)
 {

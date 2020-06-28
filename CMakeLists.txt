@@ -18,9 +18,9 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|Intel)$")
   CHECK_CXX_COMPILER_FLAG("-std=c++11" HAS_CPP11_FLAG)
 
   if (HAS_CPP14_FLAG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread -O3")
   elseif (HAS_CPP11_FLAG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
   else()
     message(FATAL_ERROR "Unsupported compiler -- pybind11 requires C++11 support!")
   endif()
@@ -88,6 +88,9 @@ else()
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -flto -Wno-unused-result -fno-strict-aliasing -Wlto-type-mismatch")
 endif()
 
+# TODO: it would probably just be nicer to clean this up a bit instead of listing
+#       all of the files out. Sure it makes compiling faster instead of using .*,
+#       but it just looks gross.
 # all of these files are listed out instead of using * notation because
 # it avoids having to rebuild the entire project when you add a new file
 add_executable(feign
@@ -204,6 +207,7 @@ add_executable(feign
     src/integrators/nice_normal.cpp
     src/integrators/volpath.cpp
     src/integrators/volpath_trans.cpp
+    src/integrators/sandbox.cpp
 
     # Material implementation files
     src/materials/simple.cpp
@@ -274,7 +278,7 @@ add_executable(feign
     scenes/cool_renders/hall_of_tiles/hall_of_tiles.cpp
 
     # debug scene implementation files
-    scenes/debugging/medium_testing.cpp
+    scenes/videos/medium_initial.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

@@ -63,10 +63,11 @@ public:
                         Sampler* sampler,
                         Imagef& image) const;
 
-    virtual void renderTile(const Scene* scene,
-                            const Camera* camera,
-                            Sampler* sampler,
-                            RenderTile& tile) const;
+    // multithreaded implementation
+    virtual void render_fast(const Scene* scene,
+                             const Camera* camera,
+                             Sampler* sampler,
+                             Imagef& image) const;
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -212,6 +213,24 @@ class VolPathTrans_Integrator : public Integrator
 {
 public:
     VolPathTrans_Integrator(FilterNode* filter,
+                       Integrator::Params* params);
+
+    virtual void preProcess();
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Sandbox Integrator
+// used for debugging or a temporary place for reworking current integrators
+/////////////////////////////////////////////////
+class Sandbox_Integrator : public Integrator
+{
+public:
+    Sandbox_Integrator(FilterNode* filter,
                        Integrator::Params* params);
 
     virtual void preProcess();

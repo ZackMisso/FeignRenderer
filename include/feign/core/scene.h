@@ -51,9 +51,10 @@ public:
                                  Color3f& beta) const;
 
     void addEmitter(Emitter* emitter);
+    void addMedium(Media* media);
 
     const MaterialShader* getShapeMaterialShader(const Intersection& its) const;
-    const Media* getShapeMedium(const Intersection& its) const;
+    // const Media* getShapeMedium(consst Intersection& its) const;
 
     void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
     void eval_one_emitter(MaterialClosure& closur, bool in_mediae = false) const;
@@ -75,6 +76,7 @@ public:
 
     // pre-processed structures
     std::vector<Emitter*> emitters;
+    std::vector<Media*> mediums;
     std::vector<Shape*> shapes;
     std::vector<ObjectNode*> objects;
 

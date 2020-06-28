@@ -260,6 +260,7 @@ FilterNode* FeignRenderer::find_filter(std::string name)
         if (name == "default")
         {
             // assert(false);
+            // TODO: gauss filter does not work for multithreaded logic
             // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
             node->filter = new BoxFilter();
         }
@@ -608,6 +609,11 @@ void FeignRenderer::fr_integrator(std::string name,
         Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new VolPathTrans_Integrator(filter_node, params);
     }
+    else if (type == "sandbox")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new Sandbox_Integrator(filter_node, params);
+    }
     else
     {
         throw new NotImplementedException("unsupported integrator: " + type);
@@ -716,7 +722,7 @@ void FeignRenderer::fr_object(std::string name,
     object->transform = getInstance()->current_transform;
     object->mesh = getInstance()->find_mesh(mesh);
     object->material_shader = getInstance()->find_material_shader(material_shader);
-    object->medium = getInstance()->find_media(medium);
+    // object->medium = getInstance()->find_media(medium);
 
     if (emitter != "null" && emitter != "")
     {
@@ -745,64 +751,136 @@ void FeignRenderer::fr_mesh(std::string name,
 
         GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new ObjMesh(params->filename,
                                  params->flip_norms,
+                                 boundry,
                                  params->is_null);
         mesh->mesh->geomShader = geom_shader;
     }
     else if (type == "grid")
     {
+        // assert(false);
         GridObj::Params* params = (GridObj::Params*)mesh_data;
+        // assert(false);
 
         GeometryShaderNode* geom_shader = getInstance()->find_geometry_shader(params->shader);
         TextureNode* terrain_texture = getInstance()->find_texture(params->texture);
+        // assert(false);
+
+        // if (terrain_texture) assert(false);
 
         mesh->mesh = new GridObj(params->resolution, terrain_texture);
+        // assert(false);
         mesh->mesh->geomShader = geom_shader;
     }
     else if (type == "sdf_sphere")
     {
         SDFSphere::Params* params = (SDFSphere::Params*)mesh_data;
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new SDFSphere(params->center,
                                    params->radius,
                                    params->interp,
+                                   boundry,
                                    params->is_null);
     }
     else if (type == "sdf_plane")
     {
         SDFPlane::Params* params = (SDFPlane::Params*)mesh_data;
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new SDFPlane(params->center,
                                   params->normal,
                                   params->interp,
+                                  boundry,
                                   params->is_null);
     }
     else if (type == "sdf_box")
     {
         SDFBox::Params* params = (SDFBox::Params*)mesh_data;
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new SDFBox(params->tlc,
                                 params->brc,
+                                boundry,
                                 params->is_null);
     }
     else if (type == "sdf_cylinder")
     {
         SDFCylinder::Params* params = (SDFCylinder::Params*)mesh_data;
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new SDFCylinder(params->first,
                                      params->second,
                                      params->radius,
+                                     boundry,
                                      params->is_null);
     }
     else if (type == "sdf_cone")
     {
         SDFCone::Params* params = (SDFCone::Params*)mesh_data;
 
+        MediumBoundry* boundry = nullptr;
+
+        if (params->inside_media != "null" || params->outside_media != "null")
+        {
+            MediaNode* inside = FeignRenderer::getInstance()->find_media(params->inside_media);
+            MediaNode* outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+
+            boundry = new MediumBoundry(inside, outside);
+        }
+
         mesh->mesh = new SDFCone(params->first,
                                  params->second,
                                  params->radius_1,
                                  params->radius_2,
+                                 boundry,
                                  params->is_null);
     }
     else
@@ -1249,20 +1327,26 @@ void FeignRenderer::flush_renders()
     // first preprocess all meshes
     unsigned int inst_index = 0;
 
-    LOG("preprocessing objects");
+    // LOG("preprocessing objects");
 
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
 
+        // LOG("pre");
         if (!mesh)
         {
+            // LOG(it.first);
+            // LOG("ahhhhhh");
             throw new FeignRendererException("mesh is not initialized");
         }
+        // LOG("post");
 
         mesh->transform = it.second->transform * mesh->transform;
         // preprocess more information for importance sampling mesh emitters
+        // LOG("what");
         mesh->preProcess(it.second->emitter != nullptr);
+        // LOG("cow");
         scene_obj->shapes.push_back(mesh);
         scene_obj->objects.push_back(it.second);
         mesh->setInstID(inst_index);
@@ -1270,7 +1354,7 @@ void FeignRenderer::flush_renders()
         inst_index++;
     }
 
-    LOG("setting meshes");
+    // LOG("setting meshes");
 
     // TODO: set this up in a more efficient way
     for (auto it : getInstance()->emitters)
@@ -1280,12 +1364,23 @@ void FeignRenderer::flush_renders()
             it.second->emitter->setMeshNode(it.second->objectNode->mesh);
         }
     }
-
-    LOG("pre processing");
+    //
+    // LOG("pre processing");
 
     // LOG("global_params.sdf_only [pre]: " + std::to_string(global_params.sdf_only));
     // LOG("debug: " + global_params.name);
     global_params.name = "blah";
+
+    for (auto it : getInstance()->medias)
+    {
+        // assert(false);
+        if (it.first != "null")
+        {
+            // LOG("med name: " + it.first);
+            scene_obj->addMedium(it.second->media);
+            // LOG("hiii");
+        }
+    }
 
     // preprocess the scene
     scene_obj->preProcess(global_params);

@@ -6,6 +6,9 @@
 
 void RenderTile::add_radiance(Color3f rad, int i, int j)
 {
+    if (i < min_y || j < min_x) return;
+    if (i >= max_y || j >= max_x) return;
+
     int wid = max_x - min_x;
     int hei = max_y - min_y;
 
@@ -16,6 +19,9 @@ void RenderTile::add_radiance(Color3f rad, int i, int j)
 
 void RenderTile::add_weight(Float wei, int i, int j)
 {
+    if (i < min_y || j < min_x) return;
+    if (i >= max_y || j >= max_x) return;
+
     int wid = max_x - min_x;
     int hei = max_y - min_y;
 
@@ -24,6 +30,7 @@ void RenderTile::add_weight(Float wei, int i, int j)
     weights[index] += wei;
 }
 
+// TODO: implement adaptive sampling for video compositing
 void RenderTile::evaluate(RenderTile* tile,
                           const Scene* scene,
                           const Integrator* integrator,
@@ -60,8 +67,8 @@ void RenderTile::evaluate(RenderTile* tile,
                 BBox2f filter_bounds = BBox2f(pixelSample - integrator->filter->filter->getSize(),
                                               pixelSample + integrator->filter->filter->getSize());
 
-                filter_bounds.clip(Point2f(0.0, 0.0),
-                                   Point2f(tile->max_x, tile->max_y));
+                filter_bounds.clip(Point2f(tile->min_x, tile->min_y),
+                                   Point2f(tile->max_x-1, tile->max_y-1));
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -77,8 +84,10 @@ void RenderTile::evaluate(RenderTile* tile,
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
 
-                        tile->add_radiance(rad, fi, fj);
+                        // LOG("pre");
+                        tile->add_radiance(rad * weight, fi, fj);
                         tile->add_weight(weight, fi, fj);
+                        // LOG("post");
                     }
                 }
 
@@ -94,13 +103,24 @@ void RenderTile::evaluate(RenderTile* tile,
 
     delete sampler;
     tile->done = true;
+    // LOG("task is done");
 }
 
 void RenderTile::finalize(Imagef& image)
 {
-    int wid = max_x - min_x;
+    // LOG("hhhhh");
+    // LOG("hhhhh 2 ");
+    // LOG("hhhhh 3 ");
+
+    // LOG("hhhhh 2 ");
     int hei = max_y - min_y;
+    int wid = max_x - min_x;
+    // LOG("hhhhh 3 ");
     int index = 0;
+
+    // LOG(std::to_string(wid * hei));
+    // LOG(std::to_string(pixels.size()));
+    // LOG("");
 
     for (int i = min_y; i < max_y; ++i)
     {
@@ -121,6 +141,9 @@ RenderPool::RenderPool(int num_threads, int tile_width)
     threads = std::vector<std::thread>(num_threads);
     tiles = std::vector<RenderTile*>();
     active_tiles = std::vector<RenderTile*>(num_threads);
+
+    for (int i = 0; i < num_threads; ++i)
+        active_tiles[i] = nullptr;
     // free_threads = new bool[num_threads];
     //
     // for (int i = 0; i < num_threads; ++i)
@@ -132,21 +155,27 @@ RenderPool::~RenderPool()
     // below maybe needed for running interactive stuff
     // for (int i = 0; i < threads.size(); ++i)
     // {
-    //     if (!freeThreads[i])
+    //     if (!active_tiles[i]->done)
     //     {
+    //         // LOG("joining threads");
     //         threads[i].join();
     //     }
     // }
+
+    threads.clear();
+    active_tiles.clear();
 
     // delete[] free_threads;
 
     for (int i = 0; i < tiles.size(); ++i)
     {
-        delete tiles[i];
+        // LOG("deleting tile: " + std::to_string(i));
+        if (tiles[i])
+            delete tiles[i];
     }
 }
 
-void RenderPool::initialize_pool(int im_w, int im_h, int dim)
+void RenderPool::initialize_pool(int im_w, int im_h)
 {
     width = im_w;
     height = im_h;
@@ -157,7 +186,7 @@ void RenderPool::initialize_pool(int im_w, int im_h, int dim)
         {
             tiles.push_back(new RenderTile(j, i,
                                            std::min(j+tile_width, im_w),
-                                           std::max(i+tile_width, im_h)));
+                                           std::min(i+tile_width, im_h)));
         }
     }
 }
@@ -165,7 +194,8 @@ void RenderPool::initialize_pool(int im_w, int im_h, int dim)
 void RenderPool::evaluate_pool(const Scene* scene,
                                const Integrator* integrator,
                                const Camera* camera,
-                               Sampler* sampler)
+                               Sampler* sampler,
+                               Imagef& image)
 {
     int completed_tiles = 0;
 
@@ -196,34 +226,65 @@ void RenderPool::evaluate_pool(const Scene* scene,
     while (tiles_to_do.size())
     {
         // std::cout << "HERE" << std::endl;
-        sleep(1);
+        // sleep(0);
         // std::cout << "ack" << std::endl;
 
-        std::cout << "tiles remaining: " << tiles_to_do.size() << std::endl;
+        // std::cout << "tiles remaining: " << tiles_to_do.size() << std::endl;
 
         for (int i = 0; i < active_tiles.size(); ++i)
         {
+            // std::cout << "checking active tiles...." << std::endl;
+            // if (!active_tiles[i]) assert(false);
             if (active_tiles[i]->done)
             {
+                // LOG("join 1");
                 threads[i].join();
-                RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
-                tiles_to_do.pop_back();
-                active_tiles[i] = tile;
-                Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
-                threads[i] = std::thread(std::bind(&RenderTile::evaluate,
-                                                   tile,
-                                                   scene,
-                                                   integrator,
-                                                   camera,
-                                                   tile_sampler));
+                // LOG("joined 1");
+                // active_tiles[i]->finalize(image);
+                // LOG("render tiles remaining: " + std::to_string(tiles_to_do.size()));
+                // std::cout << "bopopop" << std::endl;
+
+                // std::cout << tiles_to_do.size() << std::endl;
+                if (tiles_to_do.size())
+                {
+                    // LOG("wat");
+                    RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
+                    // LOG("wat 2");
+                    tiles_to_do.pop_back();
+                    // LOG("wat 3");
+                    active_tiles[i] = tile;
+                    // LOG("wat 4");
+                    Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+                    // LOG("wat 5");
+                    threads[i] = std::thread(std::bind(&RenderTile::evaluate,
+                                                       tile,
+                                                       scene,
+                                                       integrator,
+                                                       camera,
+                                                       tile_sampler));
+                    // LOG("wat 6");
+                }
+                // LOG("ack");
             }
+            // LOG("fack");
         }
     }
 
+    // LOG("finishing up");
+
     for (int i = 0; i < threads.size(); ++i)
     {
-        threads[i].join();
+        // LOG("join 2");
+        try {
+            threads[i].join();
+        }
+        catch(const std::exception& ex) { }
+        catch(...) { LOG("double thread join bug.... to fix later"); }
+        // LOG("joined 2");
+        // active_tiles[i]->finalize(image);
     }
+
+    LOG("all render tasks completed");
 }
 
 // int RenderPool::get_next_free_index() const
@@ -242,6 +303,9 @@ void RenderPool::accumulate_result(Imagef& image)
 {
     for (int i = 0; i < tiles.size(); ++i)
     {
+        // LOG("finalizing: " + std::to_string(i));
+        // if (!tiles[i]) assert(false);
+        // LOG("finalizing: " + std::to_string(i));
         tiles[i]->finalize(image);
     }
 }

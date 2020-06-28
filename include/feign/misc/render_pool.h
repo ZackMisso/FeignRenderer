@@ -19,8 +19,27 @@ struct RenderTile
           done(false)
     {
         int size = (max_x - min_x) * (max_y - min_y);
-        pixels = std::vector<Color3f>(size);
-        weights = std::vector<Float>(size);
+        // std::cout << "SIZE: " << size << std::endl;
+        pixels = new Color3f[size]();
+        weights = new Float[size]();
+
+        for (int i = 0; i < size; ++i)
+        {
+            pixels[i] = Color3f(0.f);
+            weights[i] = 0.f;
+        }
+    }
+
+    ~RenderTile()
+    {
+        // LOG("deleting tile ~ fox");
+        // pixels = std::vector<Color3f>();
+        // LOG(std::to_string(pixels.size()));
+        // pixels.clear();
+        delete[] pixels;
+        // LOG("pixels deleted");
+        delete[] weights;
+        // LOG("deleted tile");
     }
 
     void add_radiance(Color3f rad, int i, int j);
@@ -34,8 +53,11 @@ struct RenderTile
 
     void finalize(Imagef& image);
 
-    std::vector<Color3f> pixels;
-    std::vector<Float> weights;
+    Color3f* pixels;
+    Float* weights;
+
+    // std::vector<Color3f> pixels;
+    // std::vector<Float> weights;
 
     // this tile represents all pixels in the range [min, max)
     bool done;
@@ -55,11 +77,12 @@ public:
     RenderPool(int num_threads, int tile_width);
     ~RenderPool();
 
-    void initialize_pool(int im_w, int im_h, int dim);
+    void initialize_pool(int im_w, int im_h);
     void evaluate_pool(const Scene* scene,
                        const Integrator* integrator,
                        const Camera* camera,
-                       Sampler* sampler);
+                       Sampler* sampler,
+                       Imagef& image);
     void accumulate_result(Imagef& image);
 
 protected:

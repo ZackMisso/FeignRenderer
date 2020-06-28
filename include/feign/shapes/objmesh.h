@@ -13,6 +13,7 @@
 #include <feign/core/shape.h>
 #include <feign/shapes/triangle.h>
 #include <feign/math/transform.h>
+#include <feign/misc/medium_boundry.h>
 
 class ObjMesh : public Shape
 {
@@ -22,12 +23,18 @@ public:
         Params(std::string filename,
                std::string shader,
                bool flip_norms = false,
+               std::string inside_media = "null",
+               std::string outside_media = "null",
                bool is_null = false)
             : filename(filename),
               shader(shader),
               flip_norms(flip_norms),
+              inside_media(inside_media),
+              outside_media(outside_media),
               is_null(is_null) { }
 
+        std::string inside_media;
+        std::string outside_media;
         std::string filename;
         std::string shader;
         bool flip_norms;
@@ -37,6 +44,7 @@ public:
     ObjMesh();
     ObjMesh(const std::string& filename,
             bool flip_norms = false,
+            const MediumBoundry* boundry = nullptr,
             bool is_null = false);
     ObjMesh(const std::vector<Point3f>& vs,
             const std::vector<Normal3f>& ns,

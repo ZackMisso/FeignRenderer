@@ -536,6 +536,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         {
             std::string name = "mesh";
             std::string type = "default";
+            std::string inside_media = "null";
+            std::string outside_media = "null";
             bool is_null = false;
 
             const rapidjson::Value& value = itr->value;
@@ -552,6 +554,22 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             {
                 is_null = value["is_null"].GetBool();
             }
+            if (value.HasMember("inside_media"))
+            {
+                inside_media = value["inside_media"].GetString();
+            }
+            if (value.HasMember("outside_media"))
+            {
+                outside_media = value["outside_media"].GetString();
+            }
+
+            // MediumBoundry* boundry = nullptr;
+            //
+            // if (inside_media != "null" || outside_media != "null")
+            // {
+            //     boundry = new MedumBoundry(inside_media,
+            //                                outside_media);
+            // }
 
             if (type == "triangle_mesh")
             {
@@ -575,6 +593,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 ObjMesh::Params params(filename,
                                        geom_shader,
                                        flip_norms,
+                                       inside_media,
+                                       outside_media,
                                        is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
@@ -629,6 +649,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 SDFSphere::Params params = SDFSphere::Params(center,
                                                              radius,
                                                              interp,
+                                                             inside_media,
+                                                             outside_media,
                                                              is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
@@ -659,6 +681,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 SDFPlane::Params params = SDFPlane::Params(center,
                                                            norm,
                                                            interp,
+                                                           inside_media,
+                                                           outside_media,
                                                            is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
@@ -686,7 +710,11 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                     interp = value["interp"].GetFloat();
                 }
 
-                SDFBox::Params params = SDFBox::Params(tlc, brc, is_null);
+                SDFBox::Params params = SDFBox::Params(tlc,
+                                                       brc,
+                                                       inside_media,
+                                                       outside_media,
+                                                       is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
             }
@@ -716,6 +744,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 SDFCylinder::Params params = SDFCylinder::Params(first,
                                                                  second,
                                                                  radius,
+                                                                 inside_media,
+                                                                 outside_media,
                                                                  is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);
@@ -752,6 +782,8 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                                                          second,
                                                          radius_1,
                                                          radius_2,
+                                                         inside_media,
+                                                         outside_media,
                                                          is_null);
 
                 FeignRenderer::fr_mesh(name, type, &params);

@@ -11,8 +11,9 @@
  SDFPlane::SDFPlane(Point3f center,
                     Normal3f normal,
                     Float inter,
+                    const MediumBoundry* boundry,
                     bool is_null)
-    : SDFShape(is_null),
+    : SDFShape(boundry, is_null),
       center(center),
       normal(normal)
 {

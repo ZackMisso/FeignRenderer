@@ -23,9 +23,13 @@ void StandardMedium::preProcess()
 {
     // if (!density) assert(false);
     // assert(false);
+    LOG("setting density");
     sampling->sampling->density = density->density;
+    LOG("setting trans density");
     trans_est->trans_est->density = density->density;
+    LOG("setting sigma_t");
     density->density->sigma_t = sigma_t;
+    LOG("what");
 }
 
 Color3f StandardMedium::sample(Ray3f world_ray,

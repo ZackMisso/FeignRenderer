@@ -35,6 +35,10 @@
 #define CLOCKING false
 ////////////////////
 
+// TODO: make this a stats parameter in the future
+// whether or not to use multithreading
+#define GOTTAGOFAST true
+
 #define Epsilon 1e-4f
 #define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
 #define EPS_VEC_Y Vector3f(0.f, Epsilon * 100.f, 0.f)

@@ -21,6 +21,7 @@ Scene::Scene(std::string name,
 {
     shapes = std::vector<Shape*>();
     objects = std::vector<ObjectNode*>();
+    mediums = std::vector<Media*>();
     ray_accel = nullptr;
     light_selection = nullptr;
     target = nullptr;
@@ -38,6 +39,7 @@ Scene::~Scene()
     shapes.clear();
     objects.clear();
     emitters.clear();
+    mediums.clear();
 }
 
 void Scene::preProcess(const GlobalParams& globals)
@@ -81,7 +83,9 @@ void Scene::preProcess(const GlobalParams& globals)
 
     integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
-    if (env_medium_node->media)
+
+    // TODO: should this double check be necessary?
+    if (env_medium_node && env_medium_node->media)
         env_medium_node->media->preProcess();
 
     // TODO: is this really the best place to handle this?
@@ -94,12 +98,13 @@ void Scene::preProcess(const GlobalParams& globals)
             objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
             objects[i]->emitter->emitter->preProcess();
         }
+    }
 
-        // if the object contains a medium, make sure to preprocess it
-        if (objects[i]->medium)
-        {
-            objects[i]->medium->media->preProcess();
-        }
+    for (int i = 0; i < mediums.size(); ++i)
+    {
+        // LOG("pre processing media: " + std::to_string(i));
+        mediums[i]->preProcess();
+        // LOG("finished pre processing");
     }
 }
 
@@ -136,11 +141,17 @@ void Scene::renderScene() const
                            3);
     }
 
-    // TODO: this will need to be changed for parallelization
-    integrator->render(this,
-                       camera,
-                       sampler,
-                       *image);
+    #if GOTTAGOFAST
+        integrator->render_fast(this,
+                                camera,
+                                sampler,
+                                *image);
+    #else
+        integrator->render(this,
+                           camera,
+                           sampler,
+                           *image);
+    #endif
 
     if (!target)
     {
@@ -185,6 +196,9 @@ bool Scene::intersect_non_null(const Ray3f& ray, Intersection& its) const
 // volpath integrator.
 //
 // TODO: this fails if you are already inside the medium
+// TODO: this needs to be thoroughly tested in a bunch of different scenarios,
+//       i'm fairly certain this will start breaking once multiple different,
+//       volumes get added to the system
 bool Scene::intersect_transmittance(const Ray3f& ray,
                                     const Media* initial_media,
                                     Intersection& its,
@@ -210,8 +224,6 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
         {
             if (its.intersected_mesh->is_null)
             {
-                // assert(false);
-
                 Ray3f medium_ray = tmp_ray;
                 medium_ray.far = its.t;
 
@@ -242,13 +254,12 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     // that there will be two intersections.
     while (ray_accel->intersect(tmp_ray, its))
     {
-        // assert(false);
         if (its.intersected_mesh->is_null)
         {
             // assert(false);
             // LOG("HOW IN THE WORLD");
-            const Media* media = getShapeMedium(its);
-            media = (!media) ? env_medium_node->media : media;
+            const Media* media = its.intersected_mesh->boundry->inside->media;
+            // media = (!media) ? env_medium_node->media : media;
 
             if (media)
             {
@@ -316,6 +327,11 @@ void Scene::addEmitter(Emitter* emitter)
     emitters.push_back(emitter);
 }
 
+void Scene::addMedium(Media* media)
+{
+    mediums.push_back(media);
+}
+
 const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) const
 {
     int id = its.intersected_mesh->getInstID();
@@ -323,21 +339,21 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
     return (*(*objects[id]).material_shader)();
 }
 
-const Media* Scene::getShapeMedium(const Intersection& its) const
-{
-    int id = its.intersected_mesh->getInstID();
-
-    if ((*objects[id]).medium)
-    {
-        // TODO: rethink this whole storing everything in nodes malarky... there
-        //       should be a better way of doing this that will still support
-        //       my future plans of a node-based graph editor for input to the
-        //       renderer
-        return (*(*objects[id]).medium)();
-    }
-
-    return nullptr;
-}
+// const Media* Scene::getShapeMedium(const Intersection& its) const
+// {
+//     int id = its.intersected_mesh->getInstID();
+//
+//     if ((*objects[id]).medium)
+//     {
+//         // TODO: rethink this whole storing everything in nodes malarky... there
+//         //       should be a better way of doing this that will still support
+//         //       my future plans of a node-based graph editor for input to the
+//         //       renderer
+//         return (*(*objects[id]).medium)();
+//     }
+//
+//     return nullptr;
+// }
 
 // TODO: make these eval methods call the same function
 // TODO: this should also work for media closures...
@@ -436,6 +452,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
                                  transmittance) ||
         global_params.ignore_shadow_checks)
     {
+        // LOG("transmittance");
+        // LOG(transmittance);
         if (!in_media)
         {
             Float cos_term = closure.its->s_frame.n % eqr.wi;
@@ -445,8 +463,11 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
             Li *= cos_term;
         }
 
+
+
         // LOG("LI: ");
         // LOG(Li * eqr.sqr_dist);
+        // LOG("emitter_pdf: " + std::to_string(emitter_pdf));
 
         closure.shadow_rays[0].valid = true;
         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
@@ -461,6 +482,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
         //                                               closure.sampler);
         // }
 
+        // LOG(transmittance);
+
         // LOG("transmittance: " + transmittance);
 
         if (emitter_pdf == 0.f)
@@ -470,10 +493,17 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
         else
         {
             closure.shadow_rays[0].throughput = Li / (choice_pdf * emitter_pdf) * transmittance;
+            // LOG(closure.shadow_rays[0].throughput);
+            // LOG("");
         }
+
+        // LOG("out");
 
         // Note: bsdf_values are fully accumulated later
     }
+    // LOG("ahh");
+    // LOG(closure.shadow_rays[0].throughput);
+    // LOG("end");
 }
 
 // void Scene::eval_one_media_emitter(MaterialClosure& closure) const

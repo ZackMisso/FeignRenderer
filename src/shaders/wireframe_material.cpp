@@ -31,8 +31,10 @@ void WireframeMaterialShader::sample(MaterialClosure& closure) const
     #endif
 }
 
+// TODO: why is this called evaluate if it does not actually evaluate the material...
 void WireframeMaterialShader::evaluate(MaterialClosure& closure) const
 {
+    // assert(false);
     #if CLOCKING
         Clocker::startClock("shader eval");
     #endif
@@ -41,18 +43,31 @@ void WireframeMaterialShader::evaluate(MaterialClosure& closure) const
 
     closure.is_specular = material->isDelta();
 
+    if (closure.last_spec)
+    {
+        closure.scene->accumulate_emission(closure);
+    }
+
     if (closure.is_specular)
     {
+        closure.last_spec = closure.is_specular;
+
         return;
     }
 
     if (closure.sample_all_emitters)
     {
-        closure.scene->eval_all_emitters(closure);
+        if (closure.material_accepts_shadows)
+        {
+            closure.scene->eval_all_emitters(closure);
+        }
     }
     else
     {
-        closure.scene->eval_one_emitter(closure);
+        if (closure.material_accepts_shadows)
+        {
+            closure.scene->eval_one_emitter(closure);
+        }
     }
 
     #if CLOCKING

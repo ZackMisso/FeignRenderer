@@ -9,7 +9,7 @@
 #include <feign/shapes/objmesh.h>
 #include <fstream>
 
-ObjMesh::ObjMesh() : Shape()
+ObjMesh::ObjMesh() : Shape(nullptr, false)
 {
     vs = std::vector<Point3f>();
     ns = std::vector<Normal3f>();
@@ -19,8 +19,9 @@ ObjMesh::ObjMesh() : Shape()
 
 ObjMesh::ObjMesh(const std::string& filename,
                  bool flip_norms,
+                 const MediumBoundry* boundry,
                  bool is_null)
-    : Shape(is_null),
+    : Shape(boundry, is_null),
       filename(filename),
       flip_norms(flip_norms)
 {
@@ -35,7 +36,7 @@ ObjMesh::ObjMesh(const std::vector<Point3f>& vs,
                  const std::vector<Normal3f>& ns,
                  const std::vector<Vec2f>& uvs,
                  const std::vector<Triangle>& tris)
-    : Shape(), vs(vs), uvs(uvs), ns(ns), tris(tris)
+    : Shape(nullptr, false), vs(vs), uvs(uvs), ns(ns), tris(tris)
 { // does nothing
 }
 
@@ -304,6 +305,7 @@ Point3f ObjMesh::centroid(uint32_t tri) const
 
 void ObjMesh::preProcess(bool requires_processing)
 {
+    // LOG("hiya");
     // TODO: make these tasks multithreaded ???
     parseFromFile(filename);
 

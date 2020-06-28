@@ -28,7 +28,7 @@
 
 #include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
 
-#include "../scenes/debugging/medium_testing.h"
+#include "../scenes/videos/medium_initial.h"
 
 void run_scene(std::string scene_name)
 {

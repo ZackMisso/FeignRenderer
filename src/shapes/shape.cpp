@@ -8,13 +8,20 @@
 
 #include <feign/core/shape.h>
 
-Shape::Shape() : geomShader(nullptr), is_null(false)
-{
-    instID = 0;
-    transform = Transform();
-}
+// Shape::Shape() :
+//     geomShader(nullptr),
+//     is_null(false),
+//     boundry(MediumBoundry())
+// {
+//     instID = 0;
+//     transform = Transform();
+// }
 
-Shape::Shape(bool is_null) : geomShader(nullptr), is_null(is_null)
+Shape::Shape(const MediumBoundry* boundry,
+             bool is_null)
+    : geomShader(nullptr),
+      is_null(is_null),
+      boundry(boundry)
 {
     instID = 0;
     transform = Transform();

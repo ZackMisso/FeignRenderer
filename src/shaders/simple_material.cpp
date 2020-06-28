@@ -18,6 +18,7 @@ void SimpleMaterialShader::sample(MaterialClosure& closure) const
     (*material)()->sample(closure);
 }
 
+// TODO: why is this called evaluate if it does not actually evaluate the material...
 void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
 {
     #if CLOCKING

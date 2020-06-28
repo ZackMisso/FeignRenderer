@@ -20,6 +20,7 @@ void GridObj::preProcess(bool requires_processing)
 {
     // TODO: incorporate preprocessing check
     // create the underlying mesh
+    LOG("hello");
     int num_verts = resolution[0] * resolution[1];
     tris = std::vector<Triangle>();
 
