@@ -19,6 +19,7 @@ struct RenderTile
           done(false)
     {
         int size = (max_x - min_x) * (max_y - min_y);
+        // int size = (max_x - min_x + 2) * (max_y - min_y + 2);
         // std::cout << "SIZE: " << size << std::endl;
         pixels = new Color3f[size]();
         weights = new Float[size]();

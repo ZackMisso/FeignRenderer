@@ -178,6 +178,7 @@ void MediumTesting_Debug::initialize_grid_scene(int frame)
                            "grid",
                            &params_ceil_wall);
     FeignRenderer::fr_clear_transform();
+
 }
 
 void MediumTesting_Debug::initialize_scene(int frame)
@@ -390,29 +391,45 @@ void MediumTesting_Debug::initialize_homo_sphere_medium_vary_scatter(int frame)
     {
         dense = 2.f * float(frame-30) / 120.f;
     }
-    else
+    else if (frame >= 150 && frame < 360)
     {
         dense = 2.f;
     }
+    else if (frame < 480)
+    {
+        dense = 2.f - 2.f * float(frame-360) / 120.f;
+    }
+    else
+    {
+        dense = 0.f;
+    }
 
-    if (frame < 180)
+    if (frame < 195)
     {
         scat = Color3f(0.f);
         abs = Color3f(1.f);
     }
-    else if (frame >= 180 && frame < 300)
+    else if (frame >= 195 && frame < 315)
     {
-        Float val = 1.f * float(frame-180) / 120.f;
+        Float val = 1.f * float(frame-195) / 120.f;
 
         scat = Color3f(val);
         abs = Color3f(1.f - val);
     }
-    else
+    else if (frame < 500)
     {
-        assert(false);
+        // assert(false);
         scat = Color3f(0.999f);
         abs = Color3f(0.001f);
     }
+    // else if (frame < 480)
+    // {
+    //     dense = 2.f - 2.f * float(frame-360) / 120.f;
+    // }
+    // else if (frame < 500)
+    // {
+    //     dense = 0.f;
+    // }
 
 
     StandardMedium::Params media_params("default",
@@ -557,9 +574,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                                  &int_params);
 
     int samples = 8;
-    if (frame < 180) samples = 4096;
-
-    samples = 8;
+    if (frame < 180) samples = 2048;
+    else samples = 2048 * 5;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -596,7 +612,7 @@ void MediumTesting_Debug::run()
     // system(mkdir_command.c_str());
 
     int start_frame = 0;
-    int end_frame = 330;
+    int end_frame = 500;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
@@ -620,5 +636,5 @@ void MediumTesting_Debug::run()
         flush_render();
     }
 
-    system(publish_command.c_str());
+    system(publish_command. c_str());
 }

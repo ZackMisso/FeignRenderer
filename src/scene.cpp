@@ -208,6 +208,8 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     // this method assumes beta is set before being called
     Ray3f tmp_ray = ray;
 
+    // LOG("ray far: " + std::to_string(ray.far));
+
     std::vector<Ray3f> rays = std::vector<Ray3f>();
     std::vector<const Media*> mediums = std::vector<const Media*>();
 
@@ -218,6 +220,9 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     // need to do an initial
     if (initial_media)
     {
+        // beta = Color3f(0.f);
+        // return false;
+        // Intersection tmp;
         bool intersected = ray_accel->intersect(tmp_ray, its);
 
         if (intersected)
@@ -230,19 +235,22 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                 rays.push_back(medium_ray);
                 mediums.push_back(initial_media);
 
-                tmp_ray = Ray3f(its.p,
+                tmp_ray = Ray3f(ray.origin,
                                 tmp_ray.dir,
-                                Epsilon,
-                                std::numeric_limits<Float>::infinity(),
+                                its.t + Epsilon,
+                                ray.far,
                                 tmp_ray.depth);
             }
             else
             {
+                // its = tmp;
+                // assert(false);
                 return true;
             }
         }
         else
         {
+            // assert(false);
             Ray3f medium_ray = tmp_ray;
 
             rays.push_back(medium_ray);
@@ -252,8 +260,10 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
 
     // the below logic assumes you are starting outside a null-bounded media and
     // that there will be two intersections.
+    // Intersection tmp;
     while (ray_accel->intersect(tmp_ray, its))
     {
+        // LOG("ah");
         if (its.intersected_mesh->is_null)
         {
             // assert(false);
@@ -263,27 +273,39 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
 
             if (media)
             {
+                // assert(false);
                 // append the medium to the running list of media and rays, and
                 // continue the intersection. If the intersection turns out to
                 // never hit anything the various transmittance calls will be
                 // evaluated as a post process.
-                tmp_ray = Ray3f(its.p,
+                tmp_ray = Ray3f(ray.origin,
                                 tmp_ray.dir,
-                                Epsilon,
-                                std::numeric_limits<Float>::infinity(),
+                                its.t + Epsilon,
+                                ray.far,
                                 tmp_ray.depth);
+
+                // LOG("pre t: " + std::to_string(its.t));
 
                 // do a second intersection call to get the far bounds of the
                 // bounding medium.... TODO: this implementation will be bugged
                 // when the two different mediums overlap.
                 if (ray_accel->intersect(tmp_ray, its))
                 {
+
                     Ray3f medium_ray = tmp_ray;
                     medium_ray.far = its.t;
 
                     // return false if an intersection actually occurs with
                     // something that is not apart of the medium.
-                    if (!its.intersected_mesh->is_null) return true;
+                    if (!its.intersected_mesh->is_null)
+                    {
+                        // LOG("t: " + std::to_string(its.t));
+                        // LOG("far: " + std::to_string(tmp_ray.far));
+                        // assert(false);
+                        return true;
+                    }
+
+                    // assert(false);
 
                     rays.push_back(medium_ray);
                     mediums.push_back(media);
@@ -299,19 +321,30 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
         }
         else
         {
+            // beta = Color3f(0.f);
+            // return false;
+            // assert(false);
             return true;
         }
     }
+
+    // LOG("end");
 
     // accumulate transmittance
     for (int i = 0; i < rays.size(); ++i)
     {
         if (mediums[i])
         {
+            // LOG("tra")
             beta *= mediums[i]->transmittance(rays[i],
                                               sampler,
                                               rays[i].near,
                                               rays[i].far);
+
+            // if (beta(0) != 1.f) assert(false);
+
+            // LOG("Trans: ");
+            // LOG(beta);
         }
     }
 

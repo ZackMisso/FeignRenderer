@@ -47,9 +47,9 @@ void Integrator::render(const Scene* scene,
 
         // LOG("rendering");
 
-        // for (int i = 141; i < 146; ++i)
+        // for (int i = 800; i < 1080; ++i)
         // {
-        //     for (int j = 112; j < 118; ++j)
+        //     for (int j = 800; j < 1080; ++j)
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {

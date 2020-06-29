@@ -34,6 +34,8 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                                               false,
                                               true);
 
+    // closure.media = nullptr;
+
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
