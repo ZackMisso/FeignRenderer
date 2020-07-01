@@ -132,6 +132,7 @@ public:
                           std::string type,
                           void* shader_data);
 
+//////////////////////////////////// MEDIA ////////////////////////////////////
     static void fr_media(std::string name,
                          std::string type,
                          void* shader_data);
@@ -167,6 +168,7 @@ public:
     static void fr_texture(std::string name,
                            std::string type,
                            void* texture_data);
+//////////////////////////////////// MEDIA ////////////////////////////////////
 
     static void fr_clear_transform();
     static void fr_scale(float sx, float sy, float sz);

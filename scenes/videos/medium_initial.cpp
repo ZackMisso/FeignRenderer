@@ -369,9 +369,65 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
                            &box_mesh);
 }
 
+// this is currently testing the vdb scene
 void MediumTesting_Debug::initialize_initial_scene(int frame)
 {
+    // /Users/corneria/Documents/Research/testscenes/vdb_smoke
 
+    // assert(false);
+    Color3f abs = Color3f(1.f);
+    Color3f scat = Color3f(0.f);
+    Transform identity = Transform();
+
+    StandardMedium::Params media_params("ratio",
+                                        "default",
+                                        "default",
+                                        "vdb_density",
+                                        identity,
+                                        abs,
+                                        scat);
+
+    FeignRenderer::fr_media("box_medium",
+                            "standard",
+                            &media_params);
+
+    FeignRenderer::fr_medium_transmittance("ratio",
+                                           "ratio",
+                                           nullptr);
+
+    // OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/cloud-1840.vdb");
+    OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/nice_smoke_35.vdb");
+
+    FeignRenderer::fr_medium_density("vdb_density",
+                                     "openvdb",
+                                     &vdb_density_params);
+
+    FeignRenderer::fr_medium_sampling("const_sampler",
+                                      "constant",
+                                      nullptr);
+
+    FeignRenderer::fr_clear_transform();
+
+    FeignRenderer::fr_scale(2.f, 2.f, 2.f);
+
+    FeignRenderer::fr_object("medium_bounds",
+                             "box_mesh",
+                             "default",
+                             "null",
+                             "box_medium");
+
+    ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
+                             "",
+                             false,
+                             "box_medium",
+                             "null",
+                             true);
+
+    FeignRenderer::fr_mesh("box_mesh",
+                           "triangle_mesh",
+                           &box_mesh);
+
+    FeignRenderer::fr_clear_transform();
 }
 
 // initialize homogeneous sphere medium where we vary scatter vs. absorption
@@ -575,7 +631,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
 
     int samples = 8;
     if (frame < 180) samples = 2048;
-    else samples = 2048 * 5;
+    else samples = 2048 * 2;
+    // samples = 2048;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -611,7 +668,8 @@ void MediumTesting_Debug::run()
     // system(rm_command.c_str());
     // system(mkdir_command.c_str());
 
-    int start_frame = 0;
+    int start_frame = 182;
+    // int start_frame = 501;
     int end_frame = 500;
 
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -623,10 +681,16 @@ void MediumTesting_Debug::run()
         initialize_materials(frame);
 
         // initialize_scene(frame);
+
         initialize_grid_scene(frame);
+
+        // initialize_initial_scene(frame);
         // assert(false);
 
-        initialize_homo_sphere_medium_vary_scatter(frame);
+        if (frame < 500)
+            initialize_homo_sphere_medium_vary_scatter(frame);
+        else
+            initialize_initial_scene(frame);
         // initialize_box_medium(frame);
 
         initialize_lighting(frame);
@@ -636,5 +700,5 @@ void MediumTesting_Debug::run()
         flush_render();
     }
 
-    system(publish_command. c_str());
+    // system(publish_command. c_str());
 }

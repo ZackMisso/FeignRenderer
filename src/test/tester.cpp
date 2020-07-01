@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <tests/tester.h>
+#include <feign/test/tester.h>
 #include <dirent.h>
 #include <iostream>
 #include <iomanip>

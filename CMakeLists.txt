@@ -149,7 +149,7 @@ add_executable(feign
     include/feign/stats/clocker.h
 
     # Tests header files
-    include/tests/tester.h
+    include/feign/test/tester.h
 
     # Implementation files
     src/main.cpp
@@ -227,6 +227,8 @@ add_executable(feign
     src/media/trans_ests/delta.cpp
     src/media/trans_ests/pseries_cmf.cpp
     src/media/trans_ests/ratio.cpp
+    src/media/density_funcs/point_average.cpp
+    src/media/density_funcs/vdb_density.cpp
 
     # Misc implementation files
     src/misc/intersection.cpp
@@ -268,8 +270,8 @@ add_executable(feign
     src/textures/sin_texture.cpp
 
     # Test implementation files
-    src/tests/test.cpp
-    src/tests/tester.cpp
+    src/test/test.cpp
+    src/test/tester.cpp
 
     # imedit implementation files
     ext/ImageEditLib/src/image.cpp
@@ -297,5 +299,5 @@ set(CompilerFlags
 # against NanoGUI, we need to link against those as well.
 #target_link_libraries(feign)
 # TODO: get openvdb support running
-target_link_libraries(feign tbb openvdb embree3 ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb openvdb embree3 half ${PYTHON_LIBRARIES})
 #target_link_libraries(feign tbb embree3 ${PYTHON_LIBRARIES})

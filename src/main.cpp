@@ -8,8 +8,10 @@
 
 #include <feign/parser/json_parser.h>
 #include <feign/core/scene.h>
-#include <tests/tester.h>
+#include <feign/test/tester.h>
 #include <iostream>
+
+#include <openvdb/openvdb.h>
 
 #include "../scenes/adrien/ajax_cosine.h"
 #include "../scenes/adrien/neon_intro.h"
@@ -49,6 +51,9 @@ void run_scene(std::string scene_name)
 
 int main(int argc, char* argv[])
 {
+    #if OPENVDB
+        openvdb::initialize();
+    #endif
     // //////// TEMPORARY ////////
     //
     // // ajax_cosine();

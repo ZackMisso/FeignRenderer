@@ -1,4 +1,4 @@
-#include <tests/tester.h>
+#include <feign/test/tester.h>
 #include <imedit/image.h>
 #include <imedit/im_util.h>
 #include <feign/core/api.h>

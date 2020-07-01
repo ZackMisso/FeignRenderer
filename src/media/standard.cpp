@@ -29,6 +29,7 @@ void StandardMedium::preProcess()
     trans_est->trans_est->density = density->density;
     LOG("setting sigma_t");
     density->density->sigma_t = sigma_t;
+    density->density->preProcess();
     LOG("what");
 }
 

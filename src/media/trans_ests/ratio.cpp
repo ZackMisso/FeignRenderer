@@ -13,7 +13,6 @@ Float Trans_RatioTracking::transmittance(const Ray3f& ray,
                                          Float tMin,
                                          Float tMax) const
 {
-    // LOG("inside ratio tracking");
     Float t = tMin;
     Float tr = 1.0;
 
@@ -23,9 +22,7 @@ Float Trans_RatioTracking::transmittance(const Ray3f& ray,
 
         if (t >= tMax) break;
 
-        // LOG("pre density");
         Float ext = density->D(ray(t));
-        // LOG("post density");
         tr *= (maj - ext) / maj;
     }
 

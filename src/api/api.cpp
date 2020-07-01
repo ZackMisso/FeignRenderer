@@ -1037,19 +1037,28 @@ void FeignRenderer::fr_medium_density(std::string name,
 
     if (type == "constant")
     {
-        // LOG("WHOOP WHOO{}");
         ConstantDensity::Params* params = (ConstantDensity::Params*)density_data;
         density_func->density = new ConstantDensity(params->density);
     }
-    else if (type == "openvdb")
+    else if (type == "point_average")
     {
         // TODO
-        throw new NotImplementedException("api openvdb density");
+        throw new NotImplementedException("point average density");
+    }
+    else if (type == "openvdb")
+    {
+        OpenVDBDensity::Params* params = (OpenVDBDensity::Params*)density_data;
+        density_func->density = new OpenVDBDensity(params->filename);
     }
     else if (type == "noise")
     {
         // TODO
         throw new NotImplementedException("api noise denstiy");
+    }
+    else if (type == "mandlebrot")
+    {
+        // TODO
+        throw new NotImplementedException("mandlebrot density");
     }
     else if (type == "sphere")
     {
@@ -1125,7 +1134,7 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
     }
     else if (type == "ratio")
     {
-        trans_est->trans_est = new Trans_RatioTracking();
+        trans_est->trans_est = new Trans_RatioTracking(10.0);
     }
     else if (type == "pseries")
     {
@@ -1327,34 +1336,24 @@ void FeignRenderer::flush_renders()
     // first preprocess all meshes
     unsigned int inst_index = 0;
 
-    // LOG("preprocessing objects");
-
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
 
-        // LOG("pre");
         if (!mesh)
         {
-            // LOG(it.first);
-            // LOG("ahhhhhh");
             throw new FeignRendererException("mesh is not initialized");
         }
-        // LOG("post");
 
         mesh->transform = it.second->transform * mesh->transform;
         // preprocess more information for importance sampling mesh emitters
-        // LOG("what");
         mesh->preProcess(it.second->emitter != nullptr);
-        // LOG("cow");
         scene_obj->shapes.push_back(mesh);
         scene_obj->objects.push_back(it.second);
         mesh->setInstID(inst_index);
 
         inst_index++;
     }
-
-    // LOG("setting meshes");
 
     // TODO: set this up in a more efficient way
     for (auto it : getInstance()->emitters)
@@ -1364,31 +1363,21 @@ void FeignRenderer::flush_renders()
             it.second->emitter->setMeshNode(it.second->objectNode->mesh);
         }
     }
-    //
-    // LOG("pre processing");
 
-    // LOG("global_params.sdf_only [pre]: " + std::to_string(global_params.sdf_only));
-    // LOG("debug: " + global_params.name);
     global_params.name = "blah";
 
     for (auto it : getInstance()->medias)
     {
-        // assert(false);
         if (it.first != "null")
         {
-            // LOG("med name: " + it.first);
             scene_obj->addMedium(it.second->media);
-            // LOG("hiii");
         }
     }
 
     // preprocess the scene
     scene_obj->preProcess(global_params);
 
-    // LOG("debug: " + global_params.name);
     global_params.name = "blah";
-
-    // LOG("global_params.sdf_only [post]: " + std::to_string(global_params.sdf_only));
 
     #if CLOCKING
         Clocker::startClock("render");

@@ -9,6 +9,14 @@
 #pragma once
 
 #include <feign/core/node.h>
+#include <feign/math/bbox.h>
+
+#if OPENVDB
+
+#include <openvdb/openvdb.h>
+#include <openvdb/tools/ChangeBackground.h>
+
+#endif
 
 // TODO: need to redesign entire renderer to run off macros instead of having
 //       both spectral and normal support
@@ -19,6 +27,8 @@ public:
     virtual Float D(const Point3f& p) const = 0;
     virtual Color3f SpectralD(const Point3f& p) const = 0;
     virtual Float maxDensity() const = 0;
+
+    virtual void preProcess() { }
 
     Color3f sigma_t;
 };
@@ -62,34 +72,41 @@ public:
     Color3f density;
 };
 
+#if OPENVDB
+
 class OpenVDBDensity : public DensityFunction
 {
 public:
-    OpenVDBDensity(std::string openvdb_file)
+    struct Params
     {
-        throw new NotImplementedException("openvdb density");
-        // TODO
-    }
+        Params(std::string filename)
+            : filename(filename) { }
 
-    virtual Float D(const Point3f& p) const
-    {
-        throw new NotImplementedException("openvdb density");
-        return 0.0;
-    }
+        std::string filename;
+    };
 
-    virtual Color3f SpectralD(const Point3f& p) const
-    {
-        throw new NotImplementedException("openvdb density");
-        return Color3f(0.f);
-    }
+    OpenVDBDensity(std::string openvdb_file);
+    ~OpenVDBDensity();
 
-    virtual Float maxDensity() const
-    {
-        throw new NotImplementedException("openvdb density");
-        return 0.f;
-    }
+    virtual Float D(const Point3f& p) const;
+    virtual Color3f SpectralD(const Point3f& p) const;
+    virtual Float maxDensity() const;
+
+    virtual void preProcess();
+
+    // TODO: try to also support spectral grids
+    openvdb::FloatGrid::Ptr grid;
+    // openvdb::Coord min;
+    // openvdb::Coord max;
+
+    BBox3f bbox;
+    Float max_density;
 };
 
+#endif
+
+// TODO: still need to design this class. What are the correct noise parameters
+//       to use here?
 class NoiseDensity : public DensityFunction
 {
 public:
@@ -113,6 +130,44 @@ public:
     virtual Float maxDensity() const
     {
         throw new NotImplementedException("noise density");
+        return 0.f;
+    }
+};
+
+class PointAverageDensity : public DensityFunction
+{
+    PointAverageDensity();
+
+    virtual Float D(const Point3f& p) const;
+    virtual Color3f SpectralD(const Point3f& p) const;
+    virtual Float maxDensity() const;
+
+    // TODO
+};
+
+class MandlebrotDensity : public DensityFunction
+{
+public:
+    MandlebrotDensity()
+    {
+        // TODO
+    }
+
+    virtual Float D(const Point3f& p) const
+    {
+        throw new NotImplementedException("mandlebrot density");
+        return 0.0;
+    }
+
+    virtual Color3f SpectralD(const Point3f& p) const
+    {
+        throw new NotImplementedException("mandlebrot density");
+        return Color3f(0.f);
+    }
+
+    virtual Float maxDensity() const
+    {
+        throw new NotImplementedException("mandlebrot density");
         return 0.f;
     }
 };

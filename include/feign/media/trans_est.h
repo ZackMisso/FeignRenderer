@@ -51,15 +51,9 @@ public:
                                 Float tMin,
                                 Float tMax) const
     {
+        // annalytically importance samples transmittance for a homogeneous medium
         Float dense = density->D(ray((tMax-tMin) / 2.f + tMin));
         Float trans = exp(-(tMax-tMin) * dense);
-        // LOG(std::to_string(exp(-0)));
-        // LOG("    tMin: " + std::to_string(tMin));
-        // LOG("    tMax: " + std::to_string(tMax));
-        // LOG("    dense: " + std::to_string(dense));
-        // LOG("    trans: " + std::to_string(trans));
-        // if (trans > 1.0) assert(false);
-        // LOG("eval transmittance");
         return trans;
     }
 
@@ -69,7 +63,7 @@ public:
                                            Float tMax) const
     {
         return exp(-(tMax-tMin) *
-               density->D(ray((tMax-tMin / 2.f) + tMin)));
+               density->D(ray(((tMax-tMin) / 2.f) + tMin)));
     }
 };
 
