@@ -66,6 +66,7 @@ public:
     Delta_Tracking(Float majorant)
         : majorant(majorant) { }
 
+    // TODO: this does not support spectral media
     virtual Float sample(Ray3f ray,
                          Sampler* sampler,
                          Float& t,
@@ -73,21 +74,21 @@ public:
                          Float max_t) const
     {
         // Run delta-tracking iterations to sample a medium interaction
-        // Float invMaxDensity = density->maxDensity();
-        // t = min_t;
-        //
-        // while (true)
-        // {
-        //     t -= std::log(1 - sampler.Get1D()) * invMaxDensity / sigma_t;
-        //     if (t >= tMax) break;
-        //
-        //     Float dense = density->D(ray(t));
-        //
-        //     if (dense * invMaxDensity > sampler.Get1D()) {
-        //         // Populate _mi_ with medium interaction information and return
-        //         return 1.f;
-        //     }
-        // }
+        Float invMaxDensity = density->maxDensity();
+        t = min_t;
+
+        while (true)
+        {
+            t -= std::log(1 - sampler->next1D()) * invMaxDensity / density->sigma_t(0);
+            if (t >= max_t) break;
+
+            Float dense = density->D(ray(t));
+
+            if (dense * invMaxDensity > sampler->next1D()) {
+                // Populate _mi_ with medium interaction information and return
+                return 1.f;
+            }
+        }
 
         return 1.f;
     }

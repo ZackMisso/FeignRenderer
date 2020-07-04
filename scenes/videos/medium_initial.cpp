@@ -478,6 +478,13 @@ void MediumTesting_Debug::initialize_homo_sphere_medium_vary_scatter(int frame)
         scat = Color3f(0.999f);
         abs = Color3f(0.001f);
     }
+
+    LOG("frame: " + std::to_string(frame));
+    LOG("dense: " + std::to_string(dense));
+    LOG("abs: " + std::to_string(abs(0)) + " " + std::to_string(abs(1)) + " " + std::to_string(abs(2)));
+    LOG("scat: " + std::to_string(scat(0)) + " " + std::to_string(scat(1)) + " " + std::to_string(scat(2)));
+    LOG("");
+
     // else if (frame < 480)
     // {
     //     dense = 2.f - 2.f * float(frame-360) / 120.f;
@@ -591,7 +598,7 @@ void MediumTesting_Debug::initialize_camera(int frame)
                                    10.f,
                                    0.f,
                                    // Vec2i(256, 256)); // debug res
-                                   Vec2i(1080, 1080)); // full res
+                                   Vec2i(540, 540)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -663,14 +670,23 @@ void MediumTesting_Debug::run()
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
-    std::string publish_command = "ffmpeg -r 24 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
+    // std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
+    // std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/aaaaah/out" + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/aaaaah" + ".mp4";
 
     // system(rm_command.c_str());
     // system(mkdir_command.c_str());
 
-    int start_frame = 182;
+    // for (int i = 0; i < 2000; ++i)
+    // {
+    //     char str[5];
+    //     snprintf(str, 5, "%04d", i);
+    //     Imagef image = Imagef("medium_testing/aaaaah/out_" + std::string(str) + ".exr")
+    //     image.write("medium_testing/aaaaah/out_" + std::string(str) + ".png")
+    // }
+
+    int start_frame = 359;
     // int start_frame = 501;
-    int end_frame = 500;
+    int end_frame = 360;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
@@ -700,5 +716,96 @@ void MediumTesting_Debug::run()
         flush_render();
     }
 
-    // system(publish_command. c_str());
+    // finalizing the frames
+    std::string frame_folder = "frames";
+    system("mkdir frames");
+
+    std::string publish_command = "ffmpeg -r 24 -f image2 -i frames/frame_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M frames/initial_media.mp4";
+
+    // for (int frame = start_frame; frame < end_frame; frame++)
+    // {
+    //     char str[5];
+    //     snprintf(str, 5, "%04d", frame);
+    //
+    //     LOG("creating final frame: " + std::to_string(frame));
+    //
+    //     Imagef render_image = Imagef("final/medium_testing_" + std::string(str) + ".exr");
+    //     Imagef card_image = Imagef("medium_testing/840w/frame_" + std::string(str) + ".png");
+    //     Imagef final_image = Imagef(1920, 1080, 3);
+    //
+    //     for (int i = 0; i < 1080; ++i)
+    //     {
+    //         for (int j = 0; j < 1080; ++j)
+    //         {
+    //             final_image(j, i, 0) = render_image(j, i, 0);
+    //             final_image(j, i, 1) = render_image(j, i, 1);
+    //             final_image(j, i, 2) = render_image(j, i, 2);
+    //         }
+    //     }
+    //
+    //     // // hacky octuple gauss blur because of png aliasing artifacts
+    //     // for (int t = 0; t < 8; ++t)
+    //     // {
+    //     //     for (int i = 0; i < 1080; ++i)
+    //     //     {
+    //     //         for (int j = 0; j < 840; ++j)
+    //     //         {
+    //     //             // if (card_image(j, i, 0) + card_image(j, i, 0) + card_image(j, i, 0)
+    //     //             //     < 0.1)
+    //     //             // {
+    //     //                 if (i != 0 && j != 0 && i != 1079 && j != 839)
+    //     //                 {
+    //     //                     for (int k = 0; k < 3; ++k)
+    //     //                     {
+    //     //                         Float t = card_image(j, i+1, k);
+    //     //                         Float b = card_image(j, i-1, k);
+    //     //                         Float l = card_image(j-1, i, k);
+    //     //                         Float r = card_image(j+1, i, k);
+    //     //                         Float c = card_image(j, i, k) * 2.0;
+    //     //
+    //     //                         card_image(j, i, k) = t + b + l + r + c;
+    //     //                         card_image(j, i, k) /= 6.0;
+    //     //                     }
+    //     //                 }
+    //     //             // }
+    //     //         }
+    //     //     }
+    //     // }
+    //
+    //     for (int i = 0; i < 1080; ++i)
+    //     {
+    //         for (int j = 0; j < 840; ++j)
+    //         {
+    //             // hacky gauss blur because of png aliasing artifacts
+    //
+    //             // if (card_image(j, i, 0) + card_image(j, i, 0) + card_image(j, i, 0)
+    //             //     < 0.1)
+    //             // {
+    //             //     if (i != 0 && j != 0 && i != 1079 && j != 839)
+    //             //     {
+    //             //         for (int k = 0; k < 3; ++k)
+    //             //         {
+    //             //             Float t = card_image(j, i+1, k);
+    //             //             Float b = card_image(j, i-1, k);
+    //             //             Float l = card_image(j-1, i, k);
+    //             //             Float r = card_image(j+1, i, k);
+    //             //             Float c = card_image(j, i, k) * 2.0;
+    //             //
+    //             //             card_image(j, i, k)
+    //             //         }
+    //             //     }
+    //             // }
+    //
+    //             final_image(j+1080, i, 0) = card_image(j, i, 0);
+    //             final_image(j+1080, i, 1) = card_image(j, i, 1);
+    //             final_image(j+1080, i, 2) = card_image(j, i, 2);
+    //         }
+    //     }
+    //
+    //     final_image.write("frames/frame_" + std::string(str) + ".exr");
+    //     final_image.write("frames/frame_" + std::string(str) + ".png");
+    // }
+    //
+    // system(publish_command.c_str());
+    // system("rm -rf frames/*.png");
 }
