@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+
+FEIGN_BEGIN()
 
 WhittedIntegrator::WhittedIntegrator(FilterNode* filter, Integrator::Params* params)
     : Integrator(filter, params)
@@ -52,12 +54,8 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                                               false,
                                               true);
 
-    // LOG("pre shader eval");
-
     // evaluate the material shader
     shader->evaluate(closure);
-
-    // LOG("post shader eval");
 
     // accumulate the shadow rays
     closure.accumulate_shadow_rays(shader);
@@ -88,3 +86,5 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     return closure.emission + closure.nee + closure.emission;
 }
+
+FEIGN_END()

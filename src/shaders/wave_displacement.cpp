@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/shader.h>
 #include <feign/shapes/objmesh.h>
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 WaveDisplacementShader::WaveDisplacementShader(std::vector<Point2f> points,
                                                std::vector<Functor> functors,
@@ -56,8 +58,6 @@ void WaveDisplacementShader::evaluate(void* mesh)
     std::vector<Normal3f> new_norms = std::vector<Normal3f>(old_norms.size());
     // process norms
 
-
-
     throw new FeignRendererException("wave displacement shader evaluate");
     // TODO
 
@@ -65,3 +65,5 @@ void WaveDisplacementShader::evaluate(void* mesh)
         Clocker::endClock("shader eval");
     #endif
 }
+
+FEIGN_END()

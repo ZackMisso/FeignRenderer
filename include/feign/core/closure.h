@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -13,11 +13,19 @@
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
 
-// yes i know this is bad design
+FEIGN_BEGIN()
+
 class Scene;
 class Sampler;
 class MaterialShader;
 class Media;
+
+struct EmitterEval
+{
+    Color3f throughput;
+    Vector3f shadow_ray;
+    bool valid = false;
+};
 
 // this struct represents what is returned from the material shader when it
 // gets evaluated
@@ -102,3 +110,5 @@ struct MediaClosure
     Float sampled_t;
     Color3f nee;
 };
+
+FEIGN_END()

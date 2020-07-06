@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/bsdf.h>
 #include <feign/math/warp.h>
 #include <feign/math/coord_frame.h>
+
+FEIGN_BEGIN()
 
 Mirror::Mirror(Color3f albedo)
     : BSDF(), albedo(albedo) { }
@@ -48,3 +50,5 @@ void Mirror::evaluate(MaterialClosure& closure) const
         closure.albedo = albedo;
     }
 }
+
+FEIGN_END()

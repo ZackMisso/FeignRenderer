@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -13,6 +13,8 @@
 //       class once my volumetric support is fully integrated. This
 //       is just a temporary hack to get absorbing media to work for
 //       a specific scene
+
+FEIGN_BEGIN()
 
 HomogeneousAbsorbingMedia::HomogeneousAbsorbingMedia(Float avg_density)
     : avg_density(avg_density) { }
@@ -40,3 +42,5 @@ bool HomogeneousAbsorbingMedia::isGlobal() const
 {
     return true;
 }
+
+FEIGN_END()

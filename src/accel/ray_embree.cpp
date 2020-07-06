@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -8,6 +8,8 @@
 
 #include <feign/core/accel_ray.h>
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 EmbreeAccel::EmbreeAccel()
 {
@@ -59,7 +61,7 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
     rtcInitIntersectContext(&context);
 
     /* initialize ray */
-    RTCRay new_ray = EmbreeUtil::convert(scene_ray);
+    RTCRay new_ray = convert_ray_to_rtcray(scene_ray);
     RTCRayHit hit;
     hit.ray = new_ray;
     hit.hit = RTCHit();
@@ -109,3 +111,5 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
 
     return false;
 }
+
+FEIGN_END()

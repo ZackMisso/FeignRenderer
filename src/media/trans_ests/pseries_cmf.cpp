@@ -1,4 +1,14 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #include <feign/media/trans_est.h>
+
+FEIGN_BEGIN()
 
 Float Trans_PseriesCMF::transmittance(const Ray3f& ray,
                                       Sampler* sampler,
@@ -23,3 +33,5 @@ Color3f Trans_PseriesCMF::spectral_transmittance(const Ray3f& ray,
 
     return Color3f(0.f);
 }
+
+FEIGN_END()

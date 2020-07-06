@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -11,6 +11,8 @@
 ///////////////////////
 //  Discrete PDF 1D  //
 ///////////////////////
+
+FEIGN_BEGIN()
 
 DiscretePDF1D::DiscretePDF1D(int siz)
 {
@@ -44,7 +46,7 @@ void DiscretePDF1D::convert_pdf_to_cdf()
         cdf[i] = total;
         total += pdf[i];
     }
-    
+
     assert(std::abs(total - 1.0) < Epsilon);
 
     cdf.push_back(total);
@@ -93,8 +95,6 @@ int DiscretePDF1D::sample_reuse(Float& value) const
 int DiscretePDF1D::sample_reuse(Float& value, Float& pdf) const
 {
     int index = sample(value, pdf);
-    // LOG("value:", value);
-    // LOG("min:", cdf[index]);
 
     value = (value - cdf[index]) / pdf;
 
@@ -139,3 +139,5 @@ DiscretePDF2D::~DiscretePDF2D()
 {
     throw new NotImplementedException("discrete pdf 2d");
 }
+
+FEIGN_END()

@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -13,6 +13,8 @@
 #include <feign/core/sampler.h>
 #include <feign/core/recon_filter.h>
 #include <feign/misc/render_pool.h>
+
+FEIGN_BEGIN()
 
 // needed forward declaration
 class Scene;
@@ -320,3 +322,5 @@ public:
                        const Ray3f& ray) const;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

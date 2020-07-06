@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -10,6 +10,8 @@
 
 #include <feign/core/scene.h>
 #include <rapidjson/document.h>
+
+FEIGN_BEGIN()
 
 // the idea behind the parsers is to keep them from having any information
 // related to the current state of the renderer. All the information related to
@@ -25,3 +27,5 @@ public:
 protected:
     static void actually_parse(rapidjson::Document& document);
 };
+
+FEIGN_END()

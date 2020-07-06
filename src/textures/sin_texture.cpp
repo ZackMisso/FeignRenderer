@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/texture.h>
+
+FEIGN_BEGIN()
 
 SinTexture::SinTexture(Vec3f amp,
                        Vec3f phase,
@@ -26,3 +28,5 @@ Color3f SinTexture::evaluate(const Point2f& point)
         amp(2) * sin(phase(2) * freq(2)) + y(2)
     );
 }
+
+FEIGN_END()

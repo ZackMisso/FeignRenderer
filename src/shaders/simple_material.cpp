@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/shader.h>
 #include <feign/core/scene.h>
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 SimpleMaterialShader::SimpleMaterialShader(MaterialNode* material)
     : material(material) { }
@@ -85,11 +87,4 @@ void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
     #endif
 }
 
-// MaterialClosure SimpleMaterialShader::evaluate(const Intersection& its) const
-// {
-//     MaterialClosure closure = MaterialClosure();
-//
-//     (*material)()->evaluate(closure);
-//
-//     return closure;
-// }
+FEIGN_END()

@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/shapes/triangle.h>
+
+FEIGN_BEGIN()
 
 Triangle::Triangle(Vec3u vsInds,
                    Vec3u nsInds,
@@ -18,3 +20,5 @@ Triangle::Triangle(Vec3u vsInds,
 Vec3u Triangle::getVertInds() const { return vsInds; }
 Vec3u Triangle::getNormInds() const { return nsInds; }
 Vec3u Triangle::getUvInds() const { return uvsInds; }
+
+FEIGN_END()

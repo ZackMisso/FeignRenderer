@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -8,6 +8,8 @@
 
 #include <feign/core/closure.h>
 #include <feign/core/scene.h>
+
+FEIGN_BEGIN()
 
 MaterialClosure::MaterialClosure()
 {
@@ -82,3 +84,5 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
     wo = tmp_wo;
     albedo = tmp_albedo;
 }
+
+FEIGN_END()

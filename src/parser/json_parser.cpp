@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -20,6 +20,8 @@
 
 #include <cstdio>
 #include <fstream>
+
+FEIGN_BEGIN()
 
 void JsonParser::parse(std::string filename, Imagef* image)
 {
@@ -1163,3 +1165,5 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
     FeignRenderer::flush_renders();
 }
+
+FEIGN_END()

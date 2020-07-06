@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/scene.h>
+
+FEIGN_BEGIN()
 
 Scene::Scene(std::string name,
              IntegratorNode* integrator,
@@ -102,9 +104,7 @@ void Scene::preProcess(const GlobalParams& globals)
 
     for (int i = 0; i < mediums.size(); ++i)
     {
-        // LOG("pre processing media: " + std::to_string(i));
         mediums[i]->preProcess();
-        // LOG("finished pre processing");
     }
 }
 
@@ -162,7 +162,6 @@ void Scene::renderScene() const
 
 bool Scene::intersect_full(const Ray3f& ray, Intersection& its) const
 {
-    // assert(false);
     return ray_accel->intersect(ray, its);
 }
 
@@ -208,21 +207,12 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     // this method assumes beta is set before being called
     Ray3f tmp_ray = ray;
 
-    // LOG("ray far: " + std::to_string(ray.far));
-
     std::vector<Ray3f> rays = std::vector<Ray3f>();
     std::vector<const Media*> mediums = std::vector<const Media*>();
-
-    // if (!initial_media) assert(false);
-
-    // LOG("intersecting with transmittance");
 
     // need to do an initial
     if (initial_media)
     {
-        // beta = Color3f(0.f);
-        // return false;
-        // Intersection tmp;
         bool intersected = ray_accel->intersect(tmp_ray, its);
 
         if (intersected)
@@ -243,14 +233,11 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
             }
             else
             {
-                // its = tmp;
-                // assert(false);
                 return true;
             }
         }
         else
         {
-            // assert(false);
             Ray3f medium_ray = tmp_ray;
 
             rays.push_back(medium_ray);
@@ -260,16 +247,11 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
 
     // the below logic assumes you are starting outside a null-bounded media and
     // that there will be two intersections.
-    // Intersection tmp;
     while (ray_accel->intersect(tmp_ray, its))
     {
-        // LOG("ah");
         if (its.intersected_mesh->is_null)
         {
-            // assert(false);
-            // LOG("HOW IN THE WORLD");
             const Media* media = its.intersected_mesh->boundry->inside->media;
-            // media = (!media) ? env_medium_node->media : media;
 
             if (media)
             {
@@ -284,8 +266,6 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                                 ray.far,
                                 tmp_ray.depth);
 
-                // LOG("pre t: " + std::to_string(its.t));
-
                 // do a second intersection call to get the far bounds of the
                 // bounding medium.... TODO: this implementation will be bugged
                 // when the two different mediums overlap.
@@ -299,13 +279,8 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                     // something that is not apart of the medium.
                     if (!its.intersected_mesh->is_null)
                     {
-                        // LOG("t: " + std::to_string(its.t));
-                        // LOG("far: " + std::to_string(tmp_ray.far));
-                        // assert(false);
                         return true;
                     }
-
-                    // assert(false);
 
                     rays.push_back(medium_ray);
                     mediums.push_back(media);
@@ -321,36 +296,21 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
         }
         else
         {
-            // beta = Color3f(0.f);
-            // return false;
-            // assert(false);
             return true;
         }
     }
-
-    // LOG("end");
 
     // accumulate transmittance
     for (int i = 0; i < rays.size(); ++i)
     {
         if (mediums[i])
         {
-            // LOG("tra")
             beta *= mediums[i]->transmittance(rays[i],
                                               sampler,
                                               rays[i].near,
                                               rays[i].far);
-
-            // if (beta(0) != 1.f) assert(false);
-
-            // LOG("Trans: ");
-            // LOG(beta);
         }
     }
-
-    // LOG("Transmittance: " + std::to_string(beta(0)));
-
-    // LOG("intersecting with transmittance finished");
 
     return false;
 }
@@ -371,22 +331,6 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
 
     return (*(*objects[id]).material_shader)();
 }
-
-// const Media* Scene::getShapeMedium(const Intersection& its) const
-// {
-//     int id = its.intersected_mesh->getInstID();
-//
-//     if ((*objects[id]).medium)
-//     {
-//         // TODO: rethink this whole storing everything in nodes malarky... there
-//         //       should be a better way of doing this that will still support
-//         //       my future plans of a node-based graph editor for input to the
-//         //       renderer
-//         return (*(*objects[id]).medium)();
-//     }
-//
-//     return nullptr;
-// }
 
 // TODO: make these eval methods call the same function
 // TODO: this should also work for media closures...
@@ -427,14 +371,6 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
             closure.shadow_rays[i].valid = true;
             closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
 
-            // this implementation of transmittance is now deprecated
-            // Float transmittance = 1.f;
-            // if (tmp.medium)
-            // {
-            //     transmittance = tmp.medium->transmittance(shadow_ray,
-            //                                               closure.sampler);
-            // }
-
             if (emitter_pdf == 0.f)
             {
                 closure.shadow_rays[i].throughput = Li * transmittance;
@@ -467,8 +403,6 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
                                               closure.sampler->next2D(),
                                               &emitter_pdf);
 
-    // LOG("light pdf: " + std::to_string(choice_pdf));
-
     Ray3f shadow_ray = Ray3f(closure.its->p,
                              eqr.wi,
                              Epsilon,
@@ -485,8 +419,6 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
                                  transmittance) ||
         global_params.ignore_shadow_checks)
     {
-        // LOG("transmittance");
-        // LOG(transmittance);
         if (!in_media)
         {
             Float cos_term = closure.its->s_frame.n % eqr.wi;
@@ -496,28 +428,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
             Li *= cos_term;
         }
 
-
-
-        // LOG("LI: ");
-        // LOG(Li * eqr.sqr_dist);
-        // LOG("emitter_pdf: " + std::to_string(emitter_pdf));
-
         closure.shadow_rays[0].valid = true;
         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
-
-        // Float transmittance = 1.f;
-
-        // this implementation of transmittance is now deprecated
-        // Float transmittance = 1.f;
-        // if (tmp.medium)
-        // {
-        //     transmittance = tmp.medium->transmittance(shadow_ray,
-        //                                               closure.sampler);
-        // }
-
-        // LOG(transmittance);
-
-        // LOG("transmittance: " + transmittance);
 
         if (emitter_pdf == 0.f)
         {
@@ -526,82 +438,11 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
         else
         {
             closure.shadow_rays[0].throughput = Li / (choice_pdf * emitter_pdf) * transmittance;
-            // LOG(closure.shadow_rays[0].throughput);
-            // LOG("");
         }
-
-        // LOG("out");
 
         // Note: bsdf_values are fully accumulated later
     }
-    // LOG("ahh");
-    // LOG(closure.shadow_rays[0].throughput);
-    // LOG("end");
 }
-
-// void Scene::eval_one_media_emitter(MaterialClosure& closure) const
-// {
-//     closure.shadow_rays = std::vector<EmitterEval>(1);
-//
-//     Float choice_pdf;
-//     int emitter;
-//
-//     light_selection->sampleEmitter(closure.its->p,
-//                                    closure.sampler,
-//                                    emitter,
-//                                    choice_pdf);
-//
-//     EmitterQuery eqr(closure.its->p);
-//     Float emitter_pdf = 0.f;
-//     Color3f Li = emitters[emitter]->sample_li(eqr,
-//                                               closure.sampler->next2D(),
-//                                               &emitter_pdf);
-//
-//     Ray3f shadow_ray = Ray3f(closure.its->p,
-//                              eqr.wi,
-//                              Epsilon,
-//                              sqrt(eqr.sqr_dist) - Epsilon);
-//
-//     Intersection tmp;
-//
-//     Color3f transmittance = Color3f(1.f);
-//
-//     if (!intersect_transmittance(shadow_ray,
-//                                  closure.media,
-//                                  tmp,
-//                                  closure.sampler,
-//                                  transmittance) ||
-//         global_params.ignore_shadow_checks)
-//     {
-//         // Float cos_term = closure.its->s_frame.n % eqr.wi;
-//         //
-//         // if (cos_term < -Epsilon) cos_term = -cos_term;
-//
-//         closure.shadow_rays[0].valid = true;
-//         closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
-//
-//         Float transmittance = 1.f;
-//
-//         // this implementation of transmittance is now deprecated
-//         // Float transmittance = 1.f;
-//         // if (tmp.medium)
-//         // {
-//         //     transmittance = tmp.medium->transmittance(shadow_ray,
-//         //                                               closure.sampler);
-//         // }
-//
-//         if (emitter_pdf == 0.f)
-//         {
-//             closure.shadow_rays[0].throughput = Color3f(0.f);
-//         }
-//         else
-//         {
-//             closure.shadow_rays[0].throughput = Li * (choice_pdf * emitter_pdf) * transmittance;
-//         }
-//
-//         // Note: bsdf_values are fully accumulated later
-//     }
-// }
 
 void Scene::accumulate_emission(MaterialClosure& closure) const
 {
@@ -620,3 +461,5 @@ void Scene::accumulate_emission(MaterialClosure& closure) const
         closure.emission = Color3f(0.f);
     }
 }
+
+FEIGN_END()

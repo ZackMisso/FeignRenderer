@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -16,7 +16,8 @@
 // TODO: reimplement this vector framework with simd operations
 
 #include <feign/common.h>
-#include <tgmath.h>
+
+FEIGN_BEGIN()
 
 template <typename T>
 struct Vec2
@@ -1584,3 +1585,119 @@ struct Matrix4
 
     T n[16];
 };
+
+typedef Vec2<int> Vec2i;
+typedef Vec2<uint32_t> Vec2u;
+typedef Vec2<Float> Vec2f;
+typedef Vec3<int> Vec3i;
+typedef Vec3<uint32_t> Vec3u;
+typedef Vec3<Float> Vec3f;
+typedef Vec4<int> Vec4i;
+typedef Vec4<uint32_t> Vec4u;
+typedef Vec4<Float> Vec4f;
+
+/////////////////////////////////////////////////
+// VECTOR TYPES
+/////////////////////////////////////////////////
+template <typename T>
+struct Point2 : public Vec2<T>
+{
+    Point2() : Vec2<T>() { }
+    Point2(const Vec2<T>& other) : Vec2<T>(other) { }
+    Point2(T c) : Vec2<T>(c) { }
+    Point2(T x, T y) : Vec2<T>(x, y) { }
+};
+
+template <typename T>
+struct Vector3 : public Vec3<T>
+{
+    Vector3() : Vec3<T>() { }
+    Vector3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Vector3(T c) : Vec3<T>(c) { }
+    Vector3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Vector3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Point3 : public Vec3<T>
+{
+    Point3() : Vec3<T>() { }
+    Point3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Point3(T c) : Vec3<T>(c) { }
+    Point3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Point3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Normal3 : public Vec3<T>
+{
+    Normal3() : Vec3<T>() { }
+    Normal3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Normal3(T c) : Vec3<T>(c) { }
+    Normal3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+};
+
+template <typename T>
+struct Color3 : public Vec3<T>
+{
+    Color3() : Vec3<T>() { }
+    Color3(const Vec3<T>& vec) : Vec3<T>(vec) { }
+    Color3(T c) : Vec3<T>(c) { }
+    Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
+    Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+
+    bool is_black() const
+    {
+        return std::abs(Vec3<T>::operator()(0)) < Epsilon &&
+               std::abs(Vec3<T>::operator()(1)) < Epsilon &&
+               std::abs(Vec3<T>::operator()(2)) < Epsilon;
+    }
+};
+
+template <typename T>
+struct Vector4 : public Vec4<T>
+{
+    Vector4() : Vec4<T>() { }
+    Vector4(const Vec4<T>& vec) : Vec4<T>(vec) { }
+    Vector4(T c) : Vec4<T>(c) { }
+    Vector4(T x, T y, T z, T w) : Vec4<T>(x, y, z, w) { }
+    Vector4(Vec2<T> xy, T z, T w) : Vec4<T>(xy, z, w) { }
+    Vector4(Vec2<T> xy, Vec2<T>zw) : Vec4<T>(xy, zw) { }
+    Vector4(Vec3<T> xyz, T w) : Vec4<T>(xyz, w) { }
+};
+
+// these represent actual geometric primitives
+typedef Point2<Float> Point2f;
+typedef Vector3<Float> Vector3f;
+typedef Point3<Float> Point3f;
+typedef Normal3<Float> Normal3f;
+typedef Color3<Float> Color3f;
+
+typedef Matrix3<Float> Matrix3f;
+typedef Matrix4<Float> Matrix4f;
+
+// Color properties
+
+#define COLOR_BLACK Color3f(0.f)
+
+inline Color3f color_max(Color3f one, Color3f two)
+{
+    return Color3f(std::max(one(0), two(0)),
+                   std::max(one(1), two(1)),
+                   std::max(one(2), two(2)));
+}
+
+inline void LOG(std::string val, Vec3f num)
+{
+    std::cout << val << " " << num[0] << " " << num[1] << " " << num[2] << std::endl;
+}
+
+// Log methods
+
+inline void LOG(Vec3f val)
+{
+    std::cout << val[0] << " " << val[1] << " " << val[2] << std::endl;
+}
+
+FEIGN_END()

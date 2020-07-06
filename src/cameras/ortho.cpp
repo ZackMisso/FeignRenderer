@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/camera.h>
+
+FEIGN_BEGIN()
 
 Orthographic::Orthographic() : Camera()
 {
@@ -26,3 +28,5 @@ Color3f Orthographic::sampleRay(Ray3f& ray,
 
     return Color3f(1.0);
 }
+
+FEIGN_END()

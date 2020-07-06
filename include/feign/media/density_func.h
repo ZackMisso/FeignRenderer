@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -17,6 +17,8 @@
 #include <openvdb/tools/ChangeBackground.h>
 
 #endif
+
+FEIGN_BEGIN()
 
 // TODO: need to redesign entire renderer to run off macros instead of having
 //       both spectral and normal support
@@ -226,3 +228,5 @@ public:
     DensityFunction* density;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

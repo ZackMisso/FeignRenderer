@@ -1,6 +1,8 @@
 #include "hall_of_tiles.h"
 #include <feign/shapes/objmesh.h>
 
+FEIGN_BEGIN()
+
 HallOfTiles::HallOfTiles()
 {
     run();
@@ -406,3 +408,5 @@ void HallOfTiles::run()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

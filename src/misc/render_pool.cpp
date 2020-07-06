@@ -1,8 +1,18 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #include <feign/misc/render_pool.h>
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
 #include <feign/math/bbox.h>
 #include <unistd.h>
+
+FEIGN_BEGIN()
 
 void RenderTile::add_radiance(Color3f rad, int i, int j)
 {
@@ -45,7 +55,6 @@ void RenderTile::evaluate(RenderTile* tile,
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
             {
-                // std::cout << sampler->getSampleCnt() << std::endl;
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
@@ -84,10 +93,8 @@ void RenderTile::evaluate(RenderTile* tile,
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
 
-                        // LOG("pre");
                         tile->add_radiance(rad * weight, fi, fj);
                         tile->add_weight(weight, fi, fj);
-                        // LOG("post");
                     }
                 }
 
@@ -103,24 +110,13 @@ void RenderTile::evaluate(RenderTile* tile,
 
     delete sampler;
     tile->done = true;
-    // LOG("task is done");
 }
 
 void RenderTile::finalize(Imagef& image)
 {
-    // LOG("hhhhh");
-    // LOG("hhhhh 2 ");
-    // LOG("hhhhh 3 ");
-
-    // LOG("hhhhh 2 ");
     int hei = max_y - min_y;
     int wid = max_x - min_x;
-    // LOG("hhhhh 3 ");
     int index = 0;
-
-    // LOG(std::to_string(wid * hei));
-    // LOG(std::to_string(pixels.size()));
-    // LOG("");
 
     for (int i = min_y; i < max_y; ++i)
     {
@@ -144,32 +140,15 @@ RenderPool::RenderPool(int num_threads, int tile_width)
 
     for (int i = 0; i < num_threads; ++i)
         active_tiles[i] = nullptr;
-    // free_threads = new bool[num_threads];
-    //
-    // for (int i = 0; i < num_threads; ++i)
-    //     free_threads[i] = true;
 }
 
 RenderPool::~RenderPool()
 {
-    // below maybe needed for running interactive stuff
-    // for (int i = 0; i < threads.size(); ++i)
-    // {
-    //     if (!active_tiles[i]->done)
-    //     {
-    //         // LOG("joining threads");
-    //         threads[i].join();
-    //     }
-    // }
-
     threads.clear();
     active_tiles.clear();
 
-    // delete[] free_threads;
-
     for (int i = 0; i < tiles.size(); ++i)
     {
-        // LOG("deleting tile: " + std::to_string(i));
         if (tiles[i])
             delete tiles[i];
     }
@@ -210,7 +189,6 @@ void RenderPool::evaluate_pool(const Scene* scene,
     {
         RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
         tiles_to_do.pop_back();
-        // free_threads[i] = false;
         active_tiles[i] = tile;
         Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
         threads[i] = std::thread(std::bind(&RenderTile::evaluate,
@@ -221,81 +199,42 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                            tile_sampler));
     }
 
-    // std::cout << "HERE" << std::endl;
-
     while (tiles_to_do.size())
     {
-        // std::cout << "HERE" << std::endl;
-        // sleep(0);
-        // std::cout << "ack" << std::endl;
-
-        // std::cout << "tiles remaining: " << tiles_to_do.size() << std::endl;
-
         for (int i = 0; i < active_tiles.size(); ++i)
         {
-            // std::cout << "checking active tiles...." << std::endl;
-            // if (!active_tiles[i]) assert(false);
             if (active_tiles[i]->done)
             {
-                // LOG("join 1");
                 threads[i].join();
-                // LOG("joined 1");
-                // active_tiles[i]->finalize(image);
-                // LOG("render tiles remaining: " + std::to_string(tiles_to_do.size()));
-                // std::cout << "bopopop" << std::endl;
 
-                // std::cout << tiles_to_do.size() << std::endl;
                 if (tiles_to_do.size())
                 {
-                    // LOG("wat");
                     RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
-                    // LOG("wat 2");
                     tiles_to_do.pop_back();
-                    // LOG("wat 3");
                     active_tiles[i] = tile;
-                    // LOG("wat 4");
                     Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
-                    // LOG("wat 5");
                     threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                                        tile,
                                                        scene,
                                                        integrator,
                                                        camera,
                                                        tile_sampler));
-                    // LOG("wat 6");
                 }
-                // LOG("ack");
             }
-            // LOG("fack");
         }
     }
 
-    // LOG("finishing up");
-
     for (int i = 0; i < threads.size(); ++i)
     {
-        // LOG("join 2");
         try {
             threads[i].join();
         }
         catch(const std::exception& ex) { }
         catch(...) { LOG("double thread join bug.... to fix later"); }
-        // LOG("joined 2");
-        // active_tiles[i]->finalize(image);
     }
 
     LOG("all render tasks completed");
 }
-
-// int RenderPool::get_next_free_index() const
-// {
-//     for (int i = 0; i < threads.size(); ++i)
-//     {
-//         if (free_threads[i]) return i;
-//     }
-//
-//     return -1;
-// }
 
 // TODO: for now this will work as if it is offline, but in the future this should
 //       also have an implementation for interactive sessions
@@ -303,9 +242,8 @@ void RenderPool::accumulate_result(Imagef& image)
 {
     for (int i = 0; i < tiles.size(); ++i)
     {
-        // LOG("finalizing: " + std::to_string(i));
-        // if (!tiles[i]) assert(false);
-        // LOG("finalizing: " + std::to_string(i));
         tiles[i]->finalize(image);
     }
 }
+
+FEIGN_END()

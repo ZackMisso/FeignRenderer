@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -10,6 +10,9 @@
 
 // TODO: maybe keep track of dimensions
 // TODO: add next1U for use in making copies of samplers
+
+
+FEIGN_BEGIN()
 
 Independent::Independent() : Sampler() { }
 
@@ -80,3 +83,5 @@ void Independent::nextSample()
 {
     currentSample++;
 }
+
+FEIGN_END()

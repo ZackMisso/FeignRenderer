@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -10,6 +10,9 @@
 
 #include <feign/common.h>
 #include <feign/math/ray.h>
+#include <feign/math/vector.h>
+
+FEIGN_BEGIN()
 
 template <typename T>
 struct BBox3
@@ -379,3 +382,5 @@ struct BBox2
 typedef BBox3<Float> BBox3f;
 typedef BBox2<Float> BBox2f;
 typedef BBox2<int> BBox2i;
+
+FEIGN_END()

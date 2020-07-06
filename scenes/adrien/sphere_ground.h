@@ -1,6 +1,8 @@
 #include <feign/core/api.h>
 #include <feign/shapes/grid_obj.h>
 
+FEIGN_BEGIN()
+
 static void sphere_ground()
 {
     std::string test_name = "sphere_ground";
@@ -157,3 +159,5 @@ static void sphere_ground()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

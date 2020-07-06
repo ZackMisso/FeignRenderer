@@ -1,5 +1,7 @@
 #include <feign/core/api.h>
 
+FEIGN_BEGIN()
+
 // January 8, 2020
 // This render tests two sdf spheres colliding with diffuse shader
 
@@ -121,3 +123,5 @@ static void jan_8_2020()
 
     // system(publish_command.c_str());
 }
+
+FEIGN_END()

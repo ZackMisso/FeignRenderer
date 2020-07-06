@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -14,6 +14,8 @@
 #include <feign/shapes/triangle.h>
 #include <feign/math/transform.h>
 #include <feign/misc/medium_boundry.h>
+
+FEIGN_BEGIN()
 
 class ObjMesh : public Shape
 {
@@ -105,3 +107,5 @@ protected:
     Float sa;
     bool flip_norms;
 };
+
+FEIGN_END()

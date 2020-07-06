@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -17,6 +17,8 @@
 #include <feign/misc/intersection.h>
 #include <feign/misc/embree_util.h>
 #include <feign/misc/medium_boundry.h>
+
+FEIGN_BEGIN()
 
 class EmitterNode;
 
@@ -371,3 +373,5 @@ public:
     Transform transform;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

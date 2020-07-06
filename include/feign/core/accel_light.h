@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -12,6 +12,8 @@
 #include <feign/core/emitter.h>
 #include <feign/core/sampler.h>
 #include <feign/math/discrete_pdf.h>
+
+FEIGN_BEGIN();
 
 /////////////////////////////////////////////////
 // Light Sampling Acceleration Structure
@@ -120,3 +122,5 @@ protected:
 /////////////////////////////////////////////////
 
 // TODO: maybe add more in the future
+
+FEIGN_END()

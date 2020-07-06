@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/bsdf.h>
 #include <feign/core/sampler.h>
 #include <feign/math/coord_frame.h>
+
+FEIGN_BEGIN()
 
 Dielectric::Dielectric(Float int_ior, Float ext_ior)
     : BSDF(), int_ior(int_ior), ext_ior(ext_ior) { }
@@ -69,3 +71,5 @@ void Dielectric::evaluate(MaterialClosure& closure) const
 {
     closure.albedo = Color3f(1.f);
 }
+
+FEIGN_END()

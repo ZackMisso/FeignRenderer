@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/emitter.h>
+
+FEIGN_BEGIN()
 
 DistantEmitter::DistantEmitter()
 {
@@ -56,3 +58,5 @@ Color3f DistantEmitter::evaluate(EmitterQuery& rec) const
 
     return Color3f(0.f);
 }
+
+FEIGN_END()

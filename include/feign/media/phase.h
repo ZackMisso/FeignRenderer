@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -10,6 +10,8 @@
 
 #include <feign/core/node.h>
 #include <feign/math/coord_frame.h>
+
+FEIGN_BEGIN()
 
 class PhaseFunction : public Node
 {
@@ -71,7 +73,7 @@ public:
                                                  v1,
                                                  v2,
                                                  -wo);
-        
+
         return hg(-cos_theta, g);
     }
 
@@ -97,3 +99,5 @@ public:
     PhaseFunction* phase;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

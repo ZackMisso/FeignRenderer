@@ -6,6 +6,8 @@
 // heatmap. This shader is used as a means to test my api to verify that it
 // works.
 
+FEIGN_BEGIN()
+
 static void jan_1_2020()
 {
     std::string test_name = "jan_1_2020";
@@ -124,3 +126,5 @@ static void jan_1_2020()
 
     // system(publish_command.c_str());
 }
+
+FEIGN_END()

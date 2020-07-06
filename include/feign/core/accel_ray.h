@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -12,6 +12,12 @@
 #include <feign/core/shape.h>
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
+
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
+#include <embree3/rtcore_scene.h>
+
+FEIGN_BEGIN()
 
 /////////////////////////////////////////////////
 // Ray Tracing Acceleration Structure
@@ -34,10 +40,6 @@ public:
 /////////////////////////////////////////////////
 // Embree Acceleration Structure
 /////////////////////////////////////////////////
-#include <embree3/rtcore.h>
-#include <embree3/rtcore_ray.h>
-#include <embree3/rtcore_scene.h>
-
 class EmbreeAccel : public RayAccel
 {
 public:
@@ -123,3 +125,5 @@ public:
     RayAccel* accel;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

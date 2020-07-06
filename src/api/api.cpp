@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -33,6 +33,8 @@
 
 // stats
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 FeignRenderer* FeignRenderer::instance = nullptr;
 
@@ -1401,3 +1403,5 @@ void FeignRenderer::clean_up()
     if (FeignRenderer::instance) delete FeignRenderer::instance;
     FeignRenderer::instance = nullptr;
 }
+
+FEIGN_END()

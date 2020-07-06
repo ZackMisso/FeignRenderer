@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -10,6 +10,8 @@
 #include <feign/core/sampler.h>
 #include <feign/math/coord_frame.h>
 #include <feign/math/warp.h>
+
+FEIGN_BEGIN()
 
 Blinn::Blinn(const Blinn::Params* params)
     : BSDF(),
@@ -95,3 +97,5 @@ void Blinn::evaluate(MaterialClosure& closure) const
 
     closure.albedo = kd * INV_PI + ks * (exponent + 2.f) * INV_TWOPI * powf(expVal, exponent);
 }
+
+FEIGN_END()

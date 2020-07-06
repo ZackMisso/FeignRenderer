@@ -7,6 +7,8 @@
 // the center of the mesh with a radius of a fraction of the shortest side of
 // the objects bounding box
 
+FEIGN_BEGIN()
+
 static void jan_2_2020()
 {
     std::string test_name = "jan_2_2020";
@@ -92,3 +94,5 @@ static void jan_2_2020()
 
     // system(publish_command.c_str());
 }
+
+FEIGN_END()

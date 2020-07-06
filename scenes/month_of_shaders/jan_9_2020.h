@@ -1,6 +1,8 @@
 #include <feign/core/api.h>
 #include <feign/shapes/grid_obj.h>
 
+FEIGN_BEGIN()
+
 static void jan_9_2020()
 {
     std::string test_name = "jan_9_2020";
@@ -113,3 +115,5 @@ static void jan_9_2020()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

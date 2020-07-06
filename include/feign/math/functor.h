@@ -1,6 +1,18 @@
-#include <feign/common.h>
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
+// TODO: what is this used for again????
 
 #pragma once
+
+#include <feign/common.h>
+
+FEIGN_BEGIN()
 
 struct Functor
 {
@@ -78,3 +90,5 @@ struct SinWave
 {
 
 };
+
+FEIGN_END()

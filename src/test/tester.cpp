@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -11,6 +11,8 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+
+FEIGN_BEGIN()
 
 void UnitTestData::logReport() const
 {
@@ -91,3 +93,5 @@ bool UnitTestManager::run_all_tests()
 
     return passes;
 }
+
+FEIGN_END()

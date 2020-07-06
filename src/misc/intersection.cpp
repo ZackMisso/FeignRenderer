@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/misc/intersection.h>
+
+FEIGN_BEGIN()
 
 Intersection::Intersection()
     : intersected_mesh(nullptr) { }
@@ -40,3 +42,5 @@ Vector3f Intersection::toWorldGeom(const Vector3f& vec) const
 {
     return g_frame.toWorld(vec);
 }
+
+FEIGN_END()

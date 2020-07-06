@@ -1,8 +1,18 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #include <feign/media/density_func.h>
 
 #if OPENVDB
 
 #include <openvdb/tools/Interpolation.h>
+
+FEIGN_BEGIN()
 
 OpenVDBDensity::OpenVDBDensity(std::string openvdb_file)
 {
@@ -63,6 +73,8 @@ void OpenVDBDensity::preProcess()
             }
         }
     }
+
+    LOG("VDB Max Density: " + std::to_string(max_density));
     LOG("finished pre-processing openvdb medium");
 }
 
@@ -85,5 +97,7 @@ Float OpenVDBDensity::maxDensity() const
 {
     return max_density;
 }
+
+FEIGN_END()
 
 #endif

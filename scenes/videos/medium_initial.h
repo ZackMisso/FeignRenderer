@@ -11,6 +11,8 @@
 // 30 seconds final medium show off
 //
 
+FEIGN_BEGIN()
+
 class MediumTesting_Debug
 {
 protected:
@@ -43,3 +45,5 @@ protected:
 public:
     MediumTesting_Debug();
 };
+
+FEIGN_END()

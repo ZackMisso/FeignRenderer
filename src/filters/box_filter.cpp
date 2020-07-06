@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/recon_filter.h>
+
+FEIGN_BEGIN()
 
 BoxFilter::BoxFilter() : ReconstructionFilter()
 {
@@ -28,3 +30,5 @@ Float BoxFilter::evaluate(const Point2f& p) const
     }
     return 0.0;
 }
+
+FEIGN_END()

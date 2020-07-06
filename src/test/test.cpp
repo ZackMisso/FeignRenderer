@@ -1,8 +1,18 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #include <feign/test/tester.h>
 #include <imedit/image.h>
 #include <imedit/im_util.h>
 #include <feign/core/api.h>
 #include <feign/parser/json_parser.h>
+
+FEIGN_BEGIN()
 
 bool evaluate_unit_test(UnitTestData& testLog)
 {
@@ -46,3 +56,5 @@ bool replace_reference(UnitTestData& testLog)
 
     return true;
 }
+
+FEIGN_END()

@@ -4,6 +4,8 @@
 // January 4, 2020
 // This render tests terrain maps
 
+FEIGN_BEGIN()
+
 static void jan_4_2020()
 {
     std::string test_name = "jan_4_2020";
@@ -122,3 +124,5 @@ static void jan_4_2020()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

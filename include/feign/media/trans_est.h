@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -12,6 +12,8 @@
 #include <feign/media/density_func.h>
 #include <feign/core/sampler.h>
 #include <feign/math/ray.h>
+
+FEIGN_BEGIN()
 
 class TransmittanceEstimator
 {
@@ -129,3 +131,5 @@ public:
     TransmittanceEstimator* trans_est;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

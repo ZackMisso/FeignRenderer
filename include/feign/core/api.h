@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -25,6 +25,8 @@
 #include <feign/core/shader.h>
 #include <feign/core/texture.h>
 #include <unordered_map>
+
+FEIGN_BEGIN()
 
 // The end goal is to design all of this so it can be specified by a node graph
 // but it also needs to retain speed
@@ -177,3 +179,5 @@ public:
 
     static void flush_renders();
 };
+
+FEIGN_END()

@@ -3,6 +3,8 @@
 // January 6, 2020
 // This render tests sdf spheres
 
+FEIGN_BEGIN()
+
 static void jan_6_2020()
 {
     std::string test_name = "jan_6_2020";
@@ -102,3 +104,5 @@ static void jan_6_2020()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

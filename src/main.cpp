@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -31,6 +31,8 @@
 #include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
 
 #include "../scenes/videos/medium_initial.h"
+
+FEIGN_BEGIN()
 
 void run_scene(std::string scene_name)
 {
@@ -187,3 +189,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+FEIGN_END()

@@ -2,6 +2,8 @@
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
 
+FEIGN_BEGIN()
+
 MediumTesting_Debug::MediumTesting_Debug()
 {
     run();
@@ -375,9 +377,11 @@ void MediumTesting_Debug::initialize_initial_scene(int frame)
     // /Users/corneria/Documents/Research/testscenes/vdb_smoke
 
     // assert(false);
-    Color3f abs = Color3f(1.f);
+    Color3f abs = Color3f(0.5f);
     Color3f scat = Color3f(0.f);
     Transform identity = Transform();
+    identity = identity * Matrix4f::scale(Vector3f(2.f, 2.f, 2.f));
+    identity = identity * Matrix4f::translate(Vector3f(0.f, -5.f, 0.f));
 
     StandardMedium::Params media_params("ratio",
                                         "default",
@@ -396,19 +400,21 @@ void MediumTesting_Debug::initialize_initial_scene(int frame)
                                            nullptr);
 
     // OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/cloud-1840.vdb");
-    OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/nice_smoke_35.vdb");
+    OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(frame-499) + ".vdb");
 
     FeignRenderer::fr_medium_density("vdb_density",
                                      "openvdb",
                                      &vdb_density_params);
 
+    // TODO: fix this
     FeignRenderer::fr_medium_sampling("const_sampler",
                                       "constant",
                                       nullptr);
 
     FeignRenderer::fr_clear_transform();
 
-    FeignRenderer::fr_scale(2.f, 2.f, 2.f);
+    FeignRenderer::fr_scale(8.f, 10.f,8.f);
+    FeignRenderer::fr_translate(0.f, -10.f, 0.f);
 
     FeignRenderer::fr_object("medium_bounds",
                              "box_mesh",
@@ -584,21 +590,32 @@ void MediumTesting_Debug::initialize_camera(int frame)
 {
     Float xz_dist = std::sqrt(7.0 * 7.0 - 16.0);
     Float angle = 1.0 * M_PI * float(frame) / 480.f;
+    Vector3f look_at = Vector3f(0.f, 1.f, 0.f);
+    Float height = 4.0;
+    Float fov = 30.f;
+
+    if (frame >= 500)
+    {
+        xz_dist = 9.8;
+        angle = 0.0;
+        look_at = Vector3f(0.f, -7.4f, 0.f);
+        height = -9.0;
+        fov = 35.f;
+    }
+
     Perspective::Params cam_params(Vector3f(xz_dist * cos(angle),
-                                            4.0,
+                                            height,
                                             xz_dist * sin(angle)),
-                                   Vector3f(0.f,
-                                            0.f,
-                                            0.f),
+                                   look_at,
                                    Vector3f(0, 1, 0),
                                    // 30.f, // debug res
-                                   30.f, // full res
+                                   fov, // full res
                                    1e-4f,
                                    1e2f,
                                    10.f,
                                    0.f,
-                                   // Vec2i(256, 256)); // debug res
-                                   Vec2i(540, 540)); // full res
+                                   Vec2i(256, 256)); // debug res
+                                   // Vec2i(1080, 1080)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -639,6 +656,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     int samples = 8;
     if (frame < 180) samples = 2048;
     else samples = 2048 * 2;
+
+    samples = 16;
     // samples = 2048;
 
     Independent::Params samp_params(samples, 0x12345);
@@ -666,15 +685,15 @@ void MediumTesting_Debug::flush_render()
 
 void MediumTesting_Debug::run()
 {
-    std::string test_name = "medium_testing";
+    std::string test_name = "medium_hetero";
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
-    // std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
+    std::string publish_command = "ffmpeg -r 24 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
     // std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/aaaaah/out" + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/aaaaah" + ".mp4";
 
     // system(rm_command.c_str());
-    // system(mkdir_command.c_str());
+    system(mkdir_command.c_str());
 
     // for (int i = 0; i < 2000; ++i)
     // {
@@ -684,30 +703,56 @@ void MediumTesting_Debug::run()
     //     image.write("medium_testing/aaaaah/out_" + std::string(str) + ".png")
     // }
 
-    int start_frame = 359;
-    // int start_frame = 501;
-    int end_frame = 360;
+    // int start_frame = 0;
+    // // int start_frame = 501;
+    // int end_frame = 40;
 
+    // initial medium scene
+    // for (int frame = start_frame; frame < end_frame; frame++)
+    // {
+    //     initialize_base_structs(test_name, frame);
+    //
+    //     initialize_camera(frame);
+    //
+    //     initialize_materials(frame);
+    //
+    //     // initialize_scene(frame);
+    //
+    //     initialize_grid_scene(frame);
+    //
+    //     // initialize_initial_scene(frame);
+    //     // assert(false);
+    //
+    //     if (frame < 500)
+    //         initialize_homo_sphere_medium_vary_scatter(frame);
+    //     else
+    //         initialize_initial_scene(frame);
+    //     // initialize_box_medium(frame);
+    //
+    //     initialize_lighting(frame);
+    //
+    //     LOG("rendering frame: " + std::to_string(frame));
+    //
+    //     flush_render();
+    // }
+
+
+    int start_frame = 500;
+    // int start_frame = 501;
+    int end_frame = 572;
+
+    // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
     {
-        initialize_base_structs(test_name, frame);
+        initialize_base_structs(test_name, frame-500);
 
         initialize_camera(frame);
 
         initialize_materials(frame);
 
-        // initialize_scene(frame);
-
         initialize_grid_scene(frame);
 
-        // initialize_initial_scene(frame);
-        // assert(false);
-
-        if (frame < 500)
-            initialize_homo_sphere_medium_vary_scatter(frame);
-        else
-            initialize_initial_scene(frame);
-        // initialize_box_medium(frame);
+        initialize_initial_scene(frame);
 
         initialize_lighting(frame);
 
@@ -720,7 +765,7 @@ void MediumTesting_Debug::run()
     std::string frame_folder = "frames";
     system("mkdir frames");
 
-    std::string publish_command = "ffmpeg -r 24 -f image2 -i frames/frame_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M frames/initial_media.mp4";
+    // std::string publish_command = "ffmpeg -r 24 -f image2 -i frames/frame_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M frames/initial_media.mp4";
 
     // for (int frame = start_frame; frame < end_frame; frame++)
     // {
@@ -806,6 +851,8 @@ void MediumTesting_Debug::run()
     //     final_image.write("frames/frame_" + std::string(str) + ".png");
     // }
     //
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
     // system("rm -rf frames/*.png");
 }
+
+FEIGN_END()

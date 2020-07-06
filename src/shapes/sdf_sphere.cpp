@@ -1,18 +1,20 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
- #include <feign/core/shape.h>
+#include <feign/core/shape.h>
 
- SDFSphere::SDFSphere(Point3f center,
-                      Float radius,
-                      Float inter,
-                      const MediumBoundry* boundry,
-                      bool is_null)
+FEIGN_BEGIN()
+
+SDFSphere::SDFSphere(Point3f center,
+                     Float radius,
+                     Float inter,
+                     const MediumBoundry* boundry,
+                     bool is_null)
     : SDFShape(boundry, is_null),
       center(center),
       radius(radius)
@@ -41,3 +43,5 @@ Point3f SDFSphere::centroid() const
     // TODO: how do you calculate the centroid after arbitrary deformations
     return center;
 }
+
+FEIGN_END()

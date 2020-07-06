@@ -3,6 +3,8 @@
 // January 3, 2020
 // This render tests barycentric coordinate shading
 
+FEIGN_BEGIN()
+
 static void jan_3_2020()
 {
     std::string test_name = "jan_3_2020";
@@ -124,3 +126,5 @@ static void jan_3_2020()
 
     // system(publish_command.c_str());
 }
+
+FEIGN_END()

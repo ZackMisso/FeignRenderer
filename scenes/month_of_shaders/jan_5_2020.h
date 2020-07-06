@@ -3,6 +3,8 @@
 // January 5, 2020
 // This render tests spherical radar shader
 
+FEIGN_BEGIN()
+
 Point3f create_rand_point_on_sphere(float r, pcg32& rng)
 {
     float theta = rng.nextFloat() * M_PI;
@@ -241,3 +243,5 @@ static void jan_5_2020()
 
     // system(publish_command.c_str());
 }
+
+FEIGN_END()

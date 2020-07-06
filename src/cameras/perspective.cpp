@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/camera.h>
 #include <feign/core/recon_filter.h>
 #include <feign/math/warp.h>
+
+FEIGN_BEGIN()
 
 Perspective::Perspective(Float aperatureRadius,
                          Float focalDistance,
@@ -94,3 +96,5 @@ void Perspective::print() const
     std::cout << "far: " << far << std::endl;
     std::cout << std::endl;
 }
+
+FEIGN_END()

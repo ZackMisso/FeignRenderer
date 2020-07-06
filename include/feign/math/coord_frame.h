@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Based off Wenzel Jakob's implementation in Nori
  *
@@ -12,6 +12,8 @@
 
 #include <feign/common.h>
 #include <feign/math/vector.h>
+
+FEIGN_BEGIN()
 
 struct CoordinateFrame
 {
@@ -45,3 +47,5 @@ struct CoordinateFrame
     static Float sinPhiSqr(const Vector3f& vec);
     static Float cosPhiSqr(const Vector3f& vec);
 };
+
+FEIGN_END()

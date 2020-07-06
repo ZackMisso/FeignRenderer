@@ -159,9 +159,7 @@ add_executable(feign
     src/accel/light_naive.cpp
     src/accel/light_spatial.cpp
 
-    # RayAccel implementation files
-    src/accel/ray_embree.cpp
-    src/accel/ray_sdf.cpp
+
 
     # Api implementation files
     src/api/api.cpp
@@ -173,6 +171,10 @@ add_executable(feign
     src/bsdfs/dielectric.cpp
     src/bsdfs/phong.cpp
     src/bsdfs/blinn.cpp
+
+    # RayAccel implementation files
+    src/accel/ray_embree.cpp
+    src/accel/ray_sdf.cpp
 
     # Camera implementation files
     src/cameras/perspective.cpp

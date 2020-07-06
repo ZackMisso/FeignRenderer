@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -12,6 +12,8 @@
 #include <feign/core/bsdf.h>
 #include <feign/core/closure.h>
 #include <feign/misc/intersection.h>
+
+FEIGN_BEGIN()
 
 // TODO: should materials and shaders be the same abstraction instead of separate?
 //       this really seems annoying that materials do not seem to do much and to me
@@ -69,3 +71,5 @@ public:
     Material* material;
 };
 /////////////////////////////////////////////////
+
+FEIGN_END()

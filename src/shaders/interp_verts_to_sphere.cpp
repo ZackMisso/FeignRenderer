@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/shader.h>
 #include <feign/shapes/objmesh.h>
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 InterpVertsToSphereShader::InterpVertsToSphereShader(float prop_of_shortest_axis, float interp)
     : prop_of_shortest_axis(prop_of_shortest_axis), interp(interp)
@@ -103,3 +105,5 @@ void InterpVertsToSphereShader::evaluate(void* mesh)
         Clocker::endClock("shader eval");
     #endif
 }
+
+FEIGN_END()

@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -11,6 +11,8 @@
 #include <feign/core/scene.h>
 #include <feign/stats/clocker.h>
 #include <feign/misc/render_pool.h>
+
+FEIGN_BEGIN()
 
 void Integrator::preProcess()
 {
@@ -45,8 +47,6 @@ void Integrator::render(const Scene* scene,
     {
         if (verbose) LOG("sample: " + std::to_string(k));
 
-        // LOG("rendering");
-
         // for (int i = 800; i < 1080; ++i)
         // {
         //     for (int j = 800; j < 1080; ++j)
@@ -64,8 +64,6 @@ void Integrator::render(const Scene* scene,
                 #if CLOCKING
                     Clocker::startClock("integrator");
                 #endif
-
-                // LOG("pre radiance");
 
                 radiance *= Li(scene, sampler, ray);
 
@@ -135,3 +133,5 @@ void Integrator::render(const Scene* scene,
         Clocker::endClock("filter");
     #endif
 }
+
+FEIGN_END()

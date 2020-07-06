@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -11,10 +11,10 @@
 #include <feign/common.h>
 #include <feign/math/vector.h>
 #include <feign/math/coord_frame.h>
-#include <feign/media/media.h>
+
+FEIGN_BEGIN()
 
 class Shape;
-class Media;
 
 // TODO: add an intersection data struct for applying shaders
 struct Intersection
@@ -41,3 +41,5 @@ struct Intersection
     Vector3f toLocalGeom(const Vector3f& vec) const;
     Vector3f toWorldGeom(const Vector3f& vec) const;
 };
+
+FEIGN_END()

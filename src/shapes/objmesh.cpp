@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -8,6 +8,8 @@
 
 #include <feign/shapes/objmesh.h>
 #include <fstream>
+
+FEIGN_BEGIN()
 
 ObjMesh::ObjMesh() : Shape(nullptr, false)
 {
@@ -464,3 +466,5 @@ const std::vector<Vec2f>& ObjMesh::getUVs() const { return uvs; }
 void ObjMesh::setVerts(std::vector<Point3f>& param) { vs = param; }
 void ObjMesh::setNorms(std::vector<Normal3f>& param) { ns = param; }
 void ObjMesh::setUVs(std::vector<Vec2f>& param) { uvs = param; }
+
+FEIGN_END()

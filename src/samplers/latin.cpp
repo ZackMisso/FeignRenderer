@@ -1,12 +1,14 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
  **/
 
 #include <feign/core/sampler.h>
+
+FEIGN_BEGIN()
 
 Latin::Latin() : Sampler() { }
 
@@ -87,3 +89,5 @@ void Latin::nextSample()
 
     throw new NotImplementedException("latin next sample");
 }
+
+FEIGN_END()

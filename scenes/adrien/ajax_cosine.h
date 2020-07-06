@@ -1,6 +1,8 @@
 #include <feign/core/api.h>
 #include <feign/shapes/objmesh.h>
 
+FEIGN_BEGIN()
+
 static void ajax_cosine()
 {
     std::string test_name = "cosine_term_inferno";
@@ -119,3 +121,5 @@ static void ajax_cosine()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

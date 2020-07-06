@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -9,6 +9,8 @@
 #include <feign/core/shader.h>
 #include <feign/core/scene.h>
 #include <feign/stats/clocker.h>
+
+FEIGN_BEGIN()
 
 RadarMaterialShader::RadarMaterialShader(MaterialNode* radar_mat,
                                          MaterialNode* mesh_mat,
@@ -138,3 +140,5 @@ Material* RadarMaterialShader::choose_mat(MaterialClosure& closure,
         return mesh_mat->material;
     }
 }
+
+FEIGN_END()

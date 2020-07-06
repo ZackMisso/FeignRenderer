@@ -3,6 +3,8 @@
 // January 7, 2020
 // This render tests two sdf spheres colliding without smoothing
 
+FEIGN_BEGIN()
+
 static void jan_7_2020()
 {
     std::string test_name = "jan_7_2020";
@@ -96,3 +98,5 @@ static void jan_7_2020()
 
     system(publish_command.c_str());
 }
+
+FEIGN_END()

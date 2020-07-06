@@ -1,4 +1,14 @@
+/**
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
+
 #include <feign/media/trans_est.h>
+
+FEIGN_BEGIN()
 
 Trans_RatioTracking::Trans_RatioTracking()
 {
@@ -40,3 +50,5 @@ Color3f Trans_RatioTracking::spectral_transmittance(const Ray3f& ray,
 
     return Color3f(0.f);
 }
+
+FEIGN_END()

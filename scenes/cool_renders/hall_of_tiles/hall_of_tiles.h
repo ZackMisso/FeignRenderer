@@ -1,5 +1,7 @@
 #include <feign/core/api.h>
 
+FEIGN_BEGIN()
+
 class HallOfTiles
 {
 protected:
@@ -14,3 +16,5 @@ protected:
 public:
     HallOfTiles();
 };
+
+FEIGN_END()

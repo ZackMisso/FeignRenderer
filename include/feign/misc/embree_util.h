@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * This util was implemented based off of Benedikt Bitterli's code here:
  * https://github.com/tunabrain/tungsten/blob/master/src/core/renderer/TraceableScene.hpp
@@ -17,13 +17,12 @@
 #include <embree3/rtcore.h>
 #include <embree3/rtcore_ray.h>
 
-namespace EmbreeUtil
-{
+FEIGN_BEGIN()
 
 void initDevice();
 RTCDevice getDevice();
 
-inline RTCBounds convert(const BBox3f& box)
+inline RTCBounds convert_bbox_to_rtcbounds(const BBox3f& box)
 {
     return RTCBounds{
         (float)box.min(0), (float)box.min(1), (float)box.min(2),
@@ -31,7 +30,7 @@ inline RTCBounds convert(const BBox3f& box)
     };
 }
 
-inline BBox3f convert(const RTCBounds& box)
+inline BBox3f convert_rtcbounds_to_bbox(const RTCBounds& box)
 {
     return BBox3f(
         Vec3f(box.lower_x, box.lower_y, box.lower_z),
@@ -39,7 +38,7 @@ inline BBox3f convert(const RTCBounds& box)
     );
 }
 
-inline Ray3f convert(const RTCRay& ray)
+inline Ray3f convert_rtcray_to_ray(const RTCRay& ray)
 {
     return Ray3f(
         Point3f(ray.org_x, ray.org_y, ray.org_z),
@@ -47,7 +46,7 @@ inline Ray3f convert(const RTCRay& ray)
     );
 }
 
-inline RTCRay convert(const Ray3f& ray)
+inline RTCRay convert_ray_to_rtcray(const Ray3f& ray)
 {
     RTCRay new_ray;
     new_ray.org_x = ray.origin(0);
@@ -61,4 +60,4 @@ inline RTCRay convert(const Ray3f& ray)
     return new_ray;
 }
 
-}
+FEIGN_END()

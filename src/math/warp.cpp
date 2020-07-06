@@ -1,6 +1,6 @@
 /**
  * Author:    Zackary Misso
- * Version:   0.1.1
+ * Version:   0.2.0
  *
  * Anyone has permission to use the following code as long as proper
  * acknowledgement is provided to the original author(s).
@@ -8,6 +8,8 @@
 
 #include <feign/math/warp.h>
 #include <tgmath.h>
+
+FEIGN_BEGIN()
 
 Point2f WarpSpace::sqrToUniDisk(const Point2f &sample)
 {
@@ -127,3 +129,5 @@ Float WarpSpace::sqrToBeckPdf(const Vector3f &m, Float alpha)
 
     return 0.f;
 }
+
+FEIGN_END()
