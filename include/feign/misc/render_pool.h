@@ -12,6 +12,7 @@
 #include <feign/core/camera.h>
 #include <feign/core/sampler.h>
 #include <thread>
+#include <mutex>
 #include <functional>
 
 FEIGN_BEGIN()
@@ -29,46 +30,16 @@ struct RenderTile
           done(false)
     {
         int size = (max_x - min_x) * (max_y - min_y);
-        // int size = (max_x - min_x + 2) * (max_y - min_y + 2);
-        // std::cout << "SIZE: " << size << std::endl;
-        pixels = new Color3f[size]();
-        weights = new Float[size]();
-
-        for (int i = 0; i < size; ++i)
-        {
-            pixels[i] = Color3f(0.f);
-            weights[i] = 0.f;
-        }
     }
-
-    ~RenderTile()
-    {
-        // LOG("deleting tile ~ fox");
-        // pixels = std::vector<Color3f>();
-        // LOG(std::to_string(pixels.size()));
-        // pixels.clear();
-        delete[] pixels;
-        // LOG("pixels deleted");
-        delete[] weights;
-        // LOG("deleted tile");
-    }
-
-    void add_radiance(Color3f rad, int i, int j);
-    void add_weight(Float wei, int i, int j);
 
     static void evaluate(RenderTile* tile,
                          const Scene* scene,
                          const Integrator* intergator,
                          const Camera* camera,
-                         Sampler* sampler);
-
-    void finalize(Imagef& image);
-
-    Color3f* pixels;
-    Float* weights;
-
-    // std::vector<Color3f> pixels;
-    // std::vector<Float> weights;
+                         Sampler* sampler,
+                         Imagef* image,
+                         std::vector<Float>* weights,
+                         std::mutex* mutexes);
 
     // this tile represents all pixels in the range [min, max)
     bool done;
@@ -94,16 +65,11 @@ public:
                        const Camera* camera,
                        Sampler* sampler,
                        Imagef& image);
-    void accumulate_result(Imagef& image);
 
 protected:
-
-    // int get_next_free_index() const;
-
     std::vector<std::thread> threads;
     std::vector<RenderTile*> tiles;
     std::vector<RenderTile*> active_tiles;
-    // bool* free_threads;
     int tile_width;
     int width;
     int height;

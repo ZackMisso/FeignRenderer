@@ -57,6 +57,12 @@ set(JSON_INCLUDE_DIR
 set(TINYEXR_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/tinyexr)
 
+set(OPENVDB_INCLUDE_DIR
+   /usr/local/Cellar/openvdb/7.0.0_2/include/)
+
+set(OPENEXR_INCLUDE_DIR
+   /usr/local/include/)
+
 find_package(PythonLibs REQUIRED)
 # find_package(openvdb REQUIRED)
 find_package(embree 3.0 REQUIRED)
@@ -78,6 +84,10 @@ include_directories(
     ${JSON_INCLUDE_DIR}
 
     ${TINYEXR_INCLUDE_DIR}
+
+    ${OPENVDB_INCLUDE_DIR}
+
+    ${OPENEXR_INCLUDE_DIR}
 
     #ext/
 )

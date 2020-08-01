@@ -30,7 +30,6 @@ void Integrator::render_fast(const Scene* scene,
     RenderPool* pool = new RenderPool(12, 64);
     pool->initialize_pool(image.width(), image.height());
     pool->evaluate_pool(scene, this, camera, sampler, image);
-    pool->accumulate_result(image);
     delete pool;
 }
 

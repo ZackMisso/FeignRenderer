@@ -263,8 +263,8 @@ FilterNode* FeignRenderer::find_filter(std::string name)
         {
             // assert(false);
             // TODO: gauss filter does not work for multithreaded logic
-            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
-            node->filter = new BoxFilter();
+            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
+            // node->filter = new BoxFilter();
         }
 
         return node;

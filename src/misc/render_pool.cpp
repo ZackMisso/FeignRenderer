@@ -14,38 +14,15 @@
 
 FEIGN_BEGIN()
 
-void RenderTile::add_radiance(Color3f rad, int i, int j)
-{
-    if (i < min_y || j < min_x) return;
-    if (i >= max_y || j >= max_x) return;
-
-    int wid = max_x - min_x;
-    int hei = max_y - min_y;
-
-    int index = (i - min_y) * wid + (j - min_x);
-
-    pixels[index] += rad;
-}
-
-void RenderTile::add_weight(Float wei, int i, int j)
-{
-    if (i < min_y || j < min_x) return;
-    if (i >= max_y || j >= max_x) return;
-
-    int wid = max_x - min_x;
-    int hei = max_y - min_y;
-
-    int index = (i - min_y) * wid + (j - min_x);
-
-    weights[index] += wei;
-}
-
 // TODO: implement adaptive sampling for video compositing
 void RenderTile::evaluate(RenderTile* tile,
                           const Scene* scene,
                           const Integrator* integrator,
                           const Camera* camera,
-                          Sampler* sampler)
+                          Sampler* sampler,
+                          Imagef* image,
+                          std::vector<Float>* weights,
+                          std::mutex* mutexes)
 {
     int index = 0;
 
@@ -76,8 +53,8 @@ void RenderTile::evaluate(RenderTile* tile,
                 BBox2f filter_bounds = BBox2f(pixelSample - integrator->filter->filter->getSize(),
                                               pixelSample + integrator->filter->filter->getSize());
 
-                filter_bounds.clip(Point2f(tile->min_x, tile->min_y),
-                                   Point2f(tile->max_x-1, tile->max_y-1));
+                filter_bounds.clip(Point2f(0, 0),
+                                   Point2f(image->width()-1, image->height()-1));
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -93,8 +70,17 @@ void RenderTile::evaluate(RenderTile* tile,
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
 
-                        tile->add_radiance(rad * weight, fi, fj);
-                        tile->add_weight(weight, fi, fj);
+                        int index = fi * image->width() + fj;
+
+                        mutexes[index].lock();
+
+                        (*image)(fj, fi, 0) += rad(0) * weight;
+                        (*image)(fj, fi, 1) += rad(1) * weight;
+                        (*image)(fj, fi, 2) += rad(2) * weight;
+
+                        (*weights)[index] += weight;
+
+                        mutexes[index].unlock();
                     }
                 }
 
@@ -110,25 +96,6 @@ void RenderTile::evaluate(RenderTile* tile,
 
     delete sampler;
     tile->done = true;
-}
-
-void RenderTile::finalize(Imagef& image)
-{
-    int hei = max_y - min_y;
-    int wid = max_x - min_x;
-    int index = 0;
-
-    for (int i = min_y; i < max_y; ++i)
-    {
-        for (int j = min_x; j < max_x; ++j)
-        {
-            image(j, i, 0) = pixels[index](0) / weights[index];
-            image(j, i, 1) = pixels[index](1) / weights[index];
-            image(j, i, 2) = pixels[index](2) / weights[index];
-
-            ++index;
-        }
-    }
 }
 
 RenderPool::RenderPool(int num_threads, int tile_width)
@@ -180,6 +147,14 @@ void RenderPool::evaluate_pool(const Scene* scene,
 
     std::vector<RenderTile*> tiles_to_do = std::vector<RenderTile*>();
 
+    std::mutex* mutexes = new std::mutex[image.width() * image.height()];
+    std::vector<Float> weights = std::vector<Float>(image.width() * image.height());
+
+    for (int i = 0; i < weights.size(); ++i)
+    {
+        weights[i] = 0.0;
+    }
+
     for (int i = 0; i < tiles.size(); ++i)
     {
         tiles_to_do.push_back(tiles[i]);
@@ -196,7 +171,10 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                            scene,
                                            integrator,
                                            camera,
-                                           tile_sampler));
+                                           tile_sampler,
+                                           &image,
+                                           &weights,
+                                           mutexes));
     }
 
     while (tiles_to_do.size())
@@ -218,7 +196,10 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                                        scene,
                                                        integrator,
                                                        camera,
-                                                       tile_sampler));
+                                                       tile_sampler,
+                                                       &image,
+                                                       &weights,
+                                                       mutexes));
                 }
             }
         }
@@ -233,17 +214,21 @@ void RenderPool::evaluate_pool(const Scene* scene,
         catch(...) { LOG("double thread join bug.... to fix later"); }
     }
 
-    LOG("all render tasks completed");
-}
+    delete[] mutexes;
 
-// TODO: for now this will work as if it is offline, but in the future this should
-//       also have an implementation for interactive sessions
-void RenderPool::accumulate_result(Imagef& image)
-{
-    for (int i = 0; i < tiles.size(); ++i)
+    for (int i = 0; i < image.height(); ++i)
     {
-        tiles[i]->finalize(image);
+        for (int j = 0; j < image.width(); ++j)
+        {
+            int index = i * image.width() + j;
+
+            image(j, i, 0) = image(j, i, 0) / weights[index];
+            image(j, i, 1) = image(j, i, 1) / weights[index];
+            image(j, i, 2) = image(j, i, 2) / weights[index];
+        }
     }
+
+    LOG("all render tasks completed");
 }
 
 FEIGN_END()
