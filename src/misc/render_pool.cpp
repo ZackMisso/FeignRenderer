@@ -216,6 +216,7 @@ void RenderPool::evaluate_pool(const Scene* scene,
 
     delete[] mutexes;
 
+    // accumulate the results here
     for (int i = 0; i < image.height(); ++i)
     {
         for (int j = 0; j < image.width(); ++j)
