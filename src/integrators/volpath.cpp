@@ -39,6 +39,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
+        // std::cout << "max bounces: " << max_bounces << std::endl;
         if (beta.isZero()) break;
 
         Intersection its;

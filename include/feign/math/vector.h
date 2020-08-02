@@ -610,6 +610,16 @@ struct Vec3
         return vec;
     }
 
+    T min() const
+    {
+        T min_val = xyz[0];
+
+        if (min_val > xyz[1]) min_val = xyz[1];
+        if (min_val > xyz[2]) min_val = xyz[2];
+
+        return min_val;
+    }
+
     Vec3<T> max(const Vec3<T>& other) const
     {
         Vec3<T> vec;
@@ -640,6 +650,16 @@ struct Vec3
         else vec.xyz[2] = val;
 
         return vec;
+    }
+
+    T max() const
+    {
+        T max_val = xyz[0];
+
+        if (max_val > xyz[1]) max_val = xyz[1];
+        if (max_val > xyz[2]) max_val = xyz[2];
+
+        return max_val;
     }
 
     Vec3<T> abs() const

@@ -992,24 +992,14 @@ void FeignRenderer::fr_media(std::string name,
         StandardMedium::Params* params =
             (StandardMedium::Params*)medium_data;
 
-        LOG("trans node");
         TransmittanceEstimatorNode* trans_node =
             getInstance()->find_transmittance_estimator(params->trans_node);
-        LOG("phase node");
         PhaseFunctionNode* phase_node =
             getInstance()->find_phase_func(params->phase_node);
-        LOG("medium sampling node");
         MediumSamplingNode* med_samp_node =
             getInstance()->find_medium_sampling(params->sampling_node);
-        LOG("density node");
         DensityFunctionNode* density_node =
             getInstance()->find_density_func(params->density_func_node);
-        LOG("medium constructor");
-
-        // if (density_node)
-        // {
-        //     assert(false);
-        // }
 
         medium->media = new StandardMedium(trans_node,
                                            phase_node,
@@ -1097,8 +1087,7 @@ void FeignRenderer::fr_medium_sampling(std::string name,
 
     if (type == "delta")
     {
-        // TODO
-        throw new NotImplementedException("api delta sampling");
+        medium_sampling->sampling = new Delta_Tracking(10.0);
     }
     else if (type == "equi")
     {

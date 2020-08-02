@@ -333,7 +333,7 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
 
     StandardMedium::Params media_params("default",
                                         "default",
-                                        "default",
+                                        "const_sampler",
                                         "const_density",
                                         identity,
                                         Color3f(1.0f),
@@ -374,18 +374,34 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
 // this is currently testing the vdb scene
 void MediumTesting_Debug::initialize_initial_scene(int frame)
 {
+    if (frame <= 600)
+        return;
     // /Users/corneria/Documents/Research/testscenes/vdb_smoke
 
     // assert(false);
     Color3f abs = Color3f(0.5f);
     Color3f scat = Color3f(0.f);
+
+    if (frame >= 700 && frame <= 900)
+    {
+        Float proxy = Float(frame - 700) / 200.f;
+
+        abs = Color3f((1.f - proxy) * 0.5f);
+        scat = Color3f(proxy * 0.5f);
+    }
+    else if (frame >= 900)
+    {
+        abs = Color3f(0.0f);
+        scat = Color3f(0.5f);
+    }
+
     Transform identity = Transform();
     identity = identity * Matrix4f::scale(Vector3f(2.f, 2.f, 2.f));
     identity = identity * Matrix4f::translate(Vector3f(0.f, -5.f, 0.f));
 
     StandardMedium::Params media_params("ratio",
                                         "default",
-                                        "default",
+                                        "delta_sampler",
                                         "vdb_density",
                                         identity,
                                         abs,
@@ -400,20 +416,20 @@ void MediumTesting_Debug::initialize_initial_scene(int frame)
                                            nullptr);
 
     // OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/cloud-1840.vdb");
-    OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(frame-499) + ".vdb");
+    OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(frame-599) + ".vdb");
 
     FeignRenderer::fr_medium_density("vdb_density",
                                      "openvdb",
                                      &vdb_density_params);
 
     // TODO: fix this
-    FeignRenderer::fr_medium_sampling("const_sampler",
-                                      "constant",
+    FeignRenderer::fr_medium_sampling("delta_sampler",
+                                      "delta",
                                       nullptr);
 
     FeignRenderer::fr_clear_transform();
 
-    FeignRenderer::fr_scale(8.f, 10.f,8.f);
+    FeignRenderer::fr_scale(3.f, 8.f, 3.f);
     FeignRenderer::fr_translate(0.f, -10.f, 0.f);
 
     FeignRenderer::fr_object("medium_bounds",
@@ -596,11 +612,32 @@ void MediumTesting_Debug::initialize_camera(int frame)
 
     if (frame >= 500)
     {
-        xz_dist = 9.8;
-        angle = 0.0;
-        look_at = Vector3f(0.f, -7.4f, 0.f);
-        height = -9.0;
-        fov = 35.f;
+        Float end_xz_dist = 9.8;
+        Float end_angle = 2.f * M_PI;
+        Float end_look_at_y = -7.4f;
+        Float end_height = -9.0;
+        Float end_fov = 35.f;
+
+        if (frame <= 600)
+        {
+            Float proxy = Float(frame - 500) / 100.f;
+            std::cout << "proxy: " << proxy << std::endl;
+
+            xz_dist = end_xz_dist * proxy + (1.f - proxy) * xz_dist;
+            angle = end_angle * proxy + (1.f - proxy) * 1.0 * M_PI * 500.f / 480.f;
+            std::cout << "angle: " << angle << std::endl;
+            height = end_height * proxy + (1.f - proxy) * height;
+            fov = end_fov * proxy + (1.f - proxy) * fov;
+            look_at = look_at * (1.f - proxy) + Vector3f(0.f, end_look_at_y, 0.f) * (proxy);
+        }
+        else
+        {
+            xz_dist = end_xz_dist;
+            angle = end_angle;
+            look_at = Vector3f(0.f, end_look_at_y, 0.f);
+            height = end_height;
+            fov = end_fov;
+        }
     }
 
     Perspective::Params cam_params(Vector3f(xz_dist * cos(angle),
@@ -608,14 +645,13 @@ void MediumTesting_Debug::initialize_camera(int frame)
                                             xz_dist * sin(angle)),
                                    look_at,
                                    Vector3f(0, 1, 0),
-                                   // 30.f, // debug res
                                    fov, // full res
                                    1e-4f,
                                    1e2f,
                                    10.f,
                                    0.f,
-                                   Vec2i(256, 256)); // debug res
-                                   // Vec2i(1080, 1080)); // full res
+                                   // Vec2i(256, 256)); // debug res
+                                   Vec2i(1080, 1080)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -657,8 +693,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     if (frame < 180) samples = 2048;
     else samples = 2048 * 2;
 
-    samples = 16;
-    // samples = 2048;
+    // samples = 16;
+    samples = 2048;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -739,7 +775,7 @@ void MediumTesting_Debug::run()
 
     int start_frame = 500;
     // int start_frame = 501;
-    int end_frame = 572;
+    int end_frame = 1000;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)

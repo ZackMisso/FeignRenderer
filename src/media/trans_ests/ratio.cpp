@@ -32,7 +32,7 @@ Float Trans_RatioTracking::transmittance(const Ray3f& ray,
 
         if (t >= tMax) break;
 
-        Float ext = density->D(ray(t));
+        Float ext = density->D(ray(t)) * density->sigma_t.max();
         tr *= (maj - ext) / maj;
     }
 

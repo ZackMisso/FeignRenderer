@@ -52,7 +52,7 @@ public:
         Float transmittance = sampler->next1D();
         Float goal_dens = -log(transmittance);
 
-        Float dense = density->D(ray((max_t - min_t) / 2.f + min_t));
+        Float dense = density->D(ray((max_t - min_t) / 2.f + min_t)) * density->sigma_t.max();
         Float dist = goal_dens / dense;
         t = min_t + dist;
 
@@ -74,18 +74,18 @@ public:
                          Float max_t) const
     {
         // Run delta-tracking iterations to sample a medium interaction
-        Float invMaxDensity = density->maxDensity();
         t = min_t;
 
         while (true)
         {
-            t -= std::log(1 - sampler->next1D()) * invMaxDensity / density->sigma_t(0);
+            t -= std::log(1 - sampler->next1D()) / majorant;
             if (t >= max_t) break;
 
-            Float dense = density->D(ray(t));
+            Float dense = density->D(ray(t)) * density->sigma_t.max();
 
-            if (dense * invMaxDensity > sampler->next1D()) {
-                // Populate _mi_ with medium interaction information and return
+            if (dense / majorant > sampler->next1D())
+            {
+                // t should be set already
                 return 1.f;
             }
         }

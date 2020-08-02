@@ -57,24 +57,25 @@ void OpenVDBDensity::preProcess()
 
     openvdb::tools::GridSampler<openvdb::FloatGrid, openvdb::tools::PointSampler> sampler(*grid);
 
-    max_density = 0.f;
-
-    for (int k = min.z(); k <= max.z(); ++k)
-    {
-        for (int i = min.y(); i <= max.y(); ++i)
-        {
-            for (int j = min.x(); j <= max.x(); ++j)
-            {
-                Float value = sampler.isSample(openvdb::Vec3R(Float(j), Float(i), Float(k)));
-                if (value > max_density)
-                {
-                    max_density = value;
-                }
-            }
-        }
-    }
-
-    LOG("VDB Max Density: " + std::to_string(max_density));
+    // TODO: maybe use this later, but for now the majorant will be hardcoded
+    // max_density = 0.f;
+    //
+    // for (int k = min.z(); k <= max.z(); ++k)
+    // {
+    //     for (int i = min.y(); i <= max.y(); ++i)
+    //     {
+    //         for (int j = min.x(); j <= max.x(); ++j)
+    //         {
+    //             Float value = sampler.isSample(openvdb::Vec3R(Float(j), Float(i), Float(k)));
+    //             if (value > max_density)
+    //             {
+    //                 max_density = value;
+    //             }
+    //         }
+    //     }
+    // }
+    //
+    // LOG("VDB Max Density: " + std::to_string(max_density));
     LOG("finished pre-processing openvdb medium");
 }
 
