@@ -112,6 +112,7 @@ add_executable(feign
     include/feign/core/node.h
     include/feign/core/accel_ray.h
     include/feign/core/accel_light.h
+    include/feign/core/accel_photons.h
     include/feign/core/api.h
     include/feign/core/bsdf.h
     include/feign/core/camera.h
@@ -169,8 +170,6 @@ add_executable(feign
     src/accel/light_naive.cpp
     src/accel/light_spatial.cpp
 
-
-
     # Api implementation files
     src/api/api.cpp
 
@@ -220,6 +219,7 @@ add_executable(feign
     src/integrators/volpath.cpp
     src/integrators/volpath_trans.cpp
     src/integrators/sandbox.cpp
+    src/integrators/photon.cpp
 
     # Material implementation files
     src/materials/simple.cpp

@@ -12,6 +12,7 @@
 #include <feign/core/camera.h>
 #include <feign/core/sampler.h>
 #include <feign/core/recon_filter.h>
+#include <feign/core/accel_photons.h>
 #include <feign/misc/render_pool.h>
 
 FEIGN_BEGIN()
@@ -46,6 +47,9 @@ public:
                                    //       configurable
         bool verbose;
     };
+
+    Integrator() { } // default constructor should never be used, directly by
+                     // the api, only for tests or temporary initializations
 
     Integrator(FilterNode* filter,
                Integrator::Params* params)
@@ -224,6 +228,62 @@ public:
                        const Ray3f& ray) const;
 };
 /////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Photon Mapping Integrator
+/////////////////////////////////////////////////
+class PhotonMapping : public Integrator
+{
+    struct Params : public Integrator::Params
+    {
+        Params(long max_time,
+               long max_heuristic,
+               std::string location,
+               int num_photons,
+               int max_bounces = 10,
+               bool verbose = false)
+            : Integrator::Params(max_time,
+                                 max_heuristic,
+                                 location,
+                                 max_bounces,
+                                 verbose),
+              num_photons(num_photons) { }
+
+        Integrator::Params convert_to_base()
+        {
+            return Integrator::Params(max_time,
+                                      max_heuristic,
+                                      location,
+                                      max_bounces,
+                                      verbose);
+        }
+
+        int num_photons;
+        long max_time;
+        long max_heuristic;
+        int max_bounces;
+        std::string location;
+        // bool eval_all_emitters; // TODO: in a future update make this
+                                   //       configurable
+        bool verbose;
+    };
+
+    PhotonMapping(FilterNode* filter,
+                  Params* params);
+
+    virtual void preProcess();
+
+    virtual Color3f scatter_photons(const Scene* scene,
+                                    Sampler* sampler);
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+
+    // TODO: create an actual acceleration structure to store photons
+    PhotonAccel* photons;
+    int num_photons;
+};
 
 /////////////////////////////////////////////////
 // Sandbox Integrator

@@ -372,7 +372,7 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
 }
 
 // this is currently testing the vdb scene
-void MediumTesting_Debug::initialize_initial_scene(int frame)
+void MediumTesting_Debug::initialize_initial_scene(int frame, bool verbose=false)
 {
     if (frame <= 600)
         return;
@@ -393,6 +393,16 @@ void MediumTesting_Debug::initialize_initial_scene(int frame)
     {
         abs = Color3f(0.0f);
         scat = Color3f(0.5f);
+    }
+
+    if (verbose)
+    {
+        std::cout << "frame: " << std::to_string(frame) << std::endl;
+        std::cout << "abs: " << std::to_string(abs(0)) << std::endl;
+        std::cout << "scat: " << std::to_string(scat(0)) << std::endl;
+        std::cout << std::endl;
+
+        return;
     }
 
     Transform identity = Transform();
@@ -773,9 +783,9 @@ void MediumTesting_Debug::run()
     // }
 
 
-    int start_frame = 500;
+    int start_frame = 894;
     // int start_frame = 501;
-    int end_frame = 1000;
+    int end_frame = 896;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -797,9 +807,29 @@ void MediumTesting_Debug::run()
         flush_render();
     }
 
+    // // printing results
+    // for (int frame = start_frame; frame < end_frame; frame++)
+    // {
+    //     // initialize_base_structs(test_name, frame-500);
+    //     //
+    //     // initialize_camera(frame);
+    //     //
+    //     // initialize_materials(frame);
+    //
+    //     // initialize_grid_scene(frame);
+    //
+    //     initialize_initial_scene(frame, true);
+    //     //
+    //     // initialize_lighting(frame);
+    //     //
+    //     // LOG("rendering frame: " + std::to_string(frame));
+    //     //
+    //     // flush_render();
+    // }
+
     // finalizing the frames
-    std::string frame_folder = "frames";
-    system("mkdir frames");
+    // std::string frame_folder = "frames";
+    // system("mkdir frames");
 
     // std::string publish_command = "ffmpeg -r 24 -f image2 -i frames/frame_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M frames/initial_media.mp4";
 
@@ -887,7 +917,7 @@ void MediumTesting_Debug::run()
     //     final_image.write("frames/frame_" + std::string(str) + ".png");
     // }
     //
-    system(publish_command.c_str());
+    // system(publish_command.c_str());
     // system("rm -rf frames/*.png");
 }
 

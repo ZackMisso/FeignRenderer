@@ -26,7 +26,7 @@ protected:
     void initialize_box_medium(int frame);
     void initialize_sphere_medium(int frame);
 
-    void initialize_initial_scene(int frame);
+    void initialize_initial_scene(int frame, bool verbose);
     void initialize_homo_sphere_medium_vary_scatter(int frame);
     void initialize_homo_cornell_scene_vary_phase(int frame);
     void initialize_hetero_smoke_vary_scatter(int frame);

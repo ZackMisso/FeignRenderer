@@ -342,7 +342,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(1024, 0x12345);
+    Independent::Params samp_params(256, 0x12345);
 
     LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
@@ -372,39 +372,39 @@ void HallOfTiles::run()
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
-    std::string publish_command = "ffmpeg -r 60 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
+    std::string publish_command = "ffmpeg -r 24 -f image2 -i " + test_name + "/" + test_name + "_%04d.png -vcodec mpeg4 -vb 20M -minrate 20M -maxrate 30M " + test_name + "/" + test_name + ".mp4";
 
     // system(rm_command.c_str());
-    // system(mkdir_command.c_str());
+    system(mkdir_command.c_str());
 
-    int start_frame = 0;
-    int end_frame = 400;
+    int start_frame = 400;
+    int end_frame = 4000;
 
-    // for (int frame = start_frame; frame < end_frame; frame++)
-    // {
-    //     LOG("Rendering Frame: " + std::to_string(frame));
-    //     // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
-    //     // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));
-    //
-    //     LOG("initializing base structs");
-    //     initialize_base_structs(test_name, frame);
-    //
-    //     LOG("initislizing camera");
-    //     initialize_camera(frame);
-    //
-    //     LOG("initializing hallway");
-    //     initialize_hallway(frame);
-    //
-    //     LOG("initializing the materials");
-    //     initialize_materials(frame);
-    //
-    //     LOG("initializing lighting");
-    //     initialize_lighting(frame);
-    //
-    //     LOG("rendering frame: " + std::to_string(frame));
-    //
-    //     flush_render();
-    // }
+    for (int frame = start_frame; frame < end_frame; frame++)
+    {
+        LOG("Rendering Frame: " + std::to_string(frame));
+        // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
+        // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));
+
+        LOG("initializing base structs");
+        initialize_base_structs(test_name, frame);
+
+        LOG("initislizing camera");
+        initialize_camera(frame);
+
+        LOG("initializing hallway");
+        initialize_hallway(frame);
+
+        LOG("initializing the materials");
+        initialize_materials(frame);
+
+        LOG("initializing lighting");
+        initialize_lighting(frame);
+
+        LOG("rendering frame: " + std::to_string(frame));
+
+        flush_render();
+    }
 
     system(publish_command.c_str());
 }
