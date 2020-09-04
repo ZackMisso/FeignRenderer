@@ -32,6 +32,8 @@
 
 #include "../scenes/videos/medium_initial.h"
 
+#include "../scenes/shadertoy_recreations/include.h"
+
 FEIGN_BEGIN()
 
 void run_scene(std::string scene_name)
@@ -67,11 +69,14 @@ int main(int argc, char* argv[])
     // sandbox();
     // return 0;
 
-    // MediumTesting_Debug();
+    MediumTesting_Debug();
+    return 0;
+
+    // HallOfTiles();
     // return 0;
 
-    HallOfTiles();
-    return 0;
+    // VolExpShaderToy();
+    // return 0;
     //
     // /////\\\ TEMPORARY \\\/////
 

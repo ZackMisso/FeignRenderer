@@ -16,11 +16,11 @@ class MediumSampling
 {
 public:
     virtual ~MediumSampling() { }
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         Float& t,
-                         Float min_t,
-                         Float max_t) const = 0;
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           Float& t,
+                           Float min_t,
+                           Float max_t) const = 0;
 
     DensityFunction* density;
 };
@@ -30,11 +30,11 @@ class Ray_Marching_Samp : public MediumSampling
 {
     Ray_Marching_Samp() { }
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         Float& t,
-                         Float min_t,
-                         Float max_t) const = 0;
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           Float& t,
+                           Float min_t,
+                           Float max_t) const = 0;
 };
 
 // this assumes the medium is fully homogeneous
@@ -43,20 +43,20 @@ class AnalyticalTrans_Samp : public MediumSampling
 public:
     AnalyticalTrans_Samp() { }
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         Float& t,
-                         Float min_t,
-                         Float max_t) const
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           Float& t,
+                           Float min_t,
+                           Float max_t) const
     {
         Float transmittance = sampler->next1D();
         Float goal_dens = -log(transmittance);
 
-        Float dense = density->D(ray((max_t - min_t) / 2.f + min_t)) * density->sigma_t.max();
+        Float dense = (density->D(ray((max_t - min_t) / 2.f + min_t)) * density->sigma_t).max();
         Float dist = goal_dens / dense;
         t = min_t + dist;
 
-        return 1.f;
+        return Color3f(1.f);
     }
 };
 
@@ -67,11 +67,11 @@ public:
         : majorant(majorant) { }
 
     // TODO: this does not support spectral media
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         Float& t,
-                         Float min_t,
-                         Float max_t) const
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           Float& t,
+                           Float min_t,
+                           Float max_t) const
     {
         // Run delta-tracking iterations to sample a medium interaction
         t = min_t;
@@ -81,16 +81,16 @@ public:
             t -= std::log(1 - sampler->next1D()) / majorant;
             if (t >= max_t) break;
 
-            Float dense = density->D(ray(t)) * density->sigma_t.max();
+            Float dense = (density->D(ray(t)) * density->sigma_t).max();
 
             if (dense / majorant > sampler->next1D())
             {
                 // t should be set already
-                return 1.f;
+                return Color3f(1.f);
             }
         }
 
-        return 1.f;
+        return Color3f(1.f);
     }
 
     Float majorant;
@@ -101,15 +101,15 @@ class Equidistant_Sampling : public MediumSampling
 public:
     Equidistant_Sampling() { }
 
-    virtual Float sample(Ray3f ray,
-                         Sampler* sampler,
-                         Float& t,
-                         Float min_t,
-                         Float max_t) const
+    virtual Color3f sample(Ray3f ray,
+                           Sampler* sampler,
+                           Float& t,
+                           Float min_t,
+                           Float max_t) const
     {
         throw new NotImplementedException("equi-distant sampler");
         // TODO
-        return 0.f;
+        return Color3f(0.f);
     }
 };
 

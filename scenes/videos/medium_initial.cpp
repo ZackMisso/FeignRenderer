@@ -371,7 +371,6 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
                            &box_mesh);
 }
 
-// this is currently testing the vdb scene
 void MediumTesting_Debug::initialize_initial_scene(int frame, bool verbose=false)
 {
     if (frame <= 600)
@@ -460,6 +459,199 @@ void MediumTesting_Debug::initialize_initial_scene(int frame, bool verbose=false
                            &box_mesh);
 
     FeignRenderer::fr_clear_transform();
+}
+
+// this is currently testing the vdb scene
+void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false)
+{
+    // /Users/corneria/Documents/Research/testscenes/vdb_smoke
+
+    std::vector<Color3f> abs_list = std::vector<Color3f>();
+    abs_list.push_back(Color3f(0.0f, 0.8f, 0.8f));
+    abs_list.push_back(Color3f(0.4f, 0.4f, 0.8f));
+    abs_list.push_back(Color3f(0.8f, 0.0f, 0.8f));
+    abs_list.push_back(Color3f(0.8f, 0.4f, 0.4f));
+    abs_list.push_back(Color3f(0.8f, 0.8f, 0.0f));
+    abs_list.push_back(Color3f(0.4f, 0.4f, 0.8f));
+    abs_list.push_back(Color3f(0.8f, 0.0f, 0.8f));
+    abs_list.push_back(Color3f(0.8f, 0.4f, 0.4f));
+    abs_list.push_back(Color3f(0.8f, 0.8f, 0.0f));
+    // abs_list.push_back(Color3f(0.5f, 0.5f, 0.f));
+    // abs_list.push_back(Color3f(0.f, 1.0f, 0.f));
+    // abs_list.push_back(Color3f(0.f, 0.5f, 0.5f));
+    // abs_list.push_back(Color3f(0.f, 0.f, 1.f));
+
+    // assert(false);
+    // Color3f abs = Color3f(1.0f);
+
+    Color3f scat = Color3f(0.f);
+    if (frame > 50)
+        scat = Color3f(1.f);
+
+
+    for (int i = 0; i < abs_list.size(); ++i)
+    {
+        float sign = 1.f;
+        int loc = i;
+
+        // if (i != 0 && i != 5 && i != 1) continue;
+
+        float x_loc = 0.f;
+
+        if (i == 0)
+        {
+            x_loc = 1.0;
+        }
+
+        if (i == 1 || i == 5)
+        {
+            x_loc = -2.f;
+            sign *= 1.4;
+        }
+
+        if (i == 3 || i == 7)
+        {
+            x_loc = 2.f;
+        }
+
+        if (i == 4 || i == 8)
+        {
+            x_loc = -1.0;
+        }
+
+        if (i > 4)
+        {
+            sign *= -1.f;
+            loc = i-4;
+        }
+
+        Color3f abs = abs_list[i];
+        LOG("abs:", abs);
+
+        std::cout << "i: " << i << std::endl;
+        std::cout << "sign: " << sign << std::endl;
+        std::cout << "loc: " << loc << std::endl;
+        std::cout << "x_loc: " << x_loc << std::endl;
+
+        Transform identity = Transform();
+        identity = identity * Matrix4f::scale(Vector3f(2.0f, 2.0f, 2.0f));
+        identity = identity * Matrix4f::translate(Vector3f(x_loc, -5.f, loc * sign));
+
+        OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(frame-999) + ".vdb");
+
+        FeignRenderer::fr_medium_transmittance("ratio_" + std::to_string(i),
+                                               "ratio",
+                                               nullptr);
+
+        FeignRenderer::fr_medium_sampling("delta_sampler_" + std::to_string(i),
+                                          "delta",
+                                          nullptr);
+
+        FeignRenderer::fr_medium_density("vdb_density_" + std::to_string(i),
+                                         "openvdb",
+                                         &vdb_density_params);
+
+        StandardMedium::Params media_params("ratio_" + std::to_string(i),
+                                            "default",
+                                            "delta_sampler_" + std::to_string(i),
+                                            "vdb_density_" + std::to_string(i),
+                                            identity,
+                                            abs,
+                                            scat);
+
+        FeignRenderer::fr_media("box_medium_" + std::to_string(i),
+                                "standard",
+                                &media_params);
+
+        FeignRenderer::fr_clear_transform();
+
+        FeignRenderer::fr_scale(2.f, 8.f, 2.f);
+        FeignRenderer::fr_translate(x_loc * 2.f, -10.f, loc * sign * 2.f);
+
+        FeignRenderer::fr_object("medium_bounds_" + std::to_string(i),
+                                 "box_mesh_" + std::to_string(i),
+                                 "default",
+                                 "null",
+                                 "box_medium_" + std::to_string(i));
+
+        ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
+                                 "",
+                                 false,
+                                 "box_medium_" + std::to_string(i),
+                                 "null",
+                                 true);
+
+        FeignRenderer::fr_mesh("box_mesh_" + std::to_string(i),
+                               "triangle_mesh",
+                               &box_mesh);
+
+        FeignRenderer::fr_clear_transform();
+    }
+
+    // if (frame >= 700 && frame <= 900)
+    // {
+    //     Float proxy = Float(frame - 700) / 200.f;
+    //
+    //     abs = Color3f((1.f - proxy) * 0.5f);
+    //     scat = Color3f(proxy * 0.5f);
+    // }
+    // else if (frame >= 900)
+    // {
+    //     abs = Color3f(0.0f);
+    //     scat = Color3f(0.5f);
+    // }
+
+    // if (verbose)
+    // {
+    //     std::cout << "frame: " << std::to_string(frame) << std::endl;
+    //     std::cout << "abs: " << std::to_string(abs(0)) << std::endl;
+    //     std::cout << "scat: " << std::to_string(scat(0)) << std::endl;
+    //     std::cout << std::endl;
+    //
+    //     return;
+    // }
+
+    // Transform identity = Transform();
+    // identity = identity * Matrix4f::scale(Vector3f(2.f, 2.f, 2.f));
+    // identity = identity * Matrix4f::translate(Vector3f(0.f, -5.f, 0.f));
+    //
+    // StandardMedium::Params media_params("ratio",
+    //                                     "default",
+    //                                     "delta_sampler",
+    //                                     "vdb_density",
+    //                                     identity,
+    //                                     abs,
+    //                                     scat);
+    //
+    // FeignRenderer::fr_media("box_medium",
+    //                         "standard",
+    //                         &media_params);
+
+    // OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/cloud-1840.vdb");
+
+    // FeignRenderer::fr_clear_transform();
+    //
+    // FeignRenderer::fr_scale(3.f, 8.f, 3.f);
+    // FeignRenderer::fr_translate(0.f, -10.f, 0.f);
+    //
+    // FeignRenderer::fr_object("medium_bounds",
+    //                          "box_mesh",
+    //                          "default",
+    //                          "null",
+    //                          "box_medium");
+    //
+    // ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
+    //                          "",
+    //                          false,
+    //                          "box_medium",
+    //                          "null",
+    //                          true);
+    //
+    // FeignRenderer::fr_mesh("box_mesh",
+    //                        "triangle_mesh",
+    //                        &box_mesh);
+    //
+    // FeignRenderer::fr_clear_transform();
 }
 
 // initialize homogeneous sphere medium where we vary scatter vs. absorption
@@ -647,6 +839,7 @@ void MediumTesting_Debug::initialize_camera(int frame)
             look_at = Vector3f(0.f, end_look_at_y, 0.f);
             height = end_height;
             fov = end_fov;
+            fov = 90.f;
         }
     }
 
@@ -660,8 +853,8 @@ void MediumTesting_Debug::initialize_camera(int frame)
                                    1e2f,
                                    10.f,
                                    0.f,
-                                   // Vec2i(256, 256)); // debug res
-                                   Vec2i(1080, 1080)); // full res
+                                   Vec2i(256, 256)); // debug res
+                                   // Vec2i(1080, 1080)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -686,8 +879,8 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
 
     int path_depth = 10;
 
-    if (frame < 180) path_depth = 7;
-    else path_depth = 10;
+    // if (frame < 180) path_depth = 7;
+    // else path_depth = 10;
 
     Integrator::Params int_params(512,
                                   512,
@@ -704,7 +897,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     else samples = 2048 * 2;
 
     // samples = 16;
-    samples = 2048;
+    samples = 16;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -783,14 +976,38 @@ void MediumTesting_Debug::run()
     // }
 
 
-    int start_frame = 894;
+    // int start_frame = 894;
+    // // int start_frame = 501;
+    // int end_frame = 896;
+    //
+    // // smoke medium
+    // for (int frame = start_frame; frame < end_frame; frame++)
+    // {
+    //     initialize_base_structs(test_name, frame-500);
+    //
+    //     initialize_camera(frame);
+    //
+    //     initialize_materials(frame);
+    //
+    //     initialize_grid_scene(frame);
+    //
+    //     initialize_initial_scene(frame);
+    //
+    //     initialize_lighting(frame);
+    //
+    //     LOG("rendering frame: " + std::to_string(frame));
+    //
+    //     flush_render();
+    // }
+
+    int start_frame = 1000;
     // int start_frame = 501;
-    int end_frame = 896;
+    int end_frame = 1101;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
     {
-        initialize_base_structs(test_name, frame-500);
+        initialize_base_structs(test_name, frame-1000);
 
         initialize_camera(frame);
 
@@ -798,7 +1015,9 @@ void MediumTesting_Debug::run()
 
         initialize_grid_scene(frame);
 
-        initialize_initial_scene(frame);
+        // initialize_initial_scene(frame-500);
+
+        initialize_colored_scene(frame);
 
         initialize_lighting(frame);
 
@@ -917,7 +1136,7 @@ void MediumTesting_Debug::run()
     //     final_image.write("frames/frame_" + std::string(str) + ".png");
     // }
     //
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
     // system("rm -rf frames/*.png");
 }
 

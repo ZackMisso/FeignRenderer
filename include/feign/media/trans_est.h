@@ -32,15 +32,15 @@ public:
 
     TransmittanceEstimator(DensityFunction* density) : density(density) { }
 
-    virtual Float transmittance(const Ray3f& ray,
-                                Sampler* sampler,
-                                Float tMin,
-                                Float tMax) const = 0;
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  Float tMin,
+                                  Float tMax) const = 0;
 
-    virtual Color3f spectral_transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const = 0;
+    // virtual Color3f spectral_transmittance(const Ray3f& ray,
+    //                                        Sampler* sampler,
+    //                                        Float tMin,
+    //                                        Float tMax) const = 0;
 
     DensityFunction* density;
 };
@@ -48,39 +48,39 @@ public:
 class Trans_Homogenous : public TransmittanceEstimator
 {
 public:
-    virtual Float transmittance(const Ray3f& ray,
-                                Sampler* sampler,
-                                Float tMin,
-                                Float tMax) const
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  Float tMin,
+                                  Float tMax) const
     {
         // annalytically importance samples transmittance for a homogeneous medium
-        Float dense = density->D(ray((tMax-tMin) / 2.f + tMin));
-        Float trans = exp(-(tMax-tMin) * dense);
+        Color3f dense = density->D(ray((tMax-tMin) / 2.f + tMin));
+        Color3f trans = Exp(dense * -(tMax-tMin));
         return trans;
     }
 
-    virtual Color3f spectral_transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const
-    {
-        return exp(-(tMax-tMin) *
-               density->D(ray(((tMax-tMin) / 2.f) + tMin)));
-    }
+    // virtual Color3f spectral_transmittance(const Ray3f& ray,
+    //                                        Sampler* sampler,
+    //                                        Float tMin,
+    //                                        Float tMax) const
+    // {
+    //     return exp(-(tMax-tMin) *
+    //            density->D(ray(((tMax-tMin) / 2.f) + tMin)));
+    // }
 };
 
 class Trans_DeltaTracking : public TransmittanceEstimator
 {
 public:
-    virtual Float transmittance(const Ray3f& ray,
-                                Sampler* sampler,
-                                Float tMin,
-                                Float tMax) const;
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  Float tMin,
+                                  Float tMax) const;
 
-    virtual Color3f spectral_transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const;
+    // virtual Color3f spectral_transmittance(const Ray3f& ray,
+    //                                        Sampler* sampler,
+    //                                        Float tMin,
+    //                                        Float tMax) const;
 };
 
 class Trans_RatioTracking : public TransmittanceEstimator
@@ -89,15 +89,15 @@ public:
     Trans_RatioTracking();
     Trans_RatioTracking(Float maj);
 
-    virtual Float transmittance(const Ray3f& ray,
-                                Sampler* sampler,
-                                Float tMin,
-                                Float tMax) const;
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  Float tMin,
+                                  Float tMax) const;
 
-    virtual Color3f spectral_transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const;
+    // virtual Color3f spectral_transmittance(const Ray3f& ray,
+    //                                        Sampler* sampler,
+    //                                        Float tMin,
+    //                                        Float tMax) const;
 
     Float maj;
 };
@@ -105,15 +105,15 @@ public:
 class Trans_PseriesCMF : public TransmittanceEstimator
 {
 public:
-    virtual Float transmittance(const Ray3f& ray,
-                                Sampler* sampler,
-                                Float tMin,
-                                Float tMax) const;
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  Float tMin,
+                                  Float tMax) const;
 
-    virtual Color3f spectral_transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const;
+    // virtual Color3f spectral_transmittance(const Ray3f& ray,
+    //                                        Sampler* sampler,
+    //                                        Float tMin,
+    //                                        Float tMax) const;
 };
 
 /////////////////////////////////////////////////

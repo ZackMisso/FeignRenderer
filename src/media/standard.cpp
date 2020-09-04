@@ -52,11 +52,11 @@ Color3f StandardMedium::sample(Ray3f world_ray,
                                                    closure.t_max);
     }
 
-    Float samp_val = sampling->sampling->sample(ray,
-                                                sampler,
-                                                closure.sampled_t,
-                                                closure.t_min,
-                                                closure.t_max);
+    Color3f samp_val = sampling->sampling->sample(ray,
+                                                  sampler,
+                                                  closure.sampled_t,
+                                                  closure.t_min,
+                                                  closure.t_max);
 
     if (closure.handleScatter())
         return sca_coeff / (sigma_t) * samp_val;

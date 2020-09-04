@@ -1720,4 +1720,11 @@ inline void LOG(Vec3f val)
     std::cout << val[0] << " " << val[1] << " " << val[2] << std::endl;
 }
 
+inline Color3f Exp(Color3f val)
+{
+    return Color3f(exp(val(0)),
+                   exp(val(1)),
+                   exp(val(2)));
+}
+
 FEIGN_END()

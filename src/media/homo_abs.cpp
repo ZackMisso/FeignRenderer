@@ -35,6 +35,7 @@ Color3f HomogeneousAbsorbingMedia::transmittance(Ray3f ray,
                                                  Float t_min,
                                                  Float t_max) const
 {
+    // assert(false);
     return exp(-avg_density * (t_max - t_min));
 }
 

@@ -79,20 +79,20 @@ void OpenVDBDensity::preProcess()
     LOG("finished pre-processing openvdb medium");
 }
 
-Float OpenVDBDensity::D(const Point3f& p) const
+Color3f OpenVDBDensity::D(const Point3f& p) const
 {
     // TODO: need to make box vs. point a configurable parameter
     openvdb::tools::GridSampler<openvdb::FloatGrid, openvdb::tools::BoxSampler> sampler(*grid);
     // openvdb::tools::GridSampler<openvdb::FloatGrid, openvdb::tools::PointSampler> sampler(*grid);
 
-    return sampler.wsSample(openvdb::Vec3R(p(0), p(1), p(2)));
+    return Color3f(sampler.wsSample(openvdb::Vec3R(p(0), p(1), p(2))));
 }
 
-Color3f OpenVDBDensity::SpectralD(const Point3f& p) const
-{
-    // TODO: need to make support for colored media
-    return Color3f(D(p));
-}
+// Color3f OpenVDBDensity::SpectralD(const Point3f& p) const
+// {
+//     // TODO: need to make support for colored media
+//     return Color3f(D(p));
+// }
 
 Float OpenVDBDensity::maxDensity() const
 {

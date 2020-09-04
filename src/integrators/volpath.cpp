@@ -36,6 +36,11 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                                               false,
                                               true);
 
+    if (scene->env_medium_node)
+    {
+        closure.media = scene->env_medium_node->media;
+    }
+
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {

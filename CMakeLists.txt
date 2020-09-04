@@ -293,6 +293,8 @@ add_executable(feign
 
     # debug scene implementation files
     scenes/videos/medium_initial.cpp
+
+    scenes/shadertoy_recreations/vol_exp/vol_exp.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS

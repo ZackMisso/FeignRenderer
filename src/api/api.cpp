@@ -34,6 +34,8 @@
 // stats
 #include <feign/stats/clocker.h>
 
+// TODO: make all of this logic more generic for more easily adding new classes
+
 FEIGN_BEGIN()
 
 FeignRenderer* FeignRenderer::instance = nullptr;

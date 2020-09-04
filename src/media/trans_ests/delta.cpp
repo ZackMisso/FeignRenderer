@@ -10,10 +10,10 @@
 
 FEIGN_BEGIN()
 
-Float Trans_DeltaTracking::transmittance(const Ray3f& ray,
-                                         Sampler* sampler,
-                                         Float tMin,
-                                         Float tMax) const
+Color3f Trans_DeltaTracking::transmittance(const Ray3f& ray,
+                                           Sampler* sampler,
+                                           Float tMin,
+                                           Float tMax) const
 {
     throw new NotImplementedException("delta tracking tr");
 
@@ -22,16 +22,16 @@ Float Trans_DeltaTracking::transmittance(const Ray3f& ray,
     return 0.f;
 }
 
-Color3f Trans_DeltaTracking::spectral_transmittance(const Ray3f& ray,
-                                                    Sampler* sampler,
-                                                    Float tMin,
-                                                    Float tMax) const
-{
-    throw new NotImplementedException("delta tracking spectral tr");
-
-    // TODO
-
-    return Color3f(0.f);
-}
+// Color3f Trans_DeltaTracking::spectral_transmittance(const Ray3f& ray,
+//                                                     Sampler* sampler,
+//                                                     Float tMin,
+//                                                     Float tMax) const
+// {
+//     throw new NotImplementedException("delta tracking spectral tr");
+//
+//     // TODO
+//
+//     return Color3f(0.f);
+// }
 
 FEIGN_END()
