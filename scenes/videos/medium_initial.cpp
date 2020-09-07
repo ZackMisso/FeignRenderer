@@ -509,7 +509,7 @@ void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false
         hueson[7] = hueson[7] * (1.f - proxy) + proxy * end_7;
         hueson[8] = hueson[8] * (1.f - proxy) + proxy * end_8;
     }
-    else if (frame > 1072 + 168)
+    else if (frame >= 1072 + 168)
     {
         float end_0 = 0.04;
         float end_1 = 0.03;
@@ -536,7 +536,7 @@ void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false
         // TODO: make this cleaner
         for (int k = 0; k < 9; ++k)
         {
-            while (std::abs(hueson[k]) > 1.0)
+            while (std::abs(hueson[k]) >= 1.0)
                 hueson[k] = 1.0 - hueson[k];
             if (hueson[k] < 0.0)
                 hueson[k] = hueson[k] + 1.0;
@@ -990,8 +990,8 @@ void MediumTesting_Debug::initialize_camera(int frame)
                                    1e2f,
                                    10.f,
                                    0.f,
-                                   Vec2i(256, 256)); // debug res
-                                   // Vec2i(1080, 1080)); // full res
+                                   // Vec2i(256, 256)); // debug res
+                                   Vec2i(1080, 1080)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -1034,7 +1034,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     else samples = 2048 * 2;
 
     // samples = 16;
-    samples = 16;
+    samples = 1024;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -1137,9 +1137,9 @@ void MediumTesting_Debug::run()
     //     flush_render();
     // }
 
-    int start_frame = 1500;
+    int start_frame = 1000;
     // int start_frame = 501;
-    int end_frame = 2000;
+    int end_frame = 1100;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -1273,7 +1273,7 @@ void MediumTesting_Debug::run()
     //     final_image.write("frames/frame_" + std::string(str) + ".png");
     // }
     //
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
     // system("rm -rf frames/*.png");
 }
 
