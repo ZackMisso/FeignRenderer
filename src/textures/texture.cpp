@@ -28,7 +28,7 @@ Color3f Texture::evaluate(const Point3f& point)
 
 Imagef Texture::evaluate_image(int width, int height)
 {
-    Imagef image = Imagef(width, height, 3);
+    Imagef image = Imagef(width, height);
 
     for (int i = 0; i < height; ++i)
     {

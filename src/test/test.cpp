@@ -16,7 +16,7 @@ FEIGN_BEGIN()
 
 bool evaluate_unit_test(UnitTestData& testLog)
 {
-    Imagef image = Imagef(256, 256, 3);
+    Imagef image = Imagef(256, 256);
 
     JsonParser::parse("../scenes/unit_tests/scenes/"+testLog.test_name,
                       &image);
@@ -43,7 +43,7 @@ bool evaluate_unit_test(UnitTestData& testLog)
 
 bool replace_reference(UnitTestData& testLog)
 {
-    Imagef image = Imagef(256, 256, 3);
+    Imagef image = Imagef(256, 256);
 
     JsonParser::parse("../scenes/unit_tests/scenes/"+testLog.test_name,
                       &image);

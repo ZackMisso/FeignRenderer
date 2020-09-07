@@ -137,8 +137,7 @@ void Scene::renderScene() const
     else
     {
         image = new Imagef(camera->getFilmSize()[0],
-                           camera->getFilmSize()[1],
-                           3);
+                           camera->getFilmSize()[1]);
     }
 
     #if GOTTAGOFAST

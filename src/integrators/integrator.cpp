@@ -39,7 +39,8 @@ void Integrator::render(const Scene* scene,
                         Imagef& image) const
 {
     image.clear();
-    Imagef filter_weights = Imagef(image.width(), image.height(), 1);
+    // TODO: create black and white images
+    Imagef filter_weights = Imagef(image.width(), image.height());
     filter_weights.clear();
 
     for (int k = 0; k < sampler->getSampleCnt(); ++k)

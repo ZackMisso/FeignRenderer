@@ -1,6 +1,7 @@
 #include "medium_initial.h"
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
+#include <imedit/im_util.h>
 
 FEIGN_BEGIN()
 
@@ -464,29 +465,148 @@ void MediumTesting_Debug::initialize_initial_scene(int frame, bool verbose=false
 // this is currently testing the vdb scene
 void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false)
 {
-    // /Users/corneria/Documents/Research/testscenes/vdb_smoke
+    if (frame < 1072) return;
+
+    // TODO: hue saturation and lumanance
+
+    Float lum = 0.5;
+    Float saturation = 1.0;
+    Float hue_range = 0.1;
+    Float start_hue = 0.3;
+
+    std::vector<Float> hueson = std::vector<Float>();
+    hueson.push_back(0.0);
+    hueson.push_back(1.0 / 6.0);
+    hueson.push_back(1.0 / 3.0);
+    hueson.push_back(1.0 / 2.0);
+    hueson.push_back(2.0 / 3.0);
+    hueson.push_back(1.0 / 6.0);
+    hueson.push_back(1.0 / 3.0);
+    hueson.push_back(1.0 / 2.0);
+    hueson.push_back(2.0 / 3.0);
+
+    if (frame > 1072 + 120 && frame < 1072 + 168)
+    {
+        float end_0 = 0.04;
+        float end_1 = 0.03;
+        float end_2 = 0.02;
+        float end_3 = 0.00;
+        float end_4 = 0.01;
+        float end_5 = 0.05;
+        float end_6 = 0.06;
+        float end_7 = 0.08;
+        float end_8 = 0.07;
+
+        float proxy = float(frame - (1072+120)) / 48.0;
+
+        hueson[0] = hueson[0] * (1.f - proxy) + proxy * end_0;
+        hueson[1] = hueson[1] * (1.f - proxy) + proxy * end_1;
+        hueson[2] = hueson[2] * (1.f - proxy) + proxy * end_2;
+        hueson[3] = hueson[3] * (1.f - proxy) + proxy * end_3;
+        hueson[4] = hueson[4] * (1.f - proxy) + proxy * end_4;
+        hueson[5] = hueson[5] * (1.f - proxy) + proxy * end_5;
+        hueson[6] = hueson[6] * (1.f - proxy) + proxy * end_6;
+        hueson[7] = hueson[7] * (1.f - proxy) + proxy * end_7;
+        hueson[8] = hueson[8] * (1.f - proxy) + proxy * end_8;
+    }
+    else if (frame > 1072 + 168)
+    {
+        float end_0 = 0.04;
+        float end_1 = 0.03;
+        float end_2 = 0.02;
+        float end_3 = 0.00;
+        float end_4 = 0.01;
+        float end_5 = 0.05;
+        float end_6 = 0.06;
+        float end_7 = 0.08;
+        float end_8 = 0.07;
+
+        float proxy = float(frame - (1072 + 168)) * 0.0025;
+
+        hueson[0] = proxy + end_0;
+        hueson[1] = proxy + end_1;
+        hueson[2] = proxy + end_2;
+        hueson[3] = proxy + end_3;
+        hueson[4] = proxy + end_4;
+        hueson[5] = proxy + end_5;
+        hueson[6] = proxy + end_6;
+        hueson[7] = proxy + end_7;
+        hueson[8] = proxy + end_8;
+
+        // TODO: make this cleaner
+        for (int k = 0; k < 9; ++k)
+        {
+            while (std::abs(hueson[k]) > 1.0)
+                hueson[k] = 1.0 - hueson[k];
+            if (hueson[k] < 0.0)
+                hueson[k] = hueson[k] + 1.0;
+        }
+    }
+
+    imedit::Pixel init_hue_0 = imedit::Pixel(hueson[0], saturation, lum);
+    imedit::Pixel init_hue_1 = imedit::Pixel(hueson[1], saturation, lum);
+    imedit::Pixel init_hue_2 = imedit::Pixel(hueson[2], saturation, lum);
+    imedit::Pixel init_hue_3 = imedit::Pixel(hueson[3], saturation, lum);
+    imedit::Pixel init_hue_4 = imedit::Pixel(hueson[4], saturation, lum);
+    imedit::Pixel init_hue_5 = imedit::Pixel(hueson[5], saturation, lum);
+    imedit::Pixel init_hue_6 = imedit::Pixel(hueson[6], saturation, lum);
+    imedit::Pixel init_hue_7 = imedit::Pixel(hueson[7], saturation, lum);
+    imedit::Pixel init_hue_8 = imedit::Pixel(hueson[8], saturation, lum);
+
+    imedit::hsl_to_rgb(init_hue_0);
+    imedit::hsl_to_rgb(init_hue_1);
+    imedit::hsl_to_rgb(init_hue_2);
+    imedit::hsl_to_rgb(init_hue_3);
+    imedit::hsl_to_rgb(init_hue_4);
+    imedit::hsl_to_rgb(init_hue_5);
+    imedit::hsl_to_rgb(init_hue_6);
+    imedit::hsl_to_rgb(init_hue_7);
+    imedit::hsl_to_rgb(init_hue_8);
 
     std::vector<Color3f> abs_list = std::vector<Color3f>();
-    abs_list.push_back(Color3f(0.0f, 0.8f, 0.8f));
-    abs_list.push_back(Color3f(0.4f, 0.4f, 0.8f));
-    abs_list.push_back(Color3f(0.8f, 0.0f, 0.8f));
-    abs_list.push_back(Color3f(0.8f, 0.4f, 0.4f));
-    abs_list.push_back(Color3f(0.8f, 0.8f, 0.0f));
-    abs_list.push_back(Color3f(0.4f, 0.4f, 0.8f));
-    abs_list.push_back(Color3f(0.8f, 0.0f, 0.8f));
-    abs_list.push_back(Color3f(0.8f, 0.4f, 0.4f));
-    abs_list.push_back(Color3f(0.8f, 0.8f, 0.0f));
-    // abs_list.push_back(Color3f(0.5f, 0.5f, 0.f));
-    // abs_list.push_back(Color3f(0.f, 1.0f, 0.f));
-    // abs_list.push_back(Color3f(0.f, 0.5f, 0.5f));
-    // abs_list.push_back(Color3f(0.f, 0.f, 1.f));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_0.r, 0.f),
+                               std::max(0.8f - init_hue_0.g, 0.f),
+                               std::max(0.8f - init_hue_0.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_1.r, 0.f),
+                               std::max(0.8f - init_hue_1.g, 0.f),
+                               std::max(0.8f - init_hue_1.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_2.r, 0.f),
+                               std::max(0.8f - init_hue_2.g, 0.f),
+                               std::max(0.8f - init_hue_2.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_3.r, 0.f),
+                               std::max(0.8f - init_hue_3.g, 0.f),
+                               std::max(0.8f - init_hue_3.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_4.r, 0.f),
+                               std::max(0.8f - init_hue_4.g, 0.f),
+                               std::max(0.8f - init_hue_4.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_5.r, 0.f),
+                               std::max(0.8f - init_hue_5.g, 0.f),
+                               std::max(0.8f - init_hue_5.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_6.r, 0.f),
+                               std::max(0.8f - init_hue_6.g, 0.f),
+                               std::max(0.8f - init_hue_6.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_7.r, 0.f),
+                               std::max(0.8f - init_hue_7.g, 0.f),
+                               std::max(0.8f - init_hue_7.b, 0.f)));
+    abs_list.push_back(Color3f(std::max(0.8f - init_hue_8.r, 0.f),
+                               std::max(0.8f - init_hue_8.g, 0.f),
+                               std::max(0.8f - init_hue_8.b, 0.f)));
+
+    std::vector<int> start_frames = std::vector<int>();
+    start_frames.push_back(1072 + 96);
+    start_frames.push_back(1072);
+    start_frames.push_back(1072 + 48);
+    start_frames.push_back(1072 + 72);
+    start_frames.push_back(1072 + 24);
+    start_frames.push_back(1072);
+    start_frames.push_back(1072 + 48);
+    start_frames.push_back(1072 + 72);
+    start_frames.push_back(1072 + 24);
 
     // assert(false);
     // Color3f abs = Color3f(1.0f);
 
-    Color3f scat = Color3f(0.f);
-    if (frame > 50)
-        scat = Color3f(1.f);
+    Color3f scat = Color3f(1.f);
 
 
     for (int i = 0; i < abs_list.size(); ++i)
@@ -537,53 +657,60 @@ void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false
         identity = identity * Matrix4f::scale(Vector3f(2.0f, 2.0f, 2.0f));
         identity = identity * Matrix4f::translate(Vector3f(x_loc, -5.f, loc * sign));
 
-        OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(frame-999) + ".vdb");
+        int vdb_frame = frame - (start_frames[i]);
+        if (vdb_frame > 400)
+            vdb_frame = vdb_frame = start_frames[i] + 800 - frame;
 
-        FeignRenderer::fr_medium_transmittance("ratio_" + std::to_string(i),
-                                               "ratio",
-                                               nullptr);
+        if (vdb_frame > 0)
+        {
+            OpenVDBDensity::Params vdb_density_params("houdini/simple_smoke_" + std::to_string(vdb_frame) + ".vdb");
 
-        FeignRenderer::fr_medium_sampling("delta_sampler_" + std::to_string(i),
-                                          "delta",
-                                          nullptr);
+            FeignRenderer::fr_medium_transmittance("ratio_" + std::to_string(i),
+                                                   "ratio",
+                                                   nullptr);
 
-        FeignRenderer::fr_medium_density("vdb_density_" + std::to_string(i),
-                                         "openvdb",
-                                         &vdb_density_params);
+            FeignRenderer::fr_medium_sampling("delta_sampler_" + std::to_string(i),
+                                              "delta",
+                                              nullptr);
 
-        StandardMedium::Params media_params("ratio_" + std::to_string(i),
-                                            "default",
-                                            "delta_sampler_" + std::to_string(i),
-                                            "vdb_density_" + std::to_string(i),
-                                            identity,
-                                            abs,
-                                            scat);
+            FeignRenderer::fr_medium_density("vdb_density_" + std::to_string(i),
+                                             "openvdb",
+                                             &vdb_density_params);
 
-        FeignRenderer::fr_media("box_medium_" + std::to_string(i),
-                                "standard",
-                                &media_params);
+            StandardMedium::Params media_params("ratio_" + std::to_string(i),
+                                                "default",
+                                                "delta_sampler_" + std::to_string(i),
+                                                "vdb_density_" + std::to_string(i),
+                                                identity,
+                                                abs,
+                                                scat);
 
-        FeignRenderer::fr_clear_transform();
+            FeignRenderer::fr_media("box_medium_" + std::to_string(i),
+                                    "standard",
+                                    &media_params);
 
-        FeignRenderer::fr_scale(2.f, 8.f, 2.f);
-        FeignRenderer::fr_translate(x_loc * 2.f, -10.f, loc * sign * 2.f);
+            FeignRenderer::fr_clear_transform();
 
-        FeignRenderer::fr_object("medium_bounds_" + std::to_string(i),
-                                 "box_mesh_" + std::to_string(i),
-                                 "default",
-                                 "null",
-                                 "box_medium_" + std::to_string(i));
+            FeignRenderer::fr_scale(2.f, 8.f, 2.f);
+            FeignRenderer::fr_translate(x_loc * 2.f, -10.f, loc * sign * 2.f);
 
-        ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
-                                 "",
-                                 false,
-                                 "box_medium_" + std::to_string(i),
-                                 "null",
-                                 true);
+            FeignRenderer::fr_object("medium_bounds_" + std::to_string(i),
+                                     "box_mesh_" + std::to_string(i),
+                                     "default",
+                                     "null",
+                                     "box_medium_" + std::to_string(i));
 
-        FeignRenderer::fr_mesh("box_mesh_" + std::to_string(i),
-                               "triangle_mesh",
-                               &box_mesh);
+            ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
+                                     "",
+                                     false,
+                                     "box_medium_" + std::to_string(i),
+                                     "null",
+                                     true);
+
+            FeignRenderer::fr_mesh("box_mesh_" + std::to_string(i),
+                                   "triangle_mesh",
+                                   &box_mesh);
+        }
 
         FeignRenderer::fr_clear_transform();
     }
@@ -820,7 +947,7 @@ void MediumTesting_Debug::initialize_camera(int frame)
         Float end_height = -9.0;
         Float end_fov = 35.f;
 
-        if (frame <= 600)
+        if (frame <= 600 && frame < 1000)
         {
             Float proxy = Float(frame - 500) / 100.f;
             std::cout << "proxy: " << proxy << std::endl;
@@ -834,12 +961,22 @@ void MediumTesting_Debug::initialize_camera(int frame)
         }
         else
         {
+            Float last_fov = 90.f;
+
+            if (frame < 1072)
+            {
+                Float proxy = Float(frame - 1000) / 72.f;
+                fov = last_fov * proxy + (1.f - proxy) * end_fov;
+            }
+            else
+            {
+                fov = last_fov;
+            }
+
             xz_dist = end_xz_dist;
             angle = end_angle;
             look_at = Vector3f(0.f, end_look_at_y, 0.f);
             height = end_height;
-            fov = end_fov;
-            fov = 90.f;
         }
     }
 
@@ -1000,9 +1137,9 @@ void MediumTesting_Debug::run()
     //     flush_render();
     // }
 
-    int start_frame = 1000;
+    int start_frame = 1500;
     // int start_frame = 501;
-    int end_frame = 1101;
+    int end_frame = 2000;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -1136,7 +1273,7 @@ void MediumTesting_Debug::run()
     //     final_image.write("frames/frame_" + std::string(str) + ".png");
     // }
     //
-    system(publish_command.c_str());
+    // system(publish_command.c_str());
     // system("rm -rf frames/*.png");
 }
 

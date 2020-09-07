@@ -151,30 +151,30 @@ void HallOfTiles::initialize_hallway(int frame)
                 {
                     frame_intensity = double(frame) / 32.f;
                 }
-                else if (frame <= 32 + 24)
+                else if (frame < 32 + 24) // 55
                 {
                     int tmp = (frame-32) % 24;
                     frame_intensity = double(24 - tmp) / 24.0;
                 }
-                else if (frame <= 32*2 + 24)
+                else if (frame < 32*2 + 24) // 87
                 {
                     frame_intensity = double(frame - 32 - 24) / 32.0;
                 }
-                else if (frame <= 32*2 + 24*2)
+                else if (frame < 32*2 + 24*2) // 111
                 {
-                    int tmp = (frame-32) % 24;
+                    int tmp = (frame - 32*2 - 24) % 24;
                     frame_intensity = double(24 - tmp) / 24.0;
                 }
-                else if (frame <= 32*3 + 24*2)
+                else if (frame < 32*3 + 24*2) // 143
                 {
                     frame_intensity = double(frame - 2*32 - 2*24) / 32.0;
                 }
-                else if (frame <= 32*3 + 24*3)
+                else if (frame < 32*3 + 24*3) // 167
                 {
-                    int tmp = (frame-32) % 24;
+                    int tmp = (frame - 32*3 - 24*2) % 24;
                     frame_intensity = double(24 - tmp) / 24.0;
                 }
-                else if (frame <= 32*4 + 24*3)
+                else if (frame < 32*4 + 24*3) // 199
                 {
                     frame_intensity = double(frame - 3*32 - 3*24) / 32.0;
                 }
