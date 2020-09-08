@@ -69,11 +69,11 @@ int main(int argc, char* argv[])
     // sandbox();
     // return 0;
 
-    MediumTesting_Debug();
-    return 0;
-
-    // HallOfTiles();
+    // MediumTesting_Debug();
     // return 0;
+
+    HallOfTiles();
+    return 0;
 
     // VolExpShaderToy();
     // return 0;

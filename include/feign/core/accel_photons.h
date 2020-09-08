@@ -17,6 +17,17 @@ FEIGN_BEGIN();
 // TODO: make a more compact photon implementation later
 struct Photon
 {
+    Photon()
+        : pos(Vector3f(0.f)),
+          dir(Vector3f(0.f, 1.f, 0.f)),
+          power(Color3f(1.f)) { }
+
+    Photon(Point3f pos, Vector3f dir, Color3f power)
+        : pos(pos), dir(dir), power(power) { }
+
+    Photon(const Photon& other)
+        : pos(other.pos), dir(other.dir), power(other.power) { }
+
     Point3f pos;
     Vector3f dir;
     Color3f power;

@@ -11,6 +11,12 @@
 
 FEIGN_BEGIN()
 
+// TODO: focus on getting this working first for a base scene, then work on
+//       converting this to work with the shader framework
+
+// TODO: fixed the entire shading framework, it should not have as many layers
+//       of abstraction as it does
+
 // TODO: for now this will only support homogeneous global media
 
 PhotonMapping::PhotonMapping(FilterNode* filter,
@@ -31,23 +37,62 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
                                        Sampler* sampler)
 {
     // create initial list of photons
-    Photon* photons = new Photon[num_photons];
+    Photon* photons = new Photon[num_photons]();
     int created_photons = 0;
 
     // loop until we have filled our photon quota
     while (created_photons < num_photons)
     {
         // sample a light source uniformly
+        int index = int(sampler->next1D() * float(scene->emitters.size()));
+        float emitter_pdf = 1.f / float(scene->emitters.size());
+        Emitter* emitter = scene->emitters[index];
+
+        // sample the initial location and direction
+        // EmitterQuery eqr;
+        float query_pdf = 0.f;
+        // Color3f power = emitter->sample_li(eqr, sampler->next2D(), query_pdf);
+        Color3f power = Color3f(0.f); // TODO: fix all this
+        emitter_pdf *= query_pdf;
 
         // create an initial photon
+        // Photon current_photon = Photon(eqr.p, eqr.dir, power);
+
+        // create the initial ray
+        // Ray3f ray = Ray3f(current_photon.pos,
+        //                   current_photon.dir,
+        //                   Epsilon,
+        //                   10000000.0); // TODO: replace with actual floating max
 
         // loop for some maximum bounce count
         bool not_terminated = true;
         for (int i = 0; i < max_bounces && not_terminated; ++i)
         {
             // detect hit
+            Intersection its;
+
+            // if (!scene->intersect_non_null(ray, its))
+            // {
+            //     break;
+            // }
+
+            // evaluate shader / colliding location
+            const MaterialShader* shader = scene->getShapeMaterialShader(its);
+
+            // TODO: get closure working for this case
+            // closure.its = &its;
+            // closure.ray = &ray;
+            // closure.wi = its.toLocal(-ray.dir);
+            // closure.emission = COLOR_BLACK;
+            // closure.nee = COLOR_BLACK;
+            // closure.albedo = COLOR_BLACK;
+            //
+            // // evaluate the material shader
+            // shader->evaluate(closure);
+            // shader->evaluate_for_photon(closure);
 
             // potentially store photon in map
+
 
             // scatter
 

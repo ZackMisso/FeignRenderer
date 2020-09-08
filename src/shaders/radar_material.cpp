@@ -141,4 +141,10 @@ Material* RadarMaterialShader::choose_mat(MaterialClosure& closure,
     }
 }
 
+void RadarMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
+{
+    // TODO
+    throw new NotImplementedException("simple material shader evaluate photon");
+}
+
 FEIGN_END()

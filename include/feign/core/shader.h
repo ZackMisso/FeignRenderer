@@ -27,6 +27,8 @@ public:
     virtual void sample(MaterialClosure& closure) const = 0;
     virtual void evaluate(MaterialClosure& closure) const = 0;
     virtual void evaluate_mat_only(MaterialClosure& closure) const = 0;
+    // TODO: is this the best way of doing this?
+    virtual void evaluate_for_photon(MaterialClosure& closure) const = 0;
 };
 
 // a simple material shader which just evaluates one material
@@ -42,10 +44,10 @@ struct SimpleMaterialShader : public MaterialShader
 
     SimpleMaterialShader(MaterialNode* material);
 
-    // virtual MaterialClosure evaluate(const Intersection& its) const;
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
     virtual void evaluate_mat_only(MaterialClosure& closure) const;
+    virtual void evaluate_for_photon(MaterialClosure& closure) const;
 
     MaterialNode* material;
 };
@@ -74,6 +76,7 @@ public:
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
     virtual void evaluate_mat_only(MaterialClosure& closure) const;
+    virtual void evaluate_for_photon(MaterialClosure& closure) const;
     Material* choose_mat(MaterialClosure& closure) const;
 
     MaterialNode* wireframe_mat;
@@ -128,6 +131,7 @@ struct RadarMaterialShader : public MaterialShader
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
     virtual void evaluate_mat_only(MaterialClosure& closure) const;
+    virtual void evaluate_for_photon(MaterialClosure& closure) const;
     Material* choose_mat(MaterialClosure& closure, Color3f& scale) const;
 
     MaterialNode* radar_mat;

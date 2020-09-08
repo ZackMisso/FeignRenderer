@@ -87,4 +87,10 @@ void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
     #endif
 }
 
+void SimpleMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
+{
+    // TODO
+    throw new NotImplementedException("simple material shader evaluate photon");
+}
+
 FEIGN_END()

@@ -191,6 +191,7 @@ add_executable(feign
 
     # Closure implementation files
     src/closure/material.cpp
+    src/closure/photon.cpp
 
     # Emitter implementation files
     src/emitters/point.cpp

@@ -104,4 +104,10 @@ Material* WireframeMaterialShader::choose_mat(MaterialClosure& closure) const
     return mesh_mat->material;
 }
 
+void WireframeMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
+{
+    // TODO
+    throw new NotImplementedException("wireframe material shader evaluate photon");
+}
+
 FEIGN_END()

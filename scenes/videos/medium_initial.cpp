@@ -1034,7 +1034,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
     else samples = 2048 * 2;
 
     // samples = 16;
-    samples = 1024;
+    samples = 2048;
 
     Independent::Params samp_params(samples, 0x12345);
 

@@ -71,9 +71,32 @@ struct MaterialClosure
     // bool trace_ray;
     bool sample_all_emitters;
     bool material_accepts_shadows;
+};
 
-    // TODO: implement this for transitioning between environment and bounded media
-    // int internal_count;
+struct PhotonTracingClosure
+{
+    PhotonTracingClosure();
+
+    PhotonTracingClosure(Sampler* sampler,
+                         Intersection* its,
+                         Ray3f* ray,
+                         const Scene* scene);
+
+    Sampler* sampler;        // the sampler to use
+    Intersection* its; // a reference to the intersection info
+    Ray3f* ray;        // a reference to the incoming ray
+    const Scene* scene;      // a reference to the scene
+    Vector3f wi;
+    const Media* media;
+
+    Vector3f wo;             // the outgoing ray
+    Float pdf;               // the pdf of the bsdf sample
+    Color3f albedo;          // blah
+};
+
+struct PhotonGatherClosure
+{
+    // TODO
 };
 
 // this struct represents what is returned from a media shader when it gets
