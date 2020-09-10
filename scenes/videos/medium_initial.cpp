@@ -1137,9 +1137,9 @@ void MediumTesting_Debug::run()
     //     flush_render();
     // }
 
-    int start_frame = 1000;
+    int start_frame = 1200;
     // int start_frame = 501;
-    int end_frame = 1100;
+    int end_frame = 1300;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)

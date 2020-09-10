@@ -148,9 +148,11 @@ struct HOT_TileEffect_HeadLightAlight : public HOT_TileEffect
     HOT_TileEffect_HeadLightAlight(int start_frame,
                                    int end_frame,
                                    Float fall_off_dist)
+        : HOT_TileEffect(start_frame, end_frame),
+          fall_off_dist(fall_off_dist)
     {
-        start_z = 0.f;
-        end_z = 420.f;
+        start_z = -100.f;
+        end_z = 520.f;
     }
 
     void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
@@ -158,6 +160,8 @@ struct HOT_TileEffect_HeadLightAlight : public HOT_TileEffect
         if (!is_active(frame)) return;
 
         Float proxy = Float(frame - start_frame) / Float(end_frame - start_frame);
+        // std::cout << "what" << std::endl;
+        // std::cout << proxy << std::endl;
         Float zpos = proxy * end_z + (1.0 - proxy) * start_z;
 
         // TODO: maybe implement different kinds of fall off, currently just using
@@ -169,6 +173,7 @@ struct HOT_TileEffect_HeadLightAlight : public HOT_TileEffect
                 Float zdist = std::abs(tiles[i].pos(2) - zpos);
 
                 zdist = std::max(1.0 - zdist / fall_off_dist, 0.0);
+                // std::cout << zdist << std::endl;
 
                 tiles[i].light_scale = std::max(tiles[i].light_scale, zdist);
             }
@@ -226,11 +231,111 @@ void HallOfTiles::initialize_materials(int frame)
                            &mirror_bsdf);
 }
 
+void add_tile_to_scene(HOT_Tile& tile, int& index)
+{
+    // TODO
+
+    std::string material = "dark_diffuse_shad";
+    std::string emitter = "";
+
+    if (tile.base_object_type == ACCENT_LIGHT)
+    {
+        // CREATE BLUE LIGHTS
+        material = "dark_diffuse_shad";
+        emitter = "tile_emitter_" + std::to_string(index);
+
+        // float frame_intensity = 1.f;
+        // if (frame < 240)
+        // {
+        //     frame_intensity = 0.f;
+        // }
+        if (tile.light_scale > 1.f) std::cout << "FUUUUCK" << std::endl;
+
+        MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 0.7f, 0.8f) * tile.light_scale);
+
+        FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+    }
+    else if (tile.base_object_type == HEAD_LIGHT)
+    {
+        // CREATE YELLOW LIGHTS
+        material = "dark_diffuse_shad";
+        emitter = "tile_emitter_" + std::to_string(index);
+
+        // float frame_intensity = 0.f;
+        // if (frame <= 32)
+        // {
+        //     frame_intensity = double(frame) / 32.f;
+        // }
+        // else if (frame < 32 + 24) // 55
+        // {
+        //     int tmp = (frame-32) % 24;
+        //     frame_intensity = double(24 - tmp) / 24.0;
+        // }
+        // else if (frame < 32*2 + 24) // 87
+        // {
+        //     frame_intensity = double(frame - 32 - 24) / 32.0;
+        // }
+        // else if (frame < 32*2 + 24*2) // 111
+        // {
+        //     int tmp = (frame - 32*2 - 24) % 24;
+        //     frame_intensity = double(24 - tmp) / 24.0;
+        // }
+        // else if (frame < 32*3 + 24*2) // 143
+        // {
+        //     frame_intensity = double(frame - 2*32 - 2*24) / 32.0;
+        // }
+        // else if (frame < 32*3 + 24*3) // 167
+        // {
+        //     int tmp = (frame - 32*3 - 24*2) % 24;
+        //     frame_intensity = double(24 - tmp) / 24.0;
+        // }
+        // else if (frame < 32*4 + 24*3) // 199
+        // {
+        //     frame_intensity = double(frame - 3*32 - 3*24) / 32.0;
+        // }
+
+        MeshEmitter::Params mesh_emitter_params(Color3f(0.8f,
+                                                        1.0f, 0.f) * tile.light_scale);
+
+        // MeshEmitter::Params mesh_emitter_params(Color3f(2.f * rng.nextFloat() + 4.f,
+        //                                                 2.f * rng.nextFloat() + 5.f, 0.f) * mesh_light_intensity * 2.f * frame_intensity);
+
+        FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+    }
+    else if (tile.base_object_type == DIFFUSE)
+    {
+        material = "dark_diffuse_shad";
+    }
+    else if (tile.base_object_type == MIRROR)
+    {
+        material = "mirror_shad";
+    }
+
+    FeignRenderer::fr_clear_transform();
+
+    FeignRenderer::fr_translate(tile.pos(0), tile.pos(1), tile.pos(2));
+
+    FeignRenderer::fr_object("tile_" + std::to_string(index),
+                             "tile_obj_" + std::to_string(index),
+                             material,
+                             emitter);
+
+    FeignRenderer::fr_clear_transform();
+
+    ObjMesh::Params params_2("../scenes/meshes/cube_tile.obj", "");
+
+    FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
+                           "triangle_mesh",
+                           &params_2);
+
+    index++;
+
+    FeignRenderer::fr_clear_transform();
+}
+
 void HallOfTiles::initialize_hallway(int frame)
 {
     pcg32 rng = pcg32(0xacdc, 0x5493);
-
-    float mesh_light_intensity = 0.1;
 
     std::vector<HOT_TileEffect*> all_tile_fx = std::vector<HOT_TileEffect*>();
 
@@ -239,11 +344,20 @@ void HallOfTiles::initialize_hallway(int frame)
     std::vector<HOT_Tile> left_tiles = std::vector<HOT_Tile>();
     std::vector<HOT_Tile> right_tiles = std::vector<HOT_Tile>();
 
-    all_tile_fx.push_back(new HOT_TileEffect_SetHeadLightLightScale(0, 4920, 1.f));
-    all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(0, 4920, 1.f));
+    // all_tile_fx.push_back(new HOT_TileEffect_SetHeadLightLightScale(0, 4920, 2.8f));
+    // all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(0, 4920, 0.3f));
 
-    // how to light the cyan meshes:
-    // MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
+    all_tile_fx.push_back(new HOT_TileEffect_SetHeadLightLightScale(0, 4920, 0.0f));
+    all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(0, 4920, 0.0f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(0, 100, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(24+32, 100+24+32, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(48+64, 100+48+64, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(72+96, 100+24+32, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(96+128, 100+48+64, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(5*24+5*32, 100+24+32, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(6*24+6*32, 100+48+64, 100.f));
+    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(7*24+7*32, 100+48+64, 100.f));
 
     int index = 0;
     for (int i = 0; i < 400; ++i)
@@ -270,60 +384,23 @@ void HallOfTiles::initialize_hallway(int frame)
             mirror_prob /= sum;
             light_prob /= sum;
 
+            Vector3f pos = Vector3f(-4.5f + float(j), -4.5f, float(i) - 0.5f);
+
             if (prob < diffuse_prob)
             {
                 // add a diffuse tile
-                // TODO
+                bottom_tiles.push_back(HOT_Tile(DIFFUSE, pos));
             }
             else if (prob < diffuse_prob + mirror_prob)
             {
                 // add a mirror tile
-                // TODO
+                bottom_tiles.push_back(HOT_Tile(MIRROR, pos));
             }
             else
             {
                 // add a accent tile
-                // TODO
+                bottom_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
             }
-
-            if (prob < diffuse_prob) material = "dark_diffuse_shad";
-            else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
-            else
-            {
-                material = "dark_diffuse_shad";
-                emitter = "tile_emitter_" + std::to_string(index);
-
-                #ifdef HARDCODED_WAY
-                float frame_intensity = 1.f;
-                if (frame < 240)
-                {
-                    frame_intensity = 0.f;
-                }
-                #endif
-                // else
-                // {
-                //     frame_intensity = 1.f * mesh_light_intensity;
-                // }
-
-                MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-
-                FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-            }
-
-            FeignRenderer::fr_clear_transform();
-
-            FeignRenderer::fr_translate(-4.5f + float(j), -4.5f, float(i) - 0.5f);
-
-            FeignRenderer::fr_object("tile_" + std::to_string(index),
-                                     "tile_obj_" + std::to_string(index),
-                                     material,
-                                     emitter);
-
-            ObjMesh::Params params_1("../scenes/meshes/cube_tile.obj", "");
-
-            FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-                                   "triangle_mesh",
-                                   &params_1);
 
             index++;
 
@@ -347,86 +424,31 @@ void HallOfTiles::initialize_hallway(int frame)
             mirror_prob /= sum;
             light_prob /= sum;
 
+            pos = Vector3f(-4.5f + float(j), 4.5f, float(i) - 0.5f);
+
             if ((i%40 == 0 && j >=4 && j <= 6) ||
                 (i%40 == 1 && j == 5) || (i%39 == 1 && j == 5))
             {
-                // CREATE YELLOW LIGHTS
-                material = "dark_diffuse_shad";
-                emitter = "tile_emitter_" + std::to_string(index);
-
-                float frame_intensity = 0.f;
-                if (frame <= 32)
-                {
-                    frame_intensity = double(frame) / 32.f;
-                }
-                else if (frame < 32 + 24) // 55
-                {
-                    int tmp = (frame-32) % 24;
-                    frame_intensity = double(24 - tmp) / 24.0;
-                }
-                else if (frame < 32*2 + 24) // 87
-                {
-                    frame_intensity = double(frame - 32 - 24) / 32.0;
-                }
-                else if (frame < 32*2 + 24*2) // 111
-                {
-                    int tmp = (frame - 32*2 - 24) % 24;
-                    frame_intensity = double(24 - tmp) / 24.0;
-                }
-                else if (frame < 32*3 + 24*2) // 143
-                {
-                    frame_intensity = double(frame - 2*32 - 2*24) / 32.0;
-                }
-                else if (frame < 32*3 + 24*3) // 167
-                {
-                    int tmp = (frame - 32*3 - 24*2) % 24;
-                    frame_intensity = double(24 - tmp) / 24.0;
-                }
-                else if (frame < 32*4 + 24*3) // 199
-                {
-                    frame_intensity = double(frame - 3*32 - 3*24) / 32.0;
-                }
-
-                MeshEmitter::Params mesh_emitter_params(Color3f(2.f * rng.nextFloat() + 4.f,
-                                                                2.f * rng.nextFloat() + 5.f, 0.f) * mesh_light_intensity * 2.f * frame_intensity);
-
-                FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+                // create a head light
+                top_tiles.push_back(HOT_Tile(HEAD_LIGHT, pos));
+                rng.nextDouble();
+                rng.nextDouble();
             }
-            else if (prob < diffuse_prob) material = "dark_diffuse_shad";
-            else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
+            else if (prob < diffuse_prob)
+            {
+                // create a diffuse tile
+                top_tiles.push_back(HOT_Tile(DIFFUSE, pos));
+            }
+            else if (prob < diffuse_prob + mirror_prob)
+            {
+                // create a mirror tile
+                top_tiles.push_back(HOT_Tile(MIRROR, pos));
+            }
             else
             {
-                // CREATE BLUE LIGHTS
-                material = "dark_diffuse_shad";
-                emitter = "tile_emitter_" + std::to_string(index);
-
-                float frame_intensity = 1.f;
-                if (frame < 240)
-                {
-                    frame_intensity = 0.f;
-                }
-
-                MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-
-                FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+                // create accent light
+                top_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
             }
-
-            FeignRenderer::fr_clear_transform();
-
-            FeignRenderer::fr_translate(-4.5f + float(j), 4.5f, float(i) - 0.5f);
-
-            FeignRenderer::fr_object("tile_" + std::to_string(index),
-                                     "tile_obj_" + std::to_string(index),
-                                     material,
-                                     emitter);
-
-            FeignRenderer::fr_clear_transform();
-
-            ObjMesh::Params params_2("../scenes/meshes/cube_tile.obj", "");
-
-            FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-                                   "triangle_mesh",
-                                   &params_2);
 
             index++;
 
@@ -446,44 +468,27 @@ void HallOfTiles::initialize_hallway(int frame)
 
             sum = diffuse_prob + mirror_prob + light_prob;
 
+            pos = Vector3f(-4.5f, -4.5f + float(j), float(i) - 0.5f);
+
             diffuse_prob /= sum;
             mirror_prob /= sum;
             light_prob /= sum;
 
-            if (prob < diffuse_prob) material = "dark_diffuse_shad";
-            else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
+            if (prob < diffuse_prob)
+            {
+                // create a diffuse tile
+                left_tiles.push_back(HOT_Tile(DIFFUSE, pos));
+            }
+            else if (prob < diffuse_prob + mirror_prob)
+            {
+                // create a mirror tile
+                left_tiles.push_back(HOT_Tile(MIRROR, pos));
+            }
             else
             {
-                material = "dark_diffuse_shad";
-                emitter = "tile_emitter_" + std::to_string(index);
-
-                float frame_intensity = 1.f;
-                if (frame < 240)
-                {
-                    frame_intensity = 0.f;
-                }
-
-                MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-
-                FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+                // create an accent tile
+                left_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
             }
-
-            FeignRenderer::fr_clear_transform();
-
-            FeignRenderer::fr_translate(-4.5f, -4.5f + float(j), float(i) - 0.5f);
-
-            FeignRenderer::fr_object("tile_" + std::to_string(index),
-                                     "tile_obj_" + std::to_string(index),
-                                     material,
-                                     emitter);
-
-            FeignRenderer::fr_clear_transform();
-
-            ObjMesh::Params params_3("../scenes/meshes/cube_tile.obj", "");
-
-            FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-                                   "triangle_mesh",
-                                   &params_3);
 
             index++;
 
@@ -503,335 +508,55 @@ void HallOfTiles::initialize_hallway(int frame)
 
             sum = diffuse_prob + mirror_prob + light_prob;
 
+            pos = Vector3f(4.5f, -4.5f + float(j), float(i) - 0.5f);
+
             diffuse_prob /= sum;
             mirror_prob /= sum;
             light_prob /= sum;
 
-            if (prob < diffuse_prob) material = "dark_diffuse_shad";
-            else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
+            if (prob < diffuse_prob)
+            {
+                // create a diffuse tile
+                right_tiles.push_back(HOT_Tile(DIFFUSE, pos));
+            }
+            else if (prob < diffuse_prob + mirror_prob)
+            {
+                // create a mirror tile
+                right_tiles.push_back(HOT_Tile(MIRROR, pos));
+            }
             else
             {
-                material = "dark_diffuse_shad";
-                emitter = "tile_emitter_" + std::to_string(index);
-
-                float frame_intensity = 1.f;
-                if (frame < 240)
-                {
-                    frame_intensity = 0.f;
-                }
-
-                MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-
-                FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
+                // create an accent tile
+                right_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
             }
-
-            FeignRenderer::fr_clear_transform();
-
-            FeignRenderer::fr_translate(4.5f, -4.5f + float(j), float(i) - 0.5f);
-
-            FeignRenderer::fr_object("tile_" + std::to_string(index),
-                                     "tile_obj_" + std::to_string(index),
-                                     material,
-                                     emitter);
-
-            FeignRenderer::fr_clear_transform();
-
-            ObjMesh::Params params_4("../scenes/meshes/cube_tile.obj", "");
-
-            FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-                                   "triangle_mesh",
-                                   &params_4);
-
-            index++;
-
-            FeignRenderer::fr_clear_transform();
         }
     }
 
-    // int index = 0;
-    // for (int i = 0; i < 400; ++i)
-    // {
-    //     for (int j = 0; j < 10; ++j)
-    //     {
-    //         float light_prob = 0.f;
-    //         float diffuse_prob = 0.f;
-    //         float mirror_prob = 0.f;
-    //         float sum = 0.f;
-    //         float prob = rng.nextFloat();
-    //         std::string material = "dark_diffuse_shad";
-    //         std::string emitter = "";
-    //
-    //         // bottom tiles
-    //         diffuse_prob = 5.f;
-    //         mirror_prob = 5.f;
-    //         light_prob = std::max(float(i % 30) - 24.f, 0.1f) *
-    //                      std::abs(0.05f);
-    //
-    //         sum = diffuse_prob + mirror_prob + light_prob;
-    //
-    //         diffuse_prob /= sum;
-    //         mirror_prob /= sum;
-    //         light_prob /= sum;
-    //
-    //         if (prob < diffuse_prob) material = "dark_diffuse_shad";
-    //         else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
-    //         else
-    //         {
-    //             material = "dark_diffuse_shad";
-    //             emitter = "tile_emitter_" + std::to_string(index);
-    //
-    //             float frame_intensity = 1.f;
-    //             if (frame < 240)
-    //             {
-    //                 frame_intensity = 0.f;
-    //             }
-    //             // else
-    //             // {
-    //             //     frame_intensity = 1.f * mesh_light_intensity;
-    //             // }
-    //
-    //             MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-    //
-    //             FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-    //         }
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         FeignRenderer::fr_translate(-4.5f + float(j), -4.5f, float(i) - 0.5f);
-    //
-    //         FeignRenderer::fr_object("tile_" + std::to_string(index),
-    //                                  "tile_obj_" + std::to_string(index),
-    //                                  material,
-    //                                  emitter);
-    //
-    //         ObjMesh::Params params_1("../scenes/meshes/cube_tile.obj", "");
-    //
-    //         FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-    //                                "triangle_mesh",
-    //                                &params_1);
-    //
-    //         index++;
-    //
-    //         // top tiles
-    //         light_prob = 0.f;
-    //         diffuse_prob = 0.f;
-    //         mirror_prob = 0.f;
-    //         sum = 0.f;
-    //         prob = rng.nextFloat();
-    //         material = "dark_diffuse_shad";
-    //         emitter = "";
-    //
-    //         diffuse_prob = 6.f;
-    //         mirror_prob = 4.f;
-    //         light_prob = std::max(float(i % 30) - 24.f, 0.1f) *
-    //                      std::abs(j-5);
-    //
-    //         sum = diffuse_prob + mirror_prob + light_prob;
-    //
-    //         diffuse_prob /= sum;
-    //         mirror_prob /= sum;
-    //         light_prob /= sum;
-    //
-    //         if ((i%40 == 0 && j >=4 && j <= 6) ||
-    //             (i%40 == 1 && j == 5) || (i%39 == 1 && j == 5))
-    //         {
-    //             // CREATE YELLOW LIGHTS
-    //             material = "dark_diffuse_shad";
-    //             emitter = "tile_emitter_" + std::to_string(index);
-    //
-    //             float frame_intensity = 0.f;
-    //             if (frame <= 32)
-    //             {
-    //                 frame_intensity = double(frame) / 32.f;
-    //             }
-    //             else if (frame < 32 + 24) // 55
-    //             {
-    //                 int tmp = (frame-32) % 24;
-    //                 frame_intensity = double(24 - tmp) / 24.0;
-    //             }
-    //             else if (frame < 32*2 + 24) // 87
-    //             {
-    //                 frame_intensity = double(frame - 32 - 24) / 32.0;
-    //             }
-    //             else if (frame < 32*2 + 24*2) // 111
-    //             {
-    //                 int tmp = (frame - 32*2 - 24) % 24;
-    //                 frame_intensity = double(24 - tmp) / 24.0;
-    //             }
-    //             else if (frame < 32*3 + 24*2) // 143
-    //             {
-    //                 frame_intensity = double(frame - 2*32 - 2*24) / 32.0;
-    //             }
-    //             else if (frame < 32*3 + 24*3) // 167
-    //             {
-    //                 int tmp = (frame - 32*3 - 24*2) % 24;
-    //                 frame_intensity = double(24 - tmp) / 24.0;
-    //             }
-    //             else if (frame < 32*4 + 24*3) // 199
-    //             {
-    //                 frame_intensity = double(frame - 3*32 - 3*24) / 32.0;
-    //             }
-    //
-    //             MeshEmitter::Params mesh_emitter_params(Color3f(2.f * rng.nextFloat() + 4.f,
-    //                                                             2.f * rng.nextFloat() + 5.f, 0.f) * mesh_light_intensity * 2.f * frame_intensity);
-    //
-    //             FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-    //         }
-    //         else if (prob < diffuse_prob) material = "dark_diffuse_shad";
-    //         else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
-    //         else
-    //         {
-    //             // CREATE BLUE LIGHTS
-    //             material = "dark_diffuse_shad";
-    //             emitter = "tile_emitter_" + std::to_string(index);
-    //
-    //             float frame_intensity = 1.f;
-    //             if (frame < 240)
-    //             {
-    //                 frame_intensity = 0.f;
-    //             }
-    //
-    //             MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-    //
-    //             FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-    //         }
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         FeignRenderer::fr_translate(-4.5f + float(j), 4.5f, float(i) - 0.5f);
-    //
-    //         FeignRenderer::fr_object("tile_" + std::to_string(index),
-    //                                  "tile_obj_" + std::to_string(index),
-    //                                  material,
-    //                                  emitter);
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         ObjMesh::Params params_2("../scenes/meshes/cube_tile.obj", "");
-    //
-    //         FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-    //                                "triangle_mesh",
-    //                                &params_2);
-    //
-    //         index++;
-    //
-    //         // left tiles
-    //         light_prob = 0.f;
-    //         diffuse_prob = 0.f;
-    //         mirror_prob = 0.f;
-    //         sum = 0.f;
-    //         prob = rng.nextFloat();
-    //         material = "dark_diffuse_shad";
-    //         emitter = "";
-    //
-    //         diffuse_prob = 3.f;
-    //         mirror_prob = 7.f;
-    //         light_prob = std::max(float(i % 30) - 24.f, 0.1f) *
-    //                      0.5*std::abs(j-10);
-    //
-    //         sum = diffuse_prob + mirror_prob + light_prob;
-    //
-    //         diffuse_prob /= sum;
-    //         mirror_prob /= sum;
-    //         light_prob /= sum;
-    //
-    //         if (prob < diffuse_prob) material = "dark_diffuse_shad";
-    //         else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
-    //         else
-    //         {
-    //             material = "dark_diffuse_shad";
-    //             emitter = "tile_emitter_" + std::to_string(index);
-    //
-    //             float frame_intensity = 1.f;
-    //             if (frame < 240)
-    //             {
-    //                 frame_intensity = 0.f;
-    //             }
-    //
-    //             MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-    //
-    //             FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-    //         }
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         FeignRenderer::fr_translate(-4.5f, -4.5f + float(j), float(i) - 0.5f);
-    //
-    //         FeignRenderer::fr_object("tile_" + std::to_string(index),
-    //                                  "tile_obj_" + std::to_string(index),
-    //                                  material,
-    //                                  emitter);
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         ObjMesh::Params params_3("../scenes/meshes/cube_tile.obj", "");
-    //
-    //         FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-    //                                "triangle_mesh",
-    //                                &params_3);
-    //
-    //         index++;
-    //
-    //         // right tiles
-    //         light_prob = 0.f;
-    //         diffuse_prob = 0.f;
-    //         mirror_prob = 0.f;
-    //         sum = 0.f;
-    //         prob = rng.nextFloat();
-    //         material = "dark_diffuse_shad";
-    //         emitter = "";
-    //
-    //         diffuse_prob = 3.f;
-    //         mirror_prob = 7.f;
-    //         light_prob = std::max(float(i % 30) - 24.f, 0.1f) *
-    //                      0.5*std::abs(j-10);
-    //
-    //         sum = diffuse_prob + mirror_prob + light_prob;
-    //
-    //         diffuse_prob /= sum;
-    //         mirror_prob /= sum;
-    //         light_prob /= sum;
-    //
-    //         if (prob < diffuse_prob) material = "dark_diffuse_shad";
-    //         else if (prob < diffuse_prob + mirror_prob) material = "mirror_shad";
-    //         else
-    //         {
-    //             material = "dark_diffuse_shad";
-    //             emitter = "tile_emitter_" + std::to_string(index);
-    //
-    //             float frame_intensity = 1.f;
-    //             if (frame < 240)
-    //             {
-    //                 frame_intensity = 0.f;
-    //             }
-    //
-    //             MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 7.f, 8.f) * mesh_light_intensity * frame_intensity);
-    //
-    //             FeignRenderer::fr_emitter(emitter, "mesh", &mesh_emitter_params);
-    //         }
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         FeignRenderer::fr_translate(4.5f, -4.5f + float(j), float(i) - 0.5f);
-    //
-    //         FeignRenderer::fr_object("tile_" + std::to_string(index),
-    //                                  "tile_obj_" + std::to_string(index),
-    //                                  material,
-    //                                  emitter);
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //
-    //         ObjMesh::Params params_4("../scenes/meshes/cube_tile.obj", "");
-    //
-    //         FeignRenderer::fr_mesh("tile_obj_" + std::to_string(index),
-    //                                "triangle_mesh",
-    //                                &params_4);
-    //
-    //         index++;
-    //
-    //         FeignRenderer::fr_clear_transform();
-    //     }
-    // }
+    for (int i = 0; i < all_tile_fx.size(); ++i)
+    {
+        if (all_tile_fx[i]->applies_to_top) all_tile_fx[i]->apply_to_tiles(top_tiles, frame);
+        if (all_tile_fx[i]->applies_to_bottom) all_tile_fx[i]->apply_to_tiles(bottom_tiles, frame);
+        if (all_tile_fx[i]->applies_to_left) all_tile_fx[i]->apply_to_tiles(left_tiles, frame);
+        if (all_tile_fx[i]->applies_to_right) all_tile_fx[i]->apply_to_tiles(right_tiles, frame);
+    }
+
+    index = 0;
+    for (int i = 0; i < bottom_tiles.size(); ++i)
+    {
+        add_tile_to_scene(bottom_tiles[i], index);
+    }
+    for (int i = 0; i < top_tiles.size(); ++i)
+    {
+        add_tile_to_scene(top_tiles[i], index);
+    }
+    for (int i = 0; i < left_tiles.size(); ++i)
+    {
+        add_tile_to_scene(left_tiles[i], index);
+    }
+    for (int i = 0; i < right_tiles.size(); ++i)
+    {
+        add_tile_to_scene(right_tiles[i], index);
+    }
 }
 
 // notes of entire video
@@ -905,7 +630,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(256, 0x12345);
+    Independent::Params samp_params(64, 0x12345);
 
     LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
@@ -941,7 +666,7 @@ void HallOfTiles::run()
     system(mkdir_command.c_str());
 
     int start_frame = 0;
-    int end_frame = 9*24;
+    int end_frame = 400;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
@@ -1315,12 +1040,12 @@ FEIGN_END()
 //         }
 //     }
 // }
-//
-// // notes of entire video
-// // frames 0-32 - introduction of yellow lights into the scene
-// // frames 33-56 - dim yellow lights
-// // every 24 frame (1 second intervals brighten then dim yellow lights)
-//
+
+// notes of entire video
+// frames 0-32 - introduction of yellow lights into the scene
+// frames 33-56 - dim yellow lights
+// every 24 frame (1 second intervals brighten then dim yellow lights)
+
 // void HallOfTiles::initialize_camera(int frame)
 // {
 //     // for the first 40 seconds, the camera should remain completely still
@@ -1345,7 +1070,7 @@ FEIGN_END()
 //                              "perspective",
 //                              &cam_params);
 // }
-//
+
 // void HallOfTiles::initialize_base_structs(std::string test_name,
 //                                           int frame)
 // {
