@@ -32,8 +32,6 @@ Color3f Trans_RatioTracking::transmittance(const Ray3f& ray,
 
         if (t >= tMax) break;
 
-        // LOG(density->D(ray(t)));
-
         Color3f ext = density->D(ray(t)) * density->sigma_t;
         ext = ext.min(maj); // for now disallow non bounding majoranst by
                                   // clamping

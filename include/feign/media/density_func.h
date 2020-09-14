@@ -10,6 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/math/bbox.h>
+#include <feign/math/complex.h>
 
 #if OPENVDB
 
@@ -147,15 +148,87 @@ class PointAverageDensity : public DensityFunction
 class MandlebrotDensity : public DensityFunction
 {
 public:
-    MandlebrotDensity()
+    struct Params
     {
-        // TODO
-    }
+        Params(Color3f max_density)
+            : max_density(max_density) { }
 
+        Color3f max_density;
+    };
+
+    MandlebrotDensity(Color3f max_density)
+        : max_density(max_density),
+          center(Point3f(0.f)),
+          bounds(1000.0),
+          n(1000) { }
+
+    // z(n+1) = z(n) + c
+    // c will be defined to be the location of the point relative to the center
     virtual Color3f D(const Point3f& p) const
     {
-        throw new NotImplementedException("mandlebrot density");
-        return 0.0;
+        // initial implementation: if z(n+1) is bounded for a specific n, return
+        // 1.f otherwise return 0.f;
+
+        Complex3f c = Complex3f(p(0) * 0.0625, p(1) * 0.0625, p(2) * 0.0625);
+        // Complex3f c = Complex3f(-2.1);
+
+        // double x_c = (p(0) - center(0)) * 0.5;
+        // double y_c = (p(1) - center(1)) * 0.5;
+        // double z_c = (p(2) - center(2)) * 0.5;
+
+        Complex3f val = Complex3f(0.f, 0.f, 0.f);
+
+        // double x_val = 0.f;
+        // double y_val = 0.f;
+        // double z_val = 0.f;
+
+        int m = -1;
+        int m2 = -1;
+        int m3 = -1;
+
+        double bounds_1 = 0.1;
+        double bounds_2 = 0.5;
+        double bounds_3 = 2.0;
+
+        while (val.norm() <= bounds_1 &&
+               m < n)
+        {
+            val = val * val + c;
+            m++;
+        }
+
+        val = Complex3f(0.f, 0.f, 0.f);
+
+        while (val.norm() <= bounds_2 &&
+               m2 < n)
+        {
+            val = val * val + c;
+            m2++;
+        }
+
+        val = Complex3f(0.f, 0.f, 0.f);
+
+        while (val.norm() <= bounds_3 &&
+               m3 < n)
+        {
+            val = val * val + c;
+            m3++;
+        }
+
+        // for (int i = 0; i < n; ++i)
+        // {
+        //     x_val = x_val * x_val + x_c;
+        //     y_val = y_val * y_val + y_c;
+        //     z_val = z_val * z_val + z_c;
+        //
+        //     if (std::abs(x_val) > bounds) return Color3f(0.f);
+        //     if (std::abs(y_val) > bounds) return Color3f(0.f);
+        //     if (std::abs(z_val) > bounds) return Color3f(0.f);
+        // }
+
+        return Color3f(Float(m) / Float(n),
+                       Float(m2) / Float(n),
+                       Float(m3) / Float(n));
     }
 
     // virtual Color3f SpectralD(const Point3f& p) const
@@ -169,6 +242,11 @@ public:
         throw new NotImplementedException("mandlebrot density");
         return 0.f;
     }
+
+    Color3f max_density;
+    Point3f center;
+    double bounds;
+    int n;
 };
 
 // this is just a simple density which is going to be used to test

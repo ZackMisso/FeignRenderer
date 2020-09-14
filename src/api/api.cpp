@@ -1051,8 +1051,8 @@ void FeignRenderer::fr_medium_density(std::string name,
     }
     else if (type == "mandlebrot")
     {
-        // TODO
-        throw new NotImplementedException("mandlebrot density");
+        MandlebrotDensity::Params* params = (MandlebrotDensity::Params*)density_data;
+        density_func->density = new MandlebrotDensity(params->max_density);
     }
     else if (type == "sphere")
     {
@@ -1127,7 +1127,15 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
     }
     else if (type == "ratio")
     {
-        trans_est->trans_est = new Trans_RatioTracking(10.0);
+        if (trans_est_data)
+        {
+            Trans_RatioTracking::Params* params = (Trans_RatioTracking::Params*)trans_est_data;
+            trans_est->trans_est = new Trans_RatioTracking(params->maj);
+        }
+        else
+        {
+            trans_est->trans_est = new Trans_RatioTracking(10.0);
+        }
     }
     else if (type == "pseries")
     {

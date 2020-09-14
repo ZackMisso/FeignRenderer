@@ -86,6 +86,14 @@ public:
 class Trans_RatioTracking : public TransmittanceEstimator
 {
 public:
+    struct Params
+    {
+        Params(Float maj)
+            : maj(maj) { }
+
+        Float maj;
+    };
+
     Trans_RatioTracking();
     Trans_RatioTracking(Float maj);
 

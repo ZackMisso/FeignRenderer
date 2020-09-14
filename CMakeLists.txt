@@ -291,6 +291,7 @@ add_executable(feign
 
     # scene implementation files
     scenes/cool_renders/hall_of_tiles/hall_of_tiles.cpp
+    scenes/cool_renders/fractal_media/mandlebrot_media.cpp
 
     # debug scene implementation files
     scenes/videos/medium_initial.cpp

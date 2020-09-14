@@ -29,6 +29,7 @@
 #include "../scenes/month_of_shaders/jan_9_2020.h"
 
 #include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
+#include "../scenes/cool_renders/fractal_media/mandlebrot_media.h"
 
 #include "../scenes/videos/medium_initial.h"
 
@@ -72,8 +73,11 @@ int main(int argc, char* argv[])
     // MediumTesting_Debug();
     // return 0;
 
-    HallOfTiles();
+    MandlebrotMediaTests();
     return 0;
+
+    // HallOfTiles();
+    // return 0;
 
     // VolExpShaderToy();
     // return 0;

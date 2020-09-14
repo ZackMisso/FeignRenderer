@@ -1014,7 +1014,7 @@ void MediumTesting_Debug::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 10;
+    int path_depth = 6;
 
     // if (frame < 180) path_depth = 7;
     // else path_depth = 10;
@@ -1137,7 +1137,7 @@ void MediumTesting_Debug::run()
     //     flush_render();
     // }
 
-    int start_frame = 1200;
+    int start_frame = 1230;
     // int start_frame = 501;
     int end_frame = 1300;
 
