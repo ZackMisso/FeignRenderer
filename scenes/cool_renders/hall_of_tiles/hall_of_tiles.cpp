@@ -39,7 +39,7 @@ void HallOfTiles::initialize_materials(int frame)
                                &mirror_mat_params);
 
     Diffuse::Params dark_diffuse_bsdf(Color3f(0.5f, 0.5f, 0.5f));
-    Mirror::Params mirror_bsdf(Color3f(1.f));
+    Mirror::Params mirror_bsdf(Color3f(0.98f));
 
     FeignRenderer::fr_bsdf("dark_diffuse_bsdf",
                            "diffuse",
@@ -59,13 +59,15 @@ void add_tile_to_scene(HOT_Tile& tile, int& index)
     if (tile.override_object_type != -1)
         object_type = tile.override_object_type;
 
+    // if (tile.light_scale > 1.f) std::cout << "AUUUUUGGGGAA" << std::endl;
+
     if (object_type == ACCENT_LIGHT)
     {
         // CREATE BLUE LIGHTS
         material = "dark_diffuse_shad";
         emitter = "tile_emitter_" + std::to_string(index);
 
-        if (tile.light_scale > 1.f) std::cout << "FUUUUCK" << std::endl;
+        // if (tile.light_scale > 1.f) std::cout << "FUUUUCK" << std::endl;
 
         MeshEmitter::Params mesh_emitter_params(Color3f(0.f, 0.7f, 0.8f) * tile.light_scale);
 
@@ -93,7 +95,9 @@ void add_tile_to_scene(HOT_Tile& tile, int& index)
 
     FeignRenderer::fr_clear_transform();
 
+    FeignRenderer::fr_scale(0.95, 0.95, 0.95);
     FeignRenderer::fr_translate(tile.pos(0), tile.pos(1), tile.pos(2));
+    FeignRenderer::fr_rotate(tile.z_rot, 0.f, 0.f, 1.f);
 
     FeignRenderer::fr_object("tile_" + std::to_string(index),
                              "tile_obj_" + std::to_string(index),
@@ -130,23 +134,9 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_SetHeadLightLightScale(0, 4920, 0.0f));
     all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(0, 4920, 0.0f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(0, 100, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(56, 156, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(112, 212, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(168, 268, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(224, 324, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(280, 380, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(336, 436, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(392, 492, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(448, 548, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(504, 604, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560, 660, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560+56, 660+56, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560+112, 660+112, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560+168, 660+168, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560+224, 660+224, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(560+280, 660+280, 100.f));
-    all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(840+56, 940+56, 100.f));
+
+    for (int start = 0; start < 2136; start += 56)
+        all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(start, start+100, 100.f));
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(224, 274, 9.f));
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(280, 330, 9.f));
@@ -156,6 +146,12 @@ void HallOfTiles::initialize_hallway(int frame)
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(563, 663, 9.f));
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(563+56, 663+56, 9.f));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(790, 890, 9.f));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentSetLightBeam(790, 890, 0.1));
+    all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(890, 4920, 0.1));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(790+56, 890+56, 9.f));
+
+    // all_tile_fx.push_back(new HOT_TileEffect_RotationWave(790+56+112, 890+112, 12.f, 0.f, 90.f));
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(448, 498, 9.f,
                                                              false, false, true, false));
@@ -183,7 +179,99 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(508+12*3+6, 558+12*3+6, 9.f,
                                                              false, false, true, true));
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(508+12*4, 558+12*4, 9.f,
-                                                                                                                    true, true, false, false));
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675, 725, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675+12, 725+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675+12*2, 725+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675+12*3, 725+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675+12*3 + 6, 725+12*3 + 6, 9.f,
+                                                            false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(675+12*4, 725+12*4, 9.f,
+                                                            true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735, 785, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735+12*1, 785+12*1, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735+12*2, 785+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735+12*3, 785+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735+12*3+6, 785+12*3+6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(735+12*4, 785+12*4, 9.f,
+                                                             true, true, false, false));
+
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902, 952, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902+12, 952+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902+12*2, 952+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902+12*3, 952+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902+12*3 + 6, 952+12*3 + 6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(902+12*4, 952+12*4, 9.f,
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962, 1012, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*1, 1012+12*1, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*2, 1012+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*3, 1012+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*3+6, 1012+12*3+6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*4, 1012+12*4, 9.f,
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*5, 1012+12*5, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*5+6, 1012+12*5+6, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*6+6, 1012+12*6+6, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*7, 1012+12*7, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*8, 1012+12*8, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*8+6, 1012+12*8+6, 9.f,
+                                                             false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+                                                             true, false, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+                                                             false, false, true, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+                                                             false, false, false, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+                                                             true, true, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_RotationWave(1070, 1340, 60.f, 0.f, 540.f));
 
     // 56 / 4 = 14
 
@@ -204,7 +292,7 @@ void HallOfTiles::initialize_hallway(int frame)
             diffuse_prob = 5.f;
             mirror_prob = 5.f;
             light_prob = std::max(float(i % 30) - 24.f, 0.1f) *
-                         std::abs(0.05f);
+                         std::abs(0.01f);
 
             sum = diffuse_prob + mirror_prob + light_prob;
 
@@ -212,7 +300,7 @@ void HallOfTiles::initialize_hallway(int frame)
             mirror_prob /= sum;
             light_prob /= sum;
 
-            Vector3f pos = Vector3f(-4.5f + float(j), -4.5f, float(i) - 0.5f);
+            Vector3f pos = Vector3f(-4.5f + float(j), -5.f, float(i) - 0.5f);
 
             if (prob < diffuse_prob)
             {
@@ -227,7 +315,8 @@ void HallOfTiles::initialize_hallway(int frame)
             else
             {
                 // add a accent tile
-                bottom_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
+                // bottom_tiles.push_back(HOT_Tile(ACCENT_LIGHT, pos));
+                bottom_tiles.push_back(HOT_Tile(DIFFUSE, pos));
             }
 
             index++;
@@ -252,7 +341,7 @@ void HallOfTiles::initialize_hallway(int frame)
             mirror_prob /= sum;
             light_prob /= sum;
 
-            pos = Vector3f(-4.5f + float(j), 4.5f, float(i) - 0.5f);
+            pos = Vector3f(-4.5f + float(j), 5.f, float(i) - 0.5f);
 
             if ((i%40 == 0 && j >=4 && j <= 6) ||
                 (i%40 == 1 && j == 5) || (i%39 == 1 && j == 5))
@@ -296,7 +385,7 @@ void HallOfTiles::initialize_hallway(int frame)
 
             sum = diffuse_prob + mirror_prob + light_prob;
 
-            pos = Vector3f(-4.5f, -4.5f + float(j), float(i) - 0.5f);
+            pos = Vector3f(-5.f, -4.5f + float(j), float(i) - 0.5f);
 
             diffuse_prob /= sum;
             mirror_prob /= sum;
@@ -336,7 +425,7 @@ void HallOfTiles::initialize_hallway(int frame)
 
             sum = diffuse_prob + mirror_prob + light_prob;
 
-            pos = Vector3f(4.5f, -4.5f + float(j), float(i) - 0.5f);
+            pos = Vector3f(5.f, -4.5f + float(j), float(i) - 0.5f);
 
             diffuse_prob /= sum;
             mirror_prob /= sum;
@@ -395,14 +484,14 @@ void HallOfTiles::initialize_hallway(int frame)
 void HallOfTiles::initialize_camera(int frame)
 {
     // for the first 40 seconds, the camera should remain completely still
-    int initial_still_time = 40 * 24;
+    int initial_still_time = 30 * 24;
     int actual_frame = std::max(frame - initial_still_time, 0);
 
-    Perspective::Params cam_params(Vector3f(0.0 + 0.45 * cos(0.04f * actual_frame),
-                                            -0.2 - 0.3 * std::abs(cos(0.04f * actual_frame)),
+    Perspective::Params cam_params(Vector3f(0.0,
+                                            -0.4,
                                             0.0 + 0.1 * float(actual_frame)),
-                                   Vector3f(0.0 + 0.45 * cos(0.04f * actual_frame),
-                                            -0.2 - 0.3 * std::abs(cos(0.04f * actual_frame)),
+                                   Vector3f(0.0,
+                                            -0.4,
                                             1.0 + 0.1 * float(actual_frame)),
                                    Vector3f(0, 1, 0),
                                    50.f,
@@ -410,7 +499,22 @@ void HallOfTiles::initialize_camera(int frame)
                                    1e4f,
                                    10.f,
                                    0.f,
-                                   Vec2i(256, 256));
+                                   // Vec2i(1920, 1080));
+                                   Vec2i(256, 144));
+
+    // Perspective::Params cam_params(Vector3f(0.0 + 0.45 * cos(1.f / 12.f * float(actual_frame)),
+    //                                         -0.4 - 0.6 * std::abs(cos(0.04f * float(actual_frame))),
+    //                                         0.0 + 0.1 * float(actual_frame)),
+    //                                Vector3f(0.0 + 0.45 * cos(1.f / 12.f * float(actual_frame)),
+    //                                         -0.4 - 0.6 * std::abs(cos(0.04f * float(actual_frame))),
+    //                                         1.0 + 0.1 * float(actual_frame)),
+    //                                Vector3f(0, 1, 0),
+    //                                50.f,
+    //                                1e-4f,
+    //                                1e4f,
+    //                                10.f,
+    //                                0.f,
+    //                                Vec2i(256, 256));
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -438,9 +542,9 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
     LOG("light accel");
     SpatialLightAccel::Params light_accel_params(1, 1, 10);
 
-    FeignRenderer::fr_accel("light_accel",
-                            "light_spatial",
-                            &light_accel_params);
+    // FeignRenderer::fr_accel("light_accel",
+    //                         "light_spatial",
+    //                         &light_accel_params);
 
     LOG("media");
     HomogeneousAbsorbingMedia::Params media_params(0.01);
@@ -459,6 +563,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  &int_params);
 
     Independent::Params samp_params(64, 0x12345);
+    // Independent::Params samp_params(20000, 0x12345);
 
     LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
@@ -493,11 +598,12 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 500;
-    int end_frame = 800;
+    int start_frame = 1000;
+    int end_frame = 1500;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
+        if (frame == 241) continue;
         LOG("Rendering Frame: " + std::to_string(frame));
         // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
         // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));

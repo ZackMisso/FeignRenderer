@@ -75,9 +75,16 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
                             "infinite emitters for spatial acceleration");
                     }
 
-                    Float norm = ((center - emitters[l]->getCenter()).sqrNorm());
+                    if (bounds[index].bbox.contains(emitters[l]->getCenter()))
+                    {
+                        bounds[index].emitter_pdf->set_pmf(l, 1.f);
+                    }
+                    else
+                    {
+                        Float norm = ((center - emitters[l]->getCenter()).sqrNorm());
 
-                    bounds[index].emitter_pdf->set_pmf(l, 1.f / norm);
+                        bounds[index].emitter_pdf->set_pmf(l, std::min(1.f / norm, 0.01f));
+                    }
                 }
 
                 bounds[index].emitter_pdf->convert_pdf_to_cdf();

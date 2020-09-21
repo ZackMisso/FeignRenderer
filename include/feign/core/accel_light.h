@@ -71,6 +71,7 @@ protected:
 /////////////////////////////////////////////////
 // Spatial Partitioning Light Sampling Acceleration Structure
 /////////////////////////////////////////////////
+// TODO: this causes fireflies along the spatial partitioning boundries
 class SpatialLightAccel : public LightAccel
 {
 public:

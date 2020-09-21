@@ -73,11 +73,11 @@ int main(int argc, char* argv[])
     // MediumTesting_Debug();
     // return 0;
 
-    MandlebrotMediaTests();
-    return 0;
-
-    // HallOfTiles();
+    // MandlebrotMediaTests();
     // return 0;
+
+    HallOfTiles();
+    return 0;
 
     // VolExpShaderToy();
     // return 0;
