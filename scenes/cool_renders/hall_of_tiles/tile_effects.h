@@ -400,3 +400,71 @@ struct HOT_TileEffect_RotationWave : public HOT_TileEffect
     Float start_angle;
     Float end_angle;
 };
+
+// struct HOT_TileEffect_JerkyRotate : public HOT_TileEffect
+// {
+//     HOT_TileEffect_JerkyRotate(int start_frame,
+//                                int end_frame,
+//                                Float min_rotate,
+//                                Float max_ratote)
+//         : HOT_TileEffect(start_frame, end_frame),
+//           min_rotate(min_rotate),
+//           max_rotate(max_rotate)
+//     {
+//         start_z = -50.f;
+//         end_z = 470.f;
+//     }
+//
+//     HOT_TileEffect_RotationWave(int start_frame,
+//                                 int end_frame,
+//                                 Float fall_off_dist,
+//                                 Float start_angle,
+//                                 Float end_angle,
+//                                 bool applies_top,
+//                                 bool applies_bot,
+//                                 bool applies_left,
+//                                 bool applies_right)
+//         : HOT_TileEffect(applies_top,
+//                          applies_bot,
+//                          applies_left,
+//                          applies_right,
+//                          start_frame,
+//                          end_frame),
+//           fall_off_dist(fall_off_dist),
+//           start_angle(start_angle),
+//           end_angle(end_angle)
+//     {
+//         start_z = -50.f;
+//         end_z = 470.f;
+//     }
+//
+//     void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
+//     {
+//         if (!is_active(frame)) return;
+//
+//         Float proxy = Float(frame - start_frame) / Float(end_frame - start_frame);
+//
+//         Float zpos = proxy * end_z + (1.0 - proxy) * start_z;
+//
+//         // TODO: maybe implement different kinds of fall off, currently just using
+//         //       linear falloff
+//         for (int i = 0; i < tiles.size(); ++i)
+//         {
+//             if (tiles[i].base_object_type != MIRROR &&
+//                 tiles[i].base_object_type != HEAD_LIGHT)
+//             {
+//                 Float zdist = (zpos + fall_off_dist) - tiles[i].pos(2);
+//
+//                 zdist = std::min(std::max(zdist / (2.0*fall_off_dist), 0.0), 1.0);
+//
+//                 tiles[i].z_rot = zdist * (end_angle - start_angle) + start_angle;
+//             }
+//         }
+//     }
+//
+//     Float start_z;
+//     Float end_z;
+//     Float fall_off_dist;
+//     Float start_angle;
+//     Float end_angle;
+// };

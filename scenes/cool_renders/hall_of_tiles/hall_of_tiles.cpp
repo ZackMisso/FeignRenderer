@@ -244,34 +244,34 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*5+6, 1012+12*5+6, 9.f,
                                                              false, false, true, true));
 
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*6, 1012+12*6, 9.f,
+                                                             false, false, true, true));
+
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*6+6, 1012+12*6+6, 9.f,
                                                              false, false, true, true));
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*7, 1012+12*7, 9.f,
                                                              false, false, true, true));
 
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*7+6, 1012+12*7+6, 9.f,
+                                                             false, false, true, true));
+
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*8, 1012+12*8, 9.f,
-                                                             false, false, true, true));
-
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*8+6, 1012+12*8+6, 9.f,
-                                                             false, false, true, true));
-
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
                                                              true, false, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*8+6, 1012+12*8+6, 9.f,
                                                              false, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9, 1012+12*9, 9.f,
                                                              false, false, true, false));
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
                                                              false, false, false, true));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+6, 1012+12*9+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(962+12*9+10, 1012+12*9+10, 9.f,
                                                              true, true, true, true));
 
-    all_tile_fx.push_back(new HOT_TileEffect_RotationWave(1070, 1340, 60.f, 0.f, 540.f));
+    all_tile_fx.push_back(new HOT_TileEffect_RotationWave(1060, 1330, 60.f, 0.f, 720.f));
 
     // 56 / 4 = 14
 
@@ -499,8 +499,8 @@ void HallOfTiles::initialize_camera(int frame)
                                    1e4f,
                                    10.f,
                                    0.f,
-                                   // Vec2i(1920, 1080));
-                                   Vec2i(256, 144));
+                                   Vec2i(1920, 1080));
+                                   // Vec2i(256, 144));
 
     // Perspective::Params cam_params(Vector3f(0.0 + 0.45 * cos(1.f / 12.f * float(actual_frame)),
     //                                         -0.4 - 0.6 * std::abs(cos(0.04f * float(actual_frame))),
@@ -562,8 +562,8 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(64, 0x12345);
-    // Independent::Params samp_params(20000, 0x12345);
+    // Independent::Params samp_params(64, 0x12345);
+    Independent::Params samp_params(500000, 0x12345);
 
     LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
@@ -573,7 +573,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
 
 void HallOfTiles::initialize_lighting(int frame)
 {
-    PointEmitter::Params emitter_params(Color3f(250.f, 250.f, 250.f),
+    PointEmitter::Params emitter_params(Color3f(200.f, 200.f, 200.f),
                                         Vector3f(0.0, 1.0, -2.0));
 
     FeignRenderer::fr_emitter("point_emitter",
@@ -598,12 +598,12 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 1000;
-    int end_frame = 1500;
+    int start_frame = 241;
+    int end_frame = 242;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
-        if (frame == 241) continue;
+        // if (frame == 241) continue;
         LOG("Rendering Frame: " + std::to_string(frame));
         // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;
         // Vector3f origin = Vector3f(5.0 * cos(degree), 0.0, 5.0 * sin(degree));
