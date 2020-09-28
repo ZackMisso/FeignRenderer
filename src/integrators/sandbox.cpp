@@ -19,9 +19,9 @@ Sandbox_Integrator::Sandbox_Integrator(FilterNode* filter,
                                        Integrator::Params* params)
     : Integrator(filter, params) { }
 
-void Sandbox_Integrator::preProcess()
+void Sandbox_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f Sandbox_Integrator::Li(const Scene* scene,

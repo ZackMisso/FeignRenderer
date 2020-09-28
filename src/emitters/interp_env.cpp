@@ -35,6 +35,14 @@ Color3f InterpEnvironmentEmitter::sample_pos(EmitterQuery& rec,
     return Color3f(0.f);
 }
 
+Color3f InterpEnvironmentEmitter::sample_ray(EmitterQuery& rec,
+                                             const Point2f& dir_sample,
+                                             const Point2f& point_sample,
+                                             Float* pdf) const
+{
+    throw new NotImplementedException("emitter interp env sample ray");
+}
+
 Color3f InterpEnvironmentEmitter::evaluate(EmitterQuery& rec) const
 {
     throw new NotImplementedException("interp env emitter evaluate");

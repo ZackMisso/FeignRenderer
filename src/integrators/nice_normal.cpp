@@ -17,9 +17,9 @@ NiceNormalIntegrator::NiceNormalIntegrator(FilterNode* filter,
 {
 }
 
-void NiceNormalIntegrator::preProcess()
+void NiceNormalIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f NiceNormalIntegrator::Li(const Scene* scene,

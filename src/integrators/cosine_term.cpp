@@ -17,9 +17,9 @@ CosineTermIntegrator::CosineTermIntegrator(FilterNode* filter,
 {
 }
 
-void CosineTermIntegrator::preProcess()
+void CosineTermIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f CosineTermIntegrator::Li(const Scene* scene,

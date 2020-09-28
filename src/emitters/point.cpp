@@ -46,6 +46,14 @@ Color3f PointEmitter::sample_pos(EmitterQuery& rec,
     return Color3f(0.f);
 }
 
+Color3f PointEmitter::sample_ray(EmitterQuery& rec,
+                                 const Point2f& dir_sample,
+                                 const Point2f& point_sample,
+                                 Float* pdf) const
+{
+    throw new NotImplementedException("point emitter sample ray");
+}
+
 Color3f PointEmitter::evaluate(EmitterQuery& rec) const
 {
     throw new NotImplementedException("point evaluate");

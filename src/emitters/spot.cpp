@@ -55,6 +55,14 @@ Color3f SpotLightEmitter::sample_pos(EmitterQuery& rec,
     throw new NotImplementedException("spot sample pos");
 }
 
+Color3f SpotLightEmitter::sample_ray(EmitterQuery& rec,
+                                     const Point2f& dir_sample,
+                                     const Point2f& point_sample,
+                                     Float* pdf) const
+{
+    throw new NotImplementedException("spot emitter sample ray");
+}
+
 Color3f SpotLightEmitter::evaluate(EmitterQuery& rec) const
 {
     CoordinateFrame frame(light_dir);

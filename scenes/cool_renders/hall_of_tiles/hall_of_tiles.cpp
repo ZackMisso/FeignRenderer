@@ -449,6 +449,26 @@ void HallOfTiles::initialize_hallway(int frame)
         }
     }
 
+    // need to add all of the random tile effects after creating the tiles
+    all_tile_fx.push_back(new HOT_TileEffect_JerkyRotate(1400,
+                                                         4920,
+                                                         0.f,
+                                                         15.f * std::min(Float(frame - 1400) / (2000.0), 1.0),
+                                                         10.f,
+                                                         36.f,
+                                                         10.f,
+                                                         36.f,
+                                                         12.f,
+                                                         rng));
+
+    all_tile_fx.push_back(new HOT_TileEffect_PulsatingAccent(1300,
+                                                             4920,
+                                                             0.1,
+                                                             0.1,
+                                                             0.05,
+                                                             0.4,
+                                                             rng));
+
     for (int i = 0; i < all_tile_fx.size(); ++i)
     {
         if (all_tile_fx[i]->applies_to_top) all_tile_fx[i]->apply_to_tiles(top_tiles, frame);
@@ -499,8 +519,8 @@ void HallOfTiles::initialize_camera(int frame)
                                    1e4f,
                                    10.f,
                                    0.f,
-                                   Vec2i(1920, 1080));
-                                   // Vec2i(256, 144));
+                                   // Vec2i(1920, 1080));
+                                   Vec2i(256, 144));
 
     // Perspective::Params cam_params(Vector3f(0.0 + 0.45 * cos(1.f / 12.f * float(actual_frame)),
     //                                         -0.4 - 0.6 * std::abs(cos(0.04f * float(actual_frame))),
@@ -562,8 +582,8 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    // Independent::Params samp_params(64, 0x12345);
-    Independent::Params samp_params(500000, 0x12345);
+    Independent::Params samp_params(64, 0x12345);
+    // Independent::Params samp_params(500000, 0x12345);
 
     LOG("sampler");
     FeignRenderer::fr_sampler("sampler",
@@ -598,8 +618,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 241;
-    int end_frame = 242;
+    int start_frame = 1700;
+    int end_frame = 2150;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

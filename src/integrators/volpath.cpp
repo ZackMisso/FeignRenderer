@@ -17,9 +17,9 @@ VolPath_Integrator::VolPath_Integrator(FilterNode* filter,
                                        Integrator::Params* params)
     : Integrator(filter, params) { }
 
-void VolPath_Integrator::preProcess()
+void VolPath_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f VolPath_Integrator::Li(const Scene* scene,

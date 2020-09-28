@@ -14,7 +14,7 @@
 
 FEIGN_BEGIN()
 
-void Integrator::preProcess()
+void Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
     if (!filter) LOG("filter node never created");
     if (!filter->filter) LOG("filter object never created");

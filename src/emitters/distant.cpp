@@ -39,6 +39,14 @@ Color3f DistantEmitter::sample_pos(EmitterQuery& rec,
     throw new NotImplementedException("emitter distant sample pos");
 }
 
+Color3f DistantEmitter::sample_ray(EmitterQuery& rec,
+                                   const Point2f& dir_sample,
+                                   const Point2f& point_sample,
+                                   Float* pdf) const
+{
+    throw new NotImplementedException("emitter distant sample ray");
+}
+
 void DistantEmitter::preProcess()
 {
     // throw new NotImplementedException("emitter distant ");

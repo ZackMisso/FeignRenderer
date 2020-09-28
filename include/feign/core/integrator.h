@@ -62,7 +62,8 @@ public:
 
     virtual ~Integrator() { }
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual void render(const Scene* scene,
                         const Camera* camera,
@@ -99,7 +100,8 @@ public:
     Ambient_Occlusion_Integrator(FilterNode* filter,
                                  Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -116,7 +118,8 @@ public:
     Light_Unidirectional_Integrator(FilterNode* filter,
                                     Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -134,7 +137,8 @@ public:
     NormalIntegrator(FilterNode* filter,
                      Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -152,7 +156,8 @@ public:
     NiceNormalIntegrator(FilterNode* filter,
                          Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -169,7 +174,8 @@ public:
     Path_Bidirectional_Integrator(FilterNode* filter,
                                   Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -186,7 +192,8 @@ public:
     Path_Unidirectional_Integrator(FilterNode* filter,
                                    Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -203,7 +210,8 @@ public:
     VolPath_Integrator(FilterNode* filter,
                        Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -221,7 +229,8 @@ public:
     VolPathTrans_Integrator(FilterNode* filter,
                        Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -271,7 +280,8 @@ class PhotonMapping : public Integrator
     PhotonMapping(FilterNode* filter,
                   Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f scatter_photons(const Scene* scene,
                                     Sampler* sampler);
@@ -279,6 +289,17 @@ class PhotonMapping : public Integrator
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
                        const Ray3f& ray) const;
+
+    // virtual void render(const Scene* scene,
+    //                     const Camera* camera,
+    //                     Sampler* sampler,
+    //                     Imagef& image) const;
+    //
+    // // multithreaded implementation
+    // virtual void render_fast(const Scene* scene,
+    //                          const Camera* camera,
+    //                          Sampler* sampler,
+    //                          Imagef& image) const;
 
     // TODO: create an actual acceleration structure to store photons
     PhotonAccel* photons;
@@ -295,7 +316,8 @@ public:
     Sandbox_Integrator(FilterNode* filter,
                        Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -312,7 +334,8 @@ public:
     WhittedIntegrator(FilterNode* filter,
                       Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -354,7 +377,8 @@ public:
     CosineTermIntegrator(FilterNode* filter,
                          Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
@@ -375,7 +399,8 @@ public:
     BarycentricIntegrator(FilterNode* filter,
                           Integrator::Params* params);
 
-    virtual void preProcess();
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,

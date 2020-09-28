@@ -401,70 +401,179 @@ struct HOT_TileEffect_RotationWave : public HOT_TileEffect
     Float end_angle;
 };
 
-// struct HOT_TileEffect_JerkyRotate : public HOT_TileEffect
-// {
-//     HOT_TileEffect_JerkyRotate(int start_frame,
-//                                int end_frame,
-//                                Float min_rotate,
-//                                Float max_ratote)
-//         : HOT_TileEffect(start_frame, end_frame),
-//           min_rotate(min_rotate),
-//           max_rotate(max_rotate)
-//     {
-//         start_z = -50.f;
-//         end_z = 470.f;
-//     }
-//
-//     HOT_TileEffect_RotationWave(int start_frame,
-//                                 int end_frame,
-//                                 Float fall_off_dist,
-//                                 Float start_angle,
-//                                 Float end_angle,
-//                                 bool applies_top,
-//                                 bool applies_bot,
-//                                 bool applies_left,
-//                                 bool applies_right)
-//         : HOT_TileEffect(applies_top,
-//                          applies_bot,
-//                          applies_left,
-//                          applies_right,
-//                          start_frame,
-//                          end_frame),
-//           fall_off_dist(fall_off_dist),
-//           start_angle(start_angle),
-//           end_angle(end_angle)
-//     {
-//         start_z = -50.f;
-//         end_z = 470.f;
-//     }
-//
-//     void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
-//     {
-//         if (!is_active(frame)) return;
-//
-//         Float proxy = Float(frame - start_frame) / Float(end_frame - start_frame);
-//
-//         Float zpos = proxy * end_z + (1.0 - proxy) * start_z;
-//
-//         // TODO: maybe implement different kinds of fall off, currently just using
-//         //       linear falloff
-//         for (int i = 0; i < tiles.size(); ++i)
-//         {
-//             if (tiles[i].base_object_type != MIRROR &&
-//                 tiles[i].base_object_type != HEAD_LIGHT)
-//             {
-//                 Float zdist = (zpos + fall_off_dist) - tiles[i].pos(2);
-//
-//                 zdist = std::min(std::max(zdist / (2.0*fall_off_dist), 0.0), 1.0);
-//
-//                 tiles[i].z_rot = zdist * (end_angle - start_angle) + start_angle;
-//             }
-//         }
-//     }
-//
-//     Float start_z;
-//     Float end_z;
-//     Float fall_off_dist;
-//     Float start_angle;
-//     Float end_angle;
-// };
+struct HOT_TileEffect_JerkyRotate : public HOT_TileEffect
+{
+    HOT_TileEffect_JerkyRotate(int start_frame,
+                               int end_frame,
+                               Float min_rotate,
+                               Float max_rotate,
+                               Float min_min_length,
+                               Float max_min_length,
+                               Float min_max_length,
+                               Float max_max_length,
+                               Float transition_length,
+                               pcg32& rng)
+        : HOT_TileEffect(start_frame, end_frame)
+    {
+        min_rotations = std::vector<Float>();
+        max_rotations = std::vector<Float>();
+        min_lengths = std::vector<Float>();
+        max_lengths = std::vector<Float>();
+        transition_lengths = std::vector<Float>();
+
+        for (int i = 0; i < 400; ++i)
+        {
+            min_rotations.push_back(-rng.nextDouble() * (max_rotate - min_rotate) + min_rotate);
+            max_rotations.push_back(rng.nextDouble() * (max_rotate - min_rotate) + min_rotate);
+            min_lengths.push_back(int(rng.nextDouble() * (max_min_length - min_min_length) + min_min_length));
+            max_lengths.push_back(int(rng.nextDouble() * (max_max_length - min_max_length) + min_max_length));
+            transition_lengths.push_back(transition_length);
+        }
+    }
+
+    // HOT_TileEffect_JerkyRotate(int start_frame,
+    //                            int end_frame,
+    //                            Float fall_off_dist,
+    //                            Float start_angle,
+    //                            Float end_angle,
+    //                            bool applies_top,
+    //                            bool applies_bot,
+    //                            bool applies_left,
+    //                            bool applies_right)
+    //     : HOT_TileEffect(applies_top,
+    //                      applies_bot,
+    //                      applies_left,
+    //                      applies_right,
+    //                      start_frame,
+    //                      end_frame),
+    //       fall_off_dist(fall_off_dist),
+    //       start_angle(start_angle),
+    //       end_angle(end_angle)
+    // {
+    //     start_z = -50.f;
+    //     end_z = 470.f;
+    // }
+
+    int get_stage(int frame, int index, Float& proxy) const
+    {
+        // returns 0 - if min,
+        //         1 - if max,
+        //         2 - transitioning from min to max,
+        //         3 - transitioning from max to min
+
+        int base_frame = frame;
+
+        while (base_frame > 0)
+        {
+            base_frame -= min_lengths[index];
+            if (base_frame < 0) return 0;
+            base_frame -= transition_lengths[index];
+            if (base_frame < 0)
+            {
+                int val = base_frame + transition_lengths[index];
+                proxy = Float(val) / Float(transition_lengths[index]);
+                return 2;
+            }
+            base_frame -= max_lengths[index];
+            if (base_frame < 0) return 1;
+            base_frame -= transition_lengths[index];
+            if (base_frame < 0)
+            {
+                int val = base_frame + transition_lengths[index];
+                proxy = Float(val) / Float(transition_lengths[index]);
+                return 3;
+            }
+        }
+    }
+
+    void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
+    {
+        if (!is_active(frame)) return;
+
+        for (int i = 0; i < tiles.size(); ++i)
+        {
+            int index = std::floor(tiles[i].pos[2]);
+            if (index < 0) index = 0;
+            if (index > 399) index = 399;
+
+            Float proxy = 0.0;
+            int stage = get_stage(frame, index, proxy);
+
+            if (stage == 0)
+            {
+                tiles[i].z_rot = min_rotations[index];
+            }
+            if (stage == 1)
+            {
+                tiles[i].z_rot = max_rotations[index];
+            }
+            if (stage == 2)
+            {
+                tiles[i].z_rot = (1.0 - proxy) * min_rotations[index] +
+                                 proxy * max_rotations[index];
+            }
+            if (stage == 3)
+            {
+                tiles[i].z_rot = (1.0 - proxy) * max_rotations[index] +
+                                 proxy * min_rotations[index];
+            }
+        }
+    }
+
+    std::vector<Float> min_rotations;
+    std::vector<Float> max_rotations;
+    std::vector<Float> min_lengths;
+    std::vector<Float> max_lengths;
+    std::vector<Float> transition_lengths;
+};
+
+struct HOT_TileEffect_PulsatingAccent : public HOT_TileEffect
+{
+    HOT_TileEffect_PulsatingAccent(int start_frame,
+                                   int end_frame,
+                                   Float base_scale,
+                                   Float scale_var,
+                                   Float min_freq,
+                                   Float max_freq,
+                                   pcg32& rng)
+        : HOT_TileEffect(start_frame, end_frame),
+          base_scale(base_scale),
+          scale_var(scale_var)
+    {
+        frequencies = std::vector<Float>();
+
+        for (int i = 0; i < 400; ++i)
+        {
+            Float freq = rng.nextDouble() * (max_freq - min_freq) + min_freq;
+
+            frequencies.push_back(freq);
+        }
+    }
+
+    void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
+    {
+        if (!is_active(frame)) return;
+
+        for (int i = 0; i < tiles.size(); ++i)
+        {
+            int loc = std::floor(tiles[i].pos[2]);
+
+            if (loc < 0) loc = 0;
+            if (loc > 399) loc = 399;
+
+            Float freq = frequencies[loc];
+
+            Float scale = base_scale + scale_var * cos(freq * (frame - start_frame));
+
+            if (tiles[i].base_object_type != MIRROR &&
+                tiles[i].base_object_type != HEAD_LIGHT)
+            {
+                tiles[i].light_scale = scale;
+            }
+        }
+    }
+
+    std::vector<Float> frequencies;
+    Float base_scale;
+    Float scale_var;
+};

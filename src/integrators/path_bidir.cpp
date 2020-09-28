@@ -17,9 +17,9 @@ Path_Bidirectional_Integrator::Path_Bidirectional_Integrator(FilterNode* filter,
     throw new NotImplementedException("path bidir constructor");
 }
 
-void Path_Bidirectional_Integrator::preProcess()
+void Path_Bidirectional_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 
     throw new NotImplementedException("path bidir preProcess");
 }

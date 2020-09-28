@@ -19,9 +19,10 @@ Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode* filter,
     // does nothing
 }
 
-void Ambient_Occlusion_Integrator::preProcess()
+void Ambient_Occlusion_Integrator::preProcess(const Scene* scene,
+                                              Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,

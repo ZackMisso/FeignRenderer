@@ -15,9 +15,9 @@ WhittedIntegrator::WhittedIntegrator(FilterNode* filter, Integrator::Params* par
 {
 }
 
-void WhittedIntegrator::preProcess()
+void WhittedIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 // TODO: create a volumetric version of a direct integrator

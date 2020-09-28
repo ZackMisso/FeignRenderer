@@ -24,9 +24,13 @@ PhotonMapping::PhotonMapping(FilterNode* filter,
     : Integrator(filter, params),
       num_photons(params->num_photons) { }
 
-void PhotonMapping::preProcess()
+// Integrator pre-processing now has to happen last
+void PhotonMapping::preProcess(const Scene* scene,
+                               Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
+
+    scatter_photons(scene, sampler);
 }
 
 // TODO: maybe add a way to cache all of the photon data to a file?
@@ -43,26 +47,32 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
     // loop until we have filled our photon quota
     while (created_photons < num_photons)
     {
+        // predefine this so it does not have to get recreated every loop
+        MaterialClosure closure = MaterialClosure(sampler,
+                                                  scene,
+                                                  false,
+                                                  true);
+
         // sample a light source uniformly
         int index = int(sampler->next1D() * float(scene->emitters.size()));
         float emitter_pdf = 1.f / float(scene->emitters.size());
         Emitter* emitter = scene->emitters[index];
 
         // sample the initial location and direction
-        // EmitterQuery eqr;
-        float query_pdf = 0.f;
-        // Color3f power = emitter->sample_li(eqr, sampler->next2D(), query_pdf);
-        Color3f power = Color3f(0.f); // TODO: fix all this
+        EmitterQuery eqr;
+        Float query_pdf = 0.f;
+        Color3f power = emitter->sample_li(eqr, sampler->next2D(), &query_pdf);
+        // Color3f power = Color3f(0.f); // TODO: fix all this
         emitter_pdf *= query_pdf;
 
         // create an initial photon
-        // Photon current_photon = Photon(eqr.p, eqr.dir, power);
+        Photon current_photon = Photon(eqr.p, eqr.wi, power);
 
         // create the initial ray
-        // Ray3f ray = Ray3f(current_photon.pos,
-        //                   current_photon.dir,
-        //                   Epsilon,
-        //                   10000000.0); // TODO: replace with actual floating max
+        Ray3f ray = Ray3f(current_photon.pos,
+                          current_photon.dir,
+                          Epsilon,
+                          10000000.0); // TODO: replace with actual floating max
 
         // loop for some maximum bounce count
         bool not_terminated = true;
@@ -71,10 +81,10 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
             // detect hit
             Intersection its;
 
-            // if (!scene->intersect_non_null(ray, its))
-            // {
-            //     break;
-            // }
+            if (!scene->intersect_non_null(ray, its))
+            {
+                break;
+            }
 
             // evaluate shader / colliding location
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
@@ -89,10 +99,13 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
             //
             // // evaluate the material shader
             // shader->evaluate(closure);
-            // shader->evaluate_for_photon(closure);
+            shader->evaluate_for_photon(closure);
 
             // potentially store photon in map
-
+            if (!closure.is_specular)
+            {
+                // decide whether or not to store photon
+            }
 
             // scatter
 
@@ -111,5 +124,31 @@ Color3f PhotonMapping::Li(const Scene* scene,
 
     Color3f(0.f);
 }
+
+// void PhotonMapping::render(const Scene* scene,
+//                            const Camera* camera,
+//                            Sampler* sampler,
+//                            Imagef& image) const
+// {
+//     // scatter_photons(scene, sampler);
+//
+//     Integrator::render(scene,
+//                        camera,
+//                        sampler,
+//                        image);
+// }
+//
+// void PhotonMapping::render_fast(const Scene* scene,
+//                                 const Camera* camera,
+//                                 Sampler* sampler,
+//                                 Imagef& image) const
+// {
+//     // scatter_photons(scene, sampler);
+//
+//     Integrator::render(scene,
+//                        camera,
+//                        sampler,
+//                        image);
+// }
 
 FEIGN_END()

@@ -83,8 +83,8 @@ void Scene::preProcess(const GlobalParams& globals)
     ray_accel->build();
     light_selection->build(sceneBounds, emitters);
 
-    integrator_node->integrator->preProcess();
     camera_node->camera->preProcess();
+    // integrator pre-processing is done pre-rendering
 
     // TODO: should this double check be necessary?
     if (env_medium_node && env_medium_node->media)
@@ -139,6 +139,9 @@ void Scene::renderScene() const
         image = new Imagef(camera->getFilmSize()[0],
                            camera->getFilmSize()[1]);
     }
+
+    // perform preprocessing if the integrator requires it. i.e. scatter photons
+    integrator->preProcess(this, sampler);
 
     #if GOTTAGOFAST
         integrator->render_fast(this,

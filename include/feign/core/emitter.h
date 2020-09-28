@@ -31,7 +31,11 @@ struct EmitterQuery
     // int prim_index;
     // int em_index;
 
+    // this constructor is used for when the emitter is being quaried from a point
     EmitterQuery(const Vector3f& p) : p(p) { }
+
+    // this constructor is used for light tracing / photon mapping
+    EmitterQuery() { }
 };
 /////////////////////////////////////////////////
 
@@ -43,6 +47,11 @@ class Emitter
 public:
     Emitter() { }
     virtual ~Emitter() { }
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const = 0;
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -72,6 +81,11 @@ class DistantEmitter : public Emitter
 {
 public:
     DistantEmitter();
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -108,6 +122,11 @@ public:
     };
 
     DirectionalEmitter(Vector3f light_dir, Color3f radiance);
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -156,6 +175,11 @@ public:
                      Color3f radiance,
                      Float light_angle);
 
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
+
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
                               Float* pdf) const;
@@ -195,6 +219,11 @@ public:
     PointEmitter();
     PointEmitter(Color3f I,
                  Point3f pos);
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -238,6 +267,11 @@ public:
     InterpEnvironmentEmitter(Color3f top,
                              Color3f bot);
 
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
+
     // environment emitters should not be sampled
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
@@ -275,6 +309,11 @@ public:
     MeshEmitter(Color3f intensity);
     ~MeshEmitter();
 
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
+
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,
                               Float* pdf) const;
@@ -306,6 +345,11 @@ class EnvironmentEmitter : public Emitter
 {
 public:
     EnvironmentEmitter();
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
 
     virtual Color3f sample_li(EmitterQuery& rec,
                               const Point2f& sample,

@@ -17,9 +17,10 @@ Light_Unidirectional_Integrator::Light_Unidirectional_Integrator(FilterNode* fil
     throw new NotImplementedException("light unidir constructor");
 }
 
-void Light_Unidirectional_Integrator::preProcess()
+void Light_Unidirectional_Integrator::preProcess(const Scene* scene,
+                                                 Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 
     throw new NotImplementedException("light unidir preProcess");
 }

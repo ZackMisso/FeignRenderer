@@ -84,6 +84,14 @@ Color3f MeshEmitter::sample_pos(EmitterQuery& rec,
     return Color3f(0.f);
 }
 
+Color3f MeshEmitter::sample_ray(EmitterQuery& rec,
+                                const Point2f& dir_sample,
+                                const Point2f& point_sample,
+                                Float* pdf) const
+{
+    throw new NotImplementedException("mesh emitter sample ray");
+}
+
 Color3f MeshEmitter::evaluate(EmitterQuery& rec) const
 {
     if (-rec.wi[2] < Epsilon) return Color3f(0.f);

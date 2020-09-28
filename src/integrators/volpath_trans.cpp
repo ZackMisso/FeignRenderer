@@ -17,9 +17,9 @@ VolPathTrans_Integrator::VolPathTrans_Integrator(FilterNode* filter,
                                                  Integrator::Params* params)
     : Integrator(filter, params) { }
 
-void VolPathTrans_Integrator::preProcess()
+void VolPathTrans_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 // this integrator assumes that the medium being used is bounded

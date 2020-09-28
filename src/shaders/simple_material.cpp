@@ -89,8 +89,33 @@ void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
 
 void SimpleMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
 {
-    // TODO
-    throw new NotImplementedException("simple material shader evaluate photon");
+    #if CLOCKING
+        Clocker::startClock("shader eval");
+    #endif
+
+    closure.is_specular = (*material)()->isDelta();
+    closure.last_spec = closure.is_specular;
+    closure.material_accepts_shadows = false;
+
+    // if (closure.is_specular)
+    // {
+    //     closure.last_spec = closure.is_specular;
+    //
+    //     #if CLOCKING
+    //         Clocker::endClock("shader eval");
+    //     #endif
+    //
+    //     return;
+    // }
+    //
+    // closure.last_spec = closure.is_specular;
+    //
+    // // is this necessary here?
+    // closure.material_accepts_shadows = true;
+
+    #if CLOCKING
+        Clocker::endClock("shader eval");
+    #endif
 }
 
 FEIGN_END()

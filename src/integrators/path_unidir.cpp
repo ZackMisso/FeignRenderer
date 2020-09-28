@@ -15,9 +15,9 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode* filte
                                                                Integrator::Params* params)
     : Integrator(filter, params) { }
 
-void Path_Unidirectional_Integrator::preProcess()
+void Path_Unidirectional_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,

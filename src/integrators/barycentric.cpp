@@ -22,9 +22,9 @@ BarycentricIntegrator::BarycentricIntegrator(FilterNode* filter,
 {
 }
 
-void BarycentricIntegrator::preProcess()
+void BarycentricIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 {
-    Integrator::preProcess();
+    Integrator::preProcess(scene, sampler);
 }
 
 Color3f BarycentricIntegrator::Li(const Scene* scene,
