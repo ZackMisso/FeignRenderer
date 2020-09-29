@@ -48,6 +48,10 @@ void Scene::preProcess(const GlobalParams& globals)
 {
     sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
 
+    #if VERBOSE
+        LOG("preprocessing ray accel");
+    #endif
+
     if (!ray_accel)
     {
         if (globals.sdf_only)
@@ -61,10 +65,19 @@ void Scene::preProcess(const GlobalParams& globals)
 
         ray_accel->preProcess();
     }
+
+    #if VERBOSE
+        LOG("preprocessing light selection");
+    #endif
+
     if (!light_selection)
     {
         light_selection = new NaiveLightAccel();
     }
+
+    #if VERBOSE
+        LOG("adding shapes");
+    #endif
 
     for (int i = 0; i < shapes.size(); ++i)
     {
@@ -80,15 +93,31 @@ void Scene::preProcess(const GlobalParams& globals)
         sceneBounds.expand(shapes[i]->boundingBox());
     }
 
+    #if VERBOSE
+        LOG("building accels");
+    #endif
+
     ray_accel->build();
     light_selection->build(sceneBounds, emitters);
+
+    #if VERBOSE
+        LOG("preprocessing cameras");
+    #endif
 
     camera_node->camera->preProcess();
     // integrator pre-processing is done pre-rendering
 
+    #if VERBOSE
+        LOG("preprocessing env media");
+    #endif
+
     // TODO: should this double check be necessary?
     if (env_medium_node && env_medium_node->media)
         env_medium_node->media->preProcess();
+
+    #if VERBOSE
+        LOG("preprocessing object emitters");
+    #endif
 
     // TODO: is this really the best place to handle this?
     for (int i = 0; i < objects.size(); ++i)
@@ -102,10 +131,18 @@ void Scene::preProcess(const GlobalParams& globals)
         }
     }
 
+    #if VERBOSE
+        LOG("preprocessing mediums");
+    #endif
+
     for (int i = 0; i < mediums.size(); ++i)
     {
         mediums[i]->preProcess();
     }
+
+    #if VERBOSE
+        LOG("finished preprocessing scene");
+    #endif
 }
 
 void Scene::renderScene() const

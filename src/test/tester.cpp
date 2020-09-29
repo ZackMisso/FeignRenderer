@@ -38,6 +38,7 @@ bool UnitTestManager::run_test(int index)
 {
     std::string path = "test_" + zero_padded_num(index) + ".json";
     UnitTestData testLog = UnitTestData(path);
+    LOG("evaluating test: " + path);
 
     if (reference_run)
     {

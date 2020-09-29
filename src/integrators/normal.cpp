@@ -28,6 +28,8 @@ Color3f NormalIntegrator::Li(const Scene* scene,
 {
     Intersection its;
 
+    LOG("what");
+
     if (!scene->intersect_non_null(ray, its))
     {
         return Color3f(0.f);

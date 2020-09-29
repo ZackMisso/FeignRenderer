@@ -217,9 +217,10 @@ EmitterNode* FeignRenderer::find_emitter(std::string name)
 
 MediaNode* FeignRenderer::find_media(std::string name)
 {
+    LOG("Finding MEDIUM: " + name);
     std::unordered_map<std::string, MediaNode*>::const_iterator itr = medias.find(name);
 
-    if (name == "null")
+    if (name == "null" || name == "default")
     {
         return nullptr;
     }
@@ -1337,6 +1338,8 @@ void FeignRenderer::flush_renders()
     // first preprocess all meshes
     unsigned int inst_index = 0;
 
+    LOG("pre processing meshes");
+
     for (auto it : getInstance()->objects)
     {
         Shape* mesh = it.second->mesh->mesh;
@@ -1356,6 +1359,8 @@ void FeignRenderer::flush_renders()
         inst_index++;
     }
 
+    LOG("pre processing emitters");
+
     // TODO: set this up in a more efficient way
     for (auto it : getInstance()->emitters)
     {
@@ -1365,15 +1370,20 @@ void FeignRenderer::flush_renders()
         }
     }
 
+    LOG("pre processing media");
+
     global_params.name = "blah";
 
     for (auto it : getInstance()->medias)
     {
+        LOG("MEDIUM");
         if (it.first != "null")
         {
             scene_obj->addMedium(it.second->media);
         }
     }
+
+    LOG("preprocessing scene");
 
     // preprocess the scene
     scene_obj->preProcess(global_params);

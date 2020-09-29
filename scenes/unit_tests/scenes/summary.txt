@@ -2,6 +2,18 @@ Until the proper infrastructure is implemented, this document will
 serve as the summary of what features each unit test is supposed to
 cover
 
+For reference below is a list of sphere tracing related tests
+
+test_021
+test_022
+test_023
+test_024
+test_025
+test_026
+test_027
+
+List and summary of tests:
+
 test_000
 
 tests the normal integrator, and loading of triangle meshes
@@ -135,4 +147,4 @@ cone object
 
 test_028
 
-This scene tests rendering a homogeneous fully absorbing sphere medium 
+This scene tests rendering a homogeneous fully absorbing sphere medium

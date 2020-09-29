@@ -450,10 +450,10 @@ void HallOfTiles::initialize_hallway(int frame)
     }
 
     // need to add all of the random tile effects after creating the tiles
-    all_tile_fx.push_back(new HOT_TileEffect_JerkyRotate(1400,
+    all_tile_fx.push_back(new HOT_TileEffect_JerkyRotate(2400,
                                                          4920,
                                                          0.f,
-                                                         15.f * std::min(Float(frame - 1400) / (2000.0), 1.0),
+                                                         15.f * std::min(Float(frame - 2400) / (2000.0), 1.0),
                                                          10.f,
                                                          36.f,
                                                          10.f,
@@ -464,10 +464,66 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_PulsatingAccent(1300,
                                                              4920,
                                                              0.1,
-                                                             0.1,
+                                                             0.1 * std::min(Float(frame - 1300) / (200.0), 1.0),
                                                              0.05,
                                                              0.4,
                                                              rng));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430, 1480, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430+12, 1480+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430+12*2, 1480+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430+12*3, 1480+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430+12*3 + 6, 1480+12*3 + 6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1430+12*4, 1480+12*4, 9.f,
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490, 1540, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490+12, 1540+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490+12*2, 1540+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490+12*3, 1540+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490+12*3 + 6, 1540+12*3 + 6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1490+12*4, 1540+12*4, 9.f,
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550, 1600, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12, 1600+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*2, 1600+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3, 1600+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3 + 6, 1600+12*3 + 6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1600+12*4, 9.f,
+                                                             true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610, 1660, 9.f,
+                                                             false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12, 1660+12, 9.f,
+                                                             false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*2, 1660+12*2, 9.f,
+                                                             true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3, 1660+12*3, 9.f,
+                                                             false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3 + 6, 1660+12*3 + 6, 9.f,
+                                                             false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1660+12*4, 9.f,
+                                                             true, true, false, false));
 
     for (int i = 0; i < all_tile_fx.size(); ++i)
     {
@@ -506,13 +562,29 @@ void HallOfTiles::initialize_camera(int frame)
     // for the first 40 seconds, the camera should remain completely still
     int initial_still_time = 30 * 24;
     int actual_frame = std::max(frame - initial_still_time, 0);
+    Float look_angle = 0.0;
+
+    if (frame >= 1800 && frame < 1900)
+    {
+        look_angle = 75.f * Float(frame - 1800) / 100.0;
+    }
+    else if (frame >= 1900 && frame < 2300)
+    {
+        look_angle = 75.f;
+    }
+    else if (frame >= 2300 && frame < 2400)
+    {
+        look_angle = 75.f * (1.0 - Float(frame - 2300) / 100.0);
+    }
+
+    look_angle *= M_PI / 180.0;
 
     Perspective::Params cam_params(Vector3f(0.0,
                                             -0.4,
                                             0.0 + 0.1 * float(actual_frame)),
-                                   Vector3f(0.0,
+                                   Vector3f(1.0 * sin(look_angle),
                                             -0.4,
-                                            1.0 + 0.1 * float(actual_frame)),
+                                            1.0 * cos(look_angle) + 0.1 * float(actual_frame)),
                                    Vector3f(0, 1, 0),
                                    50.f,
                                    1e-4f,
@@ -618,8 +690,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 1700;
-    int end_frame = 2150;
+    int start_frame = 2300;
+    int end_frame = 2800;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

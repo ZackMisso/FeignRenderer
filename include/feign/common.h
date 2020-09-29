@@ -43,8 +43,9 @@
 
 // TODO: make this a stats parameter in the future
 // whether or not to use multithreading
-#define GOTTAGOFAST true
+#define GOTTAGOFAST false
 #define OPENVDB true
+#define VERBOSE false
 
 #define Epsilon 1e-4f
 #define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
