@@ -1,0 +1,169 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "sdf_mode": true
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "path",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -60,
+            80.0,
+            24.3583,
+            5.0,
+            10.0,
+            5.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "material": "diffuse_material"
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "sdf_sphere",
+        "center": [
+            0.0,
+            10.0,
+            0.0
+        ],
+        "radius": 10.0,
+        "interp": 0.0
+    },
+    "mesh": {
+        "name": "cube_obj",
+        "type": "sdf_box",
+        "tlc": [
+            20.0,
+            20.0,
+            20.0
+        ],
+        "brc": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "interp": 0.0
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "object": {
+        "name": "cube",
+        "mesh": "cube_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            5.0,
+            10.0,
+            0.0
+        ]
+    },
+    "mesh": {
+        "name": "plane_obj",
+        "type": "sdf_plane",
+        "center": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "normal": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "interp": 0.0
+    },
+    "object": {
+        "name": "plane",
+        "mesh": "plane_obj",
+        "material_shader": "simple_shader"
+    },
+    "material": {
+        "name": "diffuse_material",
+        "type": "simple",
+        "bsdf": "diffuse_bsdf"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse",
+        "albedo": [
+            0.8,
+            0.3,
+            0.2
+        ]
+    },
+    "material": {
+        "name": "floor_material",
+        "type": "simple",
+        "bsdf": "floor_bsdf"
+    },
+    "bsdf": {
+        "name": "floor_bsdf",
+        "type": "diffuse"
+    },
+    "emitter": {
+        "name": "point_emitter",
+        "type": "point",
+        "intensity": [
+            40000.0,
+            30000.0,
+            20000.0
+        ],
+        "position": [
+            -80,
+            80,
+            -10
+        ]
+    },
+    "emitter": {
+        "name": "point_emitter2",
+        "type": "point",
+        "intensity": [
+            22500.0,
+            30000.0,
+            37500.0
+        ],
+        "position": [
+            -20,
+            40,
+            20
+        ]
+    }
+}

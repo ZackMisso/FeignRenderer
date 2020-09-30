@@ -148,3 +148,18 @@ cone object
 test_028
 
 This scene tests rendering a homogeneous fully absorbing sphere medium
+
+test_029
+
+This scene tests rendering the union of a cube and sphere sdf using the same
+materials
+
+test_030
+
+This scene tests rendering the difference between a cube and sphere sdf using
+the same materials
+
+test_031
+
+This scene tests rendering the smooth union between a cube and a sphere sdf
+using the same materials
