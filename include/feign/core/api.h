@@ -24,6 +24,7 @@
 #include <feign/core/scene.h>
 #include <feign/core/shader.h>
 #include <feign/core/texture.h>
+#include <feign/core/sdf.h>
 #include <unordered_map>
 
 FEIGN_BEGIN()

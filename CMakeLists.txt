@@ -123,6 +123,7 @@ add_executable(feign
     include/feign/core/sampler.h
     include/feign/core/material.h
     include/feign/core/shape.h
+    include/feign/core/sdf.h
     include/feign/core/shader.h
     include/feign/core/texture.h
 

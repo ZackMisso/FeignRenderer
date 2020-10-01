@@ -10,6 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/core/shape.h>
+#include <feign/core/sdf.h>
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
 

@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/core/shape.h>
+#include <feign/core/sdf.h>
 
 FEIGN_BEGIN()
 

@@ -520,10 +520,19 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3, 1660+12*3, 9.f,
                                                              false, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3 + 6, 1660+12*3 + 6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3 + 6, 1660+12*3 + 6, 9.f,
                                                              false, false, true, true));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1660+12*4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*4, 1660+12*4, 9.f,
                                                              true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000, 3050, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3050, 3100, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3100, 3150, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3150, 3200, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3200, 3250, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3250, 3300, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3300, 3350, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3350, 3400, 0.8f));
 
     for (int i = 0; i < all_tile_fx.size(); ++i)
     {
@@ -575,6 +584,14 @@ void HallOfTiles::initialize_camera(int frame)
     else if (frame >= 2300 && frame < 2400)
     {
         look_angle = 75.f * (1.0 - Float(frame - 2300) / 100.0);
+    }
+    else if (frame >= 2800 && frame < 3000)
+    {
+        look_angle = -180.f * (1.0 - Float(frame - 2800) / 200.0);
+    }
+    else if (frame >= 3000)
+    {
+        look_angle = -180.f;
     }
 
     look_angle *= M_PI / 180.0;
@@ -690,8 +707,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 2300;
-    int end_frame = 2800;
+    int start_frame = 3000;
+    int end_frame = 3500;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

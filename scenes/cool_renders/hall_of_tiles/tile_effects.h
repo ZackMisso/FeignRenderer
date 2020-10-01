@@ -577,3 +577,47 @@ struct HOT_TileEffect_PulsatingAccent : public HOT_TileEffect
     Float base_scale;
     Float scale_var;
 };
+
+struct HOT_TileEffect_SectionBeam : public HOT_TileEffect
+{
+    HOT_TileEffect_SectionBeam(int start_frame,
+                               int end_frame,
+                               Float value)
+        : HOT_TileEffect(start_frame, end_frame),
+          value(value)
+    {
+        start_z = 0.f;
+        end_z = 400.f;
+    }
+
+    void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
+    {
+        if (!is_active(frame)) return;
+
+        Float proxy = Float(frame - start_frame) / Float(end_frame - start_frame);
+        Float zpos = proxy * (end_z - start_z) + start_z;
+        int index = std::floor(zpos / 80.f);
+
+        if (index >= 0 || index <= 7)
+        {
+            for (int i = 0; i < tiles.size(); ++i)
+            {
+                if (tiles[i].base_object_type != MIRROR &&
+                    tiles[i].base_object_type != HEAD_LIGHT)
+                {
+                    int tile_index = std::floor(tiles[i].pos(2) / 80.f);
+
+                    if (tile_index == index)
+                    {
+                        tiles[i].override_object_type = ACCENT_LIGHT;
+                        tiles[i].light_scale = std::max(tiles[i].light_scale, value);
+                    }
+                }
+            }
+        }
+    }
+
+    Float value;
+    Float start_z;
+    Float end_z;
+};
