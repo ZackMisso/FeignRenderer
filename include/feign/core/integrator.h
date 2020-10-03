@@ -283,8 +283,8 @@ class PhotonMapping : public Integrator
     virtual void preProcess(const Scene* scene,
                             Sampler* sampler);
 
-    virtual Color3f scatter_photons(const Scene* scene,
-                                    Sampler* sampler);
+    virtual void scatter_photons(const Scene* scene,
+                                 Sampler* sampler);
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,

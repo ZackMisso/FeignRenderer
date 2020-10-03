@@ -59,8 +59,13 @@ public:
     // const Media* getShapeMedium(consst Intersection& its) const;
 
     void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
-    void eval_one_emitter(MaterialClosure& closur, bool in_mediae = false) const;
+    void eval_one_emitter(MaterialClosure& closur, bool in_media = false) const;
     void accumulate_emission(MaterialClosure& closure) const;
+
+    // choosing an emitter given a specific intersection location
+    Emitter* choose_emitter(MaterialClosure& closure, Float* pdf) const;
+    // choosing a uniformly random emitter
+    Emitter* choose_emitter(Sampler* sampler, Float* pdf) const;
 
     // TODO: should these really be public...
 public:

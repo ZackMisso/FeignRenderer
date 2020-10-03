@@ -41,9 +41,9 @@ void MeshEmitter::preProcess()
     sa_pdf->normalize();
 }
 
-Color3f MeshEmitter::sample_li(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const
+Color3f MeshEmitter::sample_nee(EmitterQuery& rec,
+                                const Point2f& sample,
+                                Float* pdf) const
 {
     Point2f uv_samp = sample;
     int primitive_index = sa_pdf->sample_reuse(uv_samp[0], *pdf);
@@ -73,9 +73,9 @@ Color3f MeshEmitter::sample_li(EmitterQuery& rec,
     return intensity;
 }
 
-Color3f MeshEmitter::sample_pos(EmitterQuery& rec,
-                                const Point2f& sample,
-                                Float* pdf) const
+Color3f MeshEmitter::sample_medium(EmitterQuery& rec,
+                                   const Point2f& sample,
+                                   Float* pdf) const
 {
     // NOTE: this should never be called. This type of sampling is only used for
     //       point lights and spot lights

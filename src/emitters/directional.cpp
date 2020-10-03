@@ -16,9 +16,9 @@ DirectionalEmitter::DirectionalEmitter(Vector3f light_dir, Color3f radiance)
     light_dir = light_dir.normalized();
 }
 
-Color3f DirectionalEmitter::sample_li(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const
+Color3f DirectionalEmitter::sample_nee(EmitterQuery& rec,
+                                       const Point2f& sample,
+                                       Float* pdf) const
 {
     rec.wi = light_dir;
     if (pdf) *pdf = 1.0;
@@ -28,7 +28,7 @@ Color3f DirectionalEmitter::sample_li(EmitterQuery& rec,
     return radiance;
 }
 
-Color3f DirectionalEmitter::sample_pos(EmitterQuery& rec,
+Color3f DirectionalEmitter::sample_medium(EmitterQuery& rec,
                                    const Point2f& sample,
                                    Float* pdf) const
 {

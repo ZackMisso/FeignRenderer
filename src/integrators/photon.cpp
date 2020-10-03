@@ -37,8 +37,8 @@ void PhotonMapping::preProcess(const Scene* scene,
 // TODO: created a binary representation of all of the photon data instead of
 //       ascii
 
-Color3f PhotonMapping::scatter_photons(const Scene* scene,
-                                       Sampler* sampler)
+void PhotonMapping::scatter_photons(const Scene* scene,
+                                    Sampler* sampler)
 {
     // create initial list of photons
     Photon* photons = new Photon[num_photons]();
@@ -54,16 +54,18 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
                                                   true);
 
         // sample a light source uniformly
-        int index = int(sampler->next1D() * float(scene->emitters.size()));
-        float emitter_pdf = 1.f / float(scene->emitters.size());
-        Emitter* emitter = scene->emitters[index];
+        Float emitter_pdf = 1.f;
+        Emitter* emitter = scene->choose_emitter(sampler, &emitter_pdf);
 
         // sample the initial location and direction
         EmitterQuery eqr;
         Float query_pdf = 0.f;
-        Color3f power = emitter->sample_li(eqr, sampler->next2D(), &query_pdf);
-        // Color3f power = Color3f(0.f); // TODO: fix all this
+        Color3f power = emitter->sample_ray(eqr,
+                                            sampler->next2D(),
+                                            sampler->next2D(),
+                                            &query_pdf);
         emitter_pdf *= query_pdf;
+        power /= emitter_pdf;
 
         // create an initial photon
         Photon current_photon = Photon(eqr.p, eqr.wi, power);
@@ -104,16 +106,18 @@ Color3f PhotonMapping::scatter_photons(const Scene* scene,
             // potentially store photon in map
             if (!closure.is_specular)
             {
-                // decide whether or not to store photon
+                // store photon
+                photons[created_photons] = Photon(its.p,
+                                                  ray.dir,
+                                                  power);
             }
 
-            // scatter
-
+            // sample BSDF
+            // update power
+            // prepare to go to the next iteration
             // apply russian roulette termination
         }
-    }
-
-    return Color3f(0.f);
+    
 }
 
 Color3f PhotonMapping::Li(const Scene* scene,
@@ -124,31 +128,5 @@ Color3f PhotonMapping::Li(const Scene* scene,
 
     Color3f(0.f);
 }
-
-// void PhotonMapping::render(const Scene* scene,
-//                            const Camera* camera,
-//                            Sampler* sampler,
-//                            Imagef& image) const
-// {
-//     // scatter_photons(scene, sampler);
-//
-//     Integrator::render(scene,
-//                        camera,
-//                        sampler,
-//                        image);
-// }
-//
-// void PhotonMapping::render_fast(const Scene* scene,
-//                                 const Camera* camera,
-//                                 Sampler* sampler,
-//                                 Imagef& image) const
-// {
-//     // scatter_photons(scene, sampler);
-//
-//     Integrator::render(scene,
-//                        camera,
-//                        sampler,
-//                        image);
-// }
 
 FEIGN_END()

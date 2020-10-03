@@ -381,9 +381,9 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
     {
         EmitterQuery eqr(closure.its->p);
         Float emitter_pdf = 0.f;
-        Color3f Li = emitters[i]->sample_li(eqr,
-                                            closure.sampler->next2D(),
-                                            &emitter_pdf);
+        Color3f Li = emitters[i]->sample_nee(eqr,
+                                             closure.sampler->next2D(),
+                                             &emitter_pdf);
 
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,
@@ -428,19 +428,22 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(1);
 
-    Float choice_pdf;
-    int emitter;
+    Float choice_pdf = 0.f;
+    Emitter* emitter = choose_emitter(closure, &choice_pdf);
 
-    light_selection->sampleEmitter(closure.its->p,
-                                   closure.sampler,
-                                   emitter,
-                                   choice_pdf);
+    // Float choice_pdf;
+    // int emitter;
+    //
+    // light_selection->sampleEmitter(closure.its->p,
+    //                                closure.sampler,
+    //                                emitter,
+    //                                choice_pdf);
 
     EmitterQuery eqr(closure.its->p);
     Float emitter_pdf = 0.f;
-    Color3f Li = emitters[emitter]->sample_li(eqr,
-                                              closure.sampler->next2D(),
-                                              &emitter_pdf);
+    Color3f Li = emitter->sample_nee(eqr,
+                                     closure.sampler->next2D(),
+                                     &emitter_pdf);
 
     Ray3f shadow_ray = Ray3f(closure.its->p,
                              eqr.wi,
@@ -481,6 +484,31 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
 
         // Note: bsdf_values are fully accumulated later
     }
+}
+
+Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
+{
+    Float choice_pdf;
+    int emitter;
+
+    light_selection->sampleEmitter(closure.its->p,
+                                   closure.sampler,
+                                   emitter,
+                                   choice_pdf);
+
+    *pdf = choice_pdf;
+    return emitters[emitter];
+}
+
+// uniformly returns an emitter (used for light tracing / photon mapping)
+Emitter* Scene::choose_emitter(Sampler* sampler, Float* pdf) const
+{
+    Float val = sampler->next1D();
+
+    int emitter = int(val * emitters.size());
+    *pdf = 1.0 / Float(emitters.size());
+
+    return emitters[emitter];
 }
 
 void Scene::accumulate_emission(MaterialClosure& closure) const

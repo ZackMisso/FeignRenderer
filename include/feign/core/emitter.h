@@ -48,19 +48,25 @@ public:
     Emitter() { }
     virtual ~Emitter() { }
 
+    // samples a ray starting from the emitter (for light tracing / photon mapping)
     virtual Color3f sample_ray(EmitterQuery& rec,
                                const Point2f& dir_sample,
                                const Point2f& point_sample,
                                Float* pdf) const = 0;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const = 0;
+    // will eventually be used for euiangular sampling along paths through a medium
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const = 0;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    // samples a position on the light source for next event estimation
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const = 0;
 
+    // TODO: is this ever used? Will also have to rethink how to organize this
+    //       since the emitterquery will now be slightly different depending
+    //       on if the ray is going from the camera->emitter or emitter->camera.
     virtual Color3f evaluate(EmitterQuery& rec) const = 0;
 
     virtual bool isSpatial() const = 0;
@@ -87,11 +93,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -128,11 +134,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -180,11 +186,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -225,11 +231,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -273,11 +279,11 @@ public:
                                Float* pdf) const;
 
     // environment emitters should not be sampled
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -314,11 +320,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 
@@ -351,11 +357,11 @@ public:
                                const Point2f& point_sample,
                                Float* pdf) const;
 
-    virtual Color3f sample_li(EmitterQuery& rec,
-                              const Point2f& sample,
-                              Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
 
-    virtual Color3f sample_pos(EmitterQuery& rec,
+    virtual Color3f sample_nee(EmitterQuery& rec,
                                const Point2f& sample,
                                Float* pdf) const;
 

@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/emitter.h>
+#include <feign/math/warp.h>
 
 FEIGN_BEGIN()
 
@@ -21,7 +22,7 @@ PointEmitter::PointEmitter(Color3f I,
 
 void PointEmitter::preProcess() { }
 
-Color3f PointEmitter::sample_li(EmitterQuery& rec,
+Color3f PointEmitter::sample_nee(EmitterQuery& rec,
                                 const Point2f& sample,
                                 Float* pdf) const
 {
@@ -32,14 +33,14 @@ Color3f PointEmitter::sample_li(EmitterQuery& rec,
 
     if (pdf) *pdf = 1.0;
 
-    // LOG("I", I);
-
+    // TODO: the INV_FOURPI should actually be the pdf, and should be incorporated
+    //       in later.... but whatever for now.
     return I / rec.sqr_dist * INV_FOURPI;
 }
 
-Color3f PointEmitter::sample_pos(EmitterQuery& rec,
-                                 const Point2f& sample,
-                                 Float* pdf) const
+Color3f PointEmitter::sample_medium(EmitterQuery& rec,
+                                    const Point2f& sample,
+                                    Float* pdf) const
 {
     throw new NotImplementedException("point sample pos");
 
@@ -51,7 +52,10 @@ Color3f PointEmitter::sample_ray(EmitterQuery& rec,
                                  const Point2f& point_sample,
                                  Float* pdf) const
 {
-    throw new NotImplementedException("point emitter sample ray");
+    rec.p = pos; // point_sample is not used since a point light is a point
+    rec.wi = WarpSpace::sqrToUniSph(dir_sample);
+    *pdf = WarpSpace::sqrToUniSphPdf(rec.wi);
+    return I;
 }
 
 Color3f PointEmitter::evaluate(EmitterQuery& rec) const

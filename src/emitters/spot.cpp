@@ -22,9 +22,9 @@ SpotLightEmitter::SpotLightEmitter(Point3f light_pos,
     light_dir = light_dir.normalized();
 }
 
-Color3f SpotLightEmitter::sample_li(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const
+Color3f SpotLightEmitter::sample_nee(EmitterQuery& rec,
+                                     const Point2f& sample,
+                                     Float* pdf) const
 {
     rec.wi = (light_pos - rec.p);
     rec.wi = rec.wi.normalized();
@@ -48,9 +48,9 @@ Color3f SpotLightEmitter::sample_li(EmitterQuery& rec,
     return COLOR_BLACK;
 }
 
-Color3f SpotLightEmitter::sample_pos(EmitterQuery& rec,
-                                   const Point2f& sample,
-                                   Float* pdf) const
+Color3f SpotLightEmitter::sample_medium(EmitterQuery& rec,
+                                        const Point2f& sample,
+                                        Float* pdf) const
 {
     throw new NotImplementedException("spot sample pos");
 }

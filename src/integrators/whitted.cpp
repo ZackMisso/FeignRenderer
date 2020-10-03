@@ -25,26 +25,18 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                               Sampler* sampler,
                               const Ray3f& cam_ray) const
 {
-    // LOG("whitted Li");
-
     Intersection its;
     Ray3f ray = cam_ray;
 
     Vector3f dir = ray.dir;
     Float rr_cont_probability = 0.95f;
 
-    // LOG("scene intersect");
-
     if (!scene->intersect_non_null(ray, its))
     {
         return Color3f(0.f);
     }
 
-    // LOG("post intersect");
-
     const MaterialShader* shader = scene->getShapeMaterialShader(its);
-
-    // LOG("post get material shader");
 
     // create the material closure
     MaterialClosure closure = MaterialClosure(sampler,
