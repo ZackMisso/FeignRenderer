@@ -117,7 +117,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             // prepare to go to the next iteration
             // apply russian roulette termination
         }
-    
+    }
 }
 
 Color3f PhotonMapping::Li(const Scene* scene,

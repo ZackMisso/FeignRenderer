@@ -66,11 +66,13 @@ struct MaterialClosure
     Color3f nee;             // contribution from nee
     Float pdf;               // the pdf of the bsdf sample
     Float eta;               // how the ior changes
+    int first_diffuse_evals; // TODO: this should not have to be stored here 
     bool is_specular;        // whether or not this material is discretely evaluated
     bool last_spec;          // whether the last evaluation was specular
     // bool trace_ray;
     bool sample_all_emitters;
     bool material_accepts_shadows;
+    bool first_diffuse_event;
 };
 
 struct PhotonTracingClosure

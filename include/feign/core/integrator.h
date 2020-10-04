@@ -32,16 +32,21 @@ public:
                long max_heuristic,
                std::string location,
                int max_bounces = 10,
+               int fb_emitter_samples=1,
                bool verbose = false)
             : max_time(max_time),
               max_heuristic(max_heuristic),
               location(location),
               max_bounces(max_bounces),
+              fb_emitter_samples(fb_emitter_samples),
               verbose(verbose) { }
 
         long max_time;
         long max_heuristic;
         int max_bounces;
+        // set the number of first bounce emitter samples to a custom value to
+        // speed up convergence for specific scenes
+        int fb_emitter_samples;
         std::string location;
         // bool eval_all_emitters; // TODO: in a future update make this
                                    //       configurable
@@ -58,6 +63,7 @@ public:
           max_time(params->max_time),
           max_heuristic(params->max_heuristic),
           max_bounces(params->max_bounces),
+          fb_emitter_samples(params->fb_emitter_samples),
           verbose(params->verbose) { }
 
     virtual ~Integrator() { }
@@ -87,6 +93,7 @@ protected:
     long max_time;
     long max_heuristic;
     int max_bounces;
+    int fb_emitter_samples;
     bool verbose;
 };
 /////////////////////////////////////////////////

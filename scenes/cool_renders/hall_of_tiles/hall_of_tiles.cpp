@@ -511,18 +511,18 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1600+12*4, 9.f,
                                                              true, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610, 1660, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610-3, 1660-3, 9.f,
                                                              false, false, true, false));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12, 1660+12, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12-4, 1660+12-4, 9.f,
                                                              false, false, false, true));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*2, 1660+12*2, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*2-5, 1660+12*2-5, 9.f,
                                                              true, false, false, false));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3, 1660+12*3, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3-6, 1660+12*3-6, 9.f,
                                                              false, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3 + 6, 1660+12*3 + 6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3 + 6-7, 1660+12*3 + 6-7, 9.f,
                                                              false, false, true, true));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*4, 1660+12*4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*4-8, 1660+12*4-8, 9.f,
                                                              true, true, false, false));
 
     all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000, 3050, 0.8f));
@@ -671,6 +671,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
+    // Independent::Params samp_params(1024, 0x12345);
     Independent::Params samp_params(64, 0x12345);
     // Independent::Params samp_params(500000, 0x12345);
 
@@ -707,8 +708,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 3000;
-    int end_frame = 3500;
+    int start_frame = 4500;
+    int end_frame = 4920;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

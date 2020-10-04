@@ -77,6 +77,15 @@ public:
     // this is bad design, figure out a better way of supporting
     // mesh emitters
     virtual void setMeshNode(MeshNode* node) { }
+
+    // if a ray hits an emitter, then that emitter has a mesh. If that emitter is
+    // hit and also has a BSDF, then the emitter should not be sampled during
+    // next event estimation. An easier way of accomplishing this is forcing the
+    // nee result to be zero rather than modifying all of the light selection
+    // algorithms. For this to work, mesh emitters need to be able to expose their
+    // meshes to verify whether or not the intersection is actually with the
+    // emitter to begin with.
+    virtual MeshNode* getMeshNode() { return nullptr; }
 };
 /////////////////////////////////////////////////
 
@@ -336,6 +345,8 @@ public:
 
     virtual bool isSpatial() const { return true; }
     virtual Point3f getCenter() const;
+
+    virtual MeshNode* getMeshNode() { return mesh; }
 
 protected:
     MeshNode* mesh;

@@ -35,6 +35,8 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                                               scene,
                                               false,
                                               true);
+    // TODO: maybe make this a process of the closure constructor
+    closure.first_diffuse_evals = fb_emitter_samples;
 
     if (scene->env_medium_node)
     {
@@ -70,6 +72,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                 closure.nee = COLOR_BLACK;
                 closure.albedo = COLOR_BLACK;
 
+                // TODO: incorporate eval_multi_emitters here
                 if (closure.sample_all_emitters)
                 {
                     scene->eval_all_emitters(closure, true);

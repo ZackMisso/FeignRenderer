@@ -373,6 +373,8 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
 
 // TODO: make these eval methods call the same function
 // TODO: this should also work for media closures...
+// TODO: this currently has the bug where if a mesh light is hit it gets
+//       double counted
 void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(emitters.size());
@@ -431,13 +433,11 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
     Float choice_pdf = 0.f;
     Emitter* emitter = choose_emitter(closure, &choice_pdf);
 
-    // Float choice_pdf;
-    // int emitter;
-    //
-    // light_selection->sampleEmitter(closure.its->p,
-    //                                closure.sampler,
-    //                                emitter,
-    //                                choice_pdf);
+    if (!emitter)
+    {
+        closure.shadow_rays[0].throughput = Color3f(0.f);
+        return;
+    }
 
     EmitterQuery eqr(closure.its->p);
     Float emitter_pdf = 0.f;
@@ -486,6 +486,71 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
     }
 }
 
+void Scene::eval_multi_emitters(MaterialClosure& closure,
+                                int to_sample,
+                                bool in_media) const
+{
+    closure.shadow_rays = std::vector<EmitterEval>(to_sample);
+
+    for (int i = 0; i < to_sample; ++i)
+    {
+        Float choice_pdf = 0.f;
+        Emitter* emitter = choose_emitter(closure, &choice_pdf);
+
+        if (!emitter)
+        {
+            closure.shadow_rays[i].throughput = Color3f(0.f);
+            continue;
+        }
+
+        EmitterQuery eqr(closure.its->p);
+        Float emitter_pdf = 0.f;
+        Color3f Li = emitter->sample_nee(eqr,
+                                         closure.sampler->next2D(),
+                                         &emitter_pdf);
+
+        Ray3f shadow_ray = Ray3f(closure.its->p,
+                                 eqr.wi,
+                                 Epsilon,
+                                 sqrt(eqr.sqr_dist) - Epsilon);
+
+        Intersection tmp;
+
+        Color3f transmittance = Color3f(1.f);
+
+        if (!intersect_transmittance(shadow_ray,
+                                     closure.media,
+                                     tmp,
+                                     closure.sampler,
+                                     transmittance) ||
+            global_params.ignore_shadow_checks)
+        {
+            if (!in_media)
+            {
+                Float cos_term = closure.its->s_frame.n % eqr.wi;
+
+                if (cos_term < -Epsilon) cos_term = -cos_term;
+
+                Li *= cos_term;
+            }
+
+            closure.shadow_rays[0].valid = true;
+            closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
+
+            if (emitter_pdf == 0.f)
+            {
+                closure.shadow_rays[i].throughput = Color3f(0.f);
+            }
+            else
+            {
+                closure.shadow_rays[i].throughput = Li / (choice_pdf * emitter_pdf) * transmittance;
+            }
+
+            // Note: bsdf_values are fully accumulated later
+        }
+    }
+}
+
 Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
 {
     Float choice_pdf;
@@ -495,6 +560,17 @@ Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
                                    closure.sampler,
                                    emitter,
                                    choice_pdf);
+
+    // check to make sure there is no double counting
+    // TODO: maybe make this its own function?
+    if (emitters[emitter]->getMeshNode())
+    {
+        unsigned int emit_id = emitters[emitter]->getMeshNode()->mesh->getInstID();
+        unsigned int mesh_id = closure.its->intersected_mesh->getInstID();
+        *pdf = choice_pdf;
+
+        if (emit_id == mesh_id) return nullptr;
+    }
 
     *pdf = choice_pdf;
     return emitters[emitter];

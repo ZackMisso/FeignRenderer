@@ -60,6 +60,9 @@ public:
 
     void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
     void eval_one_emitter(MaterialClosure& closur, bool in_media = false) const;
+    void eval_multi_emitters(MaterialClosure& closur,
+                             int num_to_eval,
+                             bool in_media = false) const;
     void accumulate_emission(MaterialClosure& closure) const;
 
     // choosing an emitter given a specific intersection location
