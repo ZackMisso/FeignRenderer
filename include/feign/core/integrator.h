@@ -287,6 +287,8 @@ class PhotonMapping : public Integrator
     PhotonMapping(FilterNode* filter,
                   Params* params);
 
+    ~PhotonMapping();
+
     virtual void preProcess(const Scene* scene,
                             Sampler* sampler);
 
@@ -309,7 +311,7 @@ class PhotonMapping : public Integrator
     //                          Imagef& image) const;
 
     // TODO: create an actual acceleration structure to store photons
-    PhotonAccel* photons;
+    PhotonAccel* photon_storage;
     int num_photons;
 };
 

@@ -171,6 +171,9 @@ add_executable(feign
     src/accel/light_naive.cpp
     src/accel/light_spatial.cpp
 
+    # PhotonAccel implementation files
+    src/accel/photon_array.cpp
+
     # Api implementation files
     src/api/api.cpp
 

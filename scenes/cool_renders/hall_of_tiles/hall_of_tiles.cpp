@@ -511,28 +511,77 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1600+12*4, 9.f,
                                                              true, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610-3, 1660-3, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608, 4658, 9.f,
+                                                          false, false, true, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*1, 4658+12*1, 9.f,
+                                                          false, false, false, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*2, 4658+12*2, 9.f,
+                                                          true, false, false, false));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*3, 4658+12*3, 9.f,
+                                                          false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*3+6, 4658+12*3+6, 9.f,
+                                                          false, false, true, true));
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*4, 4658+12*4, 9.f,
+                                                          true, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*5, 4658+12*5, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*5+6, 4658+12*5+6, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*6, 4658+12*6, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*6+6, 4658+12*6+6, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*7, 4658+12*7, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*7+6, 4658+12*7+6, 9.f,
+                                                          false, false, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*8, 4658+12*8, 9.f,
+                                                          true, false, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*8+6, 4658+12*8+6, 9.f,
+                                                          false, true, false, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9, 4658+12*9, 9.f,
+                                                          false, false, true, false));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9+6, 4658+12*9+6, 9.f,
+                                                          false, false, false, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9+10, 4658+12*9+10, 9.f,
+                                                          true, true, true, true));
+
+    all_tile_fx.push_back(new HOT_TileEffect_RotationWave(4705, 4920, 60.f, 0.f, 720.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000, 3030, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3030, 3060, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3060, 3090, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3090, 3120, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3120, 3150, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3150, 3180, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3180, 3210, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3210, 3240, 0.8f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550, 1600, 9.f,
                                                              false, false, true, false));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12-4, 1660+12-4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12, 1600+12, 9.f,
                                                              false, false, false, true));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*2-5, 1660+12*2-5, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*2, 1600+12*2, 9.f,
                                                              true, false, false, false));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3-6, 1660+12*3-6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3, 1600+12*3, 9.f,
                                                              false, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*3 + 6-7, 1660+12*3 + 6-7, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*3 + 6, 1600+12*3 + 6, 9.f,
                                                              false, false, true, true));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*4-8, 1660+12*4-8, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1550+12*4, 1600+12*4, 9.f,
                                                              true, true, false, false));
-
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000, 3050, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3050, 3100, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3100, 3150, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3150, 3200, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3200, 3250, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3250, 3300, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3300, 3350, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3350, 3400, 0.8f));
 
     for (int i = 0; i < all_tile_fx.size(); ++i)
     {
@@ -587,7 +636,7 @@ void HallOfTiles::initialize_camera(int frame)
     }
     else if (frame >= 2800 && frame < 3000)
     {
-        look_angle = -180.f * (1.0 - Float(frame - 2800) / 200.0);
+        look_angle = -180.f * (Float(frame - 2800) / 200.0);
     }
     else if (frame >= 3000)
     {
@@ -596,12 +645,28 @@ void HallOfTiles::initialize_camera(int frame)
 
     look_angle *= M_PI / 180.0;
 
+    Float zpos = 0.0 + 0.1 * float(actual_frame);
+    if (frame >= 4380)
+    {
+        Float base = std::max(4380 - initial_still_time, 0);
+        zpos = 0.0 + 0.1 * float(base);
+
+        if (frame >= 4608)
+        {
+            Float base_zpos = zpos;
+            Float end_zpos = -5.f;
+
+            Float proxy = (frame - 4608) / (4840 - 4608);
+            zpos = base_zpos * (1.0-proxy) + proxy * end_zpos;
+        }
+    }
+
     Perspective::Params cam_params(Vector3f(0.0,
                                             -0.4,
-                                            0.0 + 0.1 * float(actual_frame)),
+                                            zpos),
                                    Vector3f(1.0 * sin(look_angle),
                                             -0.4,
-                                            1.0 * cos(look_angle) + 0.1 * float(actual_frame)),
+                                            1.0 * cos(look_angle) + zpos),
                                    Vector3f(0, 1, 0),
                                    50.f,
                                    1e-4f,

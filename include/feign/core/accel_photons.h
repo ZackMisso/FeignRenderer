@@ -41,7 +41,11 @@ public:
 
     virtual void clear() = 0;
     virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons) = 0;
+                       Photon* photons,
+                       int count) = 0;
+
+    // test functions
+    virtual bool near_photon(Point3f pt, Float radius) const { return false; }
 };
 
 /////////////////////////////////////////////////
@@ -55,14 +59,19 @@ public:
 
     virtual void clear();
     virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons);
+                       Photon* photons,
+                       int count);
+
+    virtual bool nearPhoton(Point3f pt, Float radius) const;
 
     Photon* photons;
+    int num_photons;
 };
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // PHOTON BVH
+// TODO in the future
 /////////////////////////////////////////////////
 class PhotonBVH : public PhotonAccel
 {
@@ -72,7 +81,8 @@ public:
 
     virtual void clear();
     virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons);
+                       Photon* photons,
+                       int count);
 
     // TODO
     // Photon* photons;
@@ -81,6 +91,7 @@ public:
 
 /////////////////////////////////////////////////
 // PHOTON KD-Tree
+// TODO in the future
 /////////////////////////////////////////////////
 class PhotonKDTree : public PhotonAccel
 {
@@ -90,7 +101,8 @@ public:
 
     virtual void clear();
     virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons);
+                       Photon* photons,
+                       int count);
 
     // TODO
     // Photon* photons;

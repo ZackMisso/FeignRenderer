@@ -14,7 +14,7 @@ FEIGN_BEGIN()
 // TODO: focus on getting this working first for a base scene, then work on
 //       converting this to work with the shader framework
 
-// TODO: fixed the entire shading framework, it should not have as many layers
+// TODO: rethink the entire shading framework, it should not have as many layers
 //       of abstraction as it does
 
 // TODO: for now this will only support homogeneous global media
@@ -24,15 +24,22 @@ PhotonMapping::PhotonMapping(FilterNode* filter,
     : Integrator(filter, params),
       num_photons(params->num_photons) { }
 
+PhotonMapping::~PhotonMapping()
+{
+    delete photon_storage;
+}
+
 // Integrator pre-processing now has to happen last
 void PhotonMapping::preProcess(const Scene* scene,
                                Sampler* sampler)
 {
     Integrator::preProcess(scene, sampler);
 
+    photon_storage = new PhotonArray();
     scatter_photons(scene, sampler);
 }
 
+// TODO: move theses notes to the photon acceleration structure files
 // TODO: maybe add a way to cache all of the photon data to a file?
 // TODO: created a binary representation of all of the photon data instead of
 //       ascii
@@ -107,26 +114,67 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             if (!closure.is_specular)
             {
                 // store photon
-                photons[created_photons] = Photon(its.p,
-                                                  ray.dir,
-                                                  power);
+                photons[created_photons++] = Photon(its.p,
+                                                    ray.dir,
+                                                    power);
             }
 
             // sample BSDF
+            closure.wi = its.toLocal(-ray.dir);
+            shader->sample(closure);
+
+            if (closure.pdf == 0.f) break;
+
+            Float cosTerm = its.s_frame.n % ray.dir;
+            if (cosTerm < 0.f) cosTerm = -cosTerm;
+            if (closure.is_specular) cosTerm = 1.f;
+
             // update power
-            // prepare to go to the next iteration
+            power *= closure.albedo * cosTerm / (closure.pdf);
+
             // apply russian roulette termination
+            Float rr_prob = std::min(power.maxValue(), 1.f);
+            if (sampler->next1D() > rr_prob) break;
+            power /= rr_prob;
+
+            // prepare to go to the next iteration
+            ray = Ray3f(its.p,
+                        its.toWorld(closure.wo),
+                        Epsilon,
+                        std::numeric_limits<Float>::infinity(),
+                        ray.depth + 1);
         }
     }
+
+    // last step: divide all photons' powers by the total number of photons
+    for (int i = 0; i < num_photons; ++i)
+    {
+        photons[i].power /= Float(num_photons);
+    }
+
+    // create the acceleration structure from the list of photons
+    // TODO: maybe do this iteratively in the future instead of at the very end?
+    photon_storage->build(scene->sceneBounds, photons, num_photons);
 }
 
 Color3f PhotonMapping::Li(const Scene* scene,
                           Sampler* sampler,
-                          const Ray3f& cam_ray) const
+                          const Ray3f& ray) const
 {
     // TODO: do a direct integrator scheme
 
-    Color3f(0.f);
+    // as an initial test I am going to visualize the photon map
+    Intersection its;
+
+    if (!scene->intersect_non_null(ray, its))
+    {
+        return Color3f(0.f);
+    }
+
+    // first test, check if the ray is anywhere near the photons
+    if (photon_storage->near_photon(its.p, 0.05))
+        return Color3f(1.f);
+    return Color3f(0.f);
 }
 
 FEIGN_END()
