@@ -36,6 +36,8 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
 
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
+        // LOG("max_bounces: " + std::to_string(max_bounces));
+        // LOG("bounces: " + std::to_string(bounces));
         if (beta.isZero()) break;
 
         Intersection its;

@@ -2,6 +2,8 @@
 
 FEIGN_BEGIN()
 
+// TODO: i do not think this is really needed at all anymore
+
 PhotonTracingClosure::PhotonTracingClosure()
     : sampler(nullptr),
       its(nullptr),

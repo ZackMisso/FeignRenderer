@@ -163,3 +163,7 @@ test_031
 
 This scene tests rendering the smooth union between a cube and a sphere sdf
 using the same materials
+
+test_032
+
+This scene tests rendering photon mapping in a simple cornell box

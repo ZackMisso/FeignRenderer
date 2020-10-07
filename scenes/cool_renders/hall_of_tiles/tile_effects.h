@@ -188,7 +188,8 @@ struct HOT_TileEffect_AccentLightWave : public HOT_TileEffect
                                    int end_frame,
                                    Float fall_off_dist)
         : HOT_TileEffect(start_frame, end_frame),
-          fall_off_dist(fall_off_dist)
+          fall_off_dist(fall_off_dist),
+          additional_scale(1.f)
     {
         start_z = -50.f;
         end_z = 470.f;
@@ -200,14 +201,16 @@ struct HOT_TileEffect_AccentLightWave : public HOT_TileEffect
                                    bool applies_top,
                                    bool applies_bot,
                                    bool applies_left,
-                                   bool applies_right)
+                                   bool applies_right,
+                                   Float additional_scale=1.f)
         : HOT_TileEffect(applies_top,
                          applies_bot,
                          applies_left,
                          applies_right,
                          start_frame,
                          end_frame),
-          fall_off_dist(fall_off_dist)
+          fall_off_dist(fall_off_dist),
+          additional_scale(additional_scale)
     {
         start_z = -50.f;
         end_z = 470.f;
@@ -238,7 +241,7 @@ struct HOT_TileEffect_AccentLightWave : public HOT_TileEffect
                     tiles[i].override_object_type = ACCENT_LIGHT;
                 }
 
-                tiles[i].light_scale = std::max(tiles[i].light_scale, zdist);
+                tiles[i].light_scale = std::max(tiles[i].light_scale, zdist*additional_scale);
             }
             // if (tiles[i].base_object_type == HEAD_LIGHT)
             // {
@@ -255,6 +258,7 @@ struct HOT_TileEffect_AccentLightWave : public HOT_TileEffect
     Float start_z;
     Float end_z;
     Float fall_off_dist;
+    Float additional_scale;
 };
 
 struct HOT_TileEffect_AccentSetLightBeam : public HOT_TileEffect

@@ -20,6 +20,8 @@
 // and sets up the parameters and executes renders. If a feature is added to
 // this renderer, then it should also be made available here.
 
+// TODO: rename fr_mesh to fr_shape
+
 #include <feign/common.h>
 #include <feign/core/scene.h>
 #include <feign/core/shader.h>
