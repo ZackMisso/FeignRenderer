@@ -525,90 +525,133 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(1610+12*4-6, 1660+12*4-6, 9.f,
                                                              true, true, false, false));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608, 4658, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560, 4610, 9.f,
                                                           false, false, true, false, 2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*1, 4658+12*1, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*1, 4610+12*1, 9.f,
                                                           false, false, false, true, 2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*2, 4658+12*2, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*2, 4610+12*2, 9.f,
                                                           true, false, false, false, 2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*3, 4658+12*3, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*3, 4610+12*3, 9.f,
                                                           false, true, false, false, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*3+6, 4658+12*3+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*3+6, 4610+12*3+6, 9.f,
                                                           false, false, true, true, 2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*4, 4658+12*4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*4, 4610+12*4, 9.f,
                                                           true, true, false, false, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*5, 4658+12*5, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*5, 4610+12*5, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*5+6, 4658+12*5+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*5+6, 4610+12*5+6, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*6, 4658+12*6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*6, 4610+12*6, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*6+6, 4658+12*6+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*6+6, 4610+12*6+6, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*7, 4658+12*7, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*7, 4610+12*7, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*7+6, 4658+12*7+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*7+6, 4610+12*7+6, 9.f,
                                                           false, false, true, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*8, 4658+12*8, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*8, 4610+12*8, 9.f,
                                                           true, false, false, false, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*8+6, 4658+12*8+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*8+6, 4610+12*8+6, 9.f,
                                                           false, true, false, false, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9, 4658+12*9, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*9, 4610+12*9, 9.f,
                                                           false, false, true, false, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9+6, 4658+12*9+6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*9+6, 4610+12*9+6, 9.f,
                                                           false, false, false, true, 2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4608+12*9+10, 4658+12*9+10, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*10, 4610+12*10, 9.f,
                                                           true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*10+6, 4610+12*10+6, 9.f,
+                                                        true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*11, 4610+12*11, 9.f,
+                                                      true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*11+6, 4610+12*11+6, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*12, 4610+12*12, 9.f,
+                                                true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*12+6, 4610+12*12+6, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*13, 4610+12*13, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*13+6, 4610+12*13+6, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*14, 4610+12*14, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*14+6, 4610+12*14+6, 9.f,
+                                                true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*15, 4610+12*15, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*15+6, 4610+12*15+6, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*16, 4610+12*16, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*16+6, 4610+12*16+6, 9.f,
+                                                    true, true, true, true, 2.f));
+
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(4560+12*17, 4610+12*17, 9.f,
+                                                    true, true, true, true, 2.f));
 
     all_tile_fx.push_back(new HOT_TileEffect_RotationWave(4705, 4920, 60.f, 0.f, 720.f));
 
     all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000, 3044, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*1+6*1, 3000+44*2+6*1, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*2+6*2, 3000+44*3+6*2, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*3+6*3, 3000+44*4+6*3, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*4+6*4, 3000+44*5+6*4, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*5+6*5, 3000+44*6+6*5, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*6+6*6, 3000+44*7+6*6, 0.8f));
-    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+44*7+6*7, 3000+44*8+6*7, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*1+7*1, 3000+48*2+7*1, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*2+7*2, 3000+48*3+7*2, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*3+7*3, 3000+48*4+7*3, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*4+7*4, 3000+48*5+7*4, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*5+7*5+2, 3000+48*6+7*5+2, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*6+7*6+4, 3000+48*7+7*6+4, 0.8f));
+    all_tile_fx.push_back(new HOT_TileEffect_SectionBeam(3000+48*7+7*7+6, 3000+48*8+7*7+6, 0.8f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720, 3770, 9.f,
+    int ch = 12;
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch, 3770-ch, 9.f,
                                                              false, false, true, false,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720+12, 3770+12, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch+12, 3770-ch+12, 9.f,
                                                              false, false, false, true,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720+12*2, 3770+12*2, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch+12*2, 3770-ch+12*2, 9.f,
                                                              true, false, false, false,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720+12*3, 3770+12*3, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch+12*3, 3770-ch+12*3, 9.f,
                                                              false, true, false, false,2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720+12*3 + 6, 3770+12*3 + 6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch+12*3 + 6, 3770-ch+12*3 + 6, 9.f,
                                                              false, false, true, true,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720+12*4, 3770+12*4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3720-ch+12*4, 3770-ch+12*4, 9.f,
                                                              true, true, false, false,2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780, 3830, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch, 3830-ch, 9.f,
                                                              false, false, true, false,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780+12, 3830+12, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch+12, 3830-ch+12, 9.f,
                                                              false, false, false, true,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780+12*2, 3830+12*2, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch+12*2, 3830-ch+12*2, 9.f,
                                                              true, false, false, false,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780+12*3, 3830+12*3, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch+12*3, 3830-ch+12*3, 9.f,
                                                              false, true, false, false,2.f));
 
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780+12*3 + 6, 3830+12*3 + 6, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch+12*3 + 6, 3830-ch+12*3 + 6, 9.f,
                                                              false, false, true, true,2.f));
-    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780+12*4, 3830+12*4, 9.f,
+    all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(3780-ch+12*4, 3830-ch+12*4, 9.f,
                                                              true, true, false, false,2.f));
 
 
@@ -686,7 +729,7 @@ void HallOfTiles::initialize_camera(int frame)
             Float base_zpos = zpos;
             Float end_zpos = -5.f;
 
-            Float proxy = Float(frame - 4608) / Float(4750 - 4608);
+            Float proxy = Float(frame - 4608) / Float(4800 - 4608);
             zpos = base_zpos * (1.0-proxy) + proxy * end_zpos;
         }
     }

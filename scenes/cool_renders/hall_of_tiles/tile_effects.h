@@ -373,9 +373,9 @@ struct HOT_TileEffect_RotationWave : public HOT_TileEffect
         //       linear falloff
         for (int i = 0; i < tiles.size(); ++i)
         {
-            if (tiles[i].base_object_type != MIRROR &&
-                tiles[i].base_object_type != HEAD_LIGHT)
-            {
+            // if (tiles[i].base_object_type != MIRROR &&
+            //     tiles[i].base_object_type != HEAD_LIGHT)
+            // {
                 Float zdist = (zpos + fall_off_dist) - tiles[i].pos(2);
 
                 zdist = std::min(std::max(zdist / (2.0*fall_off_dist), 0.0), 1.0);
@@ -385,7 +385,7 @@ struct HOT_TileEffect_RotationWave : public HOT_TileEffect
 
                 // if (zdist > 0)
                 //     std::cout << "angle: " << tiles[i].z_rot << std::endl;
-            }
+            // }
             // if (tiles[i].base_object_type == HEAD_LIGHT)
             // {
             //     Float zdist = std::abs(tiles[i].pos(2) - zpos);
@@ -465,29 +465,51 @@ struct HOT_TileEffect_JerkyRotate : public HOT_TileEffect
         //         2 - transitioning from min to max,
         //         3 - transitioning from max to min
 
-        int base_frame = frame;
+        Float base_frame = Float(frame);
+        proxy = 0.f;
 
-        while (base_frame > 0)
+        int total_dist = 2 * transition_lengths[index] +
+                         max_lengths[index] + min_lengths[index];
+
+        int loc = frame % total_dist;
+        if (loc < min_lengths[index]) return 0;
+        if (loc < min_lengths[index] + transition_lengths[index])
         {
-            base_frame -= min_lengths[index];
-            if (base_frame < 0) return 0;
-            base_frame -= transition_lengths[index];
-            if (base_frame < 0)
-            {
-                int val = base_frame + transition_lengths[index];
-                proxy = Float(val) / Float(transition_lengths[index]);
-                return 2;
-            }
-            base_frame -= max_lengths[index];
-            if (base_frame < 0) return 1;
-            base_frame -= transition_lengths[index];
-            if (base_frame < 0)
-            {
-                int val = base_frame + transition_lengths[index];
-                proxy = Float(val) / Float(transition_lengths[index]);
-                return 3;
-            }
+            Float proxy = Float(loc - min_lengths[index]) / (transition_lengths[index]);
+            return 2;
         }
+        if (loc < min_lengths[index] + transition_lengths[index] + max_lengths[index])
+            return 1;
+        else
+        {
+            Float proxy = Float(loc - min_lengths[index] - transition_lengths[index] - max_lengths[index]) / (transition_lengths[index]);
+            return 3;
+        }
+
+        // while (base_frame > 0)
+        // {
+        //     base_frame -= min_lengths[index];
+        //     if (base_frame < 0) return 0;
+        //     base_frame -= transition_lengths[index];
+        //     if (base_frame < 0)
+        //     {
+        //         Float val = base_frame + Float(transition_lengths[index]);
+        //         proxy = Float(val) / Float(transition_lengths[index]-1);
+        //         return 2;
+        //     }
+        //     base_frame -= max_lengths[index];
+        //     if (base_frame < 0) return 1;
+        //     base_frame -= transition_lengths[index];
+        //     if (base_frame < 0)
+        //     {
+        //         Float val = base_frame + (transition_lengths[index]);
+        //         proxy = Float(val) / Float(transition_lengths[index]-1);
+        //
+        //         if (proxy < 0.0) LOG("FUCK");
+        //         if (proxy > 1.0) LOG("FUCK");
+        //         return 3;
+        //     }
+        // }
     }
 
     void apply_to_tiles(std::vector<HOT_Tile>& tiles, int frame) const
