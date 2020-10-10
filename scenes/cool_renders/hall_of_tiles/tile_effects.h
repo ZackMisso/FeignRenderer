@@ -475,14 +475,14 @@ struct HOT_TileEffect_JerkyRotate : public HOT_TileEffect
         if (loc < min_lengths[index]) return 0;
         if (loc < min_lengths[index] + transition_lengths[index])
         {
-            Float proxy = Float(loc - min_lengths[index]) / (transition_lengths[index]);
+            proxy = Float(loc - min_lengths[index]) / Float(transition_lengths[index]);
             return 2;
         }
         if (loc < min_lengths[index] + transition_lengths[index] + max_lengths[index])
             return 1;
         else
         {
-            Float proxy = Float(loc - min_lengths[index] - transition_lengths[index] - max_lengths[index]) / (transition_lengths[index]);
+            proxy = Float(loc - min_lengths[index] - transition_lengths[index] - max_lengths[index]) / Float(transition_lengths[index]);
             return 3;
         }
 

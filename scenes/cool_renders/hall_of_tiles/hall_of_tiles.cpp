@@ -135,7 +135,7 @@ void HallOfTiles::initialize_hallway(int frame)
     all_tile_fx.push_back(new HOT_TileEffect_SetAccentLightLightScale(0, 4920, 0.0f));
 
 
-    for (int start = 0; start < 2136; start += 56)
+    for (int start = 0; start < 4920; start += 56)
         all_tile_fx.push_back(new HOT_TileEffect_HeadLightAlight(start, start+100, 100.f));
 
     all_tile_fx.push_back(new HOT_TileEffect_AccentLightWave(224, 274, 9.f));
@@ -746,8 +746,8 @@ void HallOfTiles::initialize_camera(int frame)
                                    1e4f,
                                    10.f,
                                    0.f,
-                                   // Vec2i(1920, 1080));
-                                   Vec2i(256, 144));
+                                   Vec2i(1920, 1080));
+                                   // Vec2i(256, 144));
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -795,8 +795,8 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    // Independent::Params samp_params(1024, 0x12345);
-    Independent::Params samp_params(64, 0x12345);
+    Independent::Params samp_params(1024, 0x12345);
+    // Independent::Params samp_params(64, 0x12345);
     // Independent::Params samp_params(500000, 0x12345);
 
     LOG("sampler");
@@ -823,7 +823,7 @@ void HallOfTiles::flush_render()
 
 void HallOfTiles::run()
 {
-    std::string test_name = "hall_of_tiles";
+    std::string test_name = "hall_of_tiles_final";
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
@@ -832,8 +832,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 4500;
-    int end_frame = 4920;
+    int start_frame = 0;
+    int end_frame = 500;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {
