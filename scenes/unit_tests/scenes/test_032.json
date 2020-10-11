@@ -7,14 +7,15 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "path",
+        "type": "photon",
         "filter": "default",
-        "max_bounces": 3
+        "max_bounces": 3,
+        "photons": 500000
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 1
+        "sample_count": 128
     },
     "camera": {
         "name": "camera",
@@ -223,38 +224,18 @@
         ]
     },
 
-    "object": {
-        "name": "area_light_obj",
-        "mesh": "plane6",
-        "scale": [
-            2.0,
-            2.0,
-            2.0
-        ],
-        "rotate": [
-            90.0,
-            1.0,
-            0.0,
-            0.0
-        ],
-        "translate": [
-            0.0, 0.0, 18.7
-        ],
-        "material_shader": "diff_shad",
-        "emitter": "area_emitter"
-    },
-    "mesh": {
-        "name": "plane6",
-        "type": "triangle_mesh",
-        "filename": "../scenes/meshes/plane.obj"
-    },
     "emitter": {
-        "name": "area_emitter",
-        "type": "mesh",
+        "name": "point_emitter",
+        "type": "point",
         "intensity": [
-            50.0,
-            50.0,
-            50.0
+            4000.0,
+            3000.0,
+            2000.0
+        ],
+        "position": [
+            0,
+            0,
+            9
         ]
     }
 }

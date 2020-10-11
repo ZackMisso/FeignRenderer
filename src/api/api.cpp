@@ -266,8 +266,8 @@ FilterNode* FeignRenderer::find_filter(std::string name)
         {
             // assert(false);
             // TODO: gauss filter does not work for multithreaded logic
-            node->filter = new GaussFilter(Vec2f(4.0, 4.0), 2.0);
-            // node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
+            // node->filter = new GaussFilter(Vec2f(4.0, 4.0), 2.0);
+            node->filter = new GaussFilter(Vec2f(2.0, 2.0), 1.0);
             // node->filter = new BoxFilter();
         }
 
@@ -614,6 +614,11 @@ void FeignRenderer::fr_integrator(std::string name,
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new VolPathTrans_Integrator(filter_node, params);
+    }
+    else if (type == "photon")
+    {
+        PhotonMapping::Params* params = (PhotonMapping::Params*)integrator_data;
+        integrator->integrator = new PhotonMapping(filter_node, params);
     }
     else if (type == "sandbox")
     {

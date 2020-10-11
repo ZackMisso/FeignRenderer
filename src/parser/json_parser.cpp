@@ -320,17 +320,40 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 location = value["location"].GetString();
             }
 
-            // all integrators share the same set of params unless there are
-            // future exceptions
-            Integrator::Params params(max_time,
-                                      max_heuristic,
-                                      location,
-                                      max_bounces);
+            if (type == "photon")
+            {
+                int photons = 1024;
 
-            FeignRenderer::fr_integrator(name,
-                                         type,
-                                         filter,
-                                         &params);
+                if (value.HasMember("photons"))
+                {
+                    photons = value["photons"].GetInt();
+                }
+
+                PhotonMapping::Params params(max_time,
+                                             max_heuristic,
+                                             location,
+                                             photons,
+                                             max_bounces);
+
+                FeignRenderer::fr_integrator(name,
+                                             type,
+                                             filter,
+                                             &params);
+            }
+            else
+            {
+                // except for a few exceptions, all integrators share the same
+                // set of params
+                Integrator::Params params(max_time,
+                                          max_heuristic,
+                                          location,
+                                          max_bounces);
+
+                FeignRenderer::fr_integrator(name,
+                                             type,
+                                             filter,
+                                             &params);
+            }
         }
         else if (strcmp(itr->name.GetString(), "sampler") == 0)
         {

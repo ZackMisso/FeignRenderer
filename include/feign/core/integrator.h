@@ -250,6 +250,7 @@ public:
 /////////////////////////////////////////////////
 class PhotonMapping : public Integrator
 {
+public:
     struct Params : public Integrator::Params
     {
         Params(long max_time,

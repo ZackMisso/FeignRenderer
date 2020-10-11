@@ -28,6 +28,8 @@ void RenderTile::evaluate(RenderTile* tile,
 
     for (int i = tile->min_y; i < tile->max_y; ++i)
     {
+        Float percent_done = Float(i - tile->min_y) / Float(tile->max_y - tile->min_y);
+        LOG("percent_done: " + std::to_string(percent_done));
         for (int j = tile->min_x; j < tile->max_x; ++j)
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
@@ -202,7 +204,7 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                                        mutexes));
                 }
 
-                // std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
+                std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
             }
         }
     }

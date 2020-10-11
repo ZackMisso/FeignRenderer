@@ -111,6 +111,16 @@ inline void LOG(std::string val)
     std::cout << val << std::endl;
 }
 
+inline std::string STR(Float val)
+{
+    return std::to_string(val);
+}
+
+inline std::string STR(int val)
+{
+    return std::to_string(val);
+}
+
 inline Float bound(Float val, Float min, Float max)
 {
     if (val > max) return max;

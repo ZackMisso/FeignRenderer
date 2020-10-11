@@ -1720,6 +1720,13 @@ inline void LOG(Vec3f val)
     std::cout << val[0] << " " << val[1] << " " << val[2] << std::endl;
 }
 
+inline std::string STR(Vec3f val)
+{
+    return "(" + std::to_string(val[0]) +
+           ", " + std::to_string(val[1]) +
+           ", " + std::to_string(val[2]);
+}
+
 inline Color3f Exp(Color3f val)
 {
     return Color3f(exp(val(0)),

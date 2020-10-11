@@ -53,7 +53,7 @@ void Integrator::render(const Scene* scene,
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
-            // LOG("i: " + std::to_string(i));
+            LOG("i: " + std::to_string(i));
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
                 // LOG("j: " + std::to_string(j));

@@ -45,7 +45,22 @@ public:
                        int count) = 0;
 
     // test functions
-    virtual bool near_photon(Point3f pt, Float radius) const { return false; }
+    virtual bool nearPhoton(Point3f pt, Float radius) const { return false; }
+
+    // TODO: should these methods modify arrays?
+    // evaluate all photons in a given radius
+    virtual void eval(const Point3f& pt,
+                      Float radius,
+                      std::vector<Color3f>& pwr_div_area) const = 0;
+    // evaluate nearest k photons
+    virtual void eval(const Point3f& pt,
+                      int k_photons,
+                      std::vector<Color3f>& pwr_div_area) const = 0;
+    // evaluate kernel
+    virtual void eval(const Point3f& pt,
+                      Float rad_1,
+                      Float rad_2,
+                      std::vector<Color3f>& pwr_div_area) const = 0;
 };
 
 /////////////////////////////////////////////////
@@ -54,7 +69,7 @@ public:
 class PhotonArray : public PhotonAccel
 {
 public:
-    PhotonArray() { }
+    PhotonArray() : PhotonAccel() { }
     virtual ~PhotonArray() { }
 
     virtual void clear();
@@ -62,7 +77,23 @@ public:
                        Photon* photons,
                        int count);
 
+    // used for debugging
     virtual bool nearPhoton(Point3f pt, Float radius) const;
+
+    // TODO: should these methods modify arrays?
+    // evaluate all photons in a given radius
+    virtual void eval(const Point3f& pt,
+                      Float radius,
+                      std::vector<Color3f>& pwr_div_area) const;
+    // evaluate nearest k photons
+    virtual void eval(const Point3f& pt,
+                      int k_photons,
+                      std::vector<Color3f>& pwr_div_area) const;
+    // evaluate kernel
+    virtual void eval(const Point3f& pt,
+                      Float rad_1,
+                      Float rad_2,
+                      std::vector<Color3f>& pwr_div_area) const;
 
     Photon* photons;
     int num_photons;

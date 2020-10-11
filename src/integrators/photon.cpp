@@ -152,6 +152,13 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         photons[i].power /= Float(num_photons);
     }
 
+    // assert(false);
+
+    // for (int i = 0; i < num_photons; ++i)
+    // {
+    //     LOG(STR(i) + " power: " + STR(photons[i].power));
+    // }
+
     // create the acceleration structure from the list of photons
     // TODO: maybe do this iteratively in the future instead of at the very end?
     photon_storage->build(scene->sceneBounds, photons, num_photons);
@@ -159,8 +166,9 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
 Color3f PhotonMapping::Li(const Scene* scene,
                           Sampler* sampler,
-                          const Ray3f& ray) const
+                          const Ray3f& cam_ray) const
 {
+    Ray3f ray = cam_ray;
     // TODO: do a direct integrator scheme
 
     // as an initial test I am going to visualize the photon map
@@ -171,10 +179,44 @@ Color3f PhotonMapping::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
+    MaterialClosure closure = MaterialClosure(sampler,
+                                              scene,
+                                              false,
+                                              true);
+
+    const MaterialShader* shader = scene->getShapeMaterialShader(its);
+
+    closure.its = &its;
+    closure.ray = &ray;
+    closure.wi = its.toLocal(-ray.dir);
+    closure.emission = COLOR_BLACK;
+    closure.nee = COLOR_BLACK;
+    closure.albedo = COLOR_BLACK;
+
+    shader->evaluate_mat_only(closure);
+
+    Color3f density_est = Color3f(0.f);
+
+    std::vector<Color3f> pwr_div_area = std::vector<Color3f>();
+
+    // TODO: redo all of this
+    photon_storage->eval(its.p, Float(0.1), pwr_div_area);
+
+    for (int i = 0; i < pwr_div_area.size(); ++i)
+    {
+        // TODO: need to set wo to the photon direction
+        // closure.wo =
+        // evaluate bsdf
+        density_est += pwr_div_area[i] * closure.albedo;
+    }
+
+    return density_est;
+
+
     // first test, check if the ray is anywhere near the photons
-    if (photon_storage->near_photon(its.p, 0.05))
-        return Color3f(1.f);
-    return Color3f(0.f);
+    // if (photon_storage->nearPhoton(its.p, 0.005))
+    //     return Color3f(1.f);
+    // return Color3f(0.f);
 }
 
 FEIGN_END()
