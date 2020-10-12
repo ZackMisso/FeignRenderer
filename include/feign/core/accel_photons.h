@@ -14,6 +14,9 @@
 
 FEIGN_BEGIN();
 
+class MaterialClosure;
+class MaterialShader;
+
 // TODO: make a more compact photon implementation later
 struct Photon
 {
@@ -33,6 +36,10 @@ struct Photon
     Color3f power;
 };
 
+// TODO: move theses notes to the photon acceleration structure files
+// TODO: maybe add a way to cache all of the photon data to a file?
+// TODO: created a binary representation of all of the photon data instead of
+//       ascii
 class PhotonAccel
 {
 public:
@@ -45,22 +52,25 @@ public:
                        int count) = 0;
 
     // test functions
-    virtual bool nearPhoton(Point3f pt, Float radius) const { return false; }
+    virtual bool nearPhoton(Point3f pt,
+                            Float radius) const { return false; }
 
-    // TODO: should these methods modify arrays?
     // evaluate all photons in a given radius
-    virtual void eval(const Point3f& pt,
-                      Float radius,
-                      std::vector<Color3f>& pwr_div_area) const = 0;
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      Float radius) const = 0;
     // evaluate nearest k photons
-    virtual void eval(const Point3f& pt,
-                      int k_photons,
-                      std::vector<Color3f>& pwr_div_area) const = 0;
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      int k_photons) const = 0;
     // evaluate kernel
-    virtual void eval(const Point3f& pt,
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
                       Float rad_1,
-                      Float rad_2,
-                      std::vector<Color3f>& pwr_div_area) const = 0;
+                      Float rad_2) const = 0;
 };
 
 /////////////////////////////////////////////////
@@ -80,20 +90,22 @@ public:
     // used for debugging
     virtual bool nearPhoton(Point3f pt, Float radius) const;
 
-    // TODO: should these methods modify arrays?
     // evaluate all photons in a given radius
-    virtual void eval(const Point3f& pt,
-                      Float radius,
-                      std::vector<Color3f>& pwr_div_area) const;
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      Float radius) const;
     // evaluate nearest k photons
-    virtual void eval(const Point3f& pt,
-                      int k_photons,
-                      std::vector<Color3f>& pwr_div_area) const;
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      int k_photons) const;
     // evaluate kernel
-    virtual void eval(const Point3f& pt,
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
                       Float rad_1,
-                      Float rad_2,
-                      std::vector<Color3f>& pwr_div_area) const;
+                      Float rad_2) const;
 
     Photon* photons;
     int num_photons;
@@ -107,6 +119,27 @@ public:
 class PhotonBVH : public PhotonAccel
 {
 public:
+    struct BVHNode
+    {
+        BVHNode();
+        ~BVHNode();
+
+        // this is the main build routine
+        void split();
+
+        BBox3f bounds;
+        Photon* photons;
+
+        BVHNode* x1_y1_z1;
+        BVHNode* x1_y2_z1;
+        BVHNode* x1_y1_z2;
+        BVHNode* x1_y2_z2;
+        BVHNode* x2_y1_z1;
+        BVHNode* x2_y2_z1;
+        BVHNode* x2_y1_z2;
+        BVHNode* x2_y2_z2;
+    };
+
     PhotonBVH() { }
     virtual ~PhotonBVH() { }
 
@@ -115,8 +148,27 @@ public:
                        Photon* photons,
                        int count);
 
-    // TODO
-    // Photon* photons;
+    // used for debugging
+    virtual bool nearPhoton(Point3f pt, Float radius) const;
+
+    // evaluate all photons in a given radius
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      Float radius) const;
+    // evaluate nearest k photons
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      int k_photons) const;
+    // evaluate kernel
+    virtual void eval(MaterialClosure& closure,
+                      const MaterialShader* shader,
+                      const Point3f& pt,
+                      Float rad_1,
+                      Float rad_2) const;
+
+    BVHNode* photon_bvh;
 };
 /////////////////////////////////////////////////
 

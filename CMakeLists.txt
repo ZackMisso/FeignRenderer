@@ -173,6 +173,7 @@ add_executable(feign
 
     # PhotonAccel implementation files
     src/accel/photon_array.cpp
+    src/accel/photon_bvh.cpp
 
     # Api implementation files
     src/api/api.cpp

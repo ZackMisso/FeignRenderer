@@ -39,11 +39,6 @@ void PhotonMapping::preProcess(const Scene* scene,
     scatter_photons(scene, sampler);
 }
 
-// TODO: move theses notes to the photon acceleration structure files
-// TODO: maybe add a way to cache all of the photon data to a file?
-// TODO: created a binary representation of all of the photon data instead of
-//       ascii
-
 void PhotonMapping::scatter_photons(const Scene* scene,
                                     Sampler* sampler)
 {
@@ -97,17 +92,6 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
             // evaluate shader / colliding location
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
-
-            // TODO: get closure working for this case
-            // closure.its = &its;
-            // closure.ray = &ray;
-            // closure.wi = its.toLocal(-ray.dir);
-            // closure.emission = COLOR_BLACK;
-            // closure.nee = COLOR_BLACK;
-            // closure.albedo = COLOR_BLACK;
-            //
-            // // evaluate the material shader
-            // shader->evaluate(closure);
             shader->evaluate_for_photon(closure);
 
             // potentially store photon in map
@@ -115,7 +99,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             {
                 // store photon
                 photons[created_photons++] = Photon(its.p,
-                                                    ray.dir,
+                                                    its.toLocal(-ray.dir),
                                                     power);
             }
 
@@ -124,6 +108,13 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             shader->sample(closure);
 
             if (closure.pdf == 0.f) break;
+
+            // prepare to go to the next iteration
+            ray = Ray3f(its.p,
+                        its.toWorld(closure.wo),
+                        Epsilon,
+                        std::numeric_limits<Float>::infinity(),
+                        ray.depth + 1);
 
             Float cosTerm = its.s_frame.n % ray.dir;
             if (cosTerm < 0.f) cosTerm = -cosTerm;
@@ -136,13 +127,6 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             Float rr_prob = std::min(power.maxValue(), 1.f);
             if (sampler->next1D() > rr_prob) break;
             power /= rr_prob;
-
-            // prepare to go to the next iteration
-            ray = Ray3f(its.p,
-                        its.toWorld(closure.wo),
-                        Epsilon,
-                        std::numeric_limits<Float>::infinity(),
-                        ray.depth + 1);
         }
     }
 
@@ -152,15 +136,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         photons[i].power /= Float(num_photons);
     }
 
-    // assert(false);
-
-    // for (int i = 0; i < num_photons; ++i)
-    // {
-    //     LOG(STR(i) + " power: " + STR(photons[i].power));
-    // }
-
-    // create the acceleration structure from the list of photons
-    // TODO: maybe do this iteratively in the future instead of at the very end?
+    // create the acceleration structure from the spawned list of photons
     photon_storage->build(scene->sceneBounds, photons, num_photons);
 }
 
@@ -179,44 +155,32 @@ Color3f PhotonMapping::Li(const Scene* scene,
         return Color3f(0.f);
     }
 
+    // create global closure datastructure
     MaterialClosure closure = MaterialClosure(sampler,
+                                              &its,
+                                              &ray,
                                               scene,
                                               false,
                                               true);
 
+    // get the material shader from the intersected mesh
     const MaterialShader* shader = scene->getShapeMaterialShader(its);
 
-    closure.its = &its;
-    closure.ray = &ray;
     closure.wi = its.toLocal(-ray.dir);
-    closure.emission = COLOR_BLACK;
-    closure.nee = COLOR_BLACK;
-    closure.albedo = COLOR_BLACK;
 
-    shader->evaluate_mat_only(closure);
+    // accumulate indirect illumination via the photon map
+    photon_storage->eval(closure, shader, its.p, Float(0.1));
 
-    Color3f density_est = Color3f(0.f);
+    // evaluate the material shader
+    shader->evaluate(closure);
 
-    std::vector<Color3f> pwr_div_area = std::vector<Color3f>();
+    // accumulate the shadow rays
+    closure.accumulate_shadow_rays(shader);
 
-    // TODO: redo all of this
-    photon_storage->eval(its.p, Float(0.1), pwr_div_area);
+    // TODO: implement final gather
 
-    for (int i = 0; i < pwr_div_area.size(); ++i)
-    {
-        // TODO: need to set wo to the photon direction
-        // closure.wo =
-        // evaluate bsdf
-        density_est += pwr_div_area[i] * closure.albedo;
-    }
-
-    return density_est;
-
-
-    // first test, check if the ray is anywhere near the photons
-    // if (photon_storage->nearPhoton(its.p, 0.005))
-    //     return Color3f(1.f);
-    // return Color3f(0.f);
+    // return the accumulated emission and gathered radiance
+    return closure.nee + closure.emission;
 }
 
 FEIGN_END()

@@ -7,7 +7,7 @@
     },
     "integrator": {
         "name": "integrator",
-        "type": "photon",
+        "type": "path",
         "filter": "default",
         "max_bounces": 5,
         "photons": 500000

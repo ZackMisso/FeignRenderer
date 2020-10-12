@@ -11,6 +11,8 @@
 // as a means to test correctness of those implementations
 
 #include <feign/core/accel_photons.h>
+#include <feign/core/closure.h>
+#include <feign/core/shader.h>
 
 void PhotonArray::build(const BBox3f& scene_bounds,
                         Photon* list,
@@ -38,9 +40,10 @@ bool PhotonArray::nearPhoton(Point3f pt, Float radius) const
     return false;
 }
 
-void PhotonArray::eval(const Point3f& pt,
-                       Float radius,
-                       std::vector<Color3f>& pwr_div_area) const
+void PhotonArray::eval(MaterialClosure& closure,
+                       const MaterialShader* shader,
+                       const Point3f& pt,
+                       Float radius) const
 {
     Float sqr_radius = radius * radius;
     Float inv_area = 1.f / (M_PI * sqr_radius);
@@ -48,23 +51,34 @@ void PhotonArray::eval(const Point3f& pt,
     {
         if ( (pt - photons[i].pos).norm() < sqr_radius )
         {
-            pwr_div_area.push_back(photons[i].power * inv_area);
+            Color3f pwr_div_area = photons[i].power * inv_area;
+
+            // evaluate the material
+            // closure.wi = closure.its->toLocal(photons[i].dir);
+            closure.wi = photons[i].dir;
+            closure.albedo = COLOR_BLACK;
+            shader->evaluate_mat_only(closure);
+
+            // results are stored in closure.nee since photon mapping does not utilize nee
+            closure.nee += closure.albedo * pwr_div_area;
         }
     }
 }
 
 
-void PhotonArray::eval(const Point3f& pt,
-                       int k_photons,
-                       std::vector<Color3f>& pwr_div_area) const
+void PhotonArray::eval(MaterialClosure& closure,
+                       const MaterialShader* shader,
+                       const Point3f& pt,
+                       int k_photons) const
 {
     throw new NotImplementedException("photon array");
 }
 
-void PhotonArray::eval(const Point3f& pt,
+void PhotonArray::eval(MaterialClosure& closure,
+                       const MaterialShader* shader,
+                       const Point3f& pt,
                        Float rad_1,
-                       Float rad_2,
-                       std::vector<Color3f>& pwr_div_area) const
+                       Float rad_2) const
 {
     throw new NotImplementedException("photon array");
 }
