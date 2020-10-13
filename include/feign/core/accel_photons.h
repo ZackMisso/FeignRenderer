@@ -122,14 +122,22 @@ public:
     struct BVHNode
     {
         BVHNode();
+        BVHNode(BVHNode* parent);
+        BVHNode(const BBox3f& bounds,
+                Photon* photons,
+                int count);
         ~BVHNode();
 
         // this is the main build routine
-        void split();
+        void split(Float radius, int k);
+
+        BVHNode* traverse(Point3f point);
 
         BBox3f bounds;
         Photon* photons;
+        int num_photons;
 
+        BVHNode* parent;
         BVHNode* x1_y1_z1;
         BVHNode* x1_y2_z1;
         BVHNode* x1_y1_z2;

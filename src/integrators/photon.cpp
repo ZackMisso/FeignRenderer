@@ -15,9 +15,9 @@ FEIGN_BEGIN()
 //       converting this to work with the shader framework
 
 // TODO: rethink the entire shading framework, it should not have as many layers
-//       of abstraction as it does
+//       of abstraction as it does. There is currently no use for
 
-// TODO: for now this will only support homogeneous global media
+// TODO: make a volumetric version of photon mapping
 
 PhotonMapping::PhotonMapping(FilterNode* filter,
                              Params* params)
@@ -61,7 +61,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
         // sample the initial location and direction
         EmitterQuery eqr;
-        Float query_pdf = 0.f;
+        Float query_pdf = 1.f;
         Color3f power = emitter->sample_ray(eqr,
                                             sampler->next2D(),
                                             sampler->next2D(),
@@ -69,12 +69,9 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         emitter_pdf *= query_pdf;
         power /= emitter_pdf;
 
-        // create an initial photon
-        Photon current_photon = Photon(eqr.p, eqr.wi, power);
-
         // create the initial ray
-        Ray3f ray = Ray3f(current_photon.pos,
-                          current_photon.dir,
+        Ray3f ray = Ray3f(eqr.p,
+                          eqr.wi,
                           Epsilon,
                           10000000.0); // TODO: replace with actual floating max
 
@@ -169,7 +166,7 @@ Color3f PhotonMapping::Li(const Scene* scene,
     closure.wi = its.toLocal(-ray.dir);
 
     // accumulate indirect illumination via the photon map
-    photon_storage->eval(closure, shader, its.p, Float(0.1));
+    photon_storage->eval(closure, shader, its.p, Float(0.5));
 
     // evaluate the material shader
     shader->evaluate(closure);

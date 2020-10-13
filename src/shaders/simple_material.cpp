@@ -57,6 +57,11 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
     {
         if (closure.material_accepts_shadows)
         {
+            if (closure.first_diffuse_evals != 1)
+            {
+                LOG(STR(closure.first_diffuse_evals));
+                assert(false); // this feature really does not help all that much
+            }
             closure.scene->eval_multi_emitters(closure,
                                                closure.first_diffuse_evals);
             closure.first_diffuse_event = false;

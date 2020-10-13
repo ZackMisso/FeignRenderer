@@ -49,7 +49,7 @@ void PhotonArray::eval(MaterialClosure& closure,
     Float inv_area = 1.f / (M_PI * sqr_radius);
     for (int i = 0; i < num_photons; ++i)
     {
-        if ( (pt - photons[i].pos).norm() < sqr_radius )
+        if ( (pt - photons[i].pos).sqrNorm() < sqr_radius )
         {
             Color3f pwr_div_area = photons[i].power * inv_area;
 
@@ -65,6 +65,8 @@ void PhotonArray::eval(MaterialClosure& closure,
     }
 }
 
+// this is not the fastest way of handling this, but i don't care to be honest,
+// this datastructure should not be used much longer anyways
 
 void PhotonArray::eval(MaterialClosure& closure,
                        const MaterialShader* shader,
