@@ -9,13 +9,13 @@
         "name": "integrator",
         "type": "path",
         "filter": "default",
-        "max_bounces": 5,
+        "max_bounces": 1,
         "photons": 500000
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 512
+        "sample_count": 4
     },
     "camera": {
         "name": "camera",

@@ -81,19 +81,19 @@ PhotonBVH::BVHNode::~BVHNode()
     parent = nullptr;
 }
 
-void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon*>& photons,
-                                               Point3f point,
-                                               Float radius) const
-{
-    // TODO
-}
-
-void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon*>& photons,
-                                            Point3f point,
-                                            int k) const
-{
-    // TODO
-}
+// void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon*>& photons,
+//                                                Point3f point,
+//                                                Float radius) const
+// {
+//     // TODO
+// }
+//
+// void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon*>& photons,
+//                                             Point3f point,
+//                                             int k) const
+// {
+//     // TODO
+// }
 
 void PhotonBVH::BVHNode::split(Float radius, int k)
 {

@@ -81,10 +81,16 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         {
             // detect hit
             Intersection its;
+            Point3f old_p = ray.origin;
 
             if (!scene->intersect_non_null(ray, its))
             {
                 break;
+            }
+
+            if (i == 0)
+            {
+                power /= (ray.origin - its.p).sqrNorm();
             }
 
             // evaluate shader / colliding location
@@ -117,8 +123,15 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             if (cosTerm < 0.f) cosTerm = -cosTerm;
             if (closure.is_specular) cosTerm = 1.f;
 
+            // LOG(STR(closure.albedo));
+
             // update power
-            power *= closure.albedo * cosTerm / (closure.pdf);
+            // if (i == 0)
+            //     power *= closure.albedo * cosTerm / (closure.pdf) / (old_p - its.p).sqrNorm();
+            // else
+                // power *= closure.albedo * cosTerm / (closure.pdf);
+
+            // photons[created_photons-1].power = power;
 
             // apply russian roulette termination
             Float rr_prob = std::min(power.maxValue(), 1.f);
@@ -127,9 +140,12 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         }
     }
 
+    LOG(STR(num_photons));
+
     // last step: divide all photons' powers by the total number of photons
     for (int i = 0; i < num_photons; ++i)
     {
+        // LOG("i: " + STR(i) + " power: " + STR(photons[i].power));
         photons[i].power /= Float(num_photons);
     }
 
@@ -166,13 +182,13 @@ Color3f PhotonMapping::Li(const Scene* scene,
     closure.wi = its.toLocal(-ray.dir);
 
     // accumulate indirect illumination via the photon map
-    photon_storage->eval(closure, shader, its.p, Float(0.5));
+    photon_storage->eval(closure, shader, its.p, Float(0.1));
 
     // evaluate the material shader
     shader->evaluate(closure);
 
     // accumulate the shadow rays
-    closure.accumulate_shadow_rays(shader);
+    // closure.accumulate_shadow_rays(shader);
 
     // TODO: implement final gather
 
