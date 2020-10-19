@@ -10,12 +10,12 @@
         "type": "photon",
         "filter": "default",
         "max_bounces": 1,
-        "photons": 500000
+        "photons": 1000000
     },
     "sampler": {
         "name": "sampler",
         "type": "independent",
-        "sample_count": 4
+        "sample_count": 1
     },
     "camera": {
         "name": "camera",

@@ -69,6 +69,8 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         emitter_pdf *= query_pdf;
         power /= emitter_pdf;
 
+        LOG("length: " + STR(eqr.wi.sqrNorm()));
+
         // create the initial ray
         Ray3f ray = Ray3f(eqr.p,
                           eqr.wi,
@@ -93,6 +95,8 @@ void PhotonMapping::scatter_photons(const Scene* scene,
                 power /= (ray.origin - its.p).sqrNorm();
             }
 
+            if (i != 0) assert(false);
+
             // evaluate shader / colliding location
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
             shader->evaluate_for_photon(closure);
@@ -102,7 +106,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             {
                 // store photon
                 photons[created_photons++] = Photon(its.p,
-                                                    its.toLocal(-ray.dir),
+                                                    -ray.dir,
                                                     power);
             }
 
@@ -129,7 +133,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             // if (i == 0)
             //     power *= closure.albedo * cosTerm / (closure.pdf) / (old_p - its.p).sqrNorm();
             // else
-                // power *= closure.albedo * cosTerm / (closure.pdf);
+            power *= closure.albedo * cosTerm / (closure.pdf);
 
             // photons[created_photons-1].power = power;
 
@@ -182,18 +186,11 @@ Color3f PhotonMapping::Li(const Scene* scene,
     closure.wi = its.toLocal(-ray.dir);
 
     // accumulate indirect illumination via the photon map
-    photon_storage->eval(closure, shader, its.p, Float(0.1));
-
-    // evaluate the material shader
-    shader->evaluate(closure);
-
-    // accumulate the shadow rays
-    // closure.accumulate_shadow_rays(shader);
-
-    // TODO: implement final gather
+    // photon_storage->eval(closure, shader, its.p, Float(0.05));
+    photon_storage->eval(closure, shader, its.p, 1000);
 
     // return the accumulated emission and gathered radiance
-    return closure.nee + closure.emission;
+    return closure.nee;// + closure.emission;
 }
 
 FEIGN_END()

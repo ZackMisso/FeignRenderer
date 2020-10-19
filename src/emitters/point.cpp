@@ -36,6 +36,8 @@ Color3f PointEmitter::sample_nee(EmitterQuery& rec,
     // TODO: the INV_FOURPI should actually be the pdf, and should be incorporated
     //       in later.... but whatever for now.
     return I / rec.sqr_dist * INV_FOURPI;
+    // return rec.sqr_dist; //I * INV_FOURPI;
+    // return rec.p;
 }
 
 Color3f PointEmitter::sample_medium(EmitterQuery& rec,
@@ -55,7 +57,9 @@ Color3f PointEmitter::sample_ray(EmitterQuery& rec,
     rec.p = pos; // point_sample is not used since a point light is a point
     rec.wi = WarpSpace::sqrToUniSph(dir_sample);
     *pdf = WarpSpace::sqrToUniSphPdf(rec.wi);
-    return I;
+    // returns power which for a point light is 4*pi*I
+    return I * 4.f * M_PI;
+    // return I;
 }
 
 Color3f PointEmitter::evaluate(EmitterQuery& rec) const

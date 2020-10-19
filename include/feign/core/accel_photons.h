@@ -90,6 +90,12 @@ public:
     // used for debugging
     virtual bool nearPhoton(Point3f pt, Float radius) const;
 
+    // utility methods
+    void maybeAddPhoton(std::vector<std::pair<Float, int> >& closest_k,
+                        const Point3f& pt,
+                        int k,
+                        int photon) const;
+
     // evaluate all photons in a given radius
     virtual void eval(MaterialClosure& closure,
                       const MaterialShader* shader,
@@ -124,8 +130,10 @@ public:
         BVHNode();
         BVHNode(BVHNode* parent);
         BVHNode(const BBox3f& bounds,
-                Photon* photons,
-                int count);
+                const std::vector<Photon*>& photons);
+        BVHNode(BVHNode* parent,
+                const BBox3f& bounds,
+                const std::vector<Photon*>& photons);
         ~BVHNode();
 
         // this is the main build routine
@@ -133,9 +141,15 @@ public:
 
         BVHNode* traverse(Point3f point);
 
+        void getAllPhotonsInRadius(std::vector<Photon*>& photons,
+                                   Point3f point,
+                                   Float radius) const;
+        void getClosestKPhotons(std::vector<Photon*>& photons,
+                                Point3f point,
+                                int k) const;
+
         BBox3f bounds;
-        Photon* photons;
-        int num_photons;
+        std::vector<Photon*> photons;
 
         BVHNode* parent;
         BVHNode* x1_y1_z1;

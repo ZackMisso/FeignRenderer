@@ -80,6 +80,8 @@ void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
             shader->evaluate_mat_only(*this);
             shadow_rays[i].throughput *= albedo;
             nee += shadow_rays[i].throughput;
+            // nee += wi;
+            // nee += albedo;
         }
     }
 

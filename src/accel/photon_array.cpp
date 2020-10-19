@@ -54,14 +54,46 @@ void PhotonArray::eval(MaterialClosure& closure,
             Color3f pwr_div_area = photons[i].power * inv_area;
 
             // evaluate the material
-            // closure.wi = closure.its->toLocal(photons[i].dir);
-            closure.wi = photons[i].dir;
+            closure.wo = closure.its->toLocal(-photons[i].dir);
+            // closure.wi = photons[i].dir;
             closure.albedo = COLOR_BLACK;
             shader->evaluate_mat_only(closure);
 
             // results are stored in closure.nee since photon mapping does not utilize nee
             closure.nee += closure.albedo * pwr_div_area;
         }
+    }
+}
+
+void PhotonArray::maybeAddPhoton(std::vector<std::pair<Float, int> >& closest_k,
+                                 const Point3f& pt,
+                                 int k,
+                                 int photon) const
+{
+    Float dist = (pt - photons[photon].pos).sqrNorm();
+
+    if (!closest_k.size())
+    {
+        closest_k.push_back(std::pair<Float, int>(dist, photon));
+        return;
+    }
+
+    int index = photon;
+
+    for (int i = 0; i < closest_k.size(); ++i)
+    {
+        if (dist < closest_k[i].first)
+        {
+            std::pair<Float, int> new_pair = std::pair<Float, int>(dist, index);
+            dist = closest_k[i].first;
+            index = closest_k[i].second;
+            closest_k[i] = new_pair;
+        }
+    }
+
+    if (closest_k.size() < k)
+    {
+        closest_k.push_back(std::pair<Float, int>(dist, index));
     }
 }
 
@@ -73,7 +105,39 @@ void PhotonArray::eval(MaterialClosure& closure,
                        const Point3f& pt,
                        int k_photons) const
 {
-    throw new NotImplementedException("photon array");
+    std::vector<std::pair<Float, int> > closest_k = std::vector<std::pair<Float, int> >();
+
+    for (int i = 0; i < num_photons; ++i)
+    {
+        maybeAddPhoton(closest_k, pt, k_photons, i);
+    }
+
+    Float inv_area = INV_PI * 1.f / (closest_k[k_photons-1].first);
+    // LOG("inv area:" + STR(inv_area));
+
+    for (int i = 0; i < closest_k.size()-1; ++i)
+    {
+        // debug logic
+        if (closest_k[i].first > closest_k[k_photons-1].first) assert(false);
+
+        int index = closest_k[i].second;
+
+        Color3f pwr_div_area = photons[index].power * inv_area;
+
+        // evaluate the material
+        closure.wo = closure.its->toLocal(photons[index].dir);
+        // closure.wi = photons[i].dir;
+        closure.albedo = COLOR_BLACK;
+        shader->evaluate_mat_only(closure);
+        // LOG(STR(closure.albedo));
+
+        // results are stored in closure.nee since photon mapping does not utilize nee
+        closure.nee += closure.albedo * pwr_div_area;
+        // closure.nee += pwr_div_area;
+        // closure.nee += photons[index].power / Float(closest_k.size()-1);
+        // closure.nee += photons[index].power / Float(closest_k.size()-1);
+        // closure.nee += closure.wi / Float(closest_k.size()-1);
+    }
 }
 
 void PhotonArray::eval(MaterialClosure& closure,

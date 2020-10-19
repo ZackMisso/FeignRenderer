@@ -544,6 +544,7 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
             else
             {
                 closure.shadow_rays[i].throughput = Li / (choice_pdf * emitter_pdf) * transmittance;
+                // closure.shadow_rays[i].throughput = Li;
             }
 
             // Note: bsdf_values are fully accumulated later

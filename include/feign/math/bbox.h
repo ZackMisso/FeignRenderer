@@ -197,6 +197,42 @@ struct BBox3
         return ray.near <= far && near <= ray.far;
     }
 
+    void split_into_eight(std::vector<BBox3<T> >& sections) const
+    {
+        // this returns 8 bounding boxes which are the results of directly splitting
+        // the bbox about the midpoints of each of its dimensions.
+        // the returned ordering is as follows:
+        //
+        // min_x - half_x, min_y - half_y, min_z - half_z
+        // min_x - half_x, half_y - max_y, min_z - half_z
+        // min_x - half_x, min_y - half_y, half_z - max_z
+        // min_x - half_x, half_y - max_y, half_z - max_z
+        // half_x - max_x, min_y - half_y, min_z - half_z
+        // half_x - max_x, half_y - max_y, min_z - half_z
+        // half_x - max_x, min_y - half_y, half_z - max_z
+        // half_x - max_x, half_y - max_y, half_z - max_z
+
+        Vec3<T> half = extents() / 2.f + min;
+
+        sections.push_back(BBox3<T>(Vec3<T>(min(0), min(1), min(2)),
+                                    Vec3<T>(half(0), half(1), half(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(min(0), half(1), min(2)),
+                                    Vec3<T>(half(0), max(1), half(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(min(0), min(1), half(2)),
+                                    Vec3<T>(half(0), half(1), max(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(min(0), half(1), half(2)),
+                                    Vec3<T>(half(0), max(1), max(2))));
+
+        sections.push_back(BBox3<T>(Vec3<T>(half(0), min(1), min(2)),
+                                    Vec3<T>(max(0), half(1), half(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(half(0), half(1), min(2)),
+                                    Vec3<T>(max(0), max(1), half(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(half(0), min(1), half(2)),
+                                    Vec3<T>(max(0), half(1), max(2))));
+        sections.push_back(BBox3<T>(Vec3<T>(half(0), half(1), half(2)),
+                                    Vec3<T>(max(0), max(1), max(2))));
+    }
+
     Vec3f operator()(Vec3f sample) const
     {
         return (max - min) * sample;

@@ -17,8 +17,7 @@
 PhotonBVH::BVHNode::BVHNode()
 {
     bounds = BBox3f();
-    num_photons = 0;
-    photons = nullptr;
+    photons = std::vector<Photon*>();
     parent = nullptr;
     x1_y1_z1 = nullptr;
     x1_y2_z1 = nullptr;
@@ -34,8 +33,7 @@ PhotonBVH::BVHNode::BVHNode(BVHNode* parent)
     : parent(parent)
 {
     bounds = BBox3f();
-    num_photons = 0;
-    photons = nullptr;
+    photons = std::vector<Photon*>();
     x1_y1_z1 = nullptr;
     x1_y2_z1 = nullptr;
     x1_y1_z2 = nullptr;
@@ -47,11 +45,9 @@ PhotonBVH::BVHNode::BVHNode(BVHNode* parent)
 }
 
 PhotonBVH::BVHNode::BVHNode(const BBox3f& bounds,
-                            Photon* photons,
-                            int count)
+                            const std::vector<Photon*>& photons)
     : bounds(bounds),
-      photons(photons),
-      num_photons(count)
+      photons(photons)
 {
     parent = nullptr;
     x1_y1_z1 = nullptr;
@@ -64,9 +60,32 @@ PhotonBVH::BVHNode::BVHNode(const BBox3f& bounds,
     x2_y2_z2 = nullptr;
 }
 
+PhotonBVH::BVHNode::BVHNode(BVHNode* parent,
+                            const BBox3f& bounds,
+                            const std::vector<Photon*>& photons)
+    : parent(parent),
+      bounds(bounds),
+      photons(photons)
+{
+    x1_y1_z1 = nullptr;
+    x1_y2_z1 = nullptr;
+    x1_y1_z2 = nullptr;
+    x1_y2_z2 = nullptr;
+    x2_y1_z1 = nullptr;
+    x2_y2_z1 = nullptr;
+    x2_y1_z2 = nullptr;
+    x2_y2_z2 = nullptr;
+}
+
 PhotonBVH::BVHNode::~BVHNode()
 {
-    if (photons) delete[] photons;
+    if (photons.size())
+    {
+        for (int i = 0; i < photons.size(); ++i)
+        {
+            delete photons[i];
+        }
+    }
     else
     {
         delete x1_y1_z1;
@@ -81,19 +100,19 @@ PhotonBVH::BVHNode::~BVHNode()
     parent = nullptr;
 }
 
-// void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon*>& photons,
-//                                                Point3f point,
-//                                                Float radius) const
-// {
-//     // TODO
-// }
-//
-// void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon*>& photons,
-//                                             Point3f point,
-//                                             int k) const
-// {
-//     // TODO
-// }
+void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon*>& photons,
+                                               Point3f point,
+                                               Float radius) const
+{
+    // TODO
+}
+
+void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon*>& photons,
+                                            Point3f point,
+                                            int k) const
+{
+    // TODO
+}
 
 void PhotonBVH::BVHNode::split(Float radius, int k)
 {
@@ -104,7 +123,24 @@ void PhotonBVH::BVHNode::split(Float radius, int k)
     // a box would no longer contain k photons. If both parameters are negative,
     // then the later strategy will be used.
 
-    throw new NotImplementedException("photon_bvh");
+    if (photons.size() == 0) return;
+
+    if (radius > 0.0)
+    {
+        if (bounds.extents().min() < 2.f * radius) return;
+
+        // split
+        std::vector<BBox3f> sections = std::vector<BBox3f>();
+        bounds.split_into_eight(sections);
+
+        // TODO: photon split
+        // x1_y1_z1 = new PhotonBVH::BVHNode(this, sections[0], , );
+        // x1_y1_z1 = new BV
+    }
+    else
+    {
+        throw new NotImplementedException("photon_bvh");
+    }
 }
 
 PhotonBVH::BVHNode* traverse_util(PhotonBVH::BVHNode* to_traverse,
@@ -128,7 +164,7 @@ PhotonBVH::BVHNode* PhotonBVH::BVHNode::traverse(Point3f point)
 {
     if (bounds.contains(point))
     {
-        if (photons) return this;
+        if (photons.size()) return this;
 
         PhotonBVH::BVHNode* found = nullptr;
         int found_cnt = 0;
@@ -164,11 +200,12 @@ void PhotonBVH::build(const BBox3f& scene_bounds,
                       Photon* photons,
                       int count)
 {
-    photon_bvh = new BVHNode(scene_bounds,
-                             photons,
-                             count);
-
-    photon_bvh->split(0.1, -1);
+    throw new NotImplementedException("photon_bvh");
+    // photon_bvh = new BVHNode(scene_bounds,
+    //                          photons,
+    //                          count);
+    //
+    // photon_bvh->split(0.1, -1);
 }
 
 bool PhotonBVH::nearPhoton(Point3f pt, Float radius) const

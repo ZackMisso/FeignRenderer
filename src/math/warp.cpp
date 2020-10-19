@@ -57,7 +57,7 @@ Float WarpSpace::sqrToUniSphCapPdf(const Vector3f &v, Float cosThetaMax)
 
 Vector3f WarpSpace::sqrToUniHemi(const Point2f &sample)
 {
-    Float cosTheta = 1.0 - sample(1); // TODO: verify this is ok
+    Float cosTheta = 1.0 - sample(1);
     Float sinTheta = std::sqrt(std::max((Float) 0, 1-cosTheta*cosTheta));
 
     Float sinPhi, cosPhi;
