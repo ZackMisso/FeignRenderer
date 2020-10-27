@@ -256,7 +256,7 @@ public:
     virtual Point3f getCenter() const;
 
 protected:
-    Color3f I;
+    Color3f I; // TODO: this is actually storing power
     Point3f pos;
 };
 /////////////////////////////////////////////////

@@ -47,9 +47,9 @@ void Integrator::render(const Scene* scene,
     {
         if (verbose) LOG("sample: " + std::to_string(k));
 
-        // for (int i = 800; i < 1080; ++i)
+        // for (int i = 167; i < 168; ++i)
         // {
-        //     for (int j = 800; j < 1080; ++j)
+        //     for (int j = 101; j < 102; ++j)
 
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
@@ -68,6 +68,16 @@ void Integrator::render(const Scene* scene,
                 #endif
 
                 radiance *= Li(scene, sampler, ray);
+
+                if (radiance.isNan())
+                {
+                    LOG("nan estimate at: " + STR(i) + " " + STR(j));
+                }
+
+                if (radiance.isInf())
+                {
+                    LOG("inf estimate at: " + STR(i) + " " + STR(j));
+                }
 
                 #if CLOCKING
                     Clocker::endClock("integrator");

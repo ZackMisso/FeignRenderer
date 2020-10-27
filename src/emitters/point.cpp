@@ -49,6 +49,7 @@ Color3f PointEmitter::sample_medium(EmitterQuery& rec,
     return Color3f(0.f);
 }
 
+// TODO: figure out if you should be dividing by the uniform sphere pdf
 Color3f PointEmitter::sample_ray(EmitterQuery& rec,
                                  const Point2f& dir_sample,
                                  const Point2f& point_sample,
@@ -57,9 +58,8 @@ Color3f PointEmitter::sample_ray(EmitterQuery& rec,
     rec.p = pos; // point_sample is not used since a point light is a point
     rec.wi = WarpSpace::sqrToUniSph(dir_sample);
     *pdf = WarpSpace::sqrToUniSphPdf(rec.wi);
-    // returns power which for a point light is 4*pi*I
-    return I * 4.f * M_PI;
-    // return I;
+    // returns power (this point light actually stores power instead of intensity)
+    return I * INV_FOURPI;
 }
 
 Color3f PointEmitter::evaluate(EmitterQuery& rec) const

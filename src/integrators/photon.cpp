@@ -69,8 +69,6 @@ void PhotonMapping::scatter_photons(const Scene* scene,
         emitter_pdf *= query_pdf;
         power /= emitter_pdf;
 
-        LOG("length: " + STR(eqr.wi.sqrNorm()));
-
         // create the initial ray
         Ray3f ray = Ray3f(eqr.p,
                           eqr.wi,
@@ -90,15 +88,13 @@ void PhotonMapping::scatter_photons(const Scene* scene,
                 break;
             }
 
-            if (i == 0)
-            {
-                power /= (ray.origin - its.p).sqrNorm();
-            }
-
-            if (i != 0) assert(false);
+            // if (i != 0) assert(false);
 
             // evaluate shader / colliding location
             const MaterialShader* shader = scene->getShapeMaterialShader(its);
+            closure.albedo = 0.0;
+            closure.pdf = 1.0;
+
             shader->evaluate_for_photon(closure);
 
             // potentially store photon in map
@@ -133,18 +129,25 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             // if (i == 0)
             //     power *= closure.albedo * cosTerm / (closure.pdf) / (old_p - its.p).sqrNorm();
             // else
+
+            Color3f old_power = power;
+
             power *= closure.albedo * cosTerm / (closure.pdf);
 
-            // photons[created_photons-1].power = power;
+            Color3f div_power = power / old_power;
+            // LOG("PROB: " + STR(div_power.maxValue()));
 
             // apply russian roulette termination
-            Float rr_prob = std::min(power.maxValue(), 1.f);
+            Float rr_prob = std::min(div_power.maxValue(), 1.f);
             if (sampler->next1D() > rr_prob) break;
             power /= rr_prob;
+
+            // LOG("OLD: " + STR(old_power));
+            // LOG("NEW: " + STR(power));
         }
     }
 
-    LOG(STR(num_photons));
+    // LOG(STR(num_photons));
 
     // last step: divide all photons' powers by the total number of photons
     for (int i = 0; i < num_photons; ++i)
@@ -187,10 +190,10 @@ Color3f PhotonMapping::Li(const Scene* scene,
 
     // accumulate indirect illumination via the photon map
     // photon_storage->eval(closure, shader, its.p, Float(0.05));
-    photon_storage->eval(closure, shader, its.p, 1000);
+    photon_storage->eval(closure, shader, its.p, 20);
 
     // return the accumulated emission and gathered radiance
-    return closure.nee;// + closure.emission;
+    return closure.nee + closure.emission;
 }
 
 FEIGN_END()

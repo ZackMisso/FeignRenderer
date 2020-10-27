@@ -10,7 +10,7 @@
         "type": "photon",
         "filter": "default",
         "max_bounces": 1,
-        "photons": 1000000
+        "photons": 500000
     },
     "sampler": {
         "name": "sampler",
@@ -212,7 +212,7 @@
         "name": "diffuse_bsdf_blue",
         "type": "diffuse",
         "albedo": [
-            0.1, 0.1, 0.9
+            0.5, 0.5, 0.5
         ]
     },
 
@@ -220,7 +220,7 @@
         "name": "diffuse_bsdf_red",
         "type": "diffuse",
         "albedo": [
-            0.9, 0.1, 0.1
+            0.5, 0.5, 0.5
         ]
     },
 
@@ -228,9 +228,9 @@
         "name": "point_emitter",
         "type": "point",
         "intensity": [
-            4000.0,
             3000.0,
-            2000.0
+            3000.0,
+            3000.0
         ],
         "position": [
             0,

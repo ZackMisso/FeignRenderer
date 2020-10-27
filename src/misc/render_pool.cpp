@@ -47,6 +47,16 @@ void RenderTile::evaluate(RenderTile* tile,
 
                 rad *= integrator->Li(scene, sampler, ray);
 
+                if (rad.isNan())
+                {
+                    LOG("nan estimate at: " + STR(i) + " " + STR(j));
+                }
+
+                if (rad.isInf())
+                {
+                    LOG("inf estimate at: " + STR(i) + " " + STR(j));
+                }
+
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
                 //     Clocker::endClock("integrator");
@@ -63,6 +73,13 @@ void RenderTile::evaluate(RenderTile* tile,
                 //     Clocker::startClock("filter");
                 // #endif
 
+                // LOG(STR(std::floor(filter_bounds.min(1))));
+                // LOG(STR(std::floor(filter_bounds.max(1))));
+                // LOG(STR(std::floor(filter_bounds.min(0))));
+                // LOG(STR(std::floor(filter_bounds.max(0))));
+
+                // if ()
+
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
                 {
@@ -71,6 +88,31 @@ void RenderTile::evaluate(RenderTile* tile,
                     {
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
+
+                        if (std::floor(filter_bounds.min(1) == 167) &&
+                            std::floor(filter_bounds.min(0) == 101))
+                        {
+                            LOG("pixek Sample: " + STR(pixelSample));
+                            LOG("weight: " + STR(weight));
+                            LOG("min y: " + STR(std::floor(filter_bounds.min(1))));
+                            LOG("min x: " + STR(std::floor(filter_bounds.min(0))));
+                            assert(false);
+                        }
+                        // if (weight < Epsilon)
+                        // {
+                        //     LOG(STR(integrator->filter->filter->getSize()));
+                        //     LOG("WEIGHT WHAT");
+                        //     LOG(STR(fj));
+                        //     LOG(STR(fi));
+                        //     assert(false);
+                        // }
+
+                        if (std::isinf(weight) || std::isnan(weight))
+                        {
+                            LOG("WHAT");
+                        }
+
+                        // LOG(STR(rad));
 
                         int index = fi * image->width() + fj;
 
@@ -227,9 +269,12 @@ void RenderPool::evaluate_pool(const Scene* scene,
         {
             int index = i * image.width() + j;
 
-            image(j, i, 0) = image(j, i, 0) / weights[index];
-            image(j, i, 1) = image(j, i, 1) / weights[index];
-            image(j, i, 2) = image(j, i, 2) / weights[index];
+            if (weights[index] != 0.f)
+            {
+                image(j, i, 0) = image(j, i, 0) / weights[index];
+                image(j, i, 1) = image(j, i, 1) / weights[index];
+                image(j, i, 2) = image(j, i, 2) / weights[index];
+            }
         }
     }
 

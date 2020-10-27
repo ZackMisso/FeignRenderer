@@ -735,6 +735,20 @@ struct Vec3
                 std::abs(xyz[2]) < 1e-4);
     }
 
+    bool isInf() const
+    {
+        return (std::isinf(xyz[0]) ||
+                std::isinf(xyz[1]) ||
+                std::isinf(xyz[2]));
+    }
+
+    bool isNan() const
+    {
+        return (std::isnan(xyz[0]) ||
+                std::isnan(xyz[1]) ||
+                std::isnan(xyz[2]));
+    }
+
     void info() const
     {
         std::cout << "(" << xyz[0] << ", " <<
@@ -1724,7 +1738,13 @@ inline std::string STR(Vec3f val)
 {
     return "(" + std::to_string(val[0]) +
            ", " + std::to_string(val[1]) +
-           ", " + std::to_string(val[2]);
+           ", " + std::to_string(val[2]) + ")";
+}
+
+inline std::string STR(Vec2f val)
+{
+    return "(" + std::to_string(val[0]) +
+           ", " + std::to_string(val[1]) + ")";
 }
 
 inline Color3f Exp(Color3f val)

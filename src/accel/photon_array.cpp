@@ -45,16 +45,16 @@ void PhotonArray::eval(MaterialClosure& closure,
                        const Point3f& pt,
                        Float radius) const
 {
-    Float sqr_radius = radius * radius;
-    Float inv_area = 1.f / (M_PI * sqr_radius);
+    Float sqr_radius = radius;
+    Float inv_area = 1.f / (M_PI * sqr_radius * radius);
     for (int i = 0; i < num_photons; ++i)
     {
-        if ( (pt - photons[i].pos).sqrNorm() < sqr_radius )
+        if ( (pt - photons[i].pos).norm() < sqr_radius )
         {
             Color3f pwr_div_area = photons[i].power * inv_area;
 
             // evaluate the material
-            closure.wo = closure.its->toLocal(-photons[i].dir);
+            closure.wo = closure.its->toLocal(photons[i].dir);
             // closure.wi = photons[i].dir;
             closure.albedo = COLOR_BLACK;
             shader->evaluate_mat_only(closure);
@@ -112,7 +112,37 @@ void PhotonArray::eval(MaterialClosure& closure,
         maybeAddPhoton(closest_k, pt, k_photons, i);
     }
 
-    Float inv_area = INV_PI * 1.f / (closest_k[k_photons-1].first);
+    // for (int i = 0; i < num_photons; ++i)
+    // {
+    //     bool exists = false;
+    //     for (int j = 0; j < k_photons; ++j)
+    //     {
+    //         if (closest_k[j].second == i)
+    //             exists = true;
+    //     }
+    //     if (!exists)
+    //     {
+    //         Float dist = (pt - photons[i].pos).sqrNorm();
+    //
+    //         for (int j = 0; j < k_photons; ++j)
+    //             if (dist < closest_k[j].first)
+    //             {
+    //                 assert(false);
+    //             }
+    //     }
+    // }
+
+    // if (k_photons == 1)
+    // {
+    //     int index = closest_k[0].second;
+    //     closure.wo = closure.its->toLocal(photons[index].dir);
+    //     closure.albedo = COLOR_BLACK;
+    //     shader->evaluate_mat_only(closure);
+    //     closure.nee += closure.albedo * photons[index].power;
+    //     return;
+    // }
+
+    Float inv_area = 1.f / (M_PI * closest_k[k_photons-1].first);
     // LOG("inv area:" + STR(inv_area));
 
     for (int i = 0; i < closest_k.size()-1; ++i)
@@ -126,6 +156,11 @@ void PhotonArray::eval(MaterialClosure& closure,
 
         // evaluate the material
         closure.wo = closure.its->toLocal(photons[index].dir);
+        // if (std::abs(closure.wo.sqrNorm() - 1.0) > Epsilon)
+        // {
+        //     LOG("norm: " + STR(closure.wo.sqrNorm()));
+        //     assert(false);
+        // }
         // closure.wi = photons[i].dir;
         closure.albedo = COLOR_BLACK;
         shader->evaluate_mat_only(closure);
