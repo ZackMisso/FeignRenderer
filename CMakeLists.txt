@@ -202,6 +202,7 @@ add_executable(feign
     src/emitters/point.cpp
     src/emitters/distant.cpp
     src/emitters/directional.cpp
+    src/emitters/directional_mesh.cpp
     src/emitters/spot.cpp
     src/emitters/environment.cpp
     src/emitters/mesh.cpp

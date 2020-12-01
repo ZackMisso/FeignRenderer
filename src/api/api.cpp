@@ -1177,13 +1177,22 @@ void FeignRenderer::fr_emitter(std::string name,
         // TODO: should the mesh logic be handled here
         MeshEmitter::Params* params = (MeshEmitter::Params*)emitter_data;
         emitter->emitter = new MeshEmitter(params->intensity);
-        // assert(false);
+
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
     else if (type == "directional")
     {
         DirectionalEmitter::Params* params = (DirectionalEmitter::Params*)emitter_data;
         emitter->emitter = new DirectionalEmitter(params->light_dir, params->radiance);
+        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+    }
+    else if (type == "directional_mesh")
+    {
+        DirectionalMeshEmitter::Params* params =
+            (DirectionalMeshEmitter::Params*)emitter_data;
+        emitter->emitter = new DirectionalMeshEmitter(params->light_dir,
+                                                      params->intensity);
+
         getInstance()->scene->scene->emitters.push_back(emitter->emitter);
     }
     else if (type == "spot")

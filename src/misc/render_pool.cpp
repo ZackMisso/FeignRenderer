@@ -29,7 +29,7 @@ void RenderTile::evaluate(RenderTile* tile,
     for (int i = tile->min_y; i < tile->max_y; ++i)
     {
         Float percent_done = Float(i - tile->min_y) / Float(tile->max_y - tile->min_y);
-        LOG("percent_done: " + std::to_string(percent_done));
+        // LOG("percent_done: " + std::to_string(percent_done));
         for (int j = tile->min_x; j < tile->max_x; ++j)
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
@@ -47,15 +47,15 @@ void RenderTile::evaluate(RenderTile* tile,
 
                 rad *= integrator->Li(scene, sampler, ray);
 
-                if (rad.isNan())
-                {
-                    LOG("nan estimate at: " + STR(i) + " " + STR(j));
-                }
-
-                if (rad.isInf())
-                {
-                    LOG("inf estimate at: " + STR(i) + " " + STR(j));
-                }
+                // if (rad.isNan())
+                // {
+                //     LOG("nan estimate at: " + STR(i) + " " + STR(j));
+                // }
+                //
+                // if (rad.isInf())
+                // {
+                //     LOG("inf estimate at: " + STR(i) + " " + STR(j));
+                // }
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -89,15 +89,15 @@ void RenderTile::evaluate(RenderTile* tile,
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
 
-                        if (std::floor(filter_bounds.min(1) == 167) &&
-                            std::floor(filter_bounds.min(0) == 101))
-                        {
-                            LOG("pixek Sample: " + STR(pixelSample));
-                            LOG("weight: " + STR(weight));
-                            LOG("min y: " + STR(std::floor(filter_bounds.min(1))));
-                            LOG("min x: " + STR(std::floor(filter_bounds.min(0))));
-                            assert(false);
-                        }
+                        // if (std::floor(filter_bounds.min(1) == 167) &&
+                        //     std::floor(filter_bounds.min(0) == 101))
+                        // {
+                        //     LOG("pixek Sample: " + STR(pixelSample));
+                        //     LOG("weight: " + STR(weight));
+                        //     LOG("min y: " + STR(std::floor(filter_bounds.min(1))));
+                        //     LOG("min x: " + STR(std::floor(filter_bounds.min(0))));
+                        //     assert(false);
+                        // }
                         // if (weight < Epsilon)
                         // {
                         //     LOG(STR(integrator->filter->filter->getSize()));
@@ -107,10 +107,10 @@ void RenderTile::evaluate(RenderTile* tile,
                         //     assert(false);
                         // }
 
-                        if (std::isinf(weight) || std::isnan(weight))
-                        {
-                            LOG("WHAT");
-                        }
+                        // if (std::isinf(weight) || std::isnan(weight))
+                        // {
+                        //     LOG("WHAT");
+                        // }
 
                         // LOG(STR(rad));
 
@@ -246,7 +246,7 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                                        mutexes));
                 }
 
-                std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
+                // std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
             }
         }
     }

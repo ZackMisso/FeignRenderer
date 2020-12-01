@@ -386,6 +386,35 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
         Color3f Li = emitters[i]->sample_nee(eqr,
                                              closure.sampler->next2D(),
                                              &emitter_pdf);
+        //LOG("base chech");
+        if (emitters[i]->requiresInitialVisibilityCheck())
+        {
+            // LOG("hello");
+            // create ray
+            Ray3f ray = Ray3f(closure.its->p,
+                              eqr.wi,
+                              Epsilon,
+                              std::numeric_limits<Float>::infinity());
+
+            // test intersection against emitter mesh
+            Intersection tmp;
+
+            if (intersect_non_null(ray, tmp))
+            {
+                if (emitters[i]->getMeshNode()->mesh == tmp.intersected_mesh)
+                {
+                    eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                }
+                else
+                {
+                    Li = COLOR_BLACK;
+                }
+            }
+            else
+            {
+                Li = COLOR_BLACK;
+            }
+        }
 
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,
@@ -444,6 +473,43 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
     Color3f Li = emitter->sample_nee(eqr,
                                      closure.sampler->next2D(),
                                      &emitter_pdf);
+
+    //LOG("base chech");
+    if (emitter->requiresInitialVisibilityCheck())
+    {
+        //LOG("hello");
+        // create ray
+        //LOG(eqr.wi);
+        Ray3f ray = Ray3f(closure.its->p,
+                          eqr.wi,
+                          Epsilon,
+                          std::numeric_limits<Float>::infinity());
+
+        // test intersection against emitter mesh
+        Intersection tmp;
+
+        if (intersect_non_null(ray, tmp))
+        {
+            // LOG("emitter");
+            // std::cout << emitter->getMeshNode()->mesh << std::endl;
+            // LOG("intersected");
+            // std::cout << tmp.intersected_mesh << std::endl;
+            if (emitter->getMeshNode()->mesh == tmp.intersected_mesh)
+            {
+                eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                Li /= eqr.sqr_dist;
+                //LOG("sqr dist: " + std::to_string(eqr.sqr_dist));
+            }
+            else
+            {
+                Li = COLOR_BLACK;
+            }
+        }
+        else
+        {
+            Li = COLOR_BLACK;
+        }
+    }
 
     Ray3f shadow_ray = Ray3f(closure.its->p,
                              eqr.wi,
@@ -508,6 +574,37 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
         Color3f Li = emitter->sample_nee(eqr,
                                          closure.sampler->next2D(),
                                          &emitter_pdf);
+
+        if (emitter->requiresInitialVisibilityCheck())
+        {
+            //LOG("hello");
+            // create ray
+            Ray3f ray = Ray3f(closure.its->p,
+                              eqr.wi,
+                              Epsilon,
+                              std::numeric_limits<Float>::infinity());
+
+            // test intersection against emitter mesh
+            Intersection tmp;
+
+            if (intersect_non_null(ray, tmp))
+            {
+                if (emitter->getMeshNode()->mesh == tmp.intersected_mesh)
+                {
+                    eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                    Li /= eqr.sqr_dist;
+                    //LOG("sqr dist: " + std::to_string(eqr.sqr_dist));
+                }
+                else
+                {
+                    Li = COLOR_BLACK;
+                }
+            }
+            else
+            {
+                Li = COLOR_BLACK;
+            }
+        }
 
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,

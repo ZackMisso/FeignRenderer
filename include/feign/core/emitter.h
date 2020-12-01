@@ -72,6 +72,17 @@ public:
     virtual bool isSpatial() const = 0;
     virtual Point3f getCenter() const = 0;
 
+    // TODO: this method currently exists for supporting the directional mesh
+    //       emitter, but really it appears more of a hack than anything. Need
+    //       to figure out a better way of doing this without this unnecessary
+    //       functionality.
+    //
+    // this method is currently used to indicate wbether or not an emitter needs
+    // an additional visibility check after sampling it for next event estimation.
+    // this is used for emitters which only emit line in singular directions where
+    // sampling any random direction would typically result in a rejected sample.
+    virtual bool requiresInitialVisibilityCheck() const { return false; }
+
     virtual void preProcess() { }
 
     // this is bad design, figure out a better way of supporting
@@ -351,6 +362,59 @@ public:
 protected:
     MeshNode* mesh;
     DiscretePDF1D* sa_pdf;
+    Color3f intensity;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Directional Emitter
+/////////////////////////////////////////////////
+// a mesh emitter is a diffuse light source, where as this emitter only emits
+// light in one direction. TODO: make a generalized emitter based on arbitrary
+// reflectance distributions.
+class DirectionalMeshEmitter : public Emitter
+{
+public:
+    struct Params
+    {
+        Params(Vector3f light_dir, Color3f intensity)
+            : light_dir(light_dir), intensity(intensity) { }
+
+        Vector3f light_dir;
+        Color3f intensity;
+    };
+
+    DirectionalMeshEmitter(Vector3f light_dir, Color3f intensity);
+    ~DirectionalMeshEmitter();
+
+    virtual Color3f sample_ray(EmitterQuery& rec,
+                               const Point2f& dir_sample,
+                               const Point2f& point_sample,
+                               Float* pdf) const;
+
+    virtual Color3f sample_medium(EmitterQuery& rec,
+                                  const Point2f& sample,
+                                  Float* pdf) const;
+
+    virtual Color3f sample_nee(EmitterQuery& rec,
+                               const Point2f& sample,
+                               Float* pdf) const;
+
+    virtual Color3f evaluate(EmitterQuery& rec) const;
+
+    virtual void setMeshNode(MeshNode* node);
+    virtual void preProcess();
+
+    virtual bool isSpatial() const { return true; }
+    virtual bool requiresInitialVisibilityCheck() const { return true; }
+    virtual Point3f getCenter() const;
+
+    virtual MeshNode* getMeshNode() { return mesh; }
+
+protected:
+    MeshNode* mesh;
+    DiscretePDF1D* sa_pdf;
+    Vector3f light_dir;
     Color3f intensity;
 };
 /////////////////////////////////////////////////

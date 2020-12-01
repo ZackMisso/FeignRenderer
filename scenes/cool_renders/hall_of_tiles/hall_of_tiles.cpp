@@ -832,8 +832,8 @@ void HallOfTiles::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 0;
-    int end_frame = 500;
+    int start_frame = 4660;
+    int end_frame = 4920;
 
     for (int frame = start_frame; frame < end_frame; frame++)
     {

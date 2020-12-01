@@ -925,6 +925,28 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 FeignRenderer::fr_emitter(name, type, &params);
             }
+            else if (type == "directional_mesh")
+            {
+                Color3f intensity = Color3f(1.f);
+                Vector3f light_dir = Color3f(1.f, 0.f, 0.f);
+
+                if (value.HasMember("intensity"))
+                {
+                    intensity[0] = value["intensity"][0].GetFloat();
+                    intensity[1] = value["intensity"][1].GetFloat();
+                    intensity[2] = value["intensity"][2].GetFloat();
+                }
+                if (value.HasMember("light_dir"))
+                {
+                    light_dir[0] = value["light_dir"][0].GetFloat();
+                    light_dir[1] = value["light_dir"][1].GetFloat();
+                    light_dir[2] = value["light_dir"][2].GetFloat();
+                }
+
+                DirectionalMeshEmitter::Params params(light_dir, intensity);
+
+                FeignRenderer::fr_emitter(name, type, &params);
+            }
             else if (type == "spot")
             {
                 Point3f light_pos = Color3f(0.f);

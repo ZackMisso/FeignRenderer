@@ -53,8 +53,17 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
             closure.scene->eval_all_emitters(closure);
         }
     }
-    else if (!closure.first_diffuse_event)
+    else
     {
+        // TODO: fix this hack with above
+        if (closure.material_accepts_shadows)
+        {
+            closure.scene->eval_one_emitter(closure);
+        }
+    }
+    /*else if (!closure.first_diffuse_event)
+    {
+        //LOG("should not be here");
         if (closure.material_accepts_shadows)
         {
             if (closure.first_diffuse_evals != 1)
@@ -74,7 +83,7 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
         {
             closure.scene->eval_one_emitter(closure);
         }
-    }
+    }*/
 
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = true;
