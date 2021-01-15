@@ -42,7 +42,6 @@ Color3f StandardMedium::sample(Ray3f world_ray,
                                MediaClosure& closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
-    // const Ray3f ray = world_ray;
 
     if (sca_coeff == COLOR_BLACK)
     {

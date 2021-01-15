@@ -143,6 +143,7 @@ add_executable(feign
     include/feign/media/phase.h
     include/feign/media/sampling.h
     include/feign/media/trans_est.h
+    include/feign/media/trans_func.h
 
     # Misc header files
     include/feign/misc/intersection.h
@@ -225,6 +226,7 @@ add_executable(feign
     src/integrators/nice_normal.cpp
     src/integrators/volpath.cpp
     src/integrators/volpath_trans.cpp
+    src/integrators/volpath_nonexp.cpp
     src/integrators/sandbox.cpp
     src/integrators/photon.cpp
 
@@ -239,7 +241,6 @@ add_executable(feign
     src/math/discrete_pdf.cpp
 
     # Media implementation files
-    src/media/media.cpp
     src/media/homo_abs.cpp
     src/media/phase.cpp
     src/media/standard.cpp
@@ -248,6 +249,10 @@ add_executable(feign
     src/media/trans_ests/ratio.cpp
     src/media/density_funcs/point_average.cpp
     src/media/density_funcs/vdb_density.cpp
+    src/media/trans_funcs/trans_func.cpp
+    src/media/trans_funcs/lin_trans.cpp
+    src/media/trans_funcs/exp_trans.cpp
+    src/media/trans_funcs/davis_trans.cpp
 
     # Misc implementation files
     src/misc/intersection.cpp

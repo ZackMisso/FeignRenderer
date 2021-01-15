@@ -746,7 +746,7 @@ void HallOfTiles::initialize_camera(int frame)
                                    1e4f,
                                    10.f,
                                    0.f,
-                                   Vec2i(1920, 1080));
+                                   Vec2i(1280, 720));
                                    // Vec2i(256, 144));
 
     FeignRenderer::fr_camera("camera",
@@ -795,7 +795,7 @@ void HallOfTiles::initialize_base_structs(std::string test_name,
                                  "default",
                                  &int_params);
 
-    Independent::Params samp_params(1024, 0x12345);
+    Independent::Params samp_params(200000, 0x12345);
     // Independent::Params samp_params(64, 0x12345);
     // Independent::Params samp_params(500000, 0x12345);
 
@@ -835,8 +835,74 @@ void HallOfTiles::run()
     int start_frame = 4660;
     int end_frame = 4920;
 
-    for (int frame = start_frame; frame < end_frame; frame++)
+    std::vector<int> frames_left = std::vector<int>();
+
+    // frames_left.push_back(1398);
+    // frames_left.push_back(1399);
+    // frames_left.push_back(4215);
+    // frames_left.push_back(4216);
+    // frames_left.push_back(4217);
+    // frames_left.push_back(4218);
+    // frames_left.push_back(4219);
+    // frames_left.push_back(4255);
+    // frames_left.push_back(4256);
+    // frames_left.push_back(4257);
+    // frames_left.push_back(4258);
+    // frames_left.push_back(4259);
+    // frames_left.push_back(4296);
+    // frames_left.push_back(4297);
+    // frames_left.push_back(4298);
+    // frames_left.push_back(4299);
+    // frames_left.push_back(4335);
+    // frames_left.push_back(4336);
+    // frames_left.push_back(4337);
+    // frames_left.push_back(4338);
+    // frames_left.push_back(4339);
+    // frames_left.push_back(4375);
+    // frames_left.push_back(4376);
+    // frames_left.push_back(4377);
+    // frames_left.push_back(4378);
+    // frames_left.push_back(4379);
+    // frames_left.push_back(4416);
+    // frames_left.push_back(4417);
+    // frames_left.push_back(4418);
+    // frames_left.push_back(4419);
+    // frames_left.push_back(4456);
+    // frames_left.push_back(4457);
+    // frames_left.push_back(4458);
+    // frames_left.push_back(4459);
+    // frames_left.push_back(4495);
+    // frames_left.push_back(4496);
+    // frames_left.push_back(4497);
+    // frames_left.push_back(4498);
+    // frames_left.push_back(4499);
+    // frames_left.push_back(4535);
+    // frames_left.push_back(4536);
+    // frames_left.push_back(4537);
+    // frames_left.push_back(4538);
+    // frames_left.push_back(4539);
+    // frames_left.push_back(4575);
+    // frames_left.push_back(4576);
+    // frames_left.push_back(4577);
+    // frames_left.push_back(4578);
+    // frames_left.push_back(4579);
+    // frames_left.push_back(4615);
+    // frames_left.push_back(4616);
+    // frames_left.push_back(4617);
+    // frames_left.push_back(4618);
+    // frames_left.push_back(4619);
+    // frames_left.push_back(4655);
+    // frames_left.push_back(4656);
+    // frames_left.push_back(4657);
+    // frames_left.push_back(4658);
+    // frames_left.push_back(4659);
+
+    frames_left.push_back(4740);
+
+    //for (int frame = start_frame; frame < end_frame; frame++)
+    for (int c = 0; c < frames_left.size(); ++c)
     {
+        int frame = frames_left[c];
         // if (frame == 241) continue;
         LOG("Rendering Frame: " + std::to_string(frame));
         // float degree = (M_PI * float(frame + 180) / 180.f) / 2.f;

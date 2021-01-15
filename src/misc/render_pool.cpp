@@ -246,7 +246,7 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                                        mutexes));
                 }
 
-                // std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
+                std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
             }
         }
     }

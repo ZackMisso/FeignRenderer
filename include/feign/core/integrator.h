@@ -227,6 +227,24 @@ public:
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
+// Volumetric Path Tracer - with support for non-exponential media
+/////////////////////////////////////////////////
+class VolPathNonExp_Integrator : public Integrator
+{
+public:
+    VolPathNonExp_Integrator(FilterNode* filter,
+                             Integrator::Params* params);
+
+    virtual void preProcess(const Scene* scene,
+                            Sampler* sampler);
+
+    virtual Color3f Li(const Scene* scene,
+                       Sampler* sampler,
+                       const Ray3f& ray) const;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
 // Volumetric Transmittance Integrator
 // used for debugging, just returns transmittance
 /////////////////////////////////////////////////

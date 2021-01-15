@@ -82,8 +82,7 @@ int main(int argc, char* argv[])
     // VolExpShaderToy();
     // return 0;
     //
-    // /////\\\ TEMPORARY \\\/////
-
+    // /////\\\ TEMPORARY \\\////
     ////// Month of shaders ////////
 
     // jan_1_2020();          // done

@@ -24,8 +24,8 @@ class MediaClosure;
 class Media
 {
 public:
-    Media();
-    virtual ~Media();
+    Media() { }
+    virtual ~Media() { }
 
     virtual void preProcess() { }
 

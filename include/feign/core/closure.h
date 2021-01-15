@@ -27,6 +27,10 @@ struct EmitterEval
     bool valid = false;
 };
 
+// TODO: clean this up a bit maybe?
+// TODO: maybe create extended versions for non-exponential support + keeping
+//       track of different types of paths
+//
 // this struct represents what is returned from the material shader when it
 // gets evaluated
 struct MaterialClosure
@@ -52,8 +56,8 @@ struct MaterialClosure
     Sampler* sampler;        // the sampler to use
     Intersection* its; // a reference to the intersection info
     Ray3f* ray;        // a reference to the incoming ray
-    const Scene* scene;      // a reference to the scene
     Vector3f wi;
+    const Scene* scene;      // a reference to the scene
     const Media* media;
 
     // sometimes inputs or outputs depending on sampling
@@ -66,13 +70,19 @@ struct MaterialClosure
     Color3f nee;             // contribution from nee
     Float pdf;               // the pdf of the bsdf sample
     Float eta;               // how the ior changes
-    int first_diffuse_evals; // TODO: this should not have to be stored here 
+    int first_diffuse_evals; // TODO: this should not have to be stored here
     bool is_specular;        // whether or not this material is discretely evaluated
     bool last_spec;          // whether the last evaluation was specular
     // bool trace_ray;
     bool sample_all_emitters;
     bool material_accepts_shadows;
     bool first_diffuse_event;
+
+    // flags
+    // 0 - diffuse
+    // 1 - specular
+    // 2 - medium
+    uint32_t last_event;
 };
 
 struct PhotonTracingClosure
@@ -113,17 +123,20 @@ struct MediaClosure
           t_max(t_max),
           sampled_t(t_max) { }
 
+    MediaClosure(const Media* medium,
+                 Float t_min,
+                 Float t_max,
+                 uint32_t last_event)
+        : medium(medium),
+          t_min(t_min),
+          t_max(t_max),
+          sampled_t(t_max),
+          last_event(last_event) { }
+
     bool handleScatter()
     {
         return sampled_t < t_max;
     }
-
-    // void accumulate_shadow_rays()
-    // {
-    //     nee = Color3f(1.f);
-    //
-    //
-    // }
 
     // input
     const Media* medium;
@@ -134,6 +147,9 @@ struct MediaClosure
     // output
     Float sampled_t;
     Color3f nee;
+
+    // used for non-exponential media
+    uint32_t last_event;
 };
 
 FEIGN_END()
