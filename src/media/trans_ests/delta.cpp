@@ -7,31 +7,21 @@
  **/
 
 #include <feign/media/trans_est.h>
+#include <feign/core/closure.h>
 
 FEIGN_BEGIN()
 
 Color3f Trans_DeltaTracking::transmittance(const Ray3f& ray,
                                            Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const
+                                           MediaClosure& closure) const
 {
-    throw new NotImplementedException("delta tracking tr");
-
-    // TODO
-
-    return 0.f;
+    #if NONEXPMEDIA
+        throw new NotSupportedException("delta tracking does not work for non-classical media");
+        return 0.f;
+    #else
+        throw new NotImplementedException("delta tracking tr");
+        return 0.f;
+    #endif
 }
-
-// Color3f Trans_DeltaTracking::spectral_transmittance(const Ray3f& ray,
-//                                                     Sampler* sampler,
-//                                                     Float tMin,
-//                                                     Float tMax) const
-// {
-//     throw new NotImplementedException("delta tracking spectral tr");
-//
-//     // TODO
-//
-//     return Color3f(0.f);
-// }
 
 FEIGN_END()

@@ -29,12 +29,8 @@
 // work laptop
 // #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
 
-// TODO: get the feign namespaces working
-// #define FEIGN_BEGIN() namespace feign {
-// #define FEIGN_END() }
-
-#define FEIGN_BEGIN()
-#define FEIGN_END()
+#define FEIGN_BEGIN() namespace feign {
+#define FEIGN_END() }
 
 // TODO: incorporate clocking throughout renderer
 // Stats tracking //
@@ -46,6 +42,7 @@
 #define GOTTAGOFAST true
 #define OPENVDB true
 #define VERBOSE false
+#define NONEXPMEDIA true
 
 #define Epsilon 1e-4f
 #define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
@@ -206,6 +203,17 @@ public:
     NotImplementedException() : std::runtime_error("Exception: Method Not Implemented") { }
 
     NotImplementedException(std::string str) : std::runtime_error("Exception: Method Not Implemented: " + str)
+    {
+        std::cout << str << std::endl;
+    }
+};
+
+class NotSupportedException : public std::runtime_error
+{
+public:
+    NotSupportedException() : std::runtime_error("Exception: Feature Not Supported") { }
+
+    NotSupportedException(std::string str) : std::runtime_error("Exception: Feature Not Supported: " + str)
     {
         std::cout << str << std::endl;
     }

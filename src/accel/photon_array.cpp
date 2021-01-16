@@ -14,6 +14,8 @@
 #include <feign/core/closure.h>
 #include <feign/core/shader.h>
 
+FEIGN_BEGIN()
+
 void PhotonArray::build(const BBox3f& scene_bounds,
                         Photon* list,
                         int count)
@@ -183,3 +185,5 @@ void PhotonArray::eval(MaterialClosure& closure,
 {
     throw new NotImplementedException("photon array");
 }
+
+FEIGN_END()

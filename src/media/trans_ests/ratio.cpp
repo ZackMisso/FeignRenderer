@@ -7,6 +7,7 @@
  **/
 
 #include <feign/media/trans_est.h>
+#include <feign/core/closure.h>
 
 FEIGN_BEGIN()
 
@@ -20,37 +21,32 @@ Trans_RatioTracking::Trans_RatioTracking(Float maj)
 
 Color3f Trans_RatioTracking::transmittance(const Ray3f& ray,
                                            Sampler* sampler,
-                                           Float tMin,
-                                           Float tMax) const
+                                           MediaClosure& closure) const
 {
-    Float t = tMin;
-    Color3f tr = Color3f(1.0);
+    #if NONEXPMEDIA
+        throw new NotSupportedException("ratio tracking does not work for non-classical media");
+        return 0.f;
+    #else
+        Float tMin = closure.t_min;
+        Float tMax = closure.t_max;
 
-    while(true)
-    {
-        t -= log(1.f - sampler->next1D()) / maj;
+        Float t = tMin;
+        Color3f tr = Color3f(1.0);
 
-        if (t >= tMax) break;
+        while(true)
+        {
+            t -= log(1.f - sampler->next1D()) / maj;
 
-        Color3f ext = density->D(ray(t)) * density->sigma_t;
-        ext = ext.min(maj); // for now disallow non bounding majoranst by
-                                  // clamping
-        tr *= (Color3f(maj) - ext) / maj;
-    }
+            if (t >= tMax) break;
 
-    return tr;
+            Color3f ext = density->D(ray(t)) * density->sigma_t;
+            ext = ext.min(maj); // for now disallow non bounding majoranst by
+                                // clamping
+            tr *= (Color3f(maj) - ext) / maj;
+        }
+
+        return tr;
+    #endif
 }
-
-// Color3f Trans_RatioTracking::spectral_transmittance(const Ray3f& ray,
-//                                                     Sampler* sampler,
-//                                                     Float tMin,
-//                                                     Float tMax) const
-// {
-//     throw new NotImplementedException("delta tracking spectral tr");
-//
-//     // TODO
-//
-//     return Color3f(0.f);
-// }
 
 FEIGN_END()

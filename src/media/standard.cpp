@@ -43,12 +43,12 @@ Color3f StandardMedium::sample(Ray3f world_ray,
 {
     const Ray3f ray = transform.inverse() * world_ray;
 
+    // if the medium is fully absorptive, just evaluate transmittance
     if (sca_coeff == COLOR_BLACK)
     {
         return trans_est->trans_est->transmittance(ray,
                                                    sampler,
-                                                   closure.t_min,
-                                                   closure.t_max);
+                                                   closure);
     }
 
     Color3f samp_val = sampling->sampling->sample(ray,
@@ -73,15 +73,13 @@ Color3f StandardMedium::sample(Ray3f world_ray,
 
 Color3f StandardMedium::transmittance(Ray3f world_ray,
                                       Sampler* sampler,
-                                      Float t_min,
-                                      Float t_max) const
+                                      MediaClosure& closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
 
     return trans_est->trans_est->transmittance(ray,
                                                sampler,
-                                               t_min,
-                                               t_max);
+                                               closure);
 }
 
 FEIGN_END()

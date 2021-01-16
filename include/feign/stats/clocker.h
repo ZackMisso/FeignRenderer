@@ -44,6 +44,6 @@ public:
     static long getClockerDuration(std::string tracker);
 };
 
-FEIGN_END()
-
 #endif
+
+FEIGN_END()

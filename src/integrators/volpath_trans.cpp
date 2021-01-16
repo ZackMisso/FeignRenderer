@@ -60,7 +60,7 @@ Color3f VolPathTrans_Integrator::Li(const Scene* scene,
         {
             MediaClosure medium_closure(closure.media, ray.near, its.t);
 
-            return closure.media->transmittance(ray, sampler, ray.near, its.t);
+            return closure.media->transmittance(ray, sampler, medium_closure);
         }
     }
 

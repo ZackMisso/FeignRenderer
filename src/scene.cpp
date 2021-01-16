@@ -344,10 +344,10 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     {
         if (mediums[i])
         {
+            MediaClosure closure(mediums[i], rays[i].near, rays[i].far);
             beta *= mediums[i]->transmittance(rays[i],
                                               sampler,
-                                              rays[i].near,
-                                              rays[i].far);
+                                              closure);
         }
     }
 

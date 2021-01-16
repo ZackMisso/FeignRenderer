@@ -11,18 +11,20 @@
 
 FEIGN_BEGIN()
 
-Color3f Trans_PseriesCMF::transmittance(const Ray3f& ray,
+Color3f Trans_Homogenous::transmittance(const Ray3f& ray,
                                         Sampler* sampler,
                                         MediaClosure& closure) const
 {
-    throw new NotImplementedException("pseries_cmf");
-
     #if NONEXPMEDIA
-        throw new NotSupportedException("pseries cmf does not work for non-classical media");
+        throw new NotImplementedException("homogenous non exp");
         return 0.f;
     #else
-        // TODO
-        return 0.f;
+        Float tMin = closure.t_min;
+        Float tMax = closure.t_max;
+
+        Color3f dense = density->D(ray((tMax - tMin) / 2.f + tMin));
+        Color3f trans = Exp(dense * -(tMax - tMin));
+        return trans;
     #endif
 }
 

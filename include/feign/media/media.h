@@ -16,6 +16,7 @@
 #include <feign/media/phase.h>
 #include <feign/media/sampling.h>
 #include <feign/media/trans_est.h>
+#include <feign/media/trans_func.h>
 
 FEIGN_BEGIN()
 
@@ -35,8 +36,7 @@ public:
 
     virtual Color3f transmittance(Ray3f ray,
                                   Sampler* sampler,
-                                  Float t_min,
-                                  Float t_max) const = 0;
+                                  MediaClosure& closure) const = 0;
 
     virtual Float sample_phase(const Vector3f& wo,
                                Vector3f& wi,
@@ -94,8 +94,7 @@ public:
 
     virtual Color3f transmittance(Ray3f ray,
                                   Sampler* sampler,
-                                  Float t_min,
-                                  Float t_max) const;
+                                  MediaClosure& closure) const;
 
     virtual Float sample_phase(const Vector3f& wo,
                                Vector3f& wi,
@@ -110,6 +109,8 @@ public:
     MediumSamplingNode* sampling;
     PhaseFunctionNode* phase;
     TransmittanceEstimatorNode* trans_est;
+    TransFuncNode* trans_func;
+
     Transform transform;
     Color3f abs_coeff;
     Color3f sca_coeff;
@@ -135,8 +136,7 @@ public:
 
     virtual Color3f transmittance(Ray3f ray,
                                   Sampler* sampler,
-                                  Float t_min,
-                                  Float t_max) const;
+                                  MediaClosure& closure) const;
 
     virtual Float sample_phase(const Vector3f& wo,
                                Vector3f& wi,

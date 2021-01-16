@@ -9,11 +9,13 @@
 #pragma once
 
 #include <feign/core/node.h>
-#include <feign/media/density_func.h>
 #include <feign/core/sampler.h>
+#include <feign/media/density_func.h>
 #include <feign/math/ray.h>
 
 FEIGN_BEGIN()
+
+class MediaClosure;
 
 class TransmittanceEstimator
 {
@@ -34,13 +36,7 @@ public:
 
     virtual Color3f transmittance(const Ray3f& ray,
                                   Sampler* sampler,
-                                  Float tMin,
-                                  Float tMax) const = 0;
-
-    // virtual Color3f spectral_transmittance(const Ray3f& ray,
-    //                                        Sampler* sampler,
-    //                                        Float tMin,
-    //                                        Float tMax) const = 0;
+                                  MediaClosure& closure) const = 0;
 
     DensityFunction* density;
 };
@@ -50,23 +46,7 @@ class Trans_Homogenous : public TransmittanceEstimator
 public:
     virtual Color3f transmittance(const Ray3f& ray,
                                   Sampler* sampler,
-                                  Float tMin,
-                                  Float tMax) const
-    {
-        // annalytically importance samples transmittance for a homogeneous medium
-        Color3f dense = density->D(ray((tMax-tMin) / 2.f + tMin));
-        Color3f trans = Exp(dense * -(tMax-tMin));
-        return trans;
-    }
-
-    // virtual Color3f spectral_transmittance(const Ray3f& ray,
-    //                                        Sampler* sampler,
-    //                                        Float tMin,
-    //                                        Float tMax) const
-    // {
-    //     return exp(-(tMax-tMin) *
-    //            density->D(ray(((tMax-tMin) / 2.f) + tMin)));
-    // }
+                                  MediaClosure& closure) const;
 };
 
 class Trans_DeltaTracking : public TransmittanceEstimator
@@ -74,13 +54,7 @@ class Trans_DeltaTracking : public TransmittanceEstimator
 public:
     virtual Color3f transmittance(const Ray3f& ray,
                                   Sampler* sampler,
-                                  Float tMin,
-                                  Float tMax) const;
-
-    // virtual Color3f spectral_transmittance(const Ray3f& ray,
-    //                                        Sampler* sampler,
-    //                                        Float tMin,
-    //                                        Float tMax) const;
+                                  MediaClosure& closure) const;
 };
 
 class Trans_RatioTracking : public TransmittanceEstimator
@@ -99,29 +73,19 @@ public:
 
     virtual Color3f transmittance(const Ray3f& ray,
                                   Sampler* sampler,
-                                  Float tMin,
-                                  Float tMax) const;
-
-    // virtual Color3f spectral_transmittance(const Ray3f& ray,
-    //                                        Sampler* sampler,
-    //                                        Float tMin,
-    //                                        Float tMax) const;
+                                  MediaClosure& closure) const;
 
     Float maj;
 };
+
+// TODO: implement ray-marching
 
 class Trans_PseriesCMF : public TransmittanceEstimator
 {
 public:
     virtual Color3f transmittance(const Ray3f& ray,
                                   Sampler* sampler,
-                                  Float tMin,
-                                  Float tMax) const;
-
-    // virtual Color3f spectral_transmittance(const Ray3f& ray,
-    //                                        Sampler* sampler,
-    //                                        Float tMin,
-    //                                        Float tMax) const;
+                                  MediaClosure& closure) const;
 };
 
 /////////////////////////////////////////////////

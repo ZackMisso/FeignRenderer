@@ -12,6 +12,8 @@
 
 #include <feign/math/vector.h>
 
+FEIGN_BEGIN()
+
 struct Complex2f
 {
 public:
@@ -155,3 +157,5 @@ struct Complex3f
     Float imag;
     Float imag_2;
 };
+
+FEIGN_END()

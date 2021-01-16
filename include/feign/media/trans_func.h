@@ -92,4 +92,22 @@ public:
     Float c;
 };
 
+/////////////////////////////////////////////////
+// Trans Func Node structure
+/////////////////////////////////////////////////
+struct TransFuncNode : public Node
+{
+public:
+    TransFuncNode() : trans_func(nullptr) { }
+    TransFuncNode(std::string name) : Node(name), trans_func(nullptr) { }
+    TransFuncNode(TransFunc* trans_func) : trans_func(trans_func) { }
+
+    TransFunc* operator()() { return trans_func; }
+
+    ~TransFuncNode() { delete trans_func; }
+
+    TransFunc* trans_func;
+};
+/////////////////////////////////////////////////
+
 FEIGN_END()

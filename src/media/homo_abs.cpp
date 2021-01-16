@@ -26,17 +26,14 @@ Color3f HomogeneousAbsorbingMedia::sample(Ray3f ray,
     closure.sampled_t = closure.t_max + 1;
     return transmittance(ray,
                          sampler,
-                         closure.t_min,
-                         closure.t_max);
+                         closure);
 }
 
 Color3f HomogeneousAbsorbingMedia::transmittance(Ray3f ray,
                                                  Sampler* sampler,
-                                                 Float t_min,
-                                                 Float t_max) const
+                                                 MediaClosure& closure) const
 {
-    // assert(false);
-    return exp(-avg_density * (t_max - t_min));
+    return exp(-avg_density * (closure.t_max - closure.t_min));
 }
 
 bool HomogeneousAbsorbingMedia::isGlobal() const

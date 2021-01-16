@@ -35,6 +35,7 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
                                               scene,
                                               false,
                                               true);
+
     // TODO: maybe make this a process of the closure constructor
     closure.first_diffuse_evals = fb_emitter_samples;
 
@@ -46,7 +47,6 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
-        // std::cout << "max bounces: " << max_bounces << std::endl;
         if (beta.isZero()) break;
 
         Intersection its;
@@ -57,7 +57,11 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
 
         if (closure.media)
         {
-            MediaClosure medium_closure(closure.media, ray.near, its.t);
+            MediaClosure medium_closure(closure.media,
+                                        ray.near,
+                                        its.t,
+                                        closure.last_event,
+                                        VertexType::VERTEX_MEDIUM);
 
             beta *= closure.media->sample(ray, sampler, medium_closure);
 
@@ -116,6 +120,8 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
 
                 beta /= rr_prob;
 
+                closure.last_event = VertexType::VERTEX_MEDIUM;
+
                 // the current media should not change during internal scattering
                 continue;
             }
@@ -153,6 +159,9 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
 
             continue;
         }
+
+        // TODO: this is not exactly right, it could be diffuse or specular
+        closure.last_event = VertexType::VERTEX_DIFFUSE;
 
         const MaterialShader* shader = scene->getShapeMaterialShader(its);
 

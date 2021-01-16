@@ -247,6 +247,7 @@ add_executable(feign
     src/media/trans_ests/delta.cpp
     src/media/trans_ests/pseries_cmf.cpp
     src/media/trans_ests/ratio.cpp
+    src/media/trans_ests/homo.cpp
     src/media/density_funcs/point_average.cpp
     src/media/density_funcs/vdb_density.cpp
     src/media/trans_funcs/trans_func.cpp

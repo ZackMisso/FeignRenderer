@@ -35,7 +35,7 @@
 
 #include "../scenes/shadertoy_recreations/include.h"
 
-FEIGN_BEGIN()
+using namespace feign;
 
 void run_scene(std::string scene_name)
 {
@@ -197,5 +197,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-
-FEIGN_END()

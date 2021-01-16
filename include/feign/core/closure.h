@@ -27,6 +27,13 @@ struct EmitterEval
     bool valid = false;
 };
 
+enum VertexType
+{
+    VERTEX_MEDIUM,
+    VERTEX_DIFFUSE,
+    VERTEX_SPECULAR
+};
+
 // TODO: clean this up a bit maybe?
 // TODO: maybe create extended versions for non-exponential support + keeping
 //       track of different types of paths
@@ -126,12 +133,14 @@ struct MediaClosure
     MediaClosure(const Media* medium,
                  Float t_min,
                  Float t_max,
-                 uint32_t last_event)
+                 uint32_t last_event,
+                 uint32_t next_event)
         : medium(medium),
           t_min(t_min),
           t_max(t_max),
           sampled_t(t_max),
-          last_event(last_event) { }
+          last_event(last_event),
+          next_event(next_event) { }
 
     bool handleScatter()
     {
@@ -148,8 +157,10 @@ struct MediaClosure
     Float sampled_t;
     Color3f nee;
 
+    // TODO: turn these into flags
     // used for non-exponential media
     uint32_t last_event;
+    uint32_t next_event;
 };
 
 FEIGN_END()

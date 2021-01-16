@@ -3,6 +3,10 @@
 #define HEAD_LIGHT 2
 #define ACCENT_LIGHT 3
 
+#include <feign/common.h>
+
+FEIGN_BEGIN()
+
 struct HOT_Tile
 {
     HOT_Tile(int type, Vector3f pos)
@@ -647,3 +651,5 @@ struct HOT_TileEffect_SectionBeam : public HOT_TileEffect
     Float start_z;
     Float end_z;
 };
+
+FEIGN_END()
