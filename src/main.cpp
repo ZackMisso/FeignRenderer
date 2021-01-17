@@ -30,6 +30,7 @@
 
 #include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
 #include "../scenes/cool_renders/fractal_media/mandlebrot_media.h"
+#include "../scenes/cool_renders/wolf_head/wolf_head.h"
 
 #include "../scenes/videos/medium_initial.h"
 
@@ -78,6 +79,9 @@ int main(int argc, char* argv[])
 
     // HallOfTiles();
     // return 0;
+
+    WolfHead();
+    return 0;
 
     // VolExpShaderToy();
     // return 0;

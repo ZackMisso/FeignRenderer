@@ -83,6 +83,11 @@ public:
 
             Float dense = (density->D(ray(t)) * density->sigma_t).max();
 
+            // if (dense > majorant)
+            // {
+            //     LOG("density is huge: " + std::to_string(dense) + " majr: " + std::to_string(majorant));
+            // }
+
             if (dense / majorant > sampler->next1D())
             {
                 // t should be set already

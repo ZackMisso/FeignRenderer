@@ -42,7 +42,7 @@
 #define GOTTAGOFAST true
 #define OPENVDB true
 #define VERBOSE false
-#define NONEXPMEDIA true
+#define NONEXPMEDIA false
 
 #define Epsilon 1e-4f
 #define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
