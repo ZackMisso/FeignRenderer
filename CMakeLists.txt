@@ -248,6 +248,10 @@ add_executable(feign
     src/media/trans_ests/pseries_cmf.cpp
     src/media/trans_ests/ratio.cpp
     src/media/trans_ests/homo.cpp
+    src/media/trans_ests/ray_march.cpp
+    src/media/sampling/analytic.cpp
+    src/media/sampling/delta.cpp
+    src/media/sampling/ray_march.cpp
     src/media/density_funcs/point_average.cpp
     src/media/density_funcs/vdb_density.cpp
     src/media/trans_funcs/trans_func.cpp

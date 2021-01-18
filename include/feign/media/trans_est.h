@@ -78,7 +78,18 @@ public:
     Float maj;
 };
 
-// TODO: implement ray-marching
+class Trans_RayMarching : public TransmittanceEstimator
+{
+    Trans_RayMarching() : step_size(1.f) { }
+    Trans_RayMarching(Float step_size) : step_size(step_size) { }
+
+    virtual Color3f transmittance(const Ray3f& ray,
+                                  Sampler* sampler,
+                                  MediaClosure& closure) const;
+
+    Float step_size;
+};
+
 
 class Trans_PseriesCMF : public TransmittanceEstimator
 {
