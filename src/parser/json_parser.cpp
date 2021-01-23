@@ -8,10 +8,8 @@
 
 #include <feign/parser/json_parser.h>
 #include <feign/core/api.h>
-
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
-
 #include <feign/stats/clocker.h>
 
 #include <rapidjson/document.h>
@@ -150,6 +148,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 std::string sampling = "default";
                 std::string phase = "default";
                 std::string trans_est = "default";
+                std::string trans_func = "default";
                 Color3f abs = Color3f(1.f);
                 Color3f scat = Color3f(0.f);
                 Transform media_transform = Transform();
@@ -170,13 +169,16 @@ void JsonParser::actually_parse(rapidjson::Document& document)
                 {
                     trans_est = value["trans_est"].GetString();
                 }
-
-                LOG("WHAT: " + density);
+                if (value.HasMember("trans_func"))
+                {
+                    trans_func = value["trans_func"].GetString();
+                }
 
                 StandardMedium::Params params(trans_est,
                                               phase,
                                               sampling,
                                               density,
+                                              trans_func,
                                               media_transform,
                                               abs,
                                               scat);

@@ -313,6 +313,7 @@ void MediumTesting_Debug::initialize_sphere_medium(int frame)
                                         "default",
                                         "default",
                                         "sphere_density",
+                                        "exp",
                                         identity,
                                         Color3f(1.f),
                                         COLOR_BLACK);
@@ -336,6 +337,7 @@ void MediumTesting_Debug::initialize_box_medium(int frame)
                                         "default",
                                         "const_sampler",
                                         "const_density",
+                                        "exp",
                                         identity,
                                         Color3f(1.0f),
                                         Color3f(0.0f));
@@ -413,6 +415,7 @@ void MediumTesting_Debug::initialize_initial_scene(int frame, bool verbose=false
                                         "default",
                                         "delta_sampler",
                                         "vdb_density",
+                                        "exp",
                                         identity,
                                         abs,
                                         scat);
@@ -681,6 +684,7 @@ void MediumTesting_Debug::initialize_colored_scene(int frame, bool verbose=false
                                                 "default",
                                                 "delta_sampler_" + std::to_string(i),
                                                 "vdb_density_" + std::to_string(i),
+                                                "exp",
                                                 identity,
                                                 abs,
                                                 scat);
@@ -850,6 +854,7 @@ void MediumTesting_Debug::initialize_homo_sphere_medium_vary_scatter(int frame)
                                         "default",
                                         "default",
                                         "const_density",
+                                        "exp",
                                         identity,
                                         abs,
                                         scat);

@@ -15,10 +15,12 @@ StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
                                PhaseFunctionNode* phase_node,
                                MediumSamplingNode* sampling_node,
                                DensityFunctionNode* density_func_node,
+                               TransFuncNode* trans_func_node,
                                Transform& transform,
                                Color3f abs,
                                Color3f scat)
     : density(density_func_node),
+      trans_func(trans_func_node),
       sampling(sampling_node),
       phase(phase_node),
       trans_est(trans_node),
@@ -32,7 +34,9 @@ StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
 void StandardMedium::preProcess()
 {
     sampling->sampling->density = density->density;
+    sampling->sampling->trans_func = trans_func->trans_func;
     trans_est->trans_est->density = density->density;
+    trans_est->trans_est->trans_func = trans_func->trans_func;
     density->density->sigma_t = sigma_t;
     density->density->preProcess();
 }
@@ -63,10 +67,6 @@ Color3f StandardMedium::sample(Ray3f world_ray,
     //       then the point sampled has surpassed the max_t
 
     return Color3f(1.f);
-
-    // // TODO: set stuff in MediumClosure
-    //
-    // return samp_val;
 }
 
 Color3f StandardMedium::transmittance(Ray3f world_ray,

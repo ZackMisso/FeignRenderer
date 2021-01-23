@@ -11,6 +11,7 @@
 #include <feign/core/node.h>
 #include <feign/core/sampler.h>
 #include <feign/media/density_func.h>
+#include <feign/media/trans_func.h>
 #include <feign/math/ray.h>
 
 FEIGN_BEGIN()
@@ -25,11 +26,13 @@ public:
         // density function should be initialized later i.e. in the constructor
         // of standard medium
         density = nullptr;
+        trans_func = nullptr;
     }
 
     virtual ~TransmittanceEstimator()
     {
         density = nullptr;
+        trans_func = nullptr;
     }
 
     TransmittanceEstimator(DensityFunction* density) : density(density) { }
@@ -39,6 +42,7 @@ public:
                                   MediaClosure& closure) const = 0;
 
     DensityFunction* density;
+    TransFunc* trans_func;
 };
 
 class Trans_Homogenous : public TransmittanceEstimator

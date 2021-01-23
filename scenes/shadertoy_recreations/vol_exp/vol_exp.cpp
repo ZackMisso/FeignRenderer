@@ -12,12 +12,13 @@ VolExpShaderToy::VolExpShaderToy()
 void VolExpShaderToy::initialize_media(int frame)
 {
     // TODO: debug why this is breaking
-    
+
     Transform identity = Transform();
     StandardMedium::Params media_params("ratio",
                                         "default",
                                         "delta_sampler",
                                         "sphere_density",
+                                        "exp",
                                         identity,
                                         Color3f(1.f),
                                         Color3f(1.0f));

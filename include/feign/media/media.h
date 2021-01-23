@@ -58,6 +58,7 @@ public:
             std::string phase_node,
             std::string sampling_node,
             std::string density_func_node,
+            std::string trans_func_node,
             Transform& transform,
             Color3f abs,
             Color3f scat
@@ -65,6 +66,7 @@ public:
             phase_node(phase_node),
             sampling_node(sampling_node),
             density_func_node(density_func_node),
+            trans_func_node(trans_func_node),
             transform(transform),
             abs(abs),
             scat(scat) { }
@@ -73,6 +75,7 @@ public:
         std::string phase_node;
         std::string sampling_node;
         std::string density_func_node;
+        std::string trans_func_node;
         Transform transform;
         Color3f abs;
         Color3f scat;
@@ -82,6 +85,7 @@ public:
                    PhaseFunctionNode* phase_node,
                    MediumSamplingNode* sampling_node,
                    DensityFunctionNode* density_func_node,
+                   TransFuncNode* trans_func_node,
                    Transform& transform,
                    Color3f abs,
                    Color3f scat);

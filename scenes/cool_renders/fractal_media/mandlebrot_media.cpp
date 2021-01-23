@@ -252,6 +252,7 @@ void MandlebrotMediaTests::initialize_homo_sphere_medium_vary_scatter(int frame)
                                         "default",
                                         "delta_sampler",
                                         "mandlebrot_density",
+                                        "exp",
                                         identity,
                                         abs,
                                         scat);

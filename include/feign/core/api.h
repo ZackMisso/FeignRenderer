@@ -71,6 +71,7 @@ public:
     std::unordered_map<std::string, PhaseFunctionNode*> phase_funcs;
     std::unordered_map<std::string, MediumSamplingNode*> medium_samplings;
     std::unordered_map<std::string, TransmittanceEstimatorNode*> trans_ests;
+    std::unordered_map<std::string, TransFuncNode*> trans_funcs;
 
     // TODO: the find methods should really not be public
     BSDFNode*                   find_bsdf(std::string name);
@@ -90,6 +91,7 @@ public:
     PhaseFunctionNode*          find_phase_func(std::string name);
     MediumSamplingNode*         find_medium_sampling(std::string name);
     TransmittanceEstimatorNode* find_transmittance_estimator(std::string name);
+    TransFuncNode*              find_transmittance_func(std::string name);
 
     // if image_target is specified, the renderer will render to the
     // image, otherwise it will output to a file
@@ -158,6 +160,11 @@ public:
                                         std::string type,
                                         void* trans_est_data);
 
+    static void fr_medium_transmittance_func(std::string name,
+                                             std::string type,
+                                             void* trans_func_data);
+//////////////////////////////////// MEDIA ////////////////////////////////////
+
     static void fr_emitter(std::string name,
                            std::string type,
                            void* emitter_data);
@@ -173,7 +180,6 @@ public:
     static void fr_texture(std::string name,
                            std::string type,
                            void* texture_data);
-//////////////////////////////////// MEDIA ////////////////////////////////////
 
     static void fr_clear_transform();
     static void fr_scale(float sx, float sy, float sz);

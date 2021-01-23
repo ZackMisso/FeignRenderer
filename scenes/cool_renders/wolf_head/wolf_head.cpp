@@ -85,6 +85,7 @@ void WolfHead::initialize_initial_scene(int frame, bool verbose=false)
                                         "default",
                                         "delta_sampler",
                                         "vdb_density",
+                                        "exp",
                                         identity,
                                         abs,
                                         scat);

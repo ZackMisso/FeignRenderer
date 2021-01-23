@@ -26,6 +26,7 @@
 #include <feign/media/density_func.h>
 #include <feign/media/sampling.h>
 #include <feign/media/trans_est.h>
+#include <feign/media/trans_func.h>
 
 // shapes
 #include <feign/shapes/objmesh.h>
@@ -35,6 +36,8 @@
 #include <feign/stats/clocker.h>
 
 // TODO: make all of this logic more generic for more easily adding new classes
+// TODO: rethink this node structure. storing everything as nodes instead of their
+//       actual types is a little weird. Is there a cleaner way of doing this?
 
 FEIGN_BEGIN()
 
@@ -474,6 +477,30 @@ TransmittanceEstimatorNode* FeignRenderer::find_transmittance_estimator(std::str
         }
 
         trans_ests.insert({name, node});
+        return node;
+    }
+    else
+    {
+        return itr->second;
+    }
+}
+
+TransFuncNode* FeignRenderer::find_transmittance_func(std::string name)
+{
+    if (name == "") return nullptr;
+
+    std::unordered_map<std::string, TransFuncNode*>::const_iterator itr = trans_funcs.find(name);
+
+    if (itr == trans_funcs.end())
+    {
+        TransFuncNode* node = new TransFuncNode(name);
+
+        if (name == "default")
+        {
+            node->trans_func = new ExpTrans();
+        }
+
+        trans_funcs.insert({name, node});
         return node;
     }
     else
@@ -1007,11 +1034,14 @@ void FeignRenderer::fr_media(std::string name,
             getInstance()->find_medium_sampling(params->sampling_node);
         DensityFunctionNode* density_node =
             getInstance()->find_density_func(params->density_func_node);
+        TransFuncNode* trans_func_node =
+            getInstance()->find_transmittance_func(params->trans_func_node);
 
         medium->media = new StandardMedium(trans_node,
                                            phase_node,
                                            med_samp_node,
                                            density_node,
+                                           trans_func_node,
                                            params->transform,
                                            params->abs,
                                            params->scat);
@@ -1150,6 +1180,49 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
     {
         throw new NotImplementedException("transmittance estimator not recognized: " + type);
     }
+}
+
+void FeignRenderer::fr_medium_transmittance_func(std::string name,
+                                                 std::string type,
+                                                 void* trans_func_data)
+{
+    TransFuncNode* trans_func = getInstance()->find_transmittance_func(name);
+
+    if (trans_func->trans_func)
+    {
+        throw new FeignRendererException("transmittance function already defined");
+    }
+
+    // TODO: finish implementing this
+
+    // if (type == "homo")
+    // {
+    //     trans_est->trans_est = new Trans_Homogenous();
+    // }
+    // else if (type == "delta")
+    // {
+    //     trans_est->trans_est = new Trans_DeltaTracking();
+    // }
+    // else if (type == "ratio")
+    // {
+    //     if (trans_est_data)
+    //     {
+    //         Trans_RatioTracking::Params* params = (Trans_RatioTracking::Params*)trans_est_data;
+    //         trans_est->trans_est = new Trans_RatioTracking(params->maj);
+    //     }
+    //     else
+    //     {
+    //         trans_est->trans_est = new Trans_RatioTracking(10.0);
+    //     }
+    // }
+    // else if (type == "pseries")
+    // {
+    //     trans_est->trans_est = new Trans_PseriesCMF();
+    // }
+    // else
+    // {
+    //     throw new NotImplementedException("transmittance estimator not recognized: " + type);
+    // }
 }
 
 void FeignRenderer::fr_emitter(std::string name,

@@ -37,6 +37,9 @@ public:
     virtual Float sampleMedium(Sampler* sampler) const = 0;
 };
 
+/////////////////////////////////////////////////
+// Linear Transmittance
+/////////////////////////////////////////////////
 class LinearTrans : public TransFunc
 {
 public:
@@ -54,12 +57,14 @@ public:
 
     Float maxT;
 };
+/////////////////////////////////////////////////
 
+/////////////////////////////////////////////////
+// Exponential Transmittance
+/////////////////////////////////////////////////
 class ExpTrans : public TransFunc
 {
 public:
-    ExpTrans(Float maxT);
-
     virtual Color3f surfaceSurface(Color3f tau) const override final;
     virtual Color3f surfaceMedium(Color3f tau) const override final;
     virtual Color3f mediumSurface(Color3f tau) const override final;
@@ -70,7 +75,11 @@ public:
     virtual Float sampleSurface(Sampler* sampler) const override final;
     virtual Float sampleMedium(Sampler* sampler) const override final;
 };
+/////////////////////////////////////////////////
 
+/////////////////////////////////////////////////
+// Davis Model Transmittance
+/////////////////////////////////////////////////
 class DavisTrans : public TransFunc
 {
 public:
@@ -91,6 +100,7 @@ public:
     Float beta;
     Float c;
 };
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // Trans Func Node structure
