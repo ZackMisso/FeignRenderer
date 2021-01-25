@@ -24,7 +24,8 @@ void NormalIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 
 Color3f NormalIntegrator::Li(const Scene* scene,
                              Sampler* sampler,
-                             const Ray3f& ray) const
+                             const Ray3f& ray,
+                             bool debug) const
 {
     Intersection its;
 

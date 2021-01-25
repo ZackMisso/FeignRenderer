@@ -27,7 +27,8 @@ void Ambient_Occlusion_Integrator::preProcess(const Scene* scene,
 
 Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
                                          Sampler* sampler,
-                                         const Ray3f& ray) const
+                                         const Ray3f& ray,
+                                         bool debug) const
 {
     Intersection its;
 

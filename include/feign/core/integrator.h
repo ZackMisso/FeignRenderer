@@ -84,7 +84,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const = 0;
+                       const Ray3f& ray,
+                       bool debug = false) const = 0;
 
     std::string location;
     FilterNode* filter;
@@ -112,7 +113,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -130,7 +132,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -149,7 +152,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -168,7 +172,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -186,7 +191,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -204,7 +210,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -222,7 +229,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -240,7 +248,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -259,7 +268,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -316,7 +326,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 
     // virtual void render(const Scene* scene,
     //                     const Camera* camera,
@@ -349,7 +360,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -367,7 +379,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -410,7 +423,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 
@@ -432,7 +446,8 @@ public:
 
     virtual Color3f Li(const Scene* scene,
                        Sampler* sampler,
-                       const Ray3f& ray) const;
+                       const Ray3f& ray,
+                       bool debug = false) const;
 };
 /////////////////////////////////////////////////
 

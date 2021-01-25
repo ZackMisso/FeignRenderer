@@ -25,7 +25,8 @@ void VolPathTrans_Integrator::preProcess(const Scene* scene, Sampler* sampler)
 // this integrator assumes that the medium being used is bounded
 Color3f VolPathTrans_Integrator::Li(const Scene* scene,
                                     Sampler* sampler,
-                                    const Ray3f& cam_ray) const
+                                    const Ray3f& cam_ray,
+                                    bool debug) const
 {
     Color3f Li = Color3f(1.f);
     Color3f beta = Color3f(1.f);

@@ -22,7 +22,8 @@ void Path_Unidirectional_Integrator::preProcess(const Scene* scene, Sampler* sam
 
 Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                                            Sampler* sampler,
-                                           const Ray3f& cam_ray) const
+                                           const Ray3f& cam_ray,
+                                           bool debug) const
 {
     Color3f Li = Color3f(0.f);
     Color3f beta = Color3f(1.f);

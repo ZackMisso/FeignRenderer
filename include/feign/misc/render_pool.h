@@ -22,11 +22,12 @@ class Scene;
 
 struct RenderTile
 {
-    RenderTile(int min_x, int min_y, int max_x, int max_y)
+    RenderTile(int min_x, int min_y, int max_x, int max_y, int tile_index)
         : min_x(min_x),
           min_y(min_y),
           max_x(max_x),
           max_y(max_y),
+          tile_index(tile_index),
           done(false)
     {
         int size = (max_x - min_x) * (max_y - min_y);
@@ -47,6 +48,7 @@ struct RenderTile
     int min_y;
     int max_x;
     int max_y;
+    int tile_index;
 };
 
 

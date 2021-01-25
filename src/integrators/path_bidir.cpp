@@ -25,8 +25,9 @@ void Path_Bidirectional_Integrator::preProcess(const Scene* scene, Sampler* samp
 }
 
 Color3f Path_Bidirectional_Integrator::Li(const Scene* scene,
-                                           Sampler* sampler,
-                                           const Ray3f& ray) const
+                                          Sampler* sampler,
+                                          const Ray3f& ray,
+                                          bool debug) const
 {
     throw new NotImplementedException("path bidir li");
 

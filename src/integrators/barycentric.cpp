@@ -28,8 +28,9 @@ void BarycentricIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 }
 
 Color3f BarycentricIntegrator::Li(const Scene* scene,
-                             Sampler* sampler,
-                             const Ray3f& ray) const
+                                  Sampler* sampler,
+                                  const Ray3f& ray,
+                                  bool debug) const
 {
     Intersection its;
 

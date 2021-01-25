@@ -309,6 +309,7 @@ add_executable(feign
     scenes/cool_renders/hall_of_tiles/hall_of_tiles.cpp
     scenes/cool_renders/fractal_media/mandlebrot_media.cpp
     scenes/cool_renders/wolf_head/wolf_head.cpp
+    scenes/cool_renders/lin_non_exp/lin_non_exp.cpp
 
     # debug scene implementation files
     scenes/videos/medium_initial.cpp

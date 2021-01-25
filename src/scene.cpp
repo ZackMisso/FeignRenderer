@@ -324,7 +324,7 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                     rays.push_back(medium_ray);
                     mediums.push_back(media);
 
-                    if (its.t > tmp_ray.far) break;
+                    if (its.t >= tmp_ray.far) break;
                 }
             }
             else

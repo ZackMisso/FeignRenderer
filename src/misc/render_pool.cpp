@@ -28,12 +28,14 @@ void RenderTile::evaluate(RenderTile* tile,
 
     for (int i = tile->min_y; i < tile->max_y; ++i)
     {
-        Float percent_done = Float(i - tile->min_y) / Float(tile->max_y - tile->min_y);
+        // Float percent_done = Float(i - tile->min_y) / Float(tile->max_y - tile->min_y);
         // LOG("percent_done: " + std::to_string(percent_done));
         for (int j = tile->min_x; j < tile->max_x; ++j)
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
             {
+                if (tile->tile_index == 475) std::cout << "sample: " << k << std::endl;
+                if (tile->tile_index == 475) std::cout << "i: " << i << " j: " << j << std::endl;
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
@@ -45,7 +47,17 @@ void RenderTile::evaluate(RenderTile* tile,
                 //     Clocker::startClock("integrator");
                 // #endif
 
-                rad *= integrator->Li(scene, sampler, ray);
+                if (tile->tile_index == 475)
+                {
+                    std::cout << "calling rad: " << tile->tile_index << std::endl;
+                    rad *= integrator->Li(scene, sampler, ray, true);
+                    std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
+                }
+                else
+                {
+                    rad *= integrator->Li(scene, sampler, ray);
+                }
+                // if (tile->tile_index == 475) std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
 
                 // if (rad.isNan())
                 // {
@@ -140,6 +152,10 @@ void RenderTile::evaluate(RenderTile* tile,
 
     delete sampler;
     tile->done = true;
+
+    std::cout << "tile done: " << tile->tile_index << std::endl;
+
+    if (is_verbose) std::cout << "tile done: " << tile->tile_index << std::endl;
 }
 
 RenderPool::RenderPool(int num_threads, int tile_width)
@@ -170,13 +186,16 @@ void RenderPool::initialize_pool(int im_w, int im_h)
     width = im_w;
     height = im_h;
 
+    int index = 0;
+
     for (int i = 0; i < im_h; i += tile_width)
     {
         for (int j = 0; j < im_w; j += tile_width)
         {
             tiles.push_back(new RenderTile(j, i,
                                            std::min(j+tile_width, im_w),
-                                           std::min(i+tile_width, im_h)));
+                                           std::min(i+tile_width, im_h),
+                                           index++));
         }
     }
 }
@@ -246,14 +265,16 @@ void RenderPool::evaluate_pool(const Scene* scene,
                                                        mutexes));
                 }
 
-                std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
+                // std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
             }
         }
     }
 
     for (int i = 0; i < threads.size(); ++i)
     {
-        try {
+        // std::cout << "joining threads: " << i << std::endl;
+        try
+        {
             threads[i].join();
         }
         catch(const std::exception& ex) { }
@@ -261,6 +282,8 @@ void RenderPool::evaluate_pool(const Scene* scene,
     }
 
     delete[] mutexes;
+
+    // std::cout << "whoop" << std::endl;
 
     // accumulate the results here
     for (int i = 0; i < image.height(); ++i)

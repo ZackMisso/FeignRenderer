@@ -23,8 +23,9 @@ void CosineTermIntegrator::preProcess(const Scene* scene, Sampler* sampler)
 }
 
 Color3f CosineTermIntegrator::Li(const Scene* scene,
-                             Sampler* sampler,
-                             const Ray3f& ray) const
+                                 Sampler* sampler,
+                                 const Ray3f& ray,
+                                 bool debug) const
 {
     Intersection its;
 

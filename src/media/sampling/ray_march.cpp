@@ -17,8 +17,35 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
                                   MediaClosure& closure) const
 {
     #if NONEXPMEDIA
-        throw new NotImplementedException("ray-marching sampling non-exp");
-        return 0.f;
+        // TODO: implement unbiased ray-marching once paper publishes
+        Float t = closure.t_min;
+        Float samp = sampler->next1D();
+        Color3f od = 0.0;
+
+        Float od_samp = trans_func->sample(sampler,
+                                           closure.last_event != VERTEX_MEDIUM);
+
+        while (t < closure.t_max)
+        {
+            Float step = std::min(step_size, closure.t_max - t);
+            Float loc = t + step * samp;
+
+            Float past_od = od.max();
+            od += density->D(ray(loc)) * density->sigma_t;
+
+            if (od.max() > od_samp)
+            {
+                t = t + step * (od_samp - past_od) / (od.max() - past_od);
+                closure.sampled_t = t;
+                return Color3f(1.f);
+            }
+
+            t += step_size;
+        }
+
+        closure.sampled_t = closure.t_max + 1.f;
+
+        return Color3f(1.f);
     #else
         Float t = closure.t_min;
         Float samp = sampler->next1D();

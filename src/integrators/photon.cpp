@@ -162,7 +162,8 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
 Color3f PhotonMapping::Li(const Scene* scene,
                           Sampler* sampler,
-                          const Ray3f& cam_ray) const
+                          const Ray3f& cam_ray,
+                          bool debug) const
 {
     Ray3f ray = cam_ray;
     // TODO: do a direct integrator scheme

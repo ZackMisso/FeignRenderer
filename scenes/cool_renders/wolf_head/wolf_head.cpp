@@ -259,7 +259,7 @@ void WolfHead::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 600;
+    int start_frame = 650;
     // int start_frame = 501;
     int end_frame = 900;
 

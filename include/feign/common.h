@@ -59,6 +59,9 @@
 
 FEIGN_BEGIN()
 
+// this is going to be used temporarily for debugging
+static bool is_verbose = true;
+
 // uncomment the following for desired types
 // typedef double Float;
 typedef float Float;
