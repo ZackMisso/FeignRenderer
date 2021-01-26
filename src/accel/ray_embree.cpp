@@ -86,8 +86,8 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         its.uv = Vec2f(hit.hit.u, hit.hit.v);
         its.f = hit.hit.primID;
 
-        Ray3f ray(scene_ray);
-        ray.far = its.t;
+        // Ray3f ray(scene_ray);
+        // ray.far = its.t;
 
         // TODO: note in the future the geom id might be different from the index
         //       if instancing is implemented in the future

@@ -43,6 +43,14 @@ public:
 class LinearTrans : public TransFunc
 {
 public:
+    struct Params
+    {
+        Params() : maxT(1.f) { }
+        Params(Float maxT) : maxT(maxT) { }
+
+        Float maxT;
+    };
+
     LinearTrans(Float maxT);
 
     virtual Color3f surfaceSurface(Color3f tau) const override final;

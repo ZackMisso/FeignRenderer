@@ -55,9 +55,18 @@ public:
     Float majorant;
 };
 
-// TODO: should ray marching be its own medium implementation???
+// TODO: change this name to be consistent with its transmittance estimator
 class Ray_Marching_Samp : public MediumSampling
 {
+public:
+    struct Params
+    {
+        Params(Float step_size)
+            : step_size(step_size) { }
+
+        Float step_size;
+    };
+
     Ray_Marching_Samp() : step_size(1.f) { }
     Ray_Marching_Samp(Float step_size) : step_size(step_size) { }
 

@@ -64,7 +64,9 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
                                         closure.last_event,
                                         VertexType::VERTEX_MEDIUM);
 
+            // std::cout << "sampling" << std::endl;
             beta *= closure.media->sample(ray, sampler, medium_closure);
+            // LOG("finished sample");
 
             if (medium_closure.handleScatter())
             {

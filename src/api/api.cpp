@@ -635,6 +635,11 @@ void FeignRenderer::fr_integrator(std::string name,
         Integrator::Params* params = (Integrator::Params*)integrator_data;
         integrator->integrator = new VolPath_Integrator(filter_node, params);
     }
+    else if (type == "volpath_nonexp")
+    {
+        Integrator::Params* params = (Integrator::Params*)integrator_data;
+        integrator->integrator = new VolPathNonExp_Integrator(filter_node, params);
+    }
     else if (type == "volpath_trans")
     {
         Integrator::Params* params = (Integrator::Params*)integrator_data;
@@ -1126,6 +1131,18 @@ void FeignRenderer::fr_medium_sampling(std::string name,
     {
         medium_sampling->sampling = new Delta_Tracking(10.0);
     }
+    else if (type == "ray")
+    {
+        if (sample_data)
+        {
+            Ray_Marching_Samp::Params* params = (Ray_Marching_Samp::Params*)sample_data;
+            medium_sampling->sampling = new Ray_Marching_Samp(params->step_size);
+        }
+        else
+        {
+            medium_sampling->sampling = new Ray_Marching_Samp();
+        }
+    }
     else if (type == "equi")
     {
         // TODO
@@ -1176,6 +1193,18 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
     {
         trans_est->trans_est = new Trans_PseriesCMF();
     }
+    else if (type == "ray")
+    {
+        if (trans_est_data)
+        {
+            Trans_RayMarching::Params* params = (Trans_RayMarching::Params*)trans_est_data;
+            trans_est->trans_est = new Trans_RayMarching(params->step_size);
+        }
+        else
+        {
+            trans_est->trans_est = new Trans_RayMarching();
+        }
+    }
     else
     {
         throw new NotImplementedException("transmittance estimator not recognized: " + type);
@@ -1193,36 +1222,26 @@ void FeignRenderer::fr_medium_transmittance_func(std::string name,
         throw new FeignRendererException("transmittance function already defined");
     }
 
-    // TODO: finish implementing this
-
-    // if (type == "homo")
-    // {
-    //     trans_est->trans_est = new Trans_Homogenous();
-    // }
-    // else if (type == "delta")
-    // {
-    //     trans_est->trans_est = new Trans_DeltaTracking();
-    // }
-    // else if (type == "ratio")
-    // {
-    //     if (trans_est_data)
-    //     {
-    //         Trans_RatioTracking::Params* params = (Trans_RatioTracking::Params*)trans_est_data;
-    //         trans_est->trans_est = new Trans_RatioTracking(params->maj);
-    //     }
-    //     else
-    //     {
-    //         trans_est->trans_est = new Trans_RatioTracking(10.0);
-    //     }
-    // }
-    // else if (type == "pseries")
-    // {
-    //     trans_est->trans_est = new Trans_PseriesCMF();
-    // }
-    // else
-    // {
-    //     throw new NotImplementedException("transmittance estimator not recognized: " + type);
-    // }
+    if (type == "exp")
+    {
+        trans_func->trans_func = new ExpTrans();
+    }
+    else if (type == "lin")
+    {
+        if (trans_func_data)
+        {
+            LinearTrans::Params* params = (LinearTrans::Params*)trans_func_data;
+            trans_func->trans_func = new LinearTrans(params->maxT);
+        }
+        else
+        {
+            trans_func->trans_func = new LinearTrans(1.f);
+        }
+    }
+    else
+    {
+        throw new NotImplementedException("transmittance function not recognized: " + type);
+    }
 }
 
 void FeignRenderer::fr_emitter(std::string name,

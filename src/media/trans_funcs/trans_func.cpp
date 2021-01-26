@@ -17,6 +17,7 @@ Color3f TransFunc::eval(Color3f tau,
 Float TransFunc::sample(Sampler* sampler,
                         bool startOnSurface) const
 {
+    // LOG("WHOOOO");
     return startOnSurface ? sampleSurface(sampler) : sampleMedium(sampler);
 }
 

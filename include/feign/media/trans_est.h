@@ -84,6 +84,15 @@ public:
 
 class Trans_RayMarching : public TransmittanceEstimator
 {
+public:
+    struct Params
+    {
+        Params(Float step_size)
+            : step_size(step_size) { }
+
+        Float step_size;
+    };
+
     Trans_RayMarching() : step_size(1.f) { }
     Trans_RayMarching(Float step_size) : step_size(step_size) { }
 

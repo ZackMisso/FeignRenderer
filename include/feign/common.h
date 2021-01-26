@@ -42,12 +42,17 @@
 #define GOTTAGOFAST true
 #define OPENVDB true
 #define VERBOSE false
-#define NONEXPMEDIA false
+#define NONEXPMEDIA true
 
-#define Epsilon 1e-4f
-#define EPS_VEC_X Vector3f(Epsilon * 100.f, 0.f, 0.f)
-#define EPS_VEC_Y Vector3f(0.f, Epsilon * 100.f, 0.f)
-#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 100.f)
+// a defined parameter to remove infinite point light contributions, but induces
+// bias
+#define CLAMP_POINT_SINGULARITIES false
+#define CLAMP_POINT_DISTANCE 0.1f
+
+#define Epsilon 1e-3f
+#define EPS_VEC_X Vector3f(Epsilon * 1.f, 0.f, 0.f)
+#define EPS_VEC_Y Vector3f(0.f, Epsilon * 1.f, 0.f)
+#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
 #define SDF_STEPS 2000
 
 #define PI           3.14159265358979323846f

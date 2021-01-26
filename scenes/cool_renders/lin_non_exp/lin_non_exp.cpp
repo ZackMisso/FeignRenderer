@@ -167,40 +167,47 @@ void LinNonExpScene::initialize_homo_sphere_medium_vary_scatter(int frame)
     Transform identity = Transform();
 
     Float dense = 1.f;
-    Color3f scat = Color3f(0.0f);
-    Color3f abs = Color3f(0.1f);
+    Color3f scat = Color3f(0.12f);
+    Color3f abs = Color3f(0.12f);
 
-    StandardMedium::Params media_params("ratio",
+    StandardMedium::Params media_params("ray",
                                         "default",
-                                        "delta_sampler",
-                                        "mandlebrot_density",
-                                        "exp",
+                                        "ray_sampler",
+                                        "nonexp_density",
+                                        "trans_func",
                                         identity,
                                         abs,
                                         scat);
 
-    FeignRenderer::fr_media("mandlebrot_medium",
+    FeignRenderer::fr_media("nonexp_medium",
                             "standard",
                             &media_params);
 
-    MandlebrotDensity::Params mandlebrot_density_params(dense);
+    ConstantDensity::Params mandlebrot_density_params(dense);
 
-    FeignRenderer::fr_medium_density("mandlebrot_density",
-                                     "mandlebrot",
+    FeignRenderer::fr_medium_density("nonexp_density",
+                                     "constant",
                                      &mandlebrot_density_params);
 
-    Trans_RatioTracking::Params ratio_params = Trans_RatioTracking::Params(2.0);
-    FeignRenderer::fr_medium_transmittance("ratio",
-                                           "ratio",
-                                           &ratio_params);
+    Trans_RayMarching::Params ray_params = Trans_RayMarching::Params(0.5);
+    FeignRenderer::fr_medium_transmittance("ray",
+                                           "ray",
+                                           &ray_params);
 
-    FeignRenderer::fr_medium_sampling("delta_sampler",
-                                      "delta",
-                                      nullptr);
+    Float maxT = 10.1f - Float(frame+1) / 10.f;
+    LinearTrans::Params nonexp_params(3.f);
+    FeignRenderer::fr_medium_transmittance_func("trans_func",
+                                                "lin",
+                                                &nonexp_params);
+
+    Ray_Marching_Samp::Params raysamp_params = Ray_Marching_Samp::Params(0.5);
+    FeignRenderer::fr_medium_sampling("ray_sampler",
+                                      "ray",
+                                      &raysamp_params);
 
     FeignRenderer::fr_clear_transform();
 
-    FeignRenderer::fr_scale(9.0, 9.0, 9.0);
+    FeignRenderer::fr_scale(19.0, 19.0, 19.0);
 
     FeignRenderer::fr_object("medium_bounds",
                              "box_mesh",
@@ -211,7 +218,7 @@ void LinNonExpScene::initialize_homo_sphere_medium_vary_scatter(int frame)
     ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
                              "",
                              false,
-                             "mandlebrot_medium",
+                             "nonexp_medium",
                              "null",
                              true);
 
@@ -268,7 +275,7 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 4;
+    int path_depth = 8;
 
     Integrator::Params int_params(512,
                                   512,
@@ -276,7 +283,7 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
                                   path_depth);
 
     FeignRenderer::fr_integrator("integrator",
-                                 "volpath",
+                                 "volpath_nonexp",
                                  "default",
                                  &int_params);
 
@@ -284,8 +291,8 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
     if (frame < 180) samples = 2048;
     else samples = 2048 * 2;
 
-    // samples = 16;
-    samples = 128;
+    samples = 256;
+    // samples = 4096;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -322,8 +329,8 @@ void LinNonExpScene::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 2;
-    int end_frame = 3;
+    int start_frame = 0;
+    int end_frame = 100;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -336,7 +343,7 @@ void LinNonExpScene::run()
 
         initialize_grid_scene(frame);
 
-        // initialize_homo_sphere_medium_vary_scatter(frame);
+        initialize_homo_sphere_medium_vary_scatter(frame);
 
         // initialize_initial_scene(frame-500);
 
@@ -349,7 +356,7 @@ void LinNonExpScene::run()
         flush_render();
     }
 
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
 }
 
 FEIGN_END()

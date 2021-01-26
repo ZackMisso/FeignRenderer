@@ -34,8 +34,8 @@ void RenderTile::evaluate(RenderTile* tile,
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
             {
-                if (tile->tile_index == 475) std::cout << "sample: " << k << std::endl;
-                if (tile->tile_index == 475) std::cout << "i: " << i << " j: " << j << std::endl;
+                // if (tile->tile_index == 475) std::cout << "sample: " << k << std::endl;
+                // if (tile->tile_index == 475) std::cout << "i: " << i << " j: " << j << std::endl;
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
@@ -47,16 +47,16 @@ void RenderTile::evaluate(RenderTile* tile,
                 //     Clocker::startClock("integrator");
                 // #endif
 
-                if (tile->tile_index == 475)
-                {
-                    std::cout << "calling rad: " << tile->tile_index << std::endl;
-                    rad *= integrator->Li(scene, sampler, ray, true);
-                    std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
-                }
-                else
-                {
+                // if (tile->tile_index == 475)
+                // {
+                //     std::cout << "calling rad: " << tile->tile_index << std::endl;
+                //     rad *= integrator->Li(scene, sampler, ray, true);
+                //     std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
+                // }
+                // else
+                // {
                     rad *= integrator->Li(scene, sampler, ray);
-                }
+                // }
                 // if (tile->tile_index == 475) std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
 
                 // if (rad.isNan())
@@ -153,7 +153,7 @@ void RenderTile::evaluate(RenderTile* tile,
     delete sampler;
     tile->done = true;
 
-    std::cout << "tile done: " << tile->tile_index << std::endl;
+    // std::cout << "tile done: " << tile->tile_index << std::endl;
 
     if (is_verbose) std::cout << "tile done: " << tile->tile_index << std::endl;
 }

@@ -81,11 +81,11 @@ int main(int argc, char* argv[])
     // HallOfTiles();
     // return 0;
 
-    WolfHead();
-    return 0;
-
-    // LinNonExpScene();
+    // WolfHead();
     // return 0;
+
+    LinNonExpScene();
+    return 0;
 
     // VolExpShaderToy();
     // return 0;

@@ -16,14 +16,18 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
                                   Sampler* sampler,
                                   MediaClosure& closure) const
 {
+    // LOG("in ray march");
     #if NONEXPMEDIA
+        // LOG("nonexp");
         // TODO: implement unbiased ray-marching once paper publishes
         Float t = closure.t_min;
         Float samp = sampler->next1D();
         Color3f od = 0.0;
 
+        // LOG("trans");
         Float od_samp = trans_func->sample(sampler,
                                            closure.last_event != VERTEX_MEDIUM);
+        // LOG("trans done");
 
         while (t < closure.t_max)
         {
