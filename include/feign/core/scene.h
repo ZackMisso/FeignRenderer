@@ -50,7 +50,9 @@ public:
                                  const Media* initial_media,
                                  Intersection& its,
                                  Sampler* sampler,
-                                 Color3f& beta) const;
+                                 Color3f& beta,
+                                 bool last_event_surface = true,
+                                 bool next_event_surface = true) const;
 
     void addEmitter(Emitter* emitter);
     void addMedium(Media* media);

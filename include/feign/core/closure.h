@@ -133,14 +133,14 @@ struct MediaClosure
     MediaClosure(const Media* medium,
                  Float t_min,
                  Float t_max,
-                 uint32_t last_event,
-                 uint32_t next_event)
+                 bool last_event_surface,
+                 bool next_event_surface)
         : medium(medium),
           t_min(t_min),
           t_max(t_max),
           sampled_t(t_max),
-          last_event(last_event),
-          next_event(next_event) { }
+          last_event(last_event_surface),
+          next_event(next_event_surface) { }
 
     bool handleScatter()
     {
@@ -159,8 +159,8 @@ struct MediaClosure
 
     // TODO: turn these into flags
     // used for non-exponential media
-    uint32_t last_event;
-    uint32_t next_event;
+    bool last_event;
+    bool next_event;
 };
 
 FEIGN_END()

@@ -26,7 +26,7 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
 
         // LOG("trans");
         Float od_samp = trans_func->sample(sampler,
-                                           closure.last_event != VERTEX_MEDIUM);
+                                           closure.last_event);
         // LOG("trans done");
 
         while (t < closure.t_max)

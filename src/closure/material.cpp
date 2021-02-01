@@ -39,7 +39,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       material_accepts_shadows(true),
       first_diffuse_event(false),
       first_diffuse_evals(1),
-      last_event(0)
+      last_event(VERTEX_DIFFUSE)
 {
     wi = its->toLocal(-ray->dir);
     media = nullptr;
@@ -64,7 +64,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
       material_accepts_shadows(true),
       first_diffuse_event(false),
       first_diffuse_evals(1),
-      last_event(0)
+      last_event(VERTEX_DIFFUSE)
 {
     media = nullptr;
 }

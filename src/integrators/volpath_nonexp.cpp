@@ -61,8 +61,8 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
             MediaClosure medium_closure(closure.media,
                                         ray.near,
                                         its.t,
-                                        closure.last_event,
-                                        VertexType::VERTEX_MEDIUM);
+                                        closure.last_event != VERTEX_MEDIUM,
+                                        false);
 
             // std::cout << "sampling" << std::endl;
             beta *= closure.media->sample(ray, sampler, medium_closure);
@@ -160,11 +160,10 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
                         ray.depth);
             bounces--;
 
+            if (bounces == 0) closure.last_event = VERTEX_DIFFUSE;
+
             continue;
         }
-
-        // TODO: this is not exactly right, it could be diffuse or specular
-        closure.last_event = VertexType::VERTEX_DIFFUSE;
 
         const MaterialShader* shader = scene->getShapeMaterialShader(its);
 
@@ -174,6 +173,9 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
         closure.emission = COLOR_BLACK;
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
+
+        closure.last_event = VertexType::VERTEX_DIFFUSE;
+        // closure.next_event = VertexType::VERTEX_DIFFUSE;
 
         // evaluate the material shader
         shader->evaluate(closure);

@@ -194,8 +194,9 @@ void LinNonExpScene::initialize_homo_sphere_medium_vary_scatter(int frame)
                                            "ray",
                                            &ray_params);
 
+    // Float maxT = 6.1f - Float(frame+1) / 100.f;
     Float maxT = 10.1f - Float(frame+1) / 10.f;
-    LinearTrans::Params nonexp_params(3.f);
+    LinearTrans::Params nonexp_params(maxT);
     FeignRenderer::fr_medium_transmittance_func("trans_func",
                                                 "lin",
                                                 &nonexp_params);

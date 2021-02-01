@@ -37,8 +37,8 @@ Color3f Trans_RayMarching::transmittance(const Ray3f& ray,
         }
 
         return trans_func->eval(od,
-                                closure.last_event != VERTEX_MEDIUM,
-                                closure.next_event != VERTEX_MEDIUM);
+                                closure.last_event,
+                                closure.next_event);
     #else
         Float min_t = closure.t_min;
         Float max_t = closure.t_max;

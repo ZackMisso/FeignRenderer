@@ -241,7 +241,9 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                                     const Media* initial_media,
                                     Intersection& its,
                                     Sampler* sampler,
-                                    Color3f& beta) const
+                                    Color3f& beta,
+                                    bool last_event_surface,
+                                    bool next_event_surface) const
 {
     // this method assumes beta is set before being called
     Ray3f tmp_ray = ray;
@@ -344,7 +346,12 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     {
         if (mediums[i])
         {
-            MediaClosure closure(mediums[i], rays[i].near, rays[i].far);
+            MediaClosure closure(mediums[i],
+                                 rays[i].near,
+                                 rays[i].far,
+                                 last_event_surface,
+                                 next_event_surface);
+
             beta *= mediums[i]->transmittance(rays[i],
                                               sampler,
                                               closure);
@@ -429,7 +436,9 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
                                      closure.media,
                                      tmp,
                                      closure.sampler,
-                                     transmittance) ||
+                                     transmittance,
+                                     closure.last_event != VERTEX_MEDIUM,
+                                     true) ||
             global_params.ignore_shadow_checks)
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
@@ -524,7 +533,9 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
                                  closure.media,
                                  tmp,
                                  closure.sampler,
-                                 transmittance) ||
+                                 transmittance,
+                                 closure.last_event != VERTEX_MEDIUM,
+                                 true) ||
         global_params.ignore_shadow_checks)
     {
         if (!in_media)
@@ -619,7 +630,9 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
                                      closure.media,
                                      tmp,
                                      closure.sampler,
-                                     transmittance) ||
+                                     transmittance,
+                                     closure.last_event != VERTEX_MEDIUM,
+                                     true) ||
             global_params.ignore_shadow_checks)
         {
             if (!in_media)
