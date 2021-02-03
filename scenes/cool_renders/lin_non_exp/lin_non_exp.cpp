@@ -304,12 +304,88 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
 
 void LinNonExpScene::initialize_lighting(int frame)
 {
-    PointEmitter::Params emitter_params(Color3f(50.f*50.f, 60.f*50.f, 37.f*100.f),
-                                        Vector3f(-4.0, 4.0, -4.0));
+    // PointEmitter::Params emitter_params(Color3f(50.f*50.f, 60.f*50.f, 37.f*100.f),
+    //                                     Vector3f(-4.0, 4.0, -4.0));
+    //
+    // FeignRenderer::fr_emitter("point_emitter",
+    //                           "point",
+    //                           &emitter_params);
 
-    FeignRenderer::fr_emitter("point_emitter",
-                              "point",
-                              &emitter_params);
+    imedit::Image image = imedit::Image("../scenes/cool_renders/lin_non_exp/sonic.png");
+
+    std::vector<int> indexes = std::vector<int>();
+
+    for (int i = 0; i < image.height(); ++i)
+    {
+        for (int j = 0; j < image.width(); ++j)
+        {
+            if (image(j, i, 0) > 0.0 || image(j, i, 1) > 0.0 || image(j, i, 2) > 0.0)
+            {
+                indexes.push_back(i * image.width() + j);
+            }
+        }
+    }
+
+    pcg32 rng = pcg32(0x1243, 0x2394);
+
+    Float min_z = -4.0;
+    Float max_z = 18.0;
+
+    int steps = indexes.size()-1;
+    int step = 0;
+
+    Float scale = 10.0;
+
+    while (indexes.size())
+    {
+        int ind = rng.nextDouble() * indexes.size();
+        int index = indexes[ind];
+
+        int i = index / image.width();
+        int j = index - (index / image.width()) * image.width();
+
+        std::cout << j << ", " << i << std::endl;
+
+        Float xpos = Float(step) / Float(steps) * 22.0 - 4.0;
+        Float zpos = Float(j) / 40.0 * 12.0 - 5.0;
+        Float ypos = Float(i) / 40.0 * 12.0 - 6.0;
+
+        std::cout << zpos << ", " << ypos << std::endl;
+
+        std::cout << std::endl;
+
+        Color3f col = Color3f(scale * image(j, i, 0),
+                              scale * image(j, i, 1),
+                              scale * image(j, i, 2));
+
+        PointEmitter::Params emitter_params(col,
+                                            Vector3f(zpos, ypos, xpos));
+
+        FeignRenderer::fr_emitter("point_emitter_" + std::to_string(step),
+                                  "point",
+                                  &emitter_params);
+
+        step++;
+
+        int val = indexes[indexes.size()-1];
+        indexes[index] = val;
+        indexes.pop_back();
+    }
+
+    // Float factor = 0.1;
+    // for (int i = 0; i < 10; ++i)
+    // {
+    //     Float zpos = 14.0 * Float(i) / 9.0 - 4.0;
+    //     Float xpos = 4.0 * sin(2.0 * M_PI / 9.0 * Float(i));
+    //     Float ypos = 4.0 * cos(2.0 * M_PI / 9.0 * Float(i));
+    //
+    //     PointEmitter::Params emitter_params(Color3f(factor * 50.f*50.f, factor * 60.f*50.f, factor * 37.f*100.f),
+    //                                         Vector3f(zpos, ypos, xpos));
+    //
+    //     FeignRenderer::fr_emitter("point_emitter_" + std::to_string(i),
+    //                               "point",
+    //                               &emitter_params);
+    // }
 }
 
 void LinNonExpScene::flush_render()
@@ -320,7 +396,7 @@ void LinNonExpScene::flush_render()
 
 void LinNonExpScene::run()
 {
-    std::string test_name = "lin_non_exp";
+    std::string test_name = "lin_non_exp_son";
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";

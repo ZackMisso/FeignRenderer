@@ -39,6 +39,7 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
 
     // TODO: maybe make this a process of the closure constructor
     closure.first_diffuse_evals = fb_emitter_samples;
+    closure.sample_all_emitters = true;
 
     if (scene->env_medium_node)
     {
