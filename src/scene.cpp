@@ -411,6 +411,7 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
                 if (emitters[i]->getMeshNode()->mesh == tmp.intersected_mesh)
                 {
                     eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                    Li /= eqr.sqr_dist;
                 }
                 else
                 {
@@ -452,11 +453,11 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
 
             if (emitter_pdf == 0.f)
             {
-                closure.shadow_rays[i].throughput = Li * transmittance;
+                closure.shadow_rays[i].throughput = Color3f(0.f);
             }
             else
             {
-                closure.shadow_rays[0].throughput = Li / (emitter_pdf) * transmittance;
+                closure.shadow_rays[i].throughput = Li / (emitter_pdf) * transmittance;
             }
 
             // Note: bsdf_values are fully accumulated later

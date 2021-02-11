@@ -167,8 +167,8 @@ void LinNonExpScene::initialize_homo_sphere_medium_vary_scatter(int frame)
     Transform identity = Transform();
 
     Float dense = 1.f;
-    Color3f scat = Color3f(0.12f);
-    Color3f abs = Color3f(0.12f);
+    Color3f scat = Color3f(0.3f * 0.6);
+    Color3f abs = Color3f(0.12f * 0.6);
 
     StandardMedium::Params media_params("ray",
                                         "default",
@@ -195,7 +195,7 @@ void LinNonExpScene::initialize_homo_sphere_medium_vary_scatter(int frame)
                                            &ray_params);
 
     // Float maxT = 6.1f - Float(frame+1) / 100.f;
-    Float maxT = 10.1f - Float(frame+1) / 10.f;
+    Float maxT = 10.1f - Float(frame+1) / 100.f;
     LinearTrans::Params nonexp_params(maxT);
     FeignRenderer::fr_medium_transmittance_func("trans_func",
                                                 "lin",
@@ -239,7 +239,14 @@ void LinNonExpScene::initialize_camera(int frame)
     // Float height = -9.0;
     Vector3f look_at = Vector3f(0.f, 0.f, 0.f);
     Float height = 0.0;
-    Float fov = 90.f;
+    Float fov = 60.f;
+
+    std::cout << "look at: " << std::endl;
+    LOG(look_at);
+    std::cout << "look from: " << std::endl;
+    LOG(Vector3f(xz_dist * cos(angle),
+                 height,
+                 xz_dist * sin(angle)));
 
     Perspective::Params cam_params(Vector3f(xz_dist * cos(angle),
                                             height,
@@ -276,7 +283,7 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 8;
+    int path_depth = 4;
 
     Integrator::Params int_params(512,
                                   512,
@@ -292,7 +299,7 @@ void LinNonExpScene::initialize_base_structs(std::string test_name,
     if (frame < 180) samples = 2048;
     else samples = 2048 * 2;
 
-    samples = 256;
+    samples = 4;
     // samples = 4096;
 
     Independent::Params samp_params(samples, 0x12345);
@@ -319,7 +326,7 @@ void LinNonExpScene::initialize_lighting(int frame)
     {
         for (int j = 0; j < image.width(); ++j)
         {
-            if (image(j, i, 0) > 0.0 || image(j, i, 1) > 0.0 || image(j, i, 2) > 0.0)
+            if (image(j, i, 0) > 0.1 || image(j, i, 1) > 0.1 || image(j, i, 2) > 0.1)
             {
                 indexes.push_back(i * image.width() + j);
             }
@@ -334,32 +341,40 @@ void LinNonExpScene::initialize_lighting(int frame)
     int steps = indexes.size()-1;
     int step = 0;
 
-    Float scale = 10.0;
+    Float scale = 3.0;
 
-    while (indexes.size())
+    while (indexes.size() - 1)
+    // while (step != indexes.size()-1)
     {
+        // std::cout << steps << std::endl;
+        // std::cout << step << " " << steps << std::endl;
         int ind = rng.nextDouble() * indexes.size();
+        // std::cout << ind << " bap " << indexes.size() << std::endl;
         int index = indexes[ind];
+
+        // int index = indexes[step];
 
         int i = index / image.width();
         int j = index - (index / image.width()) * image.width();
 
-        std::cout << j << ", " << i << std::endl;
+        // std::cout << j << ", " << i << std::endl;
+//
+        Float xpos = Float(step) / Float(steps) * 14.0 - 4.0;
+        Float zpos = Float(j) / 44.0 * 10.0 - 5.0;
+        Float ypos = Float(i) / 44.0 * 8.0 - 4.0;
+        ypos = -ypos;
+        zpos = -zpos;
 
-        Float xpos = Float(step) / Float(steps) * 22.0 - 4.0;
-        Float zpos = Float(j) / 40.0 * 12.0 - 5.0;
-        Float ypos = Float(i) / 40.0 * 12.0 - 6.0;
-
-        std::cout << zpos << ", " << ypos << std::endl;
-
-        std::cout << std::endl;
+        // std::cout << zpos << ", " << ypos << std::endl;
+        //
+        // std::cout << std::endl;
 
         Color3f col = Color3f(scale * image(j, i, 0),
                               scale * image(j, i, 1),
                               scale * image(j, i, 2));
 
         PointEmitter::Params emitter_params(col,
-                                            Vector3f(zpos, ypos, xpos));
+                                            Vector3f(xpos, ypos, zpos));
 
         FeignRenderer::fr_emitter("point_emitter_" + std::to_string(step),
                                   "point",
@@ -368,7 +383,7 @@ void LinNonExpScene::initialize_lighting(int frame)
         step++;
 
         int val = indexes[indexes.size()-1];
-        indexes[index] = val;
+        indexes[ind] = val;
         indexes.pop_back();
     }
 
@@ -396,7 +411,7 @@ void LinNonExpScene::flush_render()
 
 void LinNonExpScene::run()
 {
-    std::string test_name = "lin_non_exp_son";
+    std::string test_name = "lin_non_exp_order";
 
     std::string rm_command = "rm -rf " + test_name + "/";
     std::string mkdir_command = "mkdir " + test_name + "/";
@@ -407,7 +422,7 @@ void LinNonExpScene::run()
     system(mkdir_command.c_str());
 
     int start_frame = 0;
-    int end_frame = 100;
+    int end_frame = 1000;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)

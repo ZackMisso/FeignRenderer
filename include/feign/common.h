@@ -42,7 +42,7 @@
 #define GOTTAGOFAST true
 #define OPENVDB true
 #define VERBOSE false
-#define NONEXPMEDIA true
+#define NONEXPMEDIA false
 
 // a defined parameter to remove infinite point light contributions, but induces
 // bias

@@ -310,6 +310,7 @@ add_executable(feign
     scenes/cool_renders/fractal_media/mandlebrot_media.cpp
     scenes/cool_renders/wolf_head/wolf_head.cpp
     scenes/cool_renders/lin_non_exp/lin_non_exp.cpp
+    scenes/cool_renders/adrien_logo/adrien_logo.cpp
 
     # debug scene implementation files
     scenes/videos/medium_initial.cpp

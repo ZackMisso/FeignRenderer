@@ -32,6 +32,7 @@
 #include "../scenes/cool_renders/fractal_media/mandlebrot_media.h"
 #include "../scenes/cool_renders/wolf_head/wolf_head.h"
 #include "../scenes/cool_renders/lin_non_exp/lin_non_exp.h"
+#include "../scenes/cool_renders/adrien_logo/adrien_logo.h"
 
 #include "../scenes/videos/medium_initial.h"
 
@@ -84,7 +85,10 @@ int main(int argc, char* argv[])
     // WolfHead();
     // return 0;
 
-    LinNonExpScene();
+    // LinNonExpScene();
+    // return 0;
+
+    AdrienLogo();
     return 0;
 
     // VolExpShaderToy();

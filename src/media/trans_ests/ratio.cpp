@@ -13,7 +13,7 @@ FEIGN_BEGIN()
 
 Trans_RatioTracking::Trans_RatioTracking()
 {
-    maj = 1.0;
+    maj = 3.0;
 }
 
 Trans_RatioTracking::Trans_RatioTracking(Float maj)
