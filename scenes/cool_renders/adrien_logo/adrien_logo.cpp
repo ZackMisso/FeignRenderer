@@ -65,6 +65,7 @@ void AdrienLogo::initialize_grid_scene_2(int frame)
     FeignRenderer::fr_mesh("left_wall_grid",
                            "grid",
                            &params_left_wall);
+
     FeignRenderer::fr_clear_transform();
     ////////////////
 }
@@ -74,7 +75,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
     if (frame < 600)
         return;
 
-    Color3f abs = Color3f(3.0f);
+    Color3f abs = Color3f(0.5f);
     Color3f scat = Color3f(2.0f);
 
     Transform identity = Transform();
@@ -149,7 +150,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
                              "diffuse_shad",
                              "aiya_emitter");
 
-    ObjMesh::Params aiya_mesh("aiya_smoke_frames/aiya_frame.obj",
+    ObjMesh::Params aiya_mesh("aiya_smoke_frames/base_aiya.obj",
                              "",
                              false,
                              "null",
@@ -160,7 +161,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
                            "triangle_mesh",
                            &aiya_mesh);
 
-    MeshEmitter::Params mesh_emitter_params(Color3f(0.6f, 0.6f, 0.7f));
+    MeshEmitter::Params mesh_emitter_params(Color3f(0.6f * 4.f, 0.6f * 4.f, 0.7f * 4.f));
 
     FeignRenderer::fr_emitter("aiya_emitter", "mesh", &mesh_emitter_params);
 
@@ -215,7 +216,7 @@ void AdrienLogo::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 5;
+    int path_depth = 3;
 
     // if (frame < 180) path_depth = 7;
     // else path_depth = 10;
@@ -238,7 +239,7 @@ void AdrienLogo::initialize_base_structs(std::string test_name,
     // samples = 8;
     // samples = 8;
     // samples = 256;
-    samples = 2048;
+    samples = 1024;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -299,7 +300,7 @@ void AdrienLogo::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 600;
+    int start_frame = 638;
     // int start_frame = 501;
     int end_frame = 900;
 

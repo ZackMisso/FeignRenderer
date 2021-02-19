@@ -421,7 +421,7 @@ void LinNonExpScene::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 0;
+    int start_frame = 502;
     int end_frame = 1000;
 
     // smoke medium
