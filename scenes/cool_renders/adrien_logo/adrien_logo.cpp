@@ -115,7 +115,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
     FeignRenderer::fr_clear_transform();
 
     // FeignRenderer::fr_scale(3.f, 8.f, 3.f);
-    FeignRenderer::fr_scale(6.f, 6.f, 6.f);
+    FeignRenderer::fr_scale(3.f, 3.f, 3.f);
     FeignRenderer::fr_translate(0.f, 0.f, 0.f);
 
     FeignRenderer::fr_object("medium_bounds",
@@ -138,7 +138,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
     FeignRenderer::fr_clear_transform();
 
     FeignRenderer::fr_scale(1.f, 1.f, 1.f);
-    FeignRenderer::fr_rotate(90.f, 0.f, 1.f, 0.f);
+    FeignRenderer::fr_rotate(-90.f, 0.f, 1.f, 0.f);
     FeignRenderer::fr_translate(0.f, 0.f, 0.f);
 
     // FeignRenderer::fr_object("aiya",
@@ -150,7 +150,7 @@ void AdrienLogo::initialize_initial_scene(int frame, bool verbose=false)
                              "diffuse_shad",
                              "aiya_emitter");
 
-    ObjMesh::Params aiya_mesh("aiya_smoke_frames/base_aiya.obj",
+    ObjMesh::Params aiya_mesh("aiya_smoke_frames/aiya_frame_5.obj",
                              "",
                              false,
                              "null",
@@ -177,8 +177,8 @@ void AdrienLogo::initialize_camera_2(int frame)
     Float fov = 20.f;
 
     fov = 18.f;
-    height = 0.f;
-    look_at = Vector3f(0.f, 0.f, 0.f);
+    height = 0.3f;
+    look_at = Vector3f(0.f, 0.3f, 0.f);
     xz_dist = 20.f;
     angle = 2.f * M_PI;
 
@@ -193,7 +193,7 @@ void AdrienLogo::initialize_camera_2(int frame)
                                    10.f,
                                    0.f,
                                    // Vec2i(256, 256)); // debug res
-                                   Vec2i(1920/6, 1080/6)); // full res
+                                   Vec2i(1920/2, 1080/2)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -201,7 +201,7 @@ void AdrienLogo::initialize_camera_2(int frame)
 }
 
 void AdrienLogo::initialize_base_structs(std::string test_name,
-                                       int frame)
+                                         int frame)
 {
     char str[5];
     snprintf(str, 5, "%04d", frame);
@@ -216,7 +216,7 @@ void AdrienLogo::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 3;
+    int path_depth = 5;
 
     // if (frame < 180) path_depth = 7;
     // else path_depth = 10;
@@ -239,7 +239,8 @@ void AdrienLogo::initialize_base_structs(std::string test_name,
     // samples = 8;
     // samples = 8;
     // samples = 256;
-    samples = 1024;
+    // samples = 1024;
+    samples = 8192;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -300,9 +301,9 @@ void AdrienLogo::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 638;
+    int start_frame = 600;
     // int start_frame = 501;
-    int end_frame = 900;
+    int end_frame = 630;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
