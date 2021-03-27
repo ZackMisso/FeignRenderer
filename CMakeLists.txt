@@ -311,6 +311,7 @@ add_executable(feign
     scenes/cool_renders/wolf_head/wolf_head.cpp
     scenes/cool_renders/lin_non_exp/lin_non_exp.cpp
     scenes/cool_renders/adrien_logo/adrien_logo.cpp
+    scenes/cool_renders/one_way_dice/one_way_dice.cpp
 
     # debug scene implementation files
     scenes/videos/medium_initial.cpp

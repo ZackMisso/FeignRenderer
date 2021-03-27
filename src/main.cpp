@@ -33,6 +33,7 @@
 #include "../scenes/cool_renders/wolf_head/wolf_head.h"
 #include "../scenes/cool_renders/lin_non_exp/lin_non_exp.h"
 #include "../scenes/cool_renders/adrien_logo/adrien_logo.h"
+#include "../scenes/cool_renders/one_way_dice/one_way_dice.h"
 
 #include "../scenes/videos/medium_initial.h"
 
@@ -88,7 +89,10 @@ int main(int argc, char* argv[])
     // LinNonExpScene();
     // return 0;
 
-    AdrienLogo();
+    // AdrienLogo();
+    // return 0;
+
+    OneWayDice();
     return 0;
 
     // VolExpShaderToy();

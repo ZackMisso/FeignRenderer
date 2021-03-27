@@ -301,9 +301,9 @@ void AdrienLogo::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 600;
+    int start_frame = 830;
     // int start_frame = 501;
-    int end_frame = 630;
+    int end_frame = 860;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)

@@ -117,6 +117,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
     rtcReleaseGeometry(e_mesh);
 }
 
+// TODO: need to create a converter for obj's created from Maya to the renderer
 // TODO: implement a better parser
 void ObjMesh::parseFromFile(const std::string& filename)
 {
