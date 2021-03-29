@@ -184,6 +184,7 @@ add_executable(feign
     src/bsdfs/mirror.cpp
     src/bsdfs/null.cpp
     src/bsdfs/dielectric.cpp
+    src/bsdfs/one_way_dielectric.cpp
     src/bsdfs/phong.cpp
     src/bsdfs/blinn.cpp
 

@@ -22,9 +22,12 @@ void OneWayDice::initialize_materials(int frame)
 
     SimpleMaterial::Params diffuse_light_mat_params("diffuse_light_bsdf");
     SimpleMaterial::Params diffuse_dark_mat_params("diffuse_dark_bsdf");
+    SimpleMaterial::Params one_way_mat_params("one_way_bsdf");
+    SimpleMaterial::Params diel_mat_params("diel_bsdf");
 
-    // Diffuse::Params diffuse_light(Color3f(0.6f, 0.4f, 0.3f));
-    Diffuse::Params diffuse_light(Color3f(0.01f, 0.2f, 0.2f));
+    Diffuse::Params diffuse_light(Color3f(0.6f, 0.4f, 0.3f));
+    Diffuse::Params diffuse_dark(Color3f(0.1f, 0.2f, 0.3f));
+    // Diffuse::Params diffuse_light(Color3f(0.01f, 0.2f, 0.2f));
 
     FeignRenderer::fr_material("diffuse_light_mat",
                                "simple",
@@ -38,6 +41,10 @@ void OneWayDice::initialize_materials(int frame)
                            "diffuse",
                            &diffuse_light);
 
+    FeignRenderer::fr_bsdf("diffuse_dark_bsdf",
+                          "diffuse",
+                          &diffuse_dark);
+
     SimpleMaterialShader::Params diffuse_light_shad("diffuse_light_mat");
     FeignRenderer::fr_shader("diffuse_light_shad",
                              "simple_material",
@@ -48,12 +55,65 @@ void OneWayDice::initialize_materials(int frame)
                              "simple_material",
                              &diffuse_dark_shad);
 
-    // Diffuse::Params diffuse_dark(Color3f(0.1f, 0.2f, 0.3f));
-    Diffuse::Params diffuse_dark(Color3f(0.5f, 0.2f, 0.1f));
+    Float int_eta = 1.0;
+    Color3f albedo = Color3f(1.f);
 
-    FeignRenderer::fr_bsdf("diffuse_dark_bsdf",
-                          "diffuse",
-                          &diffuse_dark);
+    if(frame < 100)
+    {
+        albedo = Color3f(0.f);
+    }
+    else if (frame < 460)
+    {
+        albedo = Color3f(std::min(double(frame) / double(360.0), 1.0));
+        int_eta = 1.0;
+    }
+    else if (frame < 820) int_eta = double(frame - 460) / double(360.0) * 0.5 + 1.0;
+    else if (frame < 1000)
+    {
+        albedo = Color3f(std::min(double(frame-820) / double(360.0), 1.0));
+    }
+    else if (frame < 1180)
+    {
+        albedo = Color3f(std::min(double(frame-820) / double(360.0), 1.0));
+        int_eta = 0.5 - double(frame - 1000) / double(360.0) * 0.5 + 1.0;
+    }
+    else
+    {
+        int_eta = 0.5 - double(frame - 1000) / double(360.0) * 0.5 + 1.0;
+    }
+
+    OneWayDielectric::Params one_way_bsdf(int_eta, 1.0, albedo);
+
+    FeignRenderer::fr_bsdf("one_way_bsdf",
+                           "one_way_dielectric",
+                           &one_way_bsdf);
+
+    FeignRenderer::fr_material("one_way_mat",
+                               "simple",
+                               &one_way_mat_params);
+
+    SimpleMaterialShader::Params one_way_shad("one_way_mat");
+    FeignRenderer::fr_shader("one_way_shad",
+                             "simple_material",
+                             &one_way_shad);
+
+    Dielectric::Params diel_bsdf(int_eta, 1.0, albedo);
+
+    FeignRenderer::fr_bsdf("diel_bsdf",
+                           "dielectric",
+                           &diel_bsdf);
+
+    FeignRenderer::fr_material("diel_mat",
+                          "simple",
+                          &diel_mat_params);
+
+    SimpleMaterialShader::Params diel_shad("diel_mat");
+    FeignRenderer::fr_shader("diel_shad",
+                             "simple_material",
+                             &diel_shad);
+
+    // Diffuse::Params diffuse_dark(Color3f(0.1f, 0.2f, 0.3f));
+    // Diffuse::Params diffuse_dark(Color3f(0.5f, 0.2f, 0.1f));
 }
 
 void OneWayDice::initialize_grid(int frame)
@@ -81,33 +141,31 @@ void OneWayDice::initialize_grid(int frame)
 
 void OneWayDice::initialize_scene(int frame)
 {
-    if (frame < 600)
-        return;
-
+    FeignRenderer::fr_rotate(double(frame) * 360.f / 360.0, 0.f, 1.f, 0.f);
     FeignRenderer::fr_scale(0.5f, 0.5f, 0.5f);
 
     FeignRenderer::fr_object("dice_outside",
                              "dice_outside_mesh",
-                             "diffuse_light_shad");
+                             "diel_shad");
 
     FeignRenderer::fr_object("dice_inside",
                              "dice_inside_mesh",
-                             "diffuse_dark_shad");
+                             "one_way_shad");
 
     // GridObj::Params params_left_wall("", "diffuse_shad", Vec2i(grid_dim, grid_dim));
     // ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
 
 
-    ObjMesh::Params outside_mesh("../scenes/meshes/dice/glass_dice_tri_outside.obj",
-                                 "diffuse_dark_shad",
+    ObjMesh::Params outside_mesh("../scenes/meshes/dice/glass_dice_full_outside.obj",
+                                 "",
                                  false);
 
     FeignRenderer::fr_mesh("dice_outside_mesh",
                            "triangle_mesh",
                            &outside_mesh);
 
-    ObjMesh::Params inside_mesh("../scenes/meshes/dice/glass_dice_tri_glass.obj",
-                                "diffuse_light_shad",
+    ObjMesh::Params inside_mesh("../scenes/meshes/dice/glass_dice_full_inside.obj",
+                                "",
                                 false);
 
     FeignRenderer::fr_mesh("dice_inside_mesh",
@@ -115,67 +173,6 @@ void OneWayDice::initialize_scene(int frame)
                           &inside_mesh);
 
     FeignRenderer::fr_clear_transform();
-
-    // Color3f abs = Color3f(0.3f);
-    // Color3f scat = Color3f(0.7f);
-    //
-    // Transform identity = Transform();
-    // identity = identity * Matrix4f::scale(Vector3f(0.7f, 0.7f, 0.7f));
-    // identity = identity * Matrix4f::translate(Vector3f(0.f, -5.f, 0.f));
-    //
-    // StandardMedium::Params media_params("ratio",
-    //                                     "default",
-    //                                     "delta_sampler",
-    //                                     "vdb_density",
-    //                                     "exp",
-    //                                     identity,
-    //                                     abs,
-    //                                     scat);
-    //
-    // FeignRenderer::fr_media("box_medium",
-    //                         "standard",
-    //                         &media_params);
-    //
-    // FeignRenderer::fr_medium_transmittance("ratio",
-    //                                        "ratio",
-    //                                        nullptr);
-    //
-    // // OpenVDBDensity::Params vdb_density_params("/Users/corneria/Documents/Research/testscenes/vdb_smoke/cloud-1840.vdb");
-    // OpenVDBDensity::Params vdb_density_params("wolf_head/wolf_" + std::to_string(frame-599) + ".vdb");
-    //
-    // FeignRenderer::fr_medium_density("vdb_density",
-    //                                  "openvdb",
-    //                                  &vdb_density_params);
-    //
-    // // TODO: fix this
-    // FeignRenderer::fr_medium_sampling("delta_sampler",
-    //                                   "delta",
-    //                                   nullptr);
-    //
-    // FeignRenderer::fr_clear_transform();
-    //
-    // // FeignRenderer::fr_scale(3.f, 8.f, 3.f);
-    // FeignRenderer::fr_scale(6.f, 6.f, 6.f);
-    // FeignRenderer::fr_translate(0.f, 0.f, 0.f);
-    //
-    // FeignRenderer::fr_object("medium_bounds",
-    //                          "box_mesh",
-    //                          "default",
-    //                          "null",
-    //                          "box_medium");
-    //
-    // ObjMesh::Params box_mesh("../scenes/meshes/sphere_tri.obj",
-    //                          "",
-    //                          false,
-    //                          "box_medium",
-    //                          "null",
-    //                          true);
-    //
-    // FeignRenderer::fr_mesh("box_mesh",
-    //                        "triangle_mesh",
-    //                        &box_mesh);
-    //
-    // FeignRenderer::fr_clear_transform();
 }
 
 void OneWayDice::initialize_camera(int frame)
@@ -188,13 +185,13 @@ void OneWayDice::initialize_camera(int frame)
 
     fov = 60.f;
     height = 4.f;
-    look_at = Vector3f(0.f, -0.5f, 1.f);
+    look_at = Vector3f(0.f, -0.5f, 0.f);
     xz_dist = 20.f;
     angle = 2.f * M_PI;
 
     Perspective::Params cam_params(Vector3f(20.f,
                                             height,
-                                            0.f),
+                                            1.f),
                                    look_at,
                                    Vector3f(0, 1, 0),
                                    fov, // full res
@@ -203,7 +200,7 @@ void OneWayDice::initialize_camera(int frame)
                                    10.f,
                                    0.f,
                                    // Vec2i(256, 256)); // debug res
-                                   Vec2i(1920, 1080)); // full res
+                                   Vec2i(1920/8, 1080/8)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -226,7 +223,7 @@ void OneWayDice::initialize_base_structs(std::string test_name,
                             "null",
                             false);
 
-    int path_depth = 10;
+    int path_depth = 5;
 
     // if (frame < 180) path_depth = 7;
     // else path_depth = 10;
@@ -237,7 +234,7 @@ void OneWayDice::initialize_base_structs(std::string test_name,
                                   path_depth);
 
     FeignRenderer::fr_integrator("integrator",
-                                 "volpath",
+                                 "path",
                                  "default",
                                  &int_params);
 
@@ -261,7 +258,7 @@ void OneWayDice::initialize_base_structs(std::string test_name,
 void OneWayDice::initialize_lighting(int frame)
 {
     PointEmitter::Params emitter_params(Color3f(50.f*30.f*1.5, 60.f*30.f*1.5, 37.f*200.f*1.5),
-                                        Vector3f(10.0, 4.0, 0.0));
+                                        Vector3f(10.0, 4.0, 1.0));
 
     FeignRenderer::fr_emitter("point_emitter",
                               "point",
@@ -281,6 +278,27 @@ void OneWayDice::initialize_lighting(int frame)
     FeignRenderer::fr_emitter("point_emitter_3",
                             "point",
                             &emitter_params_3);
+
+    FeignRenderer::fr_scale(0.5f, 0.5f, 0.5f);
+    FeignRenderer::fr_rotate(double(frame) * 360.f / 360.0, 0.f, 1.f, 0.f);
+
+    MeshEmitter::Params mesh_emitter_params(Color3f(0.7f, 0.7f, 0.7f));
+    FeignRenderer::fr_emitter("mesh_emitter",
+                            "mesh",
+                            &mesh_emitter_params);
+
+    FeignRenderer::fr_object("dice_emitter_obj",
+                             "dice_emitter_mesh",
+                             "diffuse_dark_shad",
+                             "mesh_emitter");
+
+    ObjMesh::Params light_mesh("../scenes/meshes/dice/glass_dice_light_small.obj", "", false);
+
+    FeignRenderer::fr_mesh("dice_emitter_mesh",
+                           "triangle_mesh",
+                           &light_mesh);
+
+    FeignRenderer::fr_clear_transform();
 }
 
 void OneWayDice::flush_render()
@@ -301,16 +319,16 @@ void OneWayDice::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 649;
+    int start_frame = 500;
     // int start_frame = 501;
-    int end_frame = 650;
+    int end_frame = 1000;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
     {
-        initialize_base_structs(test_name, frame-500);
+        initialize_base_structs(test_name, frame);
 
-        initialize_camera(frame+500);
+        initialize_camera(frame);
 
         initialize_materials(frame);
 

@@ -168,13 +168,17 @@ public:
     struct Params
     {
         Params(Float int_ior, Float ext_ior)
-            : int_ior(int_ior), ext_ior(ext_ior) { }
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) { }
+
+        Params(Float int_ior, Float ext_ior, Color3f albedo)
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
 
         Float int_ior;
         Float ext_ior;
+        Color3f albedo;
     };
 
-    Dielectric(Float int_ior, Float ext_ior);
+    Dielectric(Float int_ior, Float ext_ior, Color3f albedo);
 
     virtual void sample(MaterialClosure& closure) const;
     virtual void evaluate(MaterialClosure& closure) const;
@@ -184,6 +188,43 @@ public:
 protected:
     Float int_ior;
     Float ext_ior;
+    Color3f albedo;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// One-Way Dielectric BSDF
+//
+// This material is not based off of any real material, it is simply a hacky
+// BSDF to create a cool scene idea.
+/////////////////////////////////////////////////
+class OneWayDielectric : public BSDF
+{
+public:
+    struct Params
+    {
+        Params(Float int_ior, Float ext_ior)
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) { }
+
+        Params(Float int_ior, Float ext_ior, Color3f albedo)
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
+
+        Float int_ior;
+        Float ext_ior;
+        Color3f albedo;
+    };
+
+    OneWayDielectric(Float int_ior, Float ext_ior, Color3f albedo);
+
+    virtual void sample(MaterialClosure& closure) const;
+    virtual void evaluate(MaterialClosure& closure) const;
+
+    virtual bool isDelta() const { return true; }
+
+protected:
+    Float int_ior;
+    Float ext_ior;
+    Color3f albedo;
 };
 /////////////////////////////////////////////////
 

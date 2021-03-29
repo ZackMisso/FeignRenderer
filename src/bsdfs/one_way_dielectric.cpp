@@ -1,10 +1,13 @@
 /**
- * Author:    Zackary Misso
- * Version:   0.2.0
- *
- * Anyone has permission to use the following code as long as proper
- * acknowledgement is provided to the original author(s).
- **/
+* Author:    Zackary Misso
+* Version:   0.2.0
+*
+* Anyone has permission to use the following code as long as proper
+* acknowledgement is provided to the original author(s).
+**/
+
+// This material is not based off of any real material, it is simply a hacky
+// BSDF to create a cool scene idea.
 
 #include <feign/core/bsdf.h>
 #include <feign/core/sampler.h>
@@ -12,19 +15,21 @@
 
 FEIGN_BEGIN()
 
-Dielectric::Dielectric(Float int_ior, Float ext_ior, Color3f albedo)
+OneWayDielectric::OneWayDielectric(Float int_ior, Float ext_ior, Color3f albedo)
     : BSDF(), int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
 
-void Dielectric::sample(MaterialClosure& closure) const
+void OneWayDielectric::sample(MaterialClosure& closure) const
 {
     Float sample = closure.sampler->next1D();
 
     float cos_theta = closure.wi[2];
 
+    bool exiting = false;
     if (CoordinateFrame::cosTheta(closure.wi) < 0.f)
     {
         // refracts out of object
         closure.eta = int_ior / ext_ior;
+        exiting = true;
     }
     else
     {
@@ -36,7 +41,9 @@ void Dielectric::sample(MaterialClosure& closure) const
                          ext_ior,
                          int_ior);
 
-    if (sample < prob)
+    // The insides of this object are a one-way mirror. So it will always have
+    // total internal reflection
+    if (sample < prob || exiting)
     {
         // reflects
         Vector3f wr = Vector3f(-closure.wi[0],
@@ -67,7 +74,7 @@ void Dielectric::sample(MaterialClosure& closure) const
     closure.albedo = albedo;
 }
 
-void Dielectric::evaluate(MaterialClosure& closure) const
+void OneWayDielectric::evaluate(MaterialClosure& closure) const
 {
     closure.albedo = albedo;
 }

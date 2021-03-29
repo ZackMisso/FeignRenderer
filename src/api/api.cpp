@@ -1349,7 +1349,16 @@ void FeignRenderer::fr_bsdf(std::string name,
     else if (type == "dielectric")
     {
         Dielectric::Params* params = (Dielectric::Params*)bsdf_data;
-        bsdf->bsdf = new Dielectric(params->int_ior, params->ext_ior);
+        bsdf->bsdf = new Dielectric(params->int_ior,
+                                    params->ext_ior,
+                                    params->albedo);
+    }
+    else if (type == "one_way_dielectric")
+    {
+        OneWayDielectric::Params* params = (OneWayDielectric::Params*)bsdf_data;
+        bsdf->bsdf = new OneWayDielectric(params->int_ior,
+                                          params->ext_ior,
+                                          params->albedo);
     }
     // TODO: there should not be two null bsdfs
     else if (type == "nullbsdf")
