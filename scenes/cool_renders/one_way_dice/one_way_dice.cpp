@@ -42,8 +42,8 @@ void OneWayDice::initialize_materials(int frame)
                            &diffuse_light);
 
     FeignRenderer::fr_bsdf("diffuse_dark_bsdf",
-                          "diffuse",
-                          &diffuse_dark);
+                           "diffuse",
+                           &diffuse_dark);
 
     SimpleMaterialShader::Params diffuse_light_shad("diffuse_light_mat");
     FeignRenderer::fr_shader("diffuse_light_shad",
@@ -56,7 +56,9 @@ void OneWayDice::initialize_materials(int frame)
                              &diffuse_dark_shad);
 
     Float int_eta = 1.0;
-    Color3f albedo = Color3f(1.f);
+    Float b_scale = 0.90;
+    Float g_scale = 0.93;
+    Color3f albedo = Color3f(1.f, g_scale, b_scale);
 
     if(frame < 100)
     {
@@ -64,22 +66,41 @@ void OneWayDice::initialize_materials(int frame)
     }
     else if (frame < 460)
     {
-        albedo = Color3f(std::min(double(frame) / double(360.0), 1.0));
+        double al_val = std::min(double(frame-100) / double(360.0), 1.0);
+        albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         int_eta = 1.0;
     }
     else if (frame < 820) int_eta = double(frame - 460) / double(360.0) * 0.5 + 1.0;
     else if (frame < 1000)
     {
-        albedo = Color3f(std::min(double(frame-820) / double(360.0), 1.0));
+        double al_val = 1.0-std::min(double(frame-820) / double(396.0), 1.0);
+        albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
+        // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
+        int_eta = 1.5;
     }
     else if (frame < 1180)
     {
-        albedo = Color3f(std::min(double(frame-820) / double(360.0), 1.0));
-        int_eta = 0.5 - double(frame - 1000) / double(360.0) * 0.5 + 1.0;
+        double al_val = 1.0-std::min(double(frame-820) / double(396.0), 1.0);
+        albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
+        // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
+        int_eta = 0.5 - double(frame - 1000) / double(180.0) * 0.5 + 1.0;
+    }
+    else if (frame < 1500)
+    {
+        double al_val = 0.1f;
+        albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
+        int_eta = 1.0;
+    }
+    else if (frame < 1550)
+    {
+        double al_val = (1.0 - double(frame - 1500) / 50.0) * 0.1;
+        albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
+        int_eta = 1.0;
     }
     else
     {
-        int_eta = 0.5 - double(frame - 1000) / double(360.0) * 0.5 + 1.0;
+        int_eta = 1.0;
+        albedo = Color3f(0.f);
     }
 
     OneWayDielectric::Params one_way_bsdf(int_eta, 1.0, albedo);
@@ -141,7 +162,7 @@ void OneWayDice::initialize_grid(int frame)
 
 void OneWayDice::initialize_scene(int frame)
 {
-    FeignRenderer::fr_rotate(double(frame) * 360.f / 360.0, 0.f, 1.f, 0.f);
+    FeignRenderer::fr_rotate(double(frame) / 2.f, 0.f, 1.f, 0.f);
     FeignRenderer::fr_scale(0.5f, 0.5f, 0.5f);
 
     FeignRenderer::fr_object("dice_outside",
@@ -280,9 +301,9 @@ void OneWayDice::initialize_lighting(int frame)
                             &emitter_params_3);
 
     FeignRenderer::fr_scale(0.5f, 0.5f, 0.5f);
-    FeignRenderer::fr_rotate(double(frame) * 360.f / 360.0, 0.f, 1.f, 0.f);
+    FeignRenderer::fr_rotate(double(frame) / 2.f, 0.f, 1.f, 0.f);
 
-    MeshEmitter::Params mesh_emitter_params(Color3f(0.7f, 0.7f, 0.7f));
+    MeshEmitter::Params mesh_emitter_params(Color3f(0.5f, 0.5f, 0.5f));
     FeignRenderer::fr_emitter("mesh_emitter",
                             "mesh",
                             &mesh_emitter_params);
@@ -319,9 +340,9 @@ void OneWayDice::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 500;
+    int start_frame = 1300;
     // int start_frame = 501;
-    int end_frame = 1000;
+    int end_frame = 1600;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -343,7 +364,7 @@ void OneWayDice::run()
         flush_render();
     }
 
-    // system(publish_command.c_str());
+    system(publish_command.c_str());
 }
 
 FEIGN_END()
