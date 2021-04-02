@@ -73,27 +73,27 @@ void OneWayDice::initialize_materials(int frame)
     else if (frame < 820) int_eta = double(frame - 460) / double(360.0) * 0.5 + 1.0;
     else if (frame < 1000)
     {
-        double al_val = 1.0-std::min(double(frame-820) / double(396.0), 1.0);
+        double al_val = 1.0-std::min(double(frame-820) / double(396.0+36.0), 1.0);
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
         int_eta = 1.5;
     }
     else if (frame < 1180)
     {
-        double al_val = 1.0-std::min(double(frame-820) / double(396.0), 1.0);
+        double al_val = 1.0-std::min(double(frame-820) / double(396.0+36.0), 1.0);
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
         int_eta = 0.5 - double(frame - 1000) / double(180.0) * 0.5 + 1.0;
     }
     else if (frame < 1500)
     {
-        double al_val = 0.1f;
+        double al_val = 0.2f;
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         int_eta = 1.0;
     }
     else if (frame < 1550)
     {
-        double al_val = (1.0 - double(frame - 1500) / 50.0) * 0.1;
+        double al_val = (1.0 - double(frame - 1500) / 50.0) * 0.2;
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         int_eta = 1.0;
     }
@@ -221,7 +221,7 @@ void OneWayDice::initialize_camera(int frame)
                                    10.f,
                                    0.f,
                                    // Vec2i(256, 256)); // debug res
-                                   Vec2i(1920/8, 1080/8)); // full res
+                                   Vec2i(1920, 1080)); // full res
 
     FeignRenderer::fr_camera("camera",
                              "perspective",
@@ -267,7 +267,8 @@ void OneWayDice::initialize_base_structs(std::string test_name,
     // samples = 8;
     // samples = 8;
     // samples = 256;
-    samples = 16;
+    // samples = 16;
+    samples = 256;
 
     Independent::Params samp_params(samples, 0x12345);
 
@@ -340,9 +341,9 @@ void OneWayDice::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 1300;
+    int start_frame = 0;
     // int start_frame = 501;
-    int end_frame = 1600;
+    int end_frame = 300;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)
@@ -364,7 +365,7 @@ void OneWayDice::run()
         flush_render();
     }
 
-    system(publish_command.c_str());
+    // system(publish_command.c_str());
 }
 
 FEIGN_END()
