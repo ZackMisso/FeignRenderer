@@ -48,10 +48,8 @@ void Scene::preProcess(const GlobalParams& globals)
 {
     sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
 
-    #if VERBOSE
-        LOG("preprocessing ray accel");
-    #endif
-
+    // preprocess the ray acceleration data structures, and initialize one based
+    // on the scene geometry if an acceleration structure is not specified.
     if (!ray_accel)
     {
         if (globals.sdf_only)
@@ -66,19 +64,14 @@ void Scene::preProcess(const GlobalParams& globals)
         ray_accel->preProcess();
     }
 
-    #if VERBOSE
-        LOG("preprocessing light selection");
-    #endif
-
+    // preprocessing the light selection routin
     if (!light_selection)
     {
         light_selection = new NaiveLightAccel();
     }
 
-    #if VERBOSE
-        LOG("adding shapes");
-    #endif
-
+    // add all of the shapes to the acceleration datastructure and extend the
+    // scene bounds accordingly
     for (int i = 0; i < shapes.size(); ++i)
     {
         if (globals.sdf_only)
@@ -93,33 +86,17 @@ void Scene::preProcess(const GlobalParams& globals)
         sceneBounds.expand(shapes[i]->boundingBox());
     }
 
-    #if VERBOSE
-        LOG("building accels");
-    #endif
-
+    // build the actual acceleration datastructures now that all shapes are
+    // accounted for
     ray_accel->build();
     light_selection->build(sceneBounds, emitters);
 
-    #if VERBOSE
-        LOG("preprocessing cameras");
-    #endif
-
+    // preprocess the camera
     camera_node->camera->preProcess();
+
     // integrator pre-processing is done pre-rendering
 
-    #if VERBOSE
-        LOG("preprocessing env media");
-    #endif
-
-    // TODO: should this double check be necessary?
-    if (env_medium_node && env_medium_node->media)
-        env_medium_node->media->preProcess();
-
-    #if VERBOSE
-        LOG("preprocessing object emitters");
-    #endif
-
-    // TODO: is this really the best place to handle this?
+    // preprocessing the object emitters for sampling later
     for (int i = 0; i < objects.size(); ++i)
     {
         // check if the object's emitter is valid. If so,
@@ -131,18 +108,11 @@ void Scene::preProcess(const GlobalParams& globals)
         }
     }
 
-    #if VERBOSE
-        LOG("preprocessing mediums");
-    #endif
-
+    // preprocess all of the mediums in the scene
     for (int i = 0; i < mediums.size(); ++i)
     {
         mediums[i]->preProcess();
     }
-
-    #if VERBOSE
-        LOG("finished preprocessing scene");
-    #endif
 }
 
 void Scene::renderScene() const
@@ -151,18 +121,9 @@ void Scene::renderScene() const
     Camera* camera = camera_node->camera;
     Sampler* sampler = sampler_node->sampler;
 
-    if (!integrator)
-    {
-        throw new FeignRendererException("scene: no specified integrator");
-    }
-    if (!camera)
-    {
-        throw new FeignRendererException("scene: no specified camera");
-    }
-    if (!sampler)
-    {
-        throw new FeignRendererException("scene: no specified sampler");
-    }
+    CHECK_EXISTS(integrator, "scene: no specified integrator");
+    CHECK_EXISTS(camera, "scene: no specified camera");
+    CHECK_EXISTS(sampler, "scene: no specified sampler");
 
     Imagef* image;
 
@@ -192,6 +153,8 @@ void Scene::renderScene() const
                            *image);
     #endif
 
+    // if a target image is specified, then it is assumed that the renderer is
+    // not going to be writing an image a file.
     if (!target)
     {
         image->write(integrator->location + name + ".png"); // .png writer has some issues for some scenes

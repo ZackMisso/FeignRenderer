@@ -45,18 +45,10 @@ void Integrator::render(const Scene* scene,
 
     for (int k = 0; k < sampler->getSampleCnt(); ++k)
     {
-        if (verbose) LOG("sample: " + std::to_string(k));
-
-        // for (int i = 167; i < 168; ++i)
-        // {
-        //     for (int j = 101; j < 102; ++j)
-
         for (int i = 0; i < camera->getFilmSize()[1]; ++i)
         {
-            LOG("i: " + std::to_string(i));
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
-                // LOG("j: " + std::to_string(j));
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 

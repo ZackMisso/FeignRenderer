@@ -6,8 +6,6 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#pragma once
-
 #include <feign/core/sdf.h>
 
 FEIGN_BEGIN()

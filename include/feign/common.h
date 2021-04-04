@@ -1,10 +1,10 @@
 /**
- * Author:    Zackary Misso
- * Version:   0.2.0
- *
- * Anyone has permission to use the following code as long as proper
- * acknowledgement is provided to the original author(s).
- **/
+* Author:    Zackary Misso
+* Version:   0.2.0
+*
+* Anyone has permission to use the following code as long as proper
+* acknowledgement is provided to the original author(s).
+**/
 
 #pragma once
 
@@ -19,16 +19,6 @@
 #include <imedit/image.h>
 #include <imedit/im_color_maps.h>
 
-// TODO: remove this so everyone forgets im a star fox fanboy
-// personal laptop
-#define SCENES_PATH "/Users/corneria/Documents/Projects/FeignRenderer/scenes/"
-// misc laptop
-// #define SCENES_PATH "/Users/venom/Documents/Projects/FeignRenderer/scenes/"
-// workstation
-// #define SCENES_PATH "/home/firal/Documents/Projects/FeignRenderer/scenes/"
-// work laptop
-// #define SCENES_PATH "/Users/fortuna/Documents/Hobbies/FeignRenderer/scenes/"
-
 #define FEIGN_BEGIN() namespace feign {
 #define FEIGN_END() }
 
@@ -39,7 +29,7 @@
 
 // TODO: make this a stats parameter in the future
 // whether or not to use multithreading
-#define GOTTAGOFAST true
+#define GOTTAGOFAST false
 #define OPENVDB true
 #define VERBOSE false
 #define NONEXPMEDIA false
@@ -238,5 +228,7 @@ public:
     }
 };
 /////////////////////////////////////////////////
+
+#define CHECK_EXISTS(ptr, msg) if (!ptr) throw new FeignRendererException(msg);
 
 FEIGN_END()

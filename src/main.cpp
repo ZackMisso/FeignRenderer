@@ -1,10 +1,10 @@
 /**
- * Author:    Zackary Misso
- * Version:   0.2.0
- *
- * Anyone has permission to use the following code as long as proper
- * acknowledgement is provided to the original author(s).
- **/
+* Author:    Zackary Misso
+* Version:   0.2.0
+*
+* Anyone has permission to use the following code as long as proper
+* acknowledgement is provided to the original author(s).
+**/
 
 #include <feign/parser/json_parser.h>
 #include <feign/core/scene.h>
@@ -13,50 +13,16 @@
 
 #include <openvdb/openvdb.h>
 
-#include "../scenes/adrien/ajax_cosine.h"
-#include "../scenes/adrien/neon_intro.h"
-#include "../scenes/adrien/neon_take_2.h"
-// #include "../scenes/adrien/sphere_ground.h"
-#include "../scenes/adrien/sandbox.h"
-#include "../scenes/month_of_shaders/jan_1_2020.h"
-#include "../scenes/month_of_shaders/jan_2_2020.h"
-#include "../scenes/month_of_shaders/jan_3_2020.h"
-#include "../scenes/month_of_shaders/jan_4_2020.h"
-#include "../scenes/month_of_shaders/jan_5_2020.h"
-#include "../scenes/month_of_shaders/jan_6_2020.h"
-#include "../scenes/month_of_shaders/jan_7_2020.h"
-#include "../scenes/month_of_shaders/jan_8_2020.h"
-#include "../scenes/month_of_shaders/jan_9_2020.h"
-
-#include "../scenes/cool_renders/hall_of_tiles/hall_of_tiles.h"
-#include "../scenes/cool_renders/fractal_media/mandlebrot_media.h"
-#include "../scenes/cool_renders/wolf_head/wolf_head.h"
-#include "../scenes/cool_renders/lin_non_exp/lin_non_exp.h"
-#include "../scenes/cool_renders/adrien_logo/adrien_logo.h"
 #include "../scenes/cool_renders/one_way_dice/one_way_dice.h"
-
-#include "../scenes/videos/medium_initial.h"
-
-#include "../scenes/shadertoy_recreations/include.h"
 
 using namespace feign;
 
 void run_scene(std::string scene_name)
 {
-    JsonParser::parse(SCENES_PATH + scene_name + ".json");
+    JsonParser::parse(scene_name + ".json");
 
     FeignRenderer::clean_up();
 }
-
-// these are all the base debug scenes
-// void run_all_scenes()
-// {
-//     // run_scene("tests/ajax_normals");
-//     // run_scene("tests/ajax_diffuse");
-//     // run_scene("tests/ajax_mirror");
-//     // // run_scene("tests/box_distant");
-//     // run_scene("tests/box_rotations");
-// }
 
 int main(int argc, char* argv[])
 {
@@ -64,67 +30,13 @@ int main(int argc, char* argv[])
         openvdb::initialize();
     #endif
     // //////// TEMPORARY ////////
-    //
-    // // ajax_cosine();
-    // neon_intro();
-    // return 0;
-    // neon_intro_2();
+
+    // OneWayDice();
     // return 0;
 
-    // sandbox();
-    // return 0;
-
-    // MediumTesting_Debug();
-    // return 0;
-
-    // MandlebrotMediaTests();
-    // return 0;
-
-    // HallOfTiles();
-    // return 0;
-
-    // WolfHead();
-    // return 0;
-
-    // LinNonExpScene();
-    // return 0;
-
-    // AdrienLogo();
-    // return 0;
-
-    OneWayDice();
-    return 0;
-
-    // VolExpShaderToy();
-    // return 0;
-    //
     // /////\\\ TEMPORARY \\\////
-    ////// Month of shaders ////////
 
-    // jan_1_2020();          // done
-    // jan_2_2020();          // done
-    // jan_3_2020();          // done
-    // jan_4_2020();         // done
-    // jan_5_2020();          // done
-    // jan_6_2020();
-    // jan_7_2020();
-    // jan_8_2020();
-    // jan_9_2020();
-    // sphere_ground();
-    // return 0;
-
-    ///\\\ Month of shaders \\\/////
-
-    // std::string scene = "tests/ajax_normals";
-    // std::string scene = "tests/ajax_diffuse";
-    // std::string scene = "tests/ajax_mirror";
-    // std::string scene = "tests/box_rotations";
-    // std::string scene = "tests/ajax_bary";
-    // std::string scene = "tests/cornell_box_diffuse";
-    // std::string scene = "tests/cornell_box_diffuse_area_light";
-    // std::string scene = "tests/cornell_box_dielectrics";
-    // std::string scene = "tests/cornell_box_phong";
-    std::string scene = "tests/spot_light";
+    std::string scene = "";
 
     for (int i = 1; i < argc; ++i)
     {
@@ -200,14 +112,9 @@ int main(int argc, char* argv[])
         {
             scene = std::string(argv[++i]);
         }
-        // if (strcmp(argv[i], "-a") == 0)
-        // {
-        //     // run_all_scenes();
-        //     // return 0;
-        // }
     }
 
-    std::cout << SCENES_PATH << scene << ".json" << std::endl;
+    std::cout << scene << ".json" << std::endl;
 
     run_scene(scene);
 
