@@ -128,7 +128,7 @@ FILE ( GLOB FEIGN_SOURCE
     src/shaders/*.cpp
     src/shapes/*.cpp
     src/stats/*.cpp
-    src/textires/*.cpp
+    src/textures/*.cpp
     src/test/*.cpp
   )
 

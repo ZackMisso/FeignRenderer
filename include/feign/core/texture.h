@@ -48,16 +48,10 @@ public:
     virtual void preProcess();
 
     Imagef image;
-    std::string filename;
 private:
     Vec3f scale;
-    bool initialized;
+    std::string filename;
 };
-
-// class EnvironmentMap : public Texture
-// {
-//
-// };
 
 class SinTexture : public Texture
 {

@@ -905,6 +905,26 @@ void JsonParser::actually_parse(rapidjson::Document& document)
 
                 FeignRenderer::fr_emitter(name, type, &params);
             }
+            else if (type == "environment")
+            {
+                Color3f intensity = Color3f(1.f);
+                std::string texture = "";
+
+                if (value.HasMember("intensity"))
+                {
+                    intensity[0] = value["intensity"][0].GetFloat();
+                    intensity[1] = value["intensity"][1].GetFloat();
+                    intensity[2] = value["intensity"][2].GetFloat();
+                }
+                if (value.HasMember("texture"))
+                {
+                    texture = value["texture"].GetString();
+                }
+
+                EnvironmentEmitter::Params params(intensity, texture);
+
+                FeignRenderer::fr_emitter(name, type, &params);
+            }
             else if (type == "directional")
             {
                 Vector3f light_dir = Color3f(1.f, 0.f, 0.f);
@@ -1198,6 +1218,47 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             else
             {
                 throw new FeignRendererException(type + " shader is not parsable yet");
+            }
+        }
+        else if (strcmp(itr->name.GetString(), "texture") == 0)
+        {
+            std::string name = "texture";
+            std::string type = "image";
+
+            const rapidjson::Value& value = itr->value;
+
+            if (value.HasMember("name"))
+            {
+                name = value["name"].GetString();
+            }
+            if (value.HasMember("type"))
+            {
+                type = value["type"].GetString();
+            }
+
+            if (type == "image")
+            {
+                std::string filename = "";
+                Vec3f scale = Vec3f(1.f);
+
+                if (value.HasMember("filename"))
+                {
+                    filename = value["filename"].GetString();
+                }
+                if (value.HasMember("proxy"))
+                {
+                    scale[0] = value["scale"][0].GetFloat();
+                    scale[1] = value["scale"][1].GetFloat();
+                    scale[2] = value["scale"][2].GetFloat();
+                }
+
+                ImageTexture::Params params(filename, scale);
+
+                FeignRenderer::fr_texture(name, type, &params);
+            }
+            else
+            {
+                throw new FeignRendererException(type + " texture is not parsable yet");
             }
         }
         else

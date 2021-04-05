@@ -53,9 +53,11 @@ Color3f VolPathNonExp_Integrator::Li(const Scene* scene,
 
         Intersection its;
 
-        // TODO: medium needs to be set at the end, not during intersection
-        // TODO: is this alright to do even if there is a medium???
-        if (!scene->intersect_full(ray, its)) break;
+        if (!scene->intersect_full(ray, its))
+        {
+            Li += beta * scene->env_emission(ray);
+            break;
+        }
 
         if (closure.media)
         {

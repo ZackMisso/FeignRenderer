@@ -376,7 +376,12 @@ MaterialShaderNode* FeignRenderer::find_material_shader(std::string name)
 
 TextureNode* FeignRenderer::find_texture(std::string name)
 {
-    if (name == "") return nullptr;
+    if (name == "")
+    {
+        LOG("FUCK");
+        assert(false);
+        return nullptr;
+    }
 
     std::unordered_map<std::string, TextureNode*>::const_iterator itr = textures.find(name);
 
@@ -1257,10 +1262,10 @@ void FeignRenderer::fr_emitter(std::string name,
 
     if (type == "point")
     {
-        assert(getInstance()->scene);
+        // assert(getInstance()->scene);
         PointEmitter::Params* params = (PointEmitter::Params*)emitter_data;
         emitter->emitter = new PointEmitter(params->intensity, params->pos);
-        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
     }
     else if (type == "mesh")
     {
@@ -1268,13 +1273,21 @@ void FeignRenderer::fr_emitter(std::string name,
         MeshEmitter::Params* params = (MeshEmitter::Params*)emitter_data;
         emitter->emitter = new MeshEmitter(params->intensity);
 
-        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
+    }
+    else if (type == "environment")
+    {
+        EnvironmentEmitter::Params* params = (EnvironmentEmitter::Params*)emitter_data;
+
+        TextureNode* texture = getInstance()->find_texture(params->texture);
+        emitter->emitter = new EnvironmentEmitter(texture, params->intensity);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
     }
     else if (type == "directional")
     {
         DirectionalEmitter::Params* params = (DirectionalEmitter::Params*)emitter_data;
         emitter->emitter = new DirectionalEmitter(params->light_dir, params->radiance);
-        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
     }
     else if (type == "directional_mesh")
     {
@@ -1283,7 +1296,7 @@ void FeignRenderer::fr_emitter(std::string name,
         emitter->emitter = new DirectionalMeshEmitter(params->light_dir,
                                                       params->intensity);
 
-        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
     }
     else if (type == "spot")
     {
@@ -1292,7 +1305,7 @@ void FeignRenderer::fr_emitter(std::string name,
                                                 params->light_dir,
                                                 params->radiance,
                                                 params->light_angle);
-        getInstance()->scene->scene->emitters.push_back(emitter->emitter);
+        getInstance()->scene->scene->addEmitter(emitter->emitter);
     }
     else
     {
@@ -1391,6 +1404,7 @@ void FeignRenderer::fr_texture(std::string name,
                                std::string type,
                                void* texture_data)
 {
+    std::cout << "NAME: " << name << std::endl;
     TextureNode* texture = getInstance()->find_texture(name);
 
     if (texture->texture)
@@ -1402,6 +1416,10 @@ void FeignRenderer::fr_texture(std::string name,
     {
         ImageTexture::Params* params = (ImageTexture::Params*)texture_data;
         texture->texture = new ImageTexture(params->filename, params->scale);
+        // image textures should always be preprocessed to actually parse the
+        // images
+        texture->texture->preProcess();
+        LOG("inside here");
     }
     else if (type == "sin")
     {

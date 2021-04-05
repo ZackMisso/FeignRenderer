@@ -19,7 +19,7 @@ using namespace feign;
 
 void run_scene(std::string scene_name)
 {
-    JsonParser::parse(scene_name + ".json");
+    JsonParser::parse(scene_name);
 
     FeignRenderer::clean_up();
 }
@@ -114,7 +114,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::cout << scene << ".json" << std::endl;
+    std::cout << std::endl;
+    std::cout << scene << std::endl;
+    std::cout << std::endl;
 
     run_scene(scene);
 

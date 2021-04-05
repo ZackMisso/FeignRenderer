@@ -21,6 +21,8 @@ Scene::Scene(std::string name,
       camera_node(camera),
       env_medium_node(media)
 {
+    emitters = std::vector<Emitter*>();
+    env_emitters = std::vector<Emitter*>();
     shapes = std::vector<Shape*>();
     objects = std::vector<ObjectNode*>();
     mediums = std::vector<Media*>();
@@ -41,6 +43,7 @@ Scene::~Scene()
     shapes.clear();
     objects.clear();
     emitters.clear();
+    env_emitters.clear();
     mediums.clear();
 }
 
@@ -326,7 +329,8 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
 
 void Scene::addEmitter(Emitter* emitter)
 {
-    emitters.push_back(emitter);
+    if (emitter->isEnvironmentEmitter()) env_emitters.push_back(emitter);
+    if (!emitter->isEnvironmentOnlyEmitter()) emitters.push_back(emitter);
 }
 
 void Scene::addMedium(Media* media)
@@ -447,12 +451,9 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
                                      closure.sampler->next2D(),
                                      &emitter_pdf);
 
-    //LOG("base chech");
     if (emitter->requiresInitialVisibilityCheck())
     {
-        //LOG("hello");
         // create ray
-        //LOG(eqr.wi);
         Ray3f ray = Ray3f(closure.its->p,
                           eqr.wi,
                           Epsilon,
@@ -463,15 +464,10 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
 
         if (intersect_non_null(ray, tmp))
         {
-            // LOG("emitter");
-            // std::cout << emitter->getMeshNode()->mesh << std::endl;
-            // LOG("intersected");
-            // std::cout << tmp.intersected_mesh << std::endl;
             if (emitter->getMeshNode()->mesh == tmp.intersected_mesh)
             {
                 eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
                 Li /= eqr.sqr_dist;
-                //LOG("sqr dist: " + std::to_string(eqr.sqr_dist));
             }
             else
             {
@@ -552,7 +548,6 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
 
         if (emitter->requiresInitialVisibilityCheck())
         {
-            //LOG("hello");
             // create ray
             Ray3f ray = Ray3f(closure.its->p,
                               eqr.wi,
@@ -568,7 +563,6 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
                 {
                     eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
                     Li /= eqr.sqr_dist;
-                    //LOG("sqr dist: " + std::to_string(eqr.sqr_dist));
                 }
                 else
                 {
@@ -618,7 +612,6 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
             else
             {
                 closure.shadow_rays[i].throughput = Li / (choice_pdf * emitter_pdf) * transmittance;
-                // closure.shadow_rays[i].throughput = Li;
             }
 
             // Note: bsdf_values are fully accumulated later
@@ -678,6 +671,23 @@ void Scene::accumulate_emission(MaterialClosure& closure) const
     {
         closure.emission = Color3f(0.f);
     }
+}
+
+Color3f Scene::env_emission(const Ray3f& ray) const
+{
+    EmitterQuery eqr;
+    eqr.wi = ray.dir;
+
+    Color3f Le = Color3f(0.f);
+
+    // TODO: once global media are supported, that will have to be accounted for
+    //       here.
+    for (int i = 0; i < env_emitters.size(); ++i)
+    {
+        Le += env_emitters[i]->evaluate(eqr);
+    }
+
+    return Le;
 }
 
 FEIGN_END()

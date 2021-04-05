@@ -34,7 +34,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
 
     if (!scene->intersect_non_null(ray, its))
     {
-        return Color3f(0.f);
+        return scene->env_emission(ray);
     }
 
     const MaterialShader* shader = scene->getShapeMaterialShader(its);

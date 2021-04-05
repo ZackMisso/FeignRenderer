@@ -1,7 +1,6 @@
 List of features to add to the renderer
 
 Interpolation scheme support for scene variables
-Environment Maps
 Path Tracing with (full) MIS
 Spectral Rendering
 NVIDIA Ray-Marching
@@ -24,8 +23,6 @@ Refactors:
     remove the media abstraction and just keep standard medium
     remove the material abstraction and just represent everything as shaders
     add a check to keep material shaders from being used as geometry shaders
-    create a separate projects repository and keep it separate from the renderer
-        to allow for small edits and other things while not stopping development
-    redo the unit tests library, and keep the unit tests as part of this project
-    fix the cmakelists file to not have to keep track of every file
     what the heck is a functor, and why did i make it
+
+unit tests to create:

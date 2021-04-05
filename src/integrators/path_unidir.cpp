@@ -45,6 +45,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
 
         if (!scene->intersect_non_null(ray, its))
         {
+            Li += beta * scene->env_emission(ray);
             break;
         }
 

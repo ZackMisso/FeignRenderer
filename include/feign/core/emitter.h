@@ -10,6 +10,7 @@
 
 #include <feign/core/node.h>
 #include <feign/core/shape.h>
+#include <feign/core/texture.h>
 #include <feign/math/vector.h>
 #include <feign/math/discrete_pdf.h>
 
@@ -82,6 +83,9 @@ public:
     // this is used for emitters which only emit line in singular directions where
     // sampling any random direction would typically result in a rejected sample.
     virtual bool requiresInitialVisibilityCheck() const { return false; }
+
+    virtual bool isEnvironmentOnlyEmitter() const { return false; }
+    virtual bool isEnvironmentEmitter() const { return false; }
 
     virtual void preProcess() { }
 
@@ -421,11 +425,22 @@ protected:
 
 /////////////////////////////////////////////////
 // Environment Emitter
+// TODO: implement support for importance sampling
+//       Note: will only allow support if the texture is non-procedural...
 /////////////////////////////////////////////////
 class EnvironmentEmitter : public Emitter
 {
 public:
-    EnvironmentEmitter();
+    struct Params
+    {
+        Params(Color3f intensity, std::string texture)
+            : intensity(intensity), texture(texture) { }
+
+        Color3f intensity;
+        std::string texture;
+    };
+
+    EnvironmentEmitter(TextureNode* texture, Color3f intensity);
 
     virtual Color3f sample_ray(EmitterQuery& rec,
                                const Point2f& dir_sample,
@@ -442,12 +457,17 @@ public:
 
     virtual Color3f evaluate(EmitterQuery& rec) const;
 
-    virtual void preProcess();
-
     virtual bool isSpatial() const { return false; }
+    virtual bool requiresInitialVisibilityCheck() const { return false; }
+    virtual bool isEnvironmentOnlyEmitter() const { return true; }
+    virtual bool isEnvironmentEmitter() const { return true; }
     virtual Point3f getCenter() const { return Point3f(0.f); }
 
+    virtual void preProcess();
+
 protected:
+    TextureNode* texture;
+    Color3f intensity;
 };
 /////////////////////////////////////////////////
 

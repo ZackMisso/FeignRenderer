@@ -341,9 +341,9 @@ void OneWayDice::run()
     // system(rm_command.c_str());
     system(mkdir_command.c_str());
 
-    int start_frame = 0;
+    int start_frame = 609;
     // int start_frame = 501;
-    int end_frame = 300;
+    int end_frame = 900;
 
     // smoke medium
     for (int frame = start_frame; frame < end_frame; frame++)

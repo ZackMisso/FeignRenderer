@@ -58,7 +58,6 @@ public:
     void addMedium(Media* media);
 
     const MaterialShader* getShapeMaterialShader(const Intersection& its) const;
-    // const Media* getShapeMedium(consst Intersection& its) const;
 
     void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
     void eval_one_emitter(MaterialClosure& closur, bool in_media = false) const;
@@ -67,12 +66,13 @@ public:
                              bool in_media = false) const;
     void accumulate_emission(MaterialClosure& closure) const;
 
+    Color3f env_emission(const Ray3f& ray) const;
+
     // choosing an emitter given a specific intersection location
     Emitter* choose_emitter(MaterialClosure& closure, Float* pdf) const;
     // choosing a uniformly random emitter
     Emitter* choose_emitter(Sampler* sampler, Float* pdf) const;
 
-    // TODO: should these really be public...
 public:
     std::string name;
     BBox3f sceneBounds;
@@ -87,6 +87,7 @@ public:
                     // offline rendering
 
     // pre-processed structures
+    std::vector<Emitter*> env_emitters;
     std::vector<Emitter*> emitters;
     std::vector<Media*> mediums;
     std::vector<Shape*> shapes;
