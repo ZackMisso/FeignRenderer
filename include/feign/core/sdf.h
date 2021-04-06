@@ -1,16 +1,20 @@
 /**
- * Author:    Zackary Misso
- * Version:   0.2.0
- *
- * Anyone has permission to use the following code as long as proper
- * acknowledgement is provided to the original author(s).
- **/
+* Author:    Zackary Misso
+* Version:   0.2.0
+*
+* Anyone has permission to use the following code as long as proper
+* acknowledgement is provided to the original author(s).
+**/
 
 #pragma once
 
 #include <feign/core/shape.h>
 
 FEIGN_BEGIN()
+
+// currently refractions are assumed to not be supported by the SDF rendering
+// side of this renderer. TODO: how to support automatic detection of custom
+// signed distance fields?
 
 /////////////////////////////////////////////////
 // Signed Distance Function Shape
@@ -23,10 +27,25 @@ public:
         : Shape(boundry, is_null) { }
     ~SDFShape() { }
 
-    virtual Float evaluate(Point3f pt) const = 0;
+    virtual Float evaluate_distance(Point3f pt) const = 0;
+};
+/////////////////////////////////////////////////
 
-    // TODO: remove this, will cause major compile errors
-    Float interp; // TODO: how to represent interp across all objects??
+/////////////////////////////////////////////////
+// Signed Distance Operation
+/////////////////////////////////////////////////
+// this struct should describe an operation which can be perfomed on a signed
+// distance field.
+/////////////////////////////////////////////////
+struct SDFOperation : public SDFShape
+{
+public:
+    SDFOperation(SDFShape* sdf,
+                 Float interp)
+        : sdf(sdf), interp(interp) { }
+
+    SDFShape* sdf,
+    Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -40,11 +59,31 @@ struct SDFInteraction : public SDFShape
 {
 public:
     SDFInteraction(SDFShape* sdf_1,
-                   SDFShape* sdf_2)
-        : sdf_1(sdf_1), sdf_2(sdf_2) { }
+                   SDFShape* sdf_2,
+                   Float interp)
+        : sdf_1(sdf_1), sdf_2(sdf_2), interp(interp) { }
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
+    Float interp;
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Array Interaction
+/////////////////////////////////////////////////
+// this struct should describe the interaction between an arbitrary number of
+// signed distance fields
+/////////////////////////////////////////////////
+struct SDFArrayInteraction : public SDFShape
+{
+public:
+    SDFArrayInteraction(std::vector<SDFShape*> sdfs,
+                        Float interp)
+        : sdfs(sdfs), interp(interp) { }
+
+    std::vector<SDFShape*> sdfs;
+    Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -55,26 +94,39 @@ struct SDFIntersection : public SDFInteraction
 {
 public:
     SDFIntersection(SDFShape* sdf_1,
-                    SDFShape* sdf_2);
+                    SDFShape* sdf_2
+                    Float interp,
+                    bool is_smooth);
 
     virtual Float evaluate(Point3f pt) const;
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
     bool is_smooth;
-    Float interp; // for smooth intersection
+};
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+// Signed Distance Array Intersection
+/////////////////////////////////////////////////
+struct SDFArrayIntersection : public SDFArrayInteraction
+{
+public:
+    SDFArrayIntersection(std::vector<SDFShape*> sdfs,
+                         Float interp,
+                         bool is_smooth);
+
+    virtual Float evaluate(Point3f pt) const;
+
+    bool is_smooth;
 };
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 // Signed Distance Rounding
 /////////////////////////////////////////////////
-// TODO
 struct SDFRounding : public SDFInteraction
 {
 public:
-    SDFRounding(SDFShape* sdf_1,
-                SDFShape* sdf_2);
+    SDFRounding(SDFShape* sdf);
 
     virtual Float evaluate(Point3f pt) const;
 

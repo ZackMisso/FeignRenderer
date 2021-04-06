@@ -1,17 +1,20 @@
 List of features to add to the renderer
 
+( zack's notes )
+    "+" means that this is currently being worked on
+
++ Full Basic SDF support - master branch
 Interpolation scheme support for scene variables
 Path Tracing with (full) MIS
 Spectral Rendering
 NVIDIA Ray-Marching
 Bidirectional Path Tracing
 Integrate performance analysis everywhere
-SDF rendering support
 BSSRDFs
 Dipole method
 Directional Dipole method
 Disney BSDF
-Easy SDF creation
+SDF refractions
 Easy to integrate Macros
 Instanced Geometry - Need to look into embrees features
 Subdivision Embree support
@@ -24,5 +27,11 @@ Refactors:
     remove the material abstraction and just represent everything as shaders
     add a check to keep material shaders from being used as geometry shaders
     what the heck is a functor, and why did i make it
+    create basic documentation
 
 unit tests to create:
+    Homogeneous medium
+    Heterogeneous medium
+    unit tests for all sdf intersection types
+    unit tests for all sdf basic operations
+    unit tests for sdf material interpolation
