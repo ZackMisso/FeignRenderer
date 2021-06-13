@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-#include <feign/parser/json_parser.h>
+#include <feign/parsers/json_parser.h>
 #include <feign/core/api.h>
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>

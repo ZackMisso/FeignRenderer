@@ -27,7 +27,12 @@ public:
         : Shape(boundry, is_null) { }
     ~SDFShape() { }
 
+    // TODO: why is this called evaluate_distance? why not just evaluated
+    // adding the second method below until I can remember what my thought
+    // process was a few months back
     virtual Float evaluate_distance(Point3f pt) const = 0;
+    virtual Float evaluate(Point3f pt) const = 0;
+    Float interp; // TODO: remove this, when I start impelmenting sdfs
 };
 /////////////////////////////////////////////////
 
@@ -42,10 +47,14 @@ struct SDFOperation : public SDFShape
 public:
     SDFOperation(SDFShape* sdf,
                  Float interp)
-        : sdf(sdf), interp(interp) { }
+        : sdf(sdf) { }//, interp(interp) { }
 
-    SDFShape* sdf,
-    Float interp;
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
+
+    SDFShape* sdf;
+    // Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -61,11 +70,15 @@ public:
     SDFInteraction(SDFShape* sdf_1,
                    SDFShape* sdf_2,
                    Float interp)
-        : sdf_1(sdf_1), sdf_2(sdf_2), interp(interp) { }
+        : sdf_1(sdf_1), sdf_2(sdf_2) { }//, interp(interp) { }
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
-    Float interp;
+    // Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -79,11 +92,15 @@ struct SDFArrayInteraction : public SDFShape
 {
 public:
     SDFArrayInteraction(std::vector<SDFShape*> sdfs,
-                        Float interp)
-        : sdfs(sdfs), interp(interp) { }
+                        Float interpp)
+        : sdfs(sdfs) {} //, interp(interp) { }
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     std::vector<SDFShape*> sdfs;
-    Float interp;
+    // Float interp;
 };
 /////////////////////////////////////////////////
 
@@ -94,11 +111,15 @@ struct SDFIntersection : public SDFInteraction
 {
 public:
     SDFIntersection(SDFShape* sdf_1,
-                    SDFShape* sdf_2
+                    SDFShape* sdf_2,
                     Float interp,
                     bool is_smooth);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     bool is_smooth;
 };
@@ -114,7 +135,11 @@ public:
                          Float interp,
                          bool is_smooth);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     bool is_smooth;
 };
@@ -128,7 +153,11 @@ struct SDFRounding : public SDFInteraction
 public:
     SDFRounding(SDFShape* sdf);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -145,7 +174,11 @@ public:
     SDFOnion(SDFShape* sdf_1,
              SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -161,7 +194,11 @@ public:
     SDFExtrusion(SDFShape* sdf_1,
                  SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -177,7 +214,11 @@ public:
     SDFRevolution(SDFShape* sdf_1,
                   SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -193,7 +234,11 @@ public:
     SDFUnion(SDFShape* sdf_1,
              SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -209,7 +254,11 @@ public:
     SDFDifference(SDFShape* sdf_1,
                   SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -225,7 +274,11 @@ public:
     SDFDisplacement(SDFShape* sdf_1,
                     SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -241,7 +294,11 @@ public:
     SDFTwist(SDFShape* sdf_1,
              SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -257,7 +314,11 @@ public:
     SDFBend(SDFShape* sdf_1,
             SDFShape* sdf_2);
 
-    virtual Float evaluate(Point3f pt) const;
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
+    virtual Float evaluate(Point3f pt) const { return 0.0; };
 
     SDFShape* sdf_1;
     SDFShape* sdf_2;
@@ -301,6 +362,10 @@ public:
               const MediumBoundry* boundry = nullptr,
               bool is_null = false);
 
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
     virtual BBox3f boundingBox() const;
@@ -349,6 +414,10 @@ public:
              const MediumBoundry* boundry = nullptr,
              bool is_null = false);
 
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
     virtual BBox3f boundingBox() const;
@@ -393,6 +462,10 @@ public:
            const MediumBoundry* boundry = nullptr,
            bool is_null = false);
 
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
     virtual BBox3f boundingBox() const;
@@ -441,6 +514,10 @@ public:
                 const MediumBoundry* boundry = nullptr,
                 bool is_null = false);
 
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
     virtual BBox3f boundingBox() const;
@@ -494,6 +571,10 @@ public:
             const MediumBoundry* boundry = nullptr,
             bool is_null = false);
 
+    // virtual Float evaluate(Point3f pt) const;
+
+    // TODO: actually implement these
+    virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
     virtual BBox3f boundingBox() const;

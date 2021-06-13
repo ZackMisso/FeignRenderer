@@ -1,0 +1,10 @@
+This is just a collection of minor todos to make sure I get to them
+eventually.
+
+Todo:
+
+Need to make tests for spotlight to make sure it is works correctly
+Need to remove the material abstraction as it is basically the same as
+a shader within the concept of this renderer.
+The unit tests are currently segfaulting, need to figure out why
+    - I think I broke the sdfs last time I worked on the renderer

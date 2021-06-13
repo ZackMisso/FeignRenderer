@@ -6,7 +6,7 @@
 * acknowledgement is provided to the original author(s).
 **/
 
-#include <feign/parser/json_parser.h>
+#include <feign/parsers/json_parser.h>
 #include <feign/core/scene.h>
 #include <feign/test/tester.h>
 #include <iostream>

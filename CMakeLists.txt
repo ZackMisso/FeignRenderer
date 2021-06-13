@@ -102,7 +102,7 @@ FILE ( GLOB FEIGN_SOURCE
     include/feign/math/*.h
     include/feign/media/*.h
     include/feign/misc/*.h
-    include/feign/parser/*.h
+    include/feign/parsers/*.h
     include/feign/shapes/*.h
     include/feign/stats/*.h
     include/feign/test/*.h
@@ -123,7 +123,7 @@ FILE ( GLOB FEIGN_SOURCE
     src/media/density_funcs/*.cpp
     src/media/trans_funcs/*.cpp
     src/misc/*.cpp
-    src/parser/*.cpp
+    src/parsers/*.cpp
     src/samplers/*.cpp
     src/shaders/*.cpp
     src/shapes/*.cpp
@@ -155,4 +155,5 @@ set(CompilerFlags
       TINYEXR_INCLUDE_DIR
 )
 
-target_link_libraries(feign tbb openvdb embree3 Half ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb openvdb embree3 Half)
+#target_link_libraries(feign tbb openvdb embree3 Half ${PYTHON_LIBRARIES})

@@ -10,7 +10,7 @@
 #include <imedit/image.h>
 #include <imedit/im_util.h>
 #include <feign/core/api.h>
-#include <feign/parser/json_parser.h>
+#include <feign/parsers/json_parser.h>
 
 FEIGN_BEGIN()
 
