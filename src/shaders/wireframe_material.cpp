@@ -12,11 +12,11 @@
 
 FEIGN_BEGIN()
 
-WireframeMaterialShader::WireframeMaterialShader(MaterialNode* wireframe_mat,
-                                                 MaterialNode* mesh_mat,
+WireframeMaterialShader::WireframeMaterialShader(BSDFNode* wireframe_bsdf,
+                                                 BSDFNode* mesh_bsdf,
                                                  float threshold)
-    : wireframe_mat(wireframe_mat),
-      mesh_mat(mesh_mat),
+    : wireframe_bsdf(wireframe_bsdf),
+      mesh_bsdf(mesh_bsdf),
       threshold(threshold) { }
 
 void WireframeMaterialShader::sample(MaterialClosure& closure) const
@@ -25,8 +25,8 @@ void WireframeMaterialShader::sample(MaterialClosure& closure) const
         Clocker::startClock("shader eval");
     #endif
 
-    Material* material = choose_mat(closure);
-    material->sample(closure);
+    BSDF* bsdf = choose_bsdf(closure);
+    bsdf->sample(closure);
 
     #if CLOCKING
         Clocker::endClock("shader eval");
@@ -36,14 +36,13 @@ void WireframeMaterialShader::sample(MaterialClosure& closure) const
 // TODO: why is this called evaluate if it does not actually evaluate the material...
 void WireframeMaterialShader::evaluate(MaterialClosure& closure) const
 {
-    // assert(false);
     #if CLOCKING
         Clocker::startClock("shader eval");
     #endif
 
-    Material* material = choose_mat(closure);
+    BSDF* bsdf = choose_bsdf(closure);
 
-    closure.is_specular = material->isDelta();
+    closure.is_specular = bsdf->isDelta();
 
     if (closure.last_spec)
     {
@@ -83,15 +82,15 @@ void WireframeMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
         Clocker::startClock("shader eval");
     #endif
 
-    Material* material = choose_mat(closure);
-    material->evaluate(closure);
+    BSDF* bsdf = choose_bsdf(closure);
+    bsdf->evaluate(closure);
 
     #if CLOCKING
         Clocker::endClock("shader eval");
     #endif
 }
 
-Material* WireframeMaterialShader::choose_mat(MaterialClosure& closure) const
+BSDF* WireframeMaterialShader::choose_bsdf(MaterialClosure& closure) const
 {
     Point3f bary = closure.its->bary;
     float min = bary[0];
@@ -99,14 +98,13 @@ Material* WireframeMaterialShader::choose_mat(MaterialClosure& closure) const
     if (bary[2] < min) min = bary[2];
 
     if (min < threshold)
-        return wireframe_mat->material;
+        return wireframe_bsdf->bsdf;
 
-    return mesh_mat->material;
+    return mesh_bsdf->bsdf;
 }
 
 void WireframeMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
 {
-    // TODO
     throw new NotImplementedException("wireframe material shader evaluate photon");
 }
 

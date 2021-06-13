@@ -20,8 +20,6 @@
 // and sets up the parameters and executes renders. If a feature is added to
 // this renderer, then it should also be made available here.
 
-// TODO: rename fr_mesh to fr_shape
-
 #include <feign/common.h>
 #include <feign/core/scene.h>
 #include <feign/core/shader.h>
@@ -61,7 +59,7 @@ public:
     std::unordered_map<std::string, IntegratorNode*> integrators;
     std::unordered_map<std::string, SamplerNode*> samplers;
     std::unordered_map<std::string, FilterNode*> filters;
-    std::unordered_map<std::string, MaterialNode*> materials;
+    // std::unordered_map<std::string, MaterialNode*> materials;
     std::unordered_map<std::string, ObjectNode*> objects;
     std::unordered_map<std::string, MeshNode*> meshes;
     std::unordered_map<std::string, GeometryShaderNode*> geom_shaders;
@@ -169,9 +167,9 @@ public:
                            std::string type,
                            void* emitter_data);
 
-    static void fr_material(std::string name,
-                            std::string type,
-                            void* material_data);
+    // static void fr_material(std::string name,
+    //                         std::string type,
+    //                         void* material_data);
 
     static void fr_bsdf(std::string name,
                         std::string type,

@@ -12,12 +12,12 @@
 
 FEIGN_BEGIN()
 
-SimpleMaterialShader::SimpleMaterialShader(MaterialNode* material)
-    : material(material) { }
+SimpleMaterialShader::SimpleMaterialShader(BSDFNode* bsdf)
+    : bsdf(bsdf) { }
 
 void SimpleMaterialShader::sample(MaterialClosure& closure) const
 {
-    (*material)()->sample(closure);
+    (*bsdf)()->sample(closure);
 }
 
 // TODO: why is this called evaluate if it does not actually evaluate the material...
@@ -27,7 +27,7 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
         Clocker::startClock("shader eval");
     #endif
 
-    closure.is_specular = (*material)()->isDelta();
+    closure.is_specular = (*bsdf)()->isDelta();
 
     if (closure.last_spec)
     {
@@ -61,29 +61,6 @@ void SimpleMaterialShader::evaluate(MaterialClosure& closure) const
             closure.scene->eval_one_emitter(closure);
         }
     }
-    /*else if (!closure.first_diffuse_event)
-    {
-        //LOG("should not be here");
-        if (closure.material_accepts_shadows)
-        {
-            if (closure.first_diffuse_evals != 1)
-            {
-                LOG(STR(closure.first_diffuse_evals));
-                assert(false); // this feature really does not help all that much
-            }
-            closure.scene->eval_multi_emitters(closure,
-                                               closure.first_diffuse_evals);
-            closure.first_diffuse_event = false;
-        }
-    }
-    else
-    {
-        // TODO: fix this hack with above
-        if (closure.material_accepts_shadows)
-        {
-            closure.scene->eval_one_emitter(closure);
-        }
-    }*/
 
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = true;
@@ -99,7 +76,7 @@ void SimpleMaterialShader::evaluate_mat_only(MaterialClosure& closure) const
         Clocker::startClock("shader eval");
     #endif
 
-    (*material)()->evaluate(closure);
+    (*bsdf)()->evaluate(closure);
 
     #if CLOCKING
         Clocker::endClock("shader eval");
@@ -112,25 +89,9 @@ void SimpleMaterialShader::evaluate_for_photon(MaterialClosure& closure) const
         Clocker::startClock("shader eval");
     #endif
 
-    closure.is_specular = (*material)()->isDelta();
+    closure.is_specular = (*bsdf)()->isDelta();
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = false;
-
-    // if (closure.is_specular)
-    // {
-    //     closure.last_spec = closure.is_specular;
-    //
-    //     #if CLOCKING
-    //         Clocker::endClock("shader eval");
-    //     #endif
-    //
-    //     return;
-    // }
-    //
-    // closure.last_spec = closure.is_specular;
-    //
-    // // is this necessary here?
-    // closure.material_accepts_shadows = true;
 
     #if CLOCKING
         Clocker::endClock("shader eval");

@@ -280,28 +280,28 @@ FilterNode* FeignRenderer::find_filter(std::string name)
     }
 }
 
-MaterialNode* FeignRenderer::find_material(std::string name)
-{
-    std::unordered_map<std::string, MaterialNode*>::const_iterator itr = materials.find(name);
-
-    if (itr == materials.end())
-    {
-        MaterialNode* node = new MaterialNode(name);
-        materials.insert({name, node});
-
-        if (name == "default")
-        {
-            BSDFNode* bsdf = getInstance()->find_bsdf("default");
-            node->material = new SimpleMaterial(bsdf);
-        }
-
-        return node;
-    }
-    else
-    {
-        return itr->second;
-    }
-}
+// MaterialNode* FeignRenderer::find_material(std::string name)
+// {
+//     std::unordered_map<std::string, MaterialNode*>::const_iterator itr = materials.find(name);
+//
+//     if (itr == materials.end())
+//     {
+//         MaterialNode* node = new MaterialNode(name);
+//         materials.insert({name, node});
+//
+//         if (name == "default")
+//         {
+//             BSDFNode* bsdf = getInstance()->find_bsdf("default");
+//             node->material = new SimpleMaterial(bsdf);
+//         }
+//
+//         return node;
+//     }
+//     else
+//     {
+//         return itr->second;
+//     }
+// }
 
 ObjectNode* FeignRenderer::find_object(std::string name)
 {
@@ -362,8 +362,8 @@ MaterialShaderNode* FeignRenderer::find_material_shader(std::string name)
 
         if (name == "default")
         {
-            MaterialNode* material = getInstance()->find_material("default");
-            node->shader = new SimpleMaterialShader(material);
+            BSDFNode* bsdf = getInstance()->find_bsdf("default");
+            node->shader = new SimpleMaterialShader(bsdf);
         }
 
         return node;
@@ -940,6 +940,7 @@ void FeignRenderer::fr_shader(std::string name,
                               void* shader_data)
 {
     // TODO: incorporate other shader types later
+    // TODO: continue the removal of the material abstraction from here
 
     if (type == "interp_verts_to_sphere")
     {
@@ -1313,30 +1314,30 @@ void FeignRenderer::fr_emitter(std::string name,
     }
 }
 
-void FeignRenderer::fr_material(std::string name,
-                                std::string type,
-                                void* material_data)
-{
-    MaterialNode* material = getInstance()->find_material(name);
-
-    if (material->material)
-    {
-        throw new FeignRendererException("material already defined");
-    }
-
-    if (type == "simple")
-    {
-        SimpleMaterial::Params* params = (SimpleMaterial::Params*)material_data;
-
-        BSDFNode* bsdf = getInstance()->find_bsdf(params->bsdf_name);
-
-        material->material = new SimpleMaterial(bsdf);
-    }
-    else
-    {
-        throw new FeignRendererException("material type not recognized: " + type);
-    }
-}
+// void FeignRenderer::fr_material(std::string name,
+//                                 std::string type,
+//                                 void* material_data)
+// {
+//     MaterialNode* material = getInstance()->find_material(name);
+//
+//     if (material->material)
+//     {
+//         throw new FeignRendererException("material already defined");
+//     }
+//
+//     if (type == "simple")
+//     {
+//         SimpleMaterial::Params* params = (SimpleMaterial::Params*)material_data;
+//
+//         BSDFNode* bsdf = getInstance()->find_bsdf(params->bsdf_name);
+//
+//         material->material = new SimpleMaterial(bsdf);
+//     }
+//     else
+//     {
+//         throw new FeignRendererException("material type not recognized: " + type);
+//     }
+// }
 
 void FeignRenderer::fr_bsdf(std::string name,
                             std::string type,
