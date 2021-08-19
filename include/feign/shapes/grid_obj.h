@@ -23,7 +23,7 @@ public:
                Vec2i resolution)
             : texture(texture),
               shader(shader),
-              resolution(resolution) { }
+              resolution(resolution) {}
 
         std::string shader;
         std::string texture;
@@ -31,14 +31,14 @@ public:
     };
 
     GridObj();
-    GridObj(Vec2i res, TextureNode* terrain_map);
+    GridObj(Vec2i res, TextureNode *terrain_map);
 
-    ~GridObj() { }
+    ~GridObj() {}
 
     virtual void preProcess(bool requires_processing = false);
 
     Vec2i resolution;
-    TextureNode* terrain_map;
+    TextureNode *terrain_map;
 };
 
 FEIGN_END()

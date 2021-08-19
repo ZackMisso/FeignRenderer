@@ -6,7 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
- // THIS INTEGRATOR IS USED AS A SANDBOX FOR ACTIVE DEBUGGING
+// THIS INTEGRATOR IS USED AS A SANDBOX FOR ACTIVE DEBUGGING
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
@@ -15,18 +15,18 @@ FEIGN_BEGIN()
 
 // TODO: for now this will only support homogeneous global media
 
-Sandbox_Integrator::Sandbox_Integrator(FilterNode* filter,
-                                       Integrator::Params* params)
-    : Integrator(filter, params) { }
+Sandbox_Integrator::Sandbox_Integrator(FilterNode *filter,
+                                       Integrator::Params *params)
+    : Integrator(filter, params) {}
 
-void Sandbox_Integrator::preProcess(const Scene* scene, Sampler* sampler)
+void Sandbox_Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f Sandbox_Integrator::Li(const Scene* scene,
-                               Sampler* sampler,
-                               const Ray3f& cam_ray,
+Color3f Sandbox_Integrator::Li(const Scene *scene,
+                               Sampler *sampler,
+                               const Ray3f &cam_ray,
                                bool debug) const
 {
     Color3f Li = Color3f(0.f);
@@ -41,12 +41,14 @@ Color3f Sandbox_Integrator::Li(const Scene* scene,
 
     for (int bounces = 0; bounces < 1; ++bounces)
     {
-        if (beta.isZero()) break;
+        if (beta.isZero())
+            break;
 
         Intersection its;
 
         // TODO: medium needs to be set at the end, not during intersection
-        if (!scene->intersect_full(ray, its)) break;
+        if (!scene->intersect_full(ray, its))
+            break;
 
         // media_check
         // TODO: this will be broken for media inside glass
@@ -122,18 +124,21 @@ Color3f Sandbox_Integrator::Li(const Scene* scene,
 
                     Li += closure.nee;
 
-                    if (sampler->next1D() > rr_prob) break;
+                    if (sampler->next1D() > rr_prob)
+                        break;
 
                     beta /= rr_prob;
 
                     continue;
                 }
 
-                if (!intersected) break;
+                if (!intersected)
+                    break;
             }
             else
             {
-                if (!intersected) break;
+                if (!intersected)
+                    break;
 
                 ray = Ray3f(its.p,
                             ray.dir,
@@ -155,7 +160,7 @@ Color3f Sandbox_Integrator::Li(const Scene* scene,
             continue;
         }
 
-        const MaterialShader* shader = scene->getShapeMaterialShader(its);
+        const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
         closure.its = &its;
         closure.ray = &ray;
@@ -196,8 +201,10 @@ Color3f Sandbox_Integrator::Li(const Scene* scene,
                     ray.depth + 1);
 
         Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < 0.f) cosTerm = -cosTerm;
-        if (closure.is_specular) cosTerm = 1.f;
+        if (cosTerm < 0.f)
+            cosTerm = -cosTerm;
+        if (closure.is_specular)
+            cosTerm = 1.f;
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);

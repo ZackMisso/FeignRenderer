@@ -16,34 +16,35 @@ DirectionalEmitter::DirectionalEmitter(Vector3f light_dir, Color3f radiance)
     light_dir = light_dir.normalized();
 }
 
-Color3f DirectionalEmitter::sample_nee(EmitterQuery& rec,
-                                       const Point2f& sample,
-                                       Float* pdf) const
+Color3f DirectionalEmitter::sample_nee(EmitterQuery &rec,
+                                       const Point2f &sample,
+                                       Float *pdf) const
 {
     rec.wi = light_dir;
-    if (pdf) *pdf = 1.0;
+    if (pdf)
+        *pdf = 1.0;
 
     // rec.sqr_dist = 1.f; // technically infinity
 
     return radiance;
 }
 
-Color3f DirectionalEmitter::sample_medium(EmitterQuery& rec,
-                                   const Point2f& sample,
-                                   Float* pdf) const
+Color3f DirectionalEmitter::sample_medium(EmitterQuery &rec,
+                                          const Point2f &sample,
+                                          Float *pdf) const
 {
     throw new NotImplementedException("emitter directional");
 }
 
-Color3f DirectionalEmitter::sample_ray(EmitterQuery& rec,
-                                       const Point2f& dir_sample,
-                                       const Point2f& point_sample,
-                                       Float* pdf) const
+Color3f DirectionalEmitter::sample_ray(EmitterQuery &rec,
+                                       const Point2f &dir_sample,
+                                       const Point2f &point_sample,
+                                       Float *pdf) const
 {
     throw new NotImplementedException("emitter directional");
 }
 
-Color3f DirectionalEmitter::evaluate(EmitterQuery& rec) const
+Color3f DirectionalEmitter::evaluate(EmitterQuery &rec) const
 {
     // if wi is roughly == light dir return the radiance
     if ((light_dir - rec.wi).sqrNorm() < Epsilon)

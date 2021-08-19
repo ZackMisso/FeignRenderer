@@ -24,11 +24,11 @@ void run_scene(std::string scene_name)
     FeignRenderer::clean_up();
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    #if OPENVDB
-        openvdb::initialize();
-    #endif
+#if OPENVDB
+    openvdb::initialize();
+#endif
     // //////// TEMPORARY ////////
 
     // OneWayDice();
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
         if (strcmp(argv[i], "-u") == 0)
         {
             std::cout << "Beginning Unit Tests" << std::endl;
-            UnitTestManager* unitTests = new UnitTestManager();
+            UnitTestManager *unitTests = new UnitTestManager();
 
             if (!unitTests->run_all_tests())
             {
@@ -59,9 +59,9 @@ int main(int argc, char* argv[])
         if (strcmp(argv[i], "-ui") == 0)
         {
             std::cout << "Beginning Unit Tests" << std::endl;
-            UnitTestManager* unitTests = new UnitTestManager();
+            UnitTestManager *unitTests = new UnitTestManager();
 
-            int index = std::stoi(argv[i+1]);
+            int index = std::stoi(argv[i + 1]);
 
             if (!unitTests->run_test(index))
             {
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
         }
         if (strcmp(argv[i], "-ur") == 0)
         {
-            UnitTestManager* unitTests = new UnitTestManager();
+            UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 
             if (!unitTests->run_all_tests())
@@ -92,10 +92,10 @@ int main(int argc, char* argv[])
         }
         if (strcmp(argv[i], "-uri") == 0)
         {
-            UnitTestManager* unitTests = new UnitTestManager();
+            UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 
-            int index = std::stoi(argv[i+1]);
+            int index = std::stoi(argv[i + 1]);
 
             if (!unitTests->run_test(index))
             {

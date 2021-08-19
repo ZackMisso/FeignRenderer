@@ -13,9 +13,9 @@
 FEIGN_BEGIN()
 
 Mirror::Mirror(Color3f albedo)
-    : BSDF(), albedo(albedo) { }
+    : BSDF(), albedo(albedo) {}
 
-void Mirror::sample(MaterialClosure& closure) const
+void Mirror::sample(MaterialClosure &closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
@@ -31,15 +31,14 @@ void Mirror::sample(MaterialClosure& closure) const
         closure.wo = Vector3f(
             -closure.wi(0),
             -closure.wi(1),
-             closure.wi(2)
-        );
+            closure.wi(2));
 
         closure.eta = 1.0f;
         closure.albedo = albedo;
     }
 }
 
-void Mirror::evaluate(MaterialClosure& closure) const
+void Mirror::evaluate(MaterialClosure &closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {

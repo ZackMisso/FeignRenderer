@@ -79,7 +79,7 @@ void OpenVDBDensity::preProcess()
     LOG("finished pre-processing openvdb medium");
 }
 
-Color3f OpenVDBDensity::D(const Point3f& p) const
+Color3f OpenVDBDensity::D(const Point3f &p) const
 {
     // TODO: need to make box vs. point a configurable parameter
     openvdb::tools::GridSampler<openvdb::FloatGrid, openvdb::tools::BoxSampler> sampler(*grid);

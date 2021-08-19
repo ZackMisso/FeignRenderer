@@ -11,18 +11,18 @@
 
 FEIGN_BEGIN()
 
-Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode* filter,
-                                                               Integrator::Params* params)
-    : Integrator(filter, params) { }
+Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode *filter,
+                                                               Integrator::Params *params)
+    : Integrator(filter, params) {}
 
-void Path_Unidirectional_Integrator::preProcess(const Scene* scene, Sampler* sampler)
+void Path_Unidirectional_Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
-                                           Sampler* sampler,
-                                           const Ray3f& cam_ray,
+Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
+                                           Sampler *sampler,
+                                           const Ray3f &cam_ray,
                                            bool debug) const
 {
     Color3f Li = Color3f(0.f);
@@ -39,7 +39,8 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
     {
         // LOG("max_bounces: " + std::to_string(max_bounces));
         // LOG("bounces: " + std::to_string(bounces));
-        if (beta.isZero()) break;
+        if (beta.isZero())
+            break;
 
         Intersection its;
 
@@ -49,7 +50,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
             break;
         }
 
-        const MaterialShader* shader = scene->getShapeMaterialShader(its);
+        const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
         closure.its = &its;
         closure.ray = &ray;
@@ -90,8 +91,10 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene* scene,
                     ray.depth + 1);
 
         Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < 0.f) cosTerm = -cosTerm;
-        if (closure.is_specular) cosTerm = 1.f;
+        if (cosTerm < 0.f)
+            cosTerm = -cosTerm;
+        if (closure.is_specular)
+            cosTerm = 1.f;
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);

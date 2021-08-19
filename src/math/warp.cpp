@@ -28,7 +28,7 @@ Float WarpSpace::sqrToUniDiskPdf(const Point2f &p)
 Vector3f WarpSpace::sqrToUniSph(const Point2f &sample)
 {
     Float z = 1.0f - 2.0f * sample(1);
-    Float r = std::sqrt(std::max((Float) 0.0f, 1.0f - z*z));
+    Float r = std::sqrt(std::max((Float)0.0f, 1.0f - z * z));
     Float sinPhi, cosPhi;
     feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * Float(cosPhi), r * Float(sinPhi), z);
@@ -41,8 +41,8 @@ Float WarpSpace::sqrToUniSphPdf(const Vector3f &v)
 
 Vector3f WarpSpace::sqrToUniSphCap(const Point2f &sample, Float cosThetaMax)
 {
-    Float z = sample(1) + (1.f-sample(1)) * cosThetaMax;
-    Float r = std::sqrt(1-z*z);
+    Float z = sample(1) + (1.f - sample(1)) * cosThetaMax;
+    Float r = std::sqrt(1 - z * z);
     Float sinPhi, cosPhi;
     feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
     return Vector3f(r * Float(cosPhi), r * Float(sinPhi), z);
@@ -58,7 +58,7 @@ Float WarpSpace::sqrToUniSphCapPdf(const Vector3f &v, Float cosThetaMax)
 Vector3f WarpSpace::sqrToUniHemi(const Point2f &sample)
 {
     Float cosTheta = 1.0 - sample(1);
-    Float sinTheta = std::sqrt(std::max((Float) 0, 1-cosTheta*cosTheta));
+    Float sinTheta = std::sqrt(std::max((Float)0, 1 - cosTheta * cosTheta));
 
     Float sinPhi, cosPhi;
     feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
@@ -74,7 +74,7 @@ Float WarpSpace::sqrToUniHemiPdf(const Vector3f &v)
 Vector3f WarpSpace::sqrToCosHemi(const Point2f &sample)
 {
     Point2f p = sqrToUniDisk(sample);
-    Float z = std::sqrt(std::max((Float) 0, (Float)1.0 - p(0)*p(0) - p(1)*p(1)));
+    Float z = std::sqrt(std::max((Float)0, (Float)1.0 - p(0) * p(0) - p(1) * p(1)));
 
     return Vector3f(p(0), p(1), z);
 }
@@ -86,8 +86,8 @@ Float WarpSpace::sqrToCosHemiPdf(const Vector3f &v)
 
 Vector3f WarpSpace::sqrToCosPowHemi(const Point2f &sample, Float n)
 {
-    Float cosTheta  = std::pow(sample(1), 1.0f / (n + 1.0f));
-    Float sinTheta  = std::sqrt(std::max((Float) 0.0f, 1.0f - cosTheta * cosTheta));
+    Float cosTheta = std::pow(sample(1), 1.0f / (n + 1.0f));
+    Float sinTheta = std::sqrt(std::max((Float)0.0f, 1.0f - cosTheta * cosTheta));
 
     Float sinPhi, cosPhi;
     feign_sincos(2.0 * M_PI * sample(0), &sinPhi, &cosPhi);
@@ -110,8 +110,10 @@ Point2f WarpSpace::sqrToUniTri(const Point2f &sample)
 
 Float WarpSpace::sqrToUniTriPdf(const Point2f &sample)
 {
-    if (sample(0) + sample(1) > 1.0) return 0.0f;
-    if (sample(0) + sample(1) < 0.0) return 0.0f;
+    if (sample(0) + sample(1) > 1.0)
+        return 0.0f;
+    if (sample(0) + sample(1) < 0.0)
+        return 0.0f;
 
     return 2.0f;
 }

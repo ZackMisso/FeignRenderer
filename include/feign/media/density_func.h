@@ -26,12 +26,12 @@ FEIGN_BEGIN()
 class DensityFunction
 {
 public:
-    virtual ~DensityFunction() { }
-    virtual Color3f D(const Point3f& p) const = 0;
+    virtual ~DensityFunction() {}
+    virtual Color3f D(const Point3f &p) const = 0;
     // virtual Color3f SpectralD(const Point3f& p) const = 0;
     virtual Float maxDensity() const = 0;
 
-    virtual void preProcess() { }
+    virtual void preProcess() {}
 
     Color3f sigma_t;
 };
@@ -42,17 +42,17 @@ public:
     struct Params
     {
         Params(Float density)
-            : density(density) { }
+            : density(density) {}
         Params(Color3f density)
-            : density(density) { }
+            : density(density) {}
 
         Color3f density;
     };
 
-    ConstantDensity(Color3f density) : density(density) { }
-    ConstantDensity(Float density_val) : density(Color3f(density_val)) { }
+    ConstantDensity(Color3f density) : density(density) {}
+    ConstantDensity(Float density_val) : density(Color3f(density_val)) {}
 
-    virtual Color3f D(const Point3f& p) const
+    virtual Color3f D(const Point3f &p) const
     {
         return density * sigma_t;
     }
@@ -65,8 +65,8 @@ public:
     virtual Float maxDensity() const
     {
         return std::max(density(0) * sigma_t(0),
-               std::max(density(1) * sigma_t(1),
-                        density(2) * sigma_t(2)));
+                        std::max(density(1) * sigma_t(1),
+                                 density(2) * sigma_t(2)));
     }
 
     Color3f density;
@@ -80,7 +80,7 @@ public:
     struct Params
     {
         Params(std::string filename)
-            : filename(filename) { }
+            : filename(filename) {}
 
         std::string filename;
     };
@@ -88,7 +88,7 @@ public:
     OpenVDBDensity(std::string openvdb_file);
     ~OpenVDBDensity();
 
-    virtual Color3f D(const Point3f& p) const;
+    virtual Color3f D(const Point3f &p) const;
     // virtual Color3f SpectralD(const Point3f& p) const;
     virtual Float maxDensity() const;
 
@@ -115,7 +115,7 @@ public:
         // TODO
     }
 
-    virtual Color3f D(const Point3f& p) const
+    virtual Color3f D(const Point3f &p) const
     {
         throw new NotImplementedException("noise density");
         return 0.0;
@@ -138,7 +138,7 @@ class PointAverageDensity : public DensityFunction
 {
     PointAverageDensity();
 
-    virtual Color3f D(const Point3f& p) const;
+    virtual Color3f D(const Point3f &p) const;
     // virtual Color3f SpectralD(const Point3f& p) const;
     virtual Float maxDensity() const;
 
@@ -151,7 +151,7 @@ public:
     struct Params
     {
         Params(Color3f max_density)
-            : max_density(max_density) { }
+            : max_density(max_density) {}
 
         Color3f max_density;
     };
@@ -160,11 +160,11 @@ public:
         : max_density(max_density),
           center(Point3f(0.f)),
           bounds(1000.0),
-          n(1000) { }
+          n(1000) {}
 
     // z(n+1) = z(n) + c
     // c will be defined to be the location of the point relative to the center
-    virtual Color3f D(const Point3f& p) const
+    virtual Color3f D(const Point3f &p) const
     {
         // initial implementation: if z(n+1) is bounded for a specific n, return
         // 1.f otherwise return 0.f;
@@ -256,20 +256,21 @@ public:
     struct Params
     {
         Params(Float density, Float radius)
-            : density(density), radius(radius) { }
+            : density(density), radius(radius) {}
         Params(Color3f density, Float radius)
-            : density(density), radius(radius) { }
+            : density(density), radius(radius) {}
 
         Color3f density;
         Float radius;
     };
 
-    SphereDensity(Params* params)
-        : density(params->density), radius(params->radius) { }
+    SphereDensity(Params *params)
+        : density(params->density), radius(params->radius) {}
 
-    virtual Color3f D(const Point3f& p) const
+    virtual Color3f D(const Point3f &p) const
     {
-        if (p.sqrNorm() < radius*radius) return density(0);
+        if (p.sqrNorm() < radius * radius)
+            return density(0);
         return 0.f;
     }
 
@@ -294,13 +295,13 @@ public:
 struct DensityFunctionNode : public Node
 {
 public:
-    DensityFunctionNode() : density(nullptr) { }
-    DensityFunctionNode(std::string name) : Node(name), density(nullptr) { }
-    DensityFunctionNode(DensityFunction* density) : density(density) { }
+    DensityFunctionNode() : density(nullptr) {}
+    DensityFunctionNode(std::string name) : Node(name), density(nullptr) {}
+    DensityFunctionNode(DensityFunction *density) : density(density) {}
 
     ~DensityFunctionNode() { delete density; }
 
-    DensityFunction* density;
+    DensityFunction *density;
 };
 /////////////////////////////////////////////////
 

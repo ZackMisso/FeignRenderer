@@ -27,7 +27,7 @@ public:
     Sampler(uint32_t seed,
             int sample_cnt);
 
-    virtual ~Sampler() { }
+    virtual ~Sampler() {}
 
     virtual void reseed() = 0;
     virtual void reseed(uint32_t seed) = 0;
@@ -38,8 +38,8 @@ public:
     virtual Vec4f next4D() = 0;
     // maybe add VecX
 
-    virtual Sampler* copy() = 0;
-    virtual Sampler* copy(uint32_t seed) = 0;
+    virtual Sampler *copy() = 0;
+    virtual Sampler *copy(uint32_t seed) = 0;
 
     virtual void nextSample() = 0;
 
@@ -61,7 +61,7 @@ public:
     struct Params
     {
         Params(int sample_cnt, uint32_t seed)
-            : sample_cnt(sample_cnt), seed(seed) { }
+            : sample_cnt(sample_cnt), seed(seed) {}
 
         uint32_t seed;
         int sample_cnt;
@@ -82,8 +82,8 @@ public:
     virtual Vec4f next4D();
     // maybe add VecX
 
-    virtual Sampler* copy();
-    virtual Sampler* copy(uint32_t seed);
+    virtual Sampler *copy();
+    virtual Sampler *copy(uint32_t seed);
 
     virtual void nextSample();
 
@@ -111,8 +111,8 @@ public:
     virtual Vec3f next3D();
     virtual Vec4f next4D();
 
-    virtual Sampler* copy();
-    virtual Sampler* copy(uint32_t seed);
+    virtual Sampler *copy();
+    virtual Sampler *copy(uint32_t seed);
 
     virtual void nextSample();
 
@@ -139,8 +139,8 @@ public:
     virtual Vec3f next3D();
     virtual Vec4f next4D();
 
-    virtual Sampler* copy();
-    virtual Sampler* copy(uint32_t seed);
+    virtual Sampler *copy();
+    virtual Sampler *copy(uint32_t seed);
 
     virtual void nextSample();
 
@@ -154,13 +154,13 @@ protected:
 struct SamplerNode : public Node
 {
 public:
-    SamplerNode() : sampler(nullptr) { }
-    SamplerNode(std::string name) : Node(name), sampler(nullptr) { }
-    SamplerNode(Sampler* sampler) : sampler(sampler) { }
+    SamplerNode() : sampler(nullptr) {}
+    SamplerNode(std::string name) : Node(name), sampler(nullptr) {}
+    SamplerNode(Sampler *sampler) : sampler(sampler) {}
 
     ~SamplerNode() { delete sampler; }
 
-    Sampler* sampler;
+    Sampler *sampler;
 };
 /////////////////////////////////////////////////
 

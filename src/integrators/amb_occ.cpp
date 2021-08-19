@@ -12,22 +12,22 @@
 
 FEIGN_BEGIN()
 
-Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode* filter,
-                                                           Integrator::Params* params)
+Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode *filter,
+                                                           Integrator::Params *params)
     : Integrator(filter, params)
 {
     // does nothing
 }
 
-void Ambient_Occlusion_Integrator::preProcess(const Scene* scene,
-                                              Sampler* sampler)
+void Ambient_Occlusion_Integrator::preProcess(const Scene *scene,
+                                              Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f Ambient_Occlusion_Integrator::Li(const Scene* scene,
-                                         Sampler* sampler,
-                                         const Ray3f& ray,
+Color3f Ambient_Occlusion_Integrator::Li(const Scene *scene,
+                                         Sampler *sampler,
+                                         const Ray3f &ray,
                                          bool debug) const
 {
     Intersection its;

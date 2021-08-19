@@ -60,27 +60,28 @@ void OneWayDice::initialize_materials(int frame)
     Float g_scale = 0.93;
     Color3f albedo = Color3f(1.f, g_scale, b_scale);
 
-    if(frame < 100)
+    if (frame < 100)
     {
         albedo = Color3f(0.f);
     }
     else if (frame < 460)
     {
-        double al_val = std::min(double(frame-100) / double(360.0), 1.0);
+        double al_val = std::min(double(frame - 100) / double(360.0), 1.0);
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         int_eta = 1.0;
     }
-    else if (frame < 820) int_eta = double(frame - 460) / double(360.0) * 0.5 + 1.0;
+    else if (frame < 820)
+        int_eta = double(frame - 460) / double(360.0) * 0.5 + 1.0;
     else if (frame < 1000)
     {
-        double al_val = 1.0-std::min(double(frame-820) / double(396.0+36.0), 1.0);
+        double al_val = 1.0 - std::min(double(frame - 820) / double(396.0 + 36.0), 1.0);
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
         int_eta = 1.5;
     }
     else if (frame < 1180)
     {
-        double al_val = 1.0-std::min(double(frame-820) / double(396.0+36.0), 1.0);
+        double al_val = 1.0 - std::min(double(frame - 820) / double(396.0 + 36.0), 1.0);
         albedo = Color3f(al_val, al_val * g_scale, al_val * b_scale);
         // albedo = Color3f(1.0-std::min(double(frame-820) / double(396.0), 1.0));
         int_eta = 0.5 - double(frame - 1000) / double(180.0) * 0.5 + 1.0;
@@ -125,8 +126,8 @@ void OneWayDice::initialize_materials(int frame)
                            &diel_bsdf);
 
     FeignRenderer::fr_material("diel_mat",
-                          "simple",
-                          &diel_mat_params);
+                               "simple",
+                               &diel_mat_params);
 
     SimpleMaterialShader::Params diel_shad("diel_mat");
     FeignRenderer::fr_shader("diel_shad",
@@ -176,7 +177,6 @@ void OneWayDice::initialize_scene(int frame)
     // GridObj::Params params_left_wall("", "diffuse_shad", Vec2i(grid_dim, grid_dim));
     // ObjMesh::Params params_left_wall("../scenes/meshes/plane.obj", "");
 
-
     ObjMesh::Params outside_mesh("../scenes/meshes/dice/glass_dice_full_outside.obj",
                                  "",
                                  false);
@@ -190,8 +190,8 @@ void OneWayDice::initialize_scene(int frame)
                                 false);
 
     FeignRenderer::fr_mesh("dice_inside_mesh",
-                          "triangle_mesh",
-                          &inside_mesh);
+                           "triangle_mesh",
+                           &inside_mesh);
 
     FeignRenderer::fr_clear_transform();
 }
@@ -229,7 +229,7 @@ void OneWayDice::initialize_camera(int frame)
 }
 
 void OneWayDice::initialize_base_structs(std::string test_name,
-                                       int frame)
+                                         int frame)
 {
     char str[5];
     snprintf(str, 5, "%04d", frame);
@@ -260,8 +260,10 @@ void OneWayDice::initialize_base_structs(std::string test_name,
                                  &int_params);
 
     int samples = 8;
-    if (frame < 180) samples = 2048;
-    else samples = 2048 * 2;
+    if (frame < 180)
+        samples = 2048;
+    else
+        samples = 2048 * 2;
 
     // samples = 16;
     // samples = 8;
@@ -279,35 +281,34 @@ void OneWayDice::initialize_base_structs(std::string test_name,
 
 void OneWayDice::initialize_lighting(int frame)
 {
-    PointEmitter::Params emitter_params(Color3f(50.f*30.f*1.5, 60.f*30.f*1.5, 37.f*200.f*1.5),
+    PointEmitter::Params emitter_params(Color3f(50.f * 30.f * 1.5, 60.f * 30.f * 1.5, 37.f * 200.f * 1.5),
                                         Vector3f(10.0, 4.0, 1.0));
 
     FeignRenderer::fr_emitter("point_emitter",
                               "point",
                               &emitter_params);
 
-    PointEmitter::Params emitter_params_2(Color3f(50.f*100.f, 300.f, 400.f),
+    PointEmitter::Params emitter_params_2(Color3f(50.f * 100.f, 300.f, 400.f),
                                           Vector3f(-4.0, -9.0, 4.0));
 
     FeignRenderer::fr_emitter("point_emitter_2",
                               "point",
                               &emitter_params_2);
 
-
-    PointEmitter::Params emitter_params_3(Color3f(50.f*100.f*3, 300.f*3, 400.f*3),
-                                        Vector3f(-10.0, 0, -2.0));
+    PointEmitter::Params emitter_params_3(Color3f(50.f * 100.f * 3, 300.f * 3, 400.f * 3),
+                                          Vector3f(-10.0, 0, -2.0));
 
     FeignRenderer::fr_emitter("point_emitter_3",
-                            "point",
-                            &emitter_params_3);
+                              "point",
+                              &emitter_params_3);
 
     FeignRenderer::fr_scale(0.5f, 0.5f, 0.5f);
     FeignRenderer::fr_rotate(double(frame) / 2.f, 0.f, 1.f, 0.f);
 
     MeshEmitter::Params mesh_emitter_params(Color3f(0.5f, 0.5f, 0.5f));
     FeignRenderer::fr_emitter("mesh_emitter",
-                            "mesh",
-                            &mesh_emitter_params);
+                              "mesh",
+                              &mesh_emitter_params);
 
     FeignRenderer::fr_object("dice_emitter_obj",
                              "dice_emitter_mesh",

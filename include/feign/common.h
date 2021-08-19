@@ -19,7 +19,9 @@
 #include <imedit/image.h>
 #include <imedit/im_color_maps.h>
 
-#define FEIGN_BEGIN() namespace feign {
+#define FEIGN_BEGIN() \
+    namespace feign   \
+    {
 #define FEIGN_END() }
 
 // TODO: incorporate clocking throughout renderer
@@ -45,11 +47,11 @@
 #define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
 #define SDF_STEPS 2000
 
-#define PI           3.14159265358979323846f
-#define INV_PI       0.31830988618379067154f
-#define INV_TWOPI    0.15915494309189533577f
-#define INV_FOURPI   0.07957747154594766788f
-#define SQRT_TWO     1.41421356237309504880f
+#define PI 3.14159265358979323846f
+#define INV_PI 0.31830988618379067154f
+#define INV_TWOPI 0.15915494309189533577f
+#define INV_FOURPI 0.07957747154594766788f
+#define SQRT_TWO 1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 FEIGN_BEGIN()
@@ -118,8 +120,10 @@ inline std::string STR(int val)
 
 inline Float bound(Float val, Float min, Float max)
 {
-    if (val > max) return max;
-    if (val < min) return min;
+    if (val > max)
+        return max;
+    if (val < min)
+        return min;
     return val;
 }
 
@@ -151,15 +155,13 @@ inline Float fresnel(Float cos_theta,
 
     if (sinThetaTSqr > 1.0f)
     {
-        return 1.0f;  /* Total internal reflection! */
+        return 1.0f; /* Total internal reflection! */
     }
 
     Float cosThetaT = std::sqrt(1.0f - sinThetaTSqr);
 
-    Float Rs = (etaI * cos_theta - etaT * cos_theta)
-             / (etaI * cos_theta + etaT * cos_theta);
-    Float Rp = (etaT * cos_theta - etaI * cos_theta)
-             / (etaT * cos_theta + etaI * cos_theta);
+    Float Rs = (etaI * cos_theta - etaT * cos_theta) / (etaI * cos_theta + etaT * cos_theta);
+    Float Rp = (etaT * cos_theta - etaI * cos_theta) / (etaT * cos_theta + etaI * cos_theta);
 
     return (Rs * Rs + Rp * Rp) / 2.0f;
 }
@@ -181,14 +183,17 @@ inline Float interp(Float x, Float y, Float proxy)
 
 inline Float clamp(Float proxy, Float min, Float max)
 {
-    if (proxy < min) return min;
-    if (proxy > max) return max;
+    if (proxy < min)
+        return min;
+    if (proxy > max)
+        return max;
     return proxy;
 }
 
 inline Float sign(Float val)
 {
-    if (val < 0.0) return -1.0;
+    if (val < 0.0)
+        return -1.0;
     return 1.0;
 }
 
@@ -198,7 +203,7 @@ inline Float sign(Float val)
 class NotImplementedException : public std::runtime_error
 {
 public:
-    NotImplementedException() : std::runtime_error("Exception: Method Not Implemented") { }
+    NotImplementedException() : std::runtime_error("Exception: Method Not Implemented") {}
 
     NotImplementedException(std::string str) : std::runtime_error("Exception: Method Not Implemented: " + str)
     {
@@ -209,7 +214,7 @@ public:
 class NotSupportedException : public std::runtime_error
 {
 public:
-    NotSupportedException() : std::runtime_error("Exception: Feature Not Supported") { }
+    NotSupportedException() : std::runtime_error("Exception: Feature Not Supported") {}
 
     NotSupportedException(std::string str) : std::runtime_error("Exception: Feature Not Supported: " + str)
     {
@@ -220,7 +225,7 @@ public:
 class FeignRendererException : public std::runtime_error
 {
 public:
-    FeignRendererException() : std::runtime_error("Renderer Exception") { }
+    FeignRendererException() : std::runtime_error("Renderer Exception") {}
 
     FeignRendererException(std::string str) : std::runtime_error("Renderer Exception: " + str)
     {
@@ -229,6 +234,8 @@ public:
 };
 /////////////////////////////////////////////////
 
-#define CHECK_EXISTS(ptr, msg) if (!ptr) throw new FeignRendererException(msg);
+#define CHECK_EXISTS(ptr, msg) \
+    if (!ptr)                  \
+        throw new FeignRendererException(msg);
 
 FEIGN_END()

@@ -33,10 +33,10 @@ struct EmitterQuery
     // int em_index;
 
     // this constructor is used for when the emitter is being quaried from a point
-    EmitterQuery(const Vector3f& p) : p(p) { }
+    EmitterQuery(const Vector3f &p) : p(p) {}
 
     // this constructor is used for light tracing / photon mapping
-    EmitterQuery() { }
+    EmitterQuery() {}
 };
 /////////////////////////////////////////////////
 
@@ -46,29 +46,29 @@ struct EmitterQuery
 class Emitter
 {
 public:
-    Emitter() { }
-    virtual ~Emitter() { }
+    Emitter() {}
+    virtual ~Emitter() {}
 
     // samples a ray starting from the emitter (for light tracing / photon mapping)
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const = 0;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const = 0;
 
     // will eventually be used for euiangular sampling along paths through a medium
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const = 0;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const = 0;
 
     // samples a position on the light source for next event estimation
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const = 0;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const = 0;
 
     // TODO: is this ever used? Will also have to rethink how to organize this
     //       since the emitterquery will now be slightly different depending
     //       on if the ray is going from the camera->emitter or emitter->camera.
-    virtual Color3f evaluate(EmitterQuery& rec) const = 0;
+    virtual Color3f evaluate(EmitterQuery &rec) const = 0;
 
     virtual bool isSpatial() const = 0;
     virtual Point3f getCenter() const = 0;
@@ -87,11 +87,11 @@ public:
     virtual bool isEnvironmentOnlyEmitter() const { return false; }
     virtual bool isEnvironmentEmitter() const { return false; }
 
-    virtual void preProcess() { }
+    virtual void preProcess() {}
 
     // this is bad design, figure out a better way of supporting
     // mesh emitters
-    virtual void setMeshNode(MeshNode* node) { }
+    virtual void setMeshNode(MeshNode *node) {}
 
     // if a ray hits an emitter, then that emitter has a mesh. If that emitter is
     // hit and also has a BSDF, then the emitter should not be sampled during
@@ -100,7 +100,7 @@ public:
     // algorithms. For this to work, mesh emitters need to be able to expose their
     // meshes to verify whether or not the intersection is actually with the
     // emitter to begin with.
-    virtual MeshNode* getMeshNode() { return nullptr; }
+    virtual MeshNode *getMeshNode() { return nullptr; }
 };
 /////////////////////////////////////////////////
 
@@ -112,20 +112,20 @@ class DistantEmitter : public Emitter
 public:
     DistantEmitter();
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual Point3f getCenter() const;
 
@@ -145,7 +145,7 @@ public:
     struct Params
     {
         Params(Vector3f light_dir, Color3f radiance)
-            : light_dir(light_dir), radiance(radiance) { }
+            : light_dir(light_dir), radiance(radiance) {}
 
         Vector3f light_dir;
         Color3f radiance;
@@ -153,20 +153,20 @@ public:
 
     DirectionalEmitter(Vector3f light_dir, Color3f radiance);
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual bool isSpatial() const { return false; }
     virtual Point3f getCenter() const { return Point3f(0.f); }
@@ -192,7 +192,7 @@ public:
             : light_pos(light_pos),
               light_dir(light_dir),
               radiance(radiance),
-              light_angle(light_angle) { }
+              light_angle(light_angle) {}
 
         Point3f light_pos;
         Vector3f light_dir;
@@ -205,20 +205,20 @@ public:
                      Color3f radiance,
                      Float light_angle);
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual bool isSpatial() const { return true; }
     virtual Point3f getCenter() const;
@@ -240,7 +240,7 @@ public:
     struct Params
     {
         Params(Color3f intensity, Point3f pos)
-            : intensity(intensity), pos(pos) { }
+            : intensity(intensity), pos(pos) {}
 
         Color3f intensity;
         Point3f pos;
@@ -250,20 +250,20 @@ public:
     PointEmitter(Color3f I,
                  Point3f pos);
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual void preProcess();
 
@@ -288,7 +288,7 @@ public:
     struct Params
     {
         Params(Color3f top, Color3f bot)
-            : top(top), bot(bot) { }
+            : top(top), bot(bot) {}
 
         Color3f top;
         Color3f bot;
@@ -297,21 +297,21 @@ public:
     InterpEnvironmentEmitter(Color3f top,
                              Color3f bot);
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
     // environment emitters should not be sampled
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual bool isSpatial() const { return false; }
     virtual Point3f getCenter() const { return Point3f(0.f); }
@@ -331,7 +331,7 @@ public:
     struct Params
     {
         Params(Color3f intensity)
-            : intensity(intensity) { }
+            : intensity(intensity) {}
 
         Color3f intensity;
     };
@@ -339,33 +339,33 @@ public:
     MeshEmitter(Color3f intensity);
     ~MeshEmitter();
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual void setMeshNode(MeshNode* node);
+    virtual void setMeshNode(MeshNode *node);
 
     virtual void preProcess();
 
     virtual bool isSpatial() const { return true; }
     virtual Point3f getCenter() const;
 
-    virtual MeshNode* getMeshNode() { return mesh; }
+    virtual MeshNode *getMeshNode() { return mesh; }
 
 protected:
-    MeshNode* mesh;
-    DiscretePDF1D* sa_pdf;
+    MeshNode *mesh;
+    DiscretePDF1D *sa_pdf;
     Color3f intensity;
 };
 /////////////////////////////////////////////////
@@ -382,7 +382,7 @@ public:
     struct Params
     {
         Params(Vector3f light_dir, Color3f intensity)
-            : light_dir(light_dir), intensity(intensity) { }
+            : light_dir(light_dir), intensity(intensity) {}
 
         Vector3f light_dir;
         Color3f intensity;
@@ -391,33 +391,33 @@ public:
     DirectionalMeshEmitter(Vector3f light_dir, Color3f intensity);
     ~DirectionalMeshEmitter();
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual void setMeshNode(MeshNode* node);
+    virtual void setMeshNode(MeshNode *node);
     virtual void preProcess();
 
     virtual bool isSpatial() const { return true; }
     virtual bool requiresInitialVisibilityCheck() const { return true; }
     virtual Point3f getCenter() const;
 
-    virtual MeshNode* getMeshNode() { return mesh; }
+    virtual MeshNode *getMeshNode() { return mesh; }
 
 protected:
-    MeshNode* mesh;
-    DiscretePDF1D* sa_pdf;
+    MeshNode *mesh;
+    DiscretePDF1D *sa_pdf;
     Vector3f light_dir;
     Color3f intensity;
 };
@@ -434,28 +434,28 @@ public:
     struct Params
     {
         Params(Color3f intensity, std::string texture)
-            : intensity(intensity), texture(texture) { }
+            : intensity(intensity), texture(texture) {}
 
         Color3f intensity;
         std::string texture;
     };
 
-    EnvironmentEmitter(TextureNode* texture, Color3f intensity);
+    EnvironmentEmitter(TextureNode *texture, Color3f intensity);
 
-    virtual Color3f sample_ray(EmitterQuery& rec,
-                               const Point2f& dir_sample,
-                               const Point2f& point_sample,
-                               Float* pdf) const;
+    virtual Color3f sample_ray(EmitterQuery &rec,
+                               const Point2f &dir_sample,
+                               const Point2f &point_sample,
+                               Float *pdf) const;
 
-    virtual Color3f sample_medium(EmitterQuery& rec,
-                                  const Point2f& sample,
-                                  Float* pdf) const;
+    virtual Color3f sample_medium(EmitterQuery &rec,
+                                  const Point2f &sample,
+                                  Float *pdf) const;
 
-    virtual Color3f sample_nee(EmitterQuery& rec,
-                               const Point2f& sample,
-                               Float* pdf) const;
+    virtual Color3f sample_nee(EmitterQuery &rec,
+                               const Point2f &sample,
+                               Float *pdf) const;
 
-    virtual Color3f evaluate(EmitterQuery& rec) const;
+    virtual Color3f evaluate(EmitterQuery &rec) const;
 
     virtual bool isSpatial() const { return false; }
     virtual bool requiresInitialVisibilityCheck() const { return false; }
@@ -466,7 +466,7 @@ public:
     virtual void preProcess();
 
 protected:
-    TextureNode* texture;
+    TextureNode *texture;
     Color3f intensity;
 };
 /////////////////////////////////////////////////
@@ -479,19 +479,19 @@ struct EmitterNode : public Node
 public:
     EmitterNode()
         : emitter(nullptr),
-          objectNode(nullptr) { }
+          objectNode(nullptr) {}
     EmitterNode(std::string name)
         : Node(name),
           emitter(nullptr),
-          objectNode(nullptr) { }
-    EmitterNode(Emitter* emitter)
+          objectNode(nullptr) {}
+    EmitterNode(Emitter *emitter)
         : emitter(emitter),
-          objectNode(nullptr) { }
+          objectNode(nullptr) {}
 
     ~EmitterNode() { delete emitter; }
 
-    ObjectNode* objectNode;
-    Emitter* emitter;
+    ObjectNode *objectNode;
+    Emitter *emitter;
 };
 /////////////////////////////////////////////////
 

@@ -22,10 +22,10 @@ FEIGN_BEGIN()
 class SDFShape : public Shape
 {
 public:
-    SDFShape() : Shape(nullptr, false) { }
-    SDFShape(const MediumBoundry* boundry, bool is_null)
-        : Shape(boundry, is_null) { }
-    ~SDFShape() { }
+    SDFShape() : Shape(nullptr, false) {}
+    SDFShape(const MediumBoundry *boundry, bool is_null)
+        : Shape(boundry, is_null) {}
+    ~SDFShape() {}
 
     // TODO: why is this called evaluate_distance? why not just evaluated
     // adding the second method below until I can remember what my thought
@@ -45,15 +45,15 @@ public:
 struct SDFOperation : public SDFShape
 {
 public:
-    SDFOperation(SDFShape* sdf,
+    SDFOperation(SDFShape *sdf,
                  Float interp)
-        : sdf(sdf) { }//, interp(interp) { }
+        : sdf(sdf) {} //, interp(interp) { }
 
     // TODO: actually implement these
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf;
+    SDFShape *sdf;
     // Float interp;
 };
 /////////////////////////////////////////////////
@@ -67,17 +67,17 @@ public:
 struct SDFInteraction : public SDFShape
 {
 public:
-    SDFInteraction(SDFShape* sdf_1,
-                   SDFShape* sdf_2,
+    SDFInteraction(SDFShape *sdf_1,
+                   SDFShape *sdf_2,
                    Float interp)
-        : sdf_1(sdf_1), sdf_2(sdf_2) { }//, interp(interp) { }
+        : sdf_1(sdf_1), sdf_2(sdf_2) {} //, interp(interp) { }
 
     // TODO: actually implement these
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
     // Float interp;
 };
 /////////////////////////////////////////////////
@@ -91,7 +91,7 @@ public:
 struct SDFArrayInteraction : public SDFShape
 {
 public:
-    SDFArrayInteraction(std::vector<SDFShape*> sdfs,
+    SDFArrayInteraction(std::vector<SDFShape *> sdfs,
                         Float interpp)
         : sdfs(sdfs) {} //, interp(interp) { }
 
@@ -99,7 +99,7 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    std::vector<SDFShape*> sdfs;
+    std::vector<SDFShape *> sdfs;
     // Float interp;
 };
 /////////////////////////////////////////////////
@@ -110,8 +110,8 @@ public:
 struct SDFIntersection : public SDFInteraction
 {
 public:
-    SDFIntersection(SDFShape* sdf_1,
-                    SDFShape* sdf_2,
+    SDFIntersection(SDFShape *sdf_1,
+                    SDFShape *sdf_2,
                     Float interp,
                     bool is_smooth);
 
@@ -131,7 +131,7 @@ public:
 struct SDFArrayIntersection : public SDFArrayInteraction
 {
 public:
-    SDFArrayIntersection(std::vector<SDFShape*> sdfs,
+    SDFArrayIntersection(std::vector<SDFShape *> sdfs,
                          Float interp,
                          bool is_smooth);
 
@@ -151,7 +151,7 @@ public:
 struct SDFRounding : public SDFInteraction
 {
 public:
-    SDFRounding(SDFShape* sdf);
+    SDFRounding(SDFShape *sdf);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -159,8 +159,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -171,8 +171,8 @@ public:
 struct SDFOnion : public SDFInteraction
 {
 public:
-    SDFOnion(SDFShape* sdf_1,
-             SDFShape* sdf_2);
+    SDFOnion(SDFShape *sdf_1,
+             SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -180,8 +180,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -191,8 +191,8 @@ public:
 struct SDFExtrusion : public SDFInteraction
 {
 public:
-    SDFExtrusion(SDFShape* sdf_1,
-                 SDFShape* sdf_2);
+    SDFExtrusion(SDFShape *sdf_1,
+                 SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -200,8 +200,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -211,8 +211,8 @@ public:
 struct SDFRevolution : public SDFInteraction
 {
 public:
-    SDFRevolution(SDFShape* sdf_1,
-                  SDFShape* sdf_2);
+    SDFRevolution(SDFShape *sdf_1,
+                  SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -220,8 +220,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -231,8 +231,8 @@ public:
 struct SDFUnion : public SDFInteraction
 {
 public:
-    SDFUnion(SDFShape* sdf_1,
-             SDFShape* sdf_2);
+    SDFUnion(SDFShape *sdf_1,
+             SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -240,8 +240,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -251,8 +251,8 @@ public:
 struct SDFDifference : public SDFInteraction
 {
 public:
-    SDFDifference(SDFShape* sdf_1,
-                  SDFShape* sdf_2);
+    SDFDifference(SDFShape *sdf_1,
+                  SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -260,8 +260,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -271,8 +271,8 @@ public:
 struct SDFDisplacement : public SDFInteraction
 {
 public:
-    SDFDisplacement(SDFShape* sdf_1,
-                    SDFShape* sdf_2);
+    SDFDisplacement(SDFShape *sdf_1,
+                    SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -280,8 +280,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -291,8 +291,8 @@ public:
 struct SDFTwist : public SDFInteraction
 {
 public:
-    SDFTwist(SDFShape* sdf_1,
-             SDFShape* sdf_2);
+    SDFTwist(SDFShape *sdf_1,
+             SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -300,8 +300,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -311,8 +311,8 @@ public:
 struct SDFBend : public SDFInteraction
 {
 public:
-    SDFBend(SDFShape* sdf_1,
-            SDFShape* sdf_2);
+    SDFBend(SDFShape *sdf_1,
+            SDFShape *sdf_2);
 
     // virtual Float evaluate(Point3f pt) const;
 
@@ -320,8 +320,8 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const { return 0.0; };
 
-    SDFShape* sdf_1;
-    SDFShape* sdf_2;
+    SDFShape *sdf_1;
+    SDFShape *sdf_2;
 };
 /////////////////////////////////////////////////
 
@@ -346,7 +346,7 @@ public:
               is_null(is_null),
               center(center),
               radius(radius),
-              interp(interp) { }
+              interp(interp) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -359,7 +359,7 @@ public:
     SDFSphere(Point3f center,
               Float radius,
               Float interp,
-              const MediumBoundry* boundry = nullptr,
+              const MediumBoundry *boundry = nullptr,
               bool is_null = false);
 
     // virtual Float evaluate(Point3f pt) const;
@@ -398,7 +398,7 @@ public:
               interp(interp),
               inside_media(inside_media),
               outside_media(outside_media),
-              is_null(is_null){ }
+              is_null(is_null) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -411,7 +411,7 @@ public:
     SDFPlane(Point3f center,
              Normal3f normal,
              Float interp,
-             const MediumBoundry* boundry = nullptr,
+             const MediumBoundry *boundry = nullptr,
              bool is_null = false);
 
     // virtual Float evaluate(Point3f pt) const;
@@ -448,7 +448,7 @@ public:
               brc(brc),
               inside_media(inside_media),
               outside_media(outside_media),
-              is_null(is_null) { }
+              is_null(is_null) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -459,7 +459,7 @@ public:
 
     SDFBox(Point3f tlc,
            Point3f brc,
-           const MediumBoundry* boundry = nullptr,
+           const MediumBoundry *boundry = nullptr,
            bool is_null = false);
 
     // virtual Float evaluate(Point3f pt) const;
@@ -498,7 +498,7 @@ public:
               radius(radius),
               inside_media(inside_media),
               outside_media(outside_media),
-              is_null(is_null){ }
+              is_null(is_null) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -511,7 +511,7 @@ public:
     SDFCylinder(Point3f first,
                 Point3f second,
                 float radius,
-                const MediumBoundry* boundry = nullptr,
+                const MediumBoundry *boundry = nullptr,
                 bool is_null = false);
 
     // virtual Float evaluate(Point3f pt) const;
@@ -553,7 +553,7 @@ public:
               radius_2(radius_2),
               inside_media(inside_media),
               outside_media(outside_media),
-              is_null(is_null) { }
+              is_null(is_null) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -568,7 +568,7 @@ public:
             Point3f second,
             Float radius_1,
             Float radius_2,
-            const MediumBoundry* boundry = nullptr,
+            const MediumBoundry *boundry = nullptr,
             bool is_null = false);
 
     // virtual Float evaluate(Point3f pt) const;

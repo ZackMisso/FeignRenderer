@@ -28,7 +28,7 @@ struct Vec2
         xy[1] = 0x0;
     }
 
-    Vec2(const Vec2<T>& other)
+    Vec2(const Vec2<T> &other)
     {
         xy[0] = other(0);
         xy[1] = other(1);
@@ -46,7 +46,7 @@ struct Vec2
         xy[1] = y;
     }
 
-    Vec2<T> operator+(const Vec2<T>& other) const
+    Vec2<T> operator+(const Vec2<T> &other) const
     {
         Vec2<T> vec;
         vec[0] = xy[0] + other(0);
@@ -54,7 +54,7 @@ struct Vec2
         return vec;
     }
 
-    Vec2<T> operator-(const Vec2<T>& other) const
+    Vec2<T> operator-(const Vec2<T> &other) const
     {
         Vec2<T> vec;
         vec[0] = xy[0] - other(0);
@@ -78,26 +78,26 @@ struct Vec2
         return vec;
     }
 
-    void operator+=(const Vec2<T>& other)
+    void operator+=(const Vec2<T> &other)
     {
         xy[0] += other(0);
         xy[1] += other(1);
     }
 
-    void operator-=(const Vec2<T>& other)
+    void operator-=(const Vec2<T> &other)
     {
         xy[0] -= other(0);
         xy[1] -= other(1);
     }
 
     // component wise multiplication
-    void operator*=(const Vec2<T>& other)
+    void operator*=(const Vec2<T> &other)
     {
         xy[0] *= other(0);
         xy[1] *= other(1);
     }
 
-    void operator/=(const Vec2<T>& other)
+    void operator/=(const Vec2<T> &other)
     {
         xy[0] /= other(0);
         xy[1] /= other(1);
@@ -111,7 +111,7 @@ struct Vec2
         return vec;
     }
 
-    bool operator<(const Vec2<T>& other) const
+    bool operator<(const Vec2<T> &other) const
     {
         return (xy[0] < other.xy(0) &&
                 xy[1] < other.xy(1));
@@ -123,7 +123,7 @@ struct Vec2
                 xy[1] < c);
     }
 
-    bool operator>(const Vec2<T>& other) const
+    bool operator>(const Vec2<T> &other) const
     {
         return (xy[0] > other.xy[0] &&
                 xy[1] > other.xy[1]);
@@ -135,7 +135,7 @@ struct Vec2
                 xy[1] > c);
     }
 
-    bool operator<=(const Vec2<T>& other) const
+    bool operator<=(const Vec2<T> &other) const
     {
         return (xy[0] <= other.xy[0] &&
                 xy[1] <= other.xy[1]);
@@ -147,7 +147,7 @@ struct Vec2
                 xy[1] <= c);
     }
 
-    bool operator>=(const Vec2<T>& other) const
+    bool operator>=(const Vec2<T> &other) const
     {
         return (xy[0] >= other.xy[0] &&
                 xy[1] >= other.xy[1]);
@@ -159,7 +159,7 @@ struct Vec2
                 xy[1] >= c);
     }
 
-    bool operator==(const Vec2<T>& other) const
+    bool operator==(const Vec2<T> &other) const
     {
         return (xy[0] == other.xy[0] &&
                 xy[1] == other.xy[1]);
@@ -171,7 +171,7 @@ struct Vec2
                 xy[1] == c);
     }
 
-    bool operator!=(const Vec2<T>& other) const
+    bool operator!=(const Vec2<T> &other) const
     {
         return (xy[0] != other.xy[0] &&
                 xy[1] != other.xy[1]);
@@ -184,20 +184,20 @@ struct Vec2
     }
 
     // dot product
-    T operator%(const Vec2<T>& other) const
+    T operator%(const Vec2<T> &other) const
     {
         return other(0) * xy[0] +
                other(1) * xy[1];
     }
 
     // cross product
-    T operator^(const Vec2<T>& other) const
+    T operator^(const Vec2<T> &other) const
     {
         return xy[0] * other(1) - xy[1] * other(0);
     }
 
     // returns a reference
-    T& operator[](int index)
+    T &operator[](int index)
     {
         return xy[index];
     }
@@ -231,37 +231,49 @@ struct Vec2
     {
         Vec2<T> vec;
 
-        if (xy[0] < 0.0) vec[0] = -xy[0];
-        else vec[0] = xy[0];
+        if (xy[0] < 0.0)
+            vec[0] = -xy[0];
+        else
+            vec[0] = xy[0];
 
-        if (xy[1] < 0.0) vec[1] = -xy[1];
-        else vec[1] = xy[1];
-
-        return vec;
-    }
-
-    Vec2<T> min(const Vec2<T>& other) const
-    {
-        Vec2<T> vec;
-
-        if (xy[0] < other.xy[0]) vec.xy[0] = xy[0];
-        else vec.xy[0] = other.xy[0];
-
-        if (xy[1] < other.xy[1]) vec.xy[1] = xy[1];
-        else vec.xy[1] = other.xy[1];
+        if (xy[1] < 0.0)
+            vec[1] = -xy[1];
+        else
+            vec[1] = xy[1];
 
         return vec;
     }
 
-    Vec2<T> max(const Vec2<T>& other) const
+    Vec2<T> min(const Vec2<T> &other) const
     {
         Vec2<T> vec;
 
-        if (xy[0] > other.xy[0]) vec.xy[0] = xy[0];
-        else vec.xy[0] = other.xy[0];
+        if (xy[0] < other.xy[0])
+            vec.xy[0] = xy[0];
+        else
+            vec.xy[0] = other.xy[0];
 
-        if (xy[1] > other.xy[1]) vec.xy[1] = xy[1];
-        else vec.xy[1] = other.xy[1];
+        if (xy[1] < other.xy[1])
+            vec.xy[1] = xy[1];
+        else
+            vec.xy[1] = other.xy[1];
+
+        return vec;
+    }
+
+    Vec2<T> max(const Vec2<T> &other) const
+    {
+        Vec2<T> vec;
+
+        if (xy[0] > other.xy[0])
+            vec.xy[0] = xy[0];
+        else
+            vec.xy[0] = other.xy[0];
+
+        if (xy[1] > other.xy[1])
+            vec.xy[1] = xy[1];
+        else
+            vec.xy[1] = other.xy[1];
 
         return vec;
     }
@@ -304,7 +316,7 @@ struct Vec3
         xyz[2] = 0x0;
     }
 
-    Vec3(const Vec3<T>& other)
+    Vec3(const Vec3<T> &other)
     {
         xyz[0] = other(0);
         xyz[1] = other(1);
@@ -332,7 +344,7 @@ struct Vec3
         xyz[2] = z;
     }
 
-    Vec3<T> operator+(const Vec3<T>& other) const
+    Vec3<T> operator+(const Vec3<T> &other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[0] + other(0);
@@ -341,7 +353,7 @@ struct Vec3
         return vec;
     }
 
-    Vec3<T> operator-(const Vec3<T>& other) const
+    Vec3<T> operator-(const Vec3<T> &other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[0] - other(0);
@@ -350,7 +362,7 @@ struct Vec3
         return vec;
     }
 
-    Vec3<T> operator*(const Vec3<T>& other) const
+    Vec3<T> operator*(const Vec3<T> &other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[0] * other(0);
@@ -359,7 +371,7 @@ struct Vec3
         return vec;
     }
 
-    Vec3<T> operator/(const Vec3<T>& other) const
+    Vec3<T> operator/(const Vec3<T> &other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[0] / other(0);
@@ -386,14 +398,14 @@ struct Vec3
         return vec;
     }
 
-    void operator+=(const Vec3<T>& other)
+    void operator+=(const Vec3<T> &other)
     {
         xyz[0] += other(0);
         xyz[1] += other(1);
         xyz[2] += other(2);
     }
 
-    void operator-=(const Vec3<T>& other)
+    void operator-=(const Vec3<T> &other)
     {
         xyz[0] -= other(0);
         xyz[1] -= other(1);
@@ -401,14 +413,14 @@ struct Vec3
     }
 
     // component wise multiplication
-    void operator*=(const Vec3<T>& other)
+    void operator*=(const Vec3<T> &other)
     {
         xyz[0] *= other(0);
         xyz[1] *= other(1);
         xyz[2] *= other(2);
     }
 
-    void operator/=(const Vec3<T>& other)
+    void operator/=(const Vec3<T> &other)
     {
         xyz[0] /= other(0);
         xyz[1] /= other(1);
@@ -416,7 +428,7 @@ struct Vec3
     }
 
     // dot product
-    T operator%(const Vec3<T>& other) const
+    T operator%(const Vec3<T> &other) const
     {
         return other(0) * xyz[0] +
                other(1) * xyz[1] +
@@ -424,7 +436,7 @@ struct Vec3
     }
 
     // cross product
-    Vec3<T> operator^(const Vec3<T>& other) const
+    Vec3<T> operator^(const Vec3<T> &other) const
     {
         Vec3<T> vec;
         vec[0] = xyz[1] * other(2) - xyz[2] * other(1);
@@ -442,7 +454,7 @@ struct Vec3
         return vec;
     }
 
-    bool operator<(const Vec3<T>& other) const
+    bool operator<(const Vec3<T> &other) const
     {
         return (xyz[0] < other.xyz[0] &&
                 xyz[1] < other.xyz[1] &&
@@ -456,7 +468,7 @@ struct Vec3
                 xyz[2] < c);
     }
 
-    bool operator>(const Vec3<T>& other) const
+    bool operator>(const Vec3<T> &other) const
     {
         return (xyz[0] > other.xyz[0] &&
                 xyz[1] > other.xyz[1] &&
@@ -470,7 +482,7 @@ struct Vec3
                 xyz[2] > c);
     }
 
-    bool operator<=(const Vec3<T>& other) const
+    bool operator<=(const Vec3<T> &other) const
     {
         return (xyz[0] <= other.xyz[0] &&
                 xyz[1] <= other.xyz[1] &&
@@ -484,7 +496,7 @@ struct Vec3
                 xyz[2] <= c);
     }
 
-    bool operator>=(const Vec3<T>& other) const
+    bool operator>=(const Vec3<T> &other) const
     {
         return (xyz[0] >= other.xyz[0] &&
                 xyz[1] >= other.xyz[1] &&
@@ -498,7 +510,7 @@ struct Vec3
                 xyz[2] >= c);
     }
 
-    bool operator==(const Vec3<T>& other) const
+    bool operator==(const Vec3<T> &other) const
     {
         return (xyz[0] == other.xyz[0] &&
                 xyz[1] == other.xyz[1] &&
@@ -512,7 +524,7 @@ struct Vec3
                 xyz[2] == c);
     }
 
-    bool operator!=(const Vec3<T>& other) const
+    bool operator!=(const Vec3<T> &other) const
     {
         return (xyz[0] != other.xyz[0] &&
                 xyz[1] != other.xyz[1] &&
@@ -551,7 +563,7 @@ struct Vec3
     }
 
     // returns a reference
-    T& operator[](int index)
+    T &operator[](int index)
     {
         return xyz[index];
     }
@@ -566,30 +578,42 @@ struct Vec3
     {
         Vec3<T> vec;
 
-        if (xyz[0] < 0.0) vec[0] = -xyz[0];
-        else vec[0] = xyz[0];
+        if (xyz[0] < 0.0)
+            vec[0] = -xyz[0];
+        else
+            vec[0] = xyz[0];
 
-        if (xyz[1] < 0.0) vec[1] = -xyz[1];
-        else vec[1] = xyz[1];
+        if (xyz[1] < 0.0)
+            vec[1] = -xyz[1];
+        else
+            vec[1] = xyz[1];
 
-        if (xyz[2] < 0.0) vec[2] = -xyz[2];
-        else vec[2] = xyz[2];
+        if (xyz[2] < 0.0)
+            vec[2] = -xyz[2];
+        else
+            vec[2] = xyz[2];
 
         return vec;
     }
 
-    Vec3<T> min(const Vec3<T>& other) const
+    Vec3<T> min(const Vec3<T> &other) const
     {
         Vec3<T> vec;
 
-        if (xyz[0] < other.xyz[0]) vec.xyz[0] = xyz[0];
-        else vec.xyz[0] = other.xyz[0];
+        if (xyz[0] < other.xyz[0])
+            vec.xyz[0] = xyz[0];
+        else
+            vec.xyz[0] = other.xyz[0];
 
-        if (xyz[1] < other.xyz[1]) vec.xyz[1] = xyz[1];
-        else vec.xyz[1] = other.xyz[1];
+        if (xyz[1] < other.xyz[1])
+            vec.xyz[1] = xyz[1];
+        else
+            vec.xyz[1] = other.xyz[1];
 
-        if (xyz[2] < other.xyz[2]) vec.xyz[2] = xyz[2];
-        else vec.xyz[2] = other.xyz[2];
+        if (xyz[2] < other.xyz[2])
+            vec.xyz[2] = xyz[2];
+        else
+            vec.xyz[2] = other.xyz[2];
 
         return vec;
     }
@@ -598,14 +622,20 @@ struct Vec3
     {
         Vec3<T> vec;
 
-        if (xyz[0] < val) vec.xyz[0] = xyz[0];
-        else vec.xyz[0] = val;
+        if (xyz[0] < val)
+            vec.xyz[0] = xyz[0];
+        else
+            vec.xyz[0] = val;
 
-        if (xyz[1] < val) vec.xyz[1] = xyz[1];
-        else vec.xyz[1] = val;
+        if (xyz[1] < val)
+            vec.xyz[1] = xyz[1];
+        else
+            vec.xyz[1] = val;
 
-        if (xyz[2] < val) vec.xyz[2] = xyz[2];
-        else vec.xyz[2] = val;
+        if (xyz[2] < val)
+            vec.xyz[2] = xyz[2];
+        else
+            vec.xyz[2] = val;
 
         return vec;
     }
@@ -614,24 +644,32 @@ struct Vec3
     {
         T min_val = xyz[0];
 
-        if (min_val > xyz[1]) min_val = xyz[1];
-        if (min_val > xyz[2]) min_val = xyz[2];
+        if (min_val > xyz[1])
+            min_val = xyz[1];
+        if (min_val > xyz[2])
+            min_val = xyz[2];
 
         return min_val;
     }
 
-    Vec3<T> max(const Vec3<T>& other) const
+    Vec3<T> max(const Vec3<T> &other) const
     {
         Vec3<T> vec;
 
-        if (xyz[0] > other.xyz[0]) vec.xyz[0] = xyz[0];
-        else vec.xyz[0] = other.xyz[0];
+        if (xyz[0] > other.xyz[0])
+            vec.xyz[0] = xyz[0];
+        else
+            vec.xyz[0] = other.xyz[0];
 
-        if (xyz[1] > other.xyz[1]) vec.xyz[1] = xyz[1];
-        else vec.xyz[1] = other.xyz[1];
+        if (xyz[1] > other.xyz[1])
+            vec.xyz[1] = xyz[1];
+        else
+            vec.xyz[1] = other.xyz[1];
 
-        if (xyz[2] > other.xyz[2]) vec.xyz[2] = xyz[2];
-        else vec.xyz[2] = other.xyz[2];
+        if (xyz[2] > other.xyz[2])
+            vec.xyz[2] = xyz[2];
+        else
+            vec.xyz[2] = other.xyz[2];
 
         return vec;
     }
@@ -640,14 +678,20 @@ struct Vec3
     {
         Vec3<T> vec;
 
-        if (xyz[0] > val) vec.xyz[0] = xyz[0];
-        else vec.xyz[0] = val;
+        if (xyz[0] > val)
+            vec.xyz[0] = xyz[0];
+        else
+            vec.xyz[0] = val;
 
-        if (xyz[1] > val) vec.xyz[1] = xyz[1];
-        else vec.xyz[1] = val;
+        if (xyz[1] > val)
+            vec.xyz[1] = xyz[1];
+        else
+            vec.xyz[1] = val;
 
-        if (xyz[2] > val) vec.xyz[2] = xyz[2];
-        else vec.xyz[2] = val;
+        if (xyz[2] > val)
+            vec.xyz[2] = xyz[2];
+        else
+            vec.xyz[2] = val;
 
         return vec;
     }
@@ -656,8 +700,10 @@ struct Vec3
     {
         T max_val = xyz[0];
 
-        if (max_val > xyz[1]) max_val = xyz[1];
-        if (max_val > xyz[2]) max_val = xyz[2];
+        if (max_val > xyz[1])
+            max_val = xyz[1];
+        if (max_val > xyz[2])
+            max_val = xyz[2];
 
         return max_val;
     }
@@ -679,52 +725,64 @@ struct Vec3
     T maxValue() const
     {
         T val = xyz[0];
-        if (xyz[1] > val) val = xyz[1];
-        if (xyz[2] > val) val = xyz[2];
+        if (xyz[1] > val)
+            val = xyz[1];
+        if (xyz[2] > val)
+            val = xyz[2];
         return val;
     }
 
     T minValue() const
     {
         T val = xyz[0];
-        if (xyz[1] < val) val = xyz[1];
-        if (xyz[2] < val) val = xyz[2];
+        if (xyz[1] < val)
+            val = xyz[1];
+        if (xyz[2] < val)
+            val = xyz[2];
         return val;
     }
 
     int maxIndex() const
     {
         if (xyz[0] > xyz[1] &&
-            xyz[0] > xyz[2]) return 0;
+            xyz[0] > xyz[2])
+            return 0;
         if (xyz[1] > xyz[0] &&
-            xyz[1] > xyz[2]) return 1;
+            xyz[1] > xyz[2])
+            return 1;
         return 2;
     }
 
     int minIndex() const
     {
         if (xyz[0] < xyz[1] &&
-            xyz[0] < xyz[2]) return 0;
+            xyz[0] < xyz[2])
+            return 0;
         if (xyz[1] < xyz[0] &&
-            xyz[1] < xyz[2]) return 1;
+            xyz[1] < xyz[2])
+            return 1;
         return 2;
     }
 
     int maxAbsIndex() const
     {
         if (std::abs(xyz[0]) > std::abs(xyz[1]) &&
-            std::abs(xyz[0]) > std::abs(xyz[2])) return 0;
+            std::abs(xyz[0]) > std::abs(xyz[2]))
+            return 0;
         if (std::abs(xyz[1]) > std::abs(xyz[0]) &&
-            std::abs(xyz[1]) > std::abs(xyz[2])) return 1;
+            std::abs(xyz[1]) > std::abs(xyz[2]))
+            return 1;
         return 2;
     }
 
     int minAbsIndex() const
     {
         if (std::abs(xyz[0]) < std::abs(xyz[1]) &&
-            std::abs(xyz[0]) < std::abs(xyz[2])) return 0;
+            std::abs(xyz[0]) < std::abs(xyz[2]))
+            return 0;
         if (std::abs(xyz[1]) < std::abs(xyz[0]) &&
-            std::abs(xyz[1]) < std::abs(xyz[2])) return 1;
+            std::abs(xyz[1]) < std::abs(xyz[2]))
+            return 1;
         return 2;
     }
 
@@ -751,9 +809,7 @@ struct Vec3
 
     void info() const
     {
-        std::cout << "(" << xyz[0] << ", " <<
-                            xyz[1] << ", " <<
-                            xyz[2] << ")" << std::endl;
+        std::cout << "(" << xyz[0] << ", " << xyz[1] << ", " << xyz[2] << ")" << std::endl;
     }
 
     T xyz[3];
@@ -770,7 +826,7 @@ struct Vec4
         xyzw[3] = 0x0;
     }
 
-    Vec4(const Vec4<T>& other)
+    Vec4(const Vec4<T> &other)
     {
         xyzw[0] = other(0);
         xyzw[1] = other(1);
@@ -823,7 +879,7 @@ struct Vec4
         return Vec3<T>(xyzw[0], xyzw[1], xyzw[2]);
     }
 
-    Vec4<T> operator+(const Vec4<T>& other) const
+    Vec4<T> operator+(const Vec4<T> &other) const
     {
         Vec4<T> vec;
         vec[0] = xyzw(0) + other(0);
@@ -833,7 +889,7 @@ struct Vec4
         return vec;
     }
 
-    Vec4<T> operator-(const Vec4<T>& other) const
+    Vec4<T> operator-(const Vec4<T> &other) const
     {
         Vec4<T> vec;
         vec[0] = xyzw(0) - other(0);
@@ -862,7 +918,7 @@ struct Vec4
         return vec;
     }
 
-    void operator+=(const Vec4<T>& other)
+    void operator+=(const Vec4<T> &other)
     {
         xyzw[0] += other(0);
         xyzw[1] += other(1);
@@ -870,7 +926,7 @@ struct Vec4
         xyzw[3] += other(3);
     }
 
-    void operator-=(const Vec4<T>& other)
+    void operator-=(const Vec4<T> &other)
     {
         xyzw[0] -= other(0);
         xyzw[1] -= other(1);
@@ -879,7 +935,7 @@ struct Vec4
     }
 
     // component wise multiplication
-    void operator*=(const Vec4<T>& other)
+    void operator*=(const Vec4<T> &other)
     {
         xyzw[0] *= other(0);
         xyzw[1] *= other(1);
@@ -887,7 +943,7 @@ struct Vec4
         xyzw[3] *= other(3);
     }
 
-    void operator/=(const Vec4<T>& other)
+    void operator/=(const Vec4<T> &other)
     {
         xyzw[0] /= other(0);
         xyzw[1] /= other(1);
@@ -896,7 +952,7 @@ struct Vec4
     }
 
     // dot product
-    T operator%(const Vec4<T>& other) const
+    T operator%(const Vec4<T> &other) const
     {
         return other(0) * xyzw(0) +
                other(1) * xyzw(1) +
@@ -942,7 +998,7 @@ struct Vec4
     }
 
     // returns a reference
-    T& operator[](int index)
+    T &operator[](int index)
     {
         return xyzw[index];
     }
@@ -957,22 +1013,30 @@ struct Vec4
     {
         Vec4<T> vec;
 
-        if (xyzw[0] < 0.0) vec[0] = -xyzw[0];
-        else vec[0] = xyzw[0];
+        if (xyzw[0] < 0.0)
+            vec[0] = -xyzw[0];
+        else
+            vec[0] = xyzw[0];
 
-        if (xyzw[1] < 0.0) vec[1] = -xyzw[1];
-        else vec[1] = xyzw[1];
+        if (xyzw[1] < 0.0)
+            vec[1] = -xyzw[1];
+        else
+            vec[1] = xyzw[1];
 
-        if (xyzw[2] < 0.0) vec[2] = -xyzw[2];
-        else vec[2] = xyzw[2];
+        if (xyzw[2] < 0.0)
+            vec[2] = -xyzw[2];
+        else
+            vec[2] = xyzw[2];
 
-        if (xyzw[3] < 0.0) vec[3] = -xyzw[3];
-        else vec[3] = xyzw[3];
+        if (xyzw[3] < 0.0)
+            vec[3] = -xyzw[3];
+        else
+            vec[3] = xyzw[3];
 
         return vec;
     }
 
-    bool operator<(const Vec4<T>& other)
+    bool operator<(const Vec4<T> &other)
     {
         return (xyzw[0] < other.xyzw[0] &&
                 xyzw[1] < other.xyzw[1] &&
@@ -988,7 +1052,7 @@ struct Vec4
                 xyzw[3] < c);
     }
 
-    bool operator>(const Vec4<T>& other)
+    bool operator>(const Vec4<T> &other)
     {
         return (xyzw[0] > other.xyzw[0] &&
                 xyzw[1] > other.xyzw[1] &&
@@ -1004,7 +1068,7 @@ struct Vec4
                 xyzw[3] > c);
     }
 
-    bool operator<=(const Vec4<T>& other)
+    bool operator<=(const Vec4<T> &other)
     {
         return (xyzw[0] <= other.xyzw[0] &&
                 xyzw[1] <= other.xyzw[1] &&
@@ -1020,7 +1084,7 @@ struct Vec4
                 xyzw[3] <= c);
     }
 
-    bool operator>=(const Vec4<T>& other)
+    bool operator>=(const Vec4<T> &other)
     {
         return (xyzw[0] >= other.xyzw[0] &&
                 xyzw[1] >= other.xyzw[1] &&
@@ -1036,40 +1100,56 @@ struct Vec4
                 xyzw[3] >= c);
     }
 
-    Vec4<T> min(const Vec4<T>& other) const
+    Vec4<T> min(const Vec4<T> &other) const
     {
         Vec4<T> vec;
 
-        if (xyzw[0] < other.xyzw[0]) vec.xyzw[0] = xyzw[0];
-        else vec.xyzw[0] = other.xyzw[0];
+        if (xyzw[0] < other.xyzw[0])
+            vec.xyzw[0] = xyzw[0];
+        else
+            vec.xyzw[0] = other.xyzw[0];
 
-        if (xyzw[1] < other.xyzw[1]) vec.xyzw[1] = xyzw[1];
-        else vec.xyzw[1] = other.xyzw[1];
+        if (xyzw[1] < other.xyzw[1])
+            vec.xyzw[1] = xyzw[1];
+        else
+            vec.xyzw[1] = other.xyzw[1];
 
-        if (xyzw[2] < other.xyzw[2]) vec.xyzw[2] = xyzw[2];
-        else vec.xyzw[2] = other.xyzw[2];
+        if (xyzw[2] < other.xyzw[2])
+            vec.xyzw[2] = xyzw[2];
+        else
+            vec.xyzw[2] = other.xyzw[2];
 
-        if (xyzw[3] < other.xyzw[3]) vec.xyzw[3] = xyzw[3];
-        else vec.xyzw[3] = other.xyzw[3];
+        if (xyzw[3] < other.xyzw[3])
+            vec.xyzw[3] = xyzw[3];
+        else
+            vec.xyzw[3] = other.xyzw[3];
 
         return vec;
     }
 
-    Vec4<T> max(const Vec4<T>& other) const
+    Vec4<T> max(const Vec4<T> &other) const
     {
         Vec4<T> vec;
 
-        if (xyzw[0] > other.xyzw[0]) vec.xyzw[0] = xyzw[0];
-        else vec.xyzw[0] = other.xyzw[0];
+        if (xyzw[0] > other.xyzw[0])
+            vec.xyzw[0] = xyzw[0];
+        else
+            vec.xyzw[0] = other.xyzw[0];
 
-        if (xyzw[1] > other.xyzw[1]) vec.xyzw[1] = xyzw[1];
-        else vec.xyzw[1] = other.xyzw[1];
+        if (xyzw[1] > other.xyzw[1])
+            vec.xyzw[1] = xyzw[1];
+        else
+            vec.xyzw[1] = other.xyzw[1];
 
-        if (xyzw[2] > other.xyzw[2]) vec.xyzw[2] = xyzw[2];
-        else vec.xyzw[2] = other.xyzw[2];
+        if (xyzw[2] > other.xyzw[2])
+            vec.xyzw[2] = xyzw[2];
+        else
+            vec.xyzw[2] = other.xyzw[2];
 
-        if (xyzw[3] > other.xyzw[3]) vec.xyzw[3] = xyzw[3];
-        else vec.xyzw[3] = other.xyzw[3];
+        if (xyzw[3] > other.xyzw[3])
+            vec.xyzw[3] = xyzw[3];
+        else
+            vec.xyzw[3] = other.xyzw[3];
 
         return vec;
     }
@@ -1144,10 +1224,7 @@ struct Vec4
 
     void info() const
     {
-        std::cout << "(" << xyzw[0] << ", " <<
-                            xyzw[1] << ", " <<
-                            xyzw[2] << ", " <<
-                            xyzw[3] << ")" << std::endl;
+        std::cout << "(" << xyzw[0] << ", " << xyzw[1] << ", " << xyzw[2] << ", " << xyzw[3] << ")" << std::endl;
     }
 
     T xyzw[4];
@@ -1168,37 +1245,49 @@ struct Matrix3
             T n10, T n11, T n12,
             T n20, T n21, T n22)
     {
-        n[0] = n00; n[1] = n01; n[2] = n02;
-        n[3] = n10; n[4] = n11; n[5] = n12;
-        n[6] = n20; n[7] = n21; n[8] = n22;
+        n[0] = n00;
+        n[1] = n01;
+        n[2] = n02;
+        n[3] = n10;
+        n[4] = n11;
+        n[5] = n12;
+        n[6] = n20;
+        n[7] = n21;
+        n[8] = n22;
     }
 
     static Matrix3<T> identity()
     {
         Matrix3<T> mat;
 
-        mat[0] = (T)1.0; mat[1] = (T)0.0; mat[2] = (T)0.0;
-        mat[3] = (T)0.0; mat[4] = (T)1.0; mat[5] = (T)0.0;
-        mat[6] = (T)0.0; mat[7] = (T)0.0; mat[8] = (T)1.0;
+        mat[0] = (T)1.0;
+        mat[1] = (T)0.0;
+        mat[2] = (T)0.0;
+        mat[3] = (T)0.0;
+        mat[4] = (T)1.0;
+        mat[5] = (T)0.0;
+        mat[6] = (T)0.0;
+        mat[7] = (T)0.0;
+        mat[8] = (T)1.0;
 
         return mat;
     }
 
-    Matrix3<T> operator*(const Matrix3<T>& other)
+    Matrix3<T> operator*(const Matrix3<T> &other)
     {
         Matrix3<T> mat;
 
-        mat[0] = n[0]*other(0) + n[1]*other(3) + n[2]*other(6);
-        mat[1] = n[0]*other(1) + n[1]*other(4) + n[2]*other(7);
-        mat[2] = n[0]*other(2) + n[1]*other(5) + n[2]*other(8);
+        mat[0] = n[0] * other(0) + n[1] * other(3) + n[2] * other(6);
+        mat[1] = n[0] * other(1) + n[1] * other(4) + n[2] * other(7);
+        mat[2] = n[0] * other(2) + n[1] * other(5) + n[2] * other(8);
 
-        mat[3] = n[3]*other(0) + n[4]*other(3) + n[5]*other(6);
-        mat[4] = n[3]*other(1) + n[4]*other(4) + n[5]*other(7);
-        mat[5] = n[3]*other(2) + n[4]*other(5) + n[5]*other(8);
+        mat[3] = n[3] * other(0) + n[4] * other(3) + n[5] * other(6);
+        mat[4] = n[3] * other(1) + n[4] * other(4) + n[5] * other(7);
+        mat[5] = n[3] * other(2) + n[4] * other(5) + n[5] * other(8);
 
-        mat[6] = n[6]*other(0) + n[7]*other(3) + n[8]*other(6);
-        mat[7] = n[6]*other(1) + n[7]*other(4) + n[8]*other(7);
-        mat[8] = n[6]*other(2) + n[7]*other(5) + n[8]*other(8);
+        mat[6] = n[6] * other(0) + n[7] * other(3) + n[8] * other(6);
+        mat[7] = n[6] * other(1) + n[7] * other(4) + n[8] * other(7);
+        mat[8] = n[6] * other(2) + n[7] * other(5) + n[8] * other(8);
 
         return mat;
     }
@@ -1207,14 +1296,14 @@ struct Matrix3
     {
         Vec3<T> vec;
 
-        vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2);
-        vec[1] = n[3]*other(0) + n[4]*other(1) + n[5]*other(2);
-        vec[2] = n[6]*other(0) + n[7]*other(1) + n[8]*other(2);
+        vec[0] = n[0] * other(0) + n[1] * other(1) + n[2] * other(2);
+        vec[1] = n[3] * other(0) + n[4] * other(1) + n[5] * other(2);
+        vec[2] = n[6] * other(0) + n[7] * other(1) + n[8] * other(2);
 
         return vec;
     }
 
-    Matrix3<T> operator+(const Matrix3<T>& other)
+    Matrix3<T> operator+(const Matrix3<T> &other)
     {
         Matrix3<T> mat;
 
@@ -1224,7 +1313,7 @@ struct Matrix3
         return mat;
     }
 
-    Matrix3<T> operator-(const Matrix3<T>& other)
+    Matrix3<T> operator-(const Matrix3<T> &other)
     {
         Matrix3<T> mat;
 
@@ -1265,7 +1354,7 @@ struct Matrix3
     }
 
     // returns a reference
-    T& operator[](int index)
+    T &operator[](int index)
     {
         return n[index];
     }
@@ -1295,19 +1384,37 @@ struct Matrix4
             T n20, T n21, T n22, T n23,
             T n30, T n31, T n32, T n33)
     {
-        n[0] = n00; n[1] = n01; n[2] = n02; n[3] = n03;
-        n[4] = n10; n[5] = n11; n[6] = n12; n[7] = n13;
-        n[8] = n20; n[9] = n21; n[10] = n22; n[11] = n23;
-        n[12] = n30; n[13] = n31; n[14] = n32; n[15] = n33;
+        n[0] = n00;
+        n[1] = n01;
+        n[2] = n02;
+        n[3] = n03;
+        n[4] = n10;
+        n[5] = n11;
+        n[6] = n12;
+        n[7] = n13;
+        n[8] = n20;
+        n[9] = n21;
+        n[10] = n22;
+        n[11] = n23;
+        n[12] = n30;
+        n[13] = n31;
+        n[14] = n32;
+        n[15] = n33;
     }
 
     Matrix3<T> topLeftCorner() const
     {
         Matrix3<T> mat;
 
-        mat[0] = n[0]; mat[1] = n[1]; mat[2] = n[2];
-        mat[3] = n[4]; mat[4] = n[5]; mat[5] = n[6];
-        mat[6] = n[8]; mat[7] = n[9]; mat[8] = n[10];
+        mat[0] = n[0];
+        mat[1] = n[1];
+        mat[2] = n[2];
+        mat[3] = n[4];
+        mat[4] = n[5];
+        mat[5] = n[6];
+        mat[6] = n[8];
+        mat[7] = n[9];
+        mat[8] = n[10];
 
         return mat;
     }
@@ -1316,15 +1423,27 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
-        mat[0] = (T)1.0; mat[1] = (T)0.0; mat[2] = (T)0.0; mat[3] = (T)0.0;
-        mat[4] = (T)0.0; mat[5] = (T)1.0; mat[6] = (T)0.0; mat[7] = (T)0.0;
-        mat[8] = (T)0.0; mat[9] = (T)0.0; mat[10] = (T)1.0; mat[11] = (T)0.0;
-        mat[12] = (T)0.0; mat[13] = (T)0.0; mat[14] = (T)0.0; mat[15] = (T)1.0;
+        mat[0] = (T)1.0;
+        mat[1] = (T)0.0;
+        mat[2] = (T)0.0;
+        mat[3] = (T)0.0;
+        mat[4] = (T)0.0;
+        mat[5] = (T)1.0;
+        mat[6] = (T)0.0;
+        mat[7] = (T)0.0;
+        mat[8] = (T)0.0;
+        mat[9] = (T)0.0;
+        mat[10] = (T)1.0;
+        mat[11] = (T)0.0;
+        mat[12] = (T)0.0;
+        mat[13] = (T)0.0;
+        mat[14] = (T)0.0;
+        mat[15] = (T)1.0;
 
         return mat;
     }
 
-    static Matrix4<T> scale(const Vec3<T>& vec)
+    static Matrix4<T> scale(const Vec3<T> &vec)
     {
         Matrix4<T> mat = Matrix4<T>();
 
@@ -1336,7 +1455,7 @@ struct Matrix4
         return mat;
     }
 
-    static Matrix4<T> translate(const Vec3<T>& vec)
+    static Matrix4<T> translate(const Vec3<T> &vec)
     {
         Matrix4<T> mat = Matrix4<T>();
 
@@ -1351,7 +1470,7 @@ struct Matrix4
         return mat;
     }
 
-    static Matrix4<T> rotate(T angle, const Vec3<T>& vec)
+    static Matrix4<T> rotate(T angle, const Vec3<T> &vec)
     {
         Matrix4<T> mat = Matrix4<T>();
 
@@ -1360,17 +1479,16 @@ struct Matrix4
         T t = 1.0 - c;
 
         Vec3<T> norm_vec = vec.normalized();
-    	//  if axis is not already normalised then uncomment this
-    	// double magnitude = Math.sqrt(a1.x*a1.x + a1.y*a1.y + a1.z*a1.z);
-    	// if (magnitude==0) throw error;
-    	// a1.x /= magnitude;
-    	// a1.y /= magnitude;
-    	// a1.z /= magnitude;
+        //  if axis is not already normalised then uncomment this
+        // double magnitude = Math.sqrt(a1.x*a1.x + a1.y*a1.y + a1.z*a1.z);
+        // if (magnitude==0) throw error;
+        // a1.x /= magnitude;
+        // a1.y /= magnitude;
+        // a1.z /= magnitude;
 
         mat[0] = c + norm_vec(0) * norm_vec(0) * t;
         mat[5] = c + norm_vec(1) * norm_vec(1) * t;
         mat[10] = c + norm_vec(2) * norm_vec(2) * t;
-
 
         T tmp1 = norm_vec(0) * norm_vec(1) * t;
         T tmp2 = norm_vec(2) * s;
@@ -1393,46 +1511,46 @@ struct Matrix4
         return mat;
     }
 
-    Matrix4<T> operator*(const Matrix4<T>& other) const
+    Matrix4<T> operator*(const Matrix4<T> &other) const
     {
         Matrix4<T> mat;
 
-        mat[0] = n[0]*other(0) + n[1]*other(4) + n[2]*other(8) + n[3]*other(12);
-        mat[1] = n[0]*other(1) + n[1]*other(5) + n[2]*other(9) + n[3]*other(13);
-        mat[2] = n[0]*other(2) + n[1]*other(6) + n[2]*other(10) + n[3]*other(14);
-        mat[3] = n[0]*other(3) + n[1]*other(7) + n[2]*other(11) + n[3]*other(15);
+        mat[0] = n[0] * other(0) + n[1] * other(4) + n[2] * other(8) + n[3] * other(12);
+        mat[1] = n[0] * other(1) + n[1] * other(5) + n[2] * other(9) + n[3] * other(13);
+        mat[2] = n[0] * other(2) + n[1] * other(6) + n[2] * other(10) + n[3] * other(14);
+        mat[3] = n[0] * other(3) + n[1] * other(7) + n[2] * other(11) + n[3] * other(15);
 
-        mat[4] = n[4]*other(0) + n[5]*other(4) + n[6]*other(8) + n[7]*other(12);
-        mat[5] = n[4]*other(1) + n[5]*other(5) + n[6]*other(9) + n[7]*other(13);
-        mat[6] = n[4]*other(2) + n[5]*other(6) + n[6]*other(10) + n[7]*other(14);
-        mat[7] = n[4]*other(3) + n[5]*other(7) + n[6]*other(11) + n[7]*other(15);
+        mat[4] = n[4] * other(0) + n[5] * other(4) + n[6] * other(8) + n[7] * other(12);
+        mat[5] = n[4] * other(1) + n[5] * other(5) + n[6] * other(9) + n[7] * other(13);
+        mat[6] = n[4] * other(2) + n[5] * other(6) + n[6] * other(10) + n[7] * other(14);
+        mat[7] = n[4] * other(3) + n[5] * other(7) + n[6] * other(11) + n[7] * other(15);
 
-        mat[8] = n[8]*other(0) + n[9]*other(4) + n[10]*other(8) + n[11]*other(12);
-        mat[9] = n[8]*other(1) + n[9]*other(5) + n[10]*other(9) + n[11]*other(13);
-        mat[10] = n[8]*other(2) + n[9]*other(6) + n[10]*other(10) + n[11]*other(14);
-        mat[11] = n[8]*other(3) + n[9]*other(7) + n[10]*other(11) + n[11]*other(15);
+        mat[8] = n[8] * other(0) + n[9] * other(4) + n[10] * other(8) + n[11] * other(12);
+        mat[9] = n[8] * other(1) + n[9] * other(5) + n[10] * other(9) + n[11] * other(13);
+        mat[10] = n[8] * other(2) + n[9] * other(6) + n[10] * other(10) + n[11] * other(14);
+        mat[11] = n[8] * other(3) + n[9] * other(7) + n[10] * other(11) + n[11] * other(15);
 
-        mat[12] = n[12]*other(0) + n[13]*other(4) + n[14]*other(8) + n[15]*other(12);
-        mat[13] = n[12]*other(1) + n[13]*other(5) + n[14]*other(9) + n[15]*other(13);
-        mat[14] = n[12]*other(2) + n[13]*other(6) + n[14]*other(10) + n[15]*other(14);
-        mat[15] = n[12]*other(3) + n[13]*other(7) + n[14]*other(11) + n[15]*other(15);
+        mat[12] = n[12] * other(0) + n[13] * other(4) + n[14] * other(8) + n[15] * other(12);
+        mat[13] = n[12] * other(1) + n[13] * other(5) + n[14] * other(9) + n[15] * other(13);
+        mat[14] = n[12] * other(2) + n[13] * other(6) + n[14] * other(10) + n[15] * other(14);
+        mat[15] = n[12] * other(3) + n[13] * other(7) + n[14] * other(11) + n[15] * other(15);
 
         return mat;
     }
 
-    Vec4<T> operator*(const Vec4<T>& other) const
+    Vec4<T> operator*(const Vec4<T> &other) const
     {
         Vec4<T> vec;
 
-        vec[0] = n[0]*other(0) + n[1]*other(1) + n[2]*other(2) + n[3]*other(3);
-        vec[1] = n[4]*other(0) + n[5]*other(1) + n[6]*other(2) + n[7]*other(3);
-        vec[2] = n[8]*other(0) + n[9]*other(1) + n[10]*other(2) + n[11]*other(3);
-        vec[3] = n[12]*other(0) + n[13]*other(1) + n[14]*other(2) + n[15]*other(3);
+        vec[0] = n[0] * other(0) + n[1] * other(1) + n[2] * other(2) + n[3] * other(3);
+        vec[1] = n[4] * other(0) + n[5] * other(1) + n[6] * other(2) + n[7] * other(3);
+        vec[2] = n[8] * other(0) + n[9] * other(1) + n[10] * other(2) + n[11] * other(3);
+        vec[3] = n[12] * other(0) + n[13] * other(1) + n[14] * other(2) + n[15] * other(3);
 
         return vec;
     }
 
-    Matrix4<T> operator+(const Matrix4<T>& other)
+    Matrix4<T> operator+(const Matrix4<T> &other)
     {
         Matrix4<T> mat;
 
@@ -1442,7 +1560,7 @@ struct Matrix4
         return mat;
     }
 
-    Matrix4<T> operator-(const Matrix4<T>& other)
+    Matrix4<T> operator-(const Matrix4<T> &other)
     {
         Matrix4<T> mat;
 
@@ -1457,10 +1575,22 @@ struct Matrix4
     {
         Matrix4<T> mat;
 
-        mat[0] = n[0]; mat[1] = n[4]; mat[2] = n[8]; mat[3] = n[12];
-        mat[4] = n[1]; mat[5] = n[5]; mat[6] = n[9]; mat[7] = n[13];
-        mat[8] = n[2]; mat[9] = n[6]; mat[10] = n[10]; mat[11] = n[14];
-        mat[12] = n[3]; mat[13] = n[7]; mat[14] = n[11]; mat[15] = n[15];
+        mat[0] = n[0];
+        mat[1] = n[4];
+        mat[2] = n[8];
+        mat[3] = n[12];
+        mat[4] = n[1];
+        mat[5] = n[5];
+        mat[6] = n[9];
+        mat[7] = n[13];
+        mat[8] = n[2];
+        mat[9] = n[6];
+        mat[10] = n[10];
+        mat[11] = n[14];
+        mat[12] = n[3];
+        mat[13] = n[7];
+        mat[14] = n[11];
+        mat[15] = n[15];
 
         return mat;
     }
@@ -1572,7 +1702,7 @@ struct Matrix4
         return mat;
     }
 
-    void setCol(int index, const Vec4<T>& vals)
+    void setCol(int index, const Vec4<T> &vals)
     {
         operator()(index, 0) = vals(0);
         operator()(index, 1) = vals(1);
@@ -1580,7 +1710,7 @@ struct Matrix4
         operator()(index, 3) = vals(3);
     }
 
-    void setRow(int index, const Vec4<T>& vals)
+    void setRow(int index, const Vec4<T> &vals)
     {
         operator()(0, index) = vals(0);
         operator()(1, index) = vals(1);
@@ -1589,7 +1719,7 @@ struct Matrix4
     }
 
     // returns a reference
-    T& operator[](int index)
+    T &operator[](int index)
     {
         return n[index];
     }
@@ -1600,7 +1730,7 @@ struct Matrix4
         return n[index];
     }
 
-    T& operator()(int x, int y)
+    T &operator()(int x, int y)
     {
         return n[4 * y + x];
     }
@@ -1636,50 +1766,50 @@ typedef Vec4<Float> Vec4f;
 template <typename T>
 struct Point2 : public Vec2<T>
 {
-    Point2() : Vec2<T>() { }
-    Point2(const Vec2<T>& other) : Vec2<T>(other) { }
-    Point2(T c) : Vec2<T>(c) { }
-    Point2(T x, T y) : Vec2<T>(x, y) { }
+    Point2() : Vec2<T>() {}
+    Point2(const Vec2<T> &other) : Vec2<T>(other) {}
+    Point2(T c) : Vec2<T>(c) {}
+    Point2(T x, T y) : Vec2<T>(x, y) {}
 };
 
 template <typename T>
 struct Vector3 : public Vec3<T>
 {
-    Vector3() : Vec3<T>() { }
-    Vector3(const Vec3<T>& vec) : Vec3<T>(vec) { }
-    Vector3(T c) : Vec3<T>(c) { }
-    Vector3(T x, T y, T z) : Vec3<T>(x, y, z) { }
-    Vector3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+    Vector3() : Vec3<T>() {}
+    Vector3(const Vec3<T> &vec) : Vec3<T>(vec) {}
+    Vector3(T c) : Vec3<T>(c) {}
+    Vector3(T x, T y, T z) : Vec3<T>(x, y, z) {}
+    Vector3(Vec2<T> xy, T z) : Vec3<T>(xy, z) {}
 };
 
 template <typename T>
 struct Point3 : public Vec3<T>
 {
-    Point3() : Vec3<T>() { }
-    Point3(const Vec3<T>& vec) : Vec3<T>(vec) { }
-    Point3(T c) : Vec3<T>(c) { }
-    Point3(T x, T y, T z) : Vec3<T>(x, y, z) { }
-    Point3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+    Point3() : Vec3<T>() {}
+    Point3(const Vec3<T> &vec) : Vec3<T>(vec) {}
+    Point3(T c) : Vec3<T>(c) {}
+    Point3(T x, T y, T z) : Vec3<T>(x, y, z) {}
+    Point3(Vec2<T> xy, T z) : Vec3<T>(xy, z) {}
 };
 
 template <typename T>
 struct Normal3 : public Vec3<T>
 {
-    Normal3() : Vec3<T>() { }
-    Normal3(const Vec3<T>& vec) : Vec3<T>(vec) { }
-    Normal3(T c) : Vec3<T>(c) { }
-    Normal3(T x, T y, T z) : Vec3<T>(x, y, z) { }
-    Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+    Normal3() : Vec3<T>() {}
+    Normal3(const Vec3<T> &vec) : Vec3<T>(vec) {}
+    Normal3(T c) : Vec3<T>(c) {}
+    Normal3(T x, T y, T z) : Vec3<T>(x, y, z) {}
+    Normal3(Vec2<T> xy, T z) : Vec3<T>(xy, z) {}
 };
 
 template <typename T>
 struct Color3 : public Vec3<T>
 {
-    Color3() : Vec3<T>() { }
-    Color3(const Vec3<T>& vec) : Vec3<T>(vec) { }
-    Color3(T c) : Vec3<T>(c) { }
-    Color3(T x, T y, T z) : Vec3<T>(x, y, z) { }
-    Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) { }
+    Color3() : Vec3<T>() {}
+    Color3(const Vec3<T> &vec) : Vec3<T>(vec) {}
+    Color3(T c) : Vec3<T>(c) {}
+    Color3(T x, T y, T z) : Vec3<T>(x, y, z) {}
+    Color3(Vec2<T> xy, T z) : Vec3<T>(xy, z) {}
 
     bool is_black() const
     {
@@ -1692,13 +1822,13 @@ struct Color3 : public Vec3<T>
 template <typename T>
 struct Vector4 : public Vec4<T>
 {
-    Vector4() : Vec4<T>() { }
-    Vector4(const Vec4<T>& vec) : Vec4<T>(vec) { }
-    Vector4(T c) : Vec4<T>(c) { }
-    Vector4(T x, T y, T z, T w) : Vec4<T>(x, y, z, w) { }
-    Vector4(Vec2<T> xy, T z, T w) : Vec4<T>(xy, z, w) { }
-    Vector4(Vec2<T> xy, Vec2<T>zw) : Vec4<T>(xy, zw) { }
-    Vector4(Vec3<T> xyz, T w) : Vec4<T>(xyz, w) { }
+    Vector4() : Vec4<T>() {}
+    Vector4(const Vec4<T> &vec) : Vec4<T>(vec) {}
+    Vector4(T c) : Vec4<T>(c) {}
+    Vector4(T x, T y, T z, T w) : Vec4<T>(x, y, z, w) {}
+    Vector4(Vec2<T> xy, T z, T w) : Vec4<T>(xy, z, w) {}
+    Vector4(Vec2<T> xy, Vec2<T> zw) : Vec4<T>(xy, zw) {}
+    Vector4(Vec3<T> xyz, T w) : Vec4<T>(xyz, w) {}
 };
 
 // these represent actual geometric primitives

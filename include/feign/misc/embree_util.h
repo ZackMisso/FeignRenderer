@@ -22,31 +22,28 @@ FEIGN_BEGIN()
 void initDevice();
 RTCDevice getDevice();
 
-inline RTCBounds convert_bbox_to_rtcbounds(const BBox3f& box)
+inline RTCBounds convert_bbox_to_rtcbounds(const BBox3f &box)
 {
     return RTCBounds{
         (float)box.min(0), (float)box.min(1), (float)box.min(2),
-        (float)box.max(0), (float)box.max(1), (float)box.max(2)
-    };
+        (float)box.max(0), (float)box.max(1), (float)box.max(2)};
 }
 
-inline BBox3f convert_rtcbounds_to_bbox(const RTCBounds& box)
+inline BBox3f convert_rtcbounds_to_bbox(const RTCBounds &box)
 {
     return BBox3f(
         Vec3f(box.lower_x, box.lower_y, box.lower_z),
-        Vec3f(box.upper_x, box.upper_y, box.upper_z)
-    );
+        Vec3f(box.upper_x, box.upper_y, box.upper_z));
 }
 
-inline Ray3f convert_rtcray_to_ray(const RTCRay& ray)
+inline Ray3f convert_rtcray_to_ray(const RTCRay &ray)
 {
     return Ray3f(
         Point3f(ray.org_x, ray.org_y, ray.org_z),
-        Vector3f(ray.dir_x, ray.dir_y, ray.dir_z)
-    );
+        Vector3f(ray.dir_x, ray.dir_y, ray.dir_z));
 }
 
-inline RTCRay convert_ray_to_rtcray(const Ray3f& ray)
+inline RTCRay convert_ray_to_rtcray(const Ray3f &ray)
 {
     RTCRay new_ray;
     new_ray.org_x = ray.origin(0);

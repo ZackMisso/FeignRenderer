@@ -16,10 +16,10 @@ MaterialClosure::MaterialClosure()
     throw new FeignRendererException("empty constructor should not be used");
 }
 
-MaterialClosure::MaterialClosure(Sampler* sampler,
-                                 Intersection* its,
-                                 Ray3f* ray,
-                                 const Scene* scene,
+MaterialClosure::MaterialClosure(Sampler *sampler,
+                                 Intersection *its,
+                                 Ray3f *ray,
+                                 const Scene *scene,
                                  bool sample_all_emitters,
                                  bool last_bounce_specular)
     : sampler(sampler),
@@ -45,8 +45,8 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
     media = nullptr;
 }
 
-MaterialClosure::MaterialClosure(Sampler* sampler,
-                                 const Scene* scene,
+MaterialClosure::MaterialClosure(Sampler *sampler,
+                                 const Scene *scene,
                                  bool sample_all_emitters,
                                  bool last_bounce_specular)
     : sampler(sampler),
@@ -69,7 +69,7 @@ MaterialClosure::MaterialClosure(Sampler* sampler,
     media = nullptr;
 }
 
-void MaterialClosure::accumulate_shadow_rays(const MaterialShader* shader)
+void MaterialClosure::accumulate_shadow_rays(const MaterialShader *shader)
 {
     Vector3f tmp_wo = wo;
     Color3f tmp_albedo = albedo;

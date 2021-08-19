@@ -12,24 +12,21 @@ FEIGN_BEGIN()
 
 ////////////////////////
 
-Transform::Transform() :
-                  mat(Matrix4f::identity()),
-                  inv(Matrix4f::identity())
+Transform::Transform() : mat(Matrix4f::identity()),
+                         inv(Matrix4f::identity())
 {
     // does nothing
 }
 
-Transform::Transform(const Matrix4f& matrix) :
-                  mat(matrix),
-                  inv(~matrix)
+Transform::Transform(const Matrix4f &matrix) : mat(matrix),
+                                               inv(~matrix)
 {
     // does nothing
 }
 
-Transform::Transform(const Matrix4f& matrix,
-                     const Matrix4f& inverse) :
-                 mat(matrix),
-                 inv(inverse)
+Transform::Transform(const Matrix4f &matrix,
+                     const Matrix4f &inverse) : mat(matrix),
+                                                inv(inverse)
 {
     // does nothing
 }
@@ -39,32 +36,32 @@ Transform Transform::inverse() const
     return Transform(inv, mat);
 }
 
-Transform Transform::operator*(const Transform& other) const
+Transform Transform::operator*(const Transform &other) const
 {
     Matrix4f newMat = mat * other.mat;
     Matrix4f newInv = other.inv * inv;
     return Transform(newMat, newInv);
 }
 
-Vector3f Transform::operator*(const Vector3f& other) const
+Vector3f Transform::operator*(const Vector3f &other) const
 {
     return mat.topLeftCorner() * other;
 }
 
-Normal3f Transform::operator*(const Normal3f& other) const
+Normal3f Transform::operator*(const Normal3f &other) const
 {
     // ! is transpose
     return !(inv.topLeftCorner()) * other;
 }
 
-Point3f Transform::operator*(const Point3f& other) const
+Point3f Transform::operator*(const Point3f &other) const
 {
     Vec4f hom = mat * Vec4f(other, 1.f);
     Vector3f hom3 = hom.head() / hom(3);
     return Point3f(hom3(0), hom3(1), hom3(2));
 }
 
-Ray3f Transform::operator*(const Ray3f& other) const
+Ray3f Transform::operator*(const Ray3f &other) const
 {
     return Ray3f(operator*(other.origin),
                  operator*(other.dir),
@@ -72,7 +69,7 @@ Ray3f Transform::operator*(const Ray3f& other) const
                  other.far);
 }
 
-void Transform::operator*=(const Transform& other)
+void Transform::operator*=(const Transform &other)
 {
     mat = mat * other.mat;
     inv = other.inv * inv;
@@ -93,12 +90,12 @@ void Transform::print() const
     std::cout << std::endl;
 }
 
-const Matrix4f& Transform::getMatrix() const
+const Matrix4f &Transform::getMatrix() const
 {
     return mat;
 }
 
-const Matrix4f& Transform::getInverse() const
+const Matrix4f &Transform::getInverse() const
 {
     return inv;
 }

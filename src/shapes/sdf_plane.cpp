@@ -6,15 +6,15 @@
  * acknowledgement is provided to the original author(s).
  **/
 
- #include <feign/core/sdf.h>
+#include <feign/core/sdf.h>
 
 FEIGN_BEGIN()
 
 SDFPlane::SDFPlane(Point3f center,
-                Normal3f normal,
-                Float inter,
-                const MediumBoundry* boundry,
-                bool is_null)
+                   Normal3f normal,
+                   Float inter,
+                   const MediumBoundry *boundry,
+                   bool is_null)
     : SDFShape(boundry, is_null),
       center(center),
       normal(normal)

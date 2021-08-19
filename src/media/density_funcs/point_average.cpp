@@ -16,7 +16,7 @@ PointAverageDensity::PointAverageDensity()
     // TODO
 }
 
-Color3f PointAverageDensity::D(const Point3f& p) const
+Color3f PointAverageDensity::D(const Point3f &p) const
 {
     throw new NotImplementedException("point average density");
     return 0.f;

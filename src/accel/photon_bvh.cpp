@@ -18,7 +18,7 @@ FEIGN_BEGIN()
 PhotonBVH::BVHNode::BVHNode()
 {
     bounds = BBox3f();
-    photons = std::vector<Photon*>();
+    photons = std::vector<Photon *>();
     parent = nullptr;
     x1_y1_z1 = nullptr;
     x1_y2_z1 = nullptr;
@@ -30,11 +30,11 @@ PhotonBVH::BVHNode::BVHNode()
     x2_y2_z2 = nullptr;
 }
 
-PhotonBVH::BVHNode::BVHNode(BVHNode* parent)
+PhotonBVH::BVHNode::BVHNode(BVHNode *parent)
     : parent(parent)
 {
     bounds = BBox3f();
-    photons = std::vector<Photon*>();
+    photons = std::vector<Photon *>();
     x1_y1_z1 = nullptr;
     x1_y2_z1 = nullptr;
     x1_y1_z2 = nullptr;
@@ -45,8 +45,8 @@ PhotonBVH::BVHNode::BVHNode(BVHNode* parent)
     x2_y2_z2 = nullptr;
 }
 
-PhotonBVH::BVHNode::BVHNode(const BBox3f& bounds,
-                            const std::vector<Photon*>& photons)
+PhotonBVH::BVHNode::BVHNode(const BBox3f &bounds,
+                            const std::vector<Photon *> &photons)
     : bounds(bounds),
       photons(photons)
 {
@@ -61,9 +61,9 @@ PhotonBVH::BVHNode::BVHNode(const BBox3f& bounds,
     x2_y2_z2 = nullptr;
 }
 
-PhotonBVH::BVHNode::BVHNode(BVHNode* parent,
-                            const BBox3f& bounds,
-                            const std::vector<Photon*>& photons)
+PhotonBVH::BVHNode::BVHNode(BVHNode *parent,
+                            const BBox3f &bounds,
+                            const std::vector<Photon *> &photons)
     : parent(parent),
       bounds(bounds),
       photons(photons)
@@ -101,14 +101,14 @@ PhotonBVH::BVHNode::~BVHNode()
     parent = nullptr;
 }
 
-void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon*>& photons,
+void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon *> &photons,
                                                Point3f point,
                                                Float radius) const
 {
     // TODO
 }
 
-void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon*>& photons,
+void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon *> &photons,
                                             Point3f point,
                                             int k) const
 {
@@ -124,11 +124,13 @@ void PhotonBVH::BVHNode::split(Float radius, int k)
     // a box would no longer contain k photons. If both parameters are negative,
     // then the later strategy will be used.
 
-    if (photons.size() == 0) return;
+    if (photons.size() == 0)
+        return;
 
     if (radius > 0.0)
     {
-        if (bounds.extents().min() < 2.f * radius) return;
+        if (bounds.extents().min() < 2.f * radius)
+            return;
 
         // split
         std::vector<BBox3f> sections = std::vector<BBox3f>();
@@ -144,12 +146,12 @@ void PhotonBVH::BVHNode::split(Float radius, int k)
     }
 }
 
-PhotonBVH::BVHNode* traverse_util(PhotonBVH::BVHNode* to_traverse,
-                                  PhotonBVH::BVHNode* current_found,
+PhotonBVH::BVHNode *traverse_util(PhotonBVH::BVHNode *to_traverse,
+                                  PhotonBVH::BVHNode *current_found,
                                   Point3f point,
-                                  int& found_cnt)
+                                  int &found_cnt)
 {
-    PhotonBVH::BVHNode* tmp = to_traverse->traverse(point);
+    PhotonBVH::BVHNode *tmp = to_traverse->traverse(point);
     if (tmp)
     {
         found_cnt++;
@@ -161,13 +163,14 @@ PhotonBVH::BVHNode* traverse_util(PhotonBVH::BVHNode* to_traverse,
 // this method returns the smallest bvhnode which uniquely contains a specific
 // point. If a point lies on the boundry between two bounding boxes, then the
 // largest bounding box which contains the point will be returned.
-PhotonBVH::BVHNode* PhotonBVH::BVHNode::traverse(Point3f point)
+PhotonBVH::BVHNode *PhotonBVH::BVHNode::traverse(Point3f point)
 {
     if (bounds.contains(point))
     {
-        if (photons.size()) return this;
+        if (photons.size())
+            return this;
 
-        PhotonBVH::BVHNode* found = nullptr;
+        PhotonBVH::BVHNode *found = nullptr;
         int found_cnt = 0;
 
         found = traverse_util(x1_y1_z1, found, point, found_cnt);
@@ -179,7 +182,8 @@ PhotonBVH::BVHNode* PhotonBVH::BVHNode::traverse(Point3f point)
         found = traverse_util(x2_y1_z2, found, point, found_cnt);
         found = traverse_util(x2_y2_z2, found, point, found_cnt);
 
-        if (found_cnt > 1) return this;
+        if (found_cnt > 1)
+            return this;
     }
 
     return nullptr;
@@ -197,8 +201,8 @@ void PhotonBVH::clear()
     delete photon_bvh;
 }
 
-void PhotonBVH::build(const BBox3f& scene_bounds,
-                      Photon* photons,
+void PhotonBVH::build(const BBox3f &scene_bounds,
+                      Photon *photons,
                       int count)
 {
     throw new NotImplementedException("photon_bvh");
@@ -215,25 +219,25 @@ bool PhotonBVH::nearPhoton(Point3f pt, Float radius) const
     return false;
 }
 
-void PhotonBVH::eval(MaterialClosure& closure,
-                     const MaterialShader* shader,
-                     const Point3f& pt,
+void PhotonBVH::eval(MaterialClosure &closure,
+                     const MaterialShader *shader,
+                     const Point3f &pt,
                      Float radius) const
 {
     throw new NotImplementedException("photon_bvh");
 }
 
-void PhotonBVH::eval(MaterialClosure& closure,
-                     const MaterialShader* shader,
-                     const Point3f& pt,
+void PhotonBVH::eval(MaterialClosure &closure,
+                     const MaterialShader *shader,
+                     const Point3f &pt,
                      int k_photons) const
 {
     throw new NotImplementedException("photon_bvh");
 }
 
-void PhotonBVH::eval(MaterialClosure& closure,
-                     const MaterialShader* shader,
-                     const Point3f& pt,
+void PhotonBVH::eval(MaterialClosure &closure,
+                     const MaterialShader *shader,
+                     const Point3f &pt,
                      Float rad_1,
                      Float rad_2) const
 {
@@ -242,6 +246,5 @@ void PhotonBVH::eval(MaterialClosure& closure,
 ////////////////////////////////////////////////////////////////////////////////
 /// PHOTON BVH
 ////////////////////////////////////////////////////////////////////////////////
-
 
 FEIGN_END()

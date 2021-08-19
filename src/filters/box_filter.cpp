@@ -15,14 +15,14 @@ BoxFilter::BoxFilter() : ReconstructionFilter()
     size = Vec2f(0.5, 0.5);
 }
 
-BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size) { }
+BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size) {}
 
 void BoxFilter::preProcess()
 {
     // does nothing
 }
 
-Float BoxFilter::evaluate(const Point2f& p) const
+Float BoxFilter::evaluate(const Point2f &p) const
 {
     if (std::abs(p(0)) < size(0) && std::abs(p(1)) < size(1))
     {

@@ -11,12 +11,12 @@
 
 FEIGN_BEGIN()
 
-StandardMedium::StandardMedium(TransmittanceEstimatorNode* trans_node,
-                               PhaseFunctionNode* phase_node,
-                               MediumSamplingNode* sampling_node,
-                               DensityFunctionNode* density_func_node,
-                               TransFuncNode* trans_func_node,
-                               Transform& transform,
+StandardMedium::StandardMedium(TransmittanceEstimatorNode *trans_node,
+                               PhaseFunctionNode *phase_node,
+                               MediumSamplingNode *sampling_node,
+                               DensityFunctionNode *density_func_node,
+                               TransFuncNode *trans_func_node,
+                               Transform &transform,
                                Color3f abs,
                                Color3f scat)
     : density(density_func_node),
@@ -42,8 +42,8 @@ void StandardMedium::preProcess()
 }
 
 Color3f StandardMedium::sample(Ray3f world_ray,
-                               Sampler* sampler,
-                               MediaClosure& closure) const
+                               Sampler *sampler,
+                               MediaClosure &closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
 
@@ -60,7 +60,7 @@ Color3f StandardMedium::sample(Ray3f world_ray,
                                                   closure);
 
     if (closure.handleScatter())
-        return sca_coeff / (sigma_t) * samp_val;
+        return sca_coeff / (sigma_t)*samp_val;
 
     // TODO: this may be incorrect when non-transmittance based sampling gets
     //       implemented but for now it is assumed that if this point is reached
@@ -70,8 +70,8 @@ Color3f StandardMedium::sample(Ray3f world_ray,
 }
 
 Color3f StandardMedium::transmittance(Ray3f world_ray,
-                                      Sampler* sampler,
-                                      MediaClosure& closure) const
+                                      Sampler *sampler,
+                                      MediaClosure &closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
 

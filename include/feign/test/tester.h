@@ -17,7 +17,7 @@ struct UnitTestData
     UnitTestData(std::string test_name)
         : test_name(test_name),
           image_error(0.f),
-          threshold(1.f) { }
+          threshold(1.f) {}
 
     void logReport() const;
     bool does_it_fail() const { return image_error > threshold; }
@@ -34,11 +34,11 @@ struct UnitTestManager
     bool run_all_tests();
     bool run_test(int index);
 
-    bool reference_run;            // replace the current references
+    bool reference_run; // replace the current references
 };
 
 // test methods are implemented in test.cpp
-extern bool evaluate_unit_test(UnitTestData& testLog);
-extern bool replace_reference(UnitTestData& testLog);
+extern bool evaluate_unit_test(UnitTestData &testLog);
+extern bool replace_reference(UnitTestData &testLog);
 
 FEIGN_END()

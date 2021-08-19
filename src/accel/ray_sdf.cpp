@@ -12,7 +12,7 @@ FEIGN_BEGIN()
 
 void SDFAccel::preProcess()
 {
-    sdfs = std::vector<SDFShape*>();
+    sdfs = std::vector<SDFShape *>();
 }
 
 void SDFAccel::clear()
@@ -20,7 +20,7 @@ void SDFAccel::clear()
     sdfs.clear();
 }
 
-void SDFAccel::addSDFShape(SDFShape* mesh)
+void SDFAccel::addSDFShape(SDFShape *mesh)
 {
     sdfs.push_back(mesh);
 }
@@ -75,7 +75,7 @@ Normal3f SDFAccel::sd_normal(Point3f pt) const
     return Normal3f(dx, dy, dz).normalized();
 }
 
-Float SDFAccel::sd_evaluate(Point3f point, int& shape_index) const
+Float SDFAccel::sd_evaluate(Point3f point, int &shape_index) const
 {
     Float min = std::numeric_limits<Float>::infinity();
 
@@ -109,13 +109,13 @@ Float SDFAccel::sd_evaluate(Point3f point, int& shape_index) const
 
 Float SDFAccel::sd_smooth_union(Float d1, Float d2, Float k) const
 {
-    Float h = clamp(0.5 + 0.5*(d2 - d1) / k, 0.0, 1.0 );
+    Float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
     return interp(d2, d1, h) - k * h * (1.0 - h);
 }
 
 // TODO: this intersection method is extremely inefficient for the teacup in
 //       a stadium case
-bool SDFAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
+bool SDFAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
     Float near;
     Float far;
@@ -123,7 +123,8 @@ bool SDFAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
     // LOG("scene ray origin:", scene_ray.origin);
 
     scene_box.intersect(scene_ray, near, far);
-    if (near < Epsilon) near = Epsilon;
+    if (near < Epsilon)
+        near = Epsilon;
 
     bool hit = false;
     int i = 0;

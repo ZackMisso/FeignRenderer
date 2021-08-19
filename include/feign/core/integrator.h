@@ -32,14 +32,14 @@ public:
                long max_heuristic,
                std::string location,
                int max_bounces = 10,
-               int fb_emitter_samples=1,
+               int fb_emitter_samples = 1,
                bool verbose = false)
             : max_time(max_time),
               max_heuristic(max_heuristic),
               location(location),
               max_bounces(max_bounces),
               fb_emitter_samples(fb_emitter_samples),
-              verbose(verbose) { }
+              verbose(verbose) {}
 
         long max_time;
         long max_heuristic;
@@ -49,46 +49,46 @@ public:
         int fb_emitter_samples;
         std::string location;
         // bool eval_all_emitters; // TODO: in a future update make this
-                                   //       configurable
+        //       configurable
         bool verbose;
     };
 
-    Integrator() { } // default constructor should never be used, directly by
-                     // the api, only for tests or temporary initializations
+    Integrator() {} // default constructor should never be used, directly by
+                    // the api, only for tests or temporary initializations
 
-    Integrator(FilterNode* filter,
-               Integrator::Params* params)
+    Integrator(FilterNode *filter,
+               Integrator::Params *params)
         : filter(filter),
           location(params->location),
           max_time(params->max_time),
           max_heuristic(params->max_heuristic),
           max_bounces(params->max_bounces),
           fb_emitter_samples(params->fb_emitter_samples),
-          verbose(params->verbose) { }
+          verbose(params->verbose) {}
 
-    virtual ~Integrator() { }
+    virtual ~Integrator() {}
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual void render(const Scene* scene,
-                        const Camera* camera,
-                        Sampler* sampler,
-                        Imagef& image) const;
+    virtual void render(const Scene *scene,
+                        const Camera *camera,
+                        Sampler *sampler,
+                        Imagef &image) const;
 
     // multithreaded implementation
-    virtual void render_fast(const Scene* scene,
-                             const Camera* camera,
-                             Sampler* sampler,
-                             Imagef& image) const;
+    virtual void render_fast(const Scene *scene,
+                             const Camera *camera,
+                             Sampler *sampler,
+                             Imagef &image) const;
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const = 0;
 
     std::string location;
-    FilterNode* filter;
+    FilterNode *filter;
 
 protected:
     long max_time;
@@ -105,15 +105,15 @@ protected:
 class Ambient_Occlusion_Integrator : public Integrator
 {
 public:
-    Ambient_Occlusion_Integrator(FilterNode* filter,
-                                 Integrator::Params* params);
+    Ambient_Occlusion_Integrator(FilterNode *filter,
+                                 Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -124,15 +124,15 @@ public:
 class Light_Unidirectional_Integrator : public Integrator
 {
 public:
-    Light_Unidirectional_Integrator(FilterNode* filter,
-                                    Integrator::Params* params);
+    Light_Unidirectional_Integrator(FilterNode *filter,
+                                    Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -144,15 +144,15 @@ public:
 class NormalIntegrator : public Integrator
 {
 public:
-    NormalIntegrator(FilterNode* filter,
-                     Integrator::Params* params);
+    NormalIntegrator(FilterNode *filter,
+                     Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -164,15 +164,15 @@ public:
 class NiceNormalIntegrator : public Integrator
 {
 public:
-    NiceNormalIntegrator(FilterNode* filter,
-                         Integrator::Params* params);
+    NiceNormalIntegrator(FilterNode *filter,
+                         Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -183,15 +183,15 @@ public:
 class Path_Bidirectional_Integrator : public Integrator
 {
 public:
-    Path_Bidirectional_Integrator(FilterNode* filter,
-                                  Integrator::Params* params);
+    Path_Bidirectional_Integrator(FilterNode *filter,
+                                  Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -202,15 +202,15 @@ public:
 class Path_Unidirectional_Integrator : public Integrator
 {
 public:
-    Path_Unidirectional_Integrator(FilterNode* filter,
-                                   Integrator::Params* params);
+    Path_Unidirectional_Integrator(FilterNode *filter,
+                                   Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -221,15 +221,15 @@ public:
 class VolPath_Integrator : public Integrator
 {
 public:
-    VolPath_Integrator(FilterNode* filter,
-                       Integrator::Params* params);
+    VolPath_Integrator(FilterNode *filter,
+                       Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -240,15 +240,15 @@ public:
 class VolPathNonExp_Integrator : public Integrator
 {
 public:
-    VolPathNonExp_Integrator(FilterNode* filter,
-                             Integrator::Params* params);
+    VolPathNonExp_Integrator(FilterNode *filter,
+                             Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -260,15 +260,15 @@ public:
 class VolPathTrans_Integrator : public Integrator
 {
 public:
-    VolPathTrans_Integrator(FilterNode* filter,
-                       Integrator::Params* params);
+    VolPathTrans_Integrator(FilterNode *filter,
+                            Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -292,7 +292,7 @@ public:
                                  location,
                                  max_bounces,
                                  verbose),
-              num_photons(num_photons) { }
+              num_photons(num_photons) {}
 
         Integrator::Params convert_to_base()
         {
@@ -309,24 +309,24 @@ public:
         int max_bounces;
         std::string location;
         // bool eval_all_emitters; // TODO: in a future update make this
-                                   //       configurable
+        //       configurable
         bool verbose;
     };
 
-    PhotonMapping(FilterNode* filter,
-                  Params* params);
+    PhotonMapping(FilterNode *filter,
+                  Params *params);
 
     ~PhotonMapping();
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual void scatter_photons(const Scene* scene,
-                                 Sampler* sampler);
+    virtual void scatter_photons(const Scene *scene,
+                                 Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 
     // virtual void render(const Scene* scene,
@@ -341,7 +341,7 @@ public:
     //                          Imagef& image) const;
 
     // TODO: create an actual acceleration structure to store photons
-    PhotonAccel* photon_storage;
+    PhotonAccel *photon_storage;
     int num_photons;
 };
 
@@ -352,15 +352,15 @@ public:
 class Sandbox_Integrator : public Integrator
 {
 public:
-    Sandbox_Integrator(FilterNode* filter,
-                       Integrator::Params* params);
+    Sandbox_Integrator(FilterNode *filter,
+                       Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -371,15 +371,15 @@ public:
 class WhittedIntegrator : public Integrator
 {
 public:
-    WhittedIntegrator(FilterNode* filter,
-                      Integrator::Params* params);
+    WhittedIntegrator(FilterNode *filter,
+                      Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -390,16 +390,16 @@ public:
 struct IntegratorNode : public Node
 {
 public:
-    IntegratorNode() : integrator(nullptr) { }
-    IntegratorNode(std::string name) : Node(name), integrator(nullptr) { }
-    IntegratorNode(Integrator* integrator) : integrator(integrator) { }
-    IntegratorNode(Integrator* integrator, std::string name)
+    IntegratorNode() : integrator(nullptr) {}
+    IntegratorNode(std::string name) : Node(name), integrator(nullptr) {}
+    IntegratorNode(Integrator *integrator) : integrator(integrator) {}
+    IntegratorNode(Integrator *integrator, std::string name)
         : Node(name),
-          integrator(integrator) { }
+          integrator(integrator) {}
 
     ~IntegratorNode() { delete integrator; }
 
-    Integrator* integrator;
+    Integrator *integrator;
 };
 /////////////////////////////////////////////////
 
@@ -415,15 +415,15 @@ public:
 class CosineTermIntegrator : public Integrator
 {
 public:
-    CosineTermIntegrator(FilterNode* filter,
-                         Integrator::Params* params);
+    CosineTermIntegrator(FilterNode *filter,
+                         Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////
@@ -438,15 +438,15 @@ public:
 class BarycentricIntegrator : public Integrator
 {
 public:
-    BarycentricIntegrator(FilterNode* filter,
-                          Integrator::Params* params);
+    BarycentricIntegrator(FilterNode *filter,
+                          Integrator::Params *params);
 
-    virtual void preProcess(const Scene* scene,
-                            Sampler* sampler);
+    virtual void preProcess(const Scene *scene,
+                            Sampler *sampler);
 
-    virtual Color3f Li(const Scene* scene,
-                       Sampler* sampler,
-                       const Ray3f& ray,
+    virtual Color3f Li(const Scene *scene,
+                       Sampler *sampler,
+                       const Ray3f &ray,
                        bool debug = false) const;
 };
 /////////////////////////////////////////////////

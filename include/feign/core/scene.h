@@ -33,68 +33,68 @@ class Scene
 {
 public:
     Scene(std::string name,
-          IntegratorNode* integrator,
-          SamplerNode* sampler,
-          CameraNode* camera,
-          MediaNode* media);
+          IntegratorNode *integrator,
+          SamplerNode *sampler,
+          CameraNode *camera,
+          MediaNode *media);
 
     ~Scene();
 
-    virtual void preProcess(const GlobalParams& globals);
+    virtual void preProcess(const GlobalParams &globals);
 
     void renderScene() const;
 
-    bool intersect_full(const Ray3f& ray, Intersection& its) const;
-    bool intersect_non_null(const Ray3f& ray, Intersection& its) const;
-    bool intersect_transmittance(const Ray3f& ray,
-                                 const Media* initial_media,
-                                 Intersection& its,
-                                 Sampler* sampler,
-                                 Color3f& beta,
+    bool intersect_full(const Ray3f &ray, Intersection &its) const;
+    bool intersect_non_null(const Ray3f &ray, Intersection &its) const;
+    bool intersect_transmittance(const Ray3f &ray,
+                                 const Media *initial_media,
+                                 Intersection &its,
+                                 Sampler *sampler,
+                                 Color3f &beta,
                                  bool last_event_surface = true,
                                  bool next_event_surface = true) const;
 
-    void addEmitter(Emitter* emitter);
-    void addMedium(Media* media);
+    void addEmitter(Emitter *emitter);
+    void addMedium(Media *media);
 
-    const MaterialShader* getShapeMaterialShader(const Intersection& its) const;
+    const MaterialShader *getShapeMaterialShader(const Intersection &its) const;
 
-    void eval_all_emitters(MaterialClosure& closure, bool in_media = false) const;
-    void eval_one_emitter(MaterialClosure& closur, bool in_media = false) const;
-    void eval_multi_emitters(MaterialClosure& closur,
+    void eval_all_emitters(MaterialClosure &closure, bool in_media = false) const;
+    void eval_one_emitter(MaterialClosure &closur, bool in_media = false) const;
+    void eval_multi_emitters(MaterialClosure &closur,
                              int num_to_eval,
                              bool in_media = false) const;
-    void accumulate_emission(MaterialClosure& closure) const;
+    void accumulate_emission(MaterialClosure &closure) const;
 
-    Color3f env_emission(const Ray3f& ray) const;
+    Color3f env_emission(const Ray3f &ray) const;
 
     // choosing an emitter given a specific intersection location
-    Emitter* choose_emitter(MaterialClosure& closure, Float* pdf) const;
+    Emitter *choose_emitter(MaterialClosure &closure, Float *pdf) const;
     // choosing a uniformly random emitter
-    Emitter* choose_emitter(Sampler* sampler, Float* pdf) const;
+    Emitter *choose_emitter(Sampler *sampler, Float *pdf) const;
 
 public:
     std::string name;
     BBox3f sceneBounds;
 
     // required structures
-    IntegratorNode* integrator_node;
-    SamplerNode* sampler_node;
-    LightAccel* light_selection;
-    CameraNode* camera_node;
-    RayAccel* ray_accel;
-    Imagef* target; // the target to render the image to, if not
+    IntegratorNode *integrator_node;
+    SamplerNode *sampler_node;
+    LightAccel *light_selection;
+    CameraNode *camera_node;
+    RayAccel *ray_accel;
+    Imagef *target; // the target to render the image to, if not
                     // offline rendering
 
     // pre-processed structures
-    std::vector<Emitter*> env_emitters;
-    std::vector<Emitter*> emitters;
-    std::vector<Media*> mediums;
-    std::vector<Shape*> shapes;
-    std::vector<ObjectNode*> objects;
+    std::vector<Emitter *> env_emitters;
+    std::vector<Emitter *> emitters;
+    std::vector<Media *> mediums;
+    std::vector<Shape *> shapes;
+    std::vector<ObjectNode *> objects;
 
     // optional structures
-    MediaNode* env_medium_node;
+    MediaNode *env_medium_node;
 };
 
 // TODO: the nodes should be a layer of abstraction over the actual
@@ -106,15 +106,15 @@ public:
 struct SceneNode : public Node
 {
 public:
-    SceneNode() : scene(nullptr) { }
-    SceneNode(std::string name) : Node(name), scene(nullptr) { }
-    SceneNode(Scene* scene) : scene(scene) { }
-    SceneNode(std::string name, Scene* scene)
-        : Node(name), scene(scene) { }
+    SceneNode() : scene(nullptr) {}
+    SceneNode(std::string name) : Node(name), scene(nullptr) {}
+    SceneNode(Scene *scene) : scene(scene) {}
+    SceneNode(std::string name, Scene *scene)
+        : Node(name), scene(scene) {}
 
     ~SceneNode() { delete scene; }
 
-    Scene* scene;
+    Scene *scene;
 };
 /////////////////////////////////////////////////
 

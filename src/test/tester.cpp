@@ -30,7 +30,7 @@ UnitTestManager::UnitTestManager()
 std::string zero_padded_num(int num)
 {
     std::ostringstream ss;
-    ss << std::setw( 3 ) << std::setfill( '0' ) << num;
+    ss << std::setw(3) << std::setfill('0') << num;
     return ss.str();
 }
 
@@ -59,14 +59,14 @@ bool UnitTestManager::run_all_tests()
     std::vector<std::string> paths = std::vector<std::string>();
 
     DIR *dir;
-    struct dirent* ent;
+    struct dirent *ent;
 
     if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
     {
         while ((ent = readdir(dir)) != NULL)
         {
             std::string str = std::string(ent->d_name);
-            if (str.length() > 5 && str.substr(str.length()-5) == ".json")
+            if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
                 paths.push_back(str);
         }
     }

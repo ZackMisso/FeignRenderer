@@ -11,20 +11,20 @@
 
 FEIGN_BEGIN()
 
-NiceNormalIntegrator::NiceNormalIntegrator(FilterNode* filter,
-                                           Integrator::Params* params)
+NiceNormalIntegrator::NiceNormalIntegrator(FilterNode *filter,
+                                           Integrator::Params *params)
     : Integrator(filter, params)
 {
 }
 
-void NiceNormalIntegrator::preProcess(const Scene* scene, Sampler* sampler)
+void NiceNormalIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f NiceNormalIntegrator::Li(const Scene* scene,
-                                 Sampler* sampler,
-                                 const Ray3f& ray,
+Color3f NiceNormalIntegrator::Li(const Scene *scene,
+                                 Sampler *sampler,
+                                 const Ray3f &ray,
                                  bool debug) const
 {
     Intersection its;

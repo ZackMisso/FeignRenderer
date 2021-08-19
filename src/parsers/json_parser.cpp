@@ -21,15 +21,15 @@
 
 FEIGN_BEGIN()
 
-void JsonParser::parse(std::string filename, Imagef* image)
+void JsonParser::parse(std::string filename, Imagef *image)
 {
     FeignRenderer::initialize(image);
 
-    #if CLOCKING
-        Clocker::startClock("parse");
-    #endif
+#if CLOCKING
+    Clocker::startClock("parse");
+#endif
 
-    FILE* file = fopen(filename.c_str(), "r");
+    FILE *file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
 
@@ -44,11 +44,11 @@ void JsonParser::parse(std::string filename)
 {
     FeignRenderer::initialize();
 
-    #if CLOCKING
-        Clocker::startClock("parse");
-    #endif
+#if CLOCKING
+    Clocker::startClock("parse");
+#endif
 
-    FILE* file = fopen(filename.c_str(), "r");
+    FILE *file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
     rapidjson::FileReadStream input_stream(file, read_buffer, sizeof(read_buffer));
 
@@ -59,7 +59,7 @@ void JsonParser::parse(std::string filename)
     actually_parse(document);
 }
 
-void JsonParser::actually_parse(rapidjson::Document& document)
+void JsonParser::actually_parse(rapidjson::Document &document)
 {
     // TODO: parallelize this
 
@@ -76,7 +76,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string medium = "default";
             bool sdf_mode = false;
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -117,7 +117,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "env_medium";
             std::string type = "homo_abs";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("type"))
             {
@@ -196,7 +196,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "media_density";
             std::string type = "sphere";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -242,7 +242,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "light_accel";
             std::string type = "light_naive";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("type"))
             {
@@ -291,7 +291,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             long max_heuristic = -1;
             int max_bounces = 10;
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("type"))
             {
@@ -362,7 +362,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "sampler";
             std::string type = "independent";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -401,7 +401,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "camera";
             std::string type = "perspective";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -505,14 +505,14 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string material_shader = "null";
             std::string emitter = "null";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             FeignRenderer::fr_clear_transform();
 
             for (rapidjson::Value::ConstMemberIterator itr_2 = value.MemberBegin();
                  itr_2 != value.MemberEnd(); ++itr_2)
             {
-                const rapidjson::Value& value_2 = itr_2->value;
+                const rapidjson::Value &value_2 = itr_2->value;
 
                 if (strcmp(itr_2->name.GetString(), "name") == 0)
                 {
@@ -567,7 +567,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string outside_media = "null";
             bool is_null = false;
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -829,7 +829,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             // Vector3f pos = Vector3f(0.f);
             // Color3f intensity = Color3f(1.f);
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -845,7 +845,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             for (rapidjson::Value::ConstMemberIterator itr_2 = value.MemberBegin();
                  itr_2 != value.MemberEnd(); ++itr_2)
             {
-                const rapidjson::Value& value_2 = itr_2->value;
+                const rapidjson::Value &value_2 = itr_2->value;
 
                 if (strcmp(itr_2->name.GetString(), "scale") == 0)
                 {
@@ -1018,7 +1018,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "material";
             std::string type = "simple";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -1052,7 +1052,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "bsdf";
             std::string type = "diffuse";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -1173,7 +1173,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "shader";
             std::string type = "none";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -1225,7 +1225,7 @@ void JsonParser::actually_parse(rapidjson::Document& document)
             std::string name = "texture";
             std::string type = "image";
 
-            const rapidjson::Value& value = itr->value;
+            const rapidjson::Value &value = itr->value;
 
             if (value.HasMember("name"))
             {
@@ -1267,9 +1267,9 @@ void JsonParser::actually_parse(rapidjson::Document& document)
         }
     }
 
-    #if CLOCKING
-        Clocker::endClock("parse");
-    #endif
+#if CLOCKING
+    Clocker::endClock("parse");
+#endif
 
     FeignRenderer::flush_renders();
 }

@@ -19,9 +19,9 @@ ObjMesh::ObjMesh() : Shape(nullptr, false)
     tris = std::vector<Triangle>();
 }
 
-ObjMesh::ObjMesh(const std::string& filename,
+ObjMesh::ObjMesh(const std::string &filename,
                  bool flip_norms,
-                 const MediumBoundry* boundry,
+                 const MediumBoundry *boundry,
                  bool is_null)
     : Shape(boundry, is_null),
       filename(filename),
@@ -34,10 +34,10 @@ ObjMesh::ObjMesh(const std::string& filename,
     tris = std::vector<Triangle>();
 }
 
-ObjMesh::ObjMesh(const std::vector<Point3f>& vs,
-                 const std::vector<Normal3f>& ns,
-                 const std::vector<Vec2f>& uvs,
-                 const std::vector<Triangle>& tris)
+ObjMesh::ObjMesh(const std::vector<Point3f> &vs,
+                 const std::vector<Normal3f> &ns,
+                 const std::vector<Vec2f> &uvs,
+                 const std::vector<Triangle> &tris)
     : Shape(nullptr, false), vs(vs), uvs(uvs), ns(ns), tris(tris)
 { // does nothing
 }
@@ -82,9 +82,9 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
     // TODO: modify this to store vertices as e_Vertex objects to save
     //       computation.
     // TODO: modify this to store triangles as e_Triangle objects
-    RTCGeometry e_mesh = rtcNewGeometry (device, RTC_GEOMETRY_TYPE_TRIANGLE);
+    RTCGeometry e_mesh = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-    e_Vertex* vertices = (e_Vertex*) rtcSetNewGeometryBuffer(e_mesh,
+    e_Vertex *vertices = (e_Vertex *)rtcSetNewGeometryBuffer(e_mesh,
                                                              RTC_BUFFER_TYPE_VERTEX,
                                                              0,
                                                              RTC_FORMAT_FLOAT3,
@@ -98,7 +98,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
         vertices[i].z = vs[i](2);
     }
 
-    e_Triangle* triangles = (e_Triangle*) rtcSetNewGeometryBuffer(e_mesh,
+    e_Triangle *triangles = (e_Triangle *)rtcSetNewGeometryBuffer(e_mesh,
                                                                   RTC_BUFFER_TYPE_INDEX,
                                                                   0,
                                                                   RTC_FORMAT_UINT3,
@@ -119,7 +119,7 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 
 // TODO: need to create a converter for obj's created from Maya to the renderer
 // TODO: implement a better parser
-void ObjMesh::parseFromFile(const std::string& filename)
+void ObjMesh::parseFromFile(const std::string &filename)
 {
     if (filename.empty())
         return;
@@ -132,7 +132,7 @@ void ObjMesh::parseFromFile(const std::string& filename)
 
     // TODO: is there a better way of writing this so that it runs
     //       faster?
-    std::ifstream ifs (filename.c_str());
+    std::ifstream ifs(filename.c_str());
 
     if (ifs.fail())
     {
@@ -174,7 +174,8 @@ void ObjMesh::parseFromFile(const std::string& filename)
 
             n = transform * n;
 
-            if (flip_norms) n = -n;
+            if (flip_norms)
+                n = -n;
 
             ns.push_back(n.normalized());
         }
@@ -315,7 +316,7 @@ void ObjMesh::preProcess(bool requires_processing)
     // apply the geometry shader to the mesh
     if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
     {
-        geomShader->shader->evaluate((void*)this);
+        geomShader->shader->evaluate((void *)this);
     }
 
     center = compute_centroid();
@@ -340,7 +341,7 @@ void ObjMesh::preProcess(bool requires_processing)
     }
 }
 
-bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
+bool ObjMesh::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
     Ray3f ray(scene_ray);
 
@@ -365,7 +366,7 @@ bool ObjMesh::intersect(const Ray3f& scene_ray, Intersection& its) const
 
 // I do not think I need this function anymore, but I am going to leave it commented
 // out here for reference if need be later
-bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) const
+bool ObjMesh::intersect(uint32_t face, const Ray3f &ray, Intersection &its) const
 {
     uint32_t i0 = tris[face].vsInds(0);
     uint32_t i1 = tris[face].vsInds(1);
@@ -412,7 +413,7 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f& ray, Intersection& its) cons
     return its.t >= ray.near && its.t <= ray.far;
 }
 
-void ObjMesh::completeIntersectionInfo(Intersection& its) const
+void ObjMesh::completeIntersectionInfo(Intersection &its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
 
@@ -440,7 +441,7 @@ void ObjMesh::completeIntersectionInfo(Intersection& its) const
     }
 
     // compute the geometric frame
-    its.g_frame = CoordinateFrame( ((p1-p0)^(p2-p0)).normalized() );
+    its.g_frame = CoordinateFrame(((p1 - p0) ^ (p2 - p0)).normalized());
 
     // compute the normals
     if (ns.size() > 0)
@@ -451,7 +452,8 @@ void ObjMesh::completeIntersectionInfo(Intersection& its) const
 
         its.s_frame = CoordinateFrame((ns[i0_ns] * bary(0) +
                                        ns[i1_ns] * bary(1) +
-                                       ns[i2_ns] * bary(2)).normalized());
+                                       ns[i2_ns] * bary(2))
+                                          .normalized());
     }
     else
     {
@@ -459,13 +461,13 @@ void ObjMesh::completeIntersectionInfo(Intersection& its) const
     }
 }
 
-const std::vector<Triangle>& ObjMesh::getTris() const { return tris; }
-const std::vector<Point3f>& ObjMesh::getVerts() const { return vs; }
-const std::vector<Normal3f>& ObjMesh::getNorms() const { return ns; }
-const std::vector<Vec2f>& ObjMesh::getUVs() const { return uvs; }
+const std::vector<Triangle> &ObjMesh::getTris() const { return tris; }
+const std::vector<Point3f> &ObjMesh::getVerts() const { return vs; }
+const std::vector<Normal3f> &ObjMesh::getNorms() const { return ns; }
+const std::vector<Vec2f> &ObjMesh::getUVs() const { return uvs; }
 
-void ObjMesh::setVerts(std::vector<Point3f>& param) { vs = param; }
-void ObjMesh::setNorms(std::vector<Normal3f>& param) { ns = param; }
-void ObjMesh::setUVs(std::vector<Vec2f>& param) { uvs = param; }
+void ObjMesh::setVerts(std::vector<Point3f> &param) { vs = param; }
+void ObjMesh::setNorms(std::vector<Normal3f> &param) { ns = param; }
+void ObjMesh::setUVs(std::vector<Vec2f> &param) { uvs = param; }
 
 FEIGN_END()

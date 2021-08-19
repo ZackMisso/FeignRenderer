@@ -10,14 +10,14 @@
 
 FEIGN_BEGIN()
 
-Shape::Shape(const MediumBoundry* boundry,
+Shape::Shape(const MediumBoundry *boundry,
              bool is_null)
     : geomShader(nullptr),
       is_null(is_null),
       boundry(boundry)
 {
-    instID = 0;
-    transform = Transform();
+  instID = 0;
+  transform = Transform();
 }
 
 FEIGN_END()

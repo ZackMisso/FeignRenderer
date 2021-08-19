@@ -20,11 +20,11 @@ FEIGN_BEGIN()
 class BSDF
 {
 public:
-    BSDF() { }
-    virtual ~BSDF() { }
+    BSDF() {}
+    virtual ~BSDF() {}
 
-    virtual void sample(MaterialClosure& closure) const = 0;
-    virtual void evaluate(MaterialClosure& closure) const = 0;
+    virtual void sample(MaterialClosure &closure) const = 0;
+    virtual void evaluate(MaterialClosure &closure) const = 0;
 
     // TODO: remove this method
     virtual bool isDelta() const = 0;
@@ -40,15 +40,15 @@ public:
     struct Params
     {
         Params(Color3f albedo)
-            : albedo(albedo) { }
+            : albedo(albedo) {}
 
         Color3f albedo;
     };
 
     Diffuse(Color3f albedo);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return false; }
 
@@ -66,15 +66,15 @@ public:
     struct Params
     {
         Params(Color3f albedo)
-            : albedo(albedo) { }
+            : albedo(albedo) {}
 
         Color3f albedo;
     };
 
     Mirror(Color3f albedo);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return true; }
 
@@ -91,8 +91,8 @@ class NullBSDF : public BSDF
 public:
     NullBSDF();
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return true; }
 };
@@ -107,7 +107,7 @@ public:
     struct Params
     {
         Params(Color3f kd, Float ks, Float exponent)
-            : kd(kd), ks(ks), exponent(exponent) { }
+            : kd(kd), ks(ks), exponent(exponent) {}
 
         Color3f kd;
         Float ks;
@@ -116,8 +116,8 @@ public:
 
     Phong(Color3f kd, Float ks, Float exponent);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     // this is a strange middle ground
     virtual bool isDelta() const { return false; }
@@ -138,17 +138,17 @@ public:
     struct Params
     {
         Params(Color3f kd, Color3f ks, Float exponent)
-            : kd(kd), ks(ks), exponent(exponent) { }
+            : kd(kd), ks(ks), exponent(exponent) {}
 
         Color3f kd;
         Color3f ks;
         Float exponent;
     };
 
-    Blinn(const Blinn::Params* params);
+    Blinn(const Blinn::Params *params);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return false; }
 
@@ -168,10 +168,10 @@ public:
     struct Params
     {
         Params(Float int_ior, Float ext_ior)
-            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) { }
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) {}
 
         Params(Float int_ior, Float ext_ior, Color3f albedo)
-            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) {}
 
         Float int_ior;
         Float ext_ior;
@@ -180,8 +180,8 @@ public:
 
     Dielectric(Float int_ior, Float ext_ior, Color3f albedo);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return true; }
 
@@ -204,10 +204,10 @@ public:
     struct Params
     {
         Params(Float int_ior, Float ext_ior)
-            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) { }
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(Color3f(1.f)) {}
 
         Params(Float int_ior, Float ext_ior, Color3f albedo)
-            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
+            : int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) {}
 
         Float int_ior;
         Float ext_ior;
@@ -216,8 +216,8 @@ public:
 
     OneWayDielectric(Float int_ior, Float ext_ior, Color3f albedo);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
 
     virtual bool isDelta() const { return true; }
 
@@ -234,15 +234,15 @@ protected:
 struct BSDFNode : public Node
 {
 public:
-    BSDFNode() : bsdf(nullptr) { }
-    BSDFNode(std::string name) : Node(name), bsdf(nullptr) { }
-    BSDFNode(BSDF* bsdf) : bsdf(bsdf) { }
+    BSDFNode() : bsdf(nullptr) {}
+    BSDFNode(std::string name) : Node(name), bsdf(nullptr) {}
+    BSDFNode(BSDF *bsdf) : bsdf(bsdf) {}
 
     ~BSDFNode() { delete bsdf; }
 
-    BSDF* operator()() { return bsdf; }
+    BSDF *operator()() { return bsdf; }
 
-    BSDF* bsdf;
+    BSDF *bsdf;
 };
 /////////////////////////////////////////////////
 

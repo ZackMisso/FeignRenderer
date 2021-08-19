@@ -17,11 +17,11 @@
 FEIGN_BEGIN()
 
 HomogeneousAbsorbingMedia::HomogeneousAbsorbingMedia(Float avg_density)
-    : avg_density(avg_density) { }
+    : avg_density(avg_density) {}
 
 Color3f HomogeneousAbsorbingMedia::sample(Ray3f ray,
-                                          Sampler* sampler,
-                                          MediaClosure& closure) const
+                                          Sampler *sampler,
+                                          MediaClosure &closure) const
 {
     closure.sampled_t = closure.t_max + 1;
     return transmittance(ray,
@@ -30,8 +30,8 @@ Color3f HomogeneousAbsorbingMedia::sample(Ray3f ray,
 }
 
 Color3f HomogeneousAbsorbingMedia::transmittance(Ray3f ray,
-                                                 Sampler* sampler,
-                                                 MediaClosure& closure) const
+                                                 Sampler *sampler,
+                                                 MediaClosure &closure) const
 {
     return exp(-avg_density * (closure.t_max - closure.t_min));
 }

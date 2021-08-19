@@ -11,10 +11,9 @@
 // TODO: maybe keep track of dimensions
 // TODO: add next1U for use in making copies of samplers
 
-
 FEIGN_BEGIN()
 
-Independent::Independent() : Sampler() { }
+Independent::Independent() : Sampler() {}
 
 Independent::Independent(uint32_t seed,
                          int sample_cnt)
@@ -63,17 +62,17 @@ Vec4f Independent::next4D()
 }
 
 // is this copy architecture really desired?
-Sampler* Independent::copy()
+Sampler *Independent::copy()
 {
-    Independent* newSamp = new Independent();
+    Independent *newSamp = new Independent();
     newSamp->reseed(sampleSeed);
 
     return newSamp;
 }
 
-Sampler* Independent::copy(uint32_t seed)
+Sampler *Independent::copy(uint32_t seed)
 {
-    Independent* newSamp = new Independent(seed, sampleCnt);
+    Independent *newSamp = new Independent(seed, sampleCnt);
     newSamp->reseed(seed);
 
     return newSamp;

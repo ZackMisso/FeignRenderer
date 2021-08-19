@@ -33,7 +33,7 @@ public:
               flip_norms(flip_norms),
               inside_media(inside_media),
               outside_media(outside_media),
-              is_null(is_null) { }
+              is_null(is_null) {}
 
         std::string inside_media;
         std::string outside_media;
@@ -44,16 +44,16 @@ public:
     };
 
     ObjMesh();
-    ObjMesh(const std::string& filename,
+    ObjMesh(const std::string &filename,
             bool flip_norms = false,
-            const MediumBoundry* boundry = nullptr,
+            const MediumBoundry *boundry = nullptr,
             bool is_null = false);
-    ObjMesh(const std::vector<Point3f>& vs,
-            const std::vector<Normal3f>& ns,
-            const std::vector<Vec2f>& uvs,
-            const std::vector<Triangle>& tris);
+    ObjMesh(const std::vector<Point3f> &vs,
+            const std::vector<Normal3f> &ns,
+            const std::vector<Vec2f> &uvs,
+            const std::vector<Triangle> &tris);
 
-    ~ObjMesh() { }
+    ~ObjMesh() {}
 
     uint32_t num_tris() const;
     uint32_t num_verts() const;
@@ -62,14 +62,14 @@ public:
     virtual Float surface_area(int primitive) const;
     float pdf(uint32_t index) const;
 
-    virtual bool intersect(const Ray3f& scene_ray, Intersection& its) const;
-    bool intersect(uint32_t tri, const Ray3f& ray, Intersection& its) const;
+    virtual bool intersect(const Ray3f &scene_ray, Intersection &its) const;
+    bool intersect(uint32_t tri, const Ray3f &ray, Intersection &its) const;
 
-    virtual void completeIntersectionInfo(Intersection& its) const;
+    virtual void completeIntersectionInfo(Intersection &its) const;
 
     virtual void addShapeToScene(RTCScene scene, RTCDevice device);
 
-    void parseFromFile(const std::string& filename);
+    void parseFromFile(const std::string &filename);
 
     virtual uint32_t primitiveCount() const;
 
@@ -85,14 +85,15 @@ public:
 
     // const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
-    const std::vector<Triangle>& getTris() const;
-    const std::vector<Point3f>& getVerts() const;
-    const std::vector<Normal3f>& getNorms() const;
-    const std::vector<Vec2f>& getUVs() const;
+    const std::vector<Triangle> &getTris() const;
+    const std::vector<Point3f> &getVerts() const;
+    const std::vector<Normal3f> &getNorms() const;
+    const std::vector<Vec2f> &getUVs() const;
 
-    void setVerts(std::vector<Point3f>& param);
-    void setNorms(std::vector<Normal3f>& param);
-    void setUVs(std::vector<Vec2f>& param);
+    void setVerts(std::vector<Point3f> &param);
+    void setNorms(std::vector<Normal3f> &param);
+    void setUVs(std::vector<Vec2f> &param);
+
 protected:
     std::string filename;
 

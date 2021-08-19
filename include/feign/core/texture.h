@@ -19,8 +19,8 @@ public:
     Texture();
     virtual ~Texture();
 
-    virtual Color3f evaluate(const Point2f& point);
-    virtual Color3f evaluate(const Point3f& point);
+    virtual Color3f evaluate(const Point2f &point);
+    virtual Color3f evaluate(const Point3f &point);
     virtual Imagef evaluate_image(int width, int height);
 
     virtual void preProcess();
@@ -33,7 +33,7 @@ public:
     {
         Params(std::string filename,
                Vec3f scale = Vec3f(1.f))
-            : filename(filename), scale(scale) { }
+            : filename(filename), scale(scale) {}
 
         std::string filename;
         Vec3f scale;
@@ -44,10 +44,11 @@ public:
 
     ~ImageTexture();
 
-    virtual Color3f evaluate(const Point2f& point);
+    virtual Color3f evaluate(const Point2f &point);
     virtual void preProcess();
 
     Imagef image;
+
 private:
     Vec3f scale;
     std::string filename;
@@ -62,7 +63,7 @@ public:
                Vec3f phase,
                Vec3f freq,
                Vec3f y)
-            : amp(amp), phase(phase), y(y), freq(freq) { }
+            : amp(amp), phase(phase), y(y), freq(freq) {}
 
         Vec3f amp;
         Vec3f freq;
@@ -75,7 +76,7 @@ public:
                Vec3f freq,
                Vec3f y);
 
-    virtual Color3f evaluate(const Point2f& point);
+    virtual Color3f evaluate(const Point2f &point);
     virtual void preProcess();
 
     Vec3f amp;
@@ -89,17 +90,18 @@ class NoiseTexture : public Texture
 public:
     struct Params
     {
-        Params(std::string filename) : filename(filename) { }
+        Params(std::string filename) : filename(filename) {}
 
         std::string filename;
     };
 
     NoiseTexture(std::string filename);
 
-    virtual Color3f evaluate(const Point2f& point);
+    virtual Color3f evaluate(const Point2f &point);
     virtual void preProcess();
 
     std::string filename;
+
 private:
     bool initialized;
 };
@@ -110,13 +112,13 @@ private:
 struct TextureNode : public Node
 {
 public:
-    TextureNode() : texture(nullptr) { }
-    TextureNode(std::string name) : Node(name), texture(nullptr) { }
-    TextureNode(Texture* texture) : texture(texture) { }
+    TextureNode() : texture(nullptr) {}
+    TextureNode(std::string name) : Node(name), texture(nullptr) {}
+    TextureNode(Texture *texture) : texture(texture) {}
 
     ~TextureNode() { delete texture; }
 
-    Texture* texture;
+    Texture *texture;
 };
 /////////////////////////////////////////////////
 

@@ -11,20 +11,20 @@
 
 FEIGN_BEGIN()
 
-CosineTermIntegrator::CosineTermIntegrator(FilterNode* filter,
-                                           Integrator::Params* params)
+CosineTermIntegrator::CosineTermIntegrator(FilterNode *filter,
+                                           Integrator::Params *params)
     : Integrator(filter, params)
 {
 }
 
-void CosineTermIntegrator::preProcess(const Scene* scene, Sampler* sampler)
+void CosineTermIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f CosineTermIntegrator::Li(const Scene* scene,
-                                 Sampler* sampler,
-                                 const Ray3f& ray,
+Color3f CosineTermIntegrator::Li(const Scene *scene,
+                                 Sampler *sampler,
+                                 const Ray3f &ray,
                                  bool debug) const
 {
     Intersection its;

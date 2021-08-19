@@ -52,14 +52,14 @@ void Perspective::preProcess()
     sampleToCamera = Transform(mat).inverse();
 }
 
-Color3f Perspective::sampleRay(Ray3f& ray,
-                               const Point2f& filmSamp,
-                               const Point2f& appSamp) const
+Color3f Perspective::sampleRay(Ray3f &ray,
+                               const Point2f &filmSamp,
+                               const Point2f &appSamp) const
 {
     Point3f nearP = sampleToCamera * Point3f(
-                            filmSamp(0) * 1.0 / filmSize(0),
-                            filmSamp(1) * 1.0 / filmSize(1),
-                            0.f);
+                                         filmSamp(0) * 1.0 / filmSize(0),
+                                         filmSamp(1) * 1.0 / filmSize(1),
+                                         0.f);
 
     Vector3f d = nearP.normalized();
     float invZ = 1.f / d(2);

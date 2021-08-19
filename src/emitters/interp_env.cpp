@@ -17,33 +17,33 @@ InterpEnvironmentEmitter::InterpEnvironmentEmitter(Color3f top,
     // does nothing
 }
 
-Color3f InterpEnvironmentEmitter::sample_nee(EmitterQuery& rec,
-                                             const Point2f& sample,
-                                             Float* pdf) const
+Color3f InterpEnvironmentEmitter::sample_nee(EmitterQuery &rec,
+                                             const Point2f &sample,
+                                             Float *pdf) const
 {
     throw new NotImplementedException("interp env emitter sample_li");
 
     return Color3f(0.f);
 }
 
-Color3f InterpEnvironmentEmitter::sample_medium(EmitterQuery& rec,
-                                                const Point2f& sample,
-                                                Float* pdf) const
+Color3f InterpEnvironmentEmitter::sample_medium(EmitterQuery &rec,
+                                                const Point2f &sample,
+                                                Float *pdf) const
 {
     throw new NotImplementedException("interp env emitter sample_pos");
 
     return Color3f(0.f);
 }
 
-Color3f InterpEnvironmentEmitter::sample_ray(EmitterQuery& rec,
-                                             const Point2f& dir_sample,
-                                             const Point2f& point_sample,
-                                             Float* pdf) const
+Color3f InterpEnvironmentEmitter::sample_ray(EmitterQuery &rec,
+                                             const Point2f &dir_sample,
+                                             const Point2f &point_sample,
+                                             Float *pdf) const
 {
     throw new NotImplementedException("emitter interp env sample ray");
 }
 
-Color3f InterpEnvironmentEmitter::evaluate(EmitterQuery& rec) const
+Color3f InterpEnvironmentEmitter::evaluate(EmitterQuery &rec) const
 {
     throw new NotImplementedException("interp env emitter evaluate");
 

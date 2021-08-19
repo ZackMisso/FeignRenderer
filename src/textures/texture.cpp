@@ -10,18 +10,18 @@
 
 FEIGN_BEGIN()
 
-Texture::Texture() { }
+Texture::Texture() {}
 
-Texture::~Texture() { }
+Texture::~Texture() {}
 
-void Texture::preProcess() { }
+void Texture::preProcess() {}
 
-Color3f Texture::evaluate(const Point2f& point)
+Color3f Texture::evaluate(const Point2f &point)
 {
     return Color3f(0.f);
 }
 
-Color3f Texture::evaluate(const Point3f& point)
+Color3f Texture::evaluate(const Point3f &point)
 {
     return Color3f(0.f);
 }

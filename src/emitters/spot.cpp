@@ -22,9 +22,9 @@ SpotLightEmitter::SpotLightEmitter(Point3f light_pos,
     light_dir = light_dir.normalized();
 }
 
-Color3f SpotLightEmitter::sample_nee(EmitterQuery& rec,
-                                     const Point2f& sample,
-                                     Float* pdf) const
+Color3f SpotLightEmitter::sample_nee(EmitterQuery &rec,
+                                     const Point2f &sample,
+                                     Float *pdf) const
 {
     rec.wi = (light_pos - rec.p);
     rec.wi = rec.wi.normalized();
@@ -37,7 +37,8 @@ Color3f SpotLightEmitter::sample_nee(EmitterQuery& rec,
     // LOG("light_dir", light_dir);
     // TODO: look into why the angle is flipped later
 
-    if (pdf) *pdf = 1.0;
+    if (pdf)
+        *pdf = 1.0;
 
     // a%b = |a||b|cos
     if (cos_t > light_angle)
@@ -48,22 +49,22 @@ Color3f SpotLightEmitter::sample_nee(EmitterQuery& rec,
     return COLOR_BLACK;
 }
 
-Color3f SpotLightEmitter::sample_medium(EmitterQuery& rec,
-                                        const Point2f& sample,
-                                        Float* pdf) const
+Color3f SpotLightEmitter::sample_medium(EmitterQuery &rec,
+                                        const Point2f &sample,
+                                        Float *pdf) const
 {
     throw new NotImplementedException("spot sample pos");
 }
 
-Color3f SpotLightEmitter::sample_ray(EmitterQuery& rec,
-                                     const Point2f& dir_sample,
-                                     const Point2f& point_sample,
-                                     Float* pdf) const
+Color3f SpotLightEmitter::sample_ray(EmitterQuery &rec,
+                                     const Point2f &dir_sample,
+                                     const Point2f &point_sample,
+                                     Float *pdf) const
 {
     throw new NotImplementedException("spot emitter sample ray");
 }
 
-Color3f SpotLightEmitter::evaluate(EmitterQuery& rec) const
+Color3f SpotLightEmitter::evaluate(EmitterQuery &rec) const
 {
     CoordinateFrame frame(light_dir);
 

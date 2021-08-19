@@ -80,17 +80,17 @@ Vec4f Halton::next4D()
     return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
-Sampler* Halton::copy()
+Sampler *Halton::copy()
 {
-    Halton* newSamp = new Halton();
+    Halton *newSamp = new Halton();
     newSamp->reseed(sampleSeed);
 
     return newSamp;
 }
 
-Sampler* Halton::copy(uint32_t seed)
+Sampler *Halton::copy(uint32_t seed)
 {
-    Halton* newSamp = new Halton();
+    Halton *newSamp = new Halton();
     newSamp->reseed(seed);
 
     return newSamp;

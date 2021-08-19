@@ -1,18 +1,14 @@
-This is just a collection of minor todos to make sure I get to them
-eventually.
+Future Renderer Additions:
 
-Todo:
-
-Need to make tests for spotlight to make sure it is works correctly
-Need to remove the material abstraction as it is basically the same as
-a shader within the concept of this renderer.
-The unit tests are currently segfaulting, need to figure out why
-    - I think I broke the sdfs last time I worked on the renderer
-Rename fr_mesh to fr_shape in api.h
-Add "override" to all implementations of abstractions for a small
-    performance boost.
-Need to figure out a nicer way of programmatically automating params.
-    params should be passed in as parameters instead of setting all the
-    values outside of the actual implementations.
-Maybe change the names of BSDFs in the future once Microfacet distributions
-    are working.
+Finish Removing the material abstraction
+Performance tools
+Goniometric Light Sources
+Microfacet BRDFs
+Layered BSDFs
+Uber Materials
+Pathtracing MIS
+Environment Map support
+Bidirectional Path-tracing
+Regular tracking fixes
+SDFs - full integration
+SDF / embree acceleration data structure

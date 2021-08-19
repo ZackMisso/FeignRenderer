@@ -69,12 +69,13 @@ int DiscretePDF1D::sample(Float value) const
 {
     int i = 0;
 
-    while(cdf[i] < value && i < cdf.size()-1) ++i;
+    while (cdf[i] < value && i < cdf.size() - 1)
+        ++i;
 
     return cdf[std::max(i - 1, 0)];
 }
 
-int DiscretePDF1D::sample(Float value, Float& pdf) const
+int DiscretePDF1D::sample(Float value, Float &pdf) const
 {
     int index = sample(value);
 
@@ -83,7 +84,7 @@ int DiscretePDF1D::sample(Float value, Float& pdf) const
     return index;
 }
 
-int DiscretePDF1D::sample_reuse(Float& value) const
+int DiscretePDF1D::sample_reuse(Float &value) const
 {
     int index = sample(value);
 
@@ -92,7 +93,7 @@ int DiscretePDF1D::sample_reuse(Float& value) const
     return index;
 }
 
-int DiscretePDF1D::sample_reuse(Float& value, Float& pdf) const
+int DiscretePDF1D::sample_reuse(Float &value, Float &pdf) const
 {
     int index = sample(value, pdf);
 
@@ -120,7 +121,7 @@ Float DiscretePDF1D::operator[](int entry) const
     return cdf[entry + 1] - cdf[entry];
 }
 
-Float& DiscretePDF1D::operator[](int entry)
+Float &DiscretePDF1D::operator[](int entry)
 {
     // LOG("AHHH");
     return cdf[entry];

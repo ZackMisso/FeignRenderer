@@ -15,14 +15,14 @@
 FEIGN_BEGIN()
 
 // TODO: implement adaptive sampling for video compositing
-void RenderTile::evaluate(RenderTile* tile,
-                          const Scene* scene,
-                          const Integrator* integrator,
-                          const Camera* camera,
-                          Sampler* sampler,
-                          Imagef* image,
-                          std::vector<Float>* weights,
-                          std::mutex* mutexes)
+void RenderTile::evaluate(RenderTile *tile,
+                          const Scene *scene,
+                          const Integrator *integrator,
+                          const Camera *camera,
+                          Sampler *sampler,
+                          Imagef *image,
+                          std::vector<Float> *weights,
+                          std::mutex *mutexes)
 {
     int index = 0;
 
@@ -55,7 +55,7 @@ void RenderTile::evaluate(RenderTile* tile,
                 // }
                 // else
                 // {
-                    rad *= integrator->Li(scene, sampler, ray);
+                rad *= integrator->Li(scene, sampler, ray);
                 // }
                 // if (tile->tile_index == 475) std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
 
@@ -78,7 +78,7 @@ void RenderTile::evaluate(RenderTile* tile,
                                               pixelSample + integrator->filter->filter->getSize());
 
                 filter_bounds.clip(Point2f(0, 0),
-                                   Point2f(image->width()-1, image->height()-1));
+                                   Point2f(image->width() - 1, image->height() - 1));
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -155,15 +155,16 @@ void RenderTile::evaluate(RenderTile* tile,
 
     // std::cout << "tile done: " << tile->tile_index << std::endl;
 
-    if (is_verbose) std::cout << "tile done: " << tile->tile_index << std::endl;
+    if (is_verbose)
+        std::cout << "tile done: " << tile->tile_index << std::endl;
 }
 
 RenderPool::RenderPool(int num_threads, int tile_width)
     : tile_width(tile_width)
 {
     threads = std::vector<std::thread>(num_threads);
-    tiles = std::vector<RenderTile*>();
-    active_tiles = std::vector<RenderTile*>(num_threads);
+    tiles = std::vector<RenderTile *>();
+    active_tiles = std::vector<RenderTile *>(num_threads);
 
     for (int i = 0; i < num_threads; ++i)
         active_tiles[i] = nullptr;
@@ -193,24 +194,24 @@ void RenderPool::initialize_pool(int im_w, int im_h)
         for (int j = 0; j < im_w; j += tile_width)
         {
             tiles.push_back(new RenderTile(j, i,
-                                           std::min(j+tile_width, im_w),
-                                           std::min(i+tile_width, im_h),
+                                           std::min(j + tile_width, im_w),
+                                           std::min(i + tile_width, im_h),
                                            index++));
         }
     }
 }
 
-void RenderPool::evaluate_pool(const Scene* scene,
-                               const Integrator* integrator,
-                               const Camera* camera,
-                               Sampler* sampler,
-                               Imagef& image)
+void RenderPool::evaluate_pool(const Scene *scene,
+                               const Integrator *integrator,
+                               const Camera *camera,
+                               Sampler *sampler,
+                               Imagef &image)
 {
     int completed_tiles = 0;
 
-    std::vector<RenderTile*> tiles_to_do = std::vector<RenderTile*>();
+    std::vector<RenderTile *> tiles_to_do = std::vector<RenderTile *>();
 
-    std::mutex* mutexes = new std::mutex[image.width() * image.height()];
+    std::mutex *mutexes = new std::mutex[image.width() * image.height()];
     std::vector<Float> weights = std::vector<Float>(image.width() * image.height());
 
     for (int i = 0; i < weights.size(); ++i)
@@ -225,10 +226,10 @@ void RenderPool::evaluate_pool(const Scene* scene,
 
     for (int i = 0; i < threads.size(); ++i)
     {
-        RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
+        RenderTile *tile = tiles_to_do[tiles_to_do.size() - 1];
         tiles_to_do.pop_back();
         active_tiles[i] = tile;
-        Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+        Sampler *tile_sampler = sampler->copy(sampler->next1D() * 100000000);
         threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                            tile,
                                            scene,
@@ -250,10 +251,10 @@ void RenderPool::evaluate_pool(const Scene* scene,
 
                 if (tiles_to_do.size())
                 {
-                    RenderTile* tile = tiles_to_do[tiles_to_do.size()-1];
+                    RenderTile *tile = tiles_to_do[tiles_to_do.size() - 1];
                     tiles_to_do.pop_back();
                     active_tiles[i] = tile;
-                    Sampler* tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+                    Sampler *tile_sampler = sampler->copy(sampler->next1D() * 100000000);
                     threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                                        tile,
                                                        scene,
@@ -277,8 +278,13 @@ void RenderPool::evaluate_pool(const Scene* scene,
         {
             threads[i].join();
         }
-        catch(const std::exception& ex) { }
-        catch(...) { LOG("double thread join bug.... to fix later"); }
+        catch (const std::exception &ex)
+        {
+        }
+        catch (...)
+        {
+            LOG("double thread join bug.... to fix later");
+        }
     }
 
     delete[] mutexes;

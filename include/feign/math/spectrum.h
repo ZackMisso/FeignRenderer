@@ -74,4 +74,4 @@ static inline Float Avg(const Color3f &x)
 //     return result;
 // }
 
- FEIGN_END()
+FEIGN_END()

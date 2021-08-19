@@ -10,14 +10,14 @@ FEIGN_BEGIN()
 class TransFunc
 {
 public:
-    TransFunc() { }
-    virtual ~TransFunc() { }
+    TransFunc() {}
+    virtual ~TransFunc() {}
 
     Color3f eval(Color3f tau,
                  bool startOnSurface,
                  bool endOnSurface) const;
 
-    Float sample(Sampler* sampler, bool startOnSurface) const;
+    Float sample(Sampler *sampler, bool startOnSurface) const;
 
     inline Color3f surfaceProbability(Color3f tau, bool startOnSurface) const;
     inline Color3f mediumPdf(Color3f tau, bool startOnSurface) const;
@@ -33,8 +33,8 @@ public:
 
     virtual Float sigmaBar() const = 0;
 
-    virtual Float sampleSurface(Sampler* sampler) const = 0;
-    virtual Float sampleMedium(Sampler* sampler) const = 0;
+    virtual Float sampleSurface(Sampler *sampler) const = 0;
+    virtual Float sampleMedium(Sampler *sampler) const = 0;
 };
 
 /////////////////////////////////////////////////
@@ -45,8 +45,8 @@ class LinearTrans : public TransFunc
 public:
     struct Params
     {
-        Params() : maxT(1.f) { }
-        Params(Float maxT) : maxT(maxT) { }
+        Params() : maxT(1.f) {}
+        Params(Float maxT) : maxT(maxT) {}
 
         Float maxT;
     };
@@ -60,8 +60,8 @@ public:
 
     virtual Float sigmaBar() const override final;
 
-    virtual Float sampleSurface(Sampler* sampler) const override final;
-    virtual Float sampleMedium(Sampler* sampler) const override final;
+    virtual Float sampleSurface(Sampler *sampler) const override final;
+    virtual Float sampleMedium(Sampler *sampler) const override final;
 
     Float maxT;
 };
@@ -80,8 +80,8 @@ public:
 
     virtual Float sigmaBar() const override final;
 
-    virtual Float sampleSurface(Sampler* sampler) const override final;
-    virtual Float sampleMedium(Sampler* sampler) const override final;
+    virtual Float sampleSurface(Sampler *sampler) const override final;
+    virtual Float sampleMedium(Sampler *sampler) const override final;
 };
 /////////////////////////////////////////////////
 
@@ -100,8 +100,8 @@ public:
 
     virtual Float sigmaBar() const override final;
 
-    virtual Float sampleSurface(Sampler* sampler) const override final;
-    virtual Float sampleMedium(Sampler* sampler) const override final;
+    virtual Float sampleSurface(Sampler *sampler) const override final;
+    virtual Float sampleMedium(Sampler *sampler) const override final;
 
     Float computeAlpha(Float tau) const;
 
@@ -116,15 +116,15 @@ public:
 struct TransFuncNode : public Node
 {
 public:
-    TransFuncNode() : trans_func(nullptr) { }
-    TransFuncNode(std::string name) : Node(name), trans_func(nullptr) { }
-    TransFuncNode(TransFunc* trans_func) : trans_func(trans_func) { }
+    TransFuncNode() : trans_func(nullptr) {}
+    TransFuncNode(std::string name) : Node(name), trans_func(nullptr) {}
+    TransFuncNode(TransFunc *trans_func) : trans_func(trans_func) {}
 
-    TransFunc* operator()() { return trans_func; }
+    TransFunc *operator()() { return trans_func; }
 
     ~TransFuncNode() { delete trans_func; }
 
-    TransFunc* trans_func;
+    TransFunc *trans_func;
 };
 /////////////////////////////////////////////////
 

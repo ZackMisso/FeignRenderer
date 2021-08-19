@@ -17,7 +17,7 @@ Diffuse::Diffuse(Color3f albedo)
 {
 }
 
-void Diffuse::sample(MaterialClosure& closure) const
+void Diffuse::sample(MaterialClosure &closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
@@ -33,7 +33,7 @@ void Diffuse::sample(MaterialClosure& closure) const
     }
 }
 
-void Diffuse::evaluate(MaterialClosure& closure) const
+void Diffuse::evaluate(MaterialClosure &closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0 ||
         CoordinateFrame::cosTheta(closure.wo) <= 0)

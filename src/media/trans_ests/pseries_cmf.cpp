@@ -11,19 +11,19 @@
 
 FEIGN_BEGIN()
 
-Color3f Trans_PseriesCMF::transmittance(const Ray3f& ray,
-                                        Sampler* sampler,
-                                        MediaClosure& closure) const
+Color3f Trans_PseriesCMF::transmittance(const Ray3f &ray,
+                                        Sampler *sampler,
+                                        MediaClosure &closure) const
 {
     throw new NotImplementedException("pseries_cmf");
 
-    #if NONEXPMEDIA
-        throw new NotSupportedException("pseries cmf does not work for non-classical media");
-        return 0.f;
-    #else
-        // TODO
-        return 0.f;
-    #endif
+#if NONEXPMEDIA
+    throw new NotSupportedException("pseries cmf does not work for non-classical media");
+    return 0.f;
+#else
+    // TODO
+    return 0.f;
+#endif
 }
 
 FEIGN_END()

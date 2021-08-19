@@ -20,7 +20,7 @@ struct Ray3f
     Ray3f(Vector3f d);
     Ray3f(Point3f o, Vector3f d);
     Ray3f(Point3f o, Vector3f d, float n, float f, uint32_t depth = 0);
-    Ray3f(const Ray3f& other);
+    Ray3f(const Ray3f &other);
 
     Point3f operator()(Float t) const;
     Ray3f operator~() const; // reverse ray

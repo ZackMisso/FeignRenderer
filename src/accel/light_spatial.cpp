@@ -18,11 +18,12 @@ SpatialLightAccel::SpatialLightAccel(int width, int height, int depth)
 
 void SpatialLightAccel::clear()
 {
-    if (bounds) delete[] bounds;
+    if (bounds)
+        delete[] bounds;
 }
 
-void SpatialLightAccel::build(const BBox3f& scene_bounds,
-                              const std::vector<Emitter*>& emitters)
+void SpatialLightAccel::build(const BBox3f &scene_bounds,
+                              const std::vector<Emitter *> &emitters)
 {
     // The recipe for building this acceleration structure is to make the pdf
     // proportional to the inverse distance. While calculating the inverse
@@ -44,17 +45,17 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
     for (int k = 0; k < depth; ++k)
     {
         Float min_z = scene_bounds.sample_z(Float(k) / Float(depth));
-        Float max_z = scene_bounds.sample_z(Float(k+1) / Float(depth));
+        Float max_z = scene_bounds.sample_z(Float(k + 1) / Float(depth));
 
         for (int i = 0; i < height; ++i)
         {
             Float min_y = scene_bounds.sample_y(Float(i) / Float(height));
-            Float max_y = scene_bounds.sample_y(Float(i+1) / Float(height));
+            Float max_y = scene_bounds.sample_y(Float(i + 1) / Float(height));
 
             for (int j = 0; j < width; ++j)
             {
                 Float min_x = scene_bounds.sample_x(Float(j) / Float(width));
-                Float max_x = scene_bounds.sample_x(Float(j+1) / Float(width));
+                Float max_x = scene_bounds.sample_x(Float(j + 1) / Float(width));
 
                 int index = ((k * height) + i) * width + j;
 
@@ -94,9 +95,9 @@ void SpatialLightAccel::build(const BBox3f& scene_bounds,
 }
 
 void SpatialLightAccel::sampleEmitter(Point3f pos,
-                                      Sampler* sampler,
-                                      int& index,
-                                      Float& pdf)
+                                      Sampler *sampler,
+                                      int &index,
+                                      Float &pdf)
 {
     Point3f local = light_area_bounds.local_space(pos).min(0.f).max(0.f);
 
@@ -104,17 +105,15 @@ void SpatialLightAccel::sampleEmitter(Point3f pos,
     int y = floor(local(1) * height);
     int z = floor(local(2) * depth);
 
-    index = bounds[((z * height) + y) * width + x].emitter_pdf->sample
-    (
+    index = bounds[((z * height) + y) * width + x].emitter_pdf->sample(
         sampler->next1D(),
-        pdf
-    );
+        pdf);
 }
 
 void SpatialLightAccel::sampleEmitters(Point3f pos,
-                                       Sampler* sampler,
-                                       std::vector<int>& indices,
-                                       std::vector<Float>& pdf)
+                                       Sampler *sampler,
+                                       std::vector<int> &indices,
+                                       std::vector<Float> &pdf)
 {
     for (int i = 0; i < indices.size(); ++i)
     {
@@ -124,11 +123,9 @@ void SpatialLightAccel::sampleEmitters(Point3f pos,
         int y = floor(local(1) * height);
         int z = floor(local(2) * depth);
 
-        indices[i] = bounds[((z * height) + y) * width + x].emitter_pdf->sample
-        (
+        indices[i] = bounds[((z * height) + y) * width + x].emitter_pdf->sample(
             sampler->next1D(),
-            pdf[i]
-        );
+            pdf[i]);
     }
 }
 

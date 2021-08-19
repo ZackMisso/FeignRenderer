@@ -25,21 +25,21 @@ class MediaClosure;
 class Media
 {
 public:
-    Media() { }
-    virtual ~Media() { }
+    Media() {}
+    virtual ~Media() {}
 
-    virtual void preProcess() { }
+    virtual void preProcess() {}
 
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const = 0;
+                           Sampler *sampler,
+                           MediaClosure &closure) const = 0;
 
     virtual Color3f transmittance(Ray3f ray,
-                                  Sampler* sampler,
-                                  MediaClosure& closure) const = 0;
+                                  Sampler *sampler,
+                                  MediaClosure &closure) const = 0;
 
-    virtual Float sample_phase(const Vector3f& wo,
-                               Vector3f& wi,
+    virtual Float sample_phase(const Vector3f &wo,
+                               Vector3f &wi,
                                Point2f samp) const = 0;
 
     virtual bool isGlobal() const { return false; }
@@ -52,24 +52,22 @@ public:
     struct Params
     {
     public:
-        Params
-        (
+        Params(
             std::string trans_node,
             std::string phase_node,
             std::string sampling_node,
             std::string density_func_node,
             std::string trans_func_node,
-            Transform& transform,
+            Transform &transform,
             Color3f abs,
-            Color3f scat
-        ) : trans_node(trans_node),
-            phase_node(phase_node),
-            sampling_node(sampling_node),
-            density_func_node(density_func_node),
-            trans_func_node(trans_func_node),
-            transform(transform),
-            abs(abs),
-            scat(scat) { }
+            Color3f scat) : trans_node(trans_node),
+                            phase_node(phase_node),
+                            sampling_node(sampling_node),
+                            density_func_node(density_func_node),
+                            trans_func_node(trans_func_node),
+                            transform(transform),
+                            abs(abs),
+                            scat(scat) {}
 
         std::string trans_node;
         std::string phase_node;
@@ -81,27 +79,27 @@ public:
         Color3f scat;
     };
 
-    StandardMedium(TransmittanceEstimatorNode* trans_node,
-                   PhaseFunctionNode* phase_node,
-                   MediumSamplingNode* sampling_node,
-                   DensityFunctionNode* density_func_node,
-                   TransFuncNode* trans_func_node,
-                   Transform& transform,
+    StandardMedium(TransmittanceEstimatorNode *trans_node,
+                   PhaseFunctionNode *phase_node,
+                   MediumSamplingNode *sampling_node,
+                   DensityFunctionNode *density_func_node,
+                   TransFuncNode *trans_func_node,
+                   Transform &transform,
                    Color3f abs,
                    Color3f scat);
 
     virtual void preProcess();
 
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const;
+                           Sampler *sampler,
+                           MediaClosure &closure) const;
 
     virtual Color3f transmittance(Ray3f ray,
-                                  Sampler* sampler,
-                                  MediaClosure& closure) const;
+                                  Sampler *sampler,
+                                  MediaClosure &closure) const;
 
-    virtual Float sample_phase(const Vector3f& wo,
-                               Vector3f& wi,
+    virtual Float sample_phase(const Vector3f &wo,
+                               Vector3f &wi,
                                Point2f samp) const
     {
         return phase->phase->sample(samp, wo, wi);
@@ -109,11 +107,11 @@ public:
 
     virtual bool isGlobal() const { return false; }
 
-    DensityFunctionNode* density;
-    MediumSamplingNode* sampling;
-    PhaseFunctionNode* phase;
-    TransmittanceEstimatorNode* trans_est;
-    TransFuncNode* trans_func;
+    DensityFunctionNode *density;
+    MediumSamplingNode *sampling;
+    PhaseFunctionNode *phase;
+    TransmittanceEstimatorNode *trans_est;
+    TransFuncNode *trans_func;
 
     Transform transform;
     Color3f abs_coeff;
@@ -127,7 +125,7 @@ public:
     struct Params
     {
         Params(Float avg_density)
-            : avg_density(avg_density) { }
+            : avg_density(avg_density) {}
 
         Float avg_density;
     };
@@ -135,15 +133,15 @@ public:
     HomogeneousAbsorbingMedia(Float avg_density);
 
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const;
+                           Sampler *sampler,
+                           MediaClosure &closure) const;
 
     virtual Color3f transmittance(Ray3f ray,
-                                  Sampler* sampler,
-                                  MediaClosure& closure) const;
+                                  Sampler *sampler,
+                                  MediaClosure &closure) const;
 
-    virtual Float sample_phase(const Vector3f& wo,
-                               Vector3f& wi,
+    virtual Float sample_phase(const Vector3f &wo,
+                               Vector3f &wi,
                                Point2f samp) const { return 0.f; }
 
     virtual bool isGlobal() const;
@@ -157,15 +155,15 @@ public:
 struct MediaNode : public Node
 {
 public:
-    MediaNode() : media(nullptr) { }
-    MediaNode(std::string name) : Node(name), media(nullptr) { }
-    MediaNode(Media* media) : media(media) { }
+    MediaNode() : media(nullptr) {}
+    MediaNode(std::string name) : Node(name), media(nullptr) {}
+    MediaNode(Media *media) : media(media) {}
 
-    Media* operator()() { return media; }
+    Media *operator()() { return media; }
 
     ~MediaNode() { delete media; }
 
-    Media* media;
+    Media *media;
 };
 /////////////////////////////////////////////////
 

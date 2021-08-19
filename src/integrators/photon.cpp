@@ -19,10 +19,10 @@ FEIGN_BEGIN()
 
 // TODO: make a volumetric version of photon mapping
 
-PhotonMapping::PhotonMapping(FilterNode* filter,
-                             Params* params)
+PhotonMapping::PhotonMapping(FilterNode *filter,
+                             Params *params)
     : Integrator(filter, params),
-      num_photons(params->num_photons) { }
+      num_photons(params->num_photons) {}
 
 PhotonMapping::~PhotonMapping()
 {
@@ -30,8 +30,8 @@ PhotonMapping::~PhotonMapping()
 }
 
 // Integrator pre-processing now has to happen last
-void PhotonMapping::preProcess(const Scene* scene,
-                               Sampler* sampler)
+void PhotonMapping::preProcess(const Scene *scene,
+                               Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 
@@ -39,11 +39,11 @@ void PhotonMapping::preProcess(const Scene* scene,
     scatter_photons(scene, sampler);
 }
 
-void PhotonMapping::scatter_photons(const Scene* scene,
-                                    Sampler* sampler)
+void PhotonMapping::scatter_photons(const Scene *scene,
+                                    Sampler *sampler)
 {
     // create initial list of photons
-    Photon* photons = new Photon[num_photons]();
+    Photon *photons = new Photon[num_photons]();
     int created_photons = 0;
 
     // loop until we have filled our photon quota
@@ -57,7 +57,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
         // sample a light source uniformly
         Float emitter_pdf = 1.f;
-        Emitter* emitter = scene->choose_emitter(sampler, &emitter_pdf);
+        Emitter *emitter = scene->choose_emitter(sampler, &emitter_pdf);
 
         // sample the initial location and direction
         EmitterQuery eqr;
@@ -91,7 +91,7 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             // if (i != 0) assert(false);
 
             // evaluate shader / colliding location
-            const MaterialShader* shader = scene->getShapeMaterialShader(its);
+            const MaterialShader *shader = scene->getShapeMaterialShader(its);
             closure.albedo = 0.0;
             closure.pdf = 1.0;
 
@@ -110,7 +110,8 @@ void PhotonMapping::scatter_photons(const Scene* scene,
             closure.wi = its.toLocal(-ray.dir);
             shader->sample(closure);
 
-            if (closure.pdf == 0.f) break;
+            if (closure.pdf == 0.f)
+                break;
 
             // prepare to go to the next iteration
             ray = Ray3f(its.p,
@@ -120,8 +121,10 @@ void PhotonMapping::scatter_photons(const Scene* scene,
                         ray.depth + 1);
 
             Float cosTerm = its.s_frame.n % ray.dir;
-            if (cosTerm < 0.f) cosTerm = -cosTerm;
-            if (closure.is_specular) cosTerm = 1.f;
+            if (cosTerm < 0.f)
+                cosTerm = -cosTerm;
+            if (closure.is_specular)
+                cosTerm = 1.f;
 
             // LOG(STR(closure.albedo));
 
@@ -139,7 +142,8 @@ void PhotonMapping::scatter_photons(const Scene* scene,
 
             // apply russian roulette termination
             Float rr_prob = std::min(div_power.maxValue(), 1.f);
-            if (sampler->next1D() > rr_prob) break;
+            if (sampler->next1D() > rr_prob)
+                break;
             power /= rr_prob;
 
             // LOG("OLD: " + STR(old_power));
@@ -160,9 +164,9 @@ void PhotonMapping::scatter_photons(const Scene* scene,
     photon_storage->build(scene->sceneBounds, photons, num_photons);
 }
 
-Color3f PhotonMapping::Li(const Scene* scene,
-                          Sampler* sampler,
-                          const Ray3f& cam_ray,
+Color3f PhotonMapping::Li(const Scene *scene,
+                          Sampler *sampler,
+                          const Ray3f &cam_ray,
                           bool debug) const
 {
     Ray3f ray = cam_ray;
@@ -185,7 +189,7 @@ Color3f PhotonMapping::Li(const Scene* scene,
                                               true);
 
     // get the material shader from the intersected mesh
-    const MaterialShader* shader = scene->getShapeMaterialShader(its);
+    const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
     closure.wi = its.toLocal(-ray.dir);
 

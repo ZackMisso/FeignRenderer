@@ -12,11 +12,11 @@ FEIGN_BEGIN()
 
 GridObj::GridObj()
     : ObjMesh(),
-      resolution(Vec2i(2, 2)), terrain_map(nullptr) { }
+      resolution(Vec2i(2, 2)), terrain_map(nullptr) {}
 
-GridObj::GridObj(Vec2i res, TextureNode* terrain_map)
+GridObj::GridObj(Vec2i res, TextureNode *terrain_map)
     : ObjMesh(),
-      resolution(res), terrain_map(terrain_map) { }
+      resolution(res), terrain_map(terrain_map) {}
 
 void GridObj::preProcess(bool requires_processing)
 {
@@ -39,13 +39,13 @@ void GridObj::preProcess(bool requires_processing)
     {
         for (int j = 0; j < resolution[0]; ++j)
         {
-            vs[index] = Point3f((max - min) * float(j) / float(resolution[0]-1) + min,
+            vs[index] = Point3f((max - min) * float(j) / float(resolution[0] - 1) + min,
                                 0.f,
-                                (max - min) * float(i) / float(resolution[1]-1) + min);
+                                (max - min) * float(i) / float(resolution[1] - 1) + min);
 
             ns[index] = Normal3f(0.f, 1.f, 0.f);
-            uvs[index] = Vec2f(float(j) / float(resolution[0]-1),
-                               float(i) / float(resolution[1]-1));
+            uvs[index] = Vec2f(float(j) / float(resolution[0] - 1),
+                               float(i) / float(resolution[1] - 1));
 
             index++;
         }
@@ -61,10 +61,10 @@ void GridObj::preProcess(bool requires_processing)
             // [0,1]
             // [0,0]
 
-            int one = (i-1) * resolution[0] + j;
-            int two = (i) * resolution[0] + j;
-            int three = (i) * resolution[0] + (j-1);
-            int four = (i-1) * resolution[0] + (j-1);
+            int one = (i - 1) * resolution[0] + j;
+            int two = (i)*resolution[0] + j;
+            int three = (i)*resolution[0] + (j - 1);
+            int four = (i - 1) * resolution[0] + (j - 1);
 
             Vec3u inds_one = Vec3u(one, four, two);
             Vec3u inds_two = Vec3u(four, three, two);
@@ -104,7 +104,7 @@ void GridObj::preProcess(bool requires_processing)
             Point3f p1 = vs[i1_vs];
             Point3f p2 = vs[i2_vs];
 
-            Normal3f tri_norm = ((p1-p0)^(p2-p0));
+            Normal3f tri_norm = ((p1 - p0) ^ (p2 - p0));
 
             if (tri_norm.sqrNorm() == 0.f)
             {
@@ -131,7 +131,7 @@ void GridObj::preProcess(bool requires_processing)
     // apply any geometry shader to the underlying mesh
     if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
     {
-        geomShader->shader->evaluate((void*)this);
+        geomShader->shader->evaluate((void *)this);
     }
 
     // surface area information is typically only required for

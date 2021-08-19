@@ -44,31 +44,31 @@ struct MaterialClosure
 {
     MaterialClosure();
 
-    MaterialClosure(Sampler* sampler,
-                    Intersection* its,
-                    Ray3f* ray,
-                    const Scene* scene,
+    MaterialClosure(Sampler *sampler,
+                    Intersection *its,
+                    Ray3f *ray,
+                    const Scene *scene,
                     bool sample_all_emitters = false,
                     bool last_bounce_specular = false);
 
-    MaterialClosure(Sampler* sampler,
-                    const Scene* scene,
+    MaterialClosure(Sampler *sampler,
+                    const Scene *scene,
                     bool sample_all_emitters = false,
                     bool last_bounce_specular = false);
 
     // TODO: why is this a separate operation
-    void accumulate_shadow_rays(const MaterialShader* shader);
+    void accumulate_shadow_rays(const MaterialShader *shader);
 
     // always inputs
-    Sampler* sampler;        // the sampler to use
-    Intersection* its; // a reference to the intersection info
-    Ray3f* ray;        // a reference to the incoming ray
+    Sampler *sampler;  // the sampler to use
+    Intersection *its; // a reference to the intersection info
+    Ray3f *ray;        // a reference to the incoming ray
     Vector3f wi;
-    const Scene* scene;      // a reference to the scene
-    const Media* media;
+    const Scene *scene; // a reference to the scene
+    const Media *media;
 
     // sometimes inputs or outputs depending on sampling
-    Vector3f wo;             // the outgoing ray
+    Vector3f wo;                          // the outgoing ray
     std::vector<EmitterEval> shadow_rays; // TODO: get rid of this
 
     // always outputs
@@ -96,21 +96,21 @@ struct PhotonTracingClosure
 {
     PhotonTracingClosure();
 
-    PhotonTracingClosure(Sampler* sampler,
-                         Intersection* its,
-                         Ray3f* ray,
-                         const Scene* scene);
+    PhotonTracingClosure(Sampler *sampler,
+                         Intersection *its,
+                         Ray3f *ray,
+                         const Scene *scene);
 
-    Sampler* sampler;        // the sampler to use
-    Intersection* its; // a reference to the intersection info
-    Ray3f* ray;        // a reference to the incoming ray
-    const Scene* scene;      // a reference to the scene
+    Sampler *sampler;   // the sampler to use
+    Intersection *its;  // a reference to the intersection info
+    Ray3f *ray;         // a reference to the incoming ray
+    const Scene *scene; // a reference to the scene
     Vector3f wi;
-    const Media* media;
+    const Media *media;
 
-    Vector3f wo;             // the outgoing ray
-    Float pdf;               // the pdf of the bsdf sample
-    Color3f albedo;          // blah
+    Vector3f wo;    // the outgoing ray
+    Float pdf;      // the pdf of the bsdf sample
+    Color3f albedo; // blah
 };
 
 struct PhotonGatherClosure
@@ -122,15 +122,15 @@ struct PhotonGatherClosure
 // evaluated
 struct MediaClosure
 {
-    MediaClosure(const Media* medium,
+    MediaClosure(const Media *medium,
                  Float t_min,
                  Float t_max)
         : medium(medium),
           t_min(t_min),
           t_max(t_max),
-          sampled_t(t_max) { }
+          sampled_t(t_max) {}
 
-    MediaClosure(const Media* medium,
+    MediaClosure(const Media *medium,
                  Float t_min,
                  Float t_max,
                  bool last_event_surface,
@@ -140,7 +140,7 @@ struct MediaClosure
           t_max(t_max),
           sampled_t(t_max),
           last_event(last_event_surface),
-          next_event(next_event_surface) { }
+          next_event(next_event_surface) {}
 
     bool handleScatter()
     {
@@ -148,7 +148,7 @@ struct MediaClosure
     }
 
     // input
-    const Media* medium;
+    const Media *medium;
     Float t_max;
     Float t_min;
 

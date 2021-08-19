@@ -11,7 +11,7 @@
 
 FEIGN_BEGIN()
 
-PointEmitter::PointEmitter() : Emitter() { }
+PointEmitter::PointEmitter() : Emitter() {}
 
 PointEmitter::PointEmitter(Color3f I,
                            Point3f pos)
@@ -20,18 +20,19 @@ PointEmitter::PointEmitter(Color3f I,
     // does nothing
 }
 
-void PointEmitter::preProcess() { }
+void PointEmitter::preProcess() {}
 
-Color3f PointEmitter::sample_nee(EmitterQuery& rec,
-                                const Point2f& sample,
-                                Float* pdf) const
+Color3f PointEmitter::sample_nee(EmitterQuery &rec,
+                                 const Point2f &sample,
+                                 Float *pdf) const
 {
     rec.wi = (pos - rec.p);
     rec.sqr_dist = rec.wi.sqrNorm();
     // LOG("sqr_dist", rec.sqr_dist);
     rec.wi = rec.wi.normalized();
 
-    if (pdf) *pdf = 1.0;
+    if (pdf)
+        *pdf = 1.0;
 
     // TODO: the INV_FOURPI should actually be the pdf, and should be incorporated
     //       in later.... but whatever for now.
@@ -40,9 +41,9 @@ Color3f PointEmitter::sample_nee(EmitterQuery& rec,
     // return rec.p;
 }
 
-Color3f PointEmitter::sample_medium(EmitterQuery& rec,
-                                    const Point2f& sample,
-                                    Float* pdf) const
+Color3f PointEmitter::sample_medium(EmitterQuery &rec,
+                                    const Point2f &sample,
+                                    Float *pdf) const
 {
     throw new NotImplementedException("point sample pos");
 
@@ -50,10 +51,10 @@ Color3f PointEmitter::sample_medium(EmitterQuery& rec,
 }
 
 // TODO: figure out if you should be dividing by the uniform sphere pdf
-Color3f PointEmitter::sample_ray(EmitterQuery& rec,
-                                 const Point2f& dir_sample,
-                                 const Point2f& point_sample,
-                                 Float* pdf) const
+Color3f PointEmitter::sample_ray(EmitterQuery &rec,
+                                 const Point2f &dir_sample,
+                                 const Point2f &point_sample,
+                                 Float *pdf) const
 {
     rec.p = pos; // point_sample is not used since a point light is a point
     rec.wi = WarpSpace::sqrToUniSph(dir_sample);
@@ -62,7 +63,7 @@ Color3f PointEmitter::sample_ray(EmitterQuery& rec,
     return I * INV_FOURPI;
 }
 
-Color3f PointEmitter::evaluate(EmitterQuery& rec) const
+Color3f PointEmitter::evaluate(EmitterQuery &rec) const
 {
     throw new NotImplementedException("point evaluate");
 

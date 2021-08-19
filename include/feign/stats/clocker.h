@@ -25,7 +25,7 @@ typedef std::chrono::duration<Float> Duration;
 class Clocker
 {
 private:
-    static Clocker* instance;
+    static Clocker *instance;
 
     Clocker();
 
@@ -33,8 +33,9 @@ private:
     std::vector<TimePt> startTimes;
     std::vector<Duration> durations;
     std::vector<bool> actives;
+
 public:
-    static Clocker* getInstance();
+    static Clocker *getInstance();
     static void initialize();
     static void deinitialize();
     static void printResults();

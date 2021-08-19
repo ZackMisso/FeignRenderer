@@ -39,7 +39,7 @@ void GaussFilter::preProcess()
     expCoeff[1] = std::exp(alpha * yrad * yrad);
 }
 
-Float GaussFilter::evaluate(const Point2f& p) const
+Float GaussFilter::evaluate(const Point2f &p) const
 {
     Float xval = 0.f;
     Float yval = 0.f;

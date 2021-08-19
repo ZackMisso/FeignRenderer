@@ -13,11 +13,11 @@ FEIGN_BEGIN()
 
 SDFBox::SDFBox(Point3f tlc,
                Point3f brc,
-               const MediumBoundry* boundry,
+               const MediumBoundry *boundry,
                bool is_null)
     : SDFShape(boundry, is_null),
       tlc(tlc),
-      brc(brc) { }
+      brc(brc) {}
 
 Float SDFBox::evaluate(Point3f pt) const
 {
@@ -26,7 +26,7 @@ Float SDFBox::evaluate(Point3f pt) const
     Vector3f center = (tlc + brc) / 2.f;
     Vector3f q = (pt - center).abs() - (half_bounds);
 
-    return q.max(0.f).norm() + fmin(fmax(q(0),fmax(q(1),q(2))),0.f);
+    return q.max(0.f).norm() + fmin(fmax(q(0), fmax(q(1), q(2))), 0.f);
 }
 
 BBox3f SDFBox::boundingBox() const

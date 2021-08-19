@@ -15,9 +15,9 @@ DistantEmitter::DistantEmitter()
     throw new NotImplementedException("emitter distant");
 }
 
-Color3f DistantEmitter::sample_nee(EmitterQuery& rec,
-                                   const Point2f& sample,
-                                   Float* pdf) const
+Color3f DistantEmitter::sample_nee(EmitterQuery &rec,
+                                   const Point2f &sample,
+                                   Float *pdf) const
 {
     // Vector3f light_pos = Warp::squareToUniformSphereCap(sample, cos_angle);
     // Vector3f light_pos_world = transform * lightPos;
@@ -32,17 +32,17 @@ Color3f DistantEmitter::sample_nee(EmitterQuery& rec,
     throw new NotImplementedException("emitter distant sample li");
 }
 
-Color3f DistantEmitter::sample_medium(EmitterQuery& rec,
-                                      const Point2f& sample,
-                                      Float* pdf) const
+Color3f DistantEmitter::sample_medium(EmitterQuery &rec,
+                                      const Point2f &sample,
+                                      Float *pdf) const
 {
     throw new NotImplementedException("emitter distant sample pos");
 }
 
-Color3f DistantEmitter::sample_ray(EmitterQuery& rec,
-                                   const Point2f& dir_sample,
-                                   const Point2f& point_sample,
-                                   Float* pdf) const
+Color3f DistantEmitter::sample_ray(EmitterQuery &rec,
+                                   const Point2f &dir_sample,
+                                   const Point2f &point_sample,
+                                   Float *pdf) const
 {
     throw new NotImplementedException("emitter distant sample ray");
 }
@@ -60,7 +60,7 @@ Point3f DistantEmitter::getCenter() const
     return Point3f(0.f);
 }
 
-Color3f DistantEmitter::evaluate(EmitterQuery& rec) const
+Color3f DistantEmitter::evaluate(EmitterQuery &rec) const
 {
     throw new NotImplementedException("distant evaluate");
 

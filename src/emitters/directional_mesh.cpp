@@ -42,9 +42,9 @@ void DirectionalMeshEmitter::preProcess()
     sa_pdf->normalize();
 }
 
-Color3f DirectionalMeshEmitter::sample_nee(EmitterQuery& rec,
-                                           const Point2f& sample,
-                                           Float* pdf) const
+Color3f DirectionalMeshEmitter::sample_nee(EmitterQuery &rec,
+                                           const Point2f &sample,
+                                           Float *pdf) const
 {
     // actual visibility is checked as apart of the actual integrator, so sampling
     // this emitter is functionally the same as sampling a directional emitter.
@@ -56,30 +56,32 @@ Color3f DirectionalMeshEmitter::sample_nee(EmitterQuery& rec,
     rec.wi = -light_dir;
     // LOG("dir: ");
     // LOG(light_dir);
-    if (pdf) *pdf = 1.0;
+    if (pdf)
+        *pdf = 1.0;
 
     return intensity;
 }
 
-Color3f DirectionalMeshEmitter::sample_medium(EmitterQuery& rec,
-                                              const Point2f& sample,
-                                              Float* pdf) const
+Color3f DirectionalMeshEmitter::sample_medium(EmitterQuery &rec,
+                                              const Point2f &sample,
+                                              Float *pdf) const
 {
     throw new NotImplementedException("emitter directional");
 }
 
-Color3f DirectionalMeshEmitter::sample_ray(EmitterQuery& rec,
-                                           const Point2f& dir_sample,
-                                           const Point2f& point_sample,
-                                           Float* pdf) const
+Color3f DirectionalMeshEmitter::sample_ray(EmitterQuery &rec,
+                                           const Point2f &dir_sample,
+                                           const Point2f &point_sample,
+                                           Float *pdf) const
 {
     throw new NotImplementedException("emitter directional");
 }
 
-Color3f DirectionalMeshEmitter::evaluate(EmitterQuery& rec) const
+Color3f DirectionalMeshEmitter::evaluate(EmitterQuery &rec) const
 {
     // if wi is roughly == light dir return the radiance
-    if (-rec.wi[2] < Epsilon) return Color3f(0.f);
+    if (-rec.wi[2] < Epsilon)
+        return Color3f(0.f);
     return intensity;
 
     if ((light_dir - rec.wi).sqrNorm() < Epsilon)
@@ -90,7 +92,7 @@ Color3f DirectionalMeshEmitter::evaluate(EmitterQuery& rec) const
     return COLOR_BLACK;
 }
 
-void DirectionalMeshEmitter::setMeshNode(MeshNode* node)
+void DirectionalMeshEmitter::setMeshNode(MeshNode *node)
 {
     mesh = node;
 }

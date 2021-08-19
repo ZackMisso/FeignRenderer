@@ -10,20 +10,20 @@
 
 FEIGN_BEGIN()
 
-WhittedIntegrator::WhittedIntegrator(FilterNode* filter, Integrator::Params* params)
+WhittedIntegrator::WhittedIntegrator(FilterNode *filter, Integrator::Params *params)
     : Integrator(filter, params)
 {
 }
 
-void WhittedIntegrator::preProcess(const Scene* scene, Sampler* sampler)
+void WhittedIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
 // TODO: create a volumetric version of a direct integrator
-Color3f WhittedIntegrator::Li(const Scene* scene,
-                              Sampler* sampler,
-                              const Ray3f& cam_ray,
+Color3f WhittedIntegrator::Li(const Scene *scene,
+                              Sampler *sampler,
+                              const Ray3f &cam_ray,
                               bool debug) const
 {
     Intersection its;
@@ -37,7 +37,7 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         return scene->env_emission(ray);
     }
 
-    const MaterialShader* shader = scene->getShapeMaterialShader(its);
+    const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
     // create the material closure
     MaterialClosure closure = MaterialClosure(sampler,
@@ -60,7 +60,8 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
         shader->sample(closure);
 
         // random termination
-        if (sampler->next1D() > rr_cont_probability) return Color3f(0.f);
+        if (sampler->next1D() > rr_cont_probability)
+            return Color3f(0.f);
 
         Ray3f new_ray(its.p,
                       its.toWorld(closure.wo),
@@ -69,7 +70,8 @@ Color3f WhittedIntegrator::Li(const Scene* scene,
                       ray.depth + 1);
 
         Color3f beta = closure.albedo * (1.f / rr_cont_probability);
-        if (beta.isZero()) return closure.nee + closure.emission;
+        if (beta.isZero())
+            return closure.nee + closure.emission;
 
         Color3f recur = Li(scene, sampler, new_ray);
 

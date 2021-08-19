@@ -13,7 +13,7 @@ FEIGN_BEGIN()
 SDFSphere::SDFSphere(Point3f center,
                      Float radius,
                      Float inter,
-                     const MediumBoundry* boundry,
+                     const MediumBoundry *boundry,
                      bool is_null)
     : SDFShape(boundry, is_null),
       center(center),

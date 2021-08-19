@@ -14,29 +14,31 @@
 
 FEIGN_BEGIN()
 
-void Integrator::preProcess(const Scene* scene, Sampler* sampler)
+void Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
-    if (!filter) LOG("filter node never created");
-    if (!filter->filter) LOG("filter object never created");
+    if (!filter)
+        LOG("filter node never created");
+    if (!filter->filter)
+        LOG("filter object never created");
     filter->filter->preProcess();
 }
 
 // TODO: multithreaded implementation still needs to get clocking support implemented
-void Integrator::render_fast(const Scene* scene,
-                             const Camera* camera,
-                             Sampler* sampler,
-                             Imagef& image) const
+void Integrator::render_fast(const Scene *scene,
+                             const Camera *camera,
+                             Sampler *sampler,
+                             Imagef &image) const
 {
-    RenderPool* pool = new RenderPool(12, 64);
+    RenderPool *pool = new RenderPool(12, 64);
     pool->initialize_pool(image.width(), image.height());
     pool->evaluate_pool(scene, this, camera, sampler, image);
     delete pool;
 }
 
-void Integrator::render(const Scene* scene,
-                        const Camera* camera,
-                        Sampler* sampler,
-                        Imagef& image) const
+void Integrator::render(const Scene *scene,
+                        const Camera *camera,
+                        Sampler *sampler,
+                        Imagef &image) const
 {
     image.clear();
     // TODO: create black and white images
@@ -55,9 +57,9 @@ void Integrator::render(const Scene* scene,
                 Ray3f ray;
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
 
-                #if CLOCKING
-                    Clocker::startClock("integrator");
-                #endif
+#if CLOCKING
+                Clocker::startClock("integrator");
+#endif
 
                 radiance *= Li(scene, sampler, ray);
 
@@ -71,19 +73,19 @@ void Integrator::render(const Scene* scene,
                     LOG("inf estimate at: " + STR(i) + " " + STR(j));
                 }
 
-                #if CLOCKING
-                    Clocker::endClock("integrator");
-                #endif
+#if CLOCKING
+                Clocker::endClock("integrator");
+#endif
 
                 BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
                                               pixelSample + filter->filter->getSize());
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
-                                   Point2f(camera->getFilmSize()[0]-1, camera->getFilmSize()[1]-1));
+                                   Point2f(camera->getFilmSize()[0] - 1, camera->getFilmSize()[1] - 1));
 
-                #if CLOCKING
-                    Clocker::startClock("filter");
-                #endif
+#if CLOCKING
+                Clocker::startClock("filter");
+#endif
 
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
@@ -102,17 +104,16 @@ void Integrator::render(const Scene* scene,
                     }
                 }
 
-                #if CLOCKING
-                    Clocker::endClock("filter");
-                #endif
+#if CLOCKING
+                Clocker::endClock("filter");
+#endif
             }
         }
     }
 
-    #if CLOCKING
-        Clocker::startClock("filter");
-    #endif
-
+#if CLOCKING
+    Clocker::startClock("filter");
+#endif
 
     for (int i = 0; i < image.height(); ++i)
     {
@@ -133,9 +134,9 @@ void Integrator::render(const Scene* scene,
         }
     }
 
-    #if CLOCKING
-        Clocker::endClock("filter");
-    #endif
+#if CLOCKING
+    Clocker::endClock("filter");
+#endif
 }
 
 FEIGN_END()

@@ -11,17 +11,17 @@
 
 FEIGN_BEGIN()
 
-Color3f Trans_DeltaTracking::transmittance(const Ray3f& ray,
-                                           Sampler* sampler,
-                                           MediaClosure& closure) const
+Color3f Trans_DeltaTracking::transmittance(const Ray3f &ray,
+                                           Sampler *sampler,
+                                           MediaClosure &closure) const
 {
-    #if NONEXPMEDIA
-        throw new NotSupportedException("delta tracking does not work for non-classical media");
-        return 0.f;
-    #else
-        throw new NotImplementedException("delta tracking tr");
-        return 0.f;
-    #endif
+#if NONEXPMEDIA
+    throw new NotSupportedException("delta tracking does not work for non-classical media");
+    return 0.f;
+#else
+    throw new NotImplementedException("delta tracking tr");
+    return 0.f;
+#endif
 }
 
 FEIGN_END()

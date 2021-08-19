@@ -13,18 +13,18 @@ FEIGN_BEGIN()
 
 // TODO: for now this will only support homogeneous global media
 
-VolPath_Integrator::VolPath_Integrator(FilterNode* filter,
-                                       Integrator::Params* params)
-    : Integrator(filter, params) { }
+VolPath_Integrator::VolPath_Integrator(FilterNode *filter,
+                                       Integrator::Params *params)
+    : Integrator(filter, params) {}
 
-void VolPath_Integrator::preProcess(const Scene* scene, Sampler* sampler)
+void VolPath_Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
     Integrator::preProcess(scene, sampler);
 }
 
-Color3f VolPath_Integrator::Li(const Scene* scene,
-                               Sampler* sampler,
-                               const Ray3f& cam_ray,
+Color3f VolPath_Integrator::Li(const Scene *scene,
+                               Sampler *sampler,
+                               const Ray3f &cam_ray,
                                bool debug) const
 {
     Color3f Li = Color3f(0.f);
@@ -49,7 +49,8 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
     {
         // if (debug) std::cout << "beginning bounce: " << bounces << std::endl;
         // std::cout << "max bounces: " << max_bounces << std::endl;
-        if (beta.isZero()) break;
+        if (beta.isZero())
+            break;
 
         Intersection its;
 
@@ -118,7 +119,8 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
 
                 Li += closure.nee;
 
-                if (sampler->next1D() > rr_prob) break;
+                if (sampler->next1D() > rr_prob)
+                    break;
 
                 beta /= rr_prob;
 
@@ -133,7 +135,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
         if (its.intersected_mesh->is_null)
         {
             // if (debug) std::cout << "intersecting boundry " << std::endl;
-            const MediumBoundry* boundry = its.intersected_mesh->boundry;
+            const MediumBoundry *boundry = its.intersected_mesh->boundry;
 
             if (boundry)
             {
@@ -143,16 +145,12 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                 if (CoordinateFrame::cosTheta(closure.wi) <= 0)
                 {
                     // if (debug) std::cout << "exiting " << std::endl;
-                    closure.media = (boundry->outside) ?
-                                    closure.media = boundry->outside->media :
-                                    nullptr;
+                    closure.media = (boundry->outside) ? closure.media = boundry->outside->media : nullptr;
                 }
                 else
                 {
                     // if (debug) std::cout << "entering " << std::endl;
-                    closure.media = (boundry->inside) ?
-                                    closure.media = boundry->inside->media :
-                                    nullptr;
+                    closure.media = (boundry->inside) ? closure.media = boundry->inside->media : nullptr;
                 }
             }
 
@@ -170,7 +168,7 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
             continue;
         }
 
-        const MaterialShader* shader = scene->getShapeMaterialShader(its);
+        const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
         // if (debug) std::cout << "evaluating normally " << std::endl;
 
@@ -213,8 +211,10 @@ Color3f VolPath_Integrator::Li(const Scene* scene,
                     ray.depth + 1);
 
         Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < 0.f) cosTerm = -cosTerm;
-        if (closure.is_specular) cosTerm = 1.f;
+        if (cosTerm < 0.f)
+            cosTerm = -cosTerm;
+        if (closure.is_specular)
+            cosTerm = 1.f;
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);

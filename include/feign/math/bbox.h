@@ -63,32 +63,32 @@ struct BBox3
         return (max + min) * (T)0.5;
     }
 
-    bool contains(const Vec3<T>& p) const
+    bool contains(const Vec3<T> &p) const
     {
         return p > min && p < max;
     }
 
-    bool containsOrOnBoundry(const Vec3<T>& p) const
+    bool containsOrOnBoundry(const Vec3<T> &p) const
     {
         return p >= min && p <= max;
     }
 
-    bool contains(const BBox3<T>& bbox) const
+    bool contains(const BBox3<T> &bbox) const
     {
         return bbox.min > min && bbox.max < max;
     }
 
-    bool containsOrOnBoundry(const BBox3<T>& bbox) const
+    bool containsOrOnBoundry(const BBox3<T> &bbox) const
     {
         return bbox.min >= min && bbox.max <= max;
     }
 
-    bool overlapExcludeBoundry(const BBox3<T>& bbox) const
+    bool overlapExcludeBoundry(const BBox3<T> &bbox) const
     {
         return bbox.min < min && bbox.max > max;
     }
 
-    bool overlaps(const BBox3<T>& bbox) const
+    bool overlaps(const BBox3<T> &bbox) const
     {
         return bbox.min <= min && bbox.max >= max;
     }
@@ -110,20 +110,20 @@ struct BBox3
         return max - min;
     }
 
-    void expand(const Vec3<T>& p)
+    void expand(const Vec3<T> &p)
     {
         min = min.min(p);
         max = max.max(p);
     }
 
-    void expand(const BBox3<T>& bbox)
+    void expand(const BBox3<T> &bbox)
     {
         // std::cout << ""
         min = min.min(bbox.min);
         max = max.max(bbox.max);
     }
 
-    static BBox3<T> merge(const BBox3<T>& one, const BBox3<T>& two)
+    static BBox3<T> merge(const BBox3<T> &one, const BBox3<T> &two)
     {
         // TODO: rename these methods because they are not intuitive
         Vec3<T> min_vec = one.min.min(two.min);
@@ -132,7 +132,7 @@ struct BBox3
         return BBox3<T>(min_vec, max_vec);
     }
 
-    bool intersect(const Ray3f& ray) const
+    bool intersect(const Ray3f &ray) const
     {
         float nearT = -std::numeric_limits<float>::infinity();
         float farT = std::numeric_limits<float>::infinity();
@@ -145,19 +145,22 @@ struct BBox3
 
             if (ray.dir(i) == 0)
             {
-                if (origin < minVal || origin > maxVal) return false;
+                if (origin < minVal || origin > maxVal)
+                    return false;
             }
             else
             {
                 float t1 = (minVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
                 float t2 = (maxVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
 
-                if (t1 > t2) std::swap(t1, t2);
+                if (t1 > t2)
+                    std::swap(t1, t2);
 
                 nearT = std::max(t1, nearT);
                 farT = std::min(t2, farT);
 
-                if (!(nearT <= farT)) return false;
+                if (!(nearT <= farT))
+                    return false;
             }
         }
 
@@ -165,7 +168,7 @@ struct BBox3
     }
 
     // i hope this is correct
-    bool intersect(const Ray3f& ray, Float& near, Float& far) const
+    bool intersect(const Ray3f &ray, Float &near, Float &far) const
     {
         near = -std::numeric_limits<float>::infinity();
         far = std::numeric_limits<float>::infinity();
@@ -178,26 +181,29 @@ struct BBox3
 
             if (ray.dir(i) == 0)
             {
-                if (origin < minVal || origin > maxVal) return false;
+                if (origin < minVal || origin > maxVal)
+                    return false;
             }
             else
             {
                 Float t1 = (minVal - origin) * (1.0 / ray.dir(i));
                 Float t2 = (maxVal - origin) * (1.0 / ray.dir(i));
 
-                if (t1 > t2) std::swap(t1, t2);
+                if (t1 > t2)
+                    std::swap(t1, t2);
 
                 near = std::max(t1, near);
                 far = std::min(t2, far);
 
-                if (!(near <= far)) return false;
+                if (!(near <= far))
+                    return false;
             }
         }
 
         return ray.near <= far && near <= ray.far;
     }
 
-    void split_into_eight(std::vector<BBox3<T> >& sections) const
+    void split_into_eight(std::vector<BBox3<T> > &sections) const
     {
         // this returns 8 bounding boxes which are the results of directly splitting
         // the bbox about the midpoints of each of its dimensions.
@@ -245,7 +251,7 @@ struct BBox3
                      (max(2) - min(2)) * z);
     }
 
-    Point3f local_space(Point3f& point)
+    Point3f local_space(Point3f &point)
     {
         return Point3f((point(0) - min(0)) / (max(0) - min(0)),
                        (point(1) - min(1)) / (max(1) - min(1)),
@@ -275,8 +281,10 @@ struct BBox3
 
     void infoDump() const
     {
-        std::cout << "Min: " << "(" << min(0) << ", " << min(1) << ", " << min(2) << ")" << std::endl;
-        std::cout << "Max: " << "(" << max(0) << ", " << max(1) << ", " << max(2) << ")" << std::endl;
+        std::cout << "Min: "
+                  << "(" << min(0) << ", " << min(1) << ", " << min(2) << ")" << std::endl;
+        std::cout << "Max: "
+                  << "(" << max(0) << ", " << max(1) << ", " << max(2) << ")" << std::endl;
     }
 
     Vec3<T> min;
@@ -326,27 +334,27 @@ struct BBox2
         return p > min && p < max;
     }
 
-    bool containsOrOnBoundry(const Vec2<T>& p) const
+    bool containsOrOnBoundry(const Vec2<T> &p) const
     {
         return p >= min && p <= max;
     }
 
-    bool contains(const BBox2<T>& bbox) const
+    bool contains(const BBox2<T> &bbox) const
     {
         return bbox.min > min && bbox.max < max;
     }
 
-    bool containsOrOnBoundry(const BBox2<T>& bbox) const
+    bool containsOrOnBoundry(const BBox2<T> &bbox) const
     {
         return bbox.min >= min && bbox.max <= max;
     }
 
-    bool overlapExcludeBoundry(const BBox2<T>& bbox) const
+    bool overlapExcludeBoundry(const BBox2<T> &bbox) const
     {
         return bbox.min < min && bbox.max > max;
     }
 
-    bool overlaps(const BBox2<T>& bbox) const
+    bool overlaps(const BBox2<T> &bbox) const
     {
         return bbox.min <= min && bbox.max >= max;
     }
@@ -368,28 +376,32 @@ struct BBox2
         return max - min;
     }
 
-    void expand(const Vec2<T>& p)
+    void expand(const Vec2<T> &p)
     {
         min = min.min(p);
         max = max.max(p);
     }
 
-    void expand(const BBox2<T>& bbox)
+    void expand(const BBox2<T> &bbox)
     {
         // std::cout << ""
         min = min.min(bbox.min);
         max = max.max(bbox.max);
     }
 
-    void clip(const Vec2<T>& n_min, const Vec2<T>& n_max)
+    void clip(const Vec2<T> &n_min, const Vec2<T> &n_max)
     {
-        if (min(0) < n_min(0)) min[0] = n_min(0);
-        if (min(1) < n_min(1)) min[1] = n_min(1);
-        if (max(0) > n_max(0)) max[0] = n_max(0);
-        if (max(1) > n_max(1)) max[1] = n_max(1);
+        if (min(0) < n_min(0))
+            min[0] = n_min(0);
+        if (min(1) < n_min(1))
+            min[1] = n_min(1);
+        if (max(0) > n_max(0))
+            max[0] = n_max(0);
+        if (max(1) > n_max(1))
+            max[1] = n_max(1);
     }
 
-    static BBox2<T> merge(const BBox2<T>& one, const BBox2<T>& two)
+    static BBox2<T> merge(const BBox2<T> &one, const BBox2<T> &two)
     {
         // TODO: rename these methods because they are not intuitive
         Vec2<T> min_vec = one.min.min(two.min);
@@ -406,8 +418,10 @@ struct BBox2
 
     void infoDump() const
     {
-        std::cout << "Min: " << "(" << min(0) << ", " << min(1) << ")" << std::endl;
-        std::cout << "Max: " << "(" << max(0) << ", " << max(1) << ")" << std::endl;
+        std::cout << "Min: "
+                  << "(" << min(0) << ", " << min(1) << ")" << std::endl;
+        std::cout << "Max: "
+                  << "(" << max(0) << ", " << max(1) << ")" << std::endl;
         std::cout << "Extents: " << (max - min).norm() << std::endl;
     }
 

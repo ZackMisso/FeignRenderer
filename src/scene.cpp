@@ -11,21 +11,21 @@
 FEIGN_BEGIN()
 
 Scene::Scene(std::string name,
-             IntegratorNode* integrator,
-             SamplerNode* sampler,
-             CameraNode* camera,
-             MediaNode* media)
+             IntegratorNode *integrator,
+             SamplerNode *sampler,
+             CameraNode *camera,
+             MediaNode *media)
     : name(name),
       integrator_node(integrator),
       sampler_node(sampler),
       camera_node(camera),
       env_medium_node(media)
 {
-    emitters = std::vector<Emitter*>();
-    env_emitters = std::vector<Emitter*>();
-    shapes = std::vector<Shape*>();
-    objects = std::vector<ObjectNode*>();
-    mediums = std::vector<Media*>();
+    emitters = std::vector<Emitter *>();
+    env_emitters = std::vector<Emitter *>();
+    shapes = std::vector<Shape *>();
+    objects = std::vector<ObjectNode *>();
+    mediums = std::vector<Media *>();
     ray_accel = nullptr;
     light_selection = nullptr;
     target = nullptr;
@@ -33,8 +33,10 @@ Scene::Scene(std::string name,
 
 Scene::~Scene()
 {
-    if (ray_accel) delete ray_accel;
-    if (light_selection) delete light_selection;
+    if (ray_accel)
+        delete ray_accel;
+    if (light_selection)
+        delete light_selection;
     integrator_node = nullptr;
     sampler_node = nullptr;
     camera_node = nullptr;
@@ -47,7 +49,7 @@ Scene::~Scene()
     mediums.clear();
 }
 
-void Scene::preProcess(const GlobalParams& globals)
+void Scene::preProcess(const GlobalParams &globals)
 {
     sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
 
@@ -79,7 +81,7 @@ void Scene::preProcess(const GlobalParams& globals)
     {
         if (globals.sdf_only)
         {
-            ray_accel->addSDFShape((SDFShape*)shapes[i]);
+            ray_accel->addSDFShape((SDFShape *)shapes[i]);
         }
         else
         {
@@ -120,15 +122,15 @@ void Scene::preProcess(const GlobalParams& globals)
 
 void Scene::renderScene() const
 {
-    Integrator* integrator = integrator_node->integrator;
-    Camera* camera = camera_node->camera;
-    Sampler* sampler = sampler_node->sampler;
+    Integrator *integrator = integrator_node->integrator;
+    Camera *camera = camera_node->camera;
+    Sampler *sampler = sampler_node->sampler;
 
     CHECK_EXISTS(integrator, "scene: no specified integrator");
     CHECK_EXISTS(camera, "scene: no specified camera");
     CHECK_EXISTS(sampler, "scene: no specified sampler");
 
-    Imagef* image;
+    Imagef *image;
 
     if (target)
     {
@@ -144,17 +146,17 @@ void Scene::renderScene() const
     // perform preprocessing if the integrator requires it. i.e. scatter photons
     integrator->preProcess(this, sampler);
 
-    #if GOTTAGOFAST
-        integrator->render_fast(this,
-                                camera,
-                                sampler,
-                                *image);
-    #else
-        integrator->render(this,
-                           camera,
-                           sampler,
-                           *image);
-    #endif
+#if GOTTAGOFAST
+    integrator->render_fast(this,
+                            camera,
+                            sampler,
+                            *image);
+#else
+    integrator->render(this,
+                       camera,
+                       sampler,
+                       *image);
+#endif
 
     // if a target image is specified, then it is assumed that the renderer is
     // not going to be writing an image a file.
@@ -165,14 +167,14 @@ void Scene::renderScene() const
     }
 }
 
-bool Scene::intersect_full(const Ray3f& ray, Intersection& its) const
+bool Scene::intersect_full(const Ray3f &ray, Intersection &its) const
 {
     return ray_accel->intersect(ray, its);
 }
 
 // bounaded mediums are represented by null objects, which should be skipped
 // during certain processes. Which is why this method exists
-bool Scene::intersect_non_null(const Ray3f& ray, Intersection& its) const
+bool Scene::intersect_non_null(const Ray3f &ray, Intersection &its) const
 {
     Ray3f tmp_ray = ray;
 
@@ -203,11 +205,11 @@ bool Scene::intersect_non_null(const Ray3f& ray, Intersection& its) const
 // TODO: this needs to be thoroughly tested in a bunch of different scenarios,
 //       i'm fairly certain this will start breaking once multiple different,
 //       volumes get added to the system
-bool Scene::intersect_transmittance(const Ray3f& ray,
-                                    const Media* initial_media,
-                                    Intersection& its,
-                                    Sampler* sampler,
-                                    Color3f& beta,
+bool Scene::intersect_transmittance(const Ray3f &ray,
+                                    const Media *initial_media,
+                                    Intersection &its,
+                                    Sampler *sampler,
+                                    Color3f &beta,
                                     bool last_event_surface,
                                     bool next_event_surface) const
 {
@@ -215,7 +217,7 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     Ray3f tmp_ray = ray;
 
     std::vector<Ray3f> rays = std::vector<Ray3f>();
-    std::vector<const Media*> mediums = std::vector<const Media*>();
+    std::vector<const Media *> mediums = std::vector<const Media *>();
 
     // need to do an initial
     if (initial_media)
@@ -258,7 +260,7 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     {
         if (its.intersected_mesh->is_null)
         {
-            const Media* media = its.intersected_mesh->boundry->inside->media;
+            const Media *media = its.intersected_mesh->boundry->inside->media;
 
             if (media)
             {
@@ -292,7 +294,8 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
                     rays.push_back(medium_ray);
                     mediums.push_back(media);
 
-                    if (its.t >= tmp_ray.far) break;
+                    if (its.t >= tmp_ray.far)
+                        break;
                 }
             }
             else
@@ -327,18 +330,20 @@ bool Scene::intersect_transmittance(const Ray3f& ray,
     return false;
 }
 
-void Scene::addEmitter(Emitter* emitter)
+void Scene::addEmitter(Emitter *emitter)
 {
-    if (emitter->isEnvironmentEmitter()) env_emitters.push_back(emitter);
-    if (!emitter->isEnvironmentOnlyEmitter()) emitters.push_back(emitter);
+    if (emitter->isEnvironmentEmitter())
+        env_emitters.push_back(emitter);
+    if (!emitter->isEnvironmentOnlyEmitter())
+        emitters.push_back(emitter);
 }
 
-void Scene::addMedium(Media* media)
+void Scene::addMedium(Media *media)
 {
     mediums.push_back(media);
 }
 
-const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) const
+const MaterialShader *Scene::getShapeMaterialShader(const Intersection &its) const
 {
     int id = its.intersected_mesh->getInstID();
 
@@ -349,7 +354,7 @@ const MaterialShader* Scene::getShapeMaterialShader(const Intersection& its) con
 // TODO: this should also work for media closures...
 // TODO: this currently has the bug where if a mesh light is hit it gets
 //       double counted
-void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
+void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(emitters.size());
 
@@ -411,9 +416,11 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
 
-            if (cos_term < -Epsilon) cos_term = -cos_term;
+            if (cos_term < -Epsilon)
+                cos_term = -cos_term;
 
-            if (!in_media) Li *= cos_term;
+            if (!in_media)
+                Li *= cos_term;
 
             closure.shadow_rays[i].valid = true;
             closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
@@ -424,7 +431,7 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
             }
             else
             {
-                closure.shadow_rays[i].throughput = Li / (emitter_pdf) * transmittance;
+                closure.shadow_rays[i].throughput = Li / (emitter_pdf)*transmittance;
             }
 
             // Note: bsdf_values are fully accumulated later
@@ -432,12 +439,12 @@ void Scene::eval_all_emitters(MaterialClosure& closure, bool in_media) const
     }
 }
 
-void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
+void Scene::eval_one_emitter(MaterialClosure &closure, bool in_media) const
 {
     closure.shadow_rays = std::vector<EmitterEval>(1);
 
     Float choice_pdf = 0.f;
-    Emitter* emitter = choose_emitter(closure, &choice_pdf);
+    Emitter *emitter = choose_emitter(closure, &choice_pdf);
 
     if (!emitter)
     {
@@ -502,7 +509,8 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
         {
             Float cos_term = closure.its->s_frame.n % eqr.wi;
 
-            if (cos_term < -Epsilon) cos_term = -cos_term;
+            if (cos_term < -Epsilon)
+                cos_term = -cos_term;
 
             Li *= cos_term;
         }
@@ -523,7 +531,7 @@ void Scene::eval_one_emitter(MaterialClosure& closure, bool in_media) const
     }
 }
 
-void Scene::eval_multi_emitters(MaterialClosure& closure,
+void Scene::eval_multi_emitters(MaterialClosure &closure,
                                 int to_sample,
                                 bool in_media) const
 {
@@ -532,7 +540,7 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
     for (int i = 0; i < to_sample; ++i)
     {
         Float choice_pdf = 0.f;
-        Emitter* emitter = choose_emitter(closure, &choice_pdf);
+        Emitter *emitter = choose_emitter(closure, &choice_pdf);
 
         if (!emitter)
         {
@@ -597,7 +605,8 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
             {
                 Float cos_term = closure.its->s_frame.n % eqr.wi;
 
-                if (cos_term < -Epsilon) cos_term = -cos_term;
+                if (cos_term < -Epsilon)
+                    cos_term = -cos_term;
 
                 Li *= cos_term;
             }
@@ -619,7 +628,7 @@ void Scene::eval_multi_emitters(MaterialClosure& closure,
     }
 }
 
-Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
+Emitter *Scene::choose_emitter(MaterialClosure &closure, Float *pdf) const
 {
     Float choice_pdf;
     int emitter;
@@ -637,7 +646,8 @@ Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
         unsigned int mesh_id = closure.its->intersected_mesh->getInstID();
         *pdf = choice_pdf;
 
-        if (emit_id == mesh_id) return nullptr;
+        if (emit_id == mesh_id)
+            return nullptr;
     }
 
     *pdf = choice_pdf;
@@ -645,7 +655,7 @@ Emitter* Scene::choose_emitter(MaterialClosure& closure, Float* pdf) const
 }
 
 // uniformly returns an emitter (used for light tracing / photon mapping)
-Emitter* Scene::choose_emitter(Sampler* sampler, Float* pdf) const
+Emitter *Scene::choose_emitter(Sampler *sampler, Float *pdf) const
 {
     Float val = sampler->next1D();
 
@@ -655,10 +665,10 @@ Emitter* Scene::choose_emitter(Sampler* sampler, Float* pdf) const
     return emitters[emitter];
 }
 
-void Scene::accumulate_emission(MaterialClosure& closure) const
+void Scene::accumulate_emission(MaterialClosure &closure) const
 {
     int id = closure.its->intersected_mesh->getInstID();
-    EmitterNode* emitter = objects[id]->emitter;
+    EmitterNode *emitter = objects[id]->emitter;
 
     if (emitter)
     {
@@ -673,7 +683,7 @@ void Scene::accumulate_emission(MaterialClosure& closure) const
     }
 }
 
-Color3f Scene::env_emission(const Ray3f& ray) const
+Color3f Scene::env_emission(const Ray3f &ray) const
 {
     EmitterQuery eqr;
     eqr.wi = ray.dir;

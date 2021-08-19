@@ -41,9 +41,9 @@ void MeshEmitter::preProcess()
     sa_pdf->normalize();
 }
 
-Color3f MeshEmitter::sample_nee(EmitterQuery& rec,
-                                const Point2f& sample,
-                                Float* pdf) const
+Color3f MeshEmitter::sample_nee(EmitterQuery &rec,
+                                const Point2f &sample,
+                                Float *pdf) const
 {
     Point2f uv_samp = sample;
     int primitive_index = sa_pdf->sample_reuse(uv_samp[0], *pdf);
@@ -73,9 +73,9 @@ Color3f MeshEmitter::sample_nee(EmitterQuery& rec,
     return intensity;
 }
 
-Color3f MeshEmitter::sample_medium(EmitterQuery& rec,
-                                   const Point2f& sample,
-                                   Float* pdf) const
+Color3f MeshEmitter::sample_medium(EmitterQuery &rec,
+                                   const Point2f &sample,
+                                   Float *pdf) const
 {
     // NOTE: this should never be called. This type of sampling is only used for
     //       point lights and spot lights
@@ -84,22 +84,23 @@ Color3f MeshEmitter::sample_medium(EmitterQuery& rec,
     return Color3f(0.f);
 }
 
-Color3f MeshEmitter::sample_ray(EmitterQuery& rec,
-                                const Point2f& dir_sample,
-                                const Point2f& point_sample,
-                                Float* pdf) const
+Color3f MeshEmitter::sample_ray(EmitterQuery &rec,
+                                const Point2f &dir_sample,
+                                const Point2f &point_sample,
+                                Float *pdf) const
 {
     throw new NotImplementedException("mesh emitter sample ray");
 }
 
-Color3f MeshEmitter::evaluate(EmitterQuery& rec) const
+Color3f MeshEmitter::evaluate(EmitterQuery &rec) const
 {
-    if (-rec.wi[2] < Epsilon) return Color3f(0.f);
+    if (-rec.wi[2] < Epsilon)
+        return Color3f(0.f);
 
     return intensity;
 }
 
-void MeshEmitter::setMeshNode(MeshNode* node)
+void MeshEmitter::setMeshNode(MeshNode *node)
 {
     mesh = node;
 }

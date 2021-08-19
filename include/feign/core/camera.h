@@ -21,22 +21,22 @@ FEIGN_BEGIN()
 class Camera
 {
 public:
-    Camera() { }
-    virtual ~Camera() { }
+    Camera() {}
+    virtual ~Camera() {}
 
     // takes in a film and apperture sample
     // calculates a generated ray according to the samples
     // returns an importance to weight the generated ray
-    virtual Color3f sampleRay(Ray3f& ray,
-                              const Point2f& filmSamp,
-                              const Point2f& appSamp) const = 0;
+    virtual Color3f sampleRay(Ray3f &ray,
+                              const Point2f &filmSamp,
+                              const Point2f &appSamp) const = 0;
 
-    virtual void preProcess() { }
+    virtual void preProcess() {}
 
     Vec2i getFilmSize() const { return filmSize; }
     void setFilmSize(Vec2i param) { filmSize = param; }
 
-    void setCameraToWorld(const Transform& param) { cameraToWorld = param; }
+    void setCameraToWorld(const Transform &param) { cameraToWorld = param; }
 
 protected:
     Transform cameraToWorld;
@@ -69,7 +69,7 @@ public:
               far(far),
               focal_dist(focal_dist),
               app_radius(app_radius),
-              image_res(image_res) { }
+              image_res(image_res) {}
 
         Vector3f origin;
         Vector3f target;
@@ -90,17 +90,17 @@ public:
                 uint32_t width,
                 uint32_t height);
 
-    ~Perspective() { }
+    ~Perspective() {}
 
     virtual void preProcess();
 
-    virtual Color3f sampleRay(Ray3f& ray,
-                              const Point2f& filmSamp,
-                              const Point2f& appSamp) const;
+    virtual Color3f sampleRay(Ray3f &ray,
+                              const Point2f &filmSamp,
+                              const Point2f &appSamp) const;
 
     void print() const;
 
-    void setTransform(const Transform& transform)
+    void setTransform(const Transform &transform)
     {
         sampleToCamera = transform;
     }
@@ -122,13 +122,13 @@ class Orthographic : public Camera
 {
 public:
     Orthographic();
-    ~Orthographic() { }
+    ~Orthographic() {}
 
     virtual void preProcess();
 
-    virtual Color3f sampleRay(Ray3f& ray,
-                              const Point2f& filmSamp,
-                              const Point2f& appSamp) const;
+    virtual Color3f sampleRay(Ray3f &ray,
+                              const Point2f &filmSamp,
+                              const Point2f &appSamp) const;
 };
 /////////////////////////////////////////////////
 
@@ -138,13 +138,13 @@ public:
 struct CameraNode : public Node
 {
 public:
-    CameraNode() : camera(nullptr) { }
-    CameraNode(std::string name) : Node(name), camera(nullptr) { }
-    CameraNode(Camera* camera) : camera(camera) { }
+    CameraNode() : camera(nullptr) {}
+    CameraNode(std::string name) : Node(name), camera(nullptr) {}
+    CameraNode(Camera *camera) : camera(camera) {}
 
     ~CameraNode() { delete camera; }
 
-    Camera* camera;
+    Camera *camera;
 };
 /////////////////////////////////////////////////
 

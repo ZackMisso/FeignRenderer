@@ -14,8 +14,8 @@ FEIGN_BEGIN()
 
 struct MediumBoundry
 {
-    MediumBoundry(MediaNode* inside, MediaNode* outside)
-        : inside(inside), outside(outside) { }
+    MediumBoundry(MediaNode *inside, MediaNode *outside)
+        : inside(inside), outside(outside) {}
 
     ~MediumBoundry()
     {
@@ -23,14 +23,14 @@ struct MediumBoundry
         outside = nullptr;
     }
 
-    MediumBoundry(const MediumBoundry& boundry)
+    MediumBoundry(const MediumBoundry &boundry)
     {
         inside = boundry.inside;
         outside = boundry.outside;
     }
 
-    MediaNode* inside;
-    MediaNode* outside;
+    MediaNode *inside;
+    MediaNode *outside;
 };
 
 FEIGN_END()

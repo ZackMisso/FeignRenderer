@@ -23,13 +23,13 @@ struct Photon
     Photon()
         : pos(Vector3f(0.f)),
           dir(Vector3f(0.f, 1.f, 0.f)),
-          power(Color3f(1.f)) { }
+          power(Color3f(1.f)) {}
 
     Photon(Point3f pos, Vector3f dir, Color3f power)
-        : pos(pos), dir(dir), power(power) { }
+        : pos(pos), dir(dir), power(power) {}
 
-    Photon(const Photon& other)
-        : pos(other.pos), dir(other.dir), power(other.power) { }
+    Photon(const Photon &other)
+        : pos(other.pos), dir(other.dir), power(other.power) {}
 
     Point3f pos;
     Vector3f dir;
@@ -43,12 +43,12 @@ struct Photon
 class PhotonAccel
 {
 public:
-    PhotonAccel() { }
-    virtual ~PhotonAccel() { }
+    PhotonAccel() {}
+    virtual ~PhotonAccel() {}
 
     virtual void clear() = 0;
-    virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons,
+    virtual void build(const BBox3f &scene_bounds,
+                       Photon *photons,
                        int count) = 0;
 
     // test functions
@@ -56,19 +56,19 @@ public:
                             Float radius) const { return false; }
 
     // evaluate all photons in a given radius
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float radius) const = 0;
     // evaluate nearest k photons
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       int k_photons) const = 0;
     // evaluate kernel
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float rad_1,
                       Float rad_2) const = 0;
 };
@@ -79,41 +79,41 @@ public:
 class PhotonArray : public PhotonAccel
 {
 public:
-    PhotonArray() : PhotonAccel() { }
-    virtual ~PhotonArray() { }
+    PhotonArray() : PhotonAccel() {}
+    virtual ~PhotonArray() {}
 
     virtual void clear();
-    virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons,
+    virtual void build(const BBox3f &scene_bounds,
+                       Photon *photons,
                        int count);
 
     // used for debugging
     virtual bool nearPhoton(Point3f pt, Float radius) const;
 
     // utility methods
-    void maybeAddPhoton(std::vector<std::pair<Float, int> >& closest_k,
-                        const Point3f& pt,
+    void maybeAddPhoton(std::vector<std::pair<Float, int> > &closest_k,
+                        const Point3f &pt,
                         int k,
                         int photon) const;
 
     // evaluate all photons in a given radius
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float radius) const;
     // evaluate nearest k photons
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       int k_photons) const;
     // evaluate kernel
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float rad_1,
                       Float rad_2) const;
 
-    Photon* photons;
+    Photon *photons;
     int num_photons;
 };
 /////////////////////////////////////////////////
@@ -128,69 +128,69 @@ public:
     struct BVHNode
     {
         BVHNode();
-        BVHNode(BVHNode* parent);
-        BVHNode(const BBox3f& bounds,
-                const std::vector<Photon*>& photons);
-        BVHNode(BVHNode* parent,
-                const BBox3f& bounds,
-                const std::vector<Photon*>& photons);
+        BVHNode(BVHNode *parent);
+        BVHNode(const BBox3f &bounds,
+                const std::vector<Photon *> &photons);
+        BVHNode(BVHNode *parent,
+                const BBox3f &bounds,
+                const std::vector<Photon *> &photons);
         ~BVHNode();
 
         // this is the main build routine
         void split(Float radius, int k);
 
-        BVHNode* traverse(Point3f point);
+        BVHNode *traverse(Point3f point);
 
-        void getAllPhotonsInRadius(std::vector<Photon*>& photons,
+        void getAllPhotonsInRadius(std::vector<Photon *> &photons,
                                    Point3f point,
                                    Float radius) const;
-        void getClosestKPhotons(std::vector<Photon*>& photons,
+        void getClosestKPhotons(std::vector<Photon *> &photons,
                                 Point3f point,
                                 int k) const;
 
         BBox3f bounds;
-        std::vector<Photon*> photons;
+        std::vector<Photon *> photons;
 
-        BVHNode* parent;
-        BVHNode* x1_y1_z1;
-        BVHNode* x1_y2_z1;
-        BVHNode* x1_y1_z2;
-        BVHNode* x1_y2_z2;
-        BVHNode* x2_y1_z1;
-        BVHNode* x2_y2_z1;
-        BVHNode* x2_y1_z2;
-        BVHNode* x2_y2_z2;
+        BVHNode *parent;
+        BVHNode *x1_y1_z1;
+        BVHNode *x1_y2_z1;
+        BVHNode *x1_y1_z2;
+        BVHNode *x1_y2_z2;
+        BVHNode *x2_y1_z1;
+        BVHNode *x2_y2_z1;
+        BVHNode *x2_y1_z2;
+        BVHNode *x2_y2_z2;
     };
 
-    PhotonBVH() { }
-    virtual ~PhotonBVH() { }
+    PhotonBVH() {}
+    virtual ~PhotonBVH() {}
 
     virtual void clear();
-    virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons,
+    virtual void build(const BBox3f &scene_bounds,
+                       Photon *photons,
                        int count);
 
     // used for debugging
     virtual bool nearPhoton(Point3f pt, Float radius) const;
 
     // evaluate all photons in a given radius
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float radius) const;
     // evaluate nearest k photons
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       int k_photons) const;
     // evaluate kernel
-    virtual void eval(MaterialClosure& closure,
-                      const MaterialShader* shader,
-                      const Point3f& pt,
+    virtual void eval(MaterialClosure &closure,
+                      const MaterialShader *shader,
+                      const Point3f &pt,
                       Float rad_1,
                       Float rad_2) const;
 
-    BVHNode* photon_bvh;
+    BVHNode *photon_bvh;
 };
 /////////////////////////////////////////////////
 
@@ -201,12 +201,12 @@ public:
 class PhotonKDTree : public PhotonAccel
 {
 public:
-    PhotonKDTree() { }
-    virtual ~PhotonKDTree() { }
+    PhotonKDTree() {}
+    virtual ~PhotonKDTree() {}
 
     virtual void clear();
-    virtual void build(const BBox3f& scene_bounds,
-                       Photon* photons,
+    virtual void build(const BBox3f &scene_bounds,
+                       Photon *photons,
                        int count);
 
     // TODO

@@ -11,7 +11,7 @@
 FEIGN_BEGIN()
 
 ImageTexture::ImageTexture(std::string filename, Vec3f scale)
-    : filename(filename), scale(scale) { }
+    : filename(filename), scale(scale) {}
 
 ImageTexture::~ImageTexture()
 {
@@ -24,7 +24,7 @@ void ImageTexture::preProcess()
     image = Imagef(filename);
 }
 
-Color3f ImageTexture::evaluate(const Point2f& point)
+Color3f ImageTexture::evaluate(const Point2f &point)
 {
     Point2f sample;
 
@@ -36,7 +36,8 @@ Color3f ImageTexture::evaluate(const Point2f& point)
 
     return Color3f(image(sample(0), sample(1), 0),
                    image(sample(0), sample(1), 1),
-                   image(sample(0), sample(1), 2)) * scale;
+                   image(sample(0), sample(1), 2)) *
+           scale;
 }
 
 FEIGN_END()

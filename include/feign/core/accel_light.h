@@ -21,22 +21,22 @@ FEIGN_BEGIN();
 class LightAccel
 {
 public:
-    LightAccel() { }
-    virtual ~LightAccel() { }
+    LightAccel() {}
+    virtual ~LightAccel() {}
 
     virtual void clear() = 0;
-    virtual void build(const BBox3f& scene_bounds,
-                       const std::vector<Emitter*>& emitters) = 0;
+    virtual void build(const BBox3f &scene_bounds,
+                       const std::vector<Emitter *> &emitters) = 0;
 
     virtual void sampleEmitter(Point3f pos,
-                               Sampler* sampler,
-                               int& index,
-                               Float& pdf) = 0;
+                               Sampler *sampler,
+                               int &index,
+                               Float &pdf) = 0;
 
     virtual void sampleEmitters(Point3f pos,
-                                Sampler* sampler,
-                                std::vector<int>& indices,
-                                std::vector<Float>& pdf) = 0;
+                                Sampler *sampler,
+                                std::vector<int> &indices,
+                                std::vector<Float> &pdf) = 0;
 };
 /////////////////////////////////////////////////
 
@@ -49,18 +49,18 @@ public:
     NaiveLightAccel();
 
     virtual void clear();
-    virtual void build(const BBox3f& scene_bounds,
-                       const std::vector<Emitter*>& emitters);
+    virtual void build(const BBox3f &scene_bounds,
+                       const std::vector<Emitter *> &emitters);
 
     virtual void sampleEmitter(Point3f pos,
-                               Sampler* sampler,
-                               int& index,
-                               Float& pdf);
+                               Sampler *sampler,
+                               int &index,
+                               Float &pdf);
 
     virtual void sampleEmitters(Point3f pos,
-                                Sampler* sampler,
-                                std::vector<int>& indices,
-                                std::vector<Float>& pdf);
+                                Sampler *sampler,
+                                std::vector<int> &indices,
+                                std::vector<Float> &pdf);
 
 protected:
     int number_of_emitters;
@@ -78,7 +78,7 @@ public:
     struct Params
     {
         Params(int width, int height, int depth)
-            : width(width), height(height), depth(depth) { }
+            : width(width), height(height), depth(depth) {}
 
         int width;
         int height;
@@ -93,27 +93,27 @@ public:
         }
 
         BBox3f bbox;
-        DiscretePDF1D* emitter_pdf;
+        DiscretePDF1D *emitter_pdf;
     };
 
     SpatialLightAccel(int width, int height, int depth);
 
     virtual void clear();
-    virtual void build(const BBox3f& scene_bounds,
-                       const std::vector<Emitter*>& emitters);
+    virtual void build(const BBox3f &scene_bounds,
+                       const std::vector<Emitter *> &emitters);
 
     virtual void sampleEmitter(Point3f pos,
-                               Sampler* sampler,
-                               int& index,
-                               Float& pdf);
+                               Sampler *sampler,
+                               int &index,
+                               Float &pdf);
 
     virtual void sampleEmitters(Point3f pos,
-                                Sampler* sampler,
-                                std::vector<int>& indices,
-                                std::vector<Float>& pdf);
+                                Sampler *sampler,
+                                std::vector<int> &indices,
+                                std::vector<Float> &pdf);
 
 protected:
-    SpatialLightBounds* bounds;
+    SpatialLightBounds *bounds;
     BBox3f light_area_bounds;
 
     int width;  // x

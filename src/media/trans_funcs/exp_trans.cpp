@@ -27,12 +27,12 @@ Float ExpTrans::sigmaBar() const
     return 1.0f;
 }
 
-Float ExpTrans::sampleSurface(Sampler* sampler) const
+Float ExpTrans::sampleSurface(Sampler *sampler) const
 {
     return -std::log(1.0f - sampler->next1D());
 }
 
-Float ExpTrans::sampleMedium(Sampler* sampler) const
+Float ExpTrans::sampleMedium(Sampler *sampler) const
 {
     return -std::log(1.0f - sampler->next1D());
 }

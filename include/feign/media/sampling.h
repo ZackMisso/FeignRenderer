@@ -21,36 +21,36 @@ class MediaClosure;
 class MediumSampling
 {
 public:
-    virtual ~MediumSampling() { }
+    virtual ~MediumSampling() {}
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const = 0;
+                           Sampler *sampler,
+                           MediaClosure &closure) const = 0;
 
-    DensityFunction* density;
-    TransFunc* trans_func;
+    DensityFunction *density;
+    TransFunc *trans_func;
 };
 
 // this assumes the medium is fully homogeneous
 class AnalyticalTrans_Samp : public MediumSampling
 {
 public:
-    AnalyticalTrans_Samp() { }
+    AnalyticalTrans_Samp() {}
 
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const;
+                           Sampler *sampler,
+                           MediaClosure &closure) const;
 };
 
 class Delta_Tracking : public MediumSampling
 {
 public:
     Delta_Tracking(Float majorant)
-        : majorant(majorant) { }
+        : majorant(majorant) {}
 
     // TODO: this does not support spectral media
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const;
+                           Sampler *sampler,
+                           MediaClosure &closure) const;
 
     Float majorant;
 };
@@ -62,17 +62,17 @@ public:
     struct Params
     {
         Params(Float step_size)
-            : step_size(step_size) { }
+            : step_size(step_size) {}
 
         Float step_size;
     };
 
-    Ray_Marching_Samp() : step_size(1.f) { }
-    Ray_Marching_Samp(Float step_size) : step_size(step_size) { }
+    Ray_Marching_Samp() : step_size(1.f) {}
+    Ray_Marching_Samp(Float step_size) : step_size(step_size) {}
 
     virtual Color3f sample(Ray3f ray,
-                           Sampler* sampler,
-                           MediaClosure& closure) const;
+                           Sampler *sampler,
+                           MediaClosure &closure) const;
 
     Float step_size;
 };
@@ -83,13 +83,13 @@ public:
 struct MediumSamplingNode : public Node
 {
 public:
-    MediumSamplingNode() : sampling(nullptr) { }
-    MediumSamplingNode(std::string name) : Node(name), sampling(nullptr) { }
-    MediumSamplingNode(MediumSampling* sampling) : sampling(sampling) { }
+    MediumSamplingNode() : sampling(nullptr) {}
+    MediumSamplingNode(std::string name) : Node(name), sampling(nullptr) {}
+    MediumSamplingNode(MediumSampling *sampling) : sampling(sampling) {}
 
     ~MediumSamplingNode() { delete sampling; }
 
-    MediumSampling* sampling;
+    MediumSampling *sampling;
 };
 /////////////////////////////////////////////////
 

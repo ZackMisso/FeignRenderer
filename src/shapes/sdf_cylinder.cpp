@@ -14,12 +14,12 @@ FEIGN_BEGIN()
 SDFCylinder::SDFCylinder(Point3f first,
                          Point3f second,
                          float radius,
-                         const MediumBoundry* boundry,
+                         const MediumBoundry *boundry,
                          bool is_null)
     : SDFShape(boundry, is_null),
       first(first),
       second(second),
-      radius(radius) { }
+      radius(radius) {}
 
 Float SDFCylinder::evaluate(Point3f pt) const
 {
@@ -31,11 +31,11 @@ Float SDFCylinder::evaluate(Point3f pt) const
     Float paba = pa % ba;
     float x = (pa * baba - ba * paba).norm() - radius * baba;
     float y = abs(paba - baba * 0.5) - baba * 0.5;
-    float x2 = x*x;
-    float y2 = y*y*baba;
-    float d = (fmax(x,y)<0.0)?-fmin(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));
+    float x2 = x * x;
+    float y2 = y * y * baba;
+    float d = (fmax(x, y) < 0.0) ? -fmin(x2, y2) : (((x > 0.0) ? x2 : 0.0) + ((y > 0.0) ? y2 : 0.0));
 
-    return sign(d)*sqrt(abs(d))/baba;
+    return sign(d) * sqrt(abs(d)) / baba;
 }
 
 BBox3f SDFCylinder::boundingBox() const

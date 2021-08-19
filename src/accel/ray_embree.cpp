@@ -13,7 +13,7 @@ FEIGN_BEGIN()
 
 EmbreeAccel::EmbreeAccel()
 {
-    meshes = std::vector<Shape*>();
+    meshes = std::vector<Shape *>();
 }
 
 EmbreeAccel::~EmbreeAccel()
@@ -37,7 +37,7 @@ void EmbreeAccel::clear()
 }
 
 // adds all intersectable meshes in a scene to embree's backend
-void EmbreeAccel::addShape(Shape* mesh)
+void EmbreeAccel::addShape(Shape *mesh)
 {
     mesh->addShapeToScene(scene, device);
     meshes.push_back(mesh);
@@ -51,11 +51,11 @@ void EmbreeAccel::build()
 }
 
 // the interface between the integrators and embree
-bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
+bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
-    #if CLOCKING
-        Clocker::startClock("scene intersect");
-    #endif
+#if CLOCKING
+    Clocker::startClock("scene intersect");
+#endif
 
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
@@ -68,16 +68,16 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
     hit.hit.primID = RTC_INVALID_GEOMETRY_ID;
     hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
-    #if CLOCKING
-        Clocker::startClock("embree");
-    #endif
+#if CLOCKING
+    Clocker::startClock("embree");
+#endif
 
     /* intersect ray with scene */
     rtcIntersect1(scene, &context, &hit);
 
-    #if CLOCKING
-        Clocker::endClock("embree");
-    #endif
+#if CLOCKING
+    Clocker::endClock("embree");
+#endif
 
     if (hit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {
@@ -98,16 +98,16 @@ bool EmbreeAccel::intersect(const Ray3f& scene_ray, Intersection& its) const
         // uv's // etc.
         its.intersected_mesh->completeIntersectionInfo(its);
 
-        #if CLOCKING
-            Clocker::endClock("scene intersect");
-        #endif
+#if CLOCKING
+        Clocker::endClock("scene intersect");
+#endif
 
         return true;
     }
 
-    #if CLOCKING
-        Clocker::endClock("scene intersect");
-    #endif
+#if CLOCKING
+    Clocker::endClock("scene intersect");
+#endif
 
     return false;
 }

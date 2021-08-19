@@ -39,7 +39,7 @@ Ray3f::Ray3f(Point3f o, Vector3f d, Float n, Float f, uint32_t depth)
 {
 }
 
-Ray3f::Ray3f(const Ray3f& other)
+Ray3f::Ray3f(const Ray3f &other)
 {
     origin = other.origin;
     dir = other.dir;

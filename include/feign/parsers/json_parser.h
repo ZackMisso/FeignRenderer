@@ -22,10 +22,10 @@ class JsonParser
 {
 public:
     static void parse(std::string filename);
-    static void parse(std::string filename, Imagef* image);
+    static void parse(std::string filename, Imagef *image);
 
 protected:
-    static void actually_parse(rapidjson::Document& document);
+    static void actually_parse(rapidjson::Document &document);
 };
 
 FEIGN_END()

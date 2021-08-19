@@ -13,6 +13,7 @@
 
 FEIGN_BEGIN()
 
+
 struct DiscretePDF1D
 {
     DiscretePDF1D(int siz);

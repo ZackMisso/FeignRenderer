@@ -14,30 +14,30 @@ FEIGN_BEGIN()
 
 InterpVertsToSphereShader::InterpVertsToSphereShader(float prop_of_shortest_axis, float interp)
     : prop_of_shortest_axis(prop_of_shortest_axis), interp(interp)
-{ }
-
+{
+}
 
 bool InterpVertsToSphereShader::isValid(MeshType mesh_type) const
 {
     return mesh_type == OBJ_MESH;
 }
 
-void InterpVertsToSphereShader::evaluate(void* mesh)
+void InterpVertsToSphereShader::evaluate(void *mesh)
 {
-    #if CLOCKING
-        Clocker::startClock("shader eval");
-    #endif
+#if CLOCKING
+    Clocker::startClock("shader eval");
+#endif
 
-    ObjMesh* obj_mesh = (ObjMesh*)mesh;
+    ObjMesh *obj_mesh = (ObjMesh *)mesh;
 
     Point3f centroid = obj_mesh->centroid();
     BBox3f bbox = obj_mesh->boundingBox();
     int minor_axis = bbox.minorAxis();
     Float radius = bbox.extents()[minor_axis] * prop_of_shortest_axis;
 
-    const std::vector<Triangle>& triangles = obj_mesh->getTris();
-    const std::vector<Point3f>& old_verts = obj_mesh->getVerts();
-    const std::vector<Normal3f>& old_norms = obj_mesh->getNorms();
+    const std::vector<Triangle> &triangles = obj_mesh->getTris();
+    const std::vector<Point3f> &old_verts = obj_mesh->getVerts();
+    const std::vector<Normal3f> &old_norms = obj_mesh->getNorms();
 
     std::vector<Point3f> new_verts = std::vector<Point3f>(old_verts.size());
     std::vector<Normal3f> new_norms = std::vector<Normal3f>(old_norms.size());
@@ -72,7 +72,7 @@ void InterpVertsToSphereShader::evaluate(void* mesh)
         Point3f p1 = new_verts[i1_vs];
         Point3f p2 = new_verts[i2_vs];
 
-        Normal3f tri_norm = ((p1-p0)^(p2-p0));
+        Normal3f tri_norm = ((p1 - p0) ^ (p2 - p0));
 
         if (tri_norm.sqrNorm() == 0.f)
         {
@@ -101,9 +101,9 @@ void InterpVertsToSphereShader::evaluate(void* mesh)
     obj_mesh->setVerts(new_verts);
     obj_mesh->setNorms(new_norms);
 
-    #if CLOCKING
-        Clocker::endClock("shader eval");
-    #endif
+#if CLOCKING
+    Clocker::endClock("shader eval");
+#endif
 }
 
 FEIGN_END()

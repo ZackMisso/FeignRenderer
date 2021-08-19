@@ -12,7 +12,7 @@ FEIGN_BEGIN()
 
 #if CLOCKING
 
-Clocker* Clocker::instance = nullptr;
+Clocker *Clocker::instance = nullptr;
 
 Clocker::Clocker()
 {
@@ -22,7 +22,7 @@ Clocker::Clocker()
     actives = std::vector<bool>();
 }
 
-Clocker* Clocker::getInstance() { return instance; }
+Clocker *Clocker::getInstance() { return instance; }
 
 void Clocker::initialize()
 {

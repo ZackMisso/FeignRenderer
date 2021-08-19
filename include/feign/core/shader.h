@@ -22,12 +22,12 @@ FEIGN_BEGIN()
 struct MaterialShader
 {
 public:
-    virtual ~MaterialShader() { }
+    virtual ~MaterialShader() {}
 
-    virtual void sample(MaterialClosure& closure) const = 0;
-    virtual void evaluate(MaterialClosure& closure) const = 0;
-    virtual void evaluate_mat_only(MaterialClosure& closure) const = 0;
-    virtual void evaluate_for_photon(MaterialClosure& closure) const = 0;
+    virtual void sample(MaterialClosure &closure) const = 0;
+    virtual void evaluate(MaterialClosure &closure) const = 0;
+    virtual void evaluate_mat_only(MaterialClosure &closure) const = 0;
+    virtual void evaluate_for_photon(MaterialClosure &closure) const = 0;
 };
 
 // a simple material shader which just evaluates one material
@@ -36,19 +36,19 @@ struct SimpleMaterialShader : public MaterialShader
     struct Params
     {
         Params(std::string bsdf)
-            : bsdf(bsdf) { }
+            : bsdf(bsdf) {}
 
         std::string bsdf;
     };
 
-    SimpleMaterialShader(BSDFNode* bsdf);
+    SimpleMaterialShader(BSDFNode *bsdf);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
-    virtual void evaluate_mat_only(MaterialClosure& closure) const;
-    virtual void evaluate_for_photon(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
+    virtual void evaluate_mat_only(MaterialClosure &closure) const;
+    virtual void evaluate_for_photon(MaterialClosure &closure) const;
 
-    BSDFNode* bsdf;
+    BSDFNode *bsdf;
 };
 
 // this will take some heavy re-writing probably.
@@ -62,26 +62,26 @@ public:
                float threshold)
             : wireframe_mat(wireframe_mat),
               mesh_mat(mesh_mat),
-              threshold(threshold) { }
+              threshold(threshold) {}
 
         std::string wireframe_mat;
         std::string mesh_mat;
         float threshold;
     };
 
-    WireframeMaterialShader(BSDFNode* wireframe_bsdf,
-                            BSDFNode* mesh_bsdf,
+    WireframeMaterialShader(BSDFNode *wireframe_bsdf,
+                            BSDFNode *mesh_bsdf,
                             float threshold);
 
-    virtual void sample(MaterialClosure& closure) const;
-    virtual void evaluate(MaterialClosure& closure) const;
-    virtual void evaluate_mat_only(MaterialClosure& closure) const;
-    virtual void evaluate_for_photon(MaterialClosure& closure) const;
+    virtual void sample(MaterialClosure &closure) const;
+    virtual void evaluate(MaterialClosure &closure) const;
+    virtual void evaluate_mat_only(MaterialClosure &closure) const;
+    virtual void evaluate_for_photon(MaterialClosure &closure) const;
 
-    BSDF* choose_bsdf(MaterialClosure& closure) const;
+    BSDF *choose_bsdf(MaterialClosure &closure) const;
 
-    BSDFNode* wireframe_bsdf;
-    BSDFNode* mesh_bsdf;
+    BSDFNode *wireframe_bsdf;
+    BSDFNode *mesh_bsdf;
     float threshold;
 };
 
@@ -155,10 +155,10 @@ public:
 struct GeometryShader
 {
 public:
-    virtual ~GeometryShader() { }
+    virtual ~GeometryShader() {}
 
     // TODO: figure out a way to make this safe
-    virtual void evaluate(void* mesh) { }
+    virtual void evaluate(void *mesh) {}
     virtual bool isValid(MeshType mesh_type) const { return true; }
 };
 
@@ -173,7 +173,7 @@ public:
     struct Params
     {
         Params(float prop, float proxy)
-            : prop(prop), proxy(proxy) { }
+            : prop(prop), proxy(proxy) {}
 
         float prop;
         float proxy;
@@ -181,7 +181,7 @@ public:
 
     InterpVertsToSphereShader(float prop_of_shortest_axis, float interp);
 
-    virtual void evaluate(void* mesh);
+    virtual void evaluate(void *mesh);
     virtual bool isValid(MeshType mesh_type) const;
 
     float prop_of_shortest_axis;
@@ -232,12 +232,12 @@ public:
 struct GeometryShaderNode : public Node
 {
 public:
-    GeometryShaderNode() : shader(nullptr) { }
-    GeometryShaderNode(std::string name) : Node(name), shader(nullptr) { }
+    GeometryShaderNode() : shader(nullptr) {}
+    GeometryShaderNode(std::string name) : Node(name), shader(nullptr) {}
 
     ~GeometryShaderNode() { delete shader; }
 
-    GeometryShader* shader;
+    GeometryShader *shader;
 };
 /////////////////////////////////////////////////
 
@@ -247,14 +247,14 @@ public:
 struct MaterialShaderNode : public Node
 {
 public:
-    MaterialShaderNode() : shader(nullptr) { }
-    MaterialShaderNode(std::string name) : Node(name), shader(nullptr) { }
+    MaterialShaderNode() : shader(nullptr) {}
+    MaterialShaderNode(std::string name) : Node(name), shader(nullptr) {}
 
     ~MaterialShaderNode() { delete shader; }
 
-    MaterialShader* operator()() { return shader; }
+    MaterialShader *operator()() { return shader; }
 
-    MaterialShader* shader;
+    MaterialShader *shader;
 };
 /////////////////////////////////////////////////
 

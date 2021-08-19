@@ -13,9 +13,9 @@
 FEIGN_BEGIN()
 
 Dielectric::Dielectric(Float int_ior, Float ext_ior, Color3f albedo)
-    : BSDF(), int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) { }
+    : BSDF(), int_ior(int_ior), ext_ior(ext_ior), albedo(albedo) {}
 
-void Dielectric::sample(MaterialClosure& closure) const
+void Dielectric::sample(MaterialClosure &closure) const
 {
     Float sample = closure.sampler->next1D();
 
@@ -60,14 +60,15 @@ void Dielectric::sample(MaterialClosure& closure) const
 
         closure.wo = wtperp + wtpara;
 
-        if (cos_theta < -Epsilon) closure.wo[2] = -closure.wo[2];
+        if (cos_theta < -Epsilon)
+            closure.wo[2] = -closure.wo[2];
     }
 
     closure.pdf = 1.f;
     closure.albedo = albedo;
 }
 
-void Dielectric::evaluate(MaterialClosure& closure) const
+void Dielectric::evaluate(MaterialClosure &closure) const
 {
     closure.albedo = albedo;
 }

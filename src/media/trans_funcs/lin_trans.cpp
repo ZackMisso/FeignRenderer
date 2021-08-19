@@ -32,12 +32,12 @@ Float LinearTrans::sigmaBar() const
     return 1.0f / maxT;
 }
 
-Float LinearTrans::sampleSurface(Sampler* sampler) const
+Float LinearTrans::sampleSurface(Sampler *sampler) const
 {
     return maxT * (1.0f - 1e-5f) * sampler->next1D();
 }
 
-Float LinearTrans::sampleMedium(Sampler* sampler) const
+Float LinearTrans::sampleMedium(Sampler *sampler) const
 {
     return maxT;
 }

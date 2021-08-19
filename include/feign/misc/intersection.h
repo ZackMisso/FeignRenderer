@@ -30,16 +30,16 @@ struct Intersection
     CoordinateFrame s_frame; // shading frame
     CoordinateFrame g_frame; // geometric frame
 
-    const Shape* intersected_mesh;
+    const Shape *intersected_mesh;
 
     Intersection();
-    Intersection(const Intersection& its);
+    Intersection(const Intersection &its);
 
-    Vector3f toLocal(const Vector3f& vec) const;
-    Vector3f toWorld(const Vector3f& vec) const;
+    Vector3f toLocal(const Vector3f &vec) const;
+    Vector3f toWorld(const Vector3f &vec) const;
 
-    Vector3f toLocalGeom(const Vector3f& vec) const;
-    Vector3f toWorldGeom(const Vector3f& vec) const;
+    Vector3f toLocalGeom(const Vector3f &vec) const;
+    Vector3f toWorldGeom(const Vector3f &vec) const;
 };
 
 FEIGN_END()

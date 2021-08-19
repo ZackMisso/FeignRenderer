@@ -20,7 +20,7 @@ Phong::Phong(Color3f kd, Float ks, Float exponent)
 }
 
 // TODO: the speed of this could probably be improved
-void Phong::sample(MaterialClosure& closure) const
+void Phong::sample(MaterialClosure &closure) const
 {
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
@@ -69,14 +69,14 @@ void Phong::sample(MaterialClosure& closure) const
 
     float diffPdf = (1.f - ks) * WarpSpace::sqrToCosHemiPdf(closure.wo);
     // I forget, what is this 1.f / 4 * cos term again?
-    float specPdf = (ks) * WarpSpace::sqrToCosPowHemiPdf(val, exponent);// * (1.f / (4.f * dotProd));
+    float specPdf = (ks)*WarpSpace::sqrToCosPowHemiPdf(val, exponent); // * (1.f / (4.f * dotProd));
 
     closure.pdf = diffPdf + specPdf;
     closure.albedo = kd * INV_PI +
                      ks * (exponent + 2.f) * INV_TWOPI * powf(dotProd, exponent);
 }
 
-void Phong::evaluate(MaterialClosure& closure) const
+void Phong::evaluate(MaterialClosure &closure) const
 {
     Vector3f wr = Vector3f(0.f, 0.f, 2.f * closure.wi(2)) - closure.wi;
 

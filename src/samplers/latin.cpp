@@ -10,7 +10,7 @@
 
 FEIGN_BEGIN()
 
-Latin::Latin() : Sampler() { }
+Latin::Latin() : Sampler() {}
 
 Latin::Latin(uint32_t seed,
              int sample_cnt)
@@ -67,17 +67,17 @@ Vec4f Latin::next4D()
     return Vec4f(next1D(), next1D(), next1D(), next1D());
 }
 
-Sampler* Latin::copy()
+Sampler *Latin::copy()
 {
-    Latin* newSamp = new Latin();
+    Latin *newSamp = new Latin();
     newSamp->reseed(sampleSeed);
 
     return newSamp;
 }
 
-Sampler* Latin::copy(uint32_t seed)
+Sampler *Latin::copy(uint32_t seed)
 {
-    Latin* newSamp = new Latin();
+    Latin *newSamp = new Latin();
     newSamp->reseed(seed);
 
     return newSamp;

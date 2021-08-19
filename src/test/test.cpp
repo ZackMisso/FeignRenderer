@@ -14,13 +14,13 @@
 
 FEIGN_BEGIN()
 
-bool evaluate_unit_test(UnitTestData& testLog)
+bool evaluate_unit_test(UnitTestData &testLog)
 {
     Imagef image = Imagef(256, 256);
 
     LOG("running test: " + testLog.test_name);
 
-    JsonParser::parse("../scenes/unit_tests/scenes/"+testLog.test_name,
+    JsonParser::parse("../scenes/unit_tests/scenes/" + testLog.test_name,
                       &image);
 
     int loc = testLog.test_name.find_last_of(".");
@@ -43,13 +43,13 @@ bool evaluate_unit_test(UnitTestData& testLog)
     return true;
 }
 
-bool replace_reference(UnitTestData& testLog)
+bool replace_reference(UnitTestData &testLog)
 {
     Imagef image = Imagef(256, 256);
 
     LOG("running test: " + testLog.test_name);
 
-    JsonParser::parse("../scenes/unit_tests/scenes/"+testLog.test_name,
+    JsonParser::parse("../scenes/unit_tests/scenes/" + testLog.test_name,
                       &image);
 
     int loc = testLog.test_name.find_last_of(".");

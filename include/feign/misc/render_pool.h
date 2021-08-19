@@ -33,14 +33,14 @@ struct RenderTile
         int size = (max_x - min_x) * (max_y - min_y);
     }
 
-    static void evaluate(RenderTile* tile,
-                         const Scene* scene,
-                         const Integrator* intergator,
-                         const Camera* camera,
-                         Sampler* sampler,
-                         Imagef* image,
-                         std::vector<Float>* weights,
-                         std::mutex* mutexes);
+    static void evaluate(RenderTile *tile,
+                         const Scene *scene,
+                         const Integrator *intergator,
+                         const Camera *camera,
+                         Sampler *sampler,
+                         Imagef *image,
+                         std::vector<Float> *weights,
+                         std::mutex *mutexes);
 
     // this tile represents all pixels in the range [min, max)
     bool done;
@@ -50,7 +50,6 @@ struct RenderTile
     int max_y;
     int tile_index;
 };
-
 
 // this struct handles all of the multi-threading necessary for rendering
 // complex scenes. currently this only supports rendering one frame at a
@@ -62,16 +61,16 @@ public:
     ~RenderPool();
 
     void initialize_pool(int im_w, int im_h);
-    void evaluate_pool(const Scene* scene,
-                       const Integrator* integrator,
-                       const Camera* camera,
-                       Sampler* sampler,
-                       Imagef& image);
+    void evaluate_pool(const Scene *scene,
+                       const Integrator *integrator,
+                       const Camera *camera,
+                       Sampler *sampler,
+                       Imagef &image);
 
 protected:
     std::vector<std::thread> threads;
-    std::vector<RenderTile*> tiles;
-    std::vector<RenderTile*> active_tiles;
+    std::vector<RenderTile *> tiles;
+    std::vector<RenderTile *> active_tiles;
     int tile_width;
     int width;
     int height;

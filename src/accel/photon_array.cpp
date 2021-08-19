@@ -16,8 +16,8 @@
 
 FEIGN_BEGIN()
 
-void PhotonArray::build(const BBox3f& scene_bounds,
-                        Photon* list,
+void PhotonArray::build(const BBox3f &scene_bounds,
+                        Photon *list,
                         int count)
 {
     photons = list;
@@ -37,21 +37,22 @@ bool PhotonArray::nearPhoton(Point3f pt, Float radius) const
     {
         Float dist = (pt - photons[i].pos).sqrNorm();
         // LOG("dist: " + STR(dist));
-        if ( (pt - photons[i].pos).sqrNorm() < radius ) return true;
+        if ((pt - photons[i].pos).sqrNorm() < radius)
+            return true;
     }
     return false;
 }
 
-void PhotonArray::eval(MaterialClosure& closure,
-                       const MaterialShader* shader,
-                       const Point3f& pt,
+void PhotonArray::eval(MaterialClosure &closure,
+                       const MaterialShader *shader,
+                       const Point3f &pt,
                        Float radius) const
 {
     Float sqr_radius = radius;
     Float inv_area = 1.f / (M_PI * sqr_radius * radius);
     for (int i = 0; i < num_photons; ++i)
     {
-        if ( (pt - photons[i].pos).norm() < sqr_radius )
+        if ((pt - photons[i].pos).norm() < sqr_radius)
         {
             Color3f pwr_div_area = photons[i].power * inv_area;
 
@@ -67,8 +68,8 @@ void PhotonArray::eval(MaterialClosure& closure,
     }
 }
 
-void PhotonArray::maybeAddPhoton(std::vector<std::pair<Float, int> >& closest_k,
-                                 const Point3f& pt,
+void PhotonArray::maybeAddPhoton(std::vector<std::pair<Float, int> > &closest_k,
+                                 const Point3f &pt,
                                  int k,
                                  int photon) const
 {
@@ -102,9 +103,9 @@ void PhotonArray::maybeAddPhoton(std::vector<std::pair<Float, int> >& closest_k,
 // this is not the fastest way of handling this, but i don't care to be honest,
 // this datastructure should not be used much longer anyways
 
-void PhotonArray::eval(MaterialClosure& closure,
-                       const MaterialShader* shader,
-                       const Point3f& pt,
+void PhotonArray::eval(MaterialClosure &closure,
+                       const MaterialShader *shader,
+                       const Point3f &pt,
                        int k_photons) const
 {
     std::vector<std::pair<Float, int> > closest_k = std::vector<std::pair<Float, int> >();
@@ -144,13 +145,14 @@ void PhotonArray::eval(MaterialClosure& closure,
     //     return;
     // }
 
-    Float inv_area = 1.f / (M_PI * closest_k[k_photons-1].first);
+    Float inv_area = 1.f / (M_PI * closest_k[k_photons - 1].first);
     // LOG("inv area:" + STR(inv_area));
 
-    for (int i = 0; i < closest_k.size()-1; ++i)
+    for (int i = 0; i < closest_k.size() - 1; ++i)
     {
         // debug logic
-        if (closest_k[i].first > closest_k[k_photons-1].first) assert(false);
+        if (closest_k[i].first > closest_k[k_photons - 1].first)
+            assert(false);
 
         int index = closest_k[i].second;
 
@@ -177,9 +179,9 @@ void PhotonArray::eval(MaterialClosure& closure,
     }
 }
 
-void PhotonArray::eval(MaterialClosure& closure,
-                       const MaterialShader* shader,
-                       const Point3f& pt,
+void PhotonArray::eval(MaterialClosure &closure,
+                       const MaterialShader *shader,
+                       const Point3f &pt,
                        Float rad_1,
                        Float rad_2) const
 {

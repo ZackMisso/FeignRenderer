@@ -11,11 +11,11 @@
 
 FEIGN_BEGIN()
 
-NullBSDF::NullBSDF() : BSDF() { }
+NullBSDF::NullBSDF() : BSDF() {}
 
 // the idea is that sample returns eval() / pdf()
 // Color3f NullBSDF::sample(BSDFQuery& rec, const Point2f& sample) const
-void NullBSDF::sample(MaterialClosure& closure) const
+void NullBSDF::sample(MaterialClosure &closure) const
 {
     closure.wo = -closure.wi;
     closure.eta = 1.0f;
@@ -29,7 +29,7 @@ void NullBSDF::sample(MaterialClosure& closure) const
 }
 
 // Color3f NullBSDF::eval(const BSDFQuery& rec) const
-void NullBSDF::evaluate(MaterialClosure& closure) const
+void NullBSDF::evaluate(MaterialClosure &closure) const
 {
     closure.albedo = Color3f(1.f);
 }
