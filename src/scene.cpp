@@ -630,6 +630,9 @@ void Scene::eval_multi_emitters(MaterialClosure &closure,
 
 Emitter *Scene::choose_emitter(MaterialClosure &closure, Float *pdf) const
 {
+    if (!emitters.size())
+        return nullptr;
+
     Float choice_pdf;
     int emitter;
 

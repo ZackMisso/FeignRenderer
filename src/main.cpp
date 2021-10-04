@@ -6,14 +6,12 @@
 * acknowledgement is provided to the original author(s).
 **/
 
+#include <feign/core/api.h>
 #include <feign/parsers/json_parser.h>
-#include <feign/core/scene.h>
 #include <feign/test/tester.h>
 #include <iostream>
 
 #include <openvdb/openvdb.h>
-
-#include "../scenes/cool_renders/one_way_dice/one_way_dice.h"
 
 using namespace feign;
 

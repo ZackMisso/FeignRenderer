@@ -15,7 +15,7 @@ ImageTexture::ImageTexture(std::string filename, Vec3f scale)
 
 ImageTexture::~ImageTexture()
 {
-    image.clear();
+    // image.clear();
 }
 
 // this method will always be callsed by fr_texture
@@ -28,16 +28,26 @@ Color3f ImageTexture::evaluate(const Point2f &point)
 {
     Point2f sample;
 
-    sample[0] = bound(point(0), 0.f, 1.f);
-    sample[1] = bound(point(1), 0.f, 1.f);
+    sample[0] = bound(point(0) * image.width(), 0.f, image.width() - 1);
+    sample[1] = bound(point(1) * image.height(), 0.f, image.height() - 1);
 
-    sample[0] *= image.width();
-    sample[1] *= image.height();
+    LOG("pre");
 
-    return Color3f(image(sample(0), sample(1), 0),
-                   image(sample(0), sample(1), 1),
-                   image(sample(0), sample(1), 2)) *
-           scale;
+    LOG(std::to_string(point(0)));
+    LOG(std::to_string(point(1)));
+
+    LOG("samp");
+
+    LOG(std::to_string(sample[0]));
+    LOG(std::to_string(sample[1]));
+
+    Color3f im_samp = Color3f(image(sample(0), sample(1), 0),
+                              image(sample(0), sample(1), 1),
+                              image(sample(0), sample(1), 2));
+
+    LOG("post");
+
+    return im_samp * scale;
 }
 
 FEIGN_END()

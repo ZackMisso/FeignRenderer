@@ -34,6 +34,8 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
 
     if (!scene->intersect_non_null(ray, its))
     {
+        // LOG("returning green");
+        // return Color3f(0.f, 1.f, 0.f);
         return scene->env_emission(ray);
     }
 
@@ -47,11 +49,18 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                                               false,
                                               true);
 
+    // LOG("testing 2");
+    // if (!shader)
+    //     LOG("shader does not exist");
     // evaluate the material shader
     shader->evaluate(closure);
 
+    // LOG("testing 4");
+
     // accumulate the shadow rays
     closure.accumulate_shadow_rays(shader);
+
+    // LOG("testing 3");
 
     if (closure.is_specular)
     {

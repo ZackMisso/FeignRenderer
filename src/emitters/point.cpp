@@ -28,7 +28,6 @@ Color3f PointEmitter::sample_nee(EmitterQuery &rec,
 {
     rec.wi = (pos - rec.p);
     rec.sqr_dist = rec.wi.sqrNorm();
-    // LOG("sqr_dist", rec.sqr_dist);
     rec.wi = rec.wi.normalized();
 
     if (pdf)
@@ -37,8 +36,6 @@ Color3f PointEmitter::sample_nee(EmitterQuery &rec,
     // TODO: the INV_FOURPI should actually be the pdf, and should be incorporated
     //       in later.... but whatever for now.
     return I / rec.sqr_dist * INV_FOURPI;
-    // return rec.sqr_dist; //I * INV_FOURPI;
-    // return rec.p;
 }
 
 Color3f PointEmitter::sample_medium(EmitterQuery &rec,

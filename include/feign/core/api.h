@@ -78,7 +78,7 @@ public:
     MediaNode *find_media(std::string name);
     SamplerNode *find_sampler(std::string name);
     FilterNode *find_filter(std::string name);
-    MaterialNode *find_material(std::string name);
+    // MaterialNode *find_material(std::string name);
     ObjectNode *find_object(std::string name);
     MeshNode *find_mesh(std::string name);
     GeometryShaderNode *find_geometry_shader(std::string name);

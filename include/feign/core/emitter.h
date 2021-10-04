@@ -426,7 +426,7 @@ protected:
 /////////////////////////////////////////////////
 // Environment Emitter
 // TODO: implement support for importance sampling
-//       Note: will only allow support if the texture is non-procedural...
+//       Note: will only allow support if the texture is non-procedural... why zack?
 /////////////////////////////////////////////////
 class EnvironmentEmitter : public Emitter
 {

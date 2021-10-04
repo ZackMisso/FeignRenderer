@@ -31,7 +31,7 @@
 
 // TODO: make this a stats parameter in the future
 // whether or not to use multithreading
-#define GOTTAGOFAST true
+#define GOTTAGOFAST false
 #define OPENVDB true
 #define VERBOSE false
 #define NONEXPMEDIA false

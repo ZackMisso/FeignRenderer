@@ -1013,40 +1013,40 @@ void JsonParser::actually_parse(rapidjson::Document &document)
 
             FeignRenderer::fr_clear_transform();
         }
-        else if (strcmp(itr->name.GetString(), "material") == 0)
-        {
-            std::string name = "material";
-            std::string type = "simple";
+        // else if (strcmp(itr->name.GetString(), "material") == 0)
+        // {
+        //     std::string name = "material";
+        //     std::string type = "simple";
 
-            const rapidjson::Value &value = itr->value;
+        //     const rapidjson::Value &value = itr->value;
 
-            if (value.HasMember("name"))
-            {
-                name = value["name"].GetString();
-            }
-            if (value.HasMember("type"))
-            {
-                type = value["type"].GetString();
-            }
+        //     if (value.HasMember("name"))
+        //     {
+        //         name = value["name"].GetString();
+        //     }
+        //     if (value.HasMember("type"))
+        //     {
+        //         type = value["type"].GetString();
+        //     }
 
-            if (type == "simple")
-            {
-                std::string bsdf = "default";
+        //     if (type == "simple")
+        //     {
+        //         std::string bsdf = "default";
 
-                if (value.HasMember("bsdf"))
-                {
-                    bsdf = value["bsdf"].GetString();
-                }
+        //         if (value.HasMember("bsdf"))
+        //         {
+        //             bsdf = value["bsdf"].GetString();
+        //         }
 
-                SimpleMaterial::Params params(bsdf);
+        //         SimpleMaterial::Params params(bsdf);
 
-                FeignRenderer::fr_material(name, type, &params);
-            }
-            else
-            {
-                throw new FeignRendererException(type + " material is not parsable yet");
-            }
-        }
+        //         FeignRenderer::fr_material(name, type, &params);
+        //     }
+        //     else
+        //     {
+        //         throw new FeignRendererException(type + " material is not parsable yet");
+        //     }
+        // }
         else if (strcmp(itr->name.GetString(), "bsdf") == 0)
         {
             std::string name = "bsdf";
@@ -1095,7 +1095,7 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             }
             else if (type == "dielectric")
             {
-                Float i_ior = 1.0;
+                Float i_ior = 1.5;
                 Float e_ior = 1.0;
 
                 if (value.HasMember("int_ior"))
@@ -1204,14 +1204,14 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             }
             else if (type == "simple_material")
             {
-                std::string material = "defualt";
+                std::string bsdf = "defualt";
 
-                if (value.HasMember("material"))
+                if (value.HasMember("bsdf"))
                 {
-                    material = value["material"].GetString();
+                    bsdf = value["bsdf"].GetString();
                 }
 
-                SimpleMaterial::Params params(material);
+                SimpleMaterialShader::Params params(bsdf);
 
                 FeignRenderer::fr_shader(name, type, &params);
             }
@@ -1263,6 +1263,7 @@ void JsonParser::actually_parse(rapidjson::Document &document)
         }
         else
         {
+            std::cout << itr->name.GetString() << std::endl;
             assert(false);
         }
     }

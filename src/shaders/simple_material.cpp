@@ -27,12 +27,16 @@ void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
     Clocker::startClock("shader eval");
 #endif
 
+    // LOG("testing 5");
+
     closure.is_specular = (*bsdf)()->isDelta();
 
     if (closure.last_spec)
     {
         closure.scene->accumulate_emission(closure);
     }
+
+    // LOG("testing 6");
 
     if (closure.is_specular)
     {
@@ -45,9 +49,12 @@ void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
         return;
     }
 
+    // LOG("testing 7");
+
     if (closure.sample_all_emitters)
     {
         // TODO: make this specified by the user
+        // LOG("NOOOOOO");
         if (closure.material_accepts_shadows)
         {
             closure.scene->eval_all_emitters(closure);
@@ -58,9 +65,12 @@ void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
         // TODO: fix this hack with above
         if (closure.material_accepts_shadows)
         {
+            // LOG("eval emitter");
             closure.scene->eval_one_emitter(closure);
         }
     }
+
+    // LOG("testing 8");
 
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = true;

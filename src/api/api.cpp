@@ -53,7 +53,7 @@ FeignRenderer::FeignRenderer(Imagef *target)
     integrators = std::unordered_map<std::string, IntegratorNode *>();
     samplers = std::unordered_map<std::string, SamplerNode *>();
     filters = std::unordered_map<std::string, FilterNode *>();
-    materials = std::unordered_map<std::string, MaterialNode *>();
+    // materials = std::unordered_map<std::string, MaterialNode *>();
     objects = std::unordered_map<std::string, ObjectNode *>();
     meshes = std::unordered_map<std::string, MeshNode *>();
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode *>();
@@ -71,7 +71,7 @@ FeignRenderer::FeignRenderer(Imagef *target)
     integrators.clear();
     samplers.clear();
     filters.clear();
-    materials.clear();
+    // materials.clear();
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
@@ -107,8 +107,8 @@ FeignRenderer::~FeignRenderer()
         delete it.second;
     for (auto it : filters)
         delete it.second;
-    for (auto it : materials)
-        delete it.second;
+    // for (auto it : materials)
+    //     delete it.second;
     for (auto it : objects)
         delete it.second;
     for (auto it : meshes)
@@ -139,7 +139,7 @@ FeignRenderer::~FeignRenderer()
     integrators.clear();
     samplers.clear();
     filters.clear();
-    materials.clear();
+    // materials.clear();
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
@@ -393,10 +393,8 @@ MaterialShaderNode *FeignRenderer::find_material_shader(std::string name)
 
 TextureNode *FeignRenderer::find_texture(std::string name)
 {
-    if (name == "")
+    if (name == "" || name == "default")
     {
-        LOG("FUCK");
-        assert(false);
         return nullptr;
     }
 
@@ -987,8 +985,8 @@ void FeignRenderer::fr_shader(std::string name,
         }
 
         SimpleMaterialShader::Params *params = (SimpleMaterialShader::Params *)shader_data;
-        MaterialNode *material = getInstance()->find_material(params->material);
-        material_shader->shader = new SimpleMaterialShader(material);
+        BSDFNode *bsdf = getInstance()->find_bsdf(params->bsdf);
+        material_shader->shader = new SimpleMaterialShader(bsdf);
     }
     else if (type == "wireframe")
     {
@@ -1000,36 +998,36 @@ void FeignRenderer::fr_shader(std::string name,
         }
 
         WireframeMaterialShader::Params *params = (WireframeMaterialShader::Params *)shader_data;
-        MaterialNode *wire_mat = getInstance()->find_material(params->wireframe_mat);
-        MaterialNode *mesh_mat = getInstance()->find_material(params->mesh_mat);
+        BSDFNode *wire_bsdf = getInstance()->find_bsdf(params->wireframe_mat);
+        BSDFNode *mesh_bsdf = getInstance()->find_bsdf(params->mesh_mat);
 
-        shader->shader = new WireframeMaterialShader(wire_mat,
-                                                     mesh_mat,
+        shader->shader = new WireframeMaterialShader(wire_bsdf,
+                                                     mesh_bsdf,
                                                      params->threshold);
     }
-    else if (type == "radar")
-    {
-        MaterialShaderNode *shader = getInstance()->find_material_shader(name);
+    // else if (type == "radar") // TODO: delete this
+    // {
+    //     MaterialShaderNode *shader = getInstance()->find_material_shader(name);
 
-        if (shader->shader)
-        {
-            throw new FeignRendererException("radar shader already defined");
-        }
+    //     if (shader->shader)
+    //     {
+    //         throw new FeignRendererException("radar shader already defined");
+    //     }
 
-        RadarMaterialShader::Params *params = (RadarMaterialShader::Params *)shader_data;
-        MaterialNode *radar_mat = getInstance()->find_material(params->radar_mat);
-        MaterialNode *mesh_mat = getInstance()->find_material(params->mesh_mat);
+    //     RadarMaterialShader::Params *params = (RadarMaterialShader::Params *)shader_data;
+    //     MaterialNode *radar_mat = getInstance()->find_material(params->radar_mat);
+    //     MaterialNode *mesh_mat = getInstance()->find_material(params->mesh_mat);
 
-        shader->shader = new RadarMaterialShader(radar_mat,
-                                                 mesh_mat,
-                                                 params->start_points,
-                                                 params->end_dist,
-                                                 params->start_times,
-                                                 params->end_times,
-                                                 params->band_width,
-                                                 params->fall_off,
-                                                 params->proxy);
-    }
+    //     shader->shader = new RadarMaterialShader(radar_mat,
+    //                                              mesh_mat,
+    //                                              params->start_points,
+    //                                              params->end_dist,
+    //                                              params->start_times,
+    //                                              params->end_times,
+    //                                              params->band_width,
+    //                                              params->fall_off,
+    //                                              params->proxy);
+    // }
     else
     {
         throw new NotImplementedException("shader type not recognized: " + type);
@@ -1427,7 +1425,7 @@ void FeignRenderer::fr_texture(std::string name,
                                std::string type,
                                void *texture_data)
 {
-    std::cout << "NAME: " << name << std::endl;
+    // std::cout << "NAME: " << name << std::endl;
     TextureNode *texture = getInstance()->find_texture(name);
 
     if (texture->texture)
@@ -1553,6 +1551,8 @@ void FeignRenderer::flush_renders()
 
     // render current scene
     scene_obj->renderScene();
+
+    LOG("render done, cleaning up");
 
 #if CLOCKING
     Clocker::endClock("render");

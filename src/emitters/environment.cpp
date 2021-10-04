@@ -47,14 +47,23 @@ void EnvironmentEmitter::preProcess()
 // TODO: support arbitrary rotations of the environment map
 Color3f EnvironmentEmitter::evaluate(EmitterQuery &rec) const
 {
+    if (!texture)
+    {
+        return intensity;
+    }
+
+    // LOG("whoop");
+
     // convert the direction into spherical coordinates
     Float phi = std::atan2(rec.wi(2), rec.wi(0));
+
     if (phi < 0.f)
         phi = phi + 2.f * M_PI;
 
-    double theta = acos(rec.wi(1)); // this assumes that the direction is normalized
+    // LOG("phi")
 
-    return texture->texture->evaluate(Point2f(phi * INV_TWOPI, theta * INV_PI));
+    double theta = acos(rec.wi(1)); // this assumes that the direction is normalized
+    return intensity * texture->texture->evaluate(Point2f(phi * INV_TWOPI, theta * INV_PI));
 }
 
 FEIGN_END()
