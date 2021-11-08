@@ -6,8 +6,11 @@ mkdir build && cd build cmake .. && ./feign -uri "test_index"
 
 Here are some interesting example images / projects I have created using my rendering engine.
 
+A scene created for one of my Rendering Algorithm course's milestones
 ![Alt text](eyecandy.png?raw=true "Title")
 
+A frame from a <a href="https://www.youtube.com/watch?v=rnKu9xs-KWs">music video</a> which I created using my rendering engine.
 ![Alt text](hall_of_tiles_final_4740.png?raw=true "Title")
 
+A frame from a <a href="https://www.youtube.com/watch?v=rnKu9xs-KWs">smoke animation</a> I created by importing a smoke simulation I made in Houdini into my rendering engine.
 ![Alt text](wolf_smoke.png?raw=true "Title")
