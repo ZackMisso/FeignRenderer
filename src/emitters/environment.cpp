@@ -52,15 +52,16 @@ Color3f EnvironmentEmitter::evaluate(EmitterQuery &rec) const
         return intensity;
     }
 
-    // LOG("whoop");
-
     // convert the direction into spherical coordinates
     Float phi = std::atan2(rec.wi(2), rec.wi(0));
+    // LOG("WI");
+    // LOG(rec.wi(2));
+    // LOG(rec.wi(1));
+    // LOG(rec.wi(0));
+    // LOG("DONE WI");
 
     if (phi < 0.f)
         phi = phi + 2.f * M_PI;
-
-    // LOG("phi")
 
     double theta = acos(rec.wi(1)); // this assumes that the direction is normalized
     return intensity * texture->texture->evaluate(Point2f(phi * INV_TWOPI, theta * INV_PI));

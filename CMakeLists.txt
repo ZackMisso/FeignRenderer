@@ -115,7 +115,6 @@ FILE ( GLOB FEIGN_SOURCE
     src/emitters/*.cpp
     src/filters/*.cpp
     src/integrators/*.cpp
-    src/materials/*.cpp
     src/math/*.cpp
     src/media/*.cpp
     src/media/trans_ests/*.cpp

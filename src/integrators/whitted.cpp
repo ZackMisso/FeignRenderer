@@ -49,18 +49,11 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                                               false,
                                               true);
 
-    // LOG("testing 2");
-    // if (!shader)
-    //     LOG("shader does not exist");
     // evaluate the material shader
     shader->evaluate(closure);
 
-    // LOG("testing 4");
-
     // accumulate the shadow rays
     closure.accumulate_shadow_rays(shader);
-
-    // LOG("testing 3");
 
     if (closure.is_specular)
     {
@@ -78,10 +71,12 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                       std::numeric_limits<Float>::infinity(),
                       ray.depth + 1);
 
+        // if contribution is zero terminate the path to save computation
         Color3f beta = closure.albedo * (1.f / rr_cont_probability);
         if (beta.isZero())
             return closure.nee + closure.emission;
 
+        // TODO: maybe turn this into an iterative version of whitted
         Color3f recur = Li(scene, sampler, new_ray);
 
         return beta * recur +

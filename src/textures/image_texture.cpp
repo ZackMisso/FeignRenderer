@@ -31,6 +31,7 @@ Color3f ImageTexture::evaluate(const Point2f &point)
     sample[0] = bound(point(0) * image.width(), 0.f, image.width() - 1);
     sample[1] = bound(point(1) * image.height(), 0.f, image.height() - 1);
 
+    // it is segfaulting and I am trying to figure out why
     LOG("pre");
 
     LOG(std::to_string(point(0)));

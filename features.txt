@@ -3,6 +3,7 @@ List of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
++ Environment Maps (why did I never have support for this?)
 + Full Basic SDF support - master branch
 Interpolation scheme support for scene variables
 Path Tracing with (full) MIS
@@ -15,7 +16,8 @@ Dipole method
 Directional Dipole method
 Disney BSDF
 SDF refractions
-Easy to integrate Macros
+IES support
+Easy to integrate Macros (dear zack from the past - what did this mean?)
 Instanced Geometry - Need to look into embrees features
 Subdivision Embree support
 Import scenes from obj files (Maya + Blender)

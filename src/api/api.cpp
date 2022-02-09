@@ -17,7 +17,6 @@
 #include <feign/core/integrator.h>
 #include <feign/core/sampler.h>
 #include <feign/core/scene.h>
-#include <feign/core/material.h>
 #include <feign/core/texture.h>
 
 // media includes
@@ -37,7 +36,8 @@
 
 // TODO: make all of this logic more generic for more easily adding new classes
 // TODO: rethink this node structure. storing everything as nodes instead of their
-//       actual types is a little weird. Is there a cleaner way of doing this?
+//       actual types is a little weird. Is there a cleaner way of doing this while
+//       still allowing for compatibility with the eventual scene editor idea?
 
 FEIGN_BEGIN()
 
@@ -53,7 +53,6 @@ FeignRenderer::FeignRenderer(Imagef *target)
     integrators = std::unordered_map<std::string, IntegratorNode *>();
     samplers = std::unordered_map<std::string, SamplerNode *>();
     filters = std::unordered_map<std::string, FilterNode *>();
-    // materials = std::unordered_map<std::string, MaterialNode *>();
     objects = std::unordered_map<std::string, ObjectNode *>();
     meshes = std::unordered_map<std::string, MeshNode *>();
     geom_shaders = std::unordered_map<std::string, GeometryShaderNode *>();
@@ -71,7 +70,6 @@ FeignRenderer::FeignRenderer(Imagef *target)
     integrators.clear();
     samplers.clear();
     filters.clear();
-    // materials.clear();
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
@@ -107,8 +105,6 @@ FeignRenderer::~FeignRenderer()
         delete it.second;
     for (auto it : filters)
         delete it.second;
-    // for (auto it : materials)
-    //     delete it.second;
     for (auto it : objects)
         delete it.second;
     for (auto it : meshes)
@@ -139,7 +135,6 @@ FeignRenderer::~FeignRenderer()
     integrators.clear();
     samplers.clear();
     filters.clear();
-    // materials.clear();
     objects.clear();
     meshes.clear();
     geom_shaders.clear();
@@ -296,29 +291,6 @@ FilterNode *FeignRenderer::find_filter(std::string name)
         return itr->second;
     }
 }
-
-// MaterialNode* FeignRenderer::find_material(std::string name)
-// {
-//     std::unordered_map<std::string, MaterialNode*>::const_iterator itr = materials.find(name);
-//
-//     if (itr == materials.end())
-//     {
-//         MaterialNode* node = new MaterialNode(name);
-//         materials.insert({name, node});
-//
-//         if (name == "default")
-//         {
-//             BSDFNode* bsdf = getInstance()->find_bsdf("default");
-//             node->material = new SimpleMaterial(bsdf);
-//         }
-//
-//         return node;
-//     }
-//     else
-//     {
-//         return itr->second;
-//     }
-// }
 
 ObjectNode *FeignRenderer::find_object(std::string name)
 {
@@ -1005,29 +977,6 @@ void FeignRenderer::fr_shader(std::string name,
                                                      mesh_bsdf,
                                                      params->threshold);
     }
-    // else if (type == "radar") // TODO: delete this
-    // {
-    //     MaterialShaderNode *shader = getInstance()->find_material_shader(name);
-
-    //     if (shader->shader)
-    //     {
-    //         throw new FeignRendererException("radar shader already defined");
-    //     }
-
-    //     RadarMaterialShader::Params *params = (RadarMaterialShader::Params *)shader_data;
-    //     MaterialNode *radar_mat = getInstance()->find_material(params->radar_mat);
-    //     MaterialNode *mesh_mat = getInstance()->find_material(params->mesh_mat);
-
-    //     shader->shader = new RadarMaterialShader(radar_mat,
-    //                                              mesh_mat,
-    //                                              params->start_points,
-    //                                              params->end_dist,
-    //                                              params->start_times,
-    //                                              params->end_times,
-    //                                              params->band_width,
-    //                                              params->fall_off,
-    //                                              params->proxy);
-    // }
     else
     {
         throw new NotImplementedException("shader type not recognized: " + type);

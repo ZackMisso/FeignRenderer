@@ -197,6 +197,13 @@ inline Float sign(Float val)
     return 1.0;
 }
 
+inline Float SQRT(Float val)
+{
+    if (val < Epsilon)
+        return 0.0;
+    return std::sqrt(val);
+}
+
 /////////////////////////////////////////////////
 // EXCEPTIONS
 /////////////////////////////////////////////////

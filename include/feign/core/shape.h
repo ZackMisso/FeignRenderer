@@ -9,7 +9,6 @@
 #pragma once
 
 #include <feign/core/node.h>
-#include <feign/core/material.h>
 #include <feign/core/shader.h>
 #include <feign/media/media.h>
 #include <feign/math/bbox.h>
