@@ -37,7 +37,7 @@
     "shader": {
         "name": "simple_shader",
         "type": "simple_material",
-        "material": "diffuse_material"
+        "bsdf": "diffuse_bsdf"
     },
     "mesh": {
         "name": "sphere_obj",
@@ -115,11 +115,6 @@
         "mesh": "plane_obj",
         "material_shader": "simple_shader"
     },
-    "material": {
-        "name": "diffuse_material",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
-    },
     "bsdf": {
         "name": "diffuse_bsdf",
         "type": "diffuse",
@@ -128,15 +123,6 @@
             0.3,
             0.2
         ]
-    },
-    "material": {
-        "name": "floor_material",
-        "type": "simple",
-        "bsdf": "floor_bsdf"
-    },
-    "bsdf": {
-        "name": "floor_bsdf",
-        "type": "diffuse"
     },
     "emitter": {
         "name": "point_emitter",

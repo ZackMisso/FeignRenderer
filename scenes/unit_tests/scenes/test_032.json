@@ -35,7 +35,6 @@
         "width": 256,
         "height": 256
     },
-
     "object": {
         "name": "floor",
         "mesh": "plane1",
@@ -51,7 +50,9 @@
             0.0
         ],
         "translate": [
-            0.0, 0.0, -1.0
+            0.0,
+            0.0,
+            -1.0
         ],
         "material_shader": "diff_shad"
     },
@@ -61,7 +62,6 @@
         "filename": "../scenes/meshes/plane.obj",
         "flip_norms": true
     },
-
     "object": {
         "name": "left_wall",
         "mesh": "plane2",
@@ -77,7 +77,9 @@
             0.0
         ],
         "translate": [
-            0.0, -10.0, 9.0
+            0.0,
+            -10.0,
+            9.0
         ],
         "material_shader": "diff_shad_red"
     },
@@ -86,7 +88,6 @@
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/plane.obj"
     },
-
     "object": {
         "name": "back_wall",
         "mesh": "plane3",
@@ -102,7 +103,9 @@
             1.0
         ],
         "translate": [
-            -10.0, 0.0, 9.0
+            -10.0,
+            0.0,
+            9.0
         ],
         "material_shader": "diff_shad"
     },
@@ -112,7 +115,6 @@
         "filename": "../scenes/meshes/plane.obj",
         "flip_norms": true
     },
-
     "object": {
         "name": "right_wall",
         "mesh": "plane4",
@@ -128,7 +130,9 @@
             0.0
         ],
         "translate": [
-            0.0, 10.0, 9.0
+            0.0,
+            10.0,
+            9.0
         ],
         "material_shader": "diff_shad_blue"
     },
@@ -138,7 +142,6 @@
         "filename": "../scenes/meshes/plane.obj",
         "flip_norms": true
     },
-
     "object": {
         "name": "roof",
         "mesh": "plane5",
@@ -154,7 +157,9 @@
             0.0
         ],
         "translate": [
-            0.0, 0.0, 19.0
+            0.0,
+            0.0,
+            19.0
         ],
         "material_shader": "diff_shad"
     },
@@ -163,67 +168,48 @@
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/plane.obj"
     },
-
     "shader": {
         "name": "diff_shad",
         "type": "simple_material",
-        "material": "diffuse_mat"
+        "bsdf": "diffuse_bsdf"
     },
-
     "shader": {
         "name": "diff_shad_blue",
         "type": "simple_material",
-        "material": "diffuse_mat_blue"
+        "bsdf": "diffuse_bsdf_blue"
     },
-
     "shader": {
         "name": "diff_shad_red",
         "type": "simple_material",
-        "material": "diffuse_mat_red"
-    },
-
-    "material": {
-        "name": "diffuse_mat",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
-    },
-
-    "material": {
-        "name": "diffuse_mat_blue",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf_blue"
-    },
-
-    "material": {
-        "name": "diffuse_mat_red",
-        "type": "simple",
         "bsdf": "diffuse_bsdf_red"
     },
-
     "bsdf": {
         "name": "diffuse_bsdf",
         "type": "diffuse",
         "albedo": [
-            0.5, 0.5, 0.5
+            0.5,
+            0.5,
+            0.5
         ]
     },
-
     "bsdf": {
         "name": "diffuse_bsdf_blue",
         "type": "diffuse",
         "albedo": [
-            0.5, 0.5, 0.5
+            0.5,
+            0.5,
+            0.5
         ]
     },
-
     "bsdf": {
         "name": "diffuse_bsdf_red",
         "type": "diffuse",
         "albedo": [
-            0.5, 0.5, 0.5
+            0.5,
+            0.5,
+            0.5
         ]
     },
-
     "emitter": {
         "name": "point_emitter",
         "type": "point",

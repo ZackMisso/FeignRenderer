@@ -46,7 +46,7 @@
     "shader": {
         "name": "simple_shader",
         "type": "simple_material",
-        "material": "diffuse_material"
+        "bsdf": "diffuse_bsdf"
     },
     "mesh": {
         "name": "plane",
@@ -62,11 +62,6 @@
         "name": "ajax_obj",
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/ajax.obj"
-    },
-    "material": {
-        "name": "diffuse_material",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
     },
     "bsdf": {
         "name": "diffuse_bsdf",

@@ -46,7 +46,7 @@
     "shader": {
         "name": "simple_shader",
         "type": "simple_material",
-        "material": "diffuse_material"
+        "bsdf": "diffuse_bsdf"
     },
     "mesh": {
         "name": "plane",
@@ -72,11 +72,6 @@
         "name": "sphere_obj",
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/sphere_tri.obj"
-    },
-    "material": {
-        "name": "diffuse_material",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
     },
     "bsdf": {
         "name": "diffuse_bsdf",

@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "ajax_diffuse",
+        "name": "texture_env_light",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"

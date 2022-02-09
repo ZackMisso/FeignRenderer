@@ -45,14 +45,9 @@ void Dielectric::sample(MaterialClosure &closure) const
 
         closure.wo = wr;
         closure.eta = 1.f;
-        LOG("reflect");
     }
     else
     {
-        LOG("ETA: " + std::to_string(closure.eta));
-        LOG("WI X: " + std::to_string(closure.wi[0]));
-        LOG("WI Y: " + std::to_string(closure.wi[1]));
-
         // refracts
         Vector3f wr = Vector3f(-closure.wi[0],
                                -closure.wi[1],
@@ -63,21 +58,11 @@ void Dielectric::sample(MaterialClosure &closure) const
                                    0.f,
                                    -SQRT(1.0 - wtperp.sqrNorm()));
 
-        LOG("SQR NORM: " + std::to_string(wtperp.sqrNorm()));
-        LOG("ONE MINUS: " + std::to_string(1.0 - wtperp.sqrNorm()));
-        LOG("SQRT: " + std::to_string(sqrt(1.0 - wtperp.sqrNorm())));
-
         closure.wo = wtperp + wtpara;
 
         if (cos_theta < -Epsilon)
             closure.wo[2] = -closure.wo[2];
-        LOG("refract");
     }
-
-    LOG("COS THETA: " + std::to_string(cos_theta));
-    LOG("X: " + std::to_string(closure.wo[0]));
-    LOG("Y: " + std::to_string(closure.wo[1]));
-    LOG("Z: " + std::to_string(closure.wo[2]));
 
     closure.pdf = 1.f;
     closure.albedo = albedo;

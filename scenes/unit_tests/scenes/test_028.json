@@ -56,12 +56,12 @@
     "shader": {
         "name": "floor_shader",
         "type": "simple_material",
-        "material": "floor_material"
+        "bsdf": "floor_bsdf"
     },
     "shader": {
         "name": "simple_shader",
         "type": "simple_material",
-        "material": "diffuse_material"
+        "bsdf": "diffuse_bsdf"
     },
     "mesh": {
         "name": "plane",
@@ -73,21 +73,11 @@
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/sphere_tri.obj"
     },
-    "material": {
-        "name": "diffuse_material",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
-    },
     "bsdf": {
         "name": "diffuse_bsdf",
         "type": "dielectric",
         "int_ior": 1.5,
         "ext_ior": 1.0
-    },
-    "material": {
-        "name": "floor_material",
-        "type": "simple",
-        "bsdf": "floor_bsdf"
     },
     "bsdf": {
         "name": "floor_bsdf",

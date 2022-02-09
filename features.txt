@@ -1,10 +1,15 @@
-List of features to add to the renderer
+Random list of features to add to the renderer
 
 ( zack's notes )
     "+" means that this is currently being worked on
 
-+ Environment Maps (why did I never have support for this?)
-+ Full Basic SDF support - master branch
+Photon Mapping Integrator
+Photon Mapping Acceleration Structures
+Progressive Photon Mapping Integrator
+Photon Beams Integrator
+Photon Surfaces Integrator
+Full Basic SDF support - master branch
+Environment emitter sampling
 Interpolation scheme support for scene variables
 Path Tracing with (full) MIS
 Spectral Rendering
@@ -26,7 +31,6 @@ Fur rendering
 
 Refactors:
     remove the media abstraction and just keep standard medium
-    remove the material abstraction and just represent everything as shaders
     add a check to keep material shaders from being used as geometry shaders
     what the heck is a functor, and why did i make it
     create basic documentation

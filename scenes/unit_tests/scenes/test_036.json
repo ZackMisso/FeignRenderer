@@ -37,7 +37,7 @@
     "shader": {
         "name": "mirror_shader",
         "type": "simple_material",
-        "material": "mirror_material"
+        "bsdf": "mirror_bsdf"
     },
     "mesh": {
         "name": "sphere_obj",
@@ -65,23 +65,9 @@
             0.0
         ]
     },
-    "material": {
-        "name": "mirror_material",
-        "type": "simple",
-        "bsdf": "mirror_bsdf"
-    },
     "bsdf": {
         "name": "mirror_bsdf",
         "type": "mirror"
-    },
-    "material": {
-        "name": "floor_material",
-        "type": "simple",
-        "bsdf": "floor_bsdf"
-    },
-    "bsdf": {
-        "name": "floor_bsdf",
-        "type": "diffuse"
     },
     "emitter": {
         "name": "environment_map",

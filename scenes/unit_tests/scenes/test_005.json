@@ -46,12 +46,12 @@
     "shader": {
         "name": "simple_shader",
         "type": "simple_material",
-        "material": "diffuse_material"
+        "bsdf": "diffuse_bsdf"
     },
     "shader": {
         "name": "mirror_shader",
         "type": "simple_material",
-        "material": "mirror_material"
+        "bsdf": "mirror_bsdf"
     },
     "mesh": {
         "name": "plane",
@@ -118,19 +118,9 @@
         "type": "triangle_mesh",
         "filename": "../scenes/meshes/sphere_tri.obj"
     },
-    "material": {
-        "name": "diffuse_material",
-        "type": "simple",
-        "bsdf": "diffuse_bsdf"
-    },
     "bsdf": {
         "name": "diffuse_bsdf",
         "type": "diffuse"
-    },
-    "material": {
-        "name": "mirror_material",
-        "type": "simple",
-        "bsdf": "mirror_bsdf"
     },
     "bsdf": {
         "name": "mirror_bsdf",

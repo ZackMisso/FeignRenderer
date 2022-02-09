@@ -1,6 +1,6 @@
 {
     "scene": {
-        "name": "ajax_diffuse",
+        "name": "col_env_light",
         "integrator": "integrator",
         "sampler": "sampler",
         "camera": "camera"
@@ -71,9 +71,9 @@
         "name": "env_light",
         "type": "environment",
         "intensity": [
-        0.7,
-        0.4,
-        0.2
+            0.7,
+            0.4,
+            0.2
         ]
     }
 }
