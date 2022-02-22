@@ -14,9 +14,6 @@ FEIGN_BEGIN()
 // TODO: focus on getting this working first for a base scene, then work on
 //       converting this to work with the shader framework
 
-// TODO: rethink the entire shading framework, it should not have as many layers
-//       of abstraction as it does. There is currently no use for
-
 // TODO: make a volumetric version of photon mapping
 
 PhotonMapping::PhotonMapping(FilterNode *filter,
@@ -39,6 +36,7 @@ void PhotonMapping::preProcess(const Scene *scene,
     scatter_photons(scene, sampler);
 }
 
+// TODO: this needs to be parallelized
 void PhotonMapping::scatter_photons(const Scene *scene,
                                     Sampler *sampler)
 {
@@ -88,8 +86,6 @@ void PhotonMapping::scatter_photons(const Scene *scene,
                 break;
             }
 
-            // if (i != 0) assert(false);
-
             // evaluate shader / colliding location
             const MaterialShader *shader = scene->getShapeMaterialShader(its);
             closure.albedo = 0.0;
@@ -126,37 +122,23 @@ void PhotonMapping::scatter_photons(const Scene *scene,
             if (closure.is_specular)
                 cosTerm = 1.f;
 
-            // LOG(STR(closure.albedo));
-
-            // update power
-            // if (i == 0)
-            //     power *= closure.albedo * cosTerm / (closure.pdf) / (old_p - its.p).sqrNorm();
-            // else
-
             Color3f old_power = power;
 
             power *= closure.albedo * cosTerm / (closure.pdf);
 
             Color3f div_power = power / old_power;
-            // LOG("PROB: " + STR(div_power.maxValue()));
 
             // apply russian roulette termination
             Float rr_prob = std::min(div_power.maxValue(), 1.f);
             if (sampler->next1D() > rr_prob)
                 break;
             power /= rr_prob;
-
-            // LOG("OLD: " + STR(old_power));
-            // LOG("NEW: " + STR(power));
         }
     }
-
-    // LOG(STR(num_photons));
 
     // last step: divide all photons' powers by the total number of photons
     for (int i = 0; i < num_photons; ++i)
     {
-        // LOG("i: " + STR(i) + " power: " + STR(photons[i].power));
         photons[i].power /= Float(num_photons);
     }
 
@@ -170,13 +152,15 @@ Color3f PhotonMapping::Li(const Scene *scene,
                           bool debug) const
 {
     Ray3f ray = cam_ray;
-    // TODO: do a direct integrator scheme
+
+    // TODO: implement traversal until a non-specular surface has been reached
 
     // as an initial test I am going to visualize the photon map
     Intersection its;
 
     if (!scene->intersect_non_null(ray, its))
     {
+        // TODO: handle environment maps
         return Color3f(0.f);
     }
 
@@ -194,8 +178,8 @@ Color3f PhotonMapping::Li(const Scene *scene,
     closure.wi = its.toLocal(-ray.dir);
 
     // accumulate indirect illumination via the photon map
-    // photon_storage->eval(closure, shader, its.p, Float(0.05));
-    photon_storage->eval(closure, shader, its.p, 20);
+    photon_storage->eval(closure, shader, its.p, Float(0.01));
+    // photon_storage->eval(closure, shader, its.p, 20);
 
     // return the accumulated emission and gathered radiance
     return closure.nee + closure.emission;

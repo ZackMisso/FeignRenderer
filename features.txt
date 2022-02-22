@@ -3,8 +3,9 @@ Random list of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
-Photon Mapping Integrator
 Photon Mapping Acceleration Structures
+Photon Mapping Integrator
+parallelize the scatter photons method
 Progressive Photon Mapping Integrator
 Photon Beams Integrator
 Photon Surfaces Integrator
