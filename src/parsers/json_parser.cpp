@@ -119,6 +119,7 @@ void JsonParser::actually_parse(rapidjson::Document &document)
 
             const rapidjson::Value &value = itr->value;
 
+            // TODO: remove the type specifier
             if (value.HasMember("type"))
             {
                 type = value["type"].GetString();
@@ -128,22 +129,23 @@ void JsonParser::actually_parse(rapidjson::Document &document)
                 name = value["name"].GetString();
             }
 
-            if (type == "homo_abs")
+            // TODO: remove this
+            // if (type == "homo_abs")
+            // {
+            //     Float avg_density = 0.01;
+
+            //     if (value.HasMember("avg_density"))
+            //     {
+            //         avg_density = value["avg_density"].GetFloat();
+            //     }
+
+            //     HomogeneousAbsorbingMedia::Params params(avg_density);
+
+            //     FeignRenderer::fr_media(name, type, &params);
+            // }
+            if (type == "standard")
             {
-                Float avg_density = 0.01;
-
-                if (value.HasMember("avg_density"))
-                {
-                    avg_density = value["avg_density"].GetFloat();
-                }
-
-                HomogeneousAbsorbingMedia::Params params(avg_density);
-
-                FeignRenderer::fr_media(name, type, &params);
-            }
-            else if (type == "standard")
-            {
-                LOG("parsing standard media");
+                // LOG("parsing standard media");
                 std::string density = "default";
                 std::string sampling = "default";
                 std::string phase = "default";

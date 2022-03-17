@@ -20,8 +20,6 @@ Latin::Latin(uint32_t seed,
 
 void Latin::preProcess()
 {
-    // preProcessChildren();
-
     currentSample = 0;
 
     reseed(sampleSeed);

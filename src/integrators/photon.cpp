@@ -15,6 +15,7 @@ FEIGN_BEGIN()
 //       converting this to work with the shader framework
 
 // TODO: make a volumetric version of photon mapping
+// TODO: make a progressive version of photon mapping
 
 PhotonMapping::PhotonMapping(FilterNode *filter,
                              Params *params)

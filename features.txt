@@ -3,13 +3,14 @@ Random list of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
++clocker full integration - photon mapping
 Photon Mapping Acceleration Structures
 Photon Mapping Integrator
 parallelize the scatter photons method
 Progressive Photon Mapping Integrator
 Photon Beams Integrator
 Photon Surfaces Integrator
-Full Basic SDF support - master branch
+Full Basic SDF support
 Environment emitter sampling
 Interpolation scheme support for scene variables
 Path Tracing with (full) MIS
@@ -31,7 +32,7 @@ UI for creating/editing scenes + scenegraphs
 Fur rendering
 
 Refactors:
-    remove the media abstraction and just keep standard medium
+    +remove the media abstraction and just keep standard medium
     add a check to keep material shaders from being used as geometry shaders
     what the heck is a functor, and why did i make it
     create basic documentation

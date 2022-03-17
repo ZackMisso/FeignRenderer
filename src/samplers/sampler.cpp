@@ -10,15 +10,11 @@
 
 FEIGN_BEGIN()
 
-Sampler::Sampler() : Node()
-{
-}
+Sampler::Sampler() : Node() {}
 
 Sampler::Sampler(uint32_t seed,
                  int sample_cnt)
-    : Node(), sampleSeed(seed), sampleCnt(sample_cnt)
-{
-}
+    : Node(), sampleSeed(seed), sampleCnt(sample_cnt) {}
 
 uint32_t Sampler::getSampleCnt() const
 {

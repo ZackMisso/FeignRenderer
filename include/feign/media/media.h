@@ -22,6 +22,7 @@ FEIGN_BEGIN()
 
 class MediaClosure;
 
+// TODO: remove this abstraction
 class Media
 {
 public:
@@ -46,6 +47,7 @@ public:
 };
 
 // a generalized medium class to avoid writing all these extensions
+// TODO: make this the defacto medium class with no abstraction
 class StandardMedium : public Media
 {
 public:
@@ -119,35 +121,35 @@ public:
     Color3f sigma_t;
 };
 
-class HomogeneousAbsorbingMedia : public Media
-{
-public:
-    struct Params
-    {
-        Params(Float avg_density)
-            : avg_density(avg_density) {}
+// class HomogeneousAbsorbingMedia : public Media
+// {
+// public:
+//     struct Params
+//     {
+//         Params(Float avg_density)
+//             : avg_density(avg_density) {}
 
-        Float avg_density;
-    };
+//         Float avg_density;
+//     };
 
-    HomogeneousAbsorbingMedia(Float avg_density);
+//     HomogeneousAbsorbingMedia(Float avg_density);
 
-    virtual Color3f sample(Ray3f ray,
-                           Sampler *sampler,
-                           MediaClosure &closure) const;
+//     virtual Color3f sample(Ray3f ray,
+//                            Sampler *sampler,
+//                            MediaClosure &closure) const;
 
-    virtual Color3f transmittance(Ray3f ray,
-                                  Sampler *sampler,
-                                  MediaClosure &closure) const;
+//     virtual Color3f transmittance(Ray3f ray,
+//                                   Sampler *sampler,
+//                                   MediaClosure &closure) const;
 
-    virtual Float sample_phase(const Vector3f &wo,
-                               Vector3f &wi,
-                               Point2f samp) const { return 0.f; }
+//     virtual Float sample_phase(const Vector3f &wo,
+//                                Vector3f &wi,
+//                                Point2f samp) const { return 0.f; }
 
-    virtual bool isGlobal() const;
+//     virtual bool isGlobal() const;
 
-    Float avg_density;
-};
+//     Float avg_density;
+// };
 
 /////////////////////////////////////////////////
 // Media Node structure

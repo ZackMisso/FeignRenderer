@@ -36,15 +36,11 @@ void Clocker::initialize()
     Clocker::addClocker("filter");
     Clocker::addClocker("embree");
 
-    // addClocker("full render");
-    // addClocker("embree intersect");
-    // what
     // add more soon
 }
 
 void Clocker::deinitialize()
 {
-    // std::cout << "deleting clocker" << std::endl;
     delete instance;
 }
 
@@ -106,7 +102,7 @@ void Clocker::addClocker(std::string tracker)
 
 long Clocker::getClockerDuration(std::string tracker)
 {
-    // TODO
+    throw new NotImplementedException("clocker getClockerDuration");
     return -1;
 }
 

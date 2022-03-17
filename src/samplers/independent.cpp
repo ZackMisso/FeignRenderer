@@ -23,8 +23,6 @@ Independent::Independent(uint32_t seed,
 
 void Independent::preProcess()
 {
-    // preProcessChildren();
-
     currentSample = 0;
 
     reseed(sampleSeed);

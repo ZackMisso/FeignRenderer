@@ -994,14 +994,16 @@ void FeignRenderer::fr_media(std::string name,
         throw new FeignRendererException("media already defined");
     }
 
-    if (type == "homo_abs")
-    {
-        HomogeneousAbsorbingMedia::Params *params =
-            (HomogeneousAbsorbingMedia::Params *)medium_data;
+    // TODO: remove type specifier for medium
 
-        medium->media = new HomogeneousAbsorbingMedia(params->avg_density);
-    }
-    else if (type == "standard")
+    // if (type == "homo_abs")
+    // {
+    //     HomogeneousAbsorbingMedia::Params *params =
+    //         (HomogeneousAbsorbingMedia::Params *)medium_data;
+
+    //     medium->media = new HomogeneousAbsorbingMedia(params->avg_density);
+    // }
+    if (type == "standard")
     {
         StandardMedium::Params *params =
             (StandardMedium::Params *)medium_data;

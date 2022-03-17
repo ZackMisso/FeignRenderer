@@ -9,8 +9,7 @@
         "name": "integrator",
         "type": "volpath",
         "filter": "default",
-        "max_bounces": 1,
-        "photons": 500000
+        "max_bounces": 1
     },
     "sampler": {
         "name": "sampler",

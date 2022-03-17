@@ -1,10 +1,10 @@
 /**
-* Author:    Zackary Misso
-* Version:   0.2.0
-*
-* Anyone has permission to use the following code as long as proper
-* acknowledgement is provided to the original author(s).
-**/
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
 
 #include <feign/core/api.h>
 #include <feign/parsers/json_parser.h>
@@ -27,12 +27,6 @@ int main(int argc, char *argv[])
 #if OPENVDB
     openvdb::initialize();
 #endif
-    // //////// TEMPORARY ////////
-
-    // OneWayDice();
-    // return 0;
-
-    // /////\\\ TEMPORARY \\\////
 
     std::string scene = "";
 

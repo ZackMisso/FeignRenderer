@@ -365,10 +365,9 @@ void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
         Color3f Li = emitters[i]->sample_nee(eqr,
                                              closure.sampler->next2D(),
                                              &emitter_pdf);
-        //LOG("base chech");
+
         if (emitters[i]->requiresInitialVisibilityCheck())
         {
-            // LOG("hello");
             // create ray
             Ray3f ray = Ray3f(closure.its->p,
                               eqr.wi,
