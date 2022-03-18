@@ -22,6 +22,8 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePt;
 typedef std::chrono::duration<Float> Duration;
 
+// TODO: need to figure out how to make this work with multi-threading
+
 class Clocker
 {
 private:

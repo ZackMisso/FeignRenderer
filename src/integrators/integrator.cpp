@@ -29,6 +29,7 @@ void Integrator::render_fast(const Scene *scene,
                              Sampler *sampler,
                              Imagef &image) const
 {
+    // TODO: make threads and tile size a configurable parameter
     RenderPool *pool = new RenderPool(12, 64);
     pool->initialize_pool(image.width(), image.height());
     pool->evaluate_pool(scene, this, camera, sampler, image);

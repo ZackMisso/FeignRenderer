@@ -62,6 +62,7 @@ void JsonParser::parse(std::string filename)
 void JsonParser::actually_parse(rapidjson::Document &document)
 {
     // TODO: parallelize this
+    // NOTE: how do I parallelize this with rapidjson?
 
     // still need to figure out what is the best way of building the scene
     for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
@@ -100,7 +101,6 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             }
             if (value.HasMember("sdf_mode"))
             {
-                // assert(false);
                 sdf_mode = value["sdf_mode"].GetBool();
                 std::cout << "SDF_MODE: " << sdf_mode << std::endl;
             }
@@ -115,82 +115,54 @@ void JsonParser::actually_parse(rapidjson::Document &document)
         else if (strcmp(itr->name.GetString(), "media") == 0)
         {
             std::string name = "env_medium";
-            std::string type = "homo_abs";
 
             const rapidjson::Value &value = itr->value;
 
-            // TODO: remove the type specifier
-            if (value.HasMember("type"))
-            {
-                type = value["type"].GetString();
-            }
             if (value.HasMember("name"))
             {
                 name = value["name"].GetString();
             }
 
-            // TODO: remove this
-            // if (type == "homo_abs")
-            // {
-            //     Float avg_density = 0.01;
+            std::string density = "default";
+            std::string sampling = "default";
+            std::string phase = "default";
+            std::string trans_est = "default";
+            std::string trans_func = "default";
+            Color3f abs = Color3f(1.f);
+            Color3f scat = Color3f(0.f);
+            Transform media_transform = Transform();
 
-            //     if (value.HasMember("avg_density"))
-            //     {
-            //         avg_density = value["avg_density"].GetFloat();
-            //     }
-
-            //     HomogeneousAbsorbingMedia::Params params(avg_density);
-
-            //     FeignRenderer::fr_media(name, type, &params);
-            // }
-            if (type == "standard")
+            if (value.HasMember("density"))
             {
-                // LOG("parsing standard media");
-                std::string density = "default";
-                std::string sampling = "default";
-                std::string phase = "default";
-                std::string trans_est = "default";
-                std::string trans_func = "default";
-                Color3f abs = Color3f(1.f);
-                Color3f scat = Color3f(0.f);
-                Transform media_transform = Transform();
-
-                if (value.HasMember("density"))
-                {
-                    density = value["density"].GetString();
-                }
-                if (value.HasMember("sampling"))
-                {
-                    sampling = value["sampling"].GetString();
-                }
-                if (value.HasMember("phase"))
-                {
-                    phase = value["phase"].GetString();
-                }
-                if (value.HasMember("trans_est"))
-                {
-                    trans_est = value["trans_est"].GetString();
-                }
-                if (value.HasMember("trans_func"))
-                {
-                    trans_func = value["trans_func"].GetString();
-                }
-
-                StandardMedium::Params params(trans_est,
-                                              phase,
-                                              sampling,
-                                              density,
-                                              trans_func,
-                                              media_transform,
-                                              abs,
-                                              scat);
-
-                FeignRenderer::fr_media(name, type, &params);
+                density = value["density"].GetString();
             }
-            else
+            if (value.HasMember("sampling"))
             {
-                throw new FeignRendererException(type + " medium can not be parsed through json");
+                sampling = value["sampling"].GetString();
             }
+            if (value.HasMember("phase"))
+            {
+                phase = value["phase"].GetString();
+            }
+            if (value.HasMember("trans_est"))
+            {
+                trans_est = value["trans_est"].GetString();
+            }
+            if (value.HasMember("trans_func"))
+            {
+                trans_func = value["trans_func"].GetString();
+            }
+
+            Media::Params params(trans_est,
+                                 phase,
+                                 sampling,
+                                 density,
+                                 trans_func,
+                                 media_transform,
+                                 abs,
+                                 scat);
+
+            FeignRenderer::fr_media(name, &params);
         }
         else if (strcmp(itr->name.GetString(), "media_density") == 0)
         {
@@ -549,7 +521,6 @@ void JsonParser::actually_parse(rapidjson::Document &document)
                 }
                 else if (strcmp(itr_2->name.GetString(), "emitter") == 0)
                 {
-                    // assert(false);
                     emitter = value_2.GetString();
                 }
             }
@@ -591,14 +562,6 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             {
                 outside_media = value["outside_media"].GetString();
             }
-
-            // MediumBoundry* boundry = nullptr;
-            //
-            // if (inside_media != "null" || outside_media != "null")
-            // {
-            //     boundry = new MedumBoundry(inside_media,
-            //                                outside_media);
-            // }
 
             if (type == "triangle_mesh")
             {
@@ -828,8 +791,6 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             std::string type = "point";
             std::string mesh = "null";
             std::string material = "null";
-            // Vector3f pos = Vector3f(0.f);
-            // Color3f intensity = Color3f(1.f);
 
             const rapidjson::Value &value = itr->value;
 
@@ -1015,40 +976,6 @@ void JsonParser::actually_parse(rapidjson::Document &document)
 
             FeignRenderer::fr_clear_transform();
         }
-        // else if (strcmp(itr->name.GetString(), "material") == 0)
-        // {
-        //     std::string name = "material";
-        //     std::string type = "simple";
-
-        //     const rapidjson::Value &value = itr->value;
-
-        //     if (value.HasMember("name"))
-        //     {
-        //         name = value["name"].GetString();
-        //     }
-        //     if (value.HasMember("type"))
-        //     {
-        //         type = value["type"].GetString();
-        //     }
-
-        //     if (type == "simple")
-        //     {
-        //         std::string bsdf = "default";
-
-        //         if (value.HasMember("bsdf"))
-        //         {
-        //             bsdf = value["bsdf"].GetString();
-        //         }
-
-        //         SimpleMaterial::Params params(bsdf);
-
-        //         FeignRenderer::fr_material(name, type, &params);
-        //     }
-        //     else
-        //     {
-        //         throw new FeignRendererException(type + " material is not parsable yet");
-        //     }
-        // }
         else if (strcmp(itr->name.GetString(), "bsdf") == 0)
         {
             std::string name = "bsdf";

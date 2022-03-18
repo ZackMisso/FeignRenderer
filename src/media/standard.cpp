@@ -11,14 +11,14 @@
 
 FEIGN_BEGIN()
 
-StandardMedium::StandardMedium(TransmittanceEstimatorNode *trans_node,
-                               PhaseFunctionNode *phase_node,
-                               MediumSamplingNode *sampling_node,
-                               DensityFunctionNode *density_func_node,
-                               TransFuncNode *trans_func_node,
-                               Transform &transform,
-                               Color3f abs,
-                               Color3f scat)
+Media::Media(TransmittanceEstimatorNode *trans_node,
+             PhaseFunctionNode *phase_node,
+             MediumSamplingNode *sampling_node,
+             DensityFunctionNode *density_func_node,
+             TransFuncNode *trans_func_node,
+             Transform &transform,
+             Color3f abs,
+             Color3f scat)
     : density(density_func_node),
       trans_func(trans_func_node),
       sampling(sampling_node),
@@ -31,7 +31,7 @@ StandardMedium::StandardMedium(TransmittanceEstimatorNode *trans_node,
     sigma_t = abs + scat;
 }
 
-void StandardMedium::preProcess()
+void Media::preProcess()
 {
     sampling->sampling->density = density->density;
     sampling->sampling->trans_func = trans_func->trans_func;
@@ -41,9 +41,9 @@ void StandardMedium::preProcess()
     density->density->preProcess();
 }
 
-Color3f StandardMedium::sample(Ray3f world_ray,
-                               Sampler *sampler,
-                               MediaClosure &closure) const
+Color3f Media::sample(Ray3f world_ray,
+                      Sampler *sampler,
+                      MediaClosure &closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
 
@@ -69,9 +69,9 @@ Color3f StandardMedium::sample(Ray3f world_ray,
     return Color3f(1.f);
 }
 
-Color3f StandardMedium::transmittance(Ray3f world_ray,
-                                      Sampler *sampler,
-                                      MediaClosure &closure) const
+Color3f Media::transmittance(Ray3f world_ray,
+                             Sampler *sampler,
+                             MediaClosure &closure) const
 {
     const Ray3f ray = transform.inverse() * world_ray;
 

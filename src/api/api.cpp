@@ -807,18 +807,12 @@ void FeignRenderer::fr_mesh(std::string name,
     }
     else if (type == "grid")
     {
-        // assert(false);
         GridObj::Params *params = (GridObj::Params *)mesh_data;
-        // assert(false);
 
         GeometryShaderNode *geom_shader = getInstance()->find_geometry_shader(params->shader);
         TextureNode *terrain_texture = getInstance()->find_texture(params->texture);
-        // assert(false);
-
-        // if (terrain_texture) assert(false);
 
         mesh->mesh = new GridObj(params->resolution, terrain_texture);
-        // assert(false);
         mesh->mesh->geomShader = geom_shader;
     }
     else if (type == "sdf_sphere")
@@ -932,7 +926,6 @@ void FeignRenderer::fr_shader(std::string name,
                               void *shader_data)
 {
     // TODO: incorporate other shader types later
-    // TODO: continue the removal of the material abstraction from here
 
     if (type == "interp_verts_to_sphere")
     {
@@ -984,7 +977,6 @@ void FeignRenderer::fr_shader(std::string name,
 }
 
 void FeignRenderer::fr_media(std::string name,
-                             std::string type,
                              void *medium_data)
 {
     MediaNode *medium = getInstance()->find_media(name);
@@ -994,44 +986,28 @@ void FeignRenderer::fr_media(std::string name,
         throw new FeignRendererException("media already defined");
     }
 
-    // TODO: remove type specifier for medium
+    Media::Params *params =
+        (Media::Params *)medium_data;
 
-    // if (type == "homo_abs")
-    // {
-    //     HomogeneousAbsorbingMedia::Params *params =
-    //         (HomogeneousAbsorbingMedia::Params *)medium_data;
+    TransmittanceEstimatorNode *trans_node =
+        getInstance()->find_transmittance_estimator(params->trans_node);
+    PhaseFunctionNode *phase_node =
+        getInstance()->find_phase_func(params->phase_node);
+    MediumSamplingNode *med_samp_node =
+        getInstance()->find_medium_sampling(params->sampling_node);
+    DensityFunctionNode *density_node =
+        getInstance()->find_density_func(params->density_func_node);
+    TransFuncNode *trans_func_node =
+        getInstance()->find_transmittance_func(params->trans_func_node);
 
-    //     medium->media = new HomogeneousAbsorbingMedia(params->avg_density);
-    // }
-    if (type == "standard")
-    {
-        StandardMedium::Params *params =
-            (StandardMedium::Params *)medium_data;
-
-        TransmittanceEstimatorNode *trans_node =
-            getInstance()->find_transmittance_estimator(params->trans_node);
-        PhaseFunctionNode *phase_node =
-            getInstance()->find_phase_func(params->phase_node);
-        MediumSamplingNode *med_samp_node =
-            getInstance()->find_medium_sampling(params->sampling_node);
-        DensityFunctionNode *density_node =
-            getInstance()->find_density_func(params->density_func_node);
-        TransFuncNode *trans_func_node =
-            getInstance()->find_transmittance_func(params->trans_func_node);
-
-        medium->media = new StandardMedium(trans_node,
-                                           phase_node,
-                                           med_samp_node,
-                                           density_node,
-                                           trans_func_node,
-                                           params->transform,
-                                           params->abs,
-                                           params->scat);
-    }
-    else
-    {
-        throw new NotImplementedException("medium type not recognized: " + type);
-    }
+    medium->media = new Media(trans_node,
+                              phase_node,
+                              med_samp_node,
+                              density_node,
+                              trans_func_node,
+                              params->transform,
+                              params->abs,
+                              params->scat);
 }
 
 void FeignRenderer::fr_medium_density(std::string name,

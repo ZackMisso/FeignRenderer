@@ -3,7 +3,7 @@ Random list of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
-+clocker full integration - photon mapping
+clocker full integration - photon mapping
 Photon Mapping Acceleration Structures
 Photon Mapping Integrator
 parallelize the scatter photons method
@@ -32,7 +32,7 @@ UI for creating/editing scenes + scenegraphs
 Fur rendering
 
 Refactors:
-    +remove the media abstraction and just keep standard medium
+    make clocker calls macros to hide the # declarations
     add a check to keep material shaders from being used as geometry shaders
     what the heck is a functor, and why did i make it
     create basic documentation

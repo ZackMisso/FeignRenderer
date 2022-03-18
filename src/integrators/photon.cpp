@@ -8,6 +8,7 @@
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 
@@ -35,12 +36,24 @@ void PhotonMapping::preProcess(const Scene *scene,
 
     photon_storage = new PhotonArray();
     scatter_photons(scene, sampler);
+
+    // initialize clocker instances
+#if CLOCKING
+    Clocker::addClocker("scatter photons");
+    Clocker::addClocker("eval photons");
+    Clocker::addClocker("build photon accel");
+#endif
 }
 
 // TODO: this needs to be parallelized
 void PhotonMapping::scatter_photons(const Scene *scene,
                                     Sampler *sampler)
 {
+    LOG("SCATTERING PHOTONS");
+#if CLOCKING
+    Clocker::startClock("scatter photons");
+#endif
+
     // create initial list of photons
     Photon *photons = new Photon[num_photons]();
     int created_photons = 0;
@@ -143,8 +156,20 @@ void PhotonMapping::scatter_photons(const Scene *scene,
         photons[i].power /= Float(num_photons);
     }
 
+#if CLOCKING
+    Clocker::endClock("scatter photons");
+#endif
+
+#if CLOCKING
+    Clocker::startClock("build photon accel");
+#endif
+
     // create the acceleration structure from the spawned list of photons
     photon_storage->build(scene->sceneBounds, photons, num_photons);
+
+#if CLOCKING
+    Clocker::endClock("build photon accel");
+#endif
 }
 
 Color3f PhotonMapping::Li(const Scene *scene,
@@ -178,9 +203,17 @@ Color3f PhotonMapping::Li(const Scene *scene,
 
     closure.wi = its.toLocal(-ray.dir);
 
+#if CLOCKING
+    Clocker::startClock("eval photons");
+#endif
+
     // accumulate indirect illumination via the photon map
     photon_storage->eval(closure, shader, its.p, Float(0.01));
     // photon_storage->eval(closure, shader, its.p, 20);
+
+#if CLOCKING
+    Clocker::endClock("eval photons");
+#endif
 
     // return the accumulated emission and gathered radiance
     return closure.nee + closure.emission;

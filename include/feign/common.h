@@ -1,10 +1,10 @@
 /**
-* Author:    Zackary Misso
-* Version:   0.2.0
-*
-* Anyone has permission to use the following code as long as proper
-* acknowledgement is provided to the original author(s).
-**/
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
 
 #pragma once
 
@@ -26,7 +26,7 @@
 
 // TODO: incorporate clocking throughout renderer
 // Stats tracking //
-#define CLOCKING false
+#define CLOCKING true
 ////////////////////
 
 // TODO: make this a stats parameter in the future
