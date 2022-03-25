@@ -22,7 +22,29 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePt;
 typedef std::chrono::duration<Float> Duration;
 
-// TODO: need to figure out how to make this work with multi-threading
+struct ClockerResults
+{
+    ClockerResult()
+    {
+        trackings = std::vector<std::string>();
+        times = std::vector<Duration>();
+    }
+
+    ClockerResult(const ClockerResult &other)
+    {
+        // TODO
+    }
+
+    void print(int index)
+    {
+        std::cout << trackings[i] << ": " << durations[i].count() << " seconds" << std::endl;
+    }
+
+    std::vector<std::string> trackings;
+    std::vector<Duration> times;
+};
+
+// TODO: need to implement this with support for multi-threading
 
 class Clocker
 {
@@ -31,9 +53,8 @@ private:
 
     Clocker();
 
-    std::vector<std::string> trackings;
+    ClockerResults clockings;
     std::vector<TimePt> startTimes;
-    std::vector<Duration> durations;
     std::vector<bool> actives;
 
 public:
@@ -44,7 +65,8 @@ public:
     static void startClock(std::string tracker);
     static void endClock(std::string tracker);
     static void addClocker(std::string tracker);
-    static long getClockerDuration(std::string tracker);
+    static ClockerResult returnResult(std::string tracking);
+    static void returnResults(std::vector<ClockerResult> &results);
 };
 
 #endif

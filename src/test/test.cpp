@@ -1,10 +1,10 @@
 /**
-* Author:    Zackary Misso
-* Version:   0.2.0
-*
-* Anyone has permission to use the following code as long as proper
-* acknowledgement is provided to the original author(s).
-**/
+ * Author:    Zackary Misso
+ * Version:   0.2.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
 
 #include <feign/test/tester.h>
 #include <imedit/image.h>
@@ -20,8 +20,8 @@ bool evaluate_unit_test(UnitTestData &testLog)
 
     LOG("running test: " + testLog.test_name);
 
-    JsonParser::parse("../scenes/unit_tests/scenes/" + testLog.test_name,
-                      &image);
+    JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
+                              &image);
 
     int loc = testLog.test_name.find_last_of(".");
 
@@ -49,8 +49,8 @@ bool replace_reference(UnitTestData &testLog)
 
     LOG("running test: " + testLog.test_name);
 
-    JsonParser::parse("../scenes/unit_tests/scenes/" + testLog.test_name,
-                      &image);
+    JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
+                              &image);
 
     int loc = testLog.test_name.find_last_of(".");
 

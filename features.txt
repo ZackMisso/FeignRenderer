@@ -3,7 +3,8 @@ Random list of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
-clocker full integration - photon mapping
+clocker - automatic tests and recordings
+a better system for organizing unit tests
 Photon Mapping Acceleration Structures
 Photon Mapping Integrator
 parallelize the scatter photons method

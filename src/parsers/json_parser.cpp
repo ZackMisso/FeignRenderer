@@ -21,7 +21,7 @@
 
 FEIGN_BEGIN()
 
-void JsonParser::parse(std::string filename, Imagef *image)
+void JsonParser::parse_and_run(std::string filename, Imagef *image)
 {
     FeignRenderer::initialize(image);
 
@@ -40,7 +40,7 @@ void JsonParser::parse(std::string filename, Imagef *image)
     actually_parse(document);
 }
 
-void JsonParser::parse(std::string filename)
+void JsonParser::parse_and_run(std::string filename)
 {
     FeignRenderer::initialize();
 

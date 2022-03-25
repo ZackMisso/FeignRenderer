@@ -32,24 +32,23 @@ PhotonMapping::~PhotonMapping()
 void PhotonMapping::preProcess(const Scene *scene,
                                Sampler *sampler)
 {
-    Integrator::preProcess(scene, sampler);
-
-    photon_storage = new PhotonArray();
-    scatter_photons(scene, sampler);
-
     // initialize clocker instances
 #if CLOCKING
     Clocker::addClocker("scatter photons");
     Clocker::addClocker("eval photons");
     Clocker::addClocker("build photon accel");
 #endif
+
+    Integrator::preProcess(scene, sampler);
+
+    photon_storage = new PhotonArray();
+    scatter_photons(scene, sampler);
 }
 
 // TODO: this needs to be parallelized
 void PhotonMapping::scatter_photons(const Scene *scene,
                                     Sampler *sampler)
 {
-    LOG("SCATTERING PHOTONS");
 #if CLOCKING
     Clocker::startClock("scatter photons");
 #endif

@@ -15,13 +15,6 @@
 
 using namespace feign;
 
-void run_scene(std::string scene_name)
-{
-    JsonParser::parse(scene_name);
-
-    FeignRenderer::clean_up();
-}
-
 int main(int argc, char *argv[])
 {
 #if OPENVDB
@@ -106,11 +99,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    std::cout << std::endl;
-    std::cout << scene << std::endl;
-    std::cout << std::endl;
+    LOG("");
+    LOG(scene);
+    LOG("");
 
-    run_scene(scene);
+    JsonParser::parse_and_run(scene);
 
     return 0;
 }

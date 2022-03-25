@@ -16,9 +16,8 @@ Clocker *Clocker::instance = nullptr;
 
 Clocker::Clocker()
 {
-    trackings = std::vector<std::string>();
+    clockings = ClockerResults();
     startTimes = std::vector<TimePt>();
-    durations = std::vector<Duration>();
     actives = std::vector<bool>();
 }
 
@@ -48,6 +47,7 @@ void Clocker::printResults()
 {
     for (int i = 0; i < getInstance()->trackings.size(); ++i)
     {
+        getInstance()->clockings->print(i);
         std::cout << getInstance()->trackings[i] << ": " << getInstance()->durations[i].count() << " seconds" << std::endl;
     }
 }
@@ -100,10 +100,23 @@ void Clocker::addClocker(std::string tracker)
     getInstance()->actives.push_back(false);
 }
 
-long Clocker::getClockerDuration(std::string tracker)
+void Clocker::returnResults(std::vector<ClockerResult> &results)
 {
-    throw new NotImplementedException("clocker getClockerDuration");
-    return -1;
+    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    {
+        results.push_back(ClockerResult(getInstance()->trackings[i], getInstance()->durations[i]));
+    }
+}
+
+ClockerResult Clocker::returnResult(std::string tracking)
+{
+    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    {
+        if (getInstance()->trackings[i] == tracking)
+        {
+            return ClockerResult(tracking, getInstance()->durations[i]);
+        }
+    }
 }
 
 #endif
