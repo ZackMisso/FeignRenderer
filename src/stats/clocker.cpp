@@ -12,6 +12,29 @@ FEIGN_BEGIN()
 
 #if CLOCKING
 
+ClockerResults::ClockerResults()
+{
+    trackings = std::vector<std::string>();
+    times = std::vector<Duration>();
+}
+
+ClockerResults::ClockerResults(const ClockerResults &other)
+{
+    trackings = std::vector<std::string>();
+    times = std::vector<Duration>();
+
+    for (int i = 0; i < other.trackings.size(); ++i)
+    {
+        trackings.push_back(other.trackings[i]);
+        times.push_back(other.times[i]);
+    }
+}
+
+void ClockerResults::print(int index)
+{
+    std::cout << trackings[index] << ": " << times[index].count() << " seconds" << std::endl;
+}
+
 Clocker *Clocker::instance = nullptr;
 
 Clocker::Clocker()
@@ -45,19 +68,18 @@ void Clocker::deinitialize()
 
 void Clocker::printResults()
 {
-    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    for (int i = 0; i < getInstance()->clockings.trackings.size(); ++i)
     {
-        getInstance()->clockings->print(i);
-        std::cout << getInstance()->trackings[i] << ": " << getInstance()->durations[i].count() << " seconds" << std::endl;
+        getInstance()->clockings.print(i);
     }
 }
 
 void Clocker::startClock(std::string tracker)
 {
     // TODO: replace strings with hashes for more efficiency
-    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    for (int i = 0; i < getInstance()->clockings.trackings.size(); ++i)
     {
-        if (getInstance()->trackings[i] == tracker)
+        if (getInstance()->clockings.trackings[i] == tracker)
         {
             if (getInstance()->actives[i])
             {
@@ -67,7 +89,7 @@ void Clocker::startClock(std::string tracker)
             getInstance()->actives[i] = true;
             getInstance()->startTimes[i] = Clock::now();
 
-            i = getInstance()->trackings.size();
+            i = getInstance()->clockings.trackings.size();
         }
     }
 }
@@ -75,9 +97,9 @@ void Clocker::startClock(std::string tracker)
 void Clocker::endClock(std::string tracker)
 {
     // TODO: replace strings with hashes for more efficiency
-    for (int i = 0; i < getInstance()->trackings.size(); ++i)
+    for (int i = 0; i < getInstance()->clockings.trackings.size(); ++i)
     {
-        if (getInstance()->trackings[i] == tracker)
+        if (getInstance()->clockings.trackings[i] == tracker)
         {
             if (!getInstance()->actives[i])
             {
@@ -85,38 +107,24 @@ void Clocker::endClock(std::string tracker)
             }
 
             getInstance()->actives[i] = false;
-            getInstance()->durations[i] += Clock::now() - getInstance()->startTimes[i];
+            getInstance()->clockings.times[i] += Clock::now() - getInstance()->startTimes[i];
 
-            i = getInstance()->trackings.size();
+            i = getInstance()->clockings.trackings.size();
         }
     }
 }
 
 void Clocker::addClocker(std::string tracker)
 {
-    getInstance()->trackings.push_back(tracker);
+    getInstance()->clockings.trackings.push_back(tracker);
+    getInstance()->clockings.times.push_back(Duration(0));
     getInstance()->startTimes.push_back(Clock::now());
-    getInstance()->durations.push_back(Duration(0));
     getInstance()->actives.push_back(false);
 }
 
-void Clocker::returnResults(std::vector<ClockerResult> &results)
+ClockerResults Clocker::returnResults()
 {
-    for (int i = 0; i < getInstance()->trackings.size(); ++i)
-    {
-        results.push_back(ClockerResult(getInstance()->trackings[i], getInstance()->durations[i]));
-    }
-}
-
-ClockerResult Clocker::returnResult(std::string tracking)
-{
-    for (int i = 0; i < getInstance()->trackings.size(); ++i)
-    {
-        if (getInstance()->trackings[i] == tracking)
-        {
-            return ClockerResult(tracking, getInstance()->durations[i]);
-        }
-    }
+    return getInstance()->clockings;
 }
 
 #endif
