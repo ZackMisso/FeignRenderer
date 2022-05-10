@@ -53,23 +53,69 @@ bool UnitTestManager::run_test(int index)
     return testLog.does_it_fail();
 }
 
-bool UnitTestManager::run_all_tests()
+void UnitTestManager::parse_scene_files(
+    std::string main_dir,
+    std::string base_dir,
+    std::vector<std::string> &paths,
+    std::vector<std::string> &dirs,
+    std::vector<std::string> &names)
 {
-    // parse all of the scenes in the test scenes folder
-    std::vector<std::string> paths = std::vector<std::string>();
-
     DIR *dir;
     struct dirent *ent;
 
-    if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
+    if ((dir = opendir(base_dir.c_str())) != NULL)
     {
         while ((ent = readdir(dir)) != NULL)
         {
             std::string str = std::string(ent->d_name);
+
+            if (str.find(".") == std::string::npos)
+            {
+                parse_scene_files(main_dir + str + "/",
+                                  base_dir + str + "/",
+                                  paths,
+                                  dirs);
+            }
+
             if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
-                paths.push_back(str);
+            {
+                paths.push_back(base_dir + str);
+                dirs.push_back(main_dir);
+                names.push_back(str);
+            }
         }
     }
+}
+
+bool UnitTestManager::run_all_tests()
+{
+    // parse all of the scenes in the test scenes folder
+    std::vector<std::string> paths = std::vector<std::string>();
+    std::vector<std::string> dirs = std::vector<std::string>();
+    std::vector<std::string> names = std::vector<std::string>();
+
+    // parse all scenes and their directories
+    parse_scene_files("", "../scenes/unit_tests/scenes/", paths, dirs, names);
+
+    // create all the necessary subfolders for the results directory
+    for (int i = 0; i < dirs.size(); ++i)
+    {
+        std::string str = "mkdir ../scenes/unit_tests/images/" + dirs[i];
+        system(str.c_str());
+    }
+
+    // debug logic
+    // LOG("PATHS:");
+    // for (int i = 0; i < paths.size(); ++i)
+    // {
+    //     LOG(paths[i]);
+    // }
+
+    // LOG("DIRS:");
+    // for (int i = 0; i < dirs.size(); ++i)
+    // {
+    //     LOG(dirs[i]);
+    // }
 
     bool passes = true;
 
@@ -77,7 +123,7 @@ bool UnitTestManager::run_all_tests()
     for (int i = 0; i < paths.size(); ++i)
     {
         LOG("RUNNING TEST: " + std::to_string(i));
-        UnitTestData testLog = UnitTestData(paths[i]);
+        UnitTestData testLog = UnitTestData(paths[i], dirs[i], names[i]);
 
         if (reference_run)
         {
@@ -91,6 +137,44 @@ bool UnitTestManager::run_all_tests()
                 passes = false;
         }
     }
+
+    return false;
+
+    // // TODO: rewrite this for the new directory structure
+
+    // DIR *dir;
+    // struct dirent *ent;
+
+    // if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
+    // {
+    //     while ((ent = readdir(dir)) != NULL)
+    //     {
+    //         std::string str = std::string(ent->d_name);
+    //         if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
+    //             paths.push_back(str);
+    //     }
+    // }
+
+    // bool passes = true;
+
+    // TODO: make this multithreaded
+    // for (int i = 0; i < paths.size(); ++i)
+    // {
+    //     LOG("RUNNING TEST: " + std::to_string(i));
+    //     UnitTestData testLog = UnitTestData(paths[i]);
+
+    //     if (reference_run)
+    //     {
+    //         replace_reference(testLog);
+    //     }
+    //     else
+    //     {
+    //         evaluate_unit_test(testLog);
+    //         testLog.logReport();
+    //         if (testLog.does_it_fail())
+    //             passes = false;
+    //     }
+    // }
 
     return passes;
 }

@@ -3,8 +3,8 @@ Random list of features to add to the renderer
 ( zack's notes )
     "+" means that this is currently being worked on
 
-clocker - automatic tests and recordings
 a better system for organizing unit tests
+clocker - automatic tests and performance recordings
 Photon Mapping Acceleration Structures
 Photon Mapping Integrator
 parallelize the scatter photons method
@@ -17,6 +17,7 @@ Interpolation scheme support for scene variables
 Path Tracing with (full) MIS
 Spectral Rendering
 NVIDIA Ray-Marching
+Debiased Ray-Marching
 Bidirectional Path Tracing
 Integrate performance analysis everywhere
 BSSRDFs

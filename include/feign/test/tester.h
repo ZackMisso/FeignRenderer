@@ -14,14 +14,20 @@ FEIGN_BEGIN()
 
 struct UnitTestData
 {
-    UnitTestData(std::string test_name)
-        : test_name(test_name),
+    UnitTestData(std::string test_path,
+                 std::string test_dir,
+                 std::string test_name)
+        : test_path(test_path),
+          test_dir(test_dir),
+          test_name(test_name),
           image_error(0.f),
           threshold(1.f) {}
 
     void logReport() const;
     bool does_it_fail() const { return image_error > threshold; }
 
+    std::string test_path;
+    std::string test_dir;
     std::string test_name;
     float image_error;
     float threshold;
@@ -33,6 +39,10 @@ struct UnitTestManager
 
     bool run_all_tests();
     bool run_test(int index);
+    void parse_scene_files(std::string main_dir,
+                           std::string base_dir,
+                           std::vector<std::string> &paths,
+                           std::vector<std::string> &dirs);
 
     bool reference_run; // replace the current references
 };
