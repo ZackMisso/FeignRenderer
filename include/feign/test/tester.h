@@ -14,6 +14,13 @@ FEIGN_BEGIN()
 
 struct UnitTestData
 {
+    UnitTestData(std::string test_path)
+        : test_path(test_path),
+          test_dir(""),
+          test_name(test_path),
+          image_error(0.f),
+          threshold(1.f) {}
+    
     UnitTestData(std::string test_path,
                  std::string test_dir,
                  std::string test_name)
@@ -42,7 +49,8 @@ struct UnitTestManager
     void parse_scene_files(std::string main_dir,
                            std::string base_dir,
                            std::vector<std::string> &paths,
-                           std::vector<std::string> &dirs);
+                           std::vector<std::string> &dirs,
+                           std::vector<std::string> &names);
 
     bool reference_run; // replace the current references
 };

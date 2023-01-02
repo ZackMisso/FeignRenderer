@@ -74,7 +74,8 @@ void UnitTestManager::parse_scene_files(
                 parse_scene_files(main_dir + str + "/",
                                   base_dir + str + "/",
                                   paths,
-                                  dirs);
+                                  dirs,
+                                  names);
             }
 
             if (str.length() > 5 && str.substr(str.length() - 5) == ".json")

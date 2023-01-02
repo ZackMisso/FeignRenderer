@@ -11,8 +11,6 @@
 
 FEIGN_BEGIN()
 
-// TODO: for now this will only support homogeneous global media
-
 VolPath_Integrator::VolPath_Integrator(FilterNode *filter,
                                        Integrator::Params *params)
     : Integrator(filter, params) {}
@@ -47,8 +45,6 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
-        // if (debug) std::cout << "beginning bounce: " << bounces << std::endl;
-        // std::cout << "max bounces: " << max_bounces << std::endl;
         if (beta.isZero())
             break;
 
@@ -64,12 +60,10 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
         {
             MediaClosure medium_closure(closure.media, ray.near, its.t);
 
-            // if (debug) std::cout << "sampling media " << std::endl;
             beta *= closure.media->sample(ray, sampler, medium_closure);
 
             if (medium_closure.handleScatter())
             {
-                // if (debug) std::cout << "handling scatter " << std::endl;
                 its.p = ray(medium_closure.sampled_t);
 
                 closure.its = &its;
@@ -124,8 +118,6 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
                 beta /= rr_prob;
 
-                // if (debug) std::cout << "continuing " << std::endl;
-
                 // the current media should not change during internal scattering
                 continue;
             }
@@ -139,24 +131,17 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
             if (boundry)
             {
-                // if (debug) std::cout << "valid boundry " << std::endl;
                 // TODO: check if you are entering or exiting
                 closure.wi = its.toLocal(-ray.dir);
                 if (CoordinateFrame::cosTheta(closure.wi) <= 0)
                 {
-                    // if (debug) std::cout << "exiting " << std::endl;
                     closure.media = (boundry->outside) ? closure.media = boundry->outside->media : nullptr;
                 }
                 else
                 {
-                    // if (debug) std::cout << "entering " << std::endl;
                     closure.media = (boundry->inside) ? closure.media = boundry->inside->media : nullptr;
                 }
             }
-
-            // if (debug) std::cout << "ray pos: " << ray.origin[0] << " " << ray.origin[1] << " " << ray.origin[2] << std::endl;
-            // if (debug) std::cout << "ray dir: " << ray.dir[0] << " " << ray.dir[1] << " " << ray.dir[2] << std::endl;
-            // if (debug) std::cout << "its pos: " << its.p[0] << " " << its.p[1] << " " << its.p[2] << std::endl;
 
             ray = Ray3f(its.p,
                         ray.dir,
@@ -169,8 +154,6 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
         }
 
         const MaterialShader *shader = scene->getShapeMaterialShader(its);
-
-        // if (debug) std::cout << "evaluating normally " << std::endl;
 
         closure.its = &its;
         closure.ray = &ray;

@@ -56,13 +56,13 @@ set(TINYEXR_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/tinyexr)
 
 set(OPENVDB_INCLUDE_DIR
-   /usr/local/Cellar/openvdb/7.0.0_2/include/)
+   /usr/local/Cellar/openvdb/10.0.0/include/)
 
 set(OPENEXR_INCLUDE_DIR
    /usr/local/include/)
 
 find_package(PythonLibs REQUIRED)
-find_package(embree 3.0 REQUIRED)
+find_package(embree 3.3 REQUIRED)
 
 include_directories(${PYTHON_INCLUDE_DIRS})
 
