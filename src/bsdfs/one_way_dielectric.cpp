@@ -1,10 +1,10 @@
 /**
-* Author:    Zackary Misso
-* Version:   0.2.0
-*
-* Anyone has permission to use the following code as long as proper
-* acknowledgement is provided to the original author(s).
-**/
+ * Author:    Zackary Misso
+ * Version:   0.1.0
+ *
+ * Anyone has permission to use the following code as long as proper
+ * acknowledgement is provided to the original author(s).
+ **/
 
 // This material is not based off of any real material, it is simply a hacky
 // BSDF to create a cool scene idea.

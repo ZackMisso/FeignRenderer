@@ -1,0 +1,6 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+Unfortunately, this changelog has been created after the creation of this
+project, so there will be lots of initial missing content.
+

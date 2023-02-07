@@ -14,5 +14,3 @@ A frame from a <a href="https://www.youtube.com/watch?v=rnKu9xs-KWs">music video
 
 A frame from a <a href="https://www.youtube.com/watch?v=rnKu9xs-KWs">smoke animation</a> I created by importing a smoke simulation I made in Houdini into my rendering engine.
 ![Alt text](wolf_smoke.png?raw=true "Title")
-
-su8eD_aRf_zt46fkJztA

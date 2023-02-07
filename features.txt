@@ -1,3 +1,23 @@
+Current renderer version: 0.1.0
+
+Planned list of features for actual future versions:
+
+Version 0.2.0 will feature
+    - fully functioning unit test suite for comparing implementations
+    - re-architectured version of the current codebase to convert all features
+        to be plug-and-play style modules allowing for easy extension.
+
+Version 0.3.0 will feature
+    - MIS for standard path-tracing
+    - incorporation of stats tracking using clocker.h
+
+Version 0.4.0 will feature
+    - Replace current scene description format with Pixar's Universal Scene 
+        Descriptor (USD) format
+
+Version 0.5.0 will feature
+    - To be decided, probably incorporation of my recent research work.
+
 Random list of features to add to the renderer
 
 ( zack's notes )
