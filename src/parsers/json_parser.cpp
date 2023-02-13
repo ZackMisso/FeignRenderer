@@ -23,7 +23,9 @@ FEIGN_BEGIN()
 
 void JsonParser::parse_and_run(std::string filename, Imagef *image)
 {
+    LOG("filename: " + filename); // TODO: filename is incorrect, fix paths
     FeignRenderer::initialize(image);
+    // std::string temp = "../scenes/unit_tests/scenes/normal/" + filename;
 
 #if CLOCKING
     Clocker::startClock("parse");
