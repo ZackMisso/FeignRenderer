@@ -61,6 +61,25 @@ set(OPENVDB_INCLUDE_DIR
 set(OPENEXR_INCLUDE_DIR
    /usr/local/include/)
 
+set(USD_INCLUDE_DIR
+   /Users/corneria/Documents/OpenSource/TEST/include/)
+
+set(TBB_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/tbb2019_20190410oss_mac/tbb2019_20190410oss/lib/)
+
+set(USD_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/TEST/lib)
+set(USD_INCLUDE_DIRECTORY /Users/corneria/Documents/OpenSource/TEST/include)
+
+#find_library(USD_BOOST_PYTHON boost_python HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_GF gf HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_KIND kind HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_SDF sdf HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_TF tf HINTS ${USD_LIBRARY_DIRECTORY})
+find_library(USD_USD usd HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_USDGEOM usdGeom HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_USDSHADE usdShade HINTS ${USD_LIBRARY_DIRECTORY})
+#find_library(USD_VT vt HINTS ${USD_LIBRARY_DIRECTORY})
+
+find_library(tbb REQUIRED HINTS ${TBB_LIBRARY_DIRECTORY})
 find_package(PythonLibs REQUIRED)
 find_package(embree 3.3 REQUIRED)
 
@@ -86,7 +105,11 @@ include_directories(
 
     ${OPENEXR_INCLUDE_DIR}
 
+    ${USD_INCLUDE_DIR}
+
     #ext/
+
+    ${USD_INCLUDE_DIRECTORY}
 )
 
 if(APPLE)
@@ -140,6 +163,7 @@ add_executable(feign
 
     # scene implementation file
     scenes/cool_renders/one_way_dice/one_way_dice.cpp
+    scenes/usd/scene_creation/create.cpp
 )
 
 #OPENEXR_INCLUDE_DIRS
@@ -154,5 +178,5 @@ set(CompilerFlags
       TINYEXR_INCLUDE_DIR
 )
 
-target_link_libraries(feign tbb openvdb embree3 Half)
+target_link_libraries(feign tbb openvdb embree3 Half ${USD_USD})
 #target_link_libraries(feign tbb openvdb embree3 Half ${PYTHON_LIBRARIES})

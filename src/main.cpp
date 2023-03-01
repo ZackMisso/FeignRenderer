@@ -13,6 +13,9 @@
 
 #include <openvdb/openvdb.h>
 
+// this is currently included here while I test out Pixar's USD
+#include <../scenes/usd/scene_creation/create.h>
+
 using namespace feign;
 
 int main(int argc, char *argv[])
@@ -20,6 +23,11 @@ int main(int argc, char *argv[])
 #if OPENVDB
     openvdb::initialize();
 #endif
+
+    LOG("");
+    LOG("testing USD scene creation tool");
+    USDUnitTest_CreationTool();
+    LOG("");
 
     std::string scene = "";
 
