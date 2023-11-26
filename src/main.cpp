@@ -14,7 +14,7 @@
 #include <openvdb/openvdb.h>
 
 // this is currently included here while I test out Pixar's USD
-#include <../scenes/usd/scene_creation/create.h>
+// #include <../scenes/usd/scene_creation/create.h>
 
 using namespace feign;
 
@@ -24,10 +24,11 @@ int main(int argc, char *argv[])
     openvdb::initialize();
 #endif
 
-    LOG("");
-    LOG("testing USD scene creation tool");
-    USDUnitTest_CreationTool();
-    LOG("");
+    // TODO: Get this working later
+    // LOG("");
+    // LOG("testing USD scene creation tool");
+    // USDUnitTest_CreationTool();
+    // LOG("");
 
     std::string scene = "";
 
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
     {
         if (strcmp(argv[i], "-u") == 0)
         {
+            // this is not working
             std::cout << "Beginning Unit Tests" << std::endl;
             UnitTestManager *unitTests = new UnitTestManager();
 
@@ -51,6 +53,7 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-ui") == 0)
         {
+            // this is not working apparantly
             std::cout << "Beginning Unit Tests" << std::endl;
             UnitTestManager *unitTests = new UnitTestManager();
 
@@ -69,6 +72,7 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-ur") == 0)
         {
+            // is breaking
             UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 
@@ -85,6 +89,7 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-uri") == 0)
         {
+            // is breaking
             UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 

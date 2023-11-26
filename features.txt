@@ -6,19 +6,28 @@ Version 0.2.0 will feature
     - fully functioning unit test suite for comparing implementations
     - re-architectured version of the current codebase to convert all features
         to be plug-and-play style modules allowing for easy extensions.
-
-Version 0.3.0 will feature
-    - Replace current scene description format with Pixar's Universal Scene 
-        Descriptor (USD) format
     
-Version 0.4.0 will feature
+Version 0.3.0 will feature
     - MIS for standard path-tracing
     - full incorporation of stats tracking using clocker.h
 
+Version 0.4.0 will feature
+    - Full re-implementation and verification tests for volumetric rendering
+
 Version 0.5.0 will feature
+    - Replace current scene description format with Pixar's Universal Scene 
+        Descriptor (USD) format
+    - Replace all prior test scene files with USD files
+
+Version 0.6.0 will feature
     - simple replacement of Color3f with more generic Spectrum type
         in preparation for supporting full spectral rendering later on
     - photon mapping + progressive photon mapping implementation
+
+Version 0.7.0 will feature
+    - support for naive spectral rendering with goals for MIS later
+
+Version 1.0.0 Release
 
 Random list of features to add to the renderer
 
