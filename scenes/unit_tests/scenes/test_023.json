@@ -1,0 +1,93 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "sdf_mode": true
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "normal",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -60,
+            14.5,
+            24.3583,
+            0.0,
+            12,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "mesh": {
+        "name": "box_obj",
+        "type": "sdf_box",
+        "tlc": [
+            7.0,
+            14.0,
+            7.0
+        ],
+        "brc": [
+            -7.0,
+            -0.0,
+            -7.0
+        ],
+        "interp": 0.0
+    },
+    "object": {
+        "name": "box",
+        "mesh": "box_obj",
+        "material_shader": "simple_shader"
+    },
+    "mesh": {
+        "name": "plane_obj",
+        "type": "sdf_plane",
+        "center": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "normal": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "interp": 0.0
+    },
+    "object": {
+        "name": "plane",
+        "mesh": "plane_obj",
+        "material_shader": "simple_shader"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "phong",
+        "kd": [
+            0.8,
+            0.3,
+            0.2
+        ],
+        "ks": 0.8,
+        "exponent": 500.0
+    }
+}

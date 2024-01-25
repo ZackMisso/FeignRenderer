@@ -1,0 +1,171 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "path",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -65.6055,
+            47.5762,
+            24.3583,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane",
+        "material_shader": "floor_shader",
+        "scale": [
+            100.0,
+            1.0,
+            100.0
+        ]
+    },
+    "shader": {
+        "name": "floor_shader",
+        "type": "simple_material",
+        "bsdf": "floor_bsdf"
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "shader": {
+        "name": "mirror_shader",
+        "type": "simple_material",
+        "bsdf": "mirror_bsdf"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "object": {
+        "name": "sphere2",
+        "mesh": "sphere_obj2",
+        "material_shader": "mirror_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            -20.0
+        ]
+    },
+    "object": {
+        "name": "sphere3",
+        "mesh": "sphere_obj3",
+        "material_shader": "mirror_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            20.0
+        ]
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "mesh": {
+        "name": "sphere_obj2",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "mesh": {
+        "name": "sphere_obj3",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse",
+        "albedo": [
+            0.2,
+            0.2,
+            1.0
+        ]
+    },
+    "bsdf": {
+        "name": "floor_bsdf",
+        "type": "diffuse"
+    },
+    "bsdf": {
+        "name": "mirror_bsdf",
+        "type": "mirror"
+    },
+    "emitter": {
+        "name": "point_emitter",
+        "type": "point",
+        "intensity": [
+            40000.0,
+            30000.0,
+            20000.0
+        ],
+        "position": [
+            -80,
+            80,
+            -10
+        ]
+    },
+    "emitter": {
+        "name": "point_emitter2",
+        "type": "point",
+        "intensity": [
+            22500.0,
+            30000.0,
+            37500.0
+        ],
+        "position": [
+            -20,
+            40,
+            20
+        ]
+    }
+}

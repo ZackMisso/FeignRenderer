@@ -1,0 +1,82 @@
+{
+    "scene": {
+        "name": "test_037",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "sdf_mode": true
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "path",
+        "max_bounces": 4
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -60,
+            10.0,
+            24.3583,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "shader": {
+        "name": "mirror_shader",
+        "type": "simple_material",
+        "bsdf": "mirror_bsdf"
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "sdf_sphere",
+        "center": [
+            0.0,
+            10.0,
+            0.0
+        ],
+        "radius": 10.0,
+        "interp": 0.0
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "mirror_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "bsdf": {
+        "name": "mirror_bsdf",
+        "type": "mirror"
+    },
+    "emitter": {
+        "name": "environment_map",
+        "type": "environment",
+        "texture": "envmap_texture"
+    },
+    "texture": {
+        "name": "envmap_texture",
+        "type": "image",
+        "filename": "../scenes/textures/envo.jpg"
+    }
+}

@@ -1,0 +1,80 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "ao",
+        "max_bounces": 5
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -65.6055,
+            47.5762,
+            24.3583,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane",
+        "material_shader": "simple_shader",
+        "scale": [
+            100.0,
+            1.0,
+            100.0
+        ]
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse"
+    }
+}

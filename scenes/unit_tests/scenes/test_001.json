@@ -1,0 +1,98 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "whitted",
+        "filter": "default"
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 4
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -65.6055,
+            47.5762,
+            24.3583,
+            -64.8161,
+            47.2211,
+            23.8576,
+            0.299858,
+            0.934836,
+            -0.190177
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane",
+        "material_shader": "simple_shader",
+        "scale": [
+            100.0,
+            1.0,
+            100.0
+        ]
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "ajax",
+        "mesh": "ajax_obj",
+        "material_shader": "simple_shader"
+    },
+    "mesh": {
+        "name": "ajax_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/ajax.obj"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse"
+    },
+    "emitter": {
+        "name": "point_emitter",
+        "type": "point",
+        "intensity": [
+            40000.0,
+            30000.0,
+            20000.0
+        ],
+        "position": [
+            -80,
+            80,
+            -10
+        ]
+    },
+    "emitter": {
+        "name": "point_emitter2",
+        "type": "point",
+        "intensity": [
+            22500.0,
+            30000.0,
+            37500.0
+        ],
+        "position": [
+            -20,
+            40,
+            20
+        ]
+    }
+}

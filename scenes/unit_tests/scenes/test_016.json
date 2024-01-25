@@ -1,0 +1,308 @@
+{
+    "scene": {
+        "name": "cornell_box_phong_2",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "path",
+        "filter": "default",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            40.0,
+            0.0,
+            9.5,
+            0.0,
+            0.0,
+            9,
+            0,
+            0,
+            1
+        ],
+        "fov": 35.0,
+        "width": 256,
+        "height": 256
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane1",
+        "scale": [
+            10.0,
+            1.0,
+            10.0
+        ],
+        "rotate": [
+            90.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "translate": [
+            0.0,
+            0.0,
+            -1.0
+        ],
+        "material_shader": "diff_shad"
+    },
+    "mesh": {
+        "name": "plane1",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj",
+        "flip_norms": true
+    },
+    "object": {
+        "name": "left_wall",
+        "mesh": "plane2",
+        "scale": [
+            10.0,
+            1.0,
+            10.0
+        ],
+        "rotate": [
+            90.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "translate": [
+            0.0,
+            -10.0,
+            9.0
+        ],
+        "material_shader": "diff_shad_red"
+    },
+    "mesh": {
+        "name": "plane2",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "back_wall",
+        "mesh": "plane3",
+        "scale": [
+            10.0,
+            1.0,
+            10.0
+        ],
+        "rotate": [
+            -90.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "translate": [
+            -10.0,
+            0.0,
+            9.0
+        ],
+        "material_shader": "diff_shad"
+    },
+    "mesh": {
+        "name": "plane3",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj",
+        "flip_norms": true
+    },
+    "object": {
+        "name": "right_wall",
+        "mesh": "plane4",
+        "scale": [
+            10.0,
+            1.0,
+            10.0
+        ],
+        "rotate": [
+            90.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            9.0
+        ],
+        "material_shader": "diff_shad_blue"
+    },
+    "mesh": {
+        "name": "plane4",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj",
+        "flip_norms": true
+    },
+    "object": {
+        "name": "roof",
+        "mesh": "plane5",
+        "scale": [
+            10.0,
+            1.0,
+            10.0
+        ],
+        "rotate": [
+            90.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "translate": [
+            0.0,
+            0.0,
+            19.0
+        ],
+        "material_shader": "diff_shad"
+    },
+    "mesh": {
+        "name": "plane5",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "shader": {
+        "name": "diff_shad",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "shader": {
+        "name": "diff_shad_blue",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf_blue"
+    },
+    "shader": {
+        "name": "diff_shad_red",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf_red"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "diffuse",
+        "albedo": [
+            0.5,
+            0.5,
+            0.5
+        ]
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf_blue",
+        "type": "diffuse",
+        "albedo": [
+            0.1,
+            0.1,
+            0.9
+        ]
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf_red",
+        "type": "diffuse",
+        "albedo": [
+            0.9,
+            0.1,
+            0.1
+        ]
+    },
+    "object": {
+        "name": "sphere_one",
+        "mesh": "sphere1",
+        "scale": [
+            3.5,
+            3.5,
+            3.5
+        ],
+        "translate": [
+            4.0,
+            5.0,
+            2.6
+        ],
+        "material_shader": "dielec_shad"
+    },
+    "mesh": {
+        "name": "sphere1",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "object": {
+        "name": "sphere_two",
+        "mesh": "sphere2",
+        "scale": [
+            3.5,
+            3.5,
+            3.5
+        ],
+        "translate": [
+            -4.0,
+            -5.0,
+            2.6
+        ],
+        "material_shader": "dielec_shad"
+    },
+    "mesh": {
+        "name": "sphere2",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "shader": {
+        "name": "dielec_shad",
+        "type": "simple_material",
+        "bsdf": "dielec_bsdf"
+    },
+    "bsdf": {
+        "name": "dielec_bsdf",
+        "type": "blinn",
+        "kd": [
+            0.0,
+            0.8,
+            0.0
+        ],
+        "ks": [
+            0.1,
+            0.1,
+            0.1
+        ],
+        "exponent": 100.0
+    },
+    "object": {
+        "name": "area_light_obj",
+        "mesh": "plane6",
+        "scale": [
+            2.0,
+            2.0,
+            2.0
+        ],
+        "rotate": [
+            90.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "translate": [
+            0.0,
+            0.0,
+            18.7
+        ],
+        "material_shader": "diff_shad",
+        "emitter": "area_emitter"
+    },
+    "mesh": {
+        "name": "plane6",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "emitter": {
+        "name": "area_emitter",
+        "type": "mesh",
+        "intensity": [
+            50.0,
+            50.0,
+            50.0
+        ]
+    }
+}

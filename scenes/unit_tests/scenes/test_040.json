@@ -1,0 +1,80 @@
+{
+    "scene": {
+        "name": "texture_env_light",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "path",
+        "max_bounces": 5
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 512
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            -65.6055,
+            47.5762,
+            24.3583,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "fov": 20.0,
+        "width": 256,
+        "height": 256
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "dielectric_bsdf"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "object": {
+        "name": "sphere",
+        "mesh": "sphere_obj",
+        "material_shader": "simple_shader",
+        "scale": [
+            10.0,
+            10.0,
+            10.0
+        ],
+        "translate": [
+            0.0,
+            10.0,
+            0.0
+        ]
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "bsdf": {
+        "name": "dielectric_bsdf",
+        "type": "dielectric"
+    },
+    "emitter": {
+        "name": "env_light",
+        "type": "environment",
+        "texture": "env_texture"
+    },
+    "texture": {
+        "name": "env_texture",
+        "type": "image",
+        "filename": "../hall_of_tiles_final_4740.png"
+    }
+}

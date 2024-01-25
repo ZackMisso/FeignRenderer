@@ -1,0 +1,114 @@
+{
+    "scene": {
+        "name": "ajax_diffuse",
+        "integrator": "integrator",
+        "sampler": "sampler",
+        "camera": "camera",
+        "medium": "sphere_medium"
+    },
+    "integrator": {
+        "name": "integrator",
+        "type": "volpath",
+        "max_bounces": 10
+    },
+    "sampler": {
+        "name": "sampler",
+        "type": "independent",
+        "sample_count": 16
+    },
+    "camera": {
+        "name": "camera",
+        "type": "perspective",
+        "lookat": [
+            0,
+            8.55,
+            2.75,
+            0.0,
+            0.00,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "fov": 30.0,
+        "width": 256,
+        "height": 256
+    },
+    "media": {
+        "name": "sphere_medium",
+        "type": "standard",
+        "density": "sphere_density"
+    },
+    "media_density": {
+        "name": "sphere_density",
+        "type": "sphere"
+    },
+    "object": {
+        "name": "floor",
+        "mesh": "plane",
+        "material_shader": "floor_shader",
+        "scale": [
+            100.0,
+            1.0,
+            100.0
+        ]
+    },
+    "shader": {
+        "name": "floor_shader",
+        "type": "simple_material",
+        "bsdf": "floor_bsdf"
+    },
+    "shader": {
+        "name": "simple_shader",
+        "type": "simple_material",
+        "bsdf": "diffuse_bsdf"
+    },
+    "mesh": {
+        "name": "plane",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/plane.obj"
+    },
+    "mesh": {
+        "name": "sphere_obj",
+        "type": "triangle_mesh",
+        "filename": "../scenes/meshes/sphere_tri.obj"
+    },
+    "bsdf": {
+        "name": "diffuse_bsdf",
+        "type": "dielectric",
+        "int_ior": 1.5,
+        "ext_ior": 1.0
+    },
+    "bsdf": {
+        "name": "floor_bsdf",
+        "type": "diffuse"
+    },
+    "emitter": {
+        "name": "point_emitter",
+        "type": "point",
+        "intensity": [
+            400.0,
+            300.0,
+            200.0
+        ],
+        "position": [
+            0,
+            8,
+            0
+        ]
+    },
+    "emitter": {
+        "name": "point_emitter2",
+        "type": "point",
+        "intensity": [
+            225.0,
+            300.0,
+            375.0
+        ],
+        "position": [
+            0,
+            4,
+            0
+        ]
+    }
+}

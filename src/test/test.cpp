@@ -16,34 +16,34 @@ FEIGN_BEGIN()
 
 bool evaluate_unit_test(UnitTestData &testLog)
 {
-    // TODO: fix all of this
+    Imagef image = Imagef(256, 256);
 
-    return false;
-    // Imagef image = Imagef(256, 256);
+    LOG("running test: " + testLog.test_name);
 
-    // LOG("running test: " + testLog.test_name);
+    JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
+                              &image);
 
-    // JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
-    //                           &image);
+    int loc = testLog.test_name.find_last_of(".");
 
-    // int loc = testLog.test_name.find_last_of(".");
+    std::string result_image_name = testLog.test_name.substr(0, loc);
 
-    // std::string result_image_name = testLog.test_name.substr(0, loc) + ".exr";
+    Imagef ref_image = Imagef("../scenes/unit_tests/images/" +
+                              testLog.test_name.substr(0, loc) + "_ref.exr");
 
-    // Imagef ref_image = Imagef("../scenes/unit_tests/images/" +
-    //                           testLog.test_name.substr(0, loc) + "_ref.exr");
+    testLog.image_error = imedit::mean_sqr_error(image, ref_image);
 
-    // testLog.image_error = imedit::mean_sqr_error(image, ref_image);
+    image.write("../scenes/unit_tests/images/" + result_image_name + ".exr");
+    image.write("../scenes/unit_tests/images/" + result_image_name + ".png");
 
-    // image.write("../scenes/unit_tests/images/" + result_image_name);
+    // TODO: autogenerate comparision webpage
 
-    // if (testLog.does_it_fail())
-    // {
-    //     LOG("IMAGE ERROR: " + std::to_string(testLog.image_error));
-    //     return false;
-    // }
+    if (testLog.does_it_fail())
+    {
+        LOG("IMAGE ERROR: " + std::to_string(testLog.image_error));
+        return false;
+    }
 
-    // return true;
+    return true;
 }
 
 bool replace_reference(UnitTestData &testLog)
@@ -57,9 +57,10 @@ bool replace_reference(UnitTestData &testLog)
 
     int loc = testLog.test_name.find_last_of(".");
 
-    std::string result_image_name = testLog.test_dir + testLog.test_name.substr(0, loc) + "_ref.exr";
+    std::string result_image_name = testLog.test_dir + testLog.test_name.substr(0, loc);
 
-    image.write("../scenes/unit_tests/images/" + result_image_name);
+    image.write("../scenes/unit_tests/images/" + result_image_name + "_ref.exr");
+    image.write("../scenes/unit_tests/images/" + result_image_name + "_ref.png");
 
     return true;
 }

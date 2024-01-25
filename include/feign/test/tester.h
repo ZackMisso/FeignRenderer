@@ -12,6 +12,14 @@
 
 FEIGN_BEGIN()
 
+struct UnitTestSiteAssembler
+{
+    UnitTestSiteAssembler() {}
+
+    void create_global_html_page();
+    void create_test_html_page();
+};
+
 struct UnitTestData
 {
     UnitTestData(std::string test_path)
@@ -20,7 +28,7 @@ struct UnitTestData
           test_name(test_path),
           image_error(0.f),
           threshold(1.f) {}
-    
+
     UnitTestData(std::string test_path,
                  std::string test_dir,
                  std::string test_name)

@@ -11,3 +11,4 @@ Current TODOs:
 finish creating new directory structure
 all volpath scenes are weird / not generated. Look into that
 whitted sdf is not generated / broken
+Remove directory structure, going to make a nice website viewer instead
