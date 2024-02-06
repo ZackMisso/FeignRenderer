@@ -14,10 +14,10 @@ FEIGN_BEGIN()
 
 struct UnitTestSiteAssembler
 {
-    UnitTestSiteAssembler() {}
+    // UnitTestSiteAssembler() {}
 
-    void create_global_html_page();
-    void create_test_html_page();
+    static void create_global_html_page();
+    static void create_test_html_page();
 };
 
 struct UnitTestData

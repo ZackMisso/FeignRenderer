@@ -22,6 +22,10 @@ void UnitTestData::logReport() const
 // NOTE: this is a renderer, my unit tests are going to be converted to all
 //       running and comparing renders instead of these individual unit tests
 
+// TODO: remove the hacky directory structure in return for
+//       autommatically generating a simple html page to see
+//       unit test results
+
 UnitTestManager::UnitTestManager()
 {
     reference_run = false;
@@ -95,28 +99,66 @@ bool UnitTestManager::run_all_tests()
     std::vector<std::string> dirs = std::vector<std::string>();
     std::vector<std::string> names = std::vector<std::string>();
 
-    // parse all scenes and their directories
-    parse_scene_files("", "../scenes/unit_tests/scenes/", paths, dirs, names);
+    // // parse all scenes and their directories
+    // parse_scene_files("", "../scenes/unit_tests/scenes/", paths, dirs, names);
 
-    // create all the necessary subfolders for the results directory
-    for (int i = 0; i < dirs.size(); ++i)
-    {
-        std::string str = "mkdir ../scenes/unit_tests/images/" + dirs[i];
-        system(str.c_str());
-    }
-
-    // debug logic
-    // LOG("PATHS:");
-    // for (int i = 0; i < paths.size(); ++i)
-    // {
-    //     LOG(paths[i]);
-    // }
-
-    // LOG("DIRS:");
+    // // create all the necessary subfolders for the results directory
     // for (int i = 0; i < dirs.size(); ++i)
     // {
-    //     LOG(dirs[i]);
+    //     std::string str = "mkdir ../scenes/unit_tests/images/" + dirs[i];
+    //     system(str.c_str());
     // }
+
+    // // debug logic
+    // // LOG("PATHS:");
+    // // for (int i = 0; i < paths.size(); ++i)
+    // // {
+    // //     LOG(paths[i]);
+    // // }
+
+    // // LOG("DIRS:");
+    // // for (int i = 0; i < dirs.size(); ++i)
+    // // {
+    // //     LOG(dirs[i]);
+    // // }
+
+    // bool passes = true;
+
+    // // TODO: make this multithreaded
+    // for (int i = 0; i < paths.size(); ++i)
+    // {
+    //     LOG("RUNNING TEST: " + std::to_string(i));
+    //     UnitTestData testLog = UnitTestData(paths[i], dirs[i], names[i]);
+
+    //     if (reference_run)
+    //     {
+    //         replace_reference(testLog);
+    //     }
+    //     else
+    //     {
+    //         evaluate_unit_test(testLog);
+    //         testLog.logReport();
+    //         if (testLog.does_it_fail())
+    //             passes = false;
+    //     }
+    // }
+
+    // return false;
+
+    // TODO: rewrite this for the new directory structure
+
+    DIR *dir;
+    struct dirent *ent;
+
+    if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            std::string str = std::string(ent->d_name);
+            if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
+                paths.push_back(str);
+        }
+    }
 
     bool passes = true;
 
@@ -124,7 +166,7 @@ bool UnitTestManager::run_all_tests()
     for (int i = 0; i < paths.size(); ++i)
     {
         LOG("RUNNING TEST: " + std::to_string(i));
-        UnitTestData testLog = UnitTestData(paths[i], dirs[i], names[i]);
+        UnitTestData testLog = UnitTestData(paths[i]);
 
         if (reference_run)
         {
@@ -139,43 +181,7 @@ bool UnitTestManager::run_all_tests()
         }
     }
 
-    return false;
-
-    // // TODO: rewrite this for the new directory structure
-
-    // DIR *dir;
-    // struct dirent *ent;
-
-    // if ((dir = opendir("../scenes/unit_tests/scenes/")) != NULL)
-    // {
-    //     while ((ent = readdir(dir)) != NULL)
-    //     {
-    //         std::string str = std::string(ent->d_name);
-    //         if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
-    //             paths.push_back(str);
-    //     }
-    // }
-
-    // bool passes = true;
-
-    // TODO: make this multithreaded
-    // for (int i = 0; i < paths.size(); ++i)
-    // {
-    //     LOG("RUNNING TEST: " + std::to_string(i));
-    //     UnitTestData testLog = UnitTestData(paths[i]);
-
-    //     if (reference_run)
-    //     {
-    //         replace_reference(testLog);
-    //     }
-    //     else
-    //     {
-    //         evaluate_unit_test(testLog);
-    //         testLog.logReport();
-    //         if (testLog.does_it_fail())
-    //             passes = false;
-    //     }
-    // }
+    UnitTestSiteAssembler::create_global_html_page();
 
     return passes;
 }
