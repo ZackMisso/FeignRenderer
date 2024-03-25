@@ -12,14 +12,6 @@
 
 FEIGN_BEGIN()
 
-struct UnitTestSiteAssembler
-{
-    // UnitTestSiteAssembler() {}
-
-    static void create_global_html_page();
-    static void create_test_html_page();
-};
-
 struct UnitTestData
 {
     UnitTestData(std::string test_path)
@@ -46,6 +38,13 @@ struct UnitTestData
     std::string test_name;
     float image_error;
     float threshold;
+};
+
+// this class only contains static methods
+struct UnitTestSiteAssembler
+{
+    static void create_global_html_page();
+    static void create_test_html_page(UnitTestData &testLog);
 };
 
 struct UnitTestManager

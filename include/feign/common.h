@@ -54,6 +54,9 @@
 #define SQRT_TWO 1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
 
+// TODO: there are some couts that do not use logs... remove them
+#define OUTPUT_LOGS false
+
 FEIGN_BEGIN()
 
 // this is going to be used temporarily for debugging
@@ -105,7 +108,9 @@ inline void feign_sincos(Float theta, Float *_sin, Float *_cos)
 // logging methods to avoid typing std::cout/std::endl everywhere
 inline void LOG(std::string val)
 {
+#if OUTPUT_LOGS
     std::cout << val << std::endl;
+#endif
 }
 
 inline std::string STR(Float val)

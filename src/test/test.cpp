@@ -36,6 +36,7 @@ bool evaluate_unit_test(UnitTestData &testLog)
     image.write("../scenes/unit_tests/images/" + result_image_name + ".png");
 
     // TODO: autogenerate comparision webpage
+    UnitTestSiteAssembler::create_test_html_page(testLog);
 
     if (testLog.does_it_fail())
     {
@@ -51,13 +52,14 @@ bool replace_reference(UnitTestData &testLog)
     Imagef image = Imagef(256, 256);
 
     LOG("running test: " + testLog.test_name);
+    LOG("test path: " + testLog.test_path);
 
     JsonParser::parse_and_run(testLog.test_path,
                               &image);
 
     int loc = testLog.test_name.find_last_of(".");
 
-    std::string result_image_name = testLog.test_dir + testLog.test_name.substr(0, loc);
+    std::string result_image_name = testLog.test_name.substr(0, loc);
 
     image.write("../scenes/unit_tests/images/" + result_image_name + "_ref.exr");
     image.write("../scenes/unit_tests/images/" + result_image_name + "_ref.png");

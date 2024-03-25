@@ -156,7 +156,10 @@ bool UnitTestManager::run_all_tests()
         {
             std::string str = std::string(ent->d_name);
             if (str.length() > 5 && str.substr(str.length() - 5) == ".json")
-                paths.push_back(str);
+            {
+                names.push_back(str);
+                paths.push_back("../scenes/unit_tests/scenes/" + str);
+            }
         }
     }
 
@@ -166,10 +169,11 @@ bool UnitTestManager::run_all_tests()
     for (int i = 0; i < paths.size(); ++i)
     {
         LOG("RUNNING TEST: " + std::to_string(i));
-        UnitTestData testLog = UnitTestData(paths[i]);
+        UnitTestData testLog = UnitTestData(paths[i], "../scenes/unit_tests/scenes/", names[i]);
 
         if (reference_run)
         {
+            LOG("Creating reference");
             replace_reference(testLog);
         }
         else

@@ -129,11 +129,11 @@ void UnitTestSiteAssembler::create_global_html_page()
     home_page.close();
 }
 
-void UnitTestSiteAssembler::create_test_html_page()
+void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
 {
     // TODO: need to design by hand first, then automate
     // TODO: need to add description / metadata info to test files
-    // TODO: maybe add notes supporrt in test files?
+    // TODO: maybe add notes support in test files?
 }
 
 FEIGN_END()
