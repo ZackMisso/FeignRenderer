@@ -3,7 +3,7 @@
 
 **unit test: test_001**
 
-*originally created by: Zack Misso*
+unit test originally created by: <a href="https://zackarymisso.com">Zack Misso</a>
 
 *Description: this is a test description*
 
@@ -11,18 +11,20 @@
 
 *report automatically generated*
 
+<b style="color:green">PLEASE VIEW IN CHROME</b>
+
 Generated Images
 ================
 
 <div class="row">
   <div class="column">
     <p align="center" style="color:blue;"><b>current build</b></p>
-    <br />
+    <!-- <br /> -->
     <a href="home.html"><img src="../images/test_001.png" style="width:100%;" /></a>
   </div>
   <div class="column">
     <p align="center" style="color:blue;"><b>reference</b></p>
-    <br />
+    <!-- <br /> -->
     <a href="home.html"><img src="../images/test_001_ref.png" style="width:100%;" /></a>
   </div>
 </div>
@@ -30,23 +32,80 @@ Generated Images
 Comparisons
 ===========
 
-blah
+Direct comparison
+-----------------
 
 <div class="twentytwenty-container">
     <img src="../images/test_001.png" alt="current">
     <img src="../images/test_001_ref.png" alt="referenece">
-    <img src="../images/test_001.png" alt="current2">
-    <img src="../images/test_001_ref.png" alt="referenece2">
+    <!-- <img src="../images/test_001.png" alt="current2">
+    <img src="../images/test_001_ref.png" alt="referenece2"> -->
 </div>
 
-Scenes
-======
+Error
+-----
 
+*error images report relative error, metrics reported below*
+
+<div class="row">
+  <div class="column">
+    <p align="center" style="color:blue;"><b>positive error</b></p>
+    <!-- <br /> -->
+    <a href="home.html"><img src="../images/test_001.png" style="width:100%;" /></a>
+  </div>
+  <div class="column">
+    <p align="center" style="color:blue;"><b>negative error</b></p>
+    <!-- <br /> -->
+    <a href="home.html"><img src="../images/test_001_ref.png" style="width:100%;" /></a>
+  </div>
+</div>
+
+<ul>
+<li style="color:blue">Error from reference:          0.000</li>
+<li style="color:blue">Squared error from reference:  0.000</li>
+<li style="color:blue">Relative error from reference: 0.000</li>
+</ul>
+
+
+<p style="color:blue" align="center">Test is PASSING</p>
+
+Stat History
+============
+
+Starting September 1, 2024, the Feign Renderer will begin keeping track
+of the average render times, and various errors for each of its unit tests
+on a weekly basis. These metrics will be reported to keep track of the Feign
+Renderer's performance as new features are continuously added. All unit tests
+are ran on a single thread using the same computer to maintain consistency.
+
+<div class="twentytwenty-container">
+    <img src="../images/test_001.png" alt="render time">
+    <img src="../images/test_001_ref.png" alt="error">
+    <img src="../images/test_001.png" alt="squared error">
+    <img src="../images/test_001_ref.png" alt="relative error">
+</div>
+
+Change-log
+==========
+
+Here we document any significant changes to this unit test which may
+explain changes in performance, look, etc.
+
+<ul>
+    <li>08/25/2024: implemented automated unit-test website builder
+</ul>
+
+<!-- Scenes
 Each image represents an individual unit test which links to a separate page
 containing information regarding that specific test and whether the current build
-is passing. This viewer is only verified to work on Chrome for now.
+is passing. This viewer is only verified to work on Chrome for now. -->
 
-<!-- <div>
+Related tests
+=============
+
+TODO: this is an advanced feature that may not be implemented anytime soon.
+
+<div>
 <a href="home.html"><img src="../images/test_000.png" style="width:30%; float:left; padding:5px" /></a>
 <a href="home.html"><img src="../images/test_001.png" style="width:30%; float:left; padding:5px" /></a>
 <a href="home.html"><img src="../images/test_002.png" style="width:30%; float:left; padding:5px" /></a>
@@ -69,7 +128,7 @@ is passing. This viewer is only verified to work on Chrome for now.
 <div>
 <a href="home.html"><img src="../images/test_012.png" style="width:30%; float:left; padding:5px" /></a>
 <a href="home.html"><img src="../images/test_013.png" style="width:30%; float:left; padding:5px" /></a>
-</div> -->
+</div>
 
 Contact Me
 ==========
@@ -87,21 +146,3 @@ If there are any questions please feel free to email me at zack441@mac.com
 <script>
 $(window).load(function(){$(".twentytwenty-container").twentytwenty({default_offset_pct: 0.5});});
 </script>
-
-<!--- Markdeep & image comparison library - probably no need to change anything below --><!--- Markdeep & image comparison library - probably no need to change anything below -->
-<!-- <style class="fallback">
-    body {
-        visibility: hidden;
-        font-family: monospace
-    }
-</style>
-<script src="resources/markdeep.min.js"></script>
-<script>window.alreadyProcessedMarkdeep || (document.body.style.visibility = "visible")</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="resources/jquery.event.move.js"></script>
-<script src="resources/jquery.twentytwenty.js"></script>
-<link href="resources/offcanvas.css" rel="stylesheet">
-<link href="resources/twentytwenty.css" rel="stylesheet" type="text/css" />
-<script>
-    $(window).load(function () { $(".twentytwenty-container").twentytwenty({ default_offset_pct: 0.5 }); });
-</script> -->

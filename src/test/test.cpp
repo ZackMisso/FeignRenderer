@@ -16,7 +16,7 @@ FEIGN_BEGIN()
 
 bool evaluate_unit_test(UnitTestData &testLog)
 {
-    Imagef image = Imagef(1024, 1024);
+    Imagef image = Imagef(512, 512);
 
     LOG("running test: " + testLog.test_name);
 
@@ -47,7 +47,7 @@ bool evaluate_unit_test(UnitTestData &testLog)
 
 bool replace_reference(UnitTestData &testLog)
 {
-    Imagef image = Imagef(1024, 1024);
+    Imagef image = Imagef(512, 512);
 
     LOG("running test: " + testLog.test_name);
     LOG("test path: " + testLog.test_path);

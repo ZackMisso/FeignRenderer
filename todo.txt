@@ -1,12 +1,14 @@
 todo list of immediate tasks
 
 TESTBED
-create individual test view
+create error image generation
+create graph making script
 create logging version of unit test framework to keep track of data over time
 propagate keywords and descriptions to unit test results
 make running all unit tests a multithreaded process
 make clocker a passable object into the renderer instead of being a global singlton to allow multi-threaded tests
 allow unit tests be computed multiple times and average results
+update imedit in feign renderer
 
 SAMPLE WARPING
 implement concentric disk sampling
@@ -14,3 +16,10 @@ replace uniform disk sampling with concentric disk sampling
 
 VOLUMES
 create tasks for overlapping volumes
+
+BIDIR-PT
+create tasks for bidirectional path tracing
+
+PM
+create tasks for photon mapping
+create tasks for progressive photon mapping
