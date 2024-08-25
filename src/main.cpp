@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
     {
         if (strcmp(argv[i], "-u") == 0)
         {
-            // this is not working
             std::cout << "Beginning Unit Tests" << std::endl;
             UnitTestManager *unitTests = new UnitTestManager();
 
@@ -53,7 +52,6 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-ui") == 0)
         {
-            // this is not working apparantly
             std::cout << "Beginning Unit Tests" << std::endl;
             UnitTestManager *unitTests = new UnitTestManager();
 
@@ -72,7 +70,6 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-ur") == 0)
         {
-            // is breaking
             UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 

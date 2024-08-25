@@ -53,13 +53,15 @@ struct UnitTestManager
 
     bool run_all_tests();
     bool run_test(int index);
-    void parse_scene_files(std::string main_dir,
-                           std::string base_dir,
-                           std::vector<std::string> &paths,
-                           std::vector<std::string> &dirs,
-                           std::vector<std::string> &names);
+    // i dont think i need this anymore
+    // void parse_scene_files(std::string main_dir,
+    //                        std::string base_dir,
+    //                        std::vector<std::string> &paths,
+    //                        std::vector<std::string> &dirs,
+    //                        std::vector<std::string> &names);
 
     bool reference_run; // replace the current references
+    bool log_stats;     // if stats should be logged
 };
 
 // test methods are implemented in test.cpp

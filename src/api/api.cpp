@@ -548,6 +548,8 @@ void FeignRenderer::fr_scene(std::string name,
                              std::string sampler_node,
                              std::string camera_node,
                              std::string medium_node,
+                             std::string keywords,
+                             std::string description,
                              bool sdf_mode)
 {
     std::cout << "sdf_mode: " << sdf_mode << std::endl;
@@ -568,6 +570,8 @@ void FeignRenderer::fr_scene(std::string name,
         media = getInstance()->find_media(medium_node);
 
     Scene *scene = new Scene(name,
+                             keywords,
+                             description,
                              integrator,
                              sampler,
                              camera,

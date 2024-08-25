@@ -33,8 +33,8 @@ void UnitTestSiteAssembler::create_global_html_page()
     LOG("Auto-generating unit tests results web-viewer");
     int images_per_row = 3;
 
+    // std::vector<std::string> dirs = std::vector<std::string>();
     std::vector<std::string> paths = std::vector<std::string>();
-    std::vector<std::string> dirs = std::vector<std::string>();
     std::vector<std::string> names = std::vector<std::string>();
 
     // parse all of the scenes in the test scenes folder
@@ -53,6 +53,12 @@ void UnitTestSiteAssembler::create_global_html_page()
 
     // sort them all to be in alphabetical order (TODO: make this tag based later)
     sort(paths.begin(), paths.end());
+
+    // debug code
+    // for (int i = 0; i < paths.size(); ++i)
+    // {
+    //     LOG(paths[i]);
+    // }
 
     // create the main page
     std::ofstream home_page;
@@ -131,6 +137,7 @@ void UnitTestSiteAssembler::create_global_html_page()
 
 void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
 {
+    LOG("creating test html page for " + testLog.test_name);
     // TODO: need to design by hand first, then automate
     // TODO: need to add description / metadata info to test files
     // TODO: maybe add notes support in test files?

@@ -3,7 +3,9 @@
         "name": "ajax_diffuse",
         "integrator": "integrator",
         "sampler": "sampler",
-        "camera": "camera"
+        "camera": "camera",
+        "keywords": "test,test2,test3",
+        "description": "this is a test"
     },
     "integrator": {
         "name": "integrator",
@@ -30,8 +32,8 @@
             0.0
         ],
         "fov": 30.0,
-        "width": 256,
-        "height": 256
+        "width": 1024,
+        "height": 1024
     },
     "object": {
         "name": "floor",

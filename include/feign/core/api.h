@@ -106,6 +106,8 @@ public:
                          std::string sampler_node,
                          std::string camera_node,
                          std::string medium_node,
+                         std::string keywords,
+                         std::string description,
                          bool sdf_mode = false);
 
     static void fr_integrator(std::string name,

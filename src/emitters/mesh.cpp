@@ -79,6 +79,7 @@ Color3f MeshEmitter::sample_medium(EmitterQuery &rec,
 {
     // NOTE: this should never be called. This type of sampling is only used for
     //       point lights and spot lights
+    // NOTE: zack from 4-5 years ago was dumb. implement this eventually.
     throw new NotImplementedException("mesh emitter sample pos");
 
     return Color3f(0.f);

@@ -33,8 +33,6 @@ Color3f SpotLightEmitter::sample_nee(EmitterQuery &rec,
 
     Float cos_t = frame.toLocal(-rec.wi)(2);
 
-    // LOG("rec.wi", rec.wi);
-    // LOG("light_dir", light_dir);
     // TODO: look into why the angle is flipped later
 
     if (pdf)

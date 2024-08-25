@@ -77,6 +77,8 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             std::string sampler = "default";
             std::string camera = "default";
             std::string medium = "default";
+            std::string keywords = "";
+            std::string description = "";
             bool sdf_mode = false;
 
             const rapidjson::Value &value = itr->value;
@@ -101,6 +103,14 @@ void JsonParser::actually_parse(rapidjson::Document &document)
             {
                 medium = (value["medium"].GetString());
             }
+            if (value.HasMember("keywords"))
+            {
+                keywords = (value["keywords"].GetString());
+            }
+            if (value.HasMember("description"))
+            {
+                description = (value["description"].GetString());
+            }
             if (value.HasMember("sdf_mode"))
             {
                 sdf_mode = value["sdf_mode"].GetBool();
@@ -112,6 +122,8 @@ void JsonParser::actually_parse(rapidjson::Document &document)
                                     sampler,
                                     camera,
                                     medium,
+                                    keywords,
+                                    description,
                                     sdf_mode);
         }
         else if (strcmp(itr->name.GetString(), "media") == 0)

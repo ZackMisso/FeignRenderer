@@ -11,11 +11,15 @@
 FEIGN_BEGIN()
 
 Scene::Scene(std::string name,
+             std::string keywords,
+             std::string description,
              IntegratorNode *integrator,
              SamplerNode *sampler,
              CameraNode *camera,
              MediaNode *media)
     : name(name),
+      keywords(keywords),
+      description(description),
       integrator_node(integrator),
       sampler_node(sampler),
       camera_node(camera),

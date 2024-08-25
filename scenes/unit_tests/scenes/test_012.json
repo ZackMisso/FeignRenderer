@@ -3,7 +3,9 @@
         "name": "cornell_box_area_light_no",
         "integrator": "integrator",
         "sampler": "sampler",
-        "camera": "camera"
+        "camera": "camera",
+        "keywords": "test,test2,test3",
+        "description": "this is a test"
     },
     "integrator": {
         "name": "integrator",
@@ -30,8 +32,8 @@
             1
         ],
         "fov": 35.0,
-        "width": 256,
-        "height": 256
+        "width": 1024,
+        "height": 1024
     },
     "object": {
         "name": "floor",

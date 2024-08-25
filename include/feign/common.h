@@ -55,7 +55,7 @@
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 // TODO: there are some couts that do not use logs... remove them
-#define OUTPUT_LOGS false
+#define OUTPUT_LOGS true
 
 FEIGN_BEGIN()
 

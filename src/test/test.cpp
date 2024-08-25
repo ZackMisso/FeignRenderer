@@ -16,7 +16,7 @@ FEIGN_BEGIN()
 
 bool evaluate_unit_test(UnitTestData &testLog)
 {
-    Imagef image = Imagef(256, 256);
+    Imagef image = Imagef(1024, 1024);
 
     LOG("running test: " + testLog.test_name);
 
@@ -31,12 +31,10 @@ bool evaluate_unit_test(UnitTestData &testLog)
                               testLog.test_name.substr(0, loc) + "_ref.exr");
 
     testLog.image_error = imedit::mean_sqr_error(image, ref_image);
+    // LOG("Image ERROR: " + std::to_string(testLog.image_error));
 
     image.write("../scenes/unit_tests/images/" + result_image_name + ".exr");
     image.write("../scenes/unit_tests/images/" + result_image_name + ".png");
-
-    // TODO: autogenerate comparision webpage
-    UnitTestSiteAssembler::create_test_html_page(testLog);
 
     if (testLog.does_it_fail())
     {
@@ -49,7 +47,7 @@ bool evaluate_unit_test(UnitTestData &testLog)
 
 bool replace_reference(UnitTestData &testLog)
 {
-    Imagef image = Imagef(256, 256);
+    Imagef image = Imagef(1024, 1024);
 
     LOG("running test: " + testLog.test_name);
     LOG("test path: " + testLog.test_path);

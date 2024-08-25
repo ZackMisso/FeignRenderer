@@ -33,6 +33,8 @@ class Scene
 {
 public:
     Scene(std::string name,
+          std::string keywords,
+          std::string description,
           IntegratorNode *integrator,
           SamplerNode *sampler,
           CameraNode *camera,
@@ -75,6 +77,10 @@ public:
 
 public:
     std::string name;
+    // optional info, for unit testing purposes
+    std::string keywords;
+    std::string description;
+
     BBox3f sceneBounds;
 
     // required structures
