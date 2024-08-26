@@ -41,18 +41,18 @@
 #define CLAMP_POINT_SINGULARITIES false
 #define CLAMP_POINT_DISTANCE 0.1f
 
-#define Epsilon 1e-3f
-#define EPS_VEC_X Vector3f(Epsilon * 1.f, 0.f, 0.f)
-#define EPS_VEC_Y Vector3f(0.f, Epsilon * 1.f, 0.f)
-#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
-#define SDF_STEPS 2000
+// #define Epsilon 1e-3f
+// #define EPS_VEC_X Vector3f(Epsilon * 1.f, 0.f, 0.f)
+// #define EPS_VEC_Y Vector3f(0.f, Epsilon * 1.f, 0.f)
+// #define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
+// #define SDF_STEPS 2000
 
-#define PI 3.14159265358979323846f
-#define INV_PI 0.31830988618379067154f
-#define INV_TWOPI 0.15915494309189533577f
-#define INV_FOURPI 0.07957747154594766788f
-#define SQRT_TWO 1.41421356237309504880f
-#define INV_SQRT_TWO 0.70710678118654752440f
+// #define PI 3.14159265358979323846f
+// #define INV_PI 0.31830988618379067154f
+// #define INV_TWOPI 0.15915494309189533577f
+// #define INV_FOURPI 0.07957747154594766788f
+// #define SQRT_TWO 1.41421356237309504880f
+// #define INV_SQRT_TWO 0.70710678118654752440f
 
 // TODO: there are some couts that do not use logs... remove them
 #define OUTPUT_LOGS true
@@ -63,8 +63,47 @@ FEIGN_BEGIN()
 static bool is_verbose = true;
 
 // uncomment the following for desired types
-// typedef double Float;
+// NOTE: need to also set imedit::Float in image.h
+
+#define DOUBLE_PRECISION false
+
+#if DOUBLE_PRECISION
+typedef double Float;
+#define ZERO 0.0
+#define ONE 1.0
+#define TWO 2.0
+#define FOUR 4.0
+#define PMF_MIN 0.01
+#define Epsilon 1e-3
+#define EPS_VEC_X Vector3f(Epsilon * 1.0, 0.0, 0.0)
+#define EPS_VEC_Y Vector3f(0.0, Epsilon * 1.0, 0.0)
+#define EPS_VEC_Z Vector3f(0.0, 0.0, Epsilon * 1.0)
+#define PI 3.14159265358979323846
+#define INV_PI 0.31830988618379067154
+#define INV_TWOPI 0.15915494309189533577
+#define INV_FOURPI 0.07957747154594766788
+#define SQRT_TWO 1.41421356237309504880
+#define INV_SQRT_TWO 0.70710678118654752440
+#else
 typedef float Float;
+#define ZERO 0.f
+#define ONE 1.f
+#define TWO 2.f
+#define FOUR 4.f
+#define PMF_MIN 0.01f
+#define Epsilon 1e-3f
+#define EPS_VEC_X Vector3f(Epsilon * 1.f, 0.f, 0.f)
+#define EPS_VEC_Y Vector3f(0.f, Epsilon * 1.f, 0.f)
+#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
+#define PI 3.14159265358979323846f
+#define INV_PI 0.31830988618379067154f
+#define INV_TWOPI 0.15915494309189533577f
+#define INV_FOURPI 0.07957747154594766788f
+#define SQRT_TWO 1.41421356237309504880f
+#define INV_SQRT_TWO 0.70710678118654752440f
+#endif
+
+#define SDF_STEPS 2000
 
 // a list of global parameters
 struct GlobalParams

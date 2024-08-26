@@ -67,12 +67,12 @@ void PhotonMapping::scatter_photons(const Scene *scene,
                                                   true);
 
         // sample a light source uniformly
-        Float emitter_pdf = 1.f;
+        Float emitter_pdf = ONE;
         Emitter *emitter = scene->choose_emitter(sampler, &emitter_pdf);
 
         // sample the initial location and direction
         EmitterQuery eqr;
-        Float query_pdf = 1.f;
+        Float query_pdf = ONE;
         Color3f power = emitter->sample_ray(eqr,
                                             sampler->next2D(),
                                             sampler->next2D(),
@@ -101,8 +101,8 @@ void PhotonMapping::scatter_photons(const Scene *scene,
 
             // evaluate shader / colliding location
             const MaterialShader *shader = scene->getShapeMaterialShader(its);
-            closure.albedo = 0.0;
-            closure.pdf = 1.0;
+            closure.albedo = ZERO;
+            closure.pdf = ONE;
 
             shader->evaluate_for_photon(closure);
 
@@ -119,7 +119,7 @@ void PhotonMapping::scatter_photons(const Scene *scene,
             closure.wi = its.toLocal(-ray.dir);
             shader->sample(closure);
 
-            if (closure.pdf == 0.f)
+            if (closure.pdf == ZERO)
                 break;
 
             // prepare to go to the next iteration
@@ -130,10 +130,10 @@ void PhotonMapping::scatter_photons(const Scene *scene,
                         ray.depth + 1);
 
             Float cosTerm = its.s_frame.n % ray.dir;
-            if (cosTerm < 0.f)
+            if (cosTerm < ZERO)
                 cosTerm = -cosTerm;
             if (closure.is_specular)
-                cosTerm = 1.f;
+                cosTerm = ONE;
 
             Color3f old_power = power;
 
@@ -142,7 +142,7 @@ void PhotonMapping::scatter_photons(const Scene *scene,
             Color3f div_power = power / old_power;
 
             // apply russian roulette termination
-            Float rr_prob = std::min(div_power.maxValue(), 1.f);
+            Float rr_prob = std::min(div_power.maxValue(), ONE);
             if (sampler->next1D() > rr_prob)
                 break;
             power /= rr_prob;
@@ -186,7 +186,7 @@ Color3f PhotonMapping::Li(const Scene *scene,
     if (!scene->intersect_non_null(ray, its))
     {
         // TODO: handle environment maps
-        return Color3f(0.f);
+        return Color3f(ZERO);
     }
 
     // create global closure datastructure

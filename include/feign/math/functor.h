@@ -16,7 +16,7 @@ FEIGN_BEGIN()
 
 struct Functor
 {
-    virtual ~Functor(){};
+    virtual ~Functor() {};
 
     virtual Float evaluate(Point3f p, Float time) const = 0;
 };
@@ -43,7 +43,7 @@ struct SquareWave : public Functor
 
         if (std::abs(dist - cur_dist) < wavelength)
             return amp;
-        return 0.0;
+        return ZERO;
     }
 
     Point3f start_pos;
@@ -75,8 +75,8 @@ struct TriangleWave : public Functor
         Float dist = (p - start_pos).norm();
 
         Float proxy = (std::abs(dist - cur_dist));
-        Float val = 1.0 - proxy / wavelength;
-        return std::min(val * amp, 0.f);
+        Float val = ONE - proxy / wavelength;
+        return std::min(val * amp, ZERO);
     }
 
     Point3f start_pos;

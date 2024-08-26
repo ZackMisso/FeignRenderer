@@ -28,8 +28,8 @@ Color3f VolPathTrans_Integrator::Li(const Scene *scene,
                                     const Ray3f &cam_ray,
                                     bool debug) const
 {
-    Color3f Li = Color3f(1.f);
-    Color3f beta = Color3f(1.f);
+    Color3f Li = Color3f(ONE);
+    Color3f beta = Color3f(ONE);
     Ray3f ray = cam_ray;
 
     // predefine this so it does not have to get recreated every loop

@@ -12,8 +12,8 @@ FEIGN_BEGIN()
 
 Ray3f::Ray3f()
 {
-    origin = Point3f(0.f);
-    dir = Vector3f(0.f, 0.f, 1.f);
+    origin = Point3f(ZERO);
+    dir = Vector3f(ZERO, ZERO, ONE);
     near = Epsilon;
     far = std::numeric_limits<Float>::infinity();
     depth = 0;
@@ -21,7 +21,7 @@ Ray3f::Ray3f()
 
 Ray3f::Ray3f(Vector3f d) : dir(d)
 {
-    origin = Point3f(0.f);
+    origin = Point3f(ZERO);
     near = Epsilon;
     far = std::numeric_limits<Float>::infinity();
     depth = 0;

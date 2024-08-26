@@ -25,7 +25,7 @@ void Blinn::sample(MaterialClosure &closure) const
     if (CoordinateFrame::cosTheta(closure.wi) <= 0)
     {
         closure.albedo = COLOR_BLACK;
-        closure.pdf = 0.f;
+        closure.pdf = ZERO;
         return;
     }
 
@@ -35,20 +35,17 @@ void Blinn::sample(MaterialClosure &closure) const
     {
         sample[0] /= ks.maxValue();
 
-        if (sample[0] > 1.0001)
-            assert(false);
-
         Vector3f wh = WarpSpace::sqrToCosPowHemi(sample, exponent);
-        closure.wo = wh * 2.f * (wh % closure.wi) - closure.wi;
+        closure.wo = wh * TWO * (wh % closure.wi) - closure.wi;
 
         // is_specular stores if this is a delta function, while this is technically
         // a specularity, it is not a delta function
         closure.is_specular = false;
-        closure.eta = 1.f;
+        closure.eta = ONE;
     }
     else
     {
-        sample[0] = (sample(0) - ks.maxValue()) / (1.f - ks.maxValue());
+        sample[0] = (sample(0) - ks.maxValue()) / (ONE - ks.maxValue());
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
@@ -65,7 +62,7 @@ void Blinn::sample(MaterialClosure &closure) const
     if (wh.norm() < Epsilon)
     {
         closure.albedo = COLOR_BLACK;
-        closure.pdf = 0.f;
+        closure.pdf = ZERO;
         return;
     }
 
@@ -76,14 +73,14 @@ void Blinn::sample(MaterialClosure &closure) const
 
     Float dotProd = std::max(wh % closure.wo, Epsilon);
 
-    float diffPdf = (1.f - ks.maxValue()) * WarpSpace::sqrToCosHemiPdf(val);
-    float specPdf = (ks.maxValue()) * WarpSpace::sqrToCosPowHemiPdf(val, exponent) * (1.f / (4.f * dotProd));
+    float diffPdf = (ONE - ks.maxValue()) * WarpSpace::sqrToCosHemiPdf(val);
+    float specPdf = (ks.maxValue()) * WarpSpace::sqrToCosPowHemiPdf(val, exponent) * (ONE / (FOUR * dotProd));
 
-    float expVal = std::max(wh(2), 0.f);
+    float expVal = std::max(wh(2), ZERO);
 
     closure.pdf = diffPdf + specPdf;
     closure.albedo = kd * INV_PI +
-                     ks * (exponent + 2.f) * INV_TWOPI * powf(expVal, exponent);
+                     ks * (exponent + TWO) * INV_TWOPI * powf(expVal, exponent);
 }
 
 void Blinn::evaluate(MaterialClosure &closure) const
@@ -97,9 +94,9 @@ void Blinn::evaluate(MaterialClosure &closure) const
     Vector3f wh = closure.wo + closure.wi;
     wh = wh.normalized();
 
-    float expVal = std::max(wh(2), 0.f);
+    float expVal = std::max(wh(2), ZERO);
 
-    closure.albedo = kd * INV_PI + ks * (exponent + 2.f) * INV_TWOPI * powf(expVal, exponent);
+    closure.albedo = kd * INV_PI + ks * (exponent + TWO) * INV_TWOPI * powf(expVal, exponent);
 }
 
 FEIGN_END()

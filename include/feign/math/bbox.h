@@ -186,8 +186,8 @@ struct BBox3
             }
             else
             {
-                Float t1 = (minVal - origin) * (1.0 / ray.dir(i));
-                Float t2 = (maxVal - origin) * (1.0 / ray.dir(i));
+                Float t1 = (minVal - origin) * (ONE / ray.dir(i));
+                Float t2 = (maxVal - origin) * (ONE / ray.dir(i));
 
                 if (t1 > t2)
                     std::swap(t1, t2);
@@ -203,7 +203,7 @@ struct BBox3
         return ray.near <= far && near <= ray.far;
     }
 
-    void split_into_eight(std::vector<BBox3<T> > &sections) const
+    void split_into_eight(std::vector<BBox3<T>> &sections) const
     {
         // this returns 8 bounding boxes which are the results of directly splitting
         // the bbox about the midpoints of each of its dimensions.
@@ -218,7 +218,7 @@ struct BBox3
         // half_x - max_x, min_y - half_y, half_z - max_z
         // half_x - max_x, half_y - max_y, half_z - max_z
 
-        Vec3<T> half = extents() / 2.f + min;
+        Vec3<T> half = extents() / TWO + min;
 
         sections.push_back(BBox3<T>(Vec3<T>(min(0), min(1), min(2)),
                                     Vec3<T>(half(0), half(1), half(2))));

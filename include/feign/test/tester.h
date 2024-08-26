@@ -36,6 +36,8 @@ struct UnitTestData
     std::string test_path;
     std::string test_dir;
     std::string test_name;
+    float image_sqr_error;
+    float image_rel_error;
     float image_error;
     float threshold;
 };

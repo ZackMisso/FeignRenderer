@@ -31,7 +31,7 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
     Ray3f ray = cam_ray;
 
     Vector3f dir = ray.dir;
-    Float rr_cont_probability = 0.95f;
+    Float rr_cont_probability = (Float)0.95f;
 
     if (!scene->intersect_non_null(ray, its))
     {
@@ -73,7 +73,7 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                       ray.depth + 1);
 
         // if contribution is zero terminate the path to save computation
-        Color3f beta = closure.albedo * (1.f / rr_cont_probability);
+        Color3f beta = closure.albedo * (ONE / rr_cont_probability);
         if (beta.isZero())
             return closure.nee + closure.emission;
 

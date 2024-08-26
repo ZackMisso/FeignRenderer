@@ -78,13 +78,13 @@ void SpatialLightAccel::build(const BBox3f &scene_bounds,
 
                     if (bounds[index].bbox.contains(emitters[l]->getCenter()))
                     {
-                        bounds[index].emitter_pdf->set_pmf(l, 1.f);
+                        bounds[index].emitter_pdf->set_pmf(l, ONE);
                     }
                     else
                     {
                         Float norm = ((center - emitters[l]->getCenter()).sqrNorm());
 
-                        bounds[index].emitter_pdf->set_pmf(l, std::min(1.f / norm, 0.01f));
+                        bounds[index].emitter_pdf->set_pmf(l, std::min(ONE / norm, PMF_MIN));
                     }
                 }
 
@@ -99,7 +99,7 @@ void SpatialLightAccel::sampleEmitter(Point3f pos,
                                       int &index,
                                       Float &pdf)
 {
-    Point3f local = light_area_bounds.local_space(pos).min(0.f).max(0.f);
+    Point3f local = light_area_bounds.local_space(pos).min(ZERO).max(ZERO);
 
     int x = floor(local(0) * width);
     int y = floor(local(1) * height);
@@ -117,7 +117,7 @@ void SpatialLightAccel::sampleEmitters(Point3f pos,
 {
     for (int i = 0; i < indices.size(); ++i)
     {
-        Point3f local = light_area_bounds.local_space(pos).min(0.f).max(0.f);
+        Point3f local = light_area_bounds.local_space(pos).min(ZERO).max(ZERO);
 
         int x = floor(local(0) * width);
         int y = floor(local(1) * height);

@@ -25,8 +25,8 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                                            const Ray3f &cam_ray,
                                            bool debug) const
 {
-    Color3f Li = Color3f(0.f);
-    Color3f beta = Color3f(1.f);
+    Color3f Li = Color3f(ZERO);
+    Color3f beta = Color3f(ONE);
     Ray3f ray = cam_ray;
 
     // predefine this so it does not have to get recreated every loop
@@ -65,7 +65,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         // accumulate the shadow rays
         closure.accumulate_shadow_rays(shader);
 
-        Float rr_prob = std::min(beta.maxValue(), 1.f);
+        Float rr_prob = std::min(beta.maxValue(), ONE);
 
         // random termination
         if (sampler->next1D() > rr_prob)
@@ -78,7 +78,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         closure.wi = its.toLocal(-ray.dir);
         shader->sample(closure);
 
-        if (closure.pdf == 0.f)
+        if (closure.pdf == ZERO)
         {
             Li += beta * (closure.emission + closure.nee);
             break;
@@ -91,10 +91,10 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                     ray.depth + 1);
 
         Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < 0.f)
+        if (cosTerm < ZERO)
             cosTerm = -cosTerm;
         if (closure.is_specular)
-            cosTerm = 1.f;
+            cosTerm = ONE;
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
