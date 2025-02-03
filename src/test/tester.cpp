@@ -75,7 +75,6 @@ bool UnitTestManager::run_all_tests()
 
     bool passes = true;
 
-    // TODO: make this multithreaded
     for (int i = 0; i < paths.size(); ++i)
     {
         LOG("RUNNING TEST: " + std::to_string(i));

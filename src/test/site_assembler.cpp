@@ -19,13 +19,9 @@
 
 FEIGN_BEGIN()
 
-// [] TODO: create global html page
-// [] TODO: create global html page automation
-// [] TODO: create individual unit test page
-// [] TODO: create individual unit test page automation
+// [X] TODO: create global html page
+// [X] TODO: create individual html pages per test
 // [] TODO: create logging info for individual unit test
-// [] TODO: create logging info automation for individual unit test
-// [] TODO: modify individual unit test page for displaying logging info
 // [] TODO: create tags for each unit test
 // [] TODO: create a sort by tags feature
 void UnitTestSiteAssembler::create_global_html_page()
@@ -54,12 +50,6 @@ void UnitTestSiteAssembler::create_global_html_page()
     // sort them all to be in alphabetical order (TODO: make this tag based later)
     sort(paths.begin(), paths.end());
 
-    // debug code
-    // for (int i = 0; i < paths.size(); ++i)
-    // {
-    //     LOG(paths[i]);
-    // }
-
     // create the main page
     std::ofstream home_page;
     home_page.open("../scenes/unit_tests/web_viewer/home.html");
@@ -73,17 +63,11 @@ void UnitTestSiteAssembler::create_global_html_page()
     home_page << "Scenes" << std::endl;
     home_page << "======" << std::endl;
     home_page << std::endl;
-    home_page << "Each image represents an individual unit test which links to a separate page" << std::endl;
+    home_page << "<p>Each image represents an individual unit test which links to a separate page" << std::endl;
     home_page << "containing information regarding that specific test and whether the current build" << std::endl;
-    home_page << "is passing. This viewer is only verified to work on Chrome for now." << std::endl;
+    home_page << "is passing. This viewer is only verified to work on Chrome for now.<p>" << std::endl;
     home_page << std::endl;
 
-    // this is for reference, TODO: delete later
-    // <div>
-    //     <a href="home.html"><img src="../images/test_000.png" style="width:30%; float:left; padding:5px" /></a>
-    //     <a href="home.html"><img src="../images/test_000.png" style="width:30%; float:left; padding:5px" /></a>
-    //     <a href="home.html"><img src="../images/test_000.png" style="width:30%; float:left; padding:5px" /></a>
-    // </div>
     int count = 0;
     for (int i = 0; i < paths.size(); ++i)
     {
@@ -92,7 +76,7 @@ void UnitTestSiteAssembler::create_global_html_page()
             home_page << "<div>" << std::endl;
         }
         home_page << "<a href=\"";
-        home_page << "home.html"; // TODO: replace with individual test page
+        home_page << paths[i] + ".html"; // TODO: replace with individual test page
         home_page << "\"><img src=\"../images/" << paths[i] << ".png\" style=\"width:30%; float:left; padding:5px\" /></a>";
         home_page << std::endl;
         if (++count == images_per_row)
@@ -138,9 +122,133 @@ void UnitTestSiteAssembler::create_global_html_page()
 void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
 {
     LOG("creating test html page for " + testLog.test_name);
-    // TODO: need to design by hand first, then automate
-    // TODO: need to add description / metadata info to test files
-    // TODO: maybe add notes support in test files?
+
+    std::string test_name = testLog.test_name.substr(0, testLog.test_name.length() - 5);
+
+    std::ofstream test_page;
+    test_page.open("../scenes/unit_tests/web_viewer/" + test_name + ".html");
+    
+    test_page << "<!DOCTYPE html>" << std::endl;
+    test_page << "<meta charset=\"utf-8\">" << std::endl;
+    test_page << std::endl;
+    test_page << "**unit test: " + test_name + "**" << std::endl;
+    test_page << std::endl;
+    test_page << "unit test originally created by: <a href=\"https://zackarymisso.com\">Zack Misso</a>" << std::endl;
+    test_page << std::endl;
+    test_page << "*Description: this is a test description*" << std::endl;
+    test_page << std::endl;
+    test_page << "*Keywords: blah,blah,blah*" << std::endl;
+    test_page << std::endl;
+    test_page << "*report automatically generated*" << std::endl;
+    test_page << std::endl;
+    test_page << "<b style=\"color:green\">PLEASE VIEW IN CHROME, OTHERWISE SCRIPTS MIGHT BREAK</b>" << std::endl;
+    test_page << std::endl;
+    test_page << "Generated Images" << std::endl;
+    test_page << "================" << std::endl;
+    test_page  << std::endl;
+    test_page << "<div class=\"row\">" << std::endl;
+    test_page << "  <div class=\"column\">" << std::endl;
+    test_page << "    <p align=\"center\" style=\"color:blue;\"><b>current build</b></p>" << std::endl;
+    test_page << "    <!-- <br /> -->" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + ".png\" style=\"width:100%;\" />" << std::endl;
+    test_page << "  </div>" << std::endl;
+    test_page << "  <div class=\"column\">" << std::endl;
+    test_page << "    <p align=\"center\" style=\"color:blue;\"><b>reference</b></p>" << std::endl;
+    test_page << "    <!-- <br /> -->" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" style=\"width:100%;\" />" << std::endl;
+    test_page << "  </div>" << std::endl;
+    test_page << "</div>" << std::endl;
+    test_page << std::endl;
+    test_page << "Comparisons" << std::endl;
+    test_page << "===========" << std::endl;
+    test_page << std::endl;
+    test_page << "Direct comparison" << std::endl;
+    test_page << "-----------------" << std::endl;
+    test_page << std::endl;
+    test_page << "<div class=\"twentytwenty-container\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + ".png\" alt=\"current\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"referenece\">" << std::endl;
+    test_page << "    <!-- <img src=\"../images/" + test_name + ".png\" alt=\"current2\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"referenece2\"> -->" << std::endl;
+    test_page << "</div>" << std::endl;
+    test_page << std::endl;
+    test_page << "Error" << std::endl;
+    test_page << "-----" << std::endl;
+    test_page << std::endl;
+    test_page << "*error images report relative error, metrics reported below*" << std::endl;
+    test_page << std::endl;
+    test_page << "<div class=\"row\">" << std::endl;
+    test_page << "  <div class=\"column\">" << std::endl;
+    test_page << "    <p align=\"center\" style=\"color:blue;\"><b>positive error</b></p>" << std::endl;
+    test_page << "    <!-- <br /> -->" << std::endl;
+    test_page << "    <a href=\"home.html\"><img src=\"../images/test_001_pos_error.png\" style=\"width:100%;\" /></a>" << std::endl;
+    test_page << "  </div>" << std::endl;
+    test_page << "  <div class=\"column\">" << std::endl;
+    test_page << "    <p align=\"center\" style=\"color:blue;\"><b>negative error</b></p>" << std::endl;
+    test_page << "    <!-- <br /> -->" << std::endl;
+    test_page << "    <a href=\"home.html\"><img src=\"../images/" + test_name + "_neg_error.png\" style=\"width:100%;\" /></a>" << std::endl;
+    test_page << "  </div>" << std::endl;
+    test_page << "</div>" << std::endl;
+    test_page << std::endl;
+    test_page << "<ul>" << std::endl;
+    test_page << "<li style=\"color:blue\">Error from reference:          TODO</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Squared error from reference:  TODO</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Relative error from reference: TODO</li>" << std::endl;
+    test_page << "</ul>" << std::endl;
+    test_page << std::endl;
+    test_page << std::endl;
+    test_page << "<p style=\"color:blue\" align=\"center\">Test is TODO</p>" << std::endl;
+    test_page << std::endl;
+    test_page << "Stat History" << std::endl;
+    test_page << "============" << std::endl;
+    test_page << std::endl;
+    test_page << "Starting February 1st 2025, the Feign Renderer will begin keeping track" << std::endl;
+    test_page << "of the average render times, and various errors for each of its unit tests" << std::endl;
+    test_page << "on a weekly basis. These metrics will be reported to keep track of the Feign" << std::endl;
+    test_page << "Renderer's performance as new features are continuously added. All unit tests" << std::endl;
+    test_page << "are ran on a single thread using the same computer to maintain consistency." << std::endl;
+    test_page << std::endl;
+    test_page << "<div class=\"twentytwenty-container\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + ".png\" alt=\"render time\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"error\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + ".png\" alt=\"squared error\">" << std::endl;
+    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"relative error\">" << std::endl;
+    test_page << "</div>" << std::endl;
+    test_page << std::endl;
+    test_page << "Change-log" << std::endl;
+    test_page << "==========" << std::endl;
+    test_page << std::endl;
+    test_page << "Here we document any significant changes to this unit test which may" << std::endl;
+    test_page << "explain changes in performance, look, etc." << std::endl;
+    test_page << std::endl;
+    test_page << "<ul>" << std::endl;
+    test_page << "    <li>2/02/2025: implemented automated unit-test individual tests" << std::endl;
+    test_page << "    <li>08/25/2024: implemented automated unit-test homepage" << std::endl;
+    test_page << "</ul>" << std::endl;
+    test_page << std::endl;
+    test_page << "<!-- Scenes" << std::endl;
+    test_page << "Each image represents an individual unit test which links to a separate page" << std::endl;
+    test_page << "containing information regarding that specific test and whether the current build" << std::endl;
+    test_page << "is passing. This viewer is only verified to work on Chrome for now. -->" << std::endl;
+    test_page << std::endl;
+    test_page << "Contact Me" << std::endl;
+    test_page << "==========" << std::endl;
+    test_page << std::endl;
+    test_page << "If there are any questions please feel free to email me at zack441@mac.com" << std::endl;
+    test_page << std::endl;
+    test_page << "<!--- Markdeep & image comparison library - probably no need to change anything below -->" << std::endl;
+    test_page << "<style class=\"fallback\">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src=\"resources/markdeep.min.js\"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility=\"visible\")</script>" << std::endl;
+    test_page << "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>" << std::endl;
+    test_page << "<script src=\"resources/jquery.event.move.js\"></script>" << std::endl;
+    test_page << "<script src=\"resources/jquery.twentytwenty.js\"></script>" << std::endl;
+    test_page << "<!-- <script src=\"jeri.js\"></script> -->" << std::endl;
+    test_page << "<link href=\"resources/offcanvas.css\" rel=\"stylesheet\">" << std::endl;
+    test_page << "<link href=\"resources/twentytwenty.css\" rel=\"stylesheet\" type=\"text/css\" />" << std::endl;
+    test_page << "<script>" << std::endl;
+    test_page << "$(window).load(function(){$(\".twentytwenty-container\").twentytwenty({default_offset_pct: 0.5});});" << std::endl;
+    test_page << "</script>" << std::endl;
+
+    test_page.close();
 }
 
 FEIGN_END()

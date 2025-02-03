@@ -14,10 +14,13 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|Intel)$")
+CHECK_CXX_COMPILER_FLAG("-std=c++17" HAS_CPP17_FLAG)
   CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
   CHECK_CXX_COMPILER_FLAG("-std=c++11" HAS_CPP11_FLAG)
 
-  if (HAS_CPP14_FLAG)
+  if (HAS_CPP17_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -O3")
+  elseif (HAS_CPP14_FLAG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread -O3")
   elseif (HAS_CPP11_FLAG)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
@@ -64,7 +67,7 @@ set(OPENEXR_INCLUDE_DIR
 #set(USD_INCLUDE_DIR
 #   /Users/corneria/Documents/OpenSource/TEST/include/)
 
-set(TBB_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/tbb2019_20190410oss_mac/tbb2019_20190410oss/lib/)
+#set(TBB_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/tbb2019_20190410oss_mac/tbb2019_20190410oss/lib/)
 
 #set(USD_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/TEST/lib)
 #set(USD_INCLUDE_DIRECTORY /Users/corneria/Documents/OpenSource/TEST/include)
@@ -79,7 +82,7 @@ set(TBB_LIBRARY_DIRECTORY /Users/corneria/Documents/OpenSource/tbb2019_20190410o
 #find_library(USD_USDSHADE usdShade HINTS ${USD_LIBRARY_DIRECTORY})
 #find_library(USD_VT vt HINTS ${USD_LIBRARY_DIRECTORY})
 
-find_library(tbb REQUIRED HINTS ${TBB_LIBRARY_DIRECTORY})
+#find_library(tbb REQUIRED HINTS ${TBB_LIBRARY_DIRECTORY})
 find_package(PythonLibs REQUIRED)
 find_package(embree 3.3 REQUIRED)
 

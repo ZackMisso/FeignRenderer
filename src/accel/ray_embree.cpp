@@ -24,7 +24,7 @@ EmbreeAccel::~EmbreeAccel()
 void EmbreeAccel::preProcess()
 {
     // initialize embree datastructures
-    rtcore = "start_threads=1,set_affinity=1";
+    rtcore = "start_threads=1";
     device = rtcNewDevice(rtcore.c_str());
     scene = rtcNewScene(device);
     rtcSetDeviceErrorFunction(device, embree_error_handler, nullptr);

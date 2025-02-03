@@ -30,7 +30,8 @@ void Integrator::render_fast(const Scene *scene,
                              Imagef &image) const
 {
     // TODO: make threads and tile size a configurable parameter
-    RenderPool *pool = new RenderPool(12, 64);
+    RenderPool *pool = new RenderPool(NTHREADS, 64);
+    // LOG("BLAH");
     pool->initialize_pool(image.width(), image.height());
     pool->evaluate_pool(scene, this, camera, sampler, image);
     delete pool;
@@ -42,7 +43,6 @@ void Integrator::render(const Scene *scene,
                         Imagef &image) const
 {
     image.clear();
-    // TODO: create black and white images
     Imagef filter_weights = Imagef(image.width(), image.height());
     filter_weights.clear();
 

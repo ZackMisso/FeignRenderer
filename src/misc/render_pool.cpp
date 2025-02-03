@@ -28,12 +28,11 @@ void RenderTile::evaluate(RenderTile *tile,
 
     for (int i = tile->min_y; i < tile->max_y; ++i)
     {
-        // Float percent_done = Float(i - tile->min_y) / Float(tile->max_y - tile->min_y);
-        // LOG("percent_done: " + std::to_string(percent_done));
         for (int j = tile->min_x; j < tile->max_x; ++j)
         {
             for (int k = 0; k < sampler->getSampleCnt(); ++k)
             {
+                // TODO: create custom logger interface
                 // if (tile->tile_index == 475) std::cout << "sample: " << k << std::endl;
                 // if (tile->tile_index == 475) std::cout << "i: " << i << " j: " << j << std::endl;
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
@@ -47,27 +46,7 @@ void RenderTile::evaluate(RenderTile *tile,
                 //     Clocker::startClock("integrator");
                 // #endif
 
-                // if (tile->tile_index == 475)
-                // {
-                //     std::cout << "calling rad: " << tile->tile_index << std::endl;
-                //     rad *= integrator->Li(scene, sampler, ray, true);
-                //     std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
-                // }
-                // else
-                // {
                 rad *= integrator->Li(scene, sampler, ray);
-                // }
-                // if (tile->tile_index == 475) std::cout << "rad: " << rad[0] << " " << rad[1] << " " << rad[2] << std::endl;
-
-                // if (rad.isNan())
-                // {
-                //     LOG("nan estimate at: " + STR(i) + " " + STR(j));
-                // }
-                //
-                // if (rad.isInf())
-                // {
-                //     LOG("inf estimate at: " + STR(i) + " " + STR(j));
-                // }
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -85,13 +64,6 @@ void RenderTile::evaluate(RenderTile *tile,
                 //     Clocker::startClock("filter");
                 // #endif
 
-                // LOG(STR(std::floor(filter_bounds.min(1))));
-                // LOG(STR(std::floor(filter_bounds.max(1))));
-                // LOG(STR(std::floor(filter_bounds.min(0))));
-                // LOG(STR(std::floor(filter_bounds.max(0))));
-
-                // if ()
-
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
                 {
@@ -100,31 +72,6 @@ void RenderTile::evaluate(RenderTile *tile,
                     {
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
                                                                             pixelSample);
-
-                        // if (std::floor(filter_bounds.min(1) == 167) &&
-                        //     std::floor(filter_bounds.min(0) == 101))
-                        // {
-                        //     LOG("pixek Sample: " + STR(pixelSample));
-                        //     LOG("weight: " + STR(weight));
-                        //     LOG("min y: " + STR(std::floor(filter_bounds.min(1))));
-                        //     LOG("min x: " + STR(std::floor(filter_bounds.min(0))));
-                        //     assert(false);
-                        // }
-                        // if (weight < Epsilon)
-                        // {
-                        //     LOG(STR(integrator->filter->filter->getSize()));
-                        //     LOG("WEIGHT WHAT");
-                        //     LOG(STR(fj));
-                        //     LOG(STR(fi));
-                        //     assert(false);
-                        // }
-
-                        // if (std::isinf(weight) || std::isnan(weight))
-                        // {
-                        //     LOG("WHAT");
-                        // }
-
-                        // LOG(STR(rad));
 
                         int index = fi * image->width() + fj;
 
@@ -139,11 +86,6 @@ void RenderTile::evaluate(RenderTile *tile,
                         mutexes[index].unlock();
                     }
                 }
-
-                // TODO: get multi-threaded clocking working
-                // #if CLOCKING
-                //     Clocker::endClock("filter");
-                // #endif
             }
 
             ++index;
@@ -152,8 +94,6 @@ void RenderTile::evaluate(RenderTile *tile,
 
     delete sampler;
     tile->done = true;
-
-    // std::cout << "tile done: " << tile->tile_index << std::endl;
 
     if (is_verbose)
         std::cout << "tile done: " << tile->tile_index << std::endl;
@@ -265,15 +205,12 @@ void RenderPool::evaluate_pool(const Scene *scene,
                                                        &weights,
                                                        mutexes));
                 }
-
-                // std::cout << tiles_to_do.size() << " tiles left to render" << std::endl;
             }
         }
     }
 
     for (int i = 0; i < threads.size(); ++i)
     {
-        // std::cout << "joining threads: " << i << std::endl;
         try
         {
             threads[i].join();
@@ -288,8 +225,6 @@ void RenderPool::evaluate_pool(const Scene *scene,
     }
 
     delete[] mutexes;
-
-    // std::cout << "whoop" << std::endl;
 
     // accumulate the results here
     for (int i = 0; i < image.height(); ++i)

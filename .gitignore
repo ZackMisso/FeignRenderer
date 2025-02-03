@@ -1,5 +1,6 @@
 *.o
 build/
+new_build/
 .DS_Store
 scenes/old/
 scenes/meshes/neon/
