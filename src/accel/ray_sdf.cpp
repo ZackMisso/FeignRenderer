@@ -6,6 +6,9 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+// TODO: i don't remember the state of the quality of this accel
+//       structure. need to relook into this as it has been a while
+
 #include <feign/core/accel_ray.h>
 
 FEIGN_BEGIN()

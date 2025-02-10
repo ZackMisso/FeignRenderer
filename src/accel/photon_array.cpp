@@ -14,6 +14,9 @@
 #include <feign/core/closure.h>
 #include <feign/core/shader.h>
 
+// TODO: i don't remember the state of the quality of these light
+//       sampling techniques. I need to retest if this code works.
+
 FEIGN_BEGIN()
 
 void PhotonArray::build(const BBox3f &scene_bounds,

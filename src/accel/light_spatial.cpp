@@ -8,6 +8,9 @@
 
 #include <feign/core/accel_light.h>
 
+// TODO: i don't remember the state of the quality of these light
+//       sampling techniques. I need to retest if this code works.
+
 FEIGN_BEGIN()
 
 SpatialLightAccel::SpatialLightAccel(int width, int height, int depth)

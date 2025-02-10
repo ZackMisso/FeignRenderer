@@ -7,6 +7,7 @@
  **/
 
 #include <feign/core/integrator.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 

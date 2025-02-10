@@ -6,6 +6,9 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+// TODO: make a seperate folder for "artistic"/"experimental"
+//       integrators which do non-light transporty things
+
 // this is a simple integrator which visualizes the barycentric
 // coordinates during embree's intersection tests. this is used
 // as a test to see if I can use barycentric coordinates to
@@ -13,6 +16,7 @@
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 
@@ -24,7 +28,15 @@ BarycentricIntegrator::BarycentricIntegrator(FilterNode *filter,
 
 void BarycentricIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
+#if CLOCKING
+    Clocker::startClock(ClockerType::INTEGRATOR_PREPROCESS);
+#endif
+
     Integrator::preProcess(scene, sampler);
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_PREPROCESS);
+#endif
 }
 
 Color3f BarycentricIntegrator::Li(const Scene *scene,
@@ -32,12 +44,25 @@ Color3f BarycentricIntegrator::Li(const Scene *scene,
                                   const Ray3f &ray,
                                   bool debug) const
 {
+#if CLOCKING
+    Clocker::startClock(ClockerType::INTEGRATOR_INTERSECT);
+#endif
+
     Intersection its;
 
     if (!scene->intersect_non_null(ray, its))
     {
+#if CLOCKING
+        Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
+#endif
+
         return Color3f(-2.f);
     }
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
+    Clocker::startClock(ClockerType::INTEGRATOR_EVAL);
+#endif
 
     Point3f bary = its.bary;
     float min = bary[0];
@@ -45,6 +70,10 @@ Color3f BarycentricIntegrator::Li(const Scene *scene,
         min = bary[1];
     if (bary[2] < min)
         min = bary[2];
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_EVAL);
+#endif
 
     if (min < 0.01)
         return Color3f(1.f);

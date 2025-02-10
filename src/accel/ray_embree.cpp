@@ -24,6 +24,8 @@ EmbreeAccel::~EmbreeAccel()
 void EmbreeAccel::preProcess()
 {
     // initialize embree datastructures
+    // TODO: get back up to date with figuring out what parameters I
+    //       should feed into embree
     rtcore = "start_threads=1";
     device = rtcNewDevice(rtcore.c_str());
     scene = rtcNewScene(device);
@@ -54,7 +56,7 @@ void EmbreeAccel::build()
 bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
 #if CLOCKING
-    Clocker::startClock("scene intersect");
+    Clocker::startClock(ClockerType::EMBREE);
 #endif
 
     RTCIntersectContext context;
@@ -68,16 +70,8 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
     hit.hit.primID = RTC_INVALID_GEOMETRY_ID;
     hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
-#if CLOCKING
-    Clocker::startClock("embree");
-#endif
-
     /* intersect ray with scene */
     rtcIntersect1(scene, &context, &hit);
-
-#if CLOCKING
-    Clocker::endClock("embree");
-#endif
 
     if (hit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {
@@ -99,14 +93,14 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
         its.intersected_mesh->completeIntersectionInfo(its);
 
 #if CLOCKING
-        Clocker::endClock("scene intersect");
+    Clocker::endClock(ClockerType::EMBREE);
 #endif
 
         return true;
     }
 
 #if CLOCKING
-    Clocker::endClock("scene intersect");
+    Clocker::endClock(ClockerType::EMBREE);
 #endif
 
     return false;

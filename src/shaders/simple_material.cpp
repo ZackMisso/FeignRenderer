@@ -23,10 +23,6 @@ void SimpleMaterialShader::sample(MaterialClosure &closure) const
 // TODO: why is this called evaluate if it does not actually evaluate the material...
 void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     closure.is_specular = (*bsdf)()->isDelta();
 
     if (closure.last_spec)
@@ -36,10 +32,6 @@ void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
 
     if (closure.is_specular)
     {
-#if CLOCKING
-        Clocker::endClock("shader eval");
-#endif
-
         closure.last_spec = closure.is_specular;
 
         return;
@@ -64,38 +56,18 @@ void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
 
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = true;
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 void SimpleMaterialShader::evaluate_mat_only(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     (*bsdf)()->evaluate(closure);
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 void SimpleMaterialShader::evaluate_for_photon(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     closure.is_specular = (*bsdf)()->isDelta();
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = false;
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 FEIGN_END()

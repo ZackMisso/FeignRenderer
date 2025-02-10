@@ -8,10 +8,12 @@
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 
 // TODO: for now this will only support homogeneous global media
+// TODO: integrate clocker into volumetric rendering
 
 VolPathTrans_Integrator::VolPathTrans_Integrator(FilterNode *filter,
                                                  Integrator::Params *params)

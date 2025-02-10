@@ -21,25 +21,13 @@ WireframeMaterialShader::WireframeMaterialShader(BSDFNode *wireframe_bsdf,
 
 void WireframeMaterialShader::sample(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     BSDF *bsdf = choose_bsdf(closure);
     bsdf->sample(closure);
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 // TODO: why is this called evaluate if it does not actually evaluate the material...
 void WireframeMaterialShader::evaluate(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     BSDF *bsdf = choose_bsdf(closure);
 
     closure.is_specular = bsdf->isDelta();
@@ -70,24 +58,12 @@ void WireframeMaterialShader::evaluate(MaterialClosure &closure) const
             closure.scene->eval_one_emitter(closure);
         }
     }
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 void WireframeMaterialShader::evaluate_mat_only(MaterialClosure &closure) const
 {
-#if CLOCKING
-    Clocker::startClock("shader eval");
-#endif
-
     BSDF *bsdf = choose_bsdf(closure);
     bsdf->evaluate(closure);
-
-#if CLOCKING
-    Clocker::endClock("shader eval");
-#endif
 }
 
 BSDF *WireframeMaterialShader::choose_bsdf(MaterialClosure &closure) const

@@ -8,6 +8,7 @@
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 
@@ -17,7 +18,15 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode *filte
 
 void Path_Unidirectional_Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
+#if CLOCKING
+    Clocker::startClock(ClockerType::INTEGRATOR_PREPROCESS);
+#endif
+
     Integrator::preProcess(scene, sampler);
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_PREPROCESS);
+#endif
 }
 
 Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
@@ -37,18 +46,29 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
 
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
-        // LOG("max_bounces: " + std::to_string(max_bounces));
-        // LOG("bounces: " + std::to_string(bounces));
         if (beta.isZero())
             break;
+
+#if CLOCKING
+        Clocker::startClock(ClockerType::INTEGRATOR_INTERSECT);
+#endif
 
         Intersection its;
 
         if (!scene->intersect_non_null(ray, its))
         {
+#if CLOCKING
+            Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
+#endif
             Li += beta * scene->env_emission(ray);
             break;
         }
+
+#if CLOCKING
+        Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
+        Clocker::startClock(ClockerType::SHADER);
+        Clocker::startClock(ClockerType::SHADER_SURFACE);
+#endif
 
         const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
@@ -59,11 +79,27 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
 
+#if CLOCKING
+        Clocker::startClock(ClockerType::SHADER_SURFACE_EVAL);
+#endif
+
         // evaluate the material shader
         shader->evaluate(closure);
 
+#if CLOCKING
+        Clocker::endClock(ClockerType::SHADER_SURFACE_EVAL);
+        Clocker::startClock(ClockerType::INTEGRATOR_NEE);
+#endif
+
         // accumulate the shadow rays
         closure.accumulate_shadow_rays(shader);
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_NEE);
+    Clocker::endClock(ClockerType::SHADER_SURFACE);
+    Clocker::endClock(ClockerType::SHADER);
+    Clocker::startClock(ClockerType::INTEGRATOR_RR);
+#endif
 
         Float rr_prob = std::min(beta.maxValue(), ONE);
 
@@ -71,8 +107,20 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         if (sampler->next1D() > rr_prob)
         {
             Li += beta * (closure.emission + closure.nee);
+
+#if CLOCKING
+    Clocker::endClock(ClockerType::INTEGRATOR_RR);
+#endif
+
             break;
         }
+
+#if CLOCKING
+        Clocker::endClock(ClockerType::INTEGRATOR_RR);
+        Clocker::startClock(ClockerType::SHADER);
+        Clocker::startClock(ClockerType::SHADER_SURFACE);
+        Clocker::startClock(ClockerType::SHADER_SURFACE_SAMPLE);
+#endif
 
         // sample the next path
         closure.wi = its.toLocal(-ray.dir);
@@ -81,8 +129,22 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         if (closure.pdf == ZERO)
         {
             Li += beta * (closure.emission + closure.nee);
+
+#if CLOCKING
+        Clocker::endClock(ClockerType::SHADER_SURFACE_SAMPLE);
+        Clocker::endClock(ClockerType::SHADER_SURFACE);
+        Clocker::endClock(ClockerType::SHADER);
+#endif
+
             break;
         }
+
+#if CLOCKING
+        Clocker::endClock(ClockerType::SHADER_SURFACE_SAMPLE);
+        Clocker::endClock(ClockerType::SHADER_SURFACE);
+        Clocker::endClock(ClockerType::SHADER);
+        Clocker::startClock(ClockerType::INTEGRATOR_EVAL);
+#endif
 
         ray = Ray3f(its.p,
                     its.toWorld(closure.wo),
@@ -98,6 +160,10 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
 
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+
+#if CLOCKING
+        Clocker::endClock(ClockerType::INTEGRATOR_EVAL);
+#endif
     }
 
     return Li;

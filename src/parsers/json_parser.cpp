@@ -28,7 +28,7 @@ void JsonParser::parse_and_run(std::string filename, Imagef *image)
     // std::string temp = "../scenes/unit_tests/scenes/normal/" + filename;
 
 #if CLOCKING
-    Clocker::startClock("parse");
+    Clocker::startClock(ClockerType::SCENE_PARSE);
 #endif
 
     FILE *file = fopen(filename.c_str(), "r");
@@ -47,7 +47,7 @@ void JsonParser::parse_and_run(std::string filename)
     FeignRenderer::initialize();
 
 #if CLOCKING
-    Clocker::startClock("parse");
+    Clocker::startClock(ClockerType::SCENE_PARSE);
 #endif
 
     FILE *file = fopen(filename.c_str(), "r");
@@ -1212,7 +1212,7 @@ void JsonParser::actually_parse(rapidjson::Document &document)
     }
 
 #if CLOCKING
-    Clocker::endClock("parse");
+    Clocker::endClock(ClockerType::SCENE_PARSE);
 #endif
 
     FeignRenderer::flush_renders();

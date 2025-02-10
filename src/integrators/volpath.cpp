@@ -8,8 +8,11 @@
 
 #include <feign/core/integrator.h>
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
+
+// TODO: integrate clocker into volumetric rendering
 
 VolPath_Integrator::VolPath_Integrator(FilterNode *filter,
                                        Integrator::Params *params)

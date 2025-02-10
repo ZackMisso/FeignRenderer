@@ -31,7 +31,6 @@ void Integrator::render_fast(const Scene *scene,
 {
     // TODO: make threads and tile size a configurable parameter
     RenderPool *pool = new RenderPool(NTHREADS, 64);
-    // LOG("BLAH");
     pool->initialize_pool(image.width(), image.height());
     pool->evaluate_pool(scene, this, camera, sampler, image);
     delete pool;
@@ -52,6 +51,10 @@ void Integrator::render(const Scene *scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
+#if CLOCKING
+                Clocker::startClock(ClockerType::CAMERA_RAY);
+#endif
+
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
 
@@ -59,7 +62,8 @@ void Integrator::render(const Scene *scene,
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
 
 #if CLOCKING
-                Clocker::startClock("integrator");
+                Clocker::endClock(ClockerType::CAMERA_RAY);
+                Clocker::startClock(ClockerType::INTEGRATOR);
 #endif
 
                 radiance *= Li(scene, sampler, ray);
@@ -75,7 +79,8 @@ void Integrator::render(const Scene *scene,
                 }
 
 #if CLOCKING
-                Clocker::endClock("integrator");
+                Clocker::endClock(ClockerType::INTEGRATOR);
+                Clocker::startClock(ClockerType::FILTER);
 #endif
 
                 BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
@@ -83,10 +88,6 @@ void Integrator::render(const Scene *scene,
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
                                    Point2f(camera->getFilmSize()[0] - 1, camera->getFilmSize()[1] - 1));
-
-#if CLOCKING
-                Clocker::startClock("filter");
-#endif
 
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
@@ -106,14 +107,14 @@ void Integrator::render(const Scene *scene,
                 }
 
 #if CLOCKING
-                Clocker::endClock("filter");
+                Clocker::endClock(ClockerType::FILTER);
 #endif
             }
         }
     }
 
 #if CLOCKING
-    Clocker::startClock("filter");
+    Clocker::startClock(ClockerType::FILTER);
 #endif
 
     for (int i = 0; i < image.height(); ++i)
@@ -136,7 +137,7 @@ void Integrator::render(const Scene *scene,
     }
 
 #if CLOCKING
-    Clocker::endClock("filter");
+    Clocker::endClock(ClockerType::FILTER);
 #endif
 }
 
