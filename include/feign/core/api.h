@@ -25,6 +25,7 @@
 #include <feign/core/shader.h>
 #include <feign/core/texture.h>
 #include <feign/core/sdf.h>
+#include <feign/stats/clocker.h>
 #include <unordered_map>
 
 FEIGN_BEGIN()
@@ -184,7 +185,11 @@ public:
     static void fr_translate(float tx, float ty, float tz);
     static void fr_rotate(float angle, float x, float y, float z);
 
+#if CLOCKING
+    static void flush_renders(ClockerResults* clockings = nullptr);
+#elif
     static void flush_renders();
+#endif
 };
 
 FEIGN_END()

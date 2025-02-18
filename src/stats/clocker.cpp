@@ -14,7 +14,7 @@ FEIGN_BEGIN()
 
 ClockerResults::ClockerResults()
 {
-    times = std::vector<Duration>(ClockerType::COUNT);
+    times = std::vector<Duration>(ClockerType::COUNT, Duration(0));
 }
 
 ClockerResults::ClockerResults(const ClockerResults &other)
@@ -27,13 +27,44 @@ ClockerResults::ClockerResults(const ClockerResults &other)
     }
 }
 
+void ClockerResults::print_results() const
+{
+    print(API);
+    print(RENDERING);
+    print(CAMERA_RAY);
+    print(SCENE_PARSE);
+    print(INTEGRATOR);
+    print(INTEGRATOR_INTERSECT);
+    print(INTEGRATOR_PREPROCESS);
+    print(INTEGRATOR_RR);
+    print(INTEGRATOR_NEE);
+    print(INTEGRATOR_EVAL);
+    print(SHADER);
+    print(SHADER_SURFACE);
+    print(SHADER_SURFACE_EVAL);
+    print(SHADER_SURFACE_SAMPLE);
+    print(SHADER_SURFACE_PREPROCESS);
+    print(SHADER_MEDIA);
+    print(SHADER_MEDIA_EVAL);
+    print(SHADER_MEDIA_SAMPLE);
+    print(SHADER_MEDIA_PREPROCESS);
+    print(FILTER);
+    print(EMBREE);
+    print(DEBUG_ONE);
+    print(DEBUG_TWO);
+    print(DEBUG_THREE);
+    print(COUNT);
+}
+
 void ClockerResults::print(ClockerType tracker) const
 {
     std::cout << times[tracker].count() << " seconds - " << to_name(tracker) << std::endl;
 }
 
-std::string ClockerResults::to_name(ClockerType tracker) {
-    switch (tracker) {
+std::string ClockerResults::to_name(ClockerType tracker)
+{
+    switch (tracker)
+    {
         case API: return "api";
         case RENDERING: return "rendering";
         case CAMERA_RAY: return "camera_ray_sampling";
@@ -89,31 +120,7 @@ void Clocker::deinitialize()
 
 void Clocker::printResults()
 {
-    getInstance()->clockings.print(API);
-    getInstance()->clockings.print(RENDERING);
-    getInstance()->clockings.print(CAMERA_RAY);
-    getInstance()->clockings.print(SCENE_PARSE);
-    getInstance()->clockings.print(INTEGRATOR);
-    getInstance()->clockings.print(INTEGRATOR_INTERSECT);
-    getInstance()->clockings.print(INTEGRATOR_PREPROCESS);
-    getInstance()->clockings.print(INTEGRATOR_RR);
-    getInstance()->clockings.print(INTEGRATOR_NEE);
-    getInstance()->clockings.print(INTEGRATOR_EVAL);
-    getInstance()->clockings.print(SHADER);
-    getInstance()->clockings.print(SHADER_SURFACE);
-    getInstance()->clockings.print(SHADER_SURFACE_EVAL);
-    getInstance()->clockings.print(SHADER_SURFACE_SAMPLE);
-    getInstance()->clockings.print(SHADER_SURFACE_PREPROCESS);
-    getInstance()->clockings.print(SHADER_MEDIA);
-    getInstance()->clockings.print(SHADER_MEDIA_EVAL);
-    getInstance()->clockings.print(SHADER_MEDIA_SAMPLE);
-    getInstance()->clockings.print(SHADER_MEDIA_PREPROCESS);
-    getInstance()->clockings.print(FILTER);
-    getInstance()->clockings.print(EMBREE);
-    getInstance()->clockings.print(DEBUG_ONE);
-    getInstance()->clockings.print(DEBUG_TWO);
-    getInstance()->clockings.print(DEBUG_THREE);
-    getInstance()->clockings.print(COUNT);
+    getInstance()->clockings.print_results();
 }
 
 void Clocker::startClock(ClockerType tracker)
@@ -145,9 +152,10 @@ void Clocker::addClocker(ClockerType tracker)
     getInstance()->actives[tracker] = false;
 }
 
-ClockerResults Clocker::returnResults()
+void Clocker::returnResults(ClockerResults* out)
 {
-    return getInstance()->clockings;
+    if (out)
+        *out = getInstance()->clockings;
 }
 
 #endif

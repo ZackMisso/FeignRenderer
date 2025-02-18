@@ -9,6 +9,7 @@
 #pragma once
 
 #include <feign/common.h>
+#include <feign/stats/clocker.h>
 
 FEIGN_BEGIN()
 
@@ -19,7 +20,12 @@ struct UnitTestData
           test_dir(""),
           test_name(test_path),
           image_error(0.f),
-          threshold(1.f) {}
+          threshold(1.f)
+    {
+    #if CLOCKING
+        clockings = ClockerResults();
+    #endif
+    }
 
     UnitTestData(std::string test_path,
                  std::string test_dir,
@@ -28,11 +34,19 @@ struct UnitTestData
           test_dir(test_dir),
           test_name(test_name),
           image_error(0.f),
-          threshold(1.f) {}
+          threshold(1.f)
+    {
+    #if CLOCKING
+        clockings = ClockerResults();
+    #endif
+    }
 
     void logReport() const;
     bool does_it_fail() const { return image_error > threshold; }
 
+#if CLOCKING
+    ClockerResults clockings;
+#endif
     std::string test_path;
     std::string test_dir;
     std::string test_name;

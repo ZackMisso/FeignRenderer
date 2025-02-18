@@ -61,6 +61,7 @@ struct ClockerResults
     ClockerResults();
     ClockerResults(const ClockerResults &other);
 
+    void print_results() const;
     void print(ClockerType tracker) const;
     static std::string to_name(ClockerType tracker);
 
@@ -87,7 +88,7 @@ public:
     static void startClock(ClockerType tracker);
     static void endClock(ClockerType tracker);
     static void addClocker(ClockerType tracker);
-    static ClockerResults returnResults();
+    static void returnResults(ClockerResults* out);
 };
 
 #endif

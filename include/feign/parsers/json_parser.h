@@ -9,6 +9,7 @@
 #pragma once
 
 #include <feign/core/scene.h>
+#include <feign/stats/clocker.h>
 #include <rapidjson/document.h>
 
 FEIGN_BEGIN()
@@ -21,11 +22,24 @@ FEIGN_BEGIN()
 class JsonParser
 {
 public:
+#if CLOCKING
+    static void parse_and_run(std::string filename,
+                              ClockerResults* clockings = nullptr);
+    static void parse_and_run(std::string filename,
+                              Imagef *image,
+                              ClockerResults* clockings = nullptr);
+#elif
     static void parse_and_run(std::string filename);
-    static void parse_and_run(std::string filename, Imagef *image);
+    static void parse_and_run(std::string filename, Imagef *image); 
+#endif
 
 protected:
+#if CLOCKING
+    static void actually_parse(rapidjson::Document &document,
+                               ClockerResults* clockings = nullptr);
+#elif
     static void actually_parse(rapidjson::Document &document);
+#endif
 };
 
 FEIGN_END()

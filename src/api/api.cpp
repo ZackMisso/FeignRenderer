@@ -86,9 +86,12 @@ FeignRenderer::FeignRenderer(Imagef *target)
 
 FeignRenderer::~FeignRenderer()
 {
+    LOG("test one");
 #if CLOCKING
     Clocker::printResults();
+    LOG("test wto");
     Clocker::deinitialize();
+    LOG("test three");
 #endif
 
     for (auto it : bsdfs)
@@ -1582,10 +1585,13 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 }
 
 // this is the big one
+#if CLOCKING
+void FeignRenderer::flush_renders(ClockerResults* clockings)
+#elif
 void FeignRenderer::flush_renders()
+#endif
 {
 #if CLOCKING
-    // TODO: CHANGE THIS
     Clocker::startClock(ClockerType::API);
 #endif
 
@@ -1661,6 +1667,7 @@ void FeignRenderer::flush_renders()
 
 #if CLOCKING
     Clocker::endClock(ClockerType::RENDERING);
+    Clocker::returnResults(clockings);
 #endif
 
     // clean up used memory after the renders

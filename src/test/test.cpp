@@ -20,8 +20,14 @@ bool evaluate_unit_test(UnitTestData &testLog)
 
     LOG("running test: " + testLog.test_name);
 
+#if CLOCKING
+    JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
+                              &image,
+                              &(testLog.clockings));
+#elif
     JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
                               &image);
+#endif
 
     int loc = testLog.test_name.find_last_of(".");
 
@@ -54,6 +60,12 @@ bool evaluate_unit_test(UnitTestData &testLog)
 
     pos_error_image.write("../scenes/unit_tests/images/" + result_image_name + "_pos_error.png");
     neg_error_image.write("../scenes/unit_tests/images/" + result_image_name + "_neg_error.png");
+
+#if CLOCKING
+    // this is debug code
+    LOG("passed trackings");
+    testLog.clockings.print_results();
+#endif
 
     if (testLog.does_it_fail())
     {

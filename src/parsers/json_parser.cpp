@@ -10,7 +10,6 @@
 #include <feign/core/api.h>
 #include <feign/shapes/objmesh.h>
 #include <feign/shapes/grid_obj.h>
-#include <feign/stats/clocker.h>
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
@@ -21,11 +20,21 @@
 
 FEIGN_BEGIN()
 
-void JsonParser::parse_and_run(std::string filename, Imagef *image)
+
+void JsonParser::parse_and_run
+(
+#if CLOCKING
+    std::string filename,
+    Imagef *image,
+    ClockerResults* clockings
+#elif
+    std::string filename,
+    Imagef *image
+#endif
+)
 {
     LOG("filename: " + filename); // TODO: filename is incorrect, fix paths
     FeignRenderer::initialize(image);
-    // std::string temp = "../scenes/unit_tests/scenes/normal/" + filename;
 
 #if CLOCKING
     Clocker::startClock(ClockerType::SCENE_PARSE);
@@ -42,7 +51,12 @@ void JsonParser::parse_and_run(std::string filename, Imagef *image)
     actually_parse(document);
 }
 
+#if CLOCKING
+void JsonParser::parse_and_run(std::string filename,
+                               ClockerResults* clockings)
+#elif
 void JsonParser::parse_and_run(std::string filename)
+#endif
 {
     FeignRenderer::initialize();
 
@@ -61,7 +75,12 @@ void JsonParser::parse_and_run(std::string filename)
     actually_parse(document);
 }
 
+#if CLOCKING
+void JsonParser::actually_parse(rapidjson::Document &document,
+                                ClockerResults* clockings)
+#elif
 void JsonParser::actually_parse(rapidjson::Document &document)
+#endif
 {
     // TODO: parallelize this
     // NOTE: how do I parallelize this with rapidjson?
@@ -1213,9 +1232,10 @@ void JsonParser::actually_parse(rapidjson::Document &document)
 
 #if CLOCKING
     Clocker::endClock(ClockerType::SCENE_PARSE);
-#endif
-
+    FeignRenderer::flush_renders(clockings);
+#elif
     FeignRenderer::flush_renders();
+#endif
 }
 
 FEIGN_END()
