@@ -28,15 +28,11 @@ BarycentricIntegrator::BarycentricIntegrator(FilterNode *filter,
 
 void BarycentricIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
     Integrator::preProcess(scene, sampler);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
 
 Color3f BarycentricIntegrator::Li(const Scene *scene,
@@ -44,25 +40,19 @@ Color3f BarycentricIntegrator::Li(const Scene *scene,
                                   const Ray3f &ray,
                                   bool debug) const
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+    CLOCKER_START_ONE(ClockerType::INTEGRATOR_INTERSECT)
 
     Intersection its;
 
     if (!scene->intersect_non_null(ray, its))
     {
-#if CLOCKING
-        Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+        CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_INTERSECT)
 
         return Color3f(-2.f);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-    Clocker::startClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+    CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR_EVAL,
+                           ClockerType::INTEGRATOR_INTERSECT)
 
     Point3f bary = its.bary;
     float min = bary[0];
@@ -71,9 +61,7 @@ Color3f BarycentricIntegrator::Li(const Scene *scene,
     if (bary[2] < min)
         min = bary[2];
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_EVAL)
 
     if (min < 0.01)
         return Color3f(1.f);

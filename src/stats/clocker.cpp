@@ -102,11 +102,11 @@ Clocker *Clocker::instance = nullptr;
 Clocker::Clocker()
 {
     clockings = ClockerResults();
-    startTimes = std::vector<TimePt>(ClockerType::COUNT);
+    start_times = std::vector<TimePt>(ClockerType::COUNT);
     actives = std::vector<bool>(ClockerType::COUNT, false);
 }
 
-Clocker *Clocker::getInstance() { return instance; }
+Clocker *Clocker::get_instance() { return instance; }
 
 void Clocker::initialize()
 {
@@ -118,44 +118,44 @@ void Clocker::deinitialize()
     delete instance;
 }
 
-void Clocker::printResults()
+void Clocker::print_results()
 {
     getInstance()->clockings.print_results();
 }
 
-void Clocker::startClock(ClockerType tracker)
+void Clocker::start_clock(ClockerType tracker)
 {
-    if (getInstance()->actives[tracker])
+    if (get_instance()->actives[tracker])
     {
         throw new FeignRendererException(ClockerResults::to_name(tracker) + " already active");
     }
 
-    getInstance()->actives[tracker] = true;
-    getInstance()->startTimes[tracker] = Clock::now();
+    get_instance()->actives[tracker] = true;
+    get_instance()->start_times[tracker] = Clock::now();
 }
 
-void Clocker::endClock(ClockerType tracker)
+void Clocker::end_clock(ClockerType tracker)
 {
-    if (!getInstance()->actives[tracker])
+    if (!get_instance()->actives[tracker])
     {
         throw new FeignRendererException(ClockerResults::to_name(tracker) + " not active");
     }
 
-    getInstance()->actives[tracker] = false;
-    getInstance()->clockings.times[tracker] += Clock::now() - getInstance()->startTimes[tracker];
+    get_instance()->actives[tracker] = false;
+    get_instance()->clockings.times[tracker] += Clock::now() - getInstance()->start_times[tracker];
 }
 
-void Clocker::addClocker(ClockerType tracker)
+void Clocker::add_clocker(ClockerType tracker)
 {
-    getInstance()->clockings.times[tracker] = Duration(0);
-    getInstance()->startTimes[tracker] = Clock::now();
-    getInstance()->actives[tracker] = false;
+    get_instance()->clockings.times[tracker] = Duration(0);
+    get_instance()->start_times[tracker] = Clock::now();
+    get_instance()->actives[tracker] = false;
 }
 
-void Clocker::returnResults(ClockerResults* out)
+void Clocker::return_results(ClockerResults* out)
 {
     if (out)
-        *out = getInstance()->clockings;
+        *out = get_instance()->clockings;
 }
 
 #endif

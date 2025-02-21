@@ -1,0 +1,16 @@
+Code style design etiquitte:
+
+All method names and variables should follow: method_name()
+All class and struct names use Pascal case:   ClassName
+    if a number begins the next word, the following character is lower case.
+    Example: Point3f
+All macros should follow:                     MACRO_NAME
+
+Numbers should not be used in method names unless denoting different
+degrees of parameterization. Example: 
+    Point3f is acceptable
+    divide_by_2() -> should be avoided
+    divide_by_two() -> preferred
+Numbers can be used freely in variable names. Both of these are fine:
+    int divided_by_2 = x / 2;
+    int divided_by_two = x / 2;

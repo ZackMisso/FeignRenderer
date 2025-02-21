@@ -51,9 +51,7 @@ void Integrator::render(const Scene *scene,
         {
             for (int j = 0; j < camera->getFilmSize()[0]; ++j)
             {
-#if CLOCKING
-                Clocker::startClock(ClockerType::CAMERA_RAY);
-#endif
+                CLOCKER_START_ONE(ClockerType::CAMERA_RAY)
 
                 Point2f pixelSample = Point2f(j, i) + sampler->next2D();
                 Point2f apertureSample = sampler->next2D();
@@ -61,10 +59,8 @@ void Integrator::render(const Scene *scene,
                 Ray3f ray;
                 Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
 
-#if CLOCKING
-                Clocker::endClock(ClockerType::CAMERA_RAY);
-                Clocker::startClock(ClockerType::INTEGRATOR);
-#endif
+                CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR,
+                                       ClockerType::CAMERA_RAY)
 
                 radiance *= Li(scene, sampler, ray);
 
@@ -78,10 +74,8 @@ void Integrator::render(const Scene *scene,
                     LOG("inf estimate at: " + STR(i) + " " + STR(j));
                 }
 
-#if CLOCKING
-                Clocker::endClock(ClockerType::INTEGRATOR);
-                Clocker::startClock(ClockerType::FILTER);
-#endif
+                CLOCKER_START_STOP_ONE(ClockerType::FILTER,
+                                       ClockerType::INTEGRATOR)
 
                 BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
                                               pixelSample + filter->filter->getSize());
@@ -106,16 +100,12 @@ void Integrator::render(const Scene *scene,
                     }
                 }
 
-#if CLOCKING
-                Clocker::endClock(ClockerType::FILTER);
-#endif
+                CLOCKER_STOP_ONE(ClockerType::FILTER)
             }
         }
     }
 
-#if CLOCKING
-    Clocker::startClock(ClockerType::FILTER);
-#endif
+    CLOCKER_START_ONE(ClockerType::FILTER)
 
     for (int i = 0; i < image.height(); ++i)
     {
@@ -136,9 +126,7 @@ void Integrator::render(const Scene *scene,
         }
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::FILTER);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::FILTER)
 }
 
 FEIGN_END()

@@ -18,15 +18,11 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode *filte
 
 void Path_Unidirectional_Integrator::preProcess(const Scene *scene, Sampler *sampler)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
     Integrator::preProcess(scene, sampler);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
 
 Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
@@ -49,26 +45,21 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         if (beta.isZero())
             break;
 
-#if CLOCKING
-        Clocker::startClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+        CLOCKER_START_ONE(ClockerType::INTEGRATOR_INTERSECT)
 
         Intersection its;
 
         if (!scene->intersect_non_null(ray, its))
         {
-#if CLOCKING
-            Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+            CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_INTERSECT)
+            
             Li += beta * scene->env_emission(ray);
             break;
         }
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-        Clocker::startClock(ClockerType::SHADER);
-        Clocker::startClock(ClockerType::SHADER_SURFACE);
-#endif
+        CLOCKER_START_TWO_STOP_ONE(ClockerType::SHADER,
+                                   ClockerType::SHADER_SURFACE,
+                                   ClockerType::INTEGRATOR_INTERSECT)
 
         const MaterialShader *shader = scene->getShapeMaterialShader(its);
 
@@ -79,27 +70,21 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
 
-#if CLOCKING
-        Clocker::startClock(ClockerType::SHADER_SURFACE_EVAL);
-#endif
+        CLOCKER_START_ONE(ClockerType::SHADER_SURFACE_EVAL)
 
         // evaluate the material shader
         shader->evaluate(closure);
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::SHADER_SURFACE_EVAL);
-        Clocker::startClock(ClockerType::INTEGRATOR_NEE);
-#endif
+        CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR_NEE,
+                               ClockerType::SHADER_SURFACE_EVAL)
 
         // accumulate the shadow rays
         closure.accumulate_shadow_rays(shader);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_NEE);
-    Clocker::endClock(ClockerType::SHADER_SURFACE);
-    Clocker::endClock(ClockerType::SHADER);
-    Clocker::startClock(ClockerType::INTEGRATOR_RR);
-#endif
+        CLOCKER_START_ONE_STOP_THREE(ClockerType::INTEGRATOR_RR,
+                                     ClockerType::INTEGRATOR_NEE,
+                                     ClockerType::SHADER_SURFACE,
+                                     ClockerType::SHADER)
 
         Float rr_prob = std::min(beta.maxValue(), ONE);
 
@@ -108,19 +93,15 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         {
             Li += beta * (closure.emission + closure.nee);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_RR);
-#endif
+            CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_RR)
 
             break;
         }
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::INTEGRATOR_RR);
-        Clocker::startClock(ClockerType::SHADER);
-        Clocker::startClock(ClockerType::SHADER_SURFACE);
-        Clocker::startClock(ClockerType::SHADER_SURFACE_SAMPLE);
-#endif
+        CLOCKER_START_THREE_STOP_ONE(ClockerType::SHADER,
+                                     ClockerType::SHADER_SURFACE,
+                                     ClockerType::SHADER_SURFACE_SAMPLE,
+                                     ClockerType::INTEGRATOR_RR)
 
         // sample the next path
         closure.wi = its.toLocal(-ray.dir);

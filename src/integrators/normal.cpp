@@ -20,15 +20,11 @@ NormalIntegrator::NormalIntegrator(FilterNode *filter,
 
 void NormalIntegrator::preProcess(const Scene *scene, Sampler *sampler)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
     Integrator::preProcess(scene, sampler);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_PREPROCESS);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
 
 Color3f NormalIntegrator::Li(const Scene *scene,
@@ -36,25 +32,19 @@ Color3f NormalIntegrator::Li(const Scene *scene,
                              const Ray3f &ray,
                              bool debug) const
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+    CLOCKER_START_ONE(ClockerType::INTEGRATOR_INTERSECT)
 
     Intersection its;
 
     if (!scene->intersect_non_null(ray, its))
     {
-#if CLOCKING
-        Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-#endif
+        CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_INTERSECT)
 
         return Color3f(0.f);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_INTERSECT);
-    Clocker::startClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+    CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR_EVAL,
+                           ClockerType::INTEGRATOR_INTERSECT)
 
     Normal3f shad_n = ~(its.s_frame.n);
 
@@ -63,9 +53,7 @@ Color3f NormalIntegrator::Li(const Scene *scene,
         return Color3f(0.f);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_EVAL)
 
     return Color3f(shad_n(0), shad_n(1), shad_n(2));
 }

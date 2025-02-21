@@ -12,6 +12,84 @@
 
 FEIGN_BEGIN()
 
+// macros for cleaning up code
+#define CLOCKER_START_ONE(start) \
+#if CLOCKING \
+    Clocker::start_clock(start); \
+#endif
+
+#define CLOCKER_STOP_ONE(start) \
+#if CLOCKING \
+    Clocker::stop_clock(start); \
+#endif
+
+#define CLOCKER_START_STOP_ONE(start, stop) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start); \
+#endif
+
+#define CLOCKER_START_STOP_TWO(start, start_2, stop, stop_2) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+#endif
+
+#define CLOCKER_START_STOP_THREE(start,
+                                 start_2,
+                                 start_3,
+                                 stop,
+                                 stop_2,
+                                 stop_3) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::end_clock(stop_3); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+    Clocker::start_clock(start_3); \
+#endif
+
+#define CLOCKER_START_TWO_STOP_ONE(start, start_2, stop) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+#endif
+
+#define CLOCKER_START_ONE_STOP_TWO(start, stop, stop_2) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::start_clock(start); \
+#endif
+
+#define CLOCKER_START_ONE_STOP_THREE(start,
+                                     stop,
+                                     stop_2,
+                                     stop_3) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::end_clock(stop_3); \
+    Clocker::start_clock(start); \
+#endif
+
+#define CLOCKER_START_THREE_STOP_ONE(start,
+                                     start_2,
+                                     start_3,
+                                     stop) \
+#if CLOCKING \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+    Clocker::start_clock(start_3); \
+#endif
+
+// #define CLOCKER_START_ONE_STOP_TWO(one, two) = // TODO
+
 #if CLOCKING
 
 #include <string>
@@ -77,18 +155,18 @@ private:
     Clocker();
 
     ClockerResults clockings;
-    std::vector<TimePt> startTimes;
+    std::vector<TimePt> start_times;
     std::vector<bool> actives;
 
 public:
-    static Clocker *getInstance();
+    static Clocker *get_instance();
     static void initialize();
     static void deinitialize();
-    static void printResults();
-    static void startClock(ClockerType tracker);
-    static void endClock(ClockerType tracker);
-    static void addClocker(ClockerType tracker);
-    static void returnResults(ClockerResults* out);
+    static void print_results();
+    static void start_clock(ClockerType tracker);
+    static void end_clock(ClockerType tracker);
+    static void add_clocker(ClockerType tracker);
+    static void return_results(ClockerResults* out);
 };
 
 #endif
