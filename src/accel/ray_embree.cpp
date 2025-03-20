@@ -55,9 +55,7 @@ void EmbreeAccel::build()
 // the interface between the integrators and embree
 bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::EMBREE);
-#endif
+    CLOCKER_START_ONE(ClockerType::EMBREE)
 
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
@@ -92,16 +90,12 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
         // uv's // etc.
         its.intersected_mesh->completeIntersectionInfo(its);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::EMBREE);
-#endif
+        CLOCKER_STOP_ONE(ClockerType::EMBREE)
 
         return true;
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::EMBREE);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::EMBREE)
 
     return false;
 }

@@ -61,12 +61,6 @@ bool evaluate_unit_test(UnitTestData &testLog)
     pos_error_image.write("../scenes/unit_tests/images/" + result_image_name + "_pos_error.png");
     neg_error_image.write("../scenes/unit_tests/images/" + result_image_name + "_neg_error.png");
 
-#if CLOCKING
-    // this is debug code
-    LOG("passed trackings");
-    testLog.clockings.print_results();
-#endif
-
     if (testLog.does_it_fail())
     {
         LOG("IMAGE ERROR: " + std::to_string(testLog.image_error));

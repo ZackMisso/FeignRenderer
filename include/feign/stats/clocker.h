@@ -12,94 +12,6 @@
 
 FEIGN_BEGIN()
 
-// macros for cleaning up code
-#define CLOCKER_START_ONE(start) \
-#if CLOCKING \
-    Clocker::start_clock(start); \
-#endif
-
-#define CLOCKER_STOP_ONE(start) \
-#if CLOCKING \
-    Clocker::stop_clock(start); \
-#endif
-
-#define CLOCKER_START_STOP_ONE(start, stop) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::start_clock(start); \
-#endif
-
-#define CLOCKER_START_STOP_TWO(start, start_2, stop, stop_2) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::end_clock(stop_2); \
-    Clocker::start_clock(start); \
-    Clocker::start_clock(start_2); \
-#endif
-
-#define CLOCKER_START_STOP_THREE(start,
-                                 start_2,
-                                 start_3,
-                                 stop,
-                                 stop_2,
-                                 stop_3) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::end_clock(stop_2); \
-    Clocker::end_clock(stop_3); \
-    Clocker::start_clock(start); \
-    Clocker::start_clock(start_2); \
-    Clocker::start_clock(start_3); \
-#endif
-
-#define CLOCKER_START_TWO_STOP_ONE(start, start_2, stop) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::start_clock(start); \
-    Clocker::start_clock(start_2); \
-#endif
-
-#define CLOCKER_START_ONE_STOP_TWO(start, stop, stop_2) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::end_clock(stop_2); \
-    Clocker::start_clock(start); \
-#endif
-
-#define CLOCKER_START_ONE_STOP_THREE(start,
-                                     stop,
-                                     stop_2,
-                                     stop_3) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::end_clock(stop_2); \
-    Clocker::end_clock(stop_3); \
-    Clocker::start_clock(start); \
-#endif
-
-#define CLOCKER_START_THREE_STOP_ONE(start,
-                                     start_2,
-                                     start_3,
-                                     stop) \
-#if CLOCKING \
-    Clocker::end_clock(stop); \
-    Clocker::start_clock(start); \
-    Clocker::start_clock(start_2); \
-    Clocker::start_clock(start_3); \
-#endif
-
-// #define CLOCKER_START_ONE_STOP_TWO(one, two) = // TODO
-
-#if CLOCKING
-
-#include <string>
-#include <chrono>
-#include <string>
-
-typedef std::chrono::high_resolution_clock Clock;
-typedef std::chrono::high_resolution_clock::time_point TimePt;
-typedef std::chrono::duration<Float> Duration;
-
 // a list of enums used to quickly reference which clocker is being used
 enum ClockerType {
     API,
@@ -134,13 +46,94 @@ enum ClockerType {
     COUNT
 };
 
+// macros for cleaning up code
+#if CLOCKING
+#define CLOCKER_START_ONE(start) Clocker::start_clock(start);
+
+#define CLOCKER_STOP_ONE(stop) Clocker::end_clock(stop);
+
+#define CLOCKER_STOP_TWO(stop, stop_2) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2);
+
+#define CLOCKER_STOP_THREE(stop, stop_2, stop_3) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::end_clock(stop_3);
+
+#define CLOCKER_START_STOP_ONE(start, stop) \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start);
+
+#define CLOCKER_START_STOP_TWO(start, start_2, stop, stop_2) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2);
+
+#define CLOCKER_START_STOP_THREE(start, start_2, start_3, stop, stop_2, stop_3) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::end_clock(stop_3); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+    Clocker::start_clock(start_3);
+
+#define CLOCKER_START_TWO_STOP_ONE(start, start_2, stop) \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2);
+
+#define CLOCKER_START_ONE_STOP_TWO(start, stop, stop_2) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::start_clock(start);
+
+#define CLOCKER_START_ONE_STOP_THREE(start, stop, stop_2, stop_3) \
+    Clocker::end_clock(stop); \
+    Clocker::end_clock(stop_2); \
+    Clocker::end_clock(stop_3); \
+    Clocker::start_clock(start);
+
+#define CLOCKER_START_THREE_STOP_ONE(start, start_2, start_3, stop) \
+    Clocker::end_clock(stop); \
+    Clocker::start_clock(start); \
+    Clocker::start_clock(start_2); \
+    Clocker::start_clock(start_3);
+
+#else
+// define all clocker macros as empty strings
+#define CLOCKER_START_ONE(start)
+#define CLOCKER_STOP_ONE(stop)
+#define CLOCKER_STOP_TWO(stop, stop_2)
+#define CLOCKER_STOP_THREE(stop, stop_2, stop_3)
+#define CLOCKER_START_STOP_ONE(start, stop)
+#define CLOCKER_START_STOP_TWO(start, start_2, stop, stop_2)
+#define CLOCKER_START_STOP_THREE(start, start_2, start_3, stop, stop_2, stop_3)
+#define CLOCKER_START_TWO_STOP_ONE(start, start_2, stop)
+#define CLOCKER_START_ONE_STOP_TWO(start, stop, stop_2)
+#define CLOCKER_START_ONE_STOP_THREE(start, stop, stop_2, stop_3)
+#define CLOCKER_START_THREE_STOP_ONE(start, start_2, start_3, stop)
+#endif
+
+#if CLOCKING
+
+#include <string>
+#include <chrono>
+#include <string>
+
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::high_resolution_clock::time_point TimePt;
+typedef std::chrono::duration<Float> Duration;
+
 struct ClockerResults
 {
     ClockerResults();
     ClockerResults(const ClockerResults &other);
 
     void print_results() const;
-    void print(ClockerType tracker) const;
+    void print(ClockerType tracker, int padding) const;
+    void print_total() const;
     static std::string to_name(ClockerType tracker);
 
     std::vector<Duration> times;

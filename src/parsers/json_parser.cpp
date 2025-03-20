@@ -36,9 +36,7 @@ void JsonParser::parse_and_run
     LOG("filename: " + filename); // TODO: filename is incorrect, fix paths
     FeignRenderer::initialize(image);
 
-#if CLOCKING
-    Clocker::startClock(ClockerType::SCENE_PARSE);
-#endif
+    CLOCKER_START_ONE(ClockerType::SCENE_PARSE)
 
     FILE *file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
@@ -48,7 +46,11 @@ void JsonParser::parse_and_run
     document.ParseStream(input_stream);
     fclose(file);
 
+#if CLOCKING
+    actually_parse(document, clockings);
+#else
     actually_parse(document);
+#endif
 }
 
 #if CLOCKING
@@ -60,9 +62,7 @@ void JsonParser::parse_and_run(std::string filename)
 {
     FeignRenderer::initialize();
 
-#if CLOCKING
-    Clocker::startClock(ClockerType::SCENE_PARSE);
-#endif
+    CLOCKER_START_ONE(ClockerType::SCENE_PARSE)
 
     FILE *file = fopen(filename.c_str(), "r");
     char read_buffer[65536];
@@ -1230,8 +1230,8 @@ void JsonParser::actually_parse(rapidjson::Document &document)
         }
     }
 
+    CLOCKER_STOP_ONE(ClockerType::SCENE_PARSE)
 #if CLOCKING
-    Clocker::endClock(ClockerType::SCENE_PARSE);
     FeignRenderer::flush_renders(clockings);
 #elif
     FeignRenderer::flush_renders();

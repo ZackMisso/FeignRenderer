@@ -90,6 +90,15 @@ bool UnitTestManager::run_all_tests()
             testLog.logReport();
             if (testLog.does_it_fail())
                 passes = false;
+            
+            #if RECORD
+                // if record is enabled, we want to append the various
+                // clockings to the test's permanent record.
+                // TODO: continue from here
+
+                // TODO: create python scripts to generate plots for
+                // the tests' records and call them from here.
+            #endif
         }
 
         // TODO: autogenerate comparision webpage

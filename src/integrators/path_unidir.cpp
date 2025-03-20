@@ -111,21 +111,17 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         {
             Li += beta * (closure.emission + closure.nee);
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::SHADER_SURFACE_SAMPLE);
-        Clocker::endClock(ClockerType::SHADER_SURFACE);
-        Clocker::endClock(ClockerType::SHADER);
-#endif
+            CLOCKER_STOP_THREE(ClockerType::SHADER_SURFACE_SAMPLE,
+                               ClockerType::SHADER_SURFACE,
+                               ClockerType::SHADER)
 
             break;
         }
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::SHADER_SURFACE_SAMPLE);
-        Clocker::endClock(ClockerType::SHADER_SURFACE);
-        Clocker::endClock(ClockerType::SHADER);
-        Clocker::startClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+        CLOCKER_START_ONE_STOP_THREE(ClockerType::INTEGRATOR_EVAL,
+                                     ClockerType::SHADER_SURFACE_SAMPLE,
+                                     ClockerType::SHADER_SURFACE,
+                                     ClockerType::SHADER)
 
         ray = Ray3f(its.p,
                     its.toWorld(closure.wo),
@@ -142,9 +138,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         Li += beta * (closure.nee + closure.emission);
         beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
 
-#if CLOCKING
-        Clocker::endClock(ClockerType::INTEGRATOR_EVAL);
-#endif
+        CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_EVAL)
     }
 
     return Li;

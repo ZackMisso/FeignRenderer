@@ -86,12 +86,9 @@ FeignRenderer::FeignRenderer(Imagef *target)
 
 FeignRenderer::~FeignRenderer()
 {
-    LOG("test one");
 #if CLOCKING
-    Clocker::printResults();
-    LOG("test wto");
+    Clocker::print_results();
     Clocker::deinitialize();
-    LOG("test three");
 #endif
 
     for (auto it : bsdfs)
@@ -513,9 +510,7 @@ void FeignRenderer::fr_accel(std::string name,
                              std::string type,
                              void *accel_properties)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     assert(getInstance()->scene);
 
@@ -549,9 +544,7 @@ void FeignRenderer::fr_accel(std::string name,
         throw new NotImplementedException("unsupported accelerator: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_scene(std::string name,
@@ -563,9 +556,7 @@ void FeignRenderer::fr_scene(std::string name,
                              std::string description,
                              bool sdf_mode)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     std::cout << "sdf_mode: " << sdf_mode << std::endl;
     global_params.sdf_only = sdf_mode;
@@ -596,9 +587,7 @@ void FeignRenderer::fr_scene(std::string name,
 
     getInstance()->scene = new SceneNode(name, scene);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_integrator(std::string name,
@@ -606,9 +595,7 @@ void FeignRenderer::fr_integrator(std::string name,
                                   std::string filter,
                                   void *integrator_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     IntegratorNode *integrator = getInstance()->find_integrator(name);
     FilterNode *filter_node = getInstance()->find_filter(filter);
@@ -683,18 +670,14 @@ void FeignRenderer::fr_integrator(std::string name,
         throw new NotImplementedException("unsupported integrator: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_sampler(std::string name,
                                std::string type,
                                void *sampler_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     SamplerNode *sampler = getInstance()->find_sampler(name);
 
@@ -717,18 +700,14 @@ void FeignRenderer::fr_sampler(std::string name,
         throw new NotImplementedException("unsupported sampler: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_camera(std::string name,
                               std::string type,
                               void *camera_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     CameraNode *camera = getInstance()->find_camera(name);
 
@@ -773,9 +752,7 @@ void FeignRenderer::fr_camera(std::string name,
         throw new NotImplementedException("unsupported camera type: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_object(std::string name,
@@ -785,9 +762,7 @@ void FeignRenderer::fr_object(std::string name,
                               std::string medium,
                               int index)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     if (index >= 0)
         name += "_" + std::to_string(index);
@@ -820,9 +795,7 @@ void FeignRenderer::fr_object(std::string name,
         object->emitter = emitter_node;
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 // TODO: rename this to shape... since not just meshes are supported
@@ -831,9 +804,7 @@ void FeignRenderer::fr_mesh(std::string name,
                             std::string type,
                             void *mesh_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     MeshNode *mesh = getInstance()->find_mesh(name);
 
@@ -979,18 +950,14 @@ void FeignRenderer::fr_mesh(std::string name,
         throw new NotImplementedException("mesh type not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_shader(std::string name,
                               std::string type,
                               void *shader_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     // TODO: incorporate other shader types later
 
@@ -1042,17 +1009,13 @@ void FeignRenderer::fr_shader(std::string name,
         throw new NotImplementedException("shader type not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_media(std::string name,
                              void *medium_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     MediaNode *medium = getInstance()->find_media(name);
 
@@ -1084,18 +1047,14 @@ void FeignRenderer::fr_media(std::string name,
                               params->abs,
                               params->scat);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_medium_density(std::string name,
                                       std::string type,
                                       void *density_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     LOG("medium_density: " + name);
     DensityFunctionNode *density_func = getInstance()->find_density_func(name);
@@ -1142,35 +1101,27 @@ void FeignRenderer::fr_medium_density(std::string name,
         throw new NotImplementedException("medium density not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_medium_phase(std::string name,
                                     std::string type,
                                     void *phase_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     // TODO
 
     throw new NotImplementedException("medium phase type not recognized: " + type);
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_medium_sampling(std::string name,
                                        std::string type,
                                        void *sample_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     MediumSamplingNode *medium_sampling = getInstance()->find_medium_sampling(name);
 
@@ -1209,18 +1160,14 @@ void FeignRenderer::fr_medium_sampling(std::string name,
         throw new NotImplementedException("medium sampling not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_medium_transmittance(std::string name,
                                             std::string type,
                                             void *trans_est_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     TransmittanceEstimatorNode *trans_est = getInstance()->find_transmittance_estimator(name);
 
@@ -1270,18 +1217,14 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
         throw new NotImplementedException("transmittance estimator not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_medium_transmittance_func(std::string name,
                                                  std::string type,
                                                  void *trans_func_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     TransFuncNode *trans_func = getInstance()->find_transmittance_func(name);
 
@@ -1311,18 +1254,14 @@ void FeignRenderer::fr_medium_transmittance_func(std::string name,
         throw new NotImplementedException("transmittance function not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_emitter(std::string name,
                                std::string type,
                                void *emitter_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     EmitterNode *emitter = getInstance()->find_emitter(name);
 
@@ -1383,9 +1322,7 @@ void FeignRenderer::fr_emitter(std::string name,
         throw new NotImplementedException("emitter type not recognized: " + type);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 // void FeignRenderer::fr_material(std::string name,
@@ -1417,9 +1354,7 @@ void FeignRenderer::fr_bsdf(std::string name,
                             std::string type,
                             void *bsdf_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     BSDFNode *bsdf = getInstance()->find_bsdf(name);
 
@@ -1478,20 +1413,15 @@ void FeignRenderer::fr_bsdf(std::string name,
         assert(false);
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_texture(std::string name,
                                std::string type,
                                void *texture_data)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
-    // std::cout << "NAME: " << name << std::endl;
     TextureNode *texture = getInstance()->find_texture(name);
 
     if (texture->texture)
@@ -1521,67 +1451,49 @@ void FeignRenderer::fr_texture(std::string name,
         throw new FeignRendererException(type + " texture not supported");
     }
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_clear_transform()
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     getInstance()->current_transform = Transform();
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_scale(float sx, float sy, float sz)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     Matrix4f matrix = Matrix4f::scale(Vec3f(sx, sy, sz));
     Transform scale_transform = Transform(matrix);
     getInstance()->current_transform = scale_transform * getInstance()->current_transform;
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_translate(float tx, float ty, float tz)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     Matrix4f matrix = Matrix4f::translate(Vec3f(tx, ty, tz));
     Transform translate_transform = Transform(matrix);
     getInstance()->current_transform = translate_transform * getInstance()->current_transform;
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     Matrix4f matrix = Matrix4f::rotate(angle, Vec3f(x, y, z));
     Transform rotate_transform = Transform(matrix);
     getInstance()->current_transform = rotate_transform * getInstance()->current_transform;
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-#endif
+    CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 // this is the big one
@@ -1591,9 +1503,7 @@ void FeignRenderer::flush_renders(ClockerResults* clockings)
 void FeignRenderer::flush_renders()
 #endif
 {
-#if CLOCKING
-    Clocker::startClock(ClockerType::API);
-#endif
+    CLOCKER_START_ONE(ClockerType::API)
 
     LOG("global_params.sdf_only flush: " + std::to_string(global_params.sdf_only));
     Scene *scene_obj = getInstance()->scene->scene;
@@ -1653,10 +1563,7 @@ void FeignRenderer::flush_renders()
 
     global_params.name = "blah";
 
-#if CLOCKING
-    Clocker::endClock(ClockerType::API);
-    Clocker::startClock(ClockerType::RENDERING);
-#endif
+    CLOCKER_START_STOP_ONE(ClockerType::RENDERING, ClockerType::API)
 
     LOG("entering render");
 
@@ -1665,9 +1572,9 @@ void FeignRenderer::flush_renders()
 
     LOG("render done, cleaning up");
 
+    CLOCKER_STOP_ONE(ClockerType::RENDERING)
 #if CLOCKING
-    Clocker::endClock(ClockerType::RENDERING);
-    Clocker::returnResults(clockings);
+    Clocker::return_results(clockings);
 #endif
 
     // clean up used memory after the renders

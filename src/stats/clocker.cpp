@@ -19,6 +19,7 @@ ClockerResults::ClockerResults()
 
 ClockerResults::ClockerResults(const ClockerResults &other)
 {
+    std::cout << "copy constructor was called" << std::endl;
     times = std::vector<Duration>(ClockerType::COUNT, Duration(0));
 
     for (int i = 0; i < ClockerType::COUNT; ++i)
@@ -29,36 +30,65 @@ ClockerResults::ClockerResults(const ClockerResults &other)
 
 void ClockerResults::print_results() const
 {
-    print(API);
-    print(RENDERING);
-    print(CAMERA_RAY);
-    print(SCENE_PARSE);
-    print(INTEGRATOR);
-    print(INTEGRATOR_INTERSECT);
-    print(INTEGRATOR_PREPROCESS);
-    print(INTEGRATOR_RR);
-    print(INTEGRATOR_NEE);
-    print(INTEGRATOR_EVAL);
-    print(SHADER);
-    print(SHADER_SURFACE);
-    print(SHADER_SURFACE_EVAL);
-    print(SHADER_SURFACE_SAMPLE);
-    print(SHADER_SURFACE_PREPROCESS);
-    print(SHADER_MEDIA);
-    print(SHADER_MEDIA_EVAL);
-    print(SHADER_MEDIA_SAMPLE);
-    print(SHADER_MEDIA_PREPROCESS);
-    print(FILTER);
-    print(EMBREE);
-    print(DEBUG_ONE);
-    print(DEBUG_TWO);
-    print(DEBUG_THREE);
-    print(COUNT);
+    int total_num_padding = 0;
+
+    for (int i = 0; i < ClockerType::COUNT - 1; ++i)
+    {
+        int len = std::to_string(times[i].count()).length();
+        total_num_padding = std::max(total_num_padding, len);
+    }
+
+    print(API, total_num_padding);
+    print(RENDERING, total_num_padding);
+    print(CAMERA_RAY, total_num_padding);
+    print(SCENE_PARSE, total_num_padding);
+    print(INTEGRATOR, total_num_padding);
+    print(INTEGRATOR_INTERSECT, total_num_padding);
+    print(INTEGRATOR_PREPROCESS, total_num_padding);
+    print(INTEGRATOR_RR, total_num_padding);
+    print(INTEGRATOR_NEE, total_num_padding);
+    print(INTEGRATOR_EVAL, total_num_padding);
+    print(SHADER, total_num_padding);
+    print(SHADER_SURFACE, total_num_padding);
+    print(SHADER_SURFACE_EVAL, total_num_padding);
+    print(SHADER_SURFACE_SAMPLE, total_num_padding);
+    print(SHADER_SURFACE_PREPROCESS, total_num_padding);
+    print(SHADER_MEDIA, total_num_padding);
+    print(SHADER_MEDIA_EVAL, total_num_padding);
+    print(SHADER_MEDIA_SAMPLE, total_num_padding);
+    print(SHADER_MEDIA_PREPROCESS, total_num_padding);
+    print(FILTER, total_num_padding);
+    print(EMBREE, total_num_padding);
+    print(DEBUG_ONE, total_num_padding);
+    print(DEBUG_TWO, total_num_padding);
+    print(DEBUG_THREE, total_num_padding);
+
+    // the total is the combination of SCENE_PARSE + API + RENDERING
+    print_total();
 }
 
-void ClockerResults::print(ClockerType tracker) const
+void ClockerResults::print(ClockerType tracker, int padding) const
 {
-    std::cout << times[tracker].count() << " seconds - " << to_name(tracker) << std::endl;
+    std::string padded_str = std::to_string(times[tracker].count());
+
+    // TODO: this is inefficient, fix later
+    int diff = padding - padded_str.length();
+    for (int i = 0; i < diff; ++i) {
+        padded_str = padded_str + " ";
+    }
+
+    std::cout << padded_str << " seconds - " << to_name(tracker) << std::endl;
+}
+
+void ClockerResults::print_total() const
+{
+    float time = 0.f;
+    
+    time = times[SCENE_PARSE].count() +
+           times[RENDERING].count() +
+           times[API].count();
+
+    std::cout << time << " seconds - " << to_name(COUNT) << std::endl;
 }
 
 std::string ClockerResults::to_name(ClockerType tracker)
@@ -90,8 +120,8 @@ std::string ClockerResults::to_name(ClockerType tracker)
         // three enums used for debugging purposes. TODO: maybe allow custom
         // names to be set for these
         case DEBUG_ONE: return "debug_one";
-        case DEBUG_TWO: return "debug_one";
-        case DEBUG_THREE: return "debug_one";
+        case DEBUG_TWO: return "debug_two";
+        case DEBUG_THREE: return "debug_three";
         case COUNT: return "total_clockings";
         default: return "unrecognized_clocker_type";
     }
@@ -120,7 +150,7 @@ void Clocker::deinitialize()
 
 void Clocker::print_results()
 {
-    getInstance()->clockings.print_results();
+    get_instance()->clockings.print_results();
 }
 
 void Clocker::start_clock(ClockerType tracker)
@@ -142,7 +172,7 @@ void Clocker::end_clock(ClockerType tracker)
     }
 
     get_instance()->actives[tracker] = false;
-    get_instance()->clockings.times[tracker] += Clock::now() - getInstance()->start_times[tracker];
+    get_instance()->clockings.times[tracker] += Clock::now() - get_instance()->start_times[tracker];
 }
 
 void Clocker::add_clocker(ClockerType tracker)

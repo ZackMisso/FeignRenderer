@@ -27,6 +27,13 @@
 // TODO: incorporate clocking throughout renderer
 // Stats tracking //
 #define CLOCKING true
+// record should only be true during runs where we log clockings
+// for weekly stat tracking
+#define RECORD false
+// hard coding these for now:
+#define RECORD_DAY 19
+#define RECORD_MONTH 3
+#define RECORD_YEAR 2025
 ////////////////////
 
 // TODO: make this a stats parameter in the future
