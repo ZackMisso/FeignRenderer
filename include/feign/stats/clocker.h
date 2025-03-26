@@ -121,6 +121,8 @@ enum ClockerType {
 #include <string>
 #include <chrono>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::high_resolution_clock::time_point TimePt;
@@ -137,6 +139,17 @@ struct ClockerResults
     static std::string to_name(ClockerType tracker);
 
     std::vector<Duration> times;
+
+    #if RECORD
+    ClockerResults(std::string str); // convenient for loading from file
+
+    void parse_from_string(std::string str);
+    std::string to_string() const;
+    
+    int month = RECORD_MONTH;
+    int day = RECORD_DAY;
+    int year = RECORD_YEAR;
+    #endif
 };
 
 // TODO: need to implement this with support for multi-threading

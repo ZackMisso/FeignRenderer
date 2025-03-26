@@ -17,6 +17,14 @@ ClockerResults::ClockerResults()
     times = std::vector<Duration>(ClockerType::COUNT, Duration(0));
 }
 
+#if RECORD
+ClockerResults::ClockerResults(std::string str)
+{
+    times = std::vector<Duration>(ClockerType::COUNT, Duration(0));
+    parse_from_string(str);
+}
+#endif
+
 ClockerResults::ClockerResults(const ClockerResults &other)
 {
     std::cout << "copy constructor was called" << std::endl;
@@ -66,6 +74,48 @@ void ClockerResults::print_results() const
     // the total is the combination of SCENE_PARSE + API + RENDERING
     print_total();
 }
+
+#if RECORD
+// TODO: make this faster
+void ClockerResults::parse_from_string(std::string str) {
+    std::stringstream ss(str);
+    std::vector<std::string> vals = std::vector<std::string>();
+    
+    while (ss.good())
+    {
+        std::string substr;
+        getline(ss, substr, ',');
+        vals.push_back(substr);
+    }
+
+    month = std::stof(vals[0]);
+    day = std::stof(vals[1]);
+    year = std::stof(vals[2]);
+
+    for (int i = 0; i < COUNT-1; ++i) {
+        if (vals.size() > i) {
+            times[i] = Duration(std::stof(vals[3+i]));
+        } else {
+            times[i] = Duration(0.0);
+        }
+    }
+
+    times[COUNT] = Duration(0.0);
+}
+
+// TODO: make this faster, continuous string addition is slow
+std::string ClockerResults::to_string() const {
+    std::string str = "";
+
+    for (int i = 0; i < COUNT-1; ++i) {
+        if (i != 0)
+            str = str + ",";
+        str = str + std::to_string(times[i].count());
+    }
+
+    return "";
+}
+#endif
 
 void ClockerResults::print(ClockerType tracker, int padding) const
 {

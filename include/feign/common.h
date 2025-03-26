@@ -29,7 +29,7 @@
 #define CLOCKING true
 // record should only be true during runs where we log clockings
 // for weekly stat tracking
-#define RECORD false
+#define RECORD true
 // hard coding these for now:
 #define RECORD_DAY 19
 #define RECORD_MONTH 3
