@@ -31,7 +31,7 @@
 // for weekly stat tracking
 #define RECORD true
 // hard coding these for now:
-#define RECORD_DAY 19
+#define RECORD_DAY 28
 #define RECORD_MONTH 3
 #define RECORD_YEAR 2025
 ////////////////////

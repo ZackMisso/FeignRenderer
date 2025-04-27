@@ -107,13 +107,17 @@ void ClockerResults::parse_from_string(std::string str) {
 std::string ClockerResults::to_string() const {
     std::string str = "";
 
+    str = str + std::to_string(RECORD_YEAR) + ",";
+    str = str + std::to_string(RECORD_MONTH) + ",";
+    str = str + std::to_string(RECORD_DAY) + ",";
+
     for (int i = 0; i < COUNT-1; ++i) {
         if (i != 0)
             str = str + ",";
         str = str + std::to_string(times[i].count());
     }
 
-    return "";
+    return str;
 }
 #endif
 

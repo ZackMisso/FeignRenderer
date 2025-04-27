@@ -21,9 +21,10 @@ FEIGN_BEGIN()
 
 // [X] TODO: create global html page
 // [X] TODO: create individual html pages per test
-// [] TODO: create logging info for individual unit test
-// [] TODO: create tags for each unit test
-// [] TODO: create a sort by tags feature
+// [X] TODO: create logging info for individual unit test
+// [] TODO: create automatic graphing for unit clockings and error
+// [] TODO LATER: create tags for each unit test
+// [] TODO LATER: create a sort by tags feature
 void UnitTestSiteAssembler::create_global_html_page()
 {
     LOG("Auto-generating unit tests results web-viewer");
@@ -191,9 +192,9 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
     test_page << "</div>" << std::endl;
     test_page << std::endl;
     test_page << "<ul>" << std::endl;
-    test_page << "<li style=\"color:blue\">Error from reference:          TODO</li>" << std::endl;
-    test_page << "<li style=\"color:blue\">Squared error from reference:  TODO</li>" << std::endl;
-    test_page << "<li style=\"color:blue\">Relative error from reference: TODO</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Error from reference:          " << testLog.image_error << "</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Squared error from reference:  " << testLog.image_sqr_error << "</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Relative error from reference: " << testLog.image_rel_error << "</li>" << std::endl;
     test_page << "</ul>" << std::endl;
     test_page << std::endl;
     test_page << std::endl;
@@ -249,6 +250,23 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
     test_page << "</script>" << std::endl;
 
     test_page.close();
+}
+
+// TODO: compute the average of the previous 10 clockings and report the
+//       difference between the current run and the average on the site.
+void UnitTestSiteAssembler::append_to_test_records(UnitTestData &test_log) {
+    LOG("recording clocking data for " + test_log.test_name);
+
+    std::string test_name = test_log.test_name.substr(0, test_log.test_name.length() - 5);
+
+    std::ofstream clockings_file;
+    clockings_file.open("../scenes/unit_tests/web_viewer/clocking_logs/" + test_name + ".dat", std::ios_base::app);
+
+    std::cout << "CLOCKINGS STR: " << test_log.clockings.to_string() << std::endl;
+
+    clockings_file << test_log.clockings.to_string() << std::endl;
+    
+    clockings_file.close();
 }
 
 FEIGN_END()

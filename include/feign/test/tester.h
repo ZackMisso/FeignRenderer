@@ -61,6 +61,7 @@ struct UnitTestSiteAssembler
 {
     static void create_global_html_page();
     static void create_test_html_page(UnitTestData &testLog);
+    static void append_to_test_records(UnitTestData &testLog);
 };
 
 struct UnitTestManager

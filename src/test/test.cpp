@@ -53,8 +53,8 @@ bool evaluate_unit_test(UnitTestData &testLog)
             imedit::Pixel val = ref_image(j, i) - image(j, i);
 
             // compute relative error for positive and negative values independently
-            pos_error_image(j, i) = val.positives() / ref_image(j, i);
-            neg_error_image(j, i) = val.negatives() / ref_image(j, i);
+            pos_error_image(j, i) = val.positives();// / ref_image(j, i);
+            neg_error_image(j, i) = val.negatives();// / ref_image(j, i);
         }
     }
 

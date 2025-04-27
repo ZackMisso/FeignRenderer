@@ -94,7 +94,7 @@ bool UnitTestManager::run_all_tests()
             #if RECORD
                 // if record is enabled, we want to append the various
                 // clockings to the test's permanent record.
-                // TODO: continue from here
+                UnitTestSiteAssembler::append_to_test_records(testLog);
 
                 // TODO: create python scripts to generate plots for
                 // the tests' records and call them from here.
