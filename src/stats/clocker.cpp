@@ -92,7 +92,7 @@ void ClockerResults::parse_from_string(std::string str) {
     day = std::stof(vals[1]);
     year = std::stof(vals[2]);
 
-    for (int i = 0; i < COUNT-1; ++i) {
+    for (int i = 0; i < COUNT; ++i) {
         if (vals.size() > i) {
             times[i] = Duration(std::stof(vals[3+i]));
         } else {
@@ -111,7 +111,7 @@ std::string ClockerResults::to_string() const {
     str = str + std::to_string(RECORD_MONTH) + ",";
     str = str + std::to_string(RECORD_DAY) + ",";
 
-    for (int i = 0; i < COUNT-1; ++i) {
+    for (int i = 0; i < COUNT; ++i) {
         if (i != 0)
             str = str + ",";
         str = str + std::to_string(times[i].count());

@@ -31,6 +31,8 @@ std::string zero_padded_num(int num)
     return ss.str();
 }
 
+// TODO: create convergent direct comparisons between different techniques
+
 bool UnitTestManager::run_test(int index)
 {
     std::string path = "test_" + zero_padded_num(index) + ".json";

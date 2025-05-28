@@ -252,21 +252,25 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
     test_page.close();
 }
 
-// TODO: compute the average of the previous 10 clockings and report the
-//       difference between the current run and the average on the site.
+// TODO MAYBE: compute the average of the previous 10 clockings and report the
+//             difference between the current run and the average on the site.
 void UnitTestSiteAssembler::append_to_test_records(UnitTestData &test_log) {
-    LOG("recording clocking data for " + test_log.test_name);
-
     std::string test_name = test_log.test_name.substr(0, test_log.test_name.length() - 5);
 
     std::ofstream clockings_file;
     clockings_file.open("../scenes/unit_tests/web_viewer/clocking_logs/" + test_name + ".dat", std::ios_base::app);
 
-    std::cout << "CLOCKINGS STR: " << test_log.clockings.to_string() << std::endl;
-
     clockings_file << test_log.clockings.to_string() << std::endl;
     
     clockings_file.close();
+
+    // call the script to regenerate the records after deleting the old ones
+    std::string remove_graphs_folder_cmd = "rm -rf " + test_name + "/";
+    system(remove_graphs_folder_cmd.c_str());
+    std::string create_graphs_folder_cmd = "mkdir ../scenes/unit_tests/web_viewer/clocking_logs/" + test_name + "/";
+    system(create_graphs_folder_cmd.c_str());
+    std::string create_graphs_cmd = "python3 ../scenes/unit_tests/web_viewer/scripts/generate_clocking_graphs.py " + test_name + " &";
+    system(create_graphs_cmd.c_str());
 }
 
 FEIGN_END()
