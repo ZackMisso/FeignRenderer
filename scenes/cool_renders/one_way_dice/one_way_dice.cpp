@@ -1,6 +1,6 @@
-// // this is all now broken because I have combined the material and shader
-// // abstractions into one layer of abstraction instead of two. I will probably
-// // not fix this
+// this is all now broken because I have combined the material and shader
+// abstractions into one layer of abstraction instead of two. I will probably
+// not fix this. This is being kept here while I work on creating new demos.
 
 // #include "one_way_dice.h"
 // #include <feign/shapes/objmesh.h>

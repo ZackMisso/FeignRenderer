@@ -13,6 +13,10 @@
 
 FEIGN_BEGIN()
 
+// the node abstraction layer allows for quick reference linking
+// during scene initialization. Nodes get indirectly created and
+// modified through various api calls.
+
 struct Node
 {
 public:
@@ -20,38 +24,9 @@ public:
     Node(std::string name) : name(name) {}
     virtual ~Node() {}
 
-    // modification methods to easily implement custom behavior
-    virtual void modify_color(std::string var, Color3f val) {}
-    virtual void modify_float(std::string var, Float val) {}
-    virtual void modify_int(std::string var, int val) {}
-    virtual void modify_string(std::string var, std::string val) {}
-
-    virtual void print() const {} // TODO: remove this
+    virtual void print() const {}
 
     std::string name;
-};
-
-// a struct containing the render wide globals which might be used to
-// effect the nodes
-struct NodeUpdateGlobals
-{
-    NodeUpdateGlobals();
-
-    Float screen_x;
-    Float screen_y;
-};
-
-// modifiers which can be used to modify nodes
-struct Modifier
-{
-public:
-    Modifier(std::string var) : var(var) {}
-
-    // TODO: need to think this design through to account for multithreading
-    // TODO: once actual time is accounted for, change integer frame, to float time
-    virtual void modify(Node *node, NodeUpdateGlobals &globes, int frame) const = 0;
-
-    std::string var;
 };
 
 FEIGN_END()
