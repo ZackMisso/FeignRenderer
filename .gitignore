@@ -7,3 +7,4 @@ scenes/meshes/neon/
 scenes/meshes/dice/
 scenes/unit_tests/images/
 *.exr
+scenes/unit_tests/web_viewer/clocking_logs/

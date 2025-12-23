@@ -7,9 +7,9 @@ unit test originally created by: <a href="https://zackarymisso.com">Zack Misso</
 
 *Description: this is a test description*
 
-*Keywords: blah,blah,blah*
+*Keywords: keywords currently unimplemented*
 
-*report automatically generated*
+*report automatically generated via internal script*
 
 <b style="color:green">PLEASE VIEW IN CHROME, OTHERWISE SCRIPTS MIGHT BREAK</b>
 
@@ -61,41 +61,129 @@ Error
 </div>
 
 <ul>
-<li style="color:blue">Error from reference:          9.46002e-05</li>
-<li style="color:blue">Squared error from reference:  1.51336e-08</li>
-<li style="color:blue">Relative error from reference: 0.000115632</li>
+<li style="color:blue">Mean absolute error from reference:          9.46002e-05</li>
+<li style="color:blue">Mean squared error from reference:  1.51336e-08</li>
+<li style="color:blue">Mean relative error from reference: 0.000115632</li>
 </ul>
 
-
-<p style="color:blue" align="center">Test is TODO</p>
 
 Stat History
 ============
 
-Starting February 1st 2025, the Feign Renderer will begin keeping track
+Starting January 1st 2026, the Feign Renderer will begin keeping track
 of the average render times, and various errors for each of its unit tests
-on a weekly basis. These metrics will be reported to keep track of the Feign
+on a daily basis. These metrics will be reported to keep track of the Feign
 Renderer's performance as new features are continuously added. All unit tests
 are ran on a single thread using the same computer to maintain consistency.
 
 <div class="twentytwenty-container">
-    <img src="../images/test_004.png" alt="render time">
-    <img src="../images/test_004_ref.png" alt="error">
-    <img src="../images/test_004.png" alt="squared error">
-    <img src="../images/test_004_ref.png" alt="relative error">
+    <img src="clocking_logs/test_004/test_004_time.png" alt="render time" />
+    <img src="clocking_logs/test_004/test_004_error.png" alt="mean absolute error" />
+    <img src="clocking_logs/test_004/test_004_MSE.png" alt="mean squared error" />
+    <img src="clocking_logs/test_004/test_004_rel_error.png" alt="mean relative error" />
 </div>
+Average render times of individual parts of the rendering engine
+----------------------------------------------------------------
+NOTE: These render times are not additive and are really only for my
+own use. Many of these measures functionally overlap with each other. Ex.
+"integrator_eval" also includes all render-time shader evaluations.
 
-Change-log
-==========
-
-Here we document any significant changes to this unit test which may
-explain changes in performance, look, etc.
-
-<ul>
-    <li>2/02/2025: implemented automated unit-test individual tests
-    <li>08/25/2024: implemented automated unit-test homepage
-</ul>
-
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_api.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_camera_ray.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_embree.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_filter.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator_eval.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator_intersect.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator_nee.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator_pre_process.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator_rr.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_integrator.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_rendering.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_scene_parse.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_media_eval.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_media_pre_process.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_media_sample.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_media.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_surface_eval.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_surface_pre_process.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_surface_sample.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader_surface.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_shader.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_debug_one.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_debug_two.png" style="width:100%; float:left; padding:5px" />
+  </div>
+  <div class="column">
+    <img src="clocking_logs/test_004/test_004_debug_three.png" style="width:100%; float:left; padding:5px" />
+  </div>
+</div>
 <!-- Scenes
 Each image represents an individual unit test which links to a separate page
 containing information regarding that specific test and whether the current build

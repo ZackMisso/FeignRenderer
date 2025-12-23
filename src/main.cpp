@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-uri") == 0)
         {
-            // is breaking
             UnitTestManager *unitTests = new UnitTestManager();
             unitTests->reference_run = true;
 

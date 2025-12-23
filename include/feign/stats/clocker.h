@@ -138,6 +138,10 @@ struct ClockerResults
     void print_total() const;
     static std::string to_name(ClockerType tracker);
 
+    void operator+=(const ClockerResults& other);
+    void operator/=(float val);
+    void operator*=(float val);
+
     std::vector<Duration> times;
 
     #if RECORD
@@ -146,9 +150,9 @@ struct ClockerResults
     void parse_from_string(std::string str);
     std::string to_string() const;
     
-    int month = RECORD_MONTH;
-    int day = RECORD_DAY;
-    int year = RECORD_YEAR;
+    int month;
+    int day;
+    int year;
     #endif
 };
 

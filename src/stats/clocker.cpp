@@ -15,6 +15,13 @@ FEIGN_BEGIN()
 ClockerResults::ClockerResults()
 {
     times = std::vector<Duration>(ClockerType::COUNT, Duration(0));
+
+    time_t current_time = NULL;
+    time(&current_time);
+    std::tm* now = std::localtime(&current_time);
+    day = now->tm_mday;
+    month = now->tm_mon;
+    year = now->tm_year + 1900;
 }
 
 #if RECORD
@@ -34,6 +41,10 @@ ClockerResults::ClockerResults(const ClockerResults &other)
     {
         times[i] = other.times[i];
     }
+
+    month = other.month;
+    day = other.day;
+    year = other.year;
 }
 
 void ClockerResults::print_results() const
@@ -107,15 +118,20 @@ void ClockerResults::parse_from_string(std::string str) {
 std::string ClockerResults::to_string() const {
     std::string str = "";
 
-    str = str + std::to_string(RECORD_YEAR) + ",";
-    str = str + std::to_string(RECORD_MONTH) + ",";
-    str = str + std::to_string(RECORD_DAY) + ",";
+    str = str + std::to_string(year) + ",";
+    str = str + std::to_string(month) + ",";
+    str = str + std::to_string(day) + ",";
 
     for (int i = 0; i < COUNT; ++i) {
         if (i != 0)
             str = str + ",";
         str = str + std::to_string(times[i].count());
     }
+    float total = 0.f;
+    total = times[SCENE_PARSE].count() +
+           times[RENDERING].count() +
+           times[API].count();
+    str = str + "," + std::to_string(total);
 
     return str;
 }
@@ -125,7 +141,6 @@ void ClockerResults::print(ClockerType tracker, int padding) const
 {
     std::string padded_str = std::to_string(times[tracker].count());
 
-    // TODO: this is inefficient, fix later
     int diff = padding - padded_str.length();
     for (int i = 0; i < diff; ++i) {
         padded_str = padded_str + " ";
@@ -178,6 +193,24 @@ std::string ClockerResults::to_name(ClockerType tracker)
         case DEBUG_THREE: return "debug_three";
         case COUNT: return "total_clockings";
         default: return "unrecognized_clocker_type";
+    }
+}
+
+void ClockerResults::operator+=(const ClockerResults& other) {
+    for (int i = 0; i < times.size(); ++i) {
+        times[i] += other.times[i];
+    }
+}
+
+void ClockerResults::operator/=(float val) {
+    for (int i = 0; i < times.size(); ++i) {
+        times[i] /= val;
+    }
+}
+
+void ClockerResults::operator*=(float val) {
+    for (int i = 0; i < times.size(); ++i) {
+        times[i] *= val;
     }
 }
 

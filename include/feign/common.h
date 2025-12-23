@@ -30,11 +30,7 @@
 // record should only be true during runs where we log clockings
 // for weekly stat tracking
 #define RECORD true
-// hard coding these for now:
-#define RECORD_DAY 4
-
-#define RECORD_MONTH 4
-#define RECORD_YEAR 2025
+#define NUM_TESTS_PER_RECORD 1
 ////////////////////
 
 // TODO: make this a stats parameter in the future

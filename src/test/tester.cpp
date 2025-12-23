@@ -6,6 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+#include <feign/common.h>
 #include <feign/test/tester.h>
 #include <dirent.h>
 #include <iostream>
@@ -88,18 +89,31 @@ bool UnitTestManager::run_all_tests()
         }
         else
         {
+            #if RECORD
+            ClockerResults avg_timings = ClockerResults();
+            for (int k = 0; k < NUM_TESTS_PER_RECORD; ++k) {
+            #endif
+
             evaluate_unit_test(testLog);
             testLog.logReport();
             if (testLog.does_it_fail())
                 passes = false;
             
             #if RECORD
-                // if record is enabled, we want to append the various
-                // clockings to the test's permanent record.
-                UnitTestSiteAssembler::append_to_test_records(testLog);
+            avg_timings += testLog.clockings;
+            testLog.clockings = ClockerResults();
+            }
 
-                // TODO: create python scripts to generate plots for
-                // the tests' records and call them from here.
+            // LOG("before avg:");
+            avg_timings.print_results();
+            avg_timings *= 1.0f / float(NUM_TESTS_PER_RECORD);
+            // LOG("after avg:");
+            avg_timings.print_results();
+            testLog.clockings = avg_timings;
+
+            // if record is enabled, we want to append the average
+            // clockings to the test's permanent record.
+            UnitTestSiteAssembler::append_to_test_records(testLog);
             #endif
         }
 

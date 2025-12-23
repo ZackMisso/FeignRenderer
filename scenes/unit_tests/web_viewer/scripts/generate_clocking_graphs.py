@@ -82,14 +82,18 @@ embree_clockings = []
 debug_one_clockings = []
 debug_two_clockings = []
 debug_three_clockings = []
+total_time = []
+error = []
+sqr_error = []
+rel_error = []
 
 data = open(datapath + sys.argv[1] + ".dat").readlines()
 
 cnt = 1
 for line in data:
     line_data = line.split(",")
-    if len(line_data) != 27:
-        print("parsed clockings do not have the expected 27 data points per line")
+    if len(line_data) != 31:
+        print("parsed clockings do not have the expected 31 data points per line")
         print(line_data)
         print(len(line_data))
         exit()
@@ -124,6 +128,10 @@ for line in data:
     debug_one_clockings.append(float(line_data[24]))
     debug_two_clockings.append(float(line_data[25]))
     debug_three_clockings.append(float(line_data[26]))
+    total_time.append(float(line_data[27]))
+    error.append(float(line_data[28]))
+    sqr_error.append(float(line_data[29]))
+    rel_error.append(float(line_data[30]))
 
 api_data = ClockingData("API", "api", api_clockings)
 rendering_clockings = ClockingData("Rendering", "rendering", rendering_clockings)
@@ -149,11 +157,15 @@ embree_data = ClockingData("Embree", "embree", embree_clockings)
 debug_one_data = ClockingData("Debug One", "debug_one", debug_one_clockings)
 debug_two_data = ClockingData("Debug Two", "debug_two", debug_two_clockings)
 debug_three_data = ClockingData("Debug Three", "debug_three", debug_three_clockings)
+total_time_data = ClockingData("Total Time", "time", total_time)
+error_data = ClockingData("Abs Error", "error", error)
+sqr_error_data = ClockingData("Sqr Error", "mse", sqr_error)
+rel_error_data = ClockingData("Rel Error", "rel_error", rel_error)
 
 def create_clocking_graph(data):
     path_to_results = datapath + sys.argv[1] + "/" + sys.argv[1] + "_" + data.save_name + ".png"
     plt.title(data.title)
-    plt.xlabel("Iterations")
+    plt.xlabel("Day of Measurement")
     plt.ylabel("Time (s)")
     plt.plot(iters, data.data)
     plt.tight_layout()
@@ -186,6 +198,10 @@ create_clocking_graph(embree_data)
 create_clocking_graph(debug_one_data)
 create_clocking_graph(debug_two_data)
 create_clocking_graph(debug_three_data)
+create_clocking_graph(total_time_data)
+create_clocking_graph(error_data)
+create_clocking_graph(sqr_error_data)
+create_clocking_graph(rel_error_data)
 
 # Label line with line2D label data
 

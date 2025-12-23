@@ -19,12 +19,6 @@
 
 FEIGN_BEGIN()
 
-// [X] TODO: create global html page
-// [X] TODO: create individual html pages per test
-// [X] TODO: create logging info for individual unit test
-// [] TODO: create automatic graphing for unit clockings and error
-// [] TODO LATER: create tags for each unit test
-// [] TODO LATER: create a sort by tags feature
 void UnitTestSiteAssembler::create_global_html_page()
 {
     LOG("Auto-generating unit tests results web-viewer");
@@ -138,9 +132,9 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
     test_page << std::endl;
     test_page << "*Description: this is a test description*" << std::endl;
     test_page << std::endl;
-    test_page << "*Keywords: blah,blah,blah*" << std::endl;
+    test_page << "*Keywords: keywords currently unimplemented*" << std::endl;
     test_page << std::endl;
-    test_page << "*report automatically generated*" << std::endl;
+    test_page << "*report automatically generated via internal script*" << std::endl;
     test_page << std::endl;
     test_page << "<b style=\"color:green\">PLEASE VIEW IN CHROME, OTHERWISE SCRIPTS MIGHT BREAK</b>" << std::endl;
     test_page << std::endl;
@@ -192,45 +186,101 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
     test_page << "</div>" << std::endl;
     test_page << std::endl;
     test_page << "<ul>" << std::endl;
-    test_page << "<li style=\"color:blue\">Error from reference:          " << testLog.image_error << "</li>" << std::endl;
-    test_page << "<li style=\"color:blue\">Squared error from reference:  " << testLog.image_sqr_error << "</li>" << std::endl;
-    test_page << "<li style=\"color:blue\">Relative error from reference: " << testLog.image_rel_error << "</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Mean absolute error from reference:          " << testLog.image_error << "</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Mean squared error from reference:  " << testLog.image_sqr_error << "</li>" << std::endl;
+    test_page << "<li style=\"color:blue\">Mean relative error from reference: " << testLog.image_rel_error << "</li>" << std::endl;
     test_page << "</ul>" << std::endl;
     test_page << std::endl;
-    test_page << std::endl;
-    test_page << "<p style=\"color:blue\" align=\"center\">Test is TODO</p>" << std::endl;
     test_page << std::endl;
     test_page << "Stat History" << std::endl;
     test_page << "============" << std::endl;
     test_page << std::endl;
-    test_page << "Starting February 1st 2025, the Feign Renderer will begin keeping track" << std::endl;
+    test_page << "Starting January 1st 2026, the Feign Renderer will begin keeping track" << std::endl;
     test_page << "of the average render times, and various errors for each of its unit tests" << std::endl;
-    test_page << "on a weekly basis. These metrics will be reported to keep track of the Feign" << std::endl;
+    test_page << "on a daily basis. These metrics will be reported to keep track of the Feign" << std::endl;
     test_page << "Renderer's performance as new features are continuously added. All unit tests" << std::endl;
     test_page << "are ran on a single thread using the same computer to maintain consistency." << std::endl;
     test_page << std::endl;
     test_page << "<div class=\"twentytwenty-container\">" << std::endl;
-    test_page << "    <img src=\"../images/" + test_name + ".png\" alt=\"render time\">" << std::endl;
-    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"error\">" << std::endl;
-    test_page << "    <img src=\"../images/" + test_name + ".png\" alt=\"squared error\">" << std::endl;
-    test_page << "    <img src=\"../images/" + test_name + "_ref.png\" alt=\"relative error\">" << std::endl;
+    test_page << "    <img src=\"clocking_logs/" + test_name + "/"+test_name+"_time.png\" alt=\"render time\" />" << std::endl;
+    test_page << "    <img src=\"clocking_logs/" + test_name + "/"+test_name+"_error.png\" alt=\"mean absolute error\" />" << std::endl;
+    test_page << "    <img src=\"clocking_logs/" + test_name + "/"+test_name+"_MSE.png\" alt=\"mean squared error\" />" << std::endl;
+    test_page << "    <img src=\"clocking_logs/" + test_name + "/"+test_name+"_rel_error.png\" alt=\"mean relative error\" />" << std::endl;
     test_page << "</div>" << std::endl;
+    test_page << "Average render times of individual parts of the rendering engine" << std::endl;
+    test_page << "----------------------------------------------------------------" << std::endl;
+    test_page << "NOTE: These render times are not additive and are really only for my" << std::endl;
+    test_page << "own use. Many of these measures functionally overlap with each other. Ex." << std::endl;
+    test_page << "\"integrator_eval\" also includes all render-time shader evaluations." << std::endl;
     test_page << std::endl;
-    test_page << "Change-log" << std::endl;
-    test_page << "==========" << std::endl;
-    test_page << std::endl;
-    test_page << "Here we document any significant changes to this unit test which may" << std::endl;
-    test_page << "explain changes in performance, look, etc." << std::endl;
-    test_page << std::endl;
-    test_page << "<ul>" << std::endl;
-    test_page << "    <li>2/02/2025: implemented automated unit-test individual tests" << std::endl;
-    test_page << "    <li>08/25/2024: implemented automated unit-test homepage" << std::endl;
-    test_page << "</ul>" << std::endl;
-    test_page << std::endl;
+    // test_page << "Change-log" << std::endl;
+    // test_page << "==========" << std::endl;
+    // test_page << std::endl;
+    // test_page << "Here we document any significant changes to this unit test which may" << std::endl;
+    // test_page << "explain changes in performance, look, etc." << std::endl;
+    // test_page << std::endl;
+    // test_page << "<ul>" << std::endl;
+    // test_page << "    <li>2/02/2025: implemented automated unit-test individual tests" << std::endl;
+    // test_page << "    <li>08/25/2024: implemented automated unit-test homepage" << std::endl;
+    // test_page << "</ul>" << std::endl;
+    // test_page << std::endl;
+
+    std::vector<std::string> time_measures = std::vector<std::string>();
+    time_measures.push_back("_api");
+    time_measures.push_back("_camera_ray");
+    time_measures.push_back("_embree");
+    time_measures.push_back("_filter");
+    time_measures.push_back("_integrator_eval");
+    time_measures.push_back("_integrator_intersect");
+    time_measures.push_back("_integrator_nee");
+    time_measures.push_back("_integrator_pre_process");
+    time_measures.push_back("_integrator_rr");
+    time_measures.push_back("_integrator");
+    time_measures.push_back("_rendering");
+    time_measures.push_back("_scene_parse");
+    time_measures.push_back("_shader_media_eval");
+    time_measures.push_back("_shader_media_pre_process");
+    time_measures.push_back("_shader_media_sample");
+    time_measures.push_back("_shader_media");
+    time_measures.push_back("_shader_surface_eval");
+    time_measures.push_back("_shader_surface_pre_process");
+    time_measures.push_back("_shader_surface_sample");
+    time_measures.push_back("_shader_surface");
+    time_measures.push_back("_shader");
+    time_measures.push_back("_debug_one");
+    time_measures.push_back("_debug_two");
+    time_measures.push_back("_debug_three");
+    int graphs_per_row = 2;
+    int count = 0;
+    
+    for (int i = 0; i < time_measures.size(); ++i)
+    {
+        if (count == 0)
+        {
+            test_page << "<div class=\"row\">" << std::endl;
+        }
+        test_page << "  <div class=\"column\">" << std::endl;
+        // test_page << "<a href=\"";
+        test_page << "    <img src=\"clocking_logs/" + test_name + "/" << test_name << time_measures[i] << ".png\" style=\"width:100%; float:left; padding:5px\" />" << std::endl;
+        test_page << "  </div>" << std::endl;
+        if (++count == graphs_per_row)
+        {
+            count = 0;
+            test_page << "</div>" << std::endl;
+        }
+    }
+    if (count != 0)
+    {
+        // catch in case the number of unit tests are not divisible by <images_per_row>.
+        test_page << "</div>" << std::endl;
+    }
+    // test_page << "  <div class=\"column\">" << std::endl;
+
     test_page << "<!-- Scenes" << std::endl;
     test_page << "Each image represents an individual unit test which links to a separate page" << std::endl;
     test_page << "containing information regarding that specific test and whether the current build" << std::endl;
     test_page << "is passing. This viewer is only verified to work on Chrome for now. -->" << std::endl;
+
     test_page << std::endl;
     test_page << "Contact Me" << std::endl;
     test_page << "==========" << std::endl;
@@ -259,9 +309,12 @@ void UnitTestSiteAssembler::append_to_test_records(UnitTestData &test_log) {
 
     std::ofstream clockings_file;
     clockings_file.open("../scenes/unit_tests/web_viewer/clocking_logs/" + test_name + ".dat", std::ios_base::app);
-
-    clockings_file << test_log.clockings.to_string() << std::endl;
-    
+    clockings_file << test_log.clockings.to_string()<<",";
+    // render time (included at the end of to_string())
+    // error metrics
+    clockings_file << test_log.image_error << ",";
+    clockings_file << test_log.image_sqr_error << ",";
+    clockings_file << test_log.image_rel_error << std::endl;
     clockings_file.close();
 
     // call the script to regenerate the records after deleting the old ones
