@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.3)
+cmake_minimum_required(VERSION 4.2)
 project(feign)
 
 if(APPLE)
@@ -13,7 +13,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 endif()
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|Intel)$")
+if (CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|Intel|AppleClang)$")
 CHECK_CXX_COMPILER_FLAG("-std=c++17" HAS_CPP17_FLAG)
   CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
   CHECK_CXX_COMPILER_FLAG("-std=c++11" HAS_CPP11_FLAG)
@@ -32,6 +32,7 @@ endif()
 IF(APPLE)
     # Fix linking on 10.14+. See https://stackoverflow.com/questions/54068035
     LINK_DIRECTORIES(/usr/local/lib)
+    LINK_DIRECTORIES(/opt/homebrew/lib/)
 ENDIF()
 
 if (APPLE)
@@ -59,7 +60,7 @@ set(TINYEXR_INCLUDE_DIR
   ${CMAKE_CURRENT_SOURCE_DIR}/ext/ImageEditLib/ext/tinyexr)
 
 set(OPENVDB_INCLUDE_DIR
-   /usr/local/Cellar/openvdb/10.0.0/include/)
+   /opt/homebrew/Cellar/openvdb/13.0.0_1/include/)
 
 set(OPENEXR_INCLUDE_DIR
    /usr/local/include/)
@@ -83,10 +84,21 @@ set(OPENEXR_INCLUDE_DIR
 #find_library(USD_VT vt HINTS ${USD_LIBRARY_DIRECTORY})
 
 #find_library(tbb REQUIRED HINTS ${TBB_LIBRARY_DIRECTORY})
-find_package(PythonLibs REQUIRED)
-find_package(embree 3.3 REQUIRED)
+# find_package(PythonLibs REQUIRED)
+# find_package(embree 3.3 REQUIRED)
+find_package(embree 4.4 REQUIRED)
+find_package(tbb REQUIRED)
+
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyusdz/ tinyusdz)
 
 include_directories(${PYTHON_INCLUDE_DIRS})
+
+# target_include_directories(feign PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ext/tinyusdz/src)
+
+# Namespaced static library target `tinyusdz::tinyusdz_static` is provided.
+# At the moment we recommend to use static build of TinyUSDZ. 
+# You can use alias target `tinyusdz_static` also for legacy cmake version. 
+# target_link_libraries(YOUR_APP PRIVATE tinyusdz::tinyusdz_static)
 
 include_directories(
     # Include directory
@@ -183,5 +195,6 @@ set(CompilerFlags
       TINYEXR_INCLUDE_DIR
 )
 
-target_link_libraries(feign tbb openvdb embree3 Half ${USD_USD})
-#target_link_libraries(feign tbb openvdb embree3 Half ${PYTHON_LIBRARIES})
+target_link_libraries(feign tbb openvdb embree ${USD_USD})
+# target_link_libraries(feign PRIVATE tinyusdz::tinyusdz_static)
+# target_link_libraries(feign tbb openvdb embree3 Half ${PYTHON_LIBRARIES})

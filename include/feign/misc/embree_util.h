@@ -14,8 +14,8 @@
 #include <feign/math/bbox.h>
 #include <feign/math/ray.h>
 #include <feign/math/vector.h>
-#include <embree3/rtcore.h>
-#include <embree3/rtcore_ray.h>
+#include <embree4/rtcore.h>
+#include <embree4/rtcore_ray.h>
 
 FEIGN_BEGIN()
 

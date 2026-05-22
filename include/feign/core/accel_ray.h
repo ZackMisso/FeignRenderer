@@ -14,9 +14,9 @@
 #include <feign/math/ray.h>
 #include <feign/misc/intersection.h>
 
-#include <embree3/rtcore.h>
-#include <embree3/rtcore_ray.h>
-#include <embree3/rtcore_scene.h>
+#include <embree4/rtcore.h>
+#include <embree4/rtcore_ray.h>
+#include <embree4/rtcore_scene.h>
 
 FEIGN_BEGIN()
 

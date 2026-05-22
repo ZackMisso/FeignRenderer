@@ -24,7 +24,7 @@ bool evaluate_unit_test(UnitTestData &testLog)
     JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
                               &image,
                               &(testLog.clockings));
-#elif
+#else
     JsonParser::parse_and_run("../scenes/unit_tests/scenes/" + testLog.test_name,
                               &image);
 #endif

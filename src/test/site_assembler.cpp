@@ -305,6 +305,7 @@ void UnitTestSiteAssembler::create_test_html_page(UnitTestData &testLog)
 // TODO MAYBE: compute the average of the previous 10 clockings and report the
 //             difference between the current run and the average on the site.
 void UnitTestSiteAssembler::append_to_test_records(UnitTestData &test_log) {
+#if CLOCKING
     std::string test_name = test_log.test_name.substr(0, test_log.test_name.length() - 5);
 
     std::ofstream clockings_file;
@@ -324,6 +325,7 @@ void UnitTestSiteAssembler::append_to_test_records(UnitTestData &test_log) {
     system(create_graphs_folder_cmd.c_str());
     std::string create_graphs_cmd = "python3 ../scenes/unit_tests/web_viewer/scripts/generate_clocking_graphs.py " + test_name + " &";
     system(create_graphs_cmd.c_str());
+#endif
 }
 
 FEIGN_END()

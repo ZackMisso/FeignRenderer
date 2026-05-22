@@ -187,7 +187,7 @@ public:
 
 #if CLOCKING
     static void flush_renders(ClockerResults* clockings = nullptr);
-#elif
+#else
     static void flush_renders();
 #endif
 };

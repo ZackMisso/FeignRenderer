@@ -57,8 +57,8 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 {
     CLOCKER_START_ONE(ClockerType::EMBREE)
 
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
+    RTCIntersectArguments args;
+    rtcInitIntersectArguments(&args);
 
     /* initialize ray */
     RTCRay new_ray = convert_ray_to_rtcray(scene_ray);
@@ -69,7 +69,7 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
     hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
     /* intersect ray with scene */
-    rtcIntersect1(scene, &context, &hit);
+    rtcIntersect1(scene, &hit, &args);
 
     if (hit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {

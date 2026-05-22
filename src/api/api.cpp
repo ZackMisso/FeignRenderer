@@ -1499,7 +1499,7 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 // this is the big one
 #if CLOCKING
 void FeignRenderer::flush_renders(ClockerResults* clockings)
-#elif
+#else
 void FeignRenderer::flush_renders()
 #endif
 {

@@ -10,3 +10,6 @@
 [submodule "ext/rapidjson"]
 	path = ext/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
+[submodule "ext/tinyusdz"]
+	path = ext/tinyusdz
+	url = https://github.com/lighttransport/tinyusdz.git

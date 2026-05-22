@@ -26,10 +26,10 @@
 
 // TODO: incorporate clocking throughout renderer
 // Stats tracking //
-#define CLOCKING true
+#define CLOCKING false
 // record should only be true during runs where we log clockings
 // for weekly stat tracking
-#define RECORD true
+#define RECORD (true && CLOCKING)
 #define NUM_TESTS_PER_RECORD 1
 ////////////////////
 

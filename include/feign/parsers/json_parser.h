@@ -28,7 +28,7 @@ public:
     static void parse_and_run(std::string filename,
                               Imagef *image,
                               ClockerResults* clockings = nullptr);
-#elif
+#else
     static void parse_and_run(std::string filename);
     static void parse_and_run(std::string filename, Imagef *image); 
 #endif
@@ -37,7 +37,7 @@ protected:
 #if CLOCKING
     static void actually_parse(rapidjson::Document &document,
                                ClockerResults* clockings = nullptr);
-#elif
+#else
     static void actually_parse(rapidjson::Document &document);
 #endif
 };

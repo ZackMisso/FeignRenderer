@@ -27,7 +27,7 @@ void JsonParser::parse_and_run
     std::string filename,
     Imagef *image,
     ClockerResults* clockings
-#elif
+#else
     std::string filename,
     Imagef *image
 #endif
@@ -56,7 +56,7 @@ void JsonParser::parse_and_run
 #if CLOCKING
 void JsonParser::parse_and_run(std::string filename,
                                ClockerResults* clockings)
-#elif
+#else
 void JsonParser::parse_and_run(std::string filename)
 #endif
 {
@@ -78,7 +78,7 @@ void JsonParser::parse_and_run(std::string filename)
 #if CLOCKING
 void JsonParser::actually_parse(rapidjson::Document &document,
                                 ClockerResults* clockings)
-#elif
+#else
 void JsonParser::actually_parse(rapidjson::Document &document)
 #endif
 {
@@ -1233,7 +1233,7 @@ void JsonParser::actually_parse(rapidjson::Document &document)
     CLOCKER_STOP_ONE(ClockerType::SCENE_PARSE)
 #if CLOCKING
     FeignRenderer::flush_renders(clockings);
-#elif
+#else
     FeignRenderer::flush_renders();
 #endif
 }

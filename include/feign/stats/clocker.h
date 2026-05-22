@@ -119,6 +119,7 @@ enum ClockerType {
 #if CLOCKING
 
 #include <string>
+using namespace std;
 #include <chrono>
 #include <string>
 #include <sstream>
