@@ -1,10 +1,10 @@
 Code style design etiquitte:
 
-All method names and variables should follow: method_name()
-All class and struct names use Pascal case:   ClassName
+All method names and variables should use snake_case: method_name()
+All class and struct names use PascalCase:   ClassName
     if a number begins the next word, the following character is lower case.
     Example: Point3f
-All macros should follow:                     MACRO_NAME
+All macros should be upper_snake_case:        MACRO_NAME
 
 Numbers should not be used in method names unless denoting different
 degrees of parameterization. Example: 
