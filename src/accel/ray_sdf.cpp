@@ -13,7 +13,7 @@
 
 FEIGN_BEGIN()
 
-void SDFAccel::preProcess()
+void SDFAccel::pre_process()
 {
     sdfs = std::vector<SDFShape *>();
 }
@@ -23,7 +23,7 @@ void SDFAccel::clear()
     sdfs.clear();
 }
 
-void SDFAccel::addSDFShape(SDFShape *mesh)
+void SDFAccel::add_sdf_shape(SDFShape *mesh)
 {
     sdfs.push_back(mesh);
 }
@@ -34,7 +34,7 @@ void SDFAccel::build()
 
     for (int i = 0; i < sdfs.size(); ++i)
     {
-        scene_box.expand(sdfs[i]->boundingBox());
+        scene_box.expand(sdfs[i]->bounding_box());
     }
 }
 
@@ -126,8 +126,8 @@ bool SDFAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
     // LOG("scene ray origin:", scene_ray.origin);
 
     scene_box.intersect(scene_ray, near, far);
-    if (near < Epsilon)
-        near = Epsilon;
+    if (near < EPSILON)
+        near = EPSILON;
 
     bool hit = false;
     int i = 0;
@@ -142,10 +142,10 @@ bool SDFAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 
         Float sd = sd_evaluate(p, shape_index);
 
-        if (sd <= Epsilon)
+        if (sd <= EPSILON)
         {
             Normal3f norm = sd_normal(p);
-            if (norm.isnan())
+            if (norm.is_nan())
             {
                 LOG("norm x:", norm(0));
                 LOG("norm y:", norm(1));
@@ -153,7 +153,7 @@ bool SDFAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
                 assert(false);
             }
 
-            if (norm.norm() < Epsilon)
+            if (norm.norm() < EPSILON)
             {
                 LOG("norm x:", norm(0));
                 LOG("norm y:", norm(1));
@@ -166,7 +166,7 @@ bool SDFAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
             its.uv = Vec2f(0.f, 0.f); // how to incorporate uv coordinates?
 
             its.intersected_mesh = sdfs[shape_index];
-            its.p = p + norm * Epsilon;
+            its.p = p + norm * EPSILON;
 
             its.g_frame = CoordinateFrame(norm);
             its.s_frame = its.g_frame;

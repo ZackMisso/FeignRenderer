@@ -21,7 +21,7 @@ PhaseFunction::~PhaseFunction()
     // TODO
 }
 
-std::string PhaseFunction::getName() const
+std::string PhaseFunction::get_name() const
 {
     return "phase: ";
 }

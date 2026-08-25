@@ -17,11 +17,11 @@ WhittedIntegrator::WhittedIntegrator(FilterNode *filter, Integrator::Params *par
 {
 }
 
-void WhittedIntegrator::preProcess(const Scene *scene, Sampler *sampler)
+void WhittedIntegrator::pre_process(const Scene *scene, Sampler *sampler)
 {
     CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
@@ -52,7 +52,7 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                                ClockerType::SHADER_SURFACE,
                                ClockerType::INTEGRATOR_INTERSECT)
 
-    const MaterialShader *shader = scene->getShapeMaterialShader(its);
+    const MaterialShader *shader = scene->get_shape_material_shader(its);
 
     // create the material closure
     MaterialClosure closure = MaterialClosure(sampler,
@@ -80,7 +80,7 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
         CLOCKER_START_ONE(ClockerType::SHADER_SURFACE_SAMPLE)
 
         // sample the next path
-        closure.wi = its.toLocal(-ray.dir);
+        closure.wi = its.to_local(-ray.dir);
         shader->sample(closure);
 
         CLOCKER_START_ONE_STOP_THREE(ClockerType::INTEGRATOR_RR,
@@ -90,7 +90,8 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
 
         // random termination
         // TODO: make this happen before the above closure
-        if (sampler->next1D() > rr_cont_probability) {
+        if (sampler->next_1d() > rr_cont_probability)
+        {
             CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_RR)
 
             return Color3f(0.f);
@@ -100,8 +101,8 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
                                ClockerType::INTEGRATOR_RR)
 
         Ray3f new_ray(its.p,
-                      its.toWorld(closure.wo),
-                      Epsilon,
+                      its.to_world(closure.wo),
+                      EPSILON,
                       std::numeric_limits<Float>::infinity(),
                       ray.depth + 1);
 
@@ -110,7 +111,8 @@ Color3f WhittedIntegrator::Li(const Scene *scene,
 
         CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_EVAL)
 
-        if (beta.isZero()) {
+        if (beta.is_zero())
+        {
             return closure.nee + closure.emission;
         }
 

@@ -30,7 +30,7 @@ void WireframeMaterialShader::evaluate(MaterialClosure &closure) const
 {
     BSDF *bsdf = choose_bsdf(closure);
 
-    closure.is_specular = bsdf->isDelta();
+    closure.is_specular = bsdf->is_delta();
 
     if (closure.last_spec)
     {

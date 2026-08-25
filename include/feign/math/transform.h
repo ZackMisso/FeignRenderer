@@ -35,10 +35,8 @@ public:
     Transform inverse() const;
     void print() const;
 
-    const Matrix4f &getMatrix() const;
-    const Matrix4f &getInverse() const;
-
-    // static Transform identity();
+    const Matrix4f &get_matrix() const;
+    const Matrix4f &get_inverse() const;
 
 protected:
     Matrix4f mat;

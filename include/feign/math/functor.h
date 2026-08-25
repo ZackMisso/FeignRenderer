@@ -7,6 +7,7 @@
  **/
 
 // TODO: what is this used for again????
+// TODO: very future zack: why is this here???
 
 #pragma once
 

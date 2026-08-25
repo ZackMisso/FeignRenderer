@@ -47,34 +47,34 @@ public:
         return false;
     }
 
-    virtual void completeIntersectionInfo(Intersection &its) const {}
-    virtual uint32_t primitiveCount() const = 0;
+    virtual void complete_intersection_info(Intersection &its) const {}
+    virtual uint32_t primitive_count() const = 0;
 
-    virtual BBox3f boundingBox() const = 0;
+    virtual BBox3f bounding_box() const = 0;
     virtual Point3f centroid() const = 0;
 
     virtual Float surface_area(int primitive) const { return 0.0; };
 
-    virtual void preProcess(bool requires_processing = false) {}
+    virtual void pre_process(bool requires_processing = false) {}
 
     // this is only used by embree
-    virtual void addShapeToScene(RTCScene scene, RTCDevice device) {}
+    virtual void add_shape_to_scene(RTCScene scene, RTCDevice device) {}
 
-    unsigned int getGeomID() const { return geomID; }
-    unsigned int getInstID() const { return instID; }
+    unsigned int get_geom_id() const { return geom_id; }
+    unsigned int get_inst_id() const { return inst_id; }
 
-    void setInstID(unsigned int val) { instID = val; }
-    void setGeomID(unsigned int val) { geomID = val; }
+    void set_inst_id(unsigned int val) { inst_id = val; }
+    void set_geom_id(unsigned int val) { geom_id = val; }
 
     Transform transform;
-    GeometryShaderNode *geomShader;
+    GeometryShaderNode *geom_shader;
     const MediumBoundry *boundry;
 
     bool is_null;
 
 protected:
-    unsigned int geomID;
-    unsigned int instID;
+    unsigned int geom_id;
+    unsigned int inst_id;
 };
 /////////////////////////////////////////////////
 

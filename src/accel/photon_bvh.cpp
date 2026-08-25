@@ -104,16 +104,16 @@ PhotonBVH::BVHNode::~BVHNode()
     parent = nullptr;
 }
 
-void PhotonBVH::BVHNode::getAllPhotonsInRadius(std::vector<Photon *> &photons,
-                                               Point3f point,
-                                               Float radius) const
+void PhotonBVH::BVHNode::get_all_photons_in_radius(std::vector<Photon *> &photons,
+                                                   Point3f point,
+                                                   Float radius) const
 {
     // TODO
 }
 
-void PhotonBVH::BVHNode::getClosestKPhotons(std::vector<Photon *> &photons,
-                                            Point3f point,
-                                            int k) const
+void PhotonBVH::BVHNode::get_closest_k_photons(std::vector<Photon *> &photons,
+                                               Point3f point,
+                                               int k) const
 {
     // TODO
 }
@@ -216,7 +216,7 @@ void PhotonBVH::build(const BBox3f &scene_bounds,
     // photon_bvh->split(0.1, -1);
 }
 
-bool PhotonBVH::nearPhoton(Point3f pt, Float radius) const
+bool PhotonBVH::near_photon(Point3f pt, Float radius) const
 {
     throw new NotImplementedException("photon_bvh");
     return false;

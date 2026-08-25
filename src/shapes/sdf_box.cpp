@@ -29,7 +29,7 @@ Float SDFBox::evaluate(Point3f pt) const
     return q.max(0.f).norm() + fmin(fmax(q(0), fmax(q(1), q(2))), 0.f);
 }
 
-BBox3f SDFBox::boundingBox() const
+BBox3f SDFBox::bounding_box() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     return BBox3f(tlc, brc);

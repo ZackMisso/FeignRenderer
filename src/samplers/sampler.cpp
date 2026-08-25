@@ -14,11 +14,11 @@ Sampler::Sampler() : Node() {}
 
 Sampler::Sampler(uint32_t seed,
                  int sample_cnt)
-    : Node(), sampleSeed(seed), sampleCnt(sample_cnt) {}
+    : Node(), sample_seed(seed), sample_cnt(sample_cnt) {}
 
-uint32_t Sampler::getSampleCnt() const
+uint32_t Sampler::get_sample_cnt() const
 {
-    return sampleCnt;
+    return sample_cnt;
 }
 
 FEIGN_END()

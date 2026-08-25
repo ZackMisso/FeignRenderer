@@ -53,9 +53,9 @@ Scene::~Scene()
     mediums.clear();
 }
 
-void Scene::preProcess(const GlobalParams &globals)
+void Scene::pre_process(const GlobalParams &globals)
 {
-    sceneBounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
+    scene_bounds = BBox3f(Vec3f(0.f), Vec3f(0.f));
 
     // preprocess the ray acceleration data structures, and initialize one based
     // on the scene geometry if an acceleration structure is not specified.
@@ -70,7 +70,7 @@ void Scene::preProcess(const GlobalParams &globals)
             ray_accel = new EmbreeAccel();
         }
 
-        ray_accel->preProcess();
+        ray_accel->pre_process();
     }
 
     // preprocessing the light selection routin
@@ -85,23 +85,23 @@ void Scene::preProcess(const GlobalParams &globals)
     {
         if (globals.sdf_only)
         {
-            ray_accel->addSDFShape((SDFShape *)shapes[i]);
+            ray_accel->add_sdf_shape((SDFShape *)shapes[i]);
         }
         else
         {
-            ray_accel->addShape(shapes[i]);
+            ray_accel->add_shape(shapes[i]);
         }
 
-        sceneBounds.expand(shapes[i]->boundingBox());
+        scene_bounds.expand(shapes[i]->bounding_box());
     }
 
     // build the actual acceleration datastructures now that all shapes are
     // accounted for
     ray_accel->build();
-    light_selection->build(sceneBounds, emitters);
+    light_selection->build(scene_bounds, emitters);
 
     // preprocess the camera
-    camera_node->camera->preProcess();
+    camera_node->camera->pre_process();
 
     // integrator pre-processing is done pre-rendering
 
@@ -112,19 +112,19 @@ void Scene::preProcess(const GlobalParams &globals)
         // make sure the emitter's mesh matches the object's
         if (objects[i]->emitter)
         {
-            objects[i]->emitter->emitter->setMeshNode(objects[i]->mesh);
-            objects[i]->emitter->emitter->preProcess();
+            objects[i]->emitter->emitter->set_mesh_node(objects[i]->mesh);
+            objects[i]->emitter->emitter->pre_process();
         }
     }
 
     // preprocess all of the mediums in the scene
     for (int i = 0; i < mediums.size(); ++i)
     {
-        mediums[i]->preProcess();
+        mediums[i]->pre_process();
     }
 }
 
-void Scene::renderScene() const
+void Scene::render_scene() const
 {
     Integrator *integrator = integrator_node->integrator;
     Camera *camera = camera_node->camera;
@@ -139,16 +139,16 @@ void Scene::renderScene() const
     if (target)
     {
         image = target;
-        camera->setFilmSize(Vec2i(image->width(), image->height()));
+        camera->set_film_size(Vec2i(image->width(), image->height()));
     }
     else
     {
-        image = new Imagef(camera->getFilmSize()[0],
-                           camera->getFilmSize()[1]);
+        image = new Imagef(camera->get_film_size()[0],
+                           camera->get_film_size()[1]);
     }
 
     // perform preprocessing if the integrator requires it. i.e. scatter photons
-    integrator->preProcess(this, sampler);
+    integrator->pre_process(this, sampler);
 
 #if GOTTAGOFAST
     integrator->render_fast(this,
@@ -189,7 +189,7 @@ bool Scene::intersect_non_null(const Ray3f &ray, Intersection &its) const
         if (tmp.intersected_mesh->is_null)
         {
             // update the near t on the ray and continue traversal
-            tmp_ray.near = tmp.t + Epsilon;
+            tmp_ray.near = tmp.t + EPSILON;
         }
         else
         {
@@ -240,7 +240,7 @@ bool Scene::intersect_transmittance(const Ray3f &ray,
 
                 tmp_ray = Ray3f(ray.origin,
                                 tmp_ray.dir,
-                                its.t + Epsilon,
+                                its.t + EPSILON,
                                 ray.far,
                                 tmp_ray.depth);
             }
@@ -275,7 +275,7 @@ bool Scene::intersect_transmittance(const Ray3f &ray,
                 // evaluated as a post process.
                 tmp_ray = Ray3f(ray.origin,
                                 tmp_ray.dir,
-                                its.t + Epsilon,
+                                its.t + EPSILON,
                                 ray.far,
                                 tmp_ray.depth);
 
@@ -305,7 +305,7 @@ bool Scene::intersect_transmittance(const Ray3f &ray,
             else
             {
                 // update the near t on the ray and continue traversal
-                tmp_ray.near = its.t + Epsilon;
+                tmp_ray.near = its.t + EPSILON;
             }
         }
         else
@@ -334,22 +334,22 @@ bool Scene::intersect_transmittance(const Ray3f &ray,
     return false;
 }
 
-void Scene::addEmitter(Emitter *emitter)
+void Scene::add_emitter(Emitter *emitter)
 {
-    if (emitter->isEnvironmentEmitter())
+    if (emitter->is_environment_emitter())
         env_emitters.push_back(emitter);
-    if (!emitter->isEnvironmentOnlyEmitter())
+    if (!emitter->is_environment_only_emitter())
         emitters.push_back(emitter);
 }
 
-void Scene::addMedium(Media *media)
+void Scene::add_medium(Media *media)
 {
     mediums.push_back(media);
 }
 
-const MaterialShader *Scene::getShapeMaterialShader(const Intersection &its) const
+const MaterialShader *Scene::get_shape_material_shader(const Intersection &its) const
 {
-    int id = its.intersected_mesh->getInstID();
+    int id = its.intersected_mesh->get_inst_id();
 
     return (*(*objects[id]).material_shader)();
 }
@@ -367,15 +367,15 @@ void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
         EmitterQuery eqr(closure.its->p);
         Float emitter_pdf = 0.f;
         Color3f Li = emitters[i]->sample_nee(eqr,
-                                             closure.sampler->next2D(),
+                                             closure.sampler->next_2d(),
                                              &emitter_pdf);
 
-        if (emitters[i]->requiresInitialVisibilityCheck())
+        if (emitters[i]->requires_initial_visibility_check())
         {
             // create ray
             Ray3f ray = Ray3f(closure.its->p,
                               eqr.wi,
-                              Epsilon,
+                              EPSILON,
                               std::numeric_limits<Float>::infinity());
 
             // test intersection against emitter mesh
@@ -383,9 +383,9 @@ void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
 
             if (intersect_non_null(ray, tmp))
             {
-                if (emitters[i]->getMeshNode()->mesh == tmp.intersected_mesh)
+                if (emitters[i]->get_mesh_node()->mesh == tmp.intersected_mesh)
                 {
-                    eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                    eqr.sqr_dist = (tmp.p - closure.its->p).sqr_norm();
                     Li /= eqr.sqr_dist;
                 }
                 else
@@ -401,8 +401,8 @@ void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
 
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,
-                                 Epsilon,
-                                 sqrt(eqr.sqr_dist) - Epsilon);
+                                 EPSILON,
+                                 sqrt(eqr.sqr_dist) - EPSILON);
 
         Intersection tmp;
 
@@ -419,14 +419,14 @@ void Scene::eval_all_emitters(MaterialClosure &closure, bool in_media) const
         {
             Float cos_term = closure.its->g_frame.n % eqr.wi;
 
-            if (cos_term < -Epsilon)
+            if (cos_term < -EPSILON)
                 cos_term = -cos_term;
 
             if (!in_media)
                 Li *= cos_term;
 
             closure.shadow_rays[i].valid = true;
-            closure.shadow_rays[i].shadow_ray = closure.its->toLocal(eqr.wi);
+            closure.shadow_rays[i].shadow_ray = closure.its->to_local(eqr.wi);
 
             if (emitter_pdf == 0.f)
             {
@@ -458,15 +458,15 @@ void Scene::eval_one_emitter(MaterialClosure &closure, bool in_media) const
     EmitterQuery eqr(closure.its->p);
     Float emitter_pdf = 0.f;
     Color3f Li = emitter->sample_nee(eqr,
-                                     closure.sampler->next2D(),
+                                     closure.sampler->next_2d(),
                                      &emitter_pdf);
 
-    if (emitter->requiresInitialVisibilityCheck())
+    if (emitter->requires_initial_visibility_check())
     {
         // create ray
         Ray3f ray = Ray3f(closure.its->p,
                           eqr.wi,
-                          Epsilon,
+                          EPSILON,
                           std::numeric_limits<Float>::infinity());
 
         // test intersection against emitter mesh
@@ -474,9 +474,9 @@ void Scene::eval_one_emitter(MaterialClosure &closure, bool in_media) const
 
         if (intersect_non_null(ray, tmp))
         {
-            if (emitter->getMeshNode()->mesh == tmp.intersected_mesh)
+            if (emitter->get_mesh_node()->mesh == tmp.intersected_mesh)
             {
-                eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                eqr.sqr_dist = (tmp.p - closure.its->p).sqr_norm();
                 Li /= eqr.sqr_dist;
             }
             else
@@ -492,8 +492,8 @@ void Scene::eval_one_emitter(MaterialClosure &closure, bool in_media) const
 
     Ray3f shadow_ray = Ray3f(closure.its->p,
                              eqr.wi,
-                             Epsilon,
-                             sqrt(eqr.sqr_dist) - Epsilon);
+                             EPSILON,
+                             sqrt(eqr.sqr_dist) - EPSILON);
 
     Intersection tmp;
 
@@ -512,14 +512,14 @@ void Scene::eval_one_emitter(MaterialClosure &closure, bool in_media) const
         {
             Float cos_term = closure.its->s_frame.n % eqr.wi;
 
-            if (cos_term < -Epsilon)
+            if (cos_term < -EPSILON)
                 cos_term = -cos_term;
 
             Li *= cos_term;
         }
 
         closure.shadow_rays[0].valid = true;
-        closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
+        closure.shadow_rays[0].shadow_ray = closure.its->to_local(eqr.wi);
 
         if (emitter_pdf == 0.f)
         {
@@ -554,15 +554,15 @@ void Scene::eval_multi_emitters(MaterialClosure &closure,
         EmitterQuery eqr(closure.its->p);
         Float emitter_pdf = 0.f;
         Color3f Li = emitter->sample_nee(eqr,
-                                         closure.sampler->next2D(),
+                                         closure.sampler->next_2d(),
                                          &emitter_pdf);
 
-        if (emitter->requiresInitialVisibilityCheck())
+        if (emitter->requires_initial_visibility_check())
         {
             // create ray
             Ray3f ray = Ray3f(closure.its->p,
                               eqr.wi,
-                              Epsilon,
+                              EPSILON,
                               std::numeric_limits<Float>::infinity());
 
             // test intersection against emitter mesh
@@ -570,9 +570,9 @@ void Scene::eval_multi_emitters(MaterialClosure &closure,
 
             if (intersect_non_null(ray, tmp))
             {
-                if (emitter->getMeshNode()->mesh == tmp.intersected_mesh)
+                if (emitter->get_mesh_node()->mesh == tmp.intersected_mesh)
                 {
-                    eqr.sqr_dist = (tmp.p - closure.its->p).sqrNorm();
+                    eqr.sqr_dist = (tmp.p - closure.its->p).sqr_norm();
                     Li /= eqr.sqr_dist;
                 }
                 else
@@ -588,8 +588,8 @@ void Scene::eval_multi_emitters(MaterialClosure &closure,
 
         Ray3f shadow_ray = Ray3f(closure.its->p,
                                  eqr.wi,
-                                 Epsilon,
-                                 sqrt(eqr.sqr_dist) - Epsilon);
+                                 EPSILON,
+                                 sqrt(eqr.sqr_dist) - EPSILON);
 
         Intersection tmp;
 
@@ -608,14 +608,14 @@ void Scene::eval_multi_emitters(MaterialClosure &closure,
             {
                 Float cos_term = closure.its->s_frame.n % eqr.wi;
 
-                if (cos_term < -Epsilon)
+                if (cos_term < -EPSILON)
                     cos_term = -cos_term;
 
                 Li *= cos_term;
             }
 
             closure.shadow_rays[0].valid = true;
-            closure.shadow_rays[0].shadow_ray = closure.its->toLocal(eqr.wi);
+            closure.shadow_rays[0].shadow_ray = closure.its->to_local(eqr.wi);
 
             if (emitter_pdf == 0.f)
             {
@@ -639,17 +639,17 @@ Emitter *Scene::choose_emitter(MaterialClosure &closure, Float *pdf) const
     Float choice_pdf;
     int emitter;
 
-    light_selection->sampleEmitter(closure.its->p,
-                                   closure.sampler,
-                                   emitter,
-                                   choice_pdf);
+    light_selection->sample_emitter(closure.its->p,
+                                    closure.sampler,
+                                    emitter,
+                                    choice_pdf);
 
     // check to make sure there is no double counting
     // TODO: maybe make this its own function?
-    if (emitters[emitter]->getMeshNode())
+    if (emitters[emitter]->get_mesh_node())
     {
-        unsigned int emit_id = emitters[emitter]->getMeshNode()->mesh->getInstID();
-        unsigned int mesh_id = closure.its->intersected_mesh->getInstID();
+        unsigned int emit_id = emitters[emitter]->get_mesh_node()->mesh->get_inst_id();
+        unsigned int mesh_id = closure.its->intersected_mesh->get_inst_id();
         *pdf = choice_pdf;
 
         if (emit_id == mesh_id)
@@ -663,7 +663,7 @@ Emitter *Scene::choose_emitter(MaterialClosure &closure, Float *pdf) const
 // uniformly returns an emitter (used for light tracing / photon mapping)
 Emitter *Scene::choose_emitter(Sampler *sampler, Float *pdf) const
 {
-    Float val = sampler->next1D();
+    Float val = sampler->next_1d();
 
     int emitter = int(val * emitters.size());
     *pdf = 1.0 / Float(emitters.size());
@@ -673,14 +673,14 @@ Emitter *Scene::choose_emitter(Sampler *sampler, Float *pdf) const
 
 void Scene::accumulate_emission(MaterialClosure &closure) const
 {
-    int id = closure.its->intersected_mesh->getInstID();
+    int id = closure.its->intersected_mesh->get_inst_id();
     EmitterNode *emitter = objects[id]->emitter;
 
     if (emitter)
     {
         EmitterQuery rec = EmitterQuery(closure.ray->origin);
-        rec.wi = closure.its->toLocal(closure.ray->dir);
-        rec.sh_n = closure.its->toLocal(closure.its->s_frame.n);
+        rec.wi = closure.its->to_local(closure.ray->dir);
+        rec.sh_n = closure.its->to_local(closure.its->s_frame.n);
         closure.emission = emitter->emitter->evaluate(rec);
     }
     else

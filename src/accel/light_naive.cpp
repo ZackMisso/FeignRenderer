@@ -24,23 +24,23 @@ void NaiveLightAccel::build(const BBox3f &scene_bounds,
     pmf = 1.f / float(emitters.size());
 }
 
-void NaiveLightAccel::sampleEmitter(Point3f pos,
-                                    Sampler *sampler,
-                                    int &index,
-                                    Float &pdf)
+void NaiveLightAccel::sample_emitter(Point3f pos,
+                                     Sampler *sampler,
+                                     int &index,
+                                     Float &pdf)
 {
-    index = sampler->next1D() * number_of_emitters;
+    index = sampler->next_1d() * number_of_emitters;
     pdf = pmf;
 }
 
-void NaiveLightAccel::sampleEmitters(Point3f pos,
-                                     Sampler *sampler,
-                                     std::vector<int> &indices,
-                                     std::vector<Float> &pdf)
+void NaiveLightAccel::sample_emitters(Point3f pos,
+                                      Sampler *sampler,
+                                      std::vector<int> &indices,
+                                      std::vector<Float> &pdf)
 {
     for (int i = 0; i < indices.size(); ++i)
     {
-        indices[i] = sampler->next1D() * number_of_emitters;
+        indices[i] = sampler->next_1d() * number_of_emitters;
         pdf[i] = pmf;
     }
 }

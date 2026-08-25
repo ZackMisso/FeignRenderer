@@ -38,7 +38,7 @@ Color3f EnvironmentEmitter::sample_ray(EmitterQuery &rec,
     throw new NotImplementedException("emitter environment sample ray");
 }
 
-void EnvironmentEmitter::preProcess()
+void EnvironmentEmitter::pre_process()
 {
     // TODO: this is where we can intiialize the pmf and cmf for importance
     //       sampling the texture if the texture allows for it

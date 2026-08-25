@@ -10,15 +10,15 @@
 
 FEIGN_BEGIN()
 
-Triangle::Triangle(Vec3u vsInds,
-                   Vec3u nsInds,
-                   Vec3u uvsInds)
-    : vsInds(vsInds), nsInds(nsInds), uvsInds(uvsInds)
+Triangle::Triangle(Vec3u vs_inds,
+                   Vec3u ns_inds,
+                   Vec3u uvs_inds)
+    : vs_inds(vs_inds), ns_inds(ns_inds), uvs_inds(uvs_inds)
 {
 }
 
-Vec3u Triangle::getVertInds() const { return vsInds; }
-Vec3u Triangle::getNormInds() const { return nsInds; }
-Vec3u Triangle::getUvInds() const { return uvsInds; }
+Vec3u Triangle::get_vert_inds() const { return vs_inds; }
+Vec3u Triangle::get_norm_inds() const { return ns_inds; }
+Vec3u Triangle::get_uv_inds() const { return uvs_inds; }
 
 FEIGN_END()

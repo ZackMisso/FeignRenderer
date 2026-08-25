@@ -26,13 +26,13 @@ Color3f Delta_Tracking::sample(Ray3f ray,
 
     while (true)
     {
-        t -= std::log(1 - sampler->next1D()) / majorant;
+        t -= std::log(1 - sampler->next_1d()) / majorant;
         if (t >= closure.t_max)
             break;
 
-        Float dense = (density->D(ray(t)) * density->sigma_t).max();
+        Float dense = (density->eval(ray(t)) * density->sigma_t).max();
 
-        if (dense / majorant > sampler->next1D())
+        if (dense / majorant > sampler->next_1d())
         {
             // t should be set already
             closure.sampled_t = t;

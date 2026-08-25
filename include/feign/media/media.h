@@ -65,7 +65,7 @@ public:
           Color3f abs,
           Color3f scat);
 
-    void preProcess();
+    void pre_process();
 
     Color3f sample(Ray3f ray,
                    Sampler *sampler,
@@ -82,7 +82,7 @@ public:
         return phase->phase->sample(samp, wo, wi);
     }
 
-    bool isGlobal() const { return false; }
+    bool is_global() const { return false; }
 
     DensityFunctionNode *density;
     MediumSamplingNode *sampling;

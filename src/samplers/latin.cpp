@@ -18,11 +18,11 @@ Latin::Latin(uint32_t seed,
 {
 }
 
-void Latin::preProcess()
+void Latin::pre_process()
 {
-    currentSample = 0;
+    current_sample = 0;
 
-    reseed(sampleSeed);
+    reseed(sample_seed);
 }
 
 void Latin::reseed()
@@ -38,11 +38,11 @@ void Latin::reseed()
 
 void Latin::reseed(uint32_t seed)
 {
-    sampleSeed = seed;
+    sample_seed = seed;
     reseed();
 }
 
-Float Latin::next1D()
+Float Latin::next_1d()
 {
     throw new NotImplementedException("latin next1D");
 
@@ -50,40 +50,40 @@ Float Latin::next1D()
     // return rng.nextFloat();
 }
 
-Vec2f Latin::next2D()
+Vec2f Latin::next_2d()
 {
-    return Vec2f(next1D(), next1D());
+    return Vec2f(next_1d(), next_1d());
 }
 
-Vec3f Latin::next3D()
+Vec3f Latin::next_3d()
 {
-    return Vec3f(next1D(), next1D(), next1D());
+    return Vec3f(next_1d(), next_1d(), next_1d());
 }
 
-Vec4f Latin::next4D()
+Vec4f Latin::next_4d()
 {
-    return Vec4f(next1D(), next1D(), next1D(), next1D());
+    return Vec4f(next_1d(), next_1d(), next_1d(), next_1d());
 }
 
 Sampler *Latin::copy()
 {
-    Latin *newSamp = new Latin();
-    newSamp->reseed(sampleSeed);
+    Latin *new_samp = new Latin();
+    new_samp->reseed(sample_seed);
 
-    return newSamp;
+    return new_samp;
 }
 
 Sampler *Latin::copy(uint32_t seed)
 {
-    Latin *newSamp = new Latin();
-    newSamp->reseed(seed);
+    Latin *new_samp = new Latin();
+    new_samp->reseed(seed);
 
-    return newSamp;
+    return new_samp;
 }
 
-void Latin::nextSample()
+void Latin::next_sample()
 {
-    currentSample++;
+    current_sample++;
 
     throw new NotImplementedException("latin next sample");
 }

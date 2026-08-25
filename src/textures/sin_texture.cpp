@@ -16,7 +16,7 @@ SinTexture::SinTexture(Vec3f amp,
                        Vec3f y)
     : amp(amp), phase(phase), y(y), freq(freq) {}
 
-void SinTexture::preProcess() {}
+void SinTexture::pre_process() {}
 
 Color3f SinTexture::evaluate(const Point2f &point)
 {

@@ -25,25 +25,25 @@ struct CoordinateFrame
     CoordinateFrame(const Vector3f &x, const Vector3f &y, const Vector3f &z);
     CoordinateFrame(const Normal3f &n);
 
-    Vector3f toLocal(const Vector3f &vec) const;
-    Vector3f toWorld(const Vector3f &vec) const;
+    Vector3f to_local(const Vector3f &vec) const;
+    Vector3f to_world(const Vector3f &vec) const;
 
-    static void coordinateSystem(const Vector3f &a, Vector3f &b, Vector3f &c);
-    static Vector3f sphericalDirection(Float cos_theta,
-                                       Float sin_theta,
-                                       Float phi,
-                                       const Vector3f &x,
-                                       const Vector3f &y,
-                                       const Vector3f &z);
+    static void coordinate_system(const Vector3f &a, Vector3f &b, Vector3f &c);
+    static Vector3f spherical_direction(Float cos_theta,
+                                        Float sin_theta,
+                                        Float phi,
+                                        const Vector3f &x,
+                                        const Vector3f &y,
+                                        const Vector3f &z);
 
-    static Float cosTheta(const Vector3f &vec);
-    static Float sinTheta(const Vector3f &vec);
-    static Float tanTheta(const Vector3f &vec);
-    static Float sinThetaSqr(const Vector3f &vec);
-    static Float sinPhi(const Vector3f &vec);
-    static Float cosPhi(const Vector3f &vec);
-    static Float sinPhiSqr(const Vector3f &vec);
-    static Float cosPhiSqr(const Vector3f &vec);
+    static Float cos_theta(const Vector3f &vec);
+    static Float sin_theta(const Vector3f &vec);
+    static Float tan_theta(const Vector3f &vec);
+    static Float sin_theta_sqr(const Vector3f &vec);
+    static Float sin_phi(const Vector3f &vec);
+    static Float cos_phi(const Vector3f &vec);
+    static Float sin_phi_sqr(const Vector3f &vec);
+    static Float cos_phi_sqr(const Vector3f &vec);
 };
 
 FEIGN_END()

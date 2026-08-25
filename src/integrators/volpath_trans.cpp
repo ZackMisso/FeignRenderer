@@ -19,9 +19,9 @@ VolPathTrans_Integrator::VolPathTrans_Integrator(FilterNode *filter,
                                                  Integrator::Params *params)
     : Integrator(filter, params) {}
 
-void VolPathTrans_Integrator::preProcess(const Scene *scene, Sampler *sampler)
+void VolPathTrans_Integrator::pre_process(const Scene *scene, Sampler *sampler)
 {
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 }
 
 // this integrator assumes that the medium being used is bounded
@@ -54,7 +54,7 @@ Color3f VolPathTrans_Integrator::Li(const Scene *scene,
 
         ray = Ray3f(its.p,
                     ray.dir,
-                    Epsilon,
+                    EPSILON,
                     std::numeric_limits<Float>::infinity(),
                     ray.depth);
 

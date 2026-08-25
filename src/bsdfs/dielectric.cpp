@@ -17,11 +17,11 @@ Dielectric::Dielectric(Float int_ior, Float ext_ior, Color3f albedo)
 
 void Dielectric::sample(MaterialClosure &closure) const
 {
-    Float sample = closure.sampler->next1D();
+    Float sample = closure.sampler->next_1d();
 
     float cos_theta = closure.wi[2];
 
-    if (CoordinateFrame::cosTheta(closure.wi) < 0.f)
+    if (CoordinateFrame::cos_theta(closure.wi) < 0.f)
     {
         // refracts out of object
         closure.eta = int_ior / ext_ior;
@@ -32,7 +32,7 @@ void Dielectric::sample(MaterialClosure &closure) const
         closure.eta = ext_ior / int_ior;
     }
 
-    float prob = fresnel(CoordinateFrame::cosTheta(closure.wi),
+    float prob = fresnel(CoordinateFrame::cos_theta(closure.wi),
                          ext_ior,
                          int_ior);
 
@@ -56,11 +56,11 @@ void Dielectric::sample(MaterialClosure &closure) const
         Vector3f wtperp = wr * closure.eta;
         Vector3f wtpara = Vector3f(0.f,
                                    0.f,
-                                   -SQRT(1.0 - wtperp.sqrNorm()));
+                                   -SQRT(1.0 - wtperp.sqr_norm()));
 
         closure.wo = wtperp + wtpara;
 
-        if (cos_theta < -Epsilon)
+        if (cos_theta < -EPSILON)
             closure.wo[2] = -closure.wo[2];
     }
 

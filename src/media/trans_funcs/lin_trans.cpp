@@ -10,44 +10,44 @@
 
 FEIGN_BEGIN()
 
-LinearTrans::LinearTrans(Float maxT_t) : maxT(maxT_t)
+LinearTrans::LinearTrans(Float max_t) : max_t(max_t)
 {
     // maxT = 3.0;
 }
 
-Color3f LinearTrans::surfaceSurface(Color3f tau) const
+Color3f LinearTrans::surface_surface(Color3f tau) const
 {
-    return Color3f(1.0f) - Min(tau / maxT, 1.0f);
+    return Color3f(1.0f) - min(tau / max_t, 1.0f);
 }
 
-Color3f LinearTrans::surfaceMedium(Color3f tau) const
+Color3f LinearTrans::surface_medium(Color3f tau) const
 {
-    return Step(tau, maxT) * (1.0f / maxT);
+    return step(tau, max_t) * (1.0f / max_t);
 }
 
-Color3f LinearTrans::mediumSurface(Color3f tau) const
+Color3f LinearTrans::medium_surface(Color3f tau) const
 {
-    return Step(tau, maxT);
+    return step(tau, max_t);
 }
 
-Color3f LinearTrans::mediumMedium(Color3f tau) const
+Color3f LinearTrans::medium_medium(Color3f tau) const
 {
-    return Boxcar(tau, maxT - 1e-3f, maxT + 1e-3f);
+    return boxcar(tau, max_t - 1e-3f, max_t + 1e-3f);
 }
 
-Float LinearTrans::sigmaBar() const
+Float LinearTrans::sigma_bar() const
 {
-    return 1.0f / maxT;
+    return 1.0f / max_t;
 }
 
-Float LinearTrans::sampleSurface(Sampler *sampler) const
+Float LinearTrans::sample_surface(Sampler *sampler) const
 {
-    return maxT * (1.0f - 1e-5f) * sampler->next1D();
+    return max_t * (1.0f - 1e-5f) * sampler->next_1d();
 }
 
-Float LinearTrans::sampleMedium(Sampler *sampler) const
+Float LinearTrans::sample_medium(Sampler *sampler) const
 {
-    return maxT;
+    return max_t;
 }
 
 FEIGN_END()

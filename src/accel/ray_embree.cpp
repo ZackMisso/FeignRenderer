@@ -21,7 +21,7 @@ EmbreeAccel::~EmbreeAccel()
     clear();
 }
 
-void EmbreeAccel::preProcess()
+void EmbreeAccel::pre_process()
 {
     // initialize embree datastructures
     // TODO: get back up to date with figuring out what parameters I
@@ -39,9 +39,9 @@ void EmbreeAccel::clear()
 }
 
 // adds all intersectable meshes in a scene to embree's backend
-void EmbreeAccel::addShape(Shape *mesh)
+void EmbreeAccel::add_shape(Shape *mesh)
 {
-    mesh->addShapeToScene(scene, device);
+    mesh->add_shape_to_scene(scene, device);
     meshes.push_back(mesh);
 }
 
@@ -88,7 +88,7 @@ bool EmbreeAccel::intersect(const Ray3f &scene_ray, Intersection &its) const
 
         // complete the intersection information by calculating smooth normals /
         // uv's // etc.
-        its.intersected_mesh->completeIntersectionInfo(its);
+        its.intersected_mesh->complete_intersection_info(its);
 
         CLOCKER_STOP_ONE(ClockerType::EMBREE)
 

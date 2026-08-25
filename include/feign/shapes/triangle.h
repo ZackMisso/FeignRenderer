@@ -17,17 +17,17 @@ FEIGN_BEGIN()
 class Triangle
 {
 public:
-    Triangle(Vec3u vsInds,
-             Vec3u nsInds,
-             Vec3u uvsInds);
+    Triangle(Vec3u vs_inds,
+             Vec3u ns_inds,
+             Vec3u uvs_inds);
 
-    Vec3u getVertInds() const;
-    Vec3u getNormInds() const;
-    Vec3u getUvInds() const;
+    Vec3u get_vert_inds() const;
+    Vec3u get_norm_inds() const;
+    Vec3u get_uv_inds() const;
 
-    Vec3u vsInds;
-    Vec3u nsInds;
-    Vec3u uvsInds;
+    Vec3u vs_inds;
+    Vec3u ns_inds;
+    Vec3u uvs_inds;
 };
 
 FEIGN_END()

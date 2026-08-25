@@ -42,9 +42,9 @@ public:
 
     ~Scene();
 
-    virtual void preProcess(const GlobalParams &globals);
+    virtual void pre_process(const GlobalParams &globals);
 
-    void renderScene() const;
+    void render_scene() const;
 
     bool intersect_full(const Ray3f &ray, Intersection &its) const;
     bool intersect_non_null(const Ray3f &ray, Intersection &its) const;
@@ -56,10 +56,10 @@ public:
                                  bool last_event_surface = true,
                                  bool next_event_surface = true) const;
 
-    void addEmitter(Emitter *emitter);
-    void addMedium(Media *media);
+    void add_emitter(Emitter *emitter);
+    void add_medium(Media *media);
 
-    const MaterialShader *getShapeMaterialShader(const Intersection &its) const;
+    const MaterialShader *get_shape_material_shader(const Intersection &its) const;
 
     void eval_all_emitters(MaterialClosure &closure, bool in_media = false) const;
     void eval_one_emitter(MaterialClosure &closur, bool in_media = false) const;
@@ -81,7 +81,7 @@ public:
     std::string keywords;
     std::string description;
 
-    BBox3f sceneBounds;
+    BBox3f scene_bounds;
 
     // required structures
     IntegratorNode *integrator_node;

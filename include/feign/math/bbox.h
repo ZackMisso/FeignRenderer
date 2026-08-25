@@ -49,7 +49,7 @@ struct BBox3
                (max.z - min.z);
     }
 
-    T surfaceArea() const
+    T surface_area() const
     {
         Vec3<T> diag = max - min;
 
@@ -68,7 +68,7 @@ struct BBox3
         return p > min && p < max;
     }
 
-    bool containsOrOnBoundry(const Vec3<T> &p) const
+    bool contains_or_on_boundry(const Vec3<T> &p) const
     {
         return p >= min && p <= max;
     }
@@ -78,12 +78,12 @@ struct BBox3
         return bbox.min > min && bbox.max < max;
     }
 
-    bool containsOrOnBoundry(const BBox3<T> &bbox) const
+    bool contains_or_on_boundry(const BBox3<T> &bbox) const
     {
         return bbox.min >= min && bbox.max <= max;
     }
 
-    bool overlapExcludeBoundry(const BBox3<T> &bbox) const
+    bool overlap_exclude_boundry(const BBox3<T> &bbox) const
     {
         return bbox.min < min && bbox.max > max;
     }
@@ -93,16 +93,16 @@ struct BBox3
         return bbox.min <= min && bbox.max >= max;
     }
 
-    int majorAxis() const
+    int major_axis() const
     {
         Vec3<T> diag = max - min;
-        return diag.maxAbsIndex();
+        return diag.max_abs_index();
     }
 
-    int minorAxis() const
+    int minor_axis() const
     {
         Vec3<T> diag = max - min;
-        return diag.minAbsIndex();
+        return diag.min_abs_index();
     }
 
     Vec3<T> extents() const
@@ -118,7 +118,6 @@ struct BBox3
 
     void expand(const BBox3<T> &bbox)
     {
-        // std::cout << ""
         min = min.min(bbox.min);
         max = max.max(bbox.max);
     }
@@ -134,40 +133,39 @@ struct BBox3
 
     bool intersect(const Ray3f &ray) const
     {
-        float nearT = -std::numeric_limits<float>::infinity();
-        float farT = std::numeric_limits<float>::infinity();
+        float near_t = -std::numeric_limits<float>::infinity();
+        float far_t = std::numeric_limits<float>::infinity();
 
         for (int i = 0; i < 3; i++)
         {
             float origin = ray.origin(i);
-            float minVal = min(i);
-            float maxVal = max(i);
+            float min_val = min(i);
+            float max_val = max(i);
 
             if (ray.dir(i) == 0)
             {
-                if (origin < minVal || origin > maxVal)
+                if (origin < min_val || origin > max_val)
                     return false;
             }
             else
             {
-                float t1 = (minVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
-                float t2 = (maxVal - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
+                float t1 = (min_val - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
+                float t2 = (max_val - origin) * (1.0 / ray.dir(i)); // ray.dRcp[i];
 
                 if (t1 > t2)
                     std::swap(t1, t2);
 
-                nearT = std::max(t1, nearT);
-                farT = std::min(t2, farT);
+                near_t = std::max(t1, near_t);
+                far_t = std::min(t2, far_t);
 
-                if (!(nearT <= farT))
+                if (!(near_t <= far_t))
                     return false;
             }
         }
 
-        return ray.near <= farT && nearT <= ray.far;
+        return ray.near <= far_t && near_t <= ray.far;
     }
 
-    // i hope this is correct
     bool intersect(const Ray3f &ray, Float &near, Float &far) const
     {
         near = -std::numeric_limits<float>::infinity();
@@ -176,18 +174,18 @@ struct BBox3
         for (int i = 0; i < 3; i++)
         {
             float origin = ray.origin(i);
-            float minVal = min(i);
-            float maxVal = max(i);
+            float min_val = min(i);
+            float max_val = max(i);
 
             if (ray.dir(i) == 0)
             {
-                if (origin < minVal || origin > maxVal)
+                if (origin < min_val || origin > max_val)
                     return false;
             }
             else
             {
-                Float t1 = (minVal - origin) * (ONE / ray.dir(i));
-                Float t2 = (maxVal - origin) * (ONE / ray.dir(i));
+                Float t1 = (min_val - origin) * (ONE / ray.dir(i));
+                Float t2 = (max_val - origin) * (ONE / ray.dir(i));
 
                 if (t1 > t2)
                     std::swap(t1, t2);
@@ -279,7 +277,7 @@ struct BBox3
         max = Vec3<T>(-std::numeric_limits<T>::infinity());
     }
 
-    void infoDump() const
+    void info_dump() const
     {
         std::cout << "Min: "
                   << "(" << min(0) << ", " << min(1) << ", " << min(2) << ")" << std::endl;
@@ -334,7 +332,7 @@ struct BBox2
         return p > min && p < max;
     }
 
-    bool containsOrOnBoundry(const Vec2<T> &p) const
+    bool contains_or_on_boundry(const Vec2<T> &p) const
     {
         return p >= min && p <= max;
     }
@@ -344,12 +342,12 @@ struct BBox2
         return bbox.min > min && bbox.max < max;
     }
 
-    bool containsOrOnBoundry(const BBox2<T> &bbox) const
+    bool contains_or_on_boundry(const BBox2<T> &bbox) const
     {
         return bbox.min >= min && bbox.max <= max;
     }
 
-    bool overlapExcludeBoundry(const BBox2<T> &bbox) const
+    bool overlap_exclude_boundry(const BBox2<T> &bbox) const
     {
         return bbox.min < min && bbox.max > max;
     }
@@ -359,16 +357,16 @@ struct BBox2
         return bbox.min <= min && bbox.max >= max;
     }
 
-    int majorAxis() const
+    int major_axis() const
     {
         Vec2<T> diag = max - min;
-        return diag.maxAbsIndex();
+        return diag.max_abs_index();
     }
 
-    int minorAxis() const
+    int minor_axis() const
     {
         Vec2<T> diag = max - min;
-        return diag.minAbsIndex();
+        return diag.min_abs_index();
     }
 
     Vec2<T> extents() const
@@ -384,7 +382,6 @@ struct BBox2
 
     void expand(const BBox2<T> &bbox)
     {
-        // std::cout << ""
         min = min.min(bbox.min);
         max = max.max(bbox.max);
     }
@@ -416,7 +413,7 @@ struct BBox2
         max = Vec2<T>(-std::numeric_limits<T>::infinity());
     }
 
-    void infoDump() const
+    void info_dump() const
     {
         std::cout << "Min: "
                   << "(" << min(0) << ", " << min(1) << ")" << std::endl;

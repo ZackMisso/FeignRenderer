@@ -42,7 +42,7 @@ private:
     static FeignRenderer *instance;
 
 protected:
-    static FeignRenderer *getInstance() { return instance; }
+    static FeignRenderer *get_instance() { return instance; }
 
 public:
     Transform current_transform;
@@ -186,7 +186,7 @@ public:
     static void fr_rotate(float angle, float x, float y, float z);
 
 #if CLOCKING
-    static void flush_renders(ClockerResults* clockings = nullptr);
+    static void flush_renders(ClockerResults *clockings = nullptr);
 #else
     static void flush_renders();
 #endif

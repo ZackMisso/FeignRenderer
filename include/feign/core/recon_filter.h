@@ -23,10 +23,10 @@ public:
     ReconstructionFilter(Vec2f size) : size(size) {}
     virtual ~ReconstructionFilter() {}
 
-    virtual void preProcess() {}
+    virtual void pre_process() {}
     virtual Float evaluate(const Point2f &p) const = 0;
 
-    Vec2f getSize() const { return size; }
+    Vec2f get_size() const { return size; }
 
 protected:
     Vec2f size;
@@ -42,7 +42,7 @@ public:
     BoxFilter();
     BoxFilter(Vec2f size);
 
-    virtual void preProcess();
+    virtual void pre_process();
 
     virtual Float evaluate(const Point2f &p) const;
 };
@@ -58,12 +58,12 @@ public:
     GaussFilter(Vec2f size);
     GaussFilter(Vec2f size, Float std_dev);
 
-    virtual void preProcess();
+    virtual void pre_process();
 
     virtual Float evaluate(const Point2f &p) const;
 
 protected:
-    Vec2f expCoeff;
+    Vec2f exp_coeff;
     Float alpha;
     Float std_dev;
 };

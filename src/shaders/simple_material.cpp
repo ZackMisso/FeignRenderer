@@ -23,7 +23,7 @@ void SimpleMaterialShader::sample(MaterialClosure &closure) const
 // TODO: why is this called evaluate if it does not actually evaluate the material...
 void SimpleMaterialShader::evaluate(MaterialClosure &closure) const
 {
-    closure.is_specular = (*bsdf)()->isDelta();
+    closure.is_specular = (*bsdf)()->is_delta();
 
     if (closure.last_spec)
     {
@@ -65,7 +65,7 @@ void SimpleMaterialShader::evaluate_mat_only(MaterialClosure &closure) const
 
 void SimpleMaterialShader::evaluate_for_photon(MaterialClosure &closure) const
 {
-    closure.is_specular = (*bsdf)()->isDelta();
+    closure.is_specular = (*bsdf)()->is_delta();
     closure.last_spec = closure.is_specular;
     closure.material_accepts_shadows = false;
 }

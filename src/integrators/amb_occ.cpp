@@ -20,12 +20,12 @@ Ambient_Occlusion_Integrator::Ambient_Occlusion_Integrator(FilterNode *filter,
     // does nothing
 }
 
-void Ambient_Occlusion_Integrator::preProcess(const Scene *scene,
-                                              Sampler *sampler)
+void Ambient_Occlusion_Integrator::pre_process(const Scene *scene,
+                                               Sampler *sampler)
 {
     CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
@@ -54,13 +54,13 @@ Color3f Ambient_Occlusion_Integrator::Li(const Scene *scene,
     CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR_EVAL,
                            ClockerType::INTEGRATOR_INTERSECT)
 
-    Point2f point = sampler->next2D();
-    Vector3f sample_dir = WarpSpace::sqrToCosHemi(point);
-    Float pdf = WarpSpace::sqrToCosHemiPdf(sample_dir);
+    Point2f point = sampler->next_2d();
+    Vector3f sample_dir = WarpSpace::sqr_to_cos_hemi(point);
+    Float pdf = WarpSpace::sqr_to_cos_hemi_pdf(sample_dir);
 
     Ray3f shadow_ray(its.p,
-                     its.toWorldGeom(sample_dir),
-                     Epsilon,
+                     its.to_world_geom(sample_dir),
+                     EPSILON,
                      std::numeric_limits<Float>::infinity());
 
     Intersection shadow_its;

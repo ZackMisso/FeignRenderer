@@ -12,11 +12,11 @@ FEIGN_BEGIN()
 
 Shape::Shape(const MediumBoundry *boundry,
              bool is_null)
-    : geomShader(nullptr),
+    : geom_shader(nullptr),
       is_null(is_null),
       boundry(boundry)
 {
-  instID = 0;
+  inst_id = 0;
   transform = Transform();
 }
 

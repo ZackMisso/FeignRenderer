@@ -37,15 +37,15 @@ int main(int argc, char *argv[])
         if (strcmp(argv[i], "-u") == 0)
         {
             std::cout << "Beginning Unit Tests" << std::endl;
-            UnitTestManager *unitTests = new UnitTestManager();
+            UnitTestManager *unit_tests = new UnitTestManager();
 
-            if (!unitTests->run_all_tests())
+            if (!unit_tests->run_all_tests())
             {
-                delete unitTests;
+                delete unit_tests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;
                 return -1;
             }
-            delete unitTests;
+            delete unit_tests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
             return 0;
@@ -53,51 +53,51 @@ int main(int argc, char *argv[])
         if (strcmp(argv[i], "-ui") == 0)
         {
             std::cout << "Beginning Unit Tests" << std::endl;
-            UnitTestManager *unitTests = new UnitTestManager();
+            UnitTestManager *unit_tests = new UnitTestManager();
 
             int index = std::stoi(argv[i + 1]);
 
-            if (!unitTests->run_test(index))
+            if (!unit_tests->run_test(index))
             {
-                delete unitTests;
+                delete unit_tests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;
                 return -1;
             }
-            delete unitTests;
+            delete unit_tests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
             return 0;
         }
         if (strcmp(argv[i], "-ur") == 0)
         {
-            UnitTestManager *unitTests = new UnitTestManager();
-            unitTests->reference_run = true;
+            UnitTestManager *unit_tests = new UnitTestManager();
+            unit_tests->reference_run = true;
 
-            if (!unitTests->run_all_tests())
+            if (!unit_tests->run_all_tests())
             {
-                delete unitTests;
+                delete unit_tests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;
                 return -1;
             }
-            delete unitTests;
+            delete unit_tests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
             return 0;
         }
         if (strcmp(argv[i], "-uri") == 0)
         {
-            UnitTestManager *unitTests = new UnitTestManager();
-            unitTests->reference_run = true;
+            UnitTestManager *unit_tests = new UnitTestManager();
+            unit_tests->reference_run = true;
 
             int index = std::stoi(argv[i + 1]);
 
-            if (!unitTests->run_test(index))
+            if (!unit_tests->run_test(index))
             {
-                delete unitTests;
+                delete unit_tests;
                 std::cout << "Unit Tests Failed -> terminating early" << std::endl;
                 return -1;
             }
-            delete unitTests;
+            delete unit_tests;
 
             std::cout << "All Unit Tests Passed" << std::endl;
             return 0;

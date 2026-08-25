@@ -23,24 +23,24 @@ Intersection::Intersection(const Intersection &its)
       g_frame(its.g_frame),
       intersected_mesh(its.intersected_mesh) {}
 
-Vector3f Intersection::toLocal(const Vector3f &vec) const
+Vector3f Intersection::to_local(const Vector3f &vec) const
 {
-    return s_frame.toLocal(vec);
+    return s_frame.to_local(vec);
 }
 
-Vector3f Intersection::toWorld(const Vector3f &vec) const
+Vector3f Intersection::to_world(const Vector3f &vec) const
 {
-    return s_frame.toWorld(vec);
+    return s_frame.to_world(vec);
 }
 
-Vector3f Intersection::toLocalGeom(const Vector3f &vec) const
+Vector3f Intersection::to_local_geom(const Vector3f &vec) const
 {
-    return g_frame.toLocal(vec);
+    return g_frame.to_local(vec);
 }
 
-Vector3f Intersection::toWorldGeom(const Vector3f &vec) const
+Vector3f Intersection::to_world_geom(const Vector3f &vec) const
 {
-    return g_frame.toWorld(vec);
+    return g_frame.to_world(vec);
 }
 
 FEIGN_END()

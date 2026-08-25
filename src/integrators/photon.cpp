@@ -32,17 +32,17 @@ PhotonMapping::~PhotonMapping()
 }
 
 // Integrator pre-processing now has to happen last
-void PhotonMapping::preProcess(const Scene *scene,
-                               Sampler *sampler)
+void PhotonMapping::pre_process(const Scene *scene,
+                                Sampler *sampler)
 {
     // initialize clocker instances
-// #if CLOCKING
-//     Clocker::addClocker("scatter photons");
-//     Clocker::addClocker("eval photons");
-//     Clocker::addClocker("build photon accel");
-// #endif
+    // #if CLOCKING
+    //     Clocker::addClocker("scatter photons");
+    //     Clocker::addClocker("eval photons");
+    //     Clocker::addClocker("build photon accel");
+    // #endif
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     photon_storage = new PhotonArray();
     scatter_photons(scene, sampler);
@@ -52,9 +52,9 @@ void PhotonMapping::preProcess(const Scene *scene,
 void PhotonMapping::scatter_photons(const Scene *scene,
                                     Sampler *sampler)
 {
-// #if CLOCKING
-//     Clocker::startClock("scatter photons");
-// #endif
+    // #if CLOCKING
+    //     Clocker::startClock("scatter photons");
+    // #endif
 
     // create initial list of photons
     Photon *photons = new Photon[num_photons]();
@@ -77,8 +77,8 @@ void PhotonMapping::scatter_photons(const Scene *scene,
         EmitterQuery eqr;
         Float query_pdf = ONE;
         Color3f power = emitter->sample_ray(eqr,
-                                            sampler->next2D(),
-                                            sampler->next2D(),
+                                            sampler->next_2d(),
+                                            sampler->next_2d(),
                                             &query_pdf);
         emitter_pdf *= query_pdf;
         power /= emitter_pdf;
@@ -86,7 +86,7 @@ void PhotonMapping::scatter_photons(const Scene *scene,
         // create the initial ray
         Ray3f ray = Ray3f(eqr.p,
                           eqr.wi,
-                          Epsilon,
+                          EPSILON,
                           10000000.0); // TODO: replace with actual floating max
 
         // loop for some maximum bounce count
@@ -103,7 +103,7 @@ void PhotonMapping::scatter_photons(const Scene *scene,
             }
 
             // evaluate shader / colliding location
-            const MaterialShader *shader = scene->getShapeMaterialShader(its);
+            const MaterialShader *shader = scene->get_shape_material_shader(its);
             closure.albedo = ZERO;
             closure.pdf = ONE;
 
@@ -119,7 +119,7 @@ void PhotonMapping::scatter_photons(const Scene *scene,
             }
 
             // sample BSDF
-            closure.wi = its.toLocal(-ray.dir);
+            closure.wi = its.to_local(-ray.dir);
             shader->sample(closure);
 
             if (closure.pdf == ZERO)
@@ -127,26 +127,26 @@ void PhotonMapping::scatter_photons(const Scene *scene,
 
             // prepare to go to the next iteration
             ray = Ray3f(its.p,
-                        its.toWorld(closure.wo),
-                        Epsilon,
+                        its.to_world(closure.wo),
+                        EPSILON,
                         std::numeric_limits<Float>::infinity(),
                         ray.depth + 1);
 
-            Float cosTerm = its.s_frame.n % ray.dir;
-            if (cosTerm < ZERO)
-                cosTerm = -cosTerm;
+            Float cos_term = its.s_frame.n % ray.dir;
+            if (cos_term < ZERO)
+                cos_term = -cos_term;
             if (closure.is_specular)
-                cosTerm = ONE;
+                cos_term = ONE;
 
             Color3f old_power = power;
 
-            power *= closure.albedo * cosTerm / (closure.pdf);
+            power *= closure.albedo * cos_term / (closure.pdf);
 
             Color3f div_power = power / old_power;
 
             // apply russian roulette termination
-            Float rr_prob = std::min(div_power.maxValue(), ONE);
-            if (sampler->next1D() > rr_prob)
+            Float rr_prob = std::min(div_power.max_value(), ONE);
+            if (sampler->next_1d() > rr_prob)
                 break;
             power /= rr_prob;
         }
@@ -158,20 +158,20 @@ void PhotonMapping::scatter_photons(const Scene *scene,
         photons[i].power /= Float(num_photons);
     }
 
-// #if CLOCKING
-//     Clocker::endClock("scatter photons");
-// #endif
+    // #if CLOCKING
+    //     Clocker::endClock("scatter photons");
+    // #endif
 
-// #if CLOCKING
-//     Clocker::startClock("build photon accel");
-// #endif
+    // #if CLOCKING
+    //     Clocker::startClock("build photon accel");
+    // #endif
 
     // create the acceleration structure from the spawned list of photons
-    photon_storage->build(scene->sceneBounds, photons, num_photons);
+    photon_storage->build(scene->scene_bounds, photons, num_photons);
 
-// #if CLOCKING
-//     Clocker::endClock("build photon accel");
-// #endif
+    // #if CLOCKING
+    //     Clocker::endClock("build photon accel");
+    // #endif
 }
 
 Color3f PhotonMapping::Li(const Scene *scene,
@@ -201,21 +201,21 @@ Color3f PhotonMapping::Li(const Scene *scene,
                                               true);
 
     // get the material shader from the intersected mesh
-    const MaterialShader *shader = scene->getShapeMaterialShader(its);
+    const MaterialShader *shader = scene->get_shape_material_shader(its);
 
-    closure.wi = its.toLocal(-ray.dir);
+    closure.wi = its.to_local(-ray.dir);
 
-// #if CLOCKING
-//     Clocker::startClock("eval photons");
-// #endif
+    // #if CLOCKING
+    //     Clocker::startClock("eval photons");
+    // #endif
 
     // accumulate indirect illumination via the photon map
     photon_storage->eval(closure, shader, its.p, Float(0.01));
     // photon_storage->eval(closure, shader, its.p, 20);
 
-// #if CLOCKING
-//     Clocker::endClock("eval photons");
-// #endif
+    // #if CLOCKING
+    //     Clocker::endClock("eval photons");
+    // #endif
 
     // return the accumulated emission and gathered radiance
     return closure.nee + closure.emission;

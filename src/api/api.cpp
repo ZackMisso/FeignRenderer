@@ -351,7 +351,7 @@ MaterialShaderNode *FeignRenderer::find_material_shader(std::string name)
 
         if (name == "default")
         {
-            BSDFNode *bsdf = getInstance()->find_bsdf("default");
+            BSDFNode *bsdf = get_instance()->find_bsdf("default");
             node->shader = new SimpleMaterialShader(bsdf);
         }
 
@@ -393,14 +393,12 @@ DensityFunctionNode *FeignRenderer::find_density_func(std::string name)
 
     if (itr == density_funcs.end())
     {
-        LOG("did not find");
         DensityFunctionNode *node = new DensityFunctionNode(name);
         density_funcs.insert({name, node});
         return node;
     }
     else
     {
-        LOG("found");
         return itr->second;
     }
 }
@@ -512,29 +510,29 @@ void FeignRenderer::fr_accel(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    assert(getInstance()->scene);
+    assert(get_instance()->scene);
 
     // TODO: incorporate spatial partitioning methods here
 
     if (type == "light_naive")
     {
-        if (getInstance()->scene->scene->light_selection)
+        if (get_instance()->scene->scene->light_selection)
         {
-            delete getInstance()->scene->scene->light_selection;
+            delete get_instance()->scene->scene->light_selection;
         }
 
-        getInstance()->scene->scene->light_selection = new NaiveLightAccel();
+        get_instance()->scene->scene->light_selection = new NaiveLightAccel();
     }
     else if (type == "light_spatial")
     {
-        if (getInstance()->scene->scene->light_selection)
+        if (get_instance()->scene->scene->light_selection)
         {
-            delete getInstance()->scene->scene->light_selection;
+            delete get_instance()->scene->scene->light_selection;
         }
 
         SpatialLightAccel::Params *params = (SpatialLightAccel::Params *)accel_properties;
 
-        getInstance()->scene->scene->light_selection = new SpatialLightAccel(
+        get_instance()->scene->scene->light_selection = new SpatialLightAccel(
             params->width,
             params->height,
             params->depth);
@@ -562,18 +560,18 @@ void FeignRenderer::fr_scene(std::string name,
     global_params.sdf_only = sdf_mode;
     std::cout << global_params.sdf_only << std::endl;
 
-    if (getInstance()->scene)
+    if (get_instance()->scene)
     {
         throw new FeignRendererException("currently only one scene may be constructed");
     }
 
-    IntegratorNode *integrator = getInstance()->find_integrator(integrator_node);
-    SamplerNode *sampler = getInstance()->find_sampler(sampler_node);
-    CameraNode *camera = getInstance()->find_camera(camera_node);
+    IntegratorNode *integrator = get_instance()->find_integrator(integrator_node);
+    SamplerNode *sampler = get_instance()->find_sampler(sampler_node);
+    CameraNode *camera = get_instance()->find_camera(camera_node);
     MediaNode *media = nullptr;
 
     if (!medium_node.empty())
-        media = getInstance()->find_media(medium_node);
+        media = get_instance()->find_media(medium_node);
 
     Scene *scene = new Scene(name,
                              keywords,
@@ -583,9 +581,9 @@ void FeignRenderer::fr_scene(std::string name,
                              camera,
                              media);
 
-    scene->target = getInstance()->target;
+    scene->target = get_instance()->target;
 
-    getInstance()->scene = new SceneNode(name, scene);
+    get_instance()->scene = new SceneNode(name, scene);
 
     CLOCKER_STOP_ONE(ClockerType::API)
 }
@@ -597,8 +595,8 @@ void FeignRenderer::fr_integrator(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    IntegratorNode *integrator = getInstance()->find_integrator(name);
-    FilterNode *filter_node = getInstance()->find_filter(filter);
+    IntegratorNode *integrator = get_instance()->find_integrator(name);
+    FilterNode *filter_node = get_instance()->find_filter(filter);
 
     if (integrator->integrator)
     {
@@ -679,7 +677,7 @@ void FeignRenderer::fr_sampler(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    SamplerNode *sampler = getInstance()->find_sampler(name);
+    SamplerNode *sampler = get_instance()->find_sampler(name);
 
     if (sampler->sampler)
     {
@@ -709,7 +707,7 @@ void FeignRenderer::fr_camera(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    CameraNode *camera = getInstance()->find_camera(name);
+    CameraNode *camera = get_instance()->find_camera(name);
 
     if (camera->camera)
     {
@@ -734,12 +732,12 @@ void FeignRenderer::fr_camera(std::string name,
 
         Matrix4f look_at_matrix = Matrix4f();
 
-        look_at_matrix.setCol(0, Vec4f(xaxis, 0.f));
-        look_at_matrix.setCol(1, Vec4f(yaxis, 0.f));
-        look_at_matrix.setCol(2, Vec4f(zaxis, 0.f));
-        look_at_matrix.setCol(3, Vec4f(params->origin, 1.f));
+        look_at_matrix.set_col(0, Vec4f(xaxis, 0.f));
+        look_at_matrix.set_col(1, Vec4f(yaxis, 0.f));
+        look_at_matrix.set_col(2, Vec4f(zaxis, 0.f));
+        look_at_matrix.set_col(3, Vec4f(params->origin, 1.f));
 
-        perspective->setCameraToWorld(getInstance()->current_transform * Transform(look_at_matrix));
+        perspective->set_camera_to_world(get_instance()->current_transform * Transform(look_at_matrix));
 
         camera->camera = perspective;
     }
@@ -767,7 +765,7 @@ void FeignRenderer::fr_object(std::string name,
     if (index >= 0)
         name += "_" + std::to_string(index);
 
-    ObjectNode *object = getInstance()->find_object(name);
+    ObjectNode *object = get_instance()->find_object(name);
 
     // objects are allowed to have the same name and instead be refered to
     // by instance
@@ -783,15 +781,15 @@ void FeignRenderer::fr_object(std::string name,
         return;
     }
 
-    object->transform = getInstance()->current_transform;
-    object->mesh = getInstance()->find_mesh(mesh);
-    object->material_shader = getInstance()->find_material_shader(material_shader);
-    // object->medium = getInstance()->find_media(medium);
+    object->transform = get_instance()->current_transform;
+    object->mesh = get_instance()->find_mesh(mesh);
+    object->material_shader = get_instance()->find_material_shader(material_shader);
+    // object->medium = get_instance()->find_media(medium);
 
     if (emitter != "null" && emitter != "")
     {
-        EmitterNode *emitter_node = getInstance()->find_emitter(emitter);
-        emitter_node->objectNode = object;
+        EmitterNode *emitter_node = get_instance()->find_emitter(emitter);
+        emitter_node->object_node = object;
         object->emitter = emitter_node;
     }
 
@@ -806,7 +804,7 @@ void FeignRenderer::fr_mesh(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    MeshNode *mesh = getInstance()->find_mesh(name);
+    MeshNode *mesh = get_instance()->find_mesh(name);
 
     if (mesh->mesh)
     {
@@ -817,14 +815,14 @@ void FeignRenderer::fr_mesh(std::string name,
     {
         ObjMesh::Params *params = (ObjMesh::Params *)mesh_data;
 
-        GeometryShaderNode *geom_shader = getInstance()->find_geometry_shader(params->shader);
+        GeometryShaderNode *geom_shader = get_instance()->find_geometry_shader(params->shader);
 
         MediumBoundry *boundry = nullptr;
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -833,17 +831,17 @@ void FeignRenderer::fr_mesh(std::string name,
                                  params->flip_norms,
                                  boundry,
                                  params->is_null);
-        mesh->mesh->geomShader = geom_shader;
+        mesh->mesh->geom_shader = geom_shader;
     }
     else if (type == "grid")
     {
         GridObj::Params *params = (GridObj::Params *)mesh_data;
 
-        GeometryShaderNode *geom_shader = getInstance()->find_geometry_shader(params->shader);
-        TextureNode *terrain_texture = getInstance()->find_texture(params->texture);
+        GeometryShaderNode *geom_shader = get_instance()->find_geometry_shader(params->shader);
+        TextureNode *terrain_texture = get_instance()->find_texture(params->texture);
 
         mesh->mesh = new GridObj(params->resolution, terrain_texture);
-        mesh->mesh->geomShader = geom_shader;
+        mesh->mesh->geom_shader = geom_shader;
     }
     else if (type == "sdf_sphere")
     {
@@ -853,8 +851,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -873,8 +871,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -893,8 +891,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -912,8 +910,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -932,8 +930,8 @@ void FeignRenderer::fr_mesh(std::string name,
 
         if (params->inside_media != "null" || params->outside_media != "null")
         {
-            MediaNode *inside = FeignRenderer::getInstance()->find_media(params->inside_media);
-            MediaNode *outside = FeignRenderer::getInstance()->find_media(params->outside_media);
+            MediaNode *inside = FeignRenderer::get_instance()->find_media(params->inside_media);
+            MediaNode *outside = FeignRenderer::get_instance()->find_media(params->outside_media);
 
             boundry = new MediumBoundry(inside, outside);
         }
@@ -963,7 +961,7 @@ void FeignRenderer::fr_shader(std::string name,
 
     if (type == "interp_verts_to_sphere")
     {
-        GeometryShaderNode *geom_shader = getInstance()->find_geometry_shader(name);
+        GeometryShaderNode *geom_shader = get_instance()->find_geometry_shader(name);
 
         if (geom_shader->shader)
         {
@@ -976,7 +974,7 @@ void FeignRenderer::fr_shader(std::string name,
     }
     else if (type == "simple_material")
     {
-        MaterialShaderNode *material_shader = getInstance()->find_material_shader(name);
+        MaterialShaderNode *material_shader = get_instance()->find_material_shader(name);
 
         if (material_shader->shader)
         {
@@ -984,12 +982,12 @@ void FeignRenderer::fr_shader(std::string name,
         }
 
         SimpleMaterialShader::Params *params = (SimpleMaterialShader::Params *)shader_data;
-        BSDFNode *bsdf = getInstance()->find_bsdf(params->bsdf);
+        BSDFNode *bsdf = get_instance()->find_bsdf(params->bsdf);
         material_shader->shader = new SimpleMaterialShader(bsdf);
     }
     else if (type == "wireframe")
     {
-        MaterialShaderNode *shader = getInstance()->find_material_shader(name);
+        MaterialShaderNode *shader = get_instance()->find_material_shader(name);
 
         if (shader->shader)
         {
@@ -997,8 +995,8 @@ void FeignRenderer::fr_shader(std::string name,
         }
 
         WireframeMaterialShader::Params *params = (WireframeMaterialShader::Params *)shader_data;
-        BSDFNode *wire_bsdf = getInstance()->find_bsdf(params->wireframe_mat);
-        BSDFNode *mesh_bsdf = getInstance()->find_bsdf(params->mesh_mat);
+        BSDFNode *wire_bsdf = get_instance()->find_bsdf(params->wireframe_mat);
+        BSDFNode *mesh_bsdf = get_instance()->find_bsdf(params->mesh_mat);
 
         shader->shader = new WireframeMaterialShader(wire_bsdf,
                                                      mesh_bsdf,
@@ -1017,7 +1015,7 @@ void FeignRenderer::fr_media(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    MediaNode *medium = getInstance()->find_media(name);
+    MediaNode *medium = get_instance()->find_media(name);
 
     if (medium->media)
     {
@@ -1028,15 +1026,15 @@ void FeignRenderer::fr_media(std::string name,
         (Media::Params *)medium_data;
 
     TransmittanceEstimatorNode *trans_node =
-        getInstance()->find_transmittance_estimator(params->trans_node);
+        get_instance()->find_transmittance_estimator(params->trans_node);
     PhaseFunctionNode *phase_node =
-        getInstance()->find_phase_func(params->phase_node);
+        get_instance()->find_phase_func(params->phase_node);
     MediumSamplingNode *med_samp_node =
-        getInstance()->find_medium_sampling(params->sampling_node);
+        get_instance()->find_medium_sampling(params->sampling_node);
     DensityFunctionNode *density_node =
-        getInstance()->find_density_func(params->density_func_node);
+        get_instance()->find_density_func(params->density_func_node);
     TransFuncNode *trans_func_node =
-        getInstance()->find_transmittance_func(params->trans_func_node);
+        get_instance()->find_transmittance_func(params->trans_func_node);
 
     medium->media = new Media(trans_node,
                               phase_node,
@@ -1057,7 +1055,7 @@ void FeignRenderer::fr_medium_density(std::string name,
     CLOCKER_START_ONE(ClockerType::API)
 
     LOG("medium_density: " + name);
-    DensityFunctionNode *density_func = getInstance()->find_density_func(name);
+    DensityFunctionNode *density_func = get_instance()->find_density_func(name);
 
     if (density_func->density)
     {
@@ -1087,7 +1085,7 @@ void FeignRenderer::fr_medium_density(std::string name,
     else if (type == "mandlebrot")
     {
         MandlebrotDensity::Params *params = (MandlebrotDensity::Params *)density_data;
-        density_func->density = new MandlebrotDensity(params->max_density);
+        density_func->density = new MandlebrotDensity(params->max_d);
     }
     else if (type == "sphere")
     {
@@ -1123,7 +1121,7 @@ void FeignRenderer::fr_medium_sampling(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    MediumSamplingNode *medium_sampling = getInstance()->find_medium_sampling(name);
+    MediumSamplingNode *medium_sampling = get_instance()->find_medium_sampling(name);
 
     if (medium_sampling->sampling)
     {
@@ -1169,7 +1167,7 @@ void FeignRenderer::fr_medium_transmittance(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    TransmittanceEstimatorNode *trans_est = getInstance()->find_transmittance_estimator(name);
+    TransmittanceEstimatorNode *trans_est = get_instance()->find_transmittance_estimator(name);
 
     if (trans_est->trans_est)
     {
@@ -1226,7 +1224,7 @@ void FeignRenderer::fr_medium_transmittance_func(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    TransFuncNode *trans_func = getInstance()->find_transmittance_func(name);
+    TransFuncNode *trans_func = get_instance()->find_transmittance_func(name);
 
     if (trans_func->trans_func)
     {
@@ -1242,7 +1240,7 @@ void FeignRenderer::fr_medium_transmittance_func(std::string name,
         if (trans_func_data)
         {
             LinearTrans::Params *params = (LinearTrans::Params *)trans_func_data;
-            trans_func->trans_func = new LinearTrans(params->maxT);
+            trans_func->trans_func = new LinearTrans(params->max_t);
         }
         else
         {
@@ -1263,7 +1261,7 @@ void FeignRenderer::fr_emitter(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    EmitterNode *emitter = getInstance()->find_emitter(name);
+    EmitterNode *emitter = get_instance()->find_emitter(name);
 
     if (emitter->emitter)
     {
@@ -1272,10 +1270,9 @@ void FeignRenderer::fr_emitter(std::string name,
 
     if (type == "point")
     {
-        // assert(getInstance()->scene);
         PointEmitter::Params *params = (PointEmitter::Params *)emitter_data;
         emitter->emitter = new PointEmitter(params->intensity, params->pos);
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else if (type == "mesh")
     {
@@ -1283,21 +1280,21 @@ void FeignRenderer::fr_emitter(std::string name,
         MeshEmitter::Params *params = (MeshEmitter::Params *)emitter_data;
         emitter->emitter = new MeshEmitter(params->intensity);
 
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else if (type == "environment")
     {
         EnvironmentEmitter::Params *params = (EnvironmentEmitter::Params *)emitter_data;
 
-        TextureNode *texture = getInstance()->find_texture(params->texture);
+        TextureNode *texture = get_instance()->find_texture(params->texture);
         emitter->emitter = new EnvironmentEmitter(texture, params->intensity);
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else if (type == "directional")
     {
         DirectionalEmitter::Params *params = (DirectionalEmitter::Params *)emitter_data;
         emitter->emitter = new DirectionalEmitter(params->light_dir, params->radiance);
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else if (type == "directional_mesh")
     {
@@ -1306,7 +1303,7 @@ void FeignRenderer::fr_emitter(std::string name,
         emitter->emitter = new DirectionalMeshEmitter(params->light_dir,
                                                       params->intensity);
 
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else if (type == "spot")
     {
@@ -1315,7 +1312,7 @@ void FeignRenderer::fr_emitter(std::string name,
                                                 params->light_dir,
                                                 params->radiance,
                                                 params->light_angle);
-        getInstance()->scene->scene->addEmitter(emitter->emitter);
+        get_instance()->scene->scene->add_emitter(emitter->emitter);
     }
     else
     {
@@ -1329,7 +1326,7 @@ void FeignRenderer::fr_emitter(std::string name,
 //                                 std::string type,
 //                                 void* material_data)
 // {
-//     MaterialNode* material = getInstance()->find_material(name);
+//     MaterialNode* material = get_instance()->find_material(name);
 //
 //     if (material->material)
 //     {
@@ -1340,7 +1337,7 @@ void FeignRenderer::fr_emitter(std::string name,
 //     {
 //         SimpleMaterial::Params* params = (SimpleMaterial::Params*)material_data;
 //
-//         BSDFNode* bsdf = getInstance()->find_bsdf(params->bsdf_name);
+//         BSDFNode* bsdf = get_instance()->find_bsdf(params->bsdf_name);
 //
 //         material->material = new SimpleMaterial(bsdf);
 //     }
@@ -1356,7 +1353,7 @@ void FeignRenderer::fr_bsdf(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    BSDFNode *bsdf = getInstance()->find_bsdf(name);
+    BSDFNode *bsdf = get_instance()->find_bsdf(name);
 
     if (bsdf->bsdf)
     {
@@ -1422,7 +1419,7 @@ void FeignRenderer::fr_texture(std::string name,
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    TextureNode *texture = getInstance()->find_texture(name);
+    TextureNode *texture = get_instance()->find_texture(name);
 
     if (texture->texture)
     {
@@ -1435,8 +1432,7 @@ void FeignRenderer::fr_texture(std::string name,
         texture->texture = new ImageTexture(params->filename, params->scale);
         // image textures should always be preprocessed to actually parse the
         // images
-        texture->texture->preProcess();
-        LOG("inside here");
+        texture->texture->pre_process();
     }
     else if (type == "sin")
     {
@@ -1458,7 +1454,7 @@ void FeignRenderer::fr_clear_transform()
 {
     CLOCKER_START_ONE(ClockerType::API)
 
-    getInstance()->current_transform = Transform();
+    get_instance()->current_transform = Transform();
 
     CLOCKER_STOP_ONE(ClockerType::API)
 }
@@ -1469,7 +1465,7 @@ void FeignRenderer::fr_scale(float sx, float sy, float sz)
 
     Matrix4f matrix = Matrix4f::scale(Vec3f(sx, sy, sz));
     Transform scale_transform = Transform(matrix);
-    getInstance()->current_transform = scale_transform * getInstance()->current_transform;
+    get_instance()->current_transform = scale_transform * get_instance()->current_transform;
 
     CLOCKER_STOP_ONE(ClockerType::API)
 }
@@ -1480,7 +1476,7 @@ void FeignRenderer::fr_translate(float tx, float ty, float tz)
 
     Matrix4f matrix = Matrix4f::translate(Vec3f(tx, ty, tz));
     Transform translate_transform = Transform(matrix);
-    getInstance()->current_transform = translate_transform * getInstance()->current_transform;
+    get_instance()->current_transform = translate_transform * get_instance()->current_transform;
 
     CLOCKER_STOP_ONE(ClockerType::API)
 }
@@ -1491,14 +1487,14 @@ void FeignRenderer::fr_rotate(float angle, float x, float y, float z)
 
     Matrix4f matrix = Matrix4f::rotate(angle, Vec3f(x, y, z));
     Transform rotate_transform = Transform(matrix);
-    getInstance()->current_transform = rotate_transform * getInstance()->current_transform;
+    get_instance()->current_transform = rotate_transform * get_instance()->current_transform;
 
     CLOCKER_STOP_ONE(ClockerType::API)
 }
 
 // this is the big one
 #if CLOCKING
-void FeignRenderer::flush_renders(ClockerResults* clockings)
+void FeignRenderer::flush_renders(ClockerResults *clockings)
 #else
 void FeignRenderer::flush_renders()
 #endif
@@ -1506,14 +1502,14 @@ void FeignRenderer::flush_renders()
     CLOCKER_START_ONE(ClockerType::API)
 
     LOG("global_params.sdf_only flush: " + std::to_string(global_params.sdf_only));
-    Scene *scene_obj = getInstance()->scene->scene;
+    Scene *scene_obj = get_instance()->scene->scene;
 
     // first preprocess all meshes
     unsigned int inst_index = 0;
 
     LOG("pre processing meshes");
 
-    for (auto it : getInstance()->objects)
+    for (auto it : get_instance()->objects)
     {
         Shape *mesh = it.second->mesh->mesh;
 
@@ -1524,10 +1520,10 @@ void FeignRenderer::flush_renders()
 
         mesh->transform = it.second->transform * mesh->transform;
         // preprocess more information for importance sampling mesh emitters
-        mesh->preProcess(it.second->emitter != nullptr);
+        mesh->pre_process(it.second->emitter != nullptr);
         scene_obj->shapes.push_back(mesh);
         scene_obj->objects.push_back(it.second);
-        mesh->setInstID(inst_index);
+        mesh->set_inst_id(inst_index);
 
         inst_index++;
     }
@@ -1535,11 +1531,11 @@ void FeignRenderer::flush_renders()
     LOG("pre processing emitters");
 
     // TODO: set this up in a more efficient way
-    for (auto it : getInstance()->emitters)
+    for (auto it : get_instance()->emitters)
     {
-        if (it.second->objectNode)
+        if (it.second->object_node)
         {
-            it.second->emitter->setMeshNode(it.second->objectNode->mesh);
+            it.second->emitter->set_mesh_node(it.second->object_node->mesh);
         }
     }
 
@@ -1547,19 +1543,19 @@ void FeignRenderer::flush_renders()
 
     global_params.name = "blah";
 
-    for (auto it : getInstance()->medias)
+    for (auto it : get_instance()->medias)
     {
         LOG("MEDIUM");
         if (it.first != "null")
         {
-            scene_obj->addMedium(it.second->media);
+            scene_obj->add_medium(it.second->media);
         }
     }
 
     LOG("preprocessing scene");
 
     // preprocess the scene
-    scene_obj->preProcess(global_params);
+    scene_obj->pre_process(global_params);
 
     global_params.name = "blah";
 
@@ -1568,7 +1564,7 @@ void FeignRenderer::flush_renders()
     LOG("entering render");
 
     // render current scene
-    scene_obj->renderScene();
+    scene_obj->render_scene();
 
     LOG("render done, cleaning up");
 

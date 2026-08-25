@@ -20,7 +20,7 @@ Halton::Halton(uint32_t seed,
 {
 }
 
-void Halton::preProcess()
+void Halton::pre_process()
 {
     throw new NotImplementedException("halton preProcess");
 
@@ -57,7 +57,7 @@ void Halton::reseed(uint32_t seed)
     // reseed();
 }
 
-Float Halton::next1D()
+Float Halton::next_1d()
 {
     throw new NotImplementedException("halton next1D");
 
@@ -65,42 +65,42 @@ Float Halton::next1D()
     // return rng.nextFloat();
 }
 
-Vec2f Halton::next2D()
+Vec2f Halton::next_2d()
 {
-    return Vec2f(next1D(), next1D());
+    return Vec2f(next_1d(), next_1d());
 }
 
-Vec3f Halton::next3D()
+Vec3f Halton::next_3d()
 {
-    return Vec3f(next1D(), next1D(), next1D());
+    return Vec3f(next_1d(), next_1d(), next_1d());
 }
 
-Vec4f Halton::next4D()
+Vec4f Halton::next_4d()
 {
-    return Vec4f(next1D(), next1D(), next1D(), next1D());
+    return Vec4f(next_1d(), next_1d(), next_1d(), next_1d());
 }
 
 Sampler *Halton::copy()
 {
-    Halton *newSamp = new Halton();
-    newSamp->reseed(sampleSeed);
+    Halton *new_samp = new Halton();
+    new_samp->reseed(sample_seed);
 
-    return newSamp;
+    return new_samp;
 }
 
 Sampler *Halton::copy(uint32_t seed)
 {
-    Halton *newSamp = new Halton();
-    newSamp->reseed(seed);
+    Halton *new_samp = new Halton();
+    new_samp->reseed(seed);
 
-    return newSamp;
+    return new_samp;
 }
 
-void Halton::nextSample()
+void Halton::next_sample()
 {
-    currentSample++;
+    current_sample++;
 
-    throw new NotImplementedException("halton nextSample");
+    throw new NotImplementedException("halton next_sample");
 }
 
 FEIGN_END()

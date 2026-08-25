@@ -17,7 +17,7 @@ SpotLightEmitter::SpotLightEmitter(Point3f light_pos,
     : light_pos(light_pos),
       light_dir(light_dir),
       radiance(radiance),
-      light_angle(cos(degToRad(light_angle)))
+      light_angle(cos(deg_to_rad(light_angle)))
 {
     light_dir = light_dir.normalized();
 }
@@ -31,9 +31,10 @@ Color3f SpotLightEmitter::sample_nee(EmitterQuery &rec,
 
     CoordinateFrame frame(light_dir);
 
-    Float cos_t = frame.toLocal(-rec.wi)(2);
+    Float cos_t = frame.to_local(-rec.wi)(2);
 
     // TODO: look into why the angle is flipped later
+    // WHAT?
 
     if (pdf)
         *pdf = 1.0;
@@ -66,7 +67,7 @@ Color3f SpotLightEmitter::evaluate(EmitterQuery &rec) const
 {
     CoordinateFrame frame(light_dir);
 
-    Float cos_t = frame.toLocal(-rec.wi)(2);
+    Float cos_t = frame.to_local(-rec.wi)(2);
 
     if (cos_t > light_angle)
     {
@@ -76,7 +77,7 @@ Color3f SpotLightEmitter::evaluate(EmitterQuery &rec) const
     return COLOR_BLACK;
 }
 
-Point3f SpotLightEmitter::getCenter() const
+Point3f SpotLightEmitter::get_center() const
 {
     return light_pos;
 }

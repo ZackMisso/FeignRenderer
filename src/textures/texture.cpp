@@ -14,7 +14,7 @@ Texture::Texture() {}
 
 Texture::~Texture() {}
 
-void Texture::preProcess() {}
+void Texture::pre_process() {}
 
 Color3f Texture::evaluate(const Point2f &point)
 {

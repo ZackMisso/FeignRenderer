@@ -35,11 +35,11 @@ struct Intersection
     Intersection();
     Intersection(const Intersection &its);
 
-    Vector3f toLocal(const Vector3f &vec) const;
-    Vector3f toWorld(const Vector3f &vec) const;
+    Vector3f to_local(const Vector3f &vec) const;
+    Vector3f to_world(const Vector3f &vec) const;
 
-    Vector3f toLocalGeom(const Vector3f &vec) const;
-    Vector3f toWorldGeom(const Vector3f &vec) const;
+    Vector3f to_local_geom(const Vector3f &vec) const;
+    Vector3f to_world_geom(const Vector3f &vec) const;
 };
 
 FEIGN_END()

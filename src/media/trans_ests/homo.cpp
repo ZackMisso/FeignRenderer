@@ -19,11 +19,11 @@ Color3f Trans_Homogenous::transmittance(const Ray3f &ray,
     throw new NotImplementedException("homogenous non exp");
     return 0.f;
 #else
-    Float tMin = closure.t_min;
-    Float tMax = closure.t_max;
+    Float t_min = closure.t_min;
+    Float t_max = closure.t_max;
 
-    Color3f dense = density->D(ray((tMax - tMin) / 2.f + tMin));
-    Color3f trans = Exp(dense * -(tMax - tMin));
+    Color3f dense = density->eval(ray((t_max - t_min) / 2.f + t_min));
+    Color3f trans = exponential(dense * -(t_max - t_min));
     return trans;
 #endif
 }

@@ -15,16 +15,16 @@ Orthographic::Orthographic() : Camera()
     // TODO
 }
 
-void Orthographic::preProcess()
+void Orthographic::pre_process()
 {
-    throw new NotImplementedException("preprocess ortho");
+    throw new NotImplementedException("pre_process ortho");
 }
 
-Color3f Orthographic::sampleRay(Ray3f &ray,
-                                const Point2f &filmSamp,
-                                const Point2f &appSamp) const
+Color3f Orthographic::sample_ray(Ray3f &ray,
+                                 const Point2f &film_samp,
+                                 const Point2f &app_samp) const
 {
-    throw new NotImplementedException("ortho sampleRay");
+    throw new NotImplementedException("ortho sample_ray");
 
     return Color3f(1.0);
 }

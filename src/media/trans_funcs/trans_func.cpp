@@ -11,37 +11,37 @@
 FEIGN_BEGIN()
 
 Color3f TransFunc::eval(Color3f tau,
-                        bool startOnSurface,
-                        bool endOnSurface) const
+                        bool start_on_surface,
+                        bool end_on_surface) const
 {
-    if (startOnSurface && endOnSurface)
-        return surfaceSurface(tau);
+    if (start_on_surface && end_on_surface)
+        return surface_surface(tau);
 
-    else if (!startOnSurface && !endOnSurface)
+    else if (!start_on_surface && !end_on_surface)
     {
-        return mediumMedium(tau) / sigmaBar();
+        return medium_medium(tau) / sigma_bar();
     }
 
     else
-        return mediumSurface(tau);
+        return medium_surface(tau);
 }
 
 Float TransFunc::sample(Sampler *sampler,
-                        bool startOnSurface) const
+                        bool start_on_surface) const
 {
-    return startOnSurface ? sampleSurface(sampler) : sampleMedium(sampler);
+    return start_on_surface ? sample_surface(sampler) : sample_medium(sampler);
 }
 
-Color3f TransFunc::surfaceProbability(Color3f tau,
-                                      bool startOnSurface) const
+Color3f TransFunc::surface_probability(Color3f tau,
+                                       bool start_on_surface) const
 {
-    return startOnSurface ? surfaceSurface(tau) : mediumSurface(tau);
+    return start_on_surface ? surface_surface(tau) : medium_surface(tau);
 }
 
-Color3f TransFunc::mediumPdf(Color3f tau,
-                             bool startOnSurface) const
+Color3f TransFunc::medium_pdf(Color3f tau,
+                              bool start_on_surface) const
 {
-    return startOnSurface ? surfaceMedium(tau) : mediumMedium(tau);
+    return start_on_surface ? surface_medium(tau) : medium_medium(tau);
 }
 
 FEIGN_END()

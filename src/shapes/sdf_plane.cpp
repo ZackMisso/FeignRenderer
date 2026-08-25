@@ -28,7 +28,7 @@ Float SDFPlane::evaluate(Point3f pt) const
     return std::abs((pt - center) % normal);
 }
 
-BBox3f SDFPlane::boundingBox() const
+BBox3f SDFPlane::bounding_box() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     // Float diameter = 2.0 * radius;

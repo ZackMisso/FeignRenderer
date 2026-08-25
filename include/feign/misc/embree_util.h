@@ -19,8 +19,8 @@
 
 FEIGN_BEGIN()
 
-void initDevice();
-RTCDevice getDevice();
+void init_device();
+RTCDevice get_device();
 
 inline RTCBounds convert_bbox_to_rtcbounds(const BBox3f &box)
 {

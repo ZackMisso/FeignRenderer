@@ -27,7 +27,7 @@ public:
     virtual void evaluate(MaterialClosure &closure) const = 0;
 
     // TODO: remove this method
-    virtual bool isDelta() const = 0;
+    virtual bool is_delta() const = 0;
 };
 /////////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return false; }
+    virtual bool is_delta() const { return false; }
 
 protected:
     Color3f albedo;
@@ -76,7 +76,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return true; }
+    virtual bool is_delta() const { return true; }
 
 protected:
     Color3f albedo;
@@ -94,7 +94,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return true; }
+    virtual bool is_delta() const { return true; }
 };
 /////////////////////////////////////////////////
 
@@ -120,7 +120,7 @@ public:
     virtual void evaluate(MaterialClosure &closure) const;
 
     // this is a strange middle ground
-    virtual bool isDelta() const { return false; }
+    virtual bool is_delta() const { return false; }
 
 protected:
     Color3f kd;
@@ -150,7 +150,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return false; }
+    virtual bool is_delta() const { return false; }
 
 protected:
     Color3f kd;
@@ -183,7 +183,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return true; }
+    virtual bool is_delta() const { return true; }
 
 protected:
     Float int_ior;
@@ -219,7 +219,7 @@ public:
     virtual void sample(MaterialClosure &closure) const;
     virtual void evaluate(MaterialClosure &closure) const;
 
-    virtual bool isDelta() const { return true; }
+    virtual bool is_delta() const { return true; }
 
 protected:
     Float int_ior;

@@ -26,11 +26,11 @@ BarycentricIntegrator::BarycentricIntegrator(FilterNode *filter,
 {
 }
 
-void BarycentricIntegrator::preProcess(const Scene *scene, Sampler *sampler)
+void BarycentricIntegrator::pre_process(const Scene *scene, Sampler *sampler)
 {
     CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }

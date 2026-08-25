@@ -142,7 +142,7 @@ struct MediaClosure
           last_event(last_event_surface),
           next_event(next_event_surface) {}
 
-    bool handleScatter()
+    bool handle_scatter()
     {
         return sampled_t < t_max;
     }

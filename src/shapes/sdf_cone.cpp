@@ -45,7 +45,7 @@ Float SDFCone::evaluate(Point3f pt) const
     return s * sqrt(fmin(cax * cax + cay * cay * baba, cbx * cbx + cby * cby * baba));
 }
 
-BBox3f SDFCone::boundingBox() const
+BBox3f SDFCone::bounding_box() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     Float max_radius = std::max(radius_1, radius_2);

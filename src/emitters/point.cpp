@@ -20,14 +20,14 @@ PointEmitter::PointEmitter(Color3f I,
     // does nothing
 }
 
-void PointEmitter::preProcess() {}
+void PointEmitter::pre_process() {}
 
 Color3f PointEmitter::sample_nee(EmitterQuery &rec,
                                  const Point2f &sample,
                                  Float *pdf) const
 {
     rec.wi = (pos - rec.p);
-    rec.sqr_dist = rec.wi.sqrNorm();
+    rec.sqr_dist = rec.wi.sqr_norm();
     rec.wi = rec.wi.normalized();
 
     if (pdf)
@@ -54,8 +54,8 @@ Color3f PointEmitter::sample_ray(EmitterQuery &rec,
                                  Float *pdf) const
 {
     rec.p = pos; // point_sample is not used since a point light is a point
-    rec.wi = WarpSpace::sqrToUniSph(dir_sample);
-    *pdf = WarpSpace::sqrToUniSphPdf(rec.wi);
+    rec.wi = WarpSpace::sqr_to_uni_sph(dir_sample);
+    *pdf = WarpSpace::sqr_to_uni_sph_pdf(rec.wi);
     // returns power (this point light actually stores power instead of intensity)
     return I * INV_FOURPI;
 }
@@ -67,7 +67,7 @@ Color3f PointEmitter::evaluate(EmitterQuery &rec) const
     return Color3f(0.f);
 }
 
-Point3f PointEmitter::getCenter() const
+Point3f PointEmitter::get_center() const
 {
     return pos;
 }

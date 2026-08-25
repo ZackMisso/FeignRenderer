@@ -208,7 +208,7 @@ struct Vec2
         return xy[index];
     }
 
-    T sqrNorm() const
+    T sqr_norm() const
     {
         return xy[0] * xy[0] + xy[1] * xy[1];
     }
@@ -278,22 +278,22 @@ struct Vec2
         return vec;
     }
 
-    int maxIndex() const
+    int max_index() const
     {
         return xy[0] > xy[1] ? 0 : 1;
     }
 
-    int minIndex() const
+    int min_index() const
     {
         return xy[0] < xy[1] ? 0 : 1;
     }
 
-    int maxAbsIndex() const
+    int max_abs_index() const
     {
         return std::abs(xy[0]) > std::abs(xy[1]) ? 0 : 1;
     }
 
-    int minAbsIndex() const
+    int min_abs_index() const
     {
         return std::abs(xy[0]) < std::abs(xy[1]) ? 0 : 1;
     }
@@ -538,7 +538,7 @@ struct Vec3
                 xyz[2] != c);
     }
 
-    T sqrNorm() const
+    T sqr_norm() const
     {
         return xyz[0] * xyz[0] +
                xyz[1] * xyz[1] +
@@ -715,14 +715,14 @@ struct Vec3
                        std::abs(xyz[2]));
     }
 
-    bool isnan() const
+    bool is_nan() const
     {
         return std::isnan(xyz[0]) ||
                std::isnan(xyz[1]) ||
                std::isnan(xyz[2]);
     }
 
-    T maxValue() const
+    T max_value() const
     {
         T val = xyz[0];
         if (xyz[1] > val)
@@ -732,7 +732,7 @@ struct Vec3
         return val;
     }
 
-    T minValue() const
+    T min_value() const
     {
         T val = xyz[0];
         if (xyz[1] < val)
@@ -742,7 +742,7 @@ struct Vec3
         return val;
     }
 
-    int maxIndex() const
+    int max_index() const
     {
         if (xyz[0] > xyz[1] &&
             xyz[0] > xyz[2])
@@ -753,7 +753,7 @@ struct Vec3
         return 2;
     }
 
-    int minIndex() const
+    int min_index() const
     {
         if (xyz[0] < xyz[1] &&
             xyz[0] < xyz[2])
@@ -764,7 +764,7 @@ struct Vec3
         return 2;
     }
 
-    int maxAbsIndex() const
+    int max_abs_index() const
     {
         if (std::abs(xyz[0]) > std::abs(xyz[1]) &&
             std::abs(xyz[0]) > std::abs(xyz[2]))
@@ -775,7 +775,7 @@ struct Vec3
         return 2;
     }
 
-    int minAbsIndex() const
+    int min_abs_index() const
     {
         if (std::abs(xyz[0]) < std::abs(xyz[1]) &&
             std::abs(xyz[0]) < std::abs(xyz[2]))
@@ -786,25 +786,18 @@ struct Vec3
         return 2;
     }
 
-    bool isZero() const
+    bool is_zero() const
     {
         return (std::abs(xyz[0]) < 1e-4 &&
                 std::abs(xyz[1]) < 1e-4 &&
                 std::abs(xyz[2]) < 1e-4);
     }
 
-    bool isInf() const
+    bool is_inf() const
     {
         return (std::isinf(xyz[0]) ||
                 std::isinf(xyz[1]) ||
                 std::isinf(xyz[2]));
-    }
-
-    bool isNan() const
-    {
-        return (std::isnan(xyz[0]) ||
-                std::isnan(xyz[1]) ||
-                std::isnan(xyz[2]));
     }
 
     void info() const
@@ -970,7 +963,7 @@ struct Vec4
     //     return vec;
     // }
 
-    T sqrNorm() const
+    T sqr_norm() const
     {
         return xyzw(0) * xyzw(0) +
                xyzw(1) * xyzw(1) +
@@ -1154,7 +1147,7 @@ struct Vec4
         return vec;
     }
 
-    int maxIndex() const
+    int max_index() const
     {
         int max = 0;
         T max_val = xyzw[0];
@@ -1171,7 +1164,7 @@ struct Vec4
         return max;
     }
 
-    int minIndex() const
+    int min_index() const
     {
         int min = 0;
         T min_val = xyzw[0];
@@ -1188,7 +1181,7 @@ struct Vec4
         return min;
     }
 
-    int maxAbsIndex() const
+    int max_abs_index() const
     {
         int max = 0;
         T max_val = std::abs(xyzw[0]);
@@ -1205,7 +1198,7 @@ struct Vec4
         return max;
     }
 
-    int minAbsIndex() const
+    int min_abs_index() const
     {
         int min = 0;
         T min_val = std::abs(xyzw[0]);
@@ -1402,7 +1395,7 @@ struct Matrix4
         n[15] = n33;
     }
 
-    Matrix3<T> topLeftCorner() const
+    Matrix3<T> top_left_corner() const
     {
         Matrix3<T> mat;
 
@@ -1702,7 +1695,7 @@ struct Matrix4
         return mat;
     }
 
-    void setCol(int index, const Vec4<T> &vals)
+    void set_col(int index, const Vec4<T> &vals)
     {
         operator()(index, 0) = vals(0);
         operator()(index, 1) = vals(1);
@@ -1710,7 +1703,7 @@ struct Matrix4
         operator()(index, 3) = vals(3);
     }
 
-    void setRow(int index, const Vec4<T> &vals)
+    void set_row(int index, const Vec4<T> &vals)
     {
         operator()(0, index) = vals(0);
         operator()(1, index) = vals(1);
@@ -1813,9 +1806,9 @@ struct Color3 : public Vec3<T>
 
     bool is_black() const
     {
-        return std::abs(Vec3<T>::operator()(0)) < Epsilon &&
-               std::abs(Vec3<T>::operator()(1)) < Epsilon &&
-               std::abs(Vec3<T>::operator()(2)) < Epsilon;
+        return std::abs(Vec3<T>::operator()(0)) < EPSILON &&
+               std::abs(Vec3<T>::operator()(1)) < EPSILON &&
+               std::abs(Vec3<T>::operator()(2)) < EPSILON;
     }
 };
 
@@ -1877,7 +1870,7 @@ inline std::string STR(Vec2f val)
            ", " + std::to_string(val[1]) + ")";
 }
 
-inline Color3f Exp(Color3f val)
+inline Color3f exponential(Color3f val)
 {
     return Color3f(exp(val(0)),
                    exp(val(1)),

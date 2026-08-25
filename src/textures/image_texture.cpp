@@ -19,7 +19,7 @@ ImageTexture::~ImageTexture()
 }
 
 // this method will always be callsed by fr_texture
-void ImageTexture::preProcess()
+void ImageTexture::pre_process()
 {
     image = Imagef(filename);
 }

@@ -18,7 +18,7 @@ GridObj::GridObj(Vec2i res, TextureNode *terrain_map)
     : ObjMesh(),
       resolution(res), terrain_map(terrain_map) {}
 
-void GridObj::preProcess(bool requires_processing)
+void GridObj::pre_process(bool requires_processing)
 {
     // TODO: incorporate preprocessing check
     // create the underlying mesh
@@ -78,7 +78,7 @@ void GridObj::preProcess(bool requires_processing)
     // this assumes the terrain_map is already in grayscale
     if (terrain_map)
     {
-        terrain_map->texture->preProcess();
+        terrain_map->texture->pre_process();
 
         for (int i = 0; i < vs.size(); ++i)
         {
@@ -92,13 +92,13 @@ void GridObj::preProcess(bool requires_processing)
 
         for (int i = 0; i < tris.size(); ++i)
         {
-            uint32_t i0_vs = tris[i].vsInds(0);
-            uint32_t i1_vs = tris[i].vsInds(1);
-            uint32_t i2_vs = tris[i].vsInds(2);
+            uint32_t i0_vs = tris[i].vs_inds(0);
+            uint32_t i1_vs = tris[i].vs_inds(1);
+            uint32_t i2_vs = tris[i].vs_inds(2);
 
-            uint32_t i0_ns = tris[i].nsInds(0);
-            uint32_t i1_ns = tris[i].nsInds(1);
-            uint32_t i2_ns = tris[i].nsInds(2);
+            uint32_t i0_ns = tris[i].ns_inds(0);
+            uint32_t i1_ns = tris[i].ns_inds(1);
+            uint32_t i2_ns = tris[i].ns_inds(2);
 
             Point3f p0 = vs[i0_vs];
             Point3f p1 = vs[i1_vs];
@@ -106,7 +106,7 @@ void GridObj::preProcess(bool requires_processing)
 
             Normal3f tri_norm = ((p1 - p0) ^ (p2 - p0));
 
-            if (tri_norm.sqrNorm() == 0.f)
+            if (tri_norm.sqr_norm() == 0.f)
             {
                 tri_norm = Normal3f(0.f, 1.f, 0.f);
             }
@@ -129,9 +129,9 @@ void GridObj::preProcess(bool requires_processing)
     }
 
     // apply any geometry shader to the underlying mesh
-    if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
+    if (geom_shader->shader && geom_shader->shader->is_valid(OBJ_MESH))
     {
-        geomShader->shader->evaluate((void *)this);
+        geom_shader->shader->evaluate((void *)this);
     }
 
     // surface area information is typically only required for

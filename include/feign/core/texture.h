@@ -23,7 +23,7 @@ public:
     virtual Color3f evaluate(const Point3f &point);
     virtual Imagef evaluate_image(int width, int height);
 
-    virtual void preProcess();
+    virtual void pre_process();
 };
 
 class ImageTexture : public Texture
@@ -45,7 +45,7 @@ public:
     ~ImageTexture();
 
     virtual Color3f evaluate(const Point2f &point);
-    virtual void preProcess();
+    virtual void pre_process();
 
     Imagef image;
 
@@ -77,7 +77,7 @@ public:
                Vec3f y);
 
     virtual Color3f evaluate(const Point2f &point);
-    virtual void preProcess();
+    virtual void pre_process();
 
     Vec3f amp;
     Vec3f freq;
@@ -98,7 +98,7 @@ public:
     NoiseTexture(std::string filename);
 
     virtual Color3f evaluate(const Point2f &point);
-    virtual void preProcess();
+    virtual void pre_process();
 
     std::string filename;
 

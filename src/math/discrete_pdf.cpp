@@ -6,7 +6,6 @@
  * acknowledgement is provided to the original author(s).
  **/
 
-
 #include <feign/math/discrete_pdf.h>
 
 ///////////////////////
@@ -48,14 +47,13 @@ void DiscretePDF1D::convert_pdf_to_cdf()
         total += pdf[i];
     }
 
-    assert(std::abs(total - 1.0) < Epsilon);
+    assert(std::abs(total - 1.0) < EPSILON);
 
     cdf.push_back(total);
 }
 
 void DiscretePDF1D::normalize()
 {
-    // assert(false);
     sum = cdf[cdf.size() - 1];
     normalization = 1.0 / sum;
 
@@ -118,13 +116,11 @@ void DiscretePDF1D::set_pmf(int entry, Float value)
 
 Float DiscretePDF1D::operator[](int entry) const
 {
-    // LOG("AHHH");
     return cdf[entry + 1] - cdf[entry];
 }
 
 Float &DiscretePDF1D::operator[](int entry)
 {
-    // LOG("AHHH");
     return cdf[entry];
 }
 

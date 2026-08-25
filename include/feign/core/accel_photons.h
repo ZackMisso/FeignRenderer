@@ -52,8 +52,8 @@ public:
                        int count) = 0;
 
     // test functions
-    virtual bool nearPhoton(Point3f pt,
-                            Float radius) const { return false; }
+    virtual bool near_photon(Point3f pt,
+                             Float radius) const { return false; }
 
     // evaluate all photons in a given radius
     virtual void eval(MaterialClosure &closure,
@@ -88,13 +88,13 @@ public:
                        int count);
 
     // used for debugging
-    virtual bool nearPhoton(Point3f pt, Float radius) const;
+    virtual bool near_photon(Point3f pt, Float radius) const;
 
     // utility methods
-    void maybeAddPhoton(std::vector<std::pair<Float, int> > &closest_k,
-                        const Point3f &pt,
-                        int k,
-                        int photon) const;
+    void maybe_add_photon(std::vector<std::pair<Float, int> > &closest_k,
+                         const Point3f &pt,
+                         int k,
+                         int photon) const;
 
     // evaluate all photons in a given radius
     virtual void eval(MaterialClosure &closure,
@@ -141,12 +141,12 @@ public:
 
         BVHNode *traverse(Point3f point);
 
-        void getAllPhotonsInRadius(std::vector<Photon *> &photons,
+        void get_all_photons_in_radius(std::vector<Photon *> &photons,
+                                       Point3f point,
+                                       Float radius) const;
+        void get_closest_k_photons(std::vector<Photon *> &photons,
                                    Point3f point,
-                                   Float radius) const;
-        void getClosestKPhotons(std::vector<Photon *> &photons,
-                                Point3f point,
-                                int k) const;
+                                   int k) const;
 
         BBox3f bounds;
         std::vector<Photon *> photons;
@@ -171,7 +171,7 @@ public:
                        int count);
 
     // used for debugging
-    virtual bool nearPhoton(Point3f pt, Float radius) const;
+    virtual bool near_photon(Point3f pt, Float radius) const;
 
     // evaluate all photons in a given radius
     virtual void eval(MaterialClosure &closure,

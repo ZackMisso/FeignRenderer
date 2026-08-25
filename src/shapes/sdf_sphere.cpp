@@ -27,7 +27,7 @@ Float SDFSphere::evaluate(Point3f pt) const
     return (pt - center).norm() - radius;
 }
 
-BBox3f SDFSphere::boundingBox() const
+BBox3f SDFSphere::bounding_box() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     Float diameter = 2.0 * radius;

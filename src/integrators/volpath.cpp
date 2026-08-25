@@ -18,9 +18,9 @@ VolPath_Integrator::VolPath_Integrator(FilterNode *filter,
                                        Integrator::Params *params)
     : Integrator(filter, params) {}
 
-void VolPath_Integrator::preProcess(const Scene *scene, Sampler *sampler)
+void VolPath_Integrator::pre_process(const Scene *scene, Sampler *sampler)
 {
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 }
 
 Color3f VolPath_Integrator::Li(const Scene *scene,
@@ -48,7 +48,7 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
     // TODO: in the future support different bounce #'s by path types
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
-        if (beta.isZero())
+        if (beta.is_zero())
             break;
 
         Intersection its;
@@ -65,7 +65,7 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
             beta *= closure.media->sample(ray, sampler, medium_closure);
 
-            if (medium_closure.handleScatter())
+            if (medium_closure.handle_scatter())
             {
                 its.p = ray(medium_closure.sampled_t);
 
@@ -88,7 +88,7 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
                 Vector3f wo = -ray.dir;
                 Vector3f wi;
-                Float phase = closure.media->sample_phase(wo, wi, sampler->next2D());
+                Float phase = closure.media->sample_phase(wo, wi, sampler->next_2d());
 
                 for (int i = 0; i < closure.shadow_rays.size(); ++i)
                 {
@@ -105,18 +105,18 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
                 ray = Ray3f(ray(medium_closure.sampled_t),
                             wi.normalized(),
-                            Epsilon,
+                            EPSILON,
                             std::numeric_limits<Float>::infinity(),
                             ray.depth + 1);
 
                 closure.last_spec = closure.is_specular;
                 closure.is_specular = false;
 
-                Float rr_prob = std::min(beta.maxValue(), ONE);
+                Float rr_prob = std::min(beta.max_value(), ONE);
 
                 Li += closure.nee;
 
-                if (sampler->next1D() > rr_prob)
+                if (sampler->next_1d() > rr_prob)
                     break;
 
                 beta /= rr_prob;
@@ -135,8 +135,8 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
             if (boundry)
             {
                 // TODO: check if you are entering or exiting
-                closure.wi = its.toLocal(-ray.dir);
-                if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+                closure.wi = its.to_local(-ray.dir);
+                if (CoordinateFrame::cos_theta(closure.wi) <= 0)
                 {
                     closure.media = (boundry->outside) ? closure.media = boundry->outside->media : nullptr;
                 }
@@ -148,7 +148,7 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
 
             ray = Ray3f(its.p,
                         ray.dir,
-                        Epsilon,
+                        EPSILON,
                         std::numeric_limits<Float>::infinity(),
                         ray.depth);
             bounces--;
@@ -156,11 +156,11 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
             continue;
         }
 
-        const MaterialShader *shader = scene->getShapeMaterialShader(its);
+        const MaterialShader *shader = scene->get_shape_material_shader(its);
 
         closure.its = &its;
         closure.ray = &ray;
-        closure.wi = its.toLocal(-ray.dir);
+        closure.wi = its.to_local(-ray.dir);
         closure.emission = COLOR_BLACK;
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
@@ -171,17 +171,17 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
         // accumulate the shadow rays
         closure.accumulate_shadow_rays(shader);
 
-        Float rr_prob = std::min(beta.maxValue(), ONE);
+        Float rr_prob = std::min(beta.max_value(), ONE);
 
         // random termination
-        if (sampler->next1D() > rr_prob)
+        if (sampler->next_1d() > rr_prob)
         {
             Li += beta * (closure.emission + closure.nee);
             break;
         }
 
         // sample the next path
-        closure.wi = its.toLocal(-ray.dir);
+        closure.wi = its.to_local(-ray.dir);
         shader->sample(closure);
 
         if (closure.pdf == 0.f)
@@ -191,19 +191,19 @@ Color3f VolPath_Integrator::Li(const Scene *scene,
         }
 
         ray = Ray3f(its.p,
-                    its.toWorld(closure.wo),
-                    Epsilon,
+                    its.to_world(closure.wo),
+                    EPSILON,
                     std::numeric_limits<Float>::infinity(),
                     ray.depth + 1);
 
-        Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < ZERO)
-            cosTerm = -cosTerm;
+        Float cos_term = its.s_frame.n % ray.dir;
+        if (cos_term < ZERO)
+            cos_term = -cos_term;
         if (closure.is_specular)
-            cosTerm = ONE;
+            cos_term = ONE;
 
         Li += beta * (closure.nee + closure.emission);
-        beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+        beta *= closure.albedo * cos_term / (closure.pdf * rr_prob);
     }
 
     return Li;

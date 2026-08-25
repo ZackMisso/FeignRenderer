@@ -20,10 +20,10 @@ Color3f AnalyticalTrans_Samp::sample(Ray3f ray,
     throw new NotImplementedException("analytic samp non-exp");
     return 0.f;
 #else
-    Float transmittance = sampler->next1D();
+    Float transmittance = sampler->next_1d();
     Float goal_dens = -log(transmittance);
 
-    Float dense = (density->D(ray((closure.t_max - closure.t_min) / 2.f + closure.t_min)) * density->sigma_t).max();
+    Float dense = (density->eval(ray((closure.t_max - closure.t_min) / 2.f + closure.t_min)) * density->sigma_t).max();
     Float dist = goal_dens / dense;
     closure.sampled_t = closure.t_min + dist;
 

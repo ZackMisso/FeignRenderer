@@ -22,27 +22,27 @@ public:
     virtual ~TransFunc() {}
 
     Color3f eval(Color3f tau,
-                 bool startOnSurface,
-                 bool endOnSurface) const;
+                 bool start_on_surface,
+                 bool end_on_surface) const;
 
-    Float sample(Sampler *sampler, bool startOnSurface) const;
+    Float sample(Sampler *sampler, bool start_on_surface) const;
 
-    inline Color3f surfaceProbability(Color3f tau, bool startOnSurface) const;
-    inline Color3f mediumPdf(Color3f tau, bool startOnSurface) const;
+    inline Color3f surface_probability(Color3f tau, bool start_on_surface) const;
+    inline Color3f medium_pdf(Color3f tau, bool start_on_surface) const;
 
-    virtual bool isDirac() const { return false; }
+    virtual bool is_delta() const { return false; }
 
-    virtual Float effectiveSigma() const { return sigmaBar(); }
+    virtual Float effective_sigma() const { return sigma_bar(); }
 
-    virtual Color3f surfaceSurface(Color3f tau) const = 0;
-    virtual Color3f surfaceMedium(Color3f tau) const = 0;
-    virtual Color3f mediumSurface(Color3f tau) const = 0;
-    virtual Color3f mediumMedium(Color3f tau) const = 0;
+    virtual Color3f surface_surface(Color3f tau) const = 0;
+    virtual Color3f surface_medium(Color3f tau) const = 0;
+    virtual Color3f medium_surface(Color3f tau) const = 0;
+    virtual Color3f medium_medium(Color3f tau) const = 0;
 
-    virtual Float sigmaBar() const = 0;
+    virtual Float sigma_bar() const = 0;
 
-    virtual Float sampleSurface(Sampler *sampler) const = 0;
-    virtual Float sampleMedium(Sampler *sampler) const = 0;
+    virtual Float sample_surface(Sampler *sampler) const = 0;
+    virtual Float sample_medium(Sampler *sampler) const = 0;
 };
 
 /////////////////////////////////////////////////
@@ -53,25 +53,25 @@ class LinearTrans : public TransFunc
 public:
     struct Params
     {
-        Params() : maxT(1.f) {}
-        Params(Float maxT) : maxT(maxT) {}
+        Params() : max_t(1.f) {}
+        Params(Float max_t) : max_t(max_t) {}
 
-        Float maxT;
+        Float max_t;
     };
 
     LinearTrans(Float maxT);
 
-    virtual Color3f surfaceSurface(Color3f tau) const override final;
-    virtual Color3f surfaceMedium(Color3f tau) const override final;
-    virtual Color3f mediumSurface(Color3f tau) const override final;
-    virtual Color3f mediumMedium(Color3f tau) const override final;
+    virtual Color3f surface_surface(Color3f tau) const override final;
+    virtual Color3f surface_medium(Color3f tau) const override final;
+    virtual Color3f medium_surface(Color3f tau) const override final;
+    virtual Color3f medium_medium(Color3f tau) const override final;
 
-    virtual Float sigmaBar() const override final;
+    virtual Float sigma_bar() const override final;
 
-    virtual Float sampleSurface(Sampler *sampler) const override final;
-    virtual Float sampleMedium(Sampler *sampler) const override final;
+    virtual Float sample_surface(Sampler *sampler) const override final;
+    virtual Float sample_medium(Sampler *sampler) const override final;
 
-    Float maxT;
+    Float max_t;
 };
 /////////////////////////////////////////////////
 
@@ -81,15 +81,15 @@ public:
 class ExpTrans : public TransFunc
 {
 public:
-    virtual Color3f surfaceSurface(Color3f tau) const override final;
-    virtual Color3f surfaceMedium(Color3f tau) const override final;
-    virtual Color3f mediumSurface(Color3f tau) const override final;
-    virtual Color3f mediumMedium(Color3f tau) const override final;
+    virtual Color3f surface_surface(Color3f tau) const override final;
+    virtual Color3f surface_medium(Color3f tau) const override final;
+    virtual Color3f medium_surface(Color3f tau) const override final;
+    virtual Color3f medium_medium(Color3f tau) const override final;
 
-    virtual Float sigmaBar() const override final;
+    virtual Float sigma_bar() const override final;
 
-    virtual Float sampleSurface(Sampler *sampler) const override final;
-    virtual Float sampleMedium(Sampler *sampler) const override final;
+    virtual Float sample_surface(Sampler *sampler) const override final;
+    virtual Float sample_medium(Sampler *sampler) const override final;
 };
 /////////////////////////////////////////////////
 
@@ -101,17 +101,17 @@ class DavisTrans : public TransFunc
 public:
     DavisTrans(Float h, Float c);
 
-    virtual Color3f surfaceSurface(Color3f tau) const override final;
-    virtual Color3f surfaceMedium(Color3f tau) const override final;
-    virtual Color3f mediumSurface(Color3f tau) const override final;
-    virtual Color3f mediumMedium(Color3f tau) const override final;
+    virtual Color3f surface_surface(Color3f tau) const override final;
+    virtual Color3f surface_medium(Color3f tau) const override final;
+    virtual Color3f medium_surface(Color3f tau) const override final;
+    virtual Color3f medium_medium(Color3f tau) const override final;
 
-    virtual Float sigmaBar() const override final;
+    virtual Float sigma_bar() const override final;
 
-    virtual Float sampleSurface(Sampler *sampler) const override final;
-    virtual Float sampleMedium(Sampler *sampler) const override final;
+    virtual Float sample_surface(Sampler *sampler) const override final;
+    virtual Float sample_medium(Sampler *sampler) const override final;
 
-    Float computeAlpha(Float tau) const;
+    Float compute_alpha(Float tau) const;
 
     Float beta;
     Float c;

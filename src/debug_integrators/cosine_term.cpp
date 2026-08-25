@@ -21,11 +21,11 @@ CosineTermIntegrator::CosineTermIntegrator(FilterNode *filter,
 {
 }
 
-void CosineTermIntegrator::preProcess(const Scene *scene, Sampler *sampler)
+void CosineTermIntegrator::pre_process(const Scene *scene, Sampler *sampler)
 {
     CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }

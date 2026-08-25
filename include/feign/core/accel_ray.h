@@ -30,9 +30,9 @@ public:
 
     virtual void clear() = 0;
     virtual void build() = 0;
-    virtual void preProcess() = 0;
-    virtual void addShape(Shape *mesh){};
-    virtual void addSDFShape(SDFShape *mesh){};
+    virtual void pre_process() = 0;
+    virtual void add_shape(Shape *mesh){};
+    virtual void add_sdf_shape(SDFShape *mesh){};
 
     virtual bool intersect(const Ray3f &scene_ray, Intersection &its) const = 0;
 };
@@ -47,9 +47,9 @@ public:
     EmbreeAccel();
     ~EmbreeAccel();
 
-    virtual void preProcess();
+    virtual void pre_process();
     virtual void clear();
-    virtual void addShape(Shape *mesh);
+    virtual void add_shape(Shape *mesh);
     virtual void build();
     virtual bool intersect(const Ray3f &scene_ray, Intersection &its) const;
 
@@ -111,9 +111,9 @@ protected:
 /////////////////////////////////////////////////
 class SDFAccel : public RayAccel
 {
-    virtual void preProcess();
+    virtual void pre_process();
     virtual void clear();
-    virtual void addSDFShape(SDFShape *mesh);
+    virtual void add_sdf_shape(SDFShape *mesh);
     virtual void build();
     virtual bool intersect(const Ray3f &scene_ray, Intersection &its) const;
 

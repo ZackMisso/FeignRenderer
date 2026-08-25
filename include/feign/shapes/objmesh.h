@@ -58,41 +58,41 @@ public:
     uint32_t num_tris() const;
     uint32_t num_verts() const;
 
-    float surfaceArea() const;
+    float surface_area() const;
     virtual Float surface_area(int primitive) const;
     float pdf(uint32_t index) const;
 
     virtual bool intersect(const Ray3f &scene_ray, Intersection &its) const;
     bool intersect(uint32_t tri, const Ray3f &ray, Intersection &its) const;
 
-    virtual void completeIntersectionInfo(Intersection &its) const;
+    virtual void complete_intersection_info(Intersection &its) const;
 
-    virtual void addShapeToScene(RTCScene scene, RTCDevice device);
+    virtual void add_shape_to_scene(RTCScene scene, RTCDevice device);
 
-    void parseFromFile(const std::string &filename);
+    void parse_from_file(const std::string &filename);
 
-    virtual uint32_t primitiveCount() const;
+    virtual uint32_t primitive_count() const;
 
-    virtual BBox3f boundingBox() const;
-    virtual BBox3f boundingBox(uint32_t tri) const;
+    virtual BBox3f bounding_box() const;
+    virtual BBox3f bounding_box(uint32_t tri) const;
     virtual Point3f compute_centroid() const;
     virtual Point3f centroid() const;
     virtual Point3f centroid(uint32_t tri) const;
 
-    virtual void preProcess(bool requires_processing = false);
+    virtual void pre_process(bool requires_processing = false);
 
-    void infoDump();
+    void info_dump();
 
     // const BBox3f& getBoundingBox() const;
     // TODO: bounding sphere
-    const std::vector<Triangle> &getTris() const;
-    const std::vector<Point3f> &getVerts() const;
-    const std::vector<Normal3f> &getNorms() const;
-    const std::vector<Vec2f> &getUVs() const;
+    const std::vector<Triangle> &get_tris() const;
+    const std::vector<Point3f> &get_verts() const;
+    const std::vector<Normal3f> &get_norms() const;
+    const std::vector<Vec2f> &get_uvs() const;
 
-    void setVerts(std::vector<Point3f> &param);
-    void setNorms(std::vector<Normal3f> &param);
-    void setUVs(std::vector<Vec2f> &param);
+    void set_verts(std::vector<Point3f> &param);
+    void set_norms(std::vector<Normal3f> &param);
+    void set_uvs(std::vector<Vec2f> &param);
 
 protected:
     std::string filename;

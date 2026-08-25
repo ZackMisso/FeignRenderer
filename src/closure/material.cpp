@@ -41,7 +41,7 @@ MaterialClosure::MaterialClosure(Sampler *sampler,
       first_diffuse_evals(1),
       last_event(VERTEX_DIFFUSE)
 {
-    wi = its->toLocal(-ray->dir);
+    wi = its->to_local(-ray->dir);
     media = nullptr;
 }
 

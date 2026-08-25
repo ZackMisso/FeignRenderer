@@ -6,6 +6,7 @@
  * acknowledgement is provided to the original author(s).
  **/
 
+// future zack: wtf was this used for again????
 
 #pragma once
 
@@ -36,7 +37,7 @@ public:
 
     ~GridObj() {}
 
-    virtual void preProcess(bool requires_processing = false);
+    virtual void pre_process(bool requires_processing = false);
 
     Vec2i resolution;
     TextureNode *terrain_map;

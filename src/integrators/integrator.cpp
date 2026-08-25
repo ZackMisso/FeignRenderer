@@ -14,13 +14,13 @@
 
 FEIGN_BEGIN()
 
-void Integrator::preProcess(const Scene *scene, Sampler *sampler)
+void Integrator::pre_process(const Scene *scene, Sampler *sampler)
 {
     if (!filter)
         LOG("filter node never created");
     if (!filter->filter)
         LOG("filter object never created");
-    filter->filter->preProcess();
+    filter->filter->pre_process();
 }
 
 // TODO: multithreaded implementation still needs to get clocking support implemented
@@ -45,31 +45,31 @@ void Integrator::render(const Scene *scene,
     Imagef filter_weights = Imagef(image.width(), image.height());
     filter_weights.clear();
 
-    for (int k = 0; k < sampler->getSampleCnt(); ++k)
+    for (int k = 0; k < sampler->get_sample_cnt(); ++k)
     {
-        for (int i = 0; i < camera->getFilmSize()[1]; ++i)
+        for (int i = 0; i < camera->get_film_size()[1]; ++i)
         {
-            for (int j = 0; j < camera->getFilmSize()[0]; ++j)
+            for (int j = 0; j < camera->get_film_size()[0]; ++j)
             {
                 CLOCKER_START_ONE(ClockerType::CAMERA_RAY)
 
-                Point2f pixelSample = Point2f(j, i) + sampler->next2D();
-                Point2f apertureSample = sampler->next2D();
+                Point2f pixel_sample = Point2f(j, i) + sampler->next_2d();
+                Point2f aperature_sample = sampler->next_2d();
 
                 Ray3f ray;
-                Color3f radiance = camera->sampleRay(ray, pixelSample, apertureSample);
+                Color3f radiance = camera->sample_ray(ray, pixel_sample, aperature_sample);
 
                 CLOCKER_START_STOP_ONE(ClockerType::INTEGRATOR,
                                        ClockerType::CAMERA_RAY)
 
                 radiance *= Li(scene, sampler, ray);
 
-                if (radiance.isNan())
+                if (radiance.is_nan())
                 {
                     LOG("nan estimate at: " + STR(i) + " " + STR(j));
                 }
 
-                if (radiance.isInf())
+                if (radiance.is_inf())
                 {
                     LOG("inf estimate at: " + STR(i) + " " + STR(j));
                 }
@@ -77,11 +77,11 @@ void Integrator::render(const Scene *scene,
                 CLOCKER_START_STOP_ONE(ClockerType::FILTER,
                                        ClockerType::INTEGRATOR)
 
-                BBox2f filter_bounds = BBox2f(pixelSample - filter->filter->getSize(),
-                                              pixelSample + filter->filter->getSize());
+                BBox2f filter_bounds = BBox2f(pixel_sample - filter->filter->get_size(),
+                                              pixel_sample + filter->filter->get_size());
 
                 filter_bounds.clip(Point2f(0.0, 0.0),
-                                   Point2f(camera->getFilmSize()[0] - 1, camera->getFilmSize()[1] - 1));
+                                   Point2f(camera->get_film_size()[0] - 1, camera->get_film_size()[1] - 1));
 
                 for (int fi = std::floor(filter_bounds.min(1));
                      fi <= std::floor(filter_bounds.max(1)); ++fi)
@@ -90,7 +90,7 @@ void Integrator::render(const Scene *scene,
                          fj <= std::floor(filter_bounds.max(0)); ++fj)
                     {
                         Float weight = filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
-                                                                pixelSample);
+                                                                pixel_sample);
 
                         image(fj, fi, 0) += weight * radiance(0);
                         image(fj, fi, 1) += weight * radiance(1);

@@ -13,32 +13,34 @@
 
 FEIGN_BEGIN()
 
+// TODO: maybe redo all of this to also return the pdf with the sample methods???
+
 class WarpSpace
 {
 public:
-    static Point2f sqrToUniDisk(const Point2f &sample);
-    static Float sqrToUniDiskPdf(const Point2f &p);
+    static Point2f sqr_to_uni_disk(const Point2f &sample);
+    static Float sqr_to_uni_disk_pdf(const Point2f &p);
 
-    static Vector3f sqrToUniSph(const Point2f &sample);
-    static Float sqrToUniSphPdf(const Vector3f &v);
+    static Vector3f sqr_to_uni_sph(const Point2f &sample);
+    static Float sqr_to_uni_sph_pdf(const Vector3f &v);
 
-    static Vector3f sqrToUniSphCap(const Point2f &sample, Float cosThetaMax);
-    static Float sqrToUniSphCapPdf(const Vector3f &v, Float cosThetaMax);
+    static Vector3f sqr_to_uni_sph_cap(const Point2f &sample, Float cos_theta_max);
+    static Float sqr_to_uni_sph_cap_pdf(const Vector3f &v, Float cos_theta_max);
 
-    static Vector3f sqrToUniHemi(const Point2f &sample);
-    static Float sqrToUniHemiPdf(const Vector3f &v);
+    static Vector3f sqr_to_uni_hemi(const Point2f &sample);
+    static Float sqr_to_uni_hemi_pdf(const Vector3f &v);
 
-    static Vector3f sqrToCosHemi(const Point2f &sample);
-    static Float sqrToCosHemiPdf(const Vector3f &v);
+    static Vector3f sqr_to_cos_hemi(const Point2f &sample);
+    static Float sqr_to_cos_hemi_pdf(const Vector3f &v);
 
-    static Vector3f sqrToCosPowHemi(const Point2f &sample, Float n);
-    static Float sqrToCosPowHemiPdf(const Vector3f &v, Float n);
+    static Vector3f sqr_to_cos_pow_hemi(const Point2f &sample, Float n);
+    static Float sqr_to_cos_pow_hemi_pdf(const Vector3f &v, Float n);
 
-    static Point2f sqrToUniTri(const Point2f &sample);
-    static Float sqrToUniTriPdf(const Point2f &sample);
+    static Point2f sqr_to_uni_tri(const Point2f &sample);
+    static Float sqr_to_uni_tri_pdf(const Point2f &sample);
 
-    static Vector3f sqrToBeck(const Point2f &sample, Float alpha);
-    static Float sqrToBeckPdf(const Vector3f &m, Float alpha);
+    static Vector3f sqr_to_beck(const Point2f &sample, Float alpha);
+    static Float sqr_to_beck_pdf(const Vector3f &m, Float alpha);
 };
 
 FEIGN_END()

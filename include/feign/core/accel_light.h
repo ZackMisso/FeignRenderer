@@ -28,15 +28,15 @@ public:
     virtual void build(const BBox3f &scene_bounds,
                        const std::vector<Emitter *> &emitters) = 0;
 
-    virtual void sampleEmitter(Point3f pos,
-                               Sampler *sampler,
-                               int &index,
-                               Float &pdf) = 0;
-
-    virtual void sampleEmitters(Point3f pos,
+    virtual void sample_emitter(Point3f pos,
                                 Sampler *sampler,
-                                std::vector<int> &indices,
-                                std::vector<Float> &pdf) = 0;
+                                int &index,
+                                Float &pdf) = 0;
+
+    virtual void sample_emitters(Point3f pos,
+                                 Sampler *sampler,
+                                 std::vector<int> &indices,
+                                 std::vector<Float> &pdf) = 0;
 };
 /////////////////////////////////////////////////
 
@@ -52,15 +52,15 @@ public:
     virtual void build(const BBox3f &scene_bounds,
                        const std::vector<Emitter *> &emitters);
 
-    virtual void sampleEmitter(Point3f pos,
-                               Sampler *sampler,
-                               int &index,
-                               Float &pdf);
-
-    virtual void sampleEmitters(Point3f pos,
+    virtual void sample_emitter(Point3f pos,
                                 Sampler *sampler,
-                                std::vector<int> &indices,
-                                std::vector<Float> &pdf);
+                                int &index,
+                                Float &pdf);
+
+    virtual void sample_emitters(Point3f pos,
+                                 Sampler *sampler,
+                                 std::vector<int> &indices,
+                                 std::vector<Float> &pdf);
 
 protected:
     int number_of_emitters;
@@ -102,15 +102,15 @@ public:
     virtual void build(const BBox3f &scene_bounds,
                        const std::vector<Emitter *> &emitters);
 
-    virtual void sampleEmitter(Point3f pos,
-                               Sampler *sampler,
-                               int &index,
-                               Float &pdf);
-
-    virtual void sampleEmitters(Point3f pos,
+    virtual void sample_emitter(Point3f pos,
                                 Sampler *sampler,
-                                std::vector<int> &indices,
-                                std::vector<Float> &pdf);
+                                int &index,
+                                Float &pdf);
+
+    virtual void sample_emitters(Point3f pos,
+                                 Sampler *sampler,
+                                 std::vector<int> &indices,
+                                 std::vector<Float> &pdf);
 
 protected:
     SpatialLightBounds *bounds;

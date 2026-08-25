@@ -30,16 +30,14 @@ void RenderTile::evaluate(RenderTile *tile,
     {
         for (int j = tile->min_x; j < tile->max_x; ++j)
         {
-            for (int k = 0; k < sampler->getSampleCnt(); ++k)
+            for (int k = 0; k < sampler->get_sample_cnt(); ++k)
             {
                 // TODO: create custom logger interface
-                // if (tile->tile_index == 475) std::cout << "sample: " << k << std::endl;
-                // if (tile->tile_index == 475) std::cout << "i: " << i << " j: " << j << std::endl;
-                Point2f pixelSample = Point2f(j, i) + sampler->next2D();
-                Point2f apertureSample = sampler->next2D();
+                Point2f pixel_sample = Point2f(j, i) + sampler->next_2d();
+                Point2f aperature_sample = sampler->next_2d();
 
                 Ray3f ray;
-                Color3f rad = camera->sampleRay(ray, pixelSample, apertureSample);
+                Color3f rad = camera->sample_ray(ray, pixel_sample, aperature_sample);
 
                 // TODO: get multi-threaded clocking working
                 // #if CLOCKING
@@ -53,8 +51,8 @@ void RenderTile::evaluate(RenderTile *tile,
                 //     Clocker::endClock("integrator");
                 // #endif
 
-                BBox2f filter_bounds = BBox2f(pixelSample - integrator->filter->filter->getSize(),
-                                              pixelSample + integrator->filter->filter->getSize());
+                BBox2f filter_bounds = BBox2f(pixel_sample - integrator->filter->filter->get_size(),
+                                              pixel_sample + integrator->filter->filter->get_size());
 
                 filter_bounds.clip(Point2f(0, 0),
                                    Point2f(image->width() - 1, image->height() - 1));
@@ -71,7 +69,7 @@ void RenderTile::evaluate(RenderTile *tile,
                          fj <= std::floor(filter_bounds.max(0)); ++fj)
                     {
                         Float weight = integrator->filter->filter->evaluate(Point2f(fj + 0.5, fi + 0.5) -
-                                                                            pixelSample);
+                                                                            pixel_sample);
 
                         int index = fi * image->width() + fj;
 
@@ -169,7 +167,7 @@ void RenderPool::evaluate_pool(const Scene *scene,
         RenderTile *tile = tiles_to_do[tiles_to_do.size() - 1];
         tiles_to_do.pop_back();
         active_tiles[i] = tile;
-        Sampler *tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+        Sampler *tile_sampler = sampler->copy(sampler->next_1d() * 100000000);
         threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                            tile,
                                            scene,
@@ -194,7 +192,7 @@ void RenderPool::evaluate_pool(const Scene *scene,
                     RenderTile *tile = tiles_to_do[tiles_to_do.size() - 1];
                     tiles_to_do.pop_back();
                     active_tiles[i] = tile;
-                    Sampler *tile_sampler = sampler->copy(sampler->next1D() * 100000000);
+                    Sampler *tile_sampler = sampler->copy(sampler->next_1d() * 100000000);
                     threads[i] = std::thread(std::bind(&RenderTile::evaluate,
                                                        tile,
                                                        scene,

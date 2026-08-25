@@ -9,3 +9,4 @@
 #pragma once
 
 // TODO: file should contain methods for interpolating variables
+// TODO: future zack: redesign this maybe???

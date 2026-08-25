@@ -22,9 +22,9 @@ struct UnitTestData
           image_error(0.f),
           threshold(1.f)
     {
-    #if CLOCKING
+#if CLOCKING
         clockings = ClockerResults();
-    #endif
+#endif
     }
 
     UnitTestData(std::string test_path,
@@ -36,12 +36,12 @@ struct UnitTestData
           image_error(0.f),
           threshold(1.f)
     {
-    #if CLOCKING
+#if CLOCKING
         clockings = ClockerResults();
-    #endif
+#endif
     }
 
-    void logReport() const;
+    void log_report() const;
     bool does_it_fail() const { return image_error > threshold; }
 
 #if CLOCKING

@@ -19,24 +19,24 @@ Diffuse::Diffuse(Color3f albedo)
 
 void Diffuse::sample(MaterialClosure &closure) const
 {
-    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+    if (CoordinateFrame::cos_theta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f, 0.f, 0.f);
         closure.pdf = 0.f;
     }
     else
     {
-        closure.wo = WarpSpace::sqrToCosHemi(closure.sampler->next2D());
+        closure.wo = WarpSpace::sqr_to_cos_hemi(closure.sampler->next_2d());
         closure.eta = 1.0f;
         closure.albedo = albedo * INV_PI;
-        closure.pdf = INV_PI * CoordinateFrame::cosTheta(closure.wo);
+        closure.pdf = INV_PI * CoordinateFrame::cos_theta(closure.wo);
     }
 }
 
 void Diffuse::evaluate(MaterialClosure &closure) const
 {
-    if (CoordinateFrame::cosTheta(closure.wi) <= 0 ||
-        CoordinateFrame::cosTheta(closure.wo) <= 0)
+    if (CoordinateFrame::cos_theta(closure.wi) <= 0 ||
+        CoordinateFrame::cos_theta(closure.wo) <= 0)
     {
         closure.albedo = Color3f(0.f);
     }

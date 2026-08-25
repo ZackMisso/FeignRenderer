@@ -21,64 +21,64 @@ Independent::Independent(uint32_t seed,
 {
 }
 
-void Independent::preProcess()
+void Independent::pre_process()
 {
-    currentSample = 0;
+    current_sample = 0;
 
-    reseed(sampleSeed);
+    reseed(sample_seed);
 }
 
 void Independent::reseed()
 {
-    rng = pcg32(sampleSeed, 1);
+    rng = pcg32(sample_seed, 1);
 }
 
 void Independent::reseed(uint32_t seed)
 {
-    sampleSeed = seed;
-    rng = pcg32(sampleSeed, 1);
+    sample_seed = seed;
+    rng = pcg32(sample_seed, 1);
 }
 
-Float Independent::next1D()
+Float Independent::next_1d()
 {
     return rng.nextFloat();
 }
 
-Vec2f Independent::next2D()
+Vec2f Independent::next_2d()
 {
-    return Vec2f(next1D(), next1D());
+    return Vec2f(next_1d(), next_1d());
 }
 
-Vec3f Independent::next3D()
+Vec3f Independent::next_3d()
 {
-    return Vec3f(next1D(), next1D(), next1D());
+    return Vec3f(next_1d(), next_1d(), next_1d());
 }
 
-Vec4f Independent::next4D()
+Vec4f Independent::next_4d()
 {
-    return Vec4f(next1D(), next1D(), next1D(), next1D());
+    return Vec4f(next_1d(), next_1d(), next_1d(), next_1d());
 }
 
 // is this copy architecture really desired?
 Sampler *Independent::copy()
 {
-    Independent *newSamp = new Independent();
-    newSamp->reseed(sampleSeed);
+    Independent *new_samp = new Independent();
+    new_samp->reseed(sample_seed);
 
-    return newSamp;
+    return new_samp;
 }
 
 Sampler *Independent::copy(uint32_t seed)
 {
-    Independent *newSamp = new Independent(seed, sampleCnt);
-    newSamp->reseed(seed);
+    Independent *new_samp = new Independent(seed, sample_cnt);
+    new_samp->reseed(seed);
 
-    return newSamp;
+    return new_samp;
 }
 
-void Independent::nextSample()
+void Independent::next_sample()
 {
-    currentSample++;
+    current_sample++;
 }
 
 FEIGN_END()

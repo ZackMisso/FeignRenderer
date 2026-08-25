@@ -368,10 +368,10 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
-    virtual BBox3f boundingBox() const;
+    virtual BBox3f bounding_box() const;
     virtual Point3f centroid() const;
 
-    virtual uint32_t primitiveCount() const { return 1; }
+    virtual uint32_t primitive_count() const { return 1; }
 
 protected:
     Point3f center;
@@ -420,10 +420,10 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
-    virtual BBox3f boundingBox() const;
+    virtual BBox3f bounding_box() const;
     virtual Point3f centroid() const;
 
-    virtual uint32_t primitiveCount() const { return 1; }
+    virtual uint32_t primitive_count() const { return 1; }
 
 protected:
     Point3f center;
@@ -468,10 +468,10 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
-    virtual BBox3f boundingBox() const;
+    virtual BBox3f bounding_box() const;
     virtual Point3f centroid() const;
 
-    virtual uint32_t primitiveCount() const { return 1; }
+    virtual uint32_t primitive_count() const { return 1; }
 
 protected:
     Point3f tlc;
@@ -520,10 +520,10 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
-    virtual BBox3f boundingBox() const;
+    virtual BBox3f bounding_box() const;
     virtual Point3f centroid() const;
 
-    virtual uint32_t primitiveCount() const { return 1; }
+    virtual uint32_t primitive_count() const { return 1; }
 
 protected:
     Point3f first;
@@ -577,10 +577,10 @@ public:
     virtual Float evaluate_distance(Point3f pt) const { return 0.0; };
     virtual Float evaluate(Point3f pt) const;
 
-    virtual BBox3f boundingBox() const;
+    virtual BBox3f bounding_box() const;
     virtual Point3f centroid() const;
 
-    virtual uint32_t primitiveCount() const { return 1; }
+    virtual uint32_t primitive_count() const { return 1; }
 
 protected:
     Point3f first;

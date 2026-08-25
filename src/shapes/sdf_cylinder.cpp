@@ -38,7 +38,7 @@ Float SDFCylinder::evaluate(Point3f pt) const
     return sign(d) * sqrt(abs(d)) / baba;
 }
 
-BBox3f SDFCylinder::boundingBox() const
+BBox3f SDFCylinder::bounding_box() const
 {
     // TODO: how do you calculate the centroid after arbitrary deformations
     return BBox3f(first + Vector3f(radius),

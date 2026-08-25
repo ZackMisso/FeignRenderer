@@ -21,22 +21,22 @@ OpenVDBDensity::OpenVDBDensity(std::string openvdb_file)
     openvdb::io::File file(openvdb_file);
     file.open();
 
-    openvdb::GridBase::Ptr baseGrid;
+    openvdb::GridBase::Ptr base_grid;
 
-    for (openvdb::io::File::NameIterator nameIter = file.beginName();
-         nameIter != file.endName(); ++nameIter)
+    for (openvdb::io::File::NameIterator name_iter = file.beginName();
+         name_iter != file.endName(); ++name_iter)
     {
-        if (nameIter.gridName() == "density")
+        if (name_iter.gridName() == "density")
         {
-            baseGrid = file.readGrid(nameIter.gridName());
+            base_grid = file.readGrid(name_iter.gridName());
         }
         else
         {
-            std::cout << "Ignoring Grid: " << nameIter.gridName() << std::endl;
+            std::cout << "Ignoring Grid: " << name_iter.gridName() << std::endl;
         }
     }
 
-    grid = openvdb::gridPtrCast<openvdb::FloatGrid>(baseGrid);
+    grid = openvdb::gridPtrCast<openvdb::FloatGrid>(base_grid);
 
     file.close();
     LOG("finished loading openvdb file");
@@ -47,7 +47,7 @@ OpenVDBDensity::~OpenVDBDensity()
     grid->clear();
 }
 
-void OpenVDBDensity::preProcess()
+void OpenVDBDensity::pre_process()
 {
     LOG("pre-processing openvdb medium");
     openvdb::CoordBBox bbox = grid->evalActiveVoxelBoundingBox();
@@ -79,7 +79,7 @@ void OpenVDBDensity::preProcess()
     LOG("finished pre-processing openvdb medium");
 }
 
-Color3f OpenVDBDensity::D(const Point3f &p) const
+Color3f OpenVDBDensity::eval(const Point3f &p) const
 {
     // TODO: need to make box vs. point a configurable parameter
     openvdb::tools::GridSampler<openvdb::FloatGrid, openvdb::tools::BoxSampler> sampler(*grid);
@@ -94,9 +94,9 @@ Color3f OpenVDBDensity::D(const Point3f &p) const
 //     return Color3f(D(p));
 // }
 
-Float OpenVDBDensity::maxDensity() const
+Float OpenVDBDensity::max_density() const
 {
-    return max_density;
+    return max_d;
 }
 
 FEIGN_END()

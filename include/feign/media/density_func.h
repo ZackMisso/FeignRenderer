@@ -27,11 +27,11 @@ class DensityFunction
 {
 public:
     virtual ~DensityFunction() {}
-    virtual Color3f D(const Point3f &p) const = 0;
+    virtual Color3f eval(const Point3f &p) const = 0;
     // virtual Color3f SpectralD(const Point3f& p) const = 0;
-    virtual Float maxDensity() const = 0;
+    virtual Float max_density() const = 0;
 
-    virtual void preProcess() {}
+    virtual void pre_process() {}
 
     Color3f sigma_t;
 };
@@ -52,7 +52,7 @@ public:
     ConstantDensity(Color3f density) : density(density) {}
     ConstantDensity(Float density_val) : density(Color3f(density_val)) {}
 
-    virtual Color3f D(const Point3f &p) const
+    virtual Color3f eval(const Point3f &p) const
     {
         return density * sigma_t;
     }
@@ -62,7 +62,7 @@ public:
     //     return density * sigma_t;
     // }
 
-    virtual Float maxDensity() const
+    virtual Float max_density() const
     {
         return std::max(density(0) * sigma_t(0),
                         std::max(density(1) * sigma_t(1),
@@ -88,11 +88,11 @@ public:
     OpenVDBDensity(std::string openvdb_file);
     ~OpenVDBDensity();
 
-    virtual Color3f D(const Point3f &p) const;
+    virtual Color3f eval(const Point3f &p) const;
     // virtual Color3f SpectralD(const Point3f& p) const;
-    virtual Float maxDensity() const;
+    virtual Float max_density() const;
 
-    virtual void preProcess();
+    virtual void pre_process();
 
     // TODO: try to also support spectral grids
     openvdb::FloatGrid::Ptr grid;
@@ -100,7 +100,7 @@ public:
     // openvdb::Coord max;
 
     BBox3f bbox;
-    Float max_density;
+    Float max_d;
 };
 
 #endif
@@ -115,7 +115,7 @@ public:
         // TODO
     }
 
-    virtual Color3f D(const Point3f &p) const
+    virtual Color3f eval(const Point3f &p) const
     {
         throw new NotImplementedException("noise density");
         return 0.0;
@@ -127,7 +127,7 @@ public:
     //     return Color3f(0.f);
     // }
 
-    virtual Float maxDensity() const
+    virtual Float max_density() const
     {
         throw new NotImplementedException("noise density");
         return 0.f;
@@ -138,33 +138,34 @@ class PointAverageDensity : public DensityFunction
 {
     PointAverageDensity();
 
-    virtual Color3f D(const Point3f &p) const;
+    virtual Color3f eval(const Point3f &p) const;
     // virtual Color3f SpectralD(const Point3f& p) const;
-    virtual Float maxDensity() const;
+    virtual Float max_density() const;
 
     // TODO
 };
 
+// TODO: probably get rid of this???
 class MandlebrotDensity : public DensityFunction
 {
 public:
     struct Params
     {
-        Params(Color3f max_density)
-            : max_density(max_density) {}
+        Params(Color3f max_d)
+            : max_d(max_d) {}
 
-        Color3f max_density;
+        Color3f max_d;
     };
 
-    MandlebrotDensity(Color3f max_density)
-        : max_density(max_density),
+    MandlebrotDensity(Color3f max_d)
+        : max_d(max_d),
           center(Point3f(0.f)),
           bounds(1000.0),
           n(1000) {}
 
     // z(n+1) = z(n) + c
     // c will be defined to be the location of the point relative to the center
-    virtual Color3f D(const Point3f &p) const
+    virtual Color3f eval(const Point3f &p) const
     {
         // initial implementation: if z(n+1) is bounded for a specific n, return
         // 1.f otherwise return 0.f;
@@ -237,13 +238,13 @@ public:
     //     return Color3f(0.f);
     // }
 
-    virtual Float maxDensity() const
+    virtual Float max_density() const
     {
         throw new NotImplementedException("mandlebrot density");
         return 0.f;
     }
 
-    Color3f max_density;
+    Color3f max_d;
     Point3f center;
     double bounds;
     int n;
@@ -267,9 +268,9 @@ public:
     SphereDensity(Params *params)
         : density(params->density), radius(params->radius) {}
 
-    virtual Color3f D(const Point3f &p) const
+    virtual Color3f eval(const Point3f &p) const
     {
-        if (p.sqrNorm() < radius * radius)
+        if (p.sqr_norm() < radius * radius)
             return density(0);
         return 0.f;
     }
@@ -280,7 +281,7 @@ public:
     //     return Color3f(0.f);
     // }
 
-    virtual Float maxDensity() const
+    virtual Float max_density() const
     {
         return std::max(density(0), std::max(density(1), density(2)));
     }

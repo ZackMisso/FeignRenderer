@@ -16,18 +16,14 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
                                   Sampler *sampler,
                                   MediaClosure &closure) const
 {
-// LOG("in ray march");
 #if NONEXPMEDIA
-    // LOG("nonexp");
     // TODO: implement unbiased ray-marching once paper publishes
     Float t = closure.t_min;
-    Float samp = sampler->next1D();
+    Float samp = sampler->next_1d();
     Color3f od = 0.0;
 
-    // LOG("trans");
     Float od_samp = trans_func->sample(sampler,
                                        closure.last_event);
-    // LOG("trans done");
 
     while (t < closure.t_max)
     {
@@ -35,7 +31,7 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
         Float loc = t + step * samp;
 
         Float past_od = od.max();
-        od += density->D(ray(loc)) * density->sigma_t;
+        od += density->eval(ray(loc)) * density->sigma_t;
 
         if (od.max() > od_samp)
         {
@@ -52,9 +48,9 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
     return Color3f(1.f);
 #else
     Float t = closure.t_min;
-    Float samp = sampler->next1D();
+    Float samp = sampler->next_1d();
     Color3f od = 0.0;
-    Float od_samp = -std::log(1.0 - sampler->next1D());
+    Float od_samp = -std::log(1.0 - sampler->next_1d());
 
     while (t < closure.t_max)
     {
@@ -62,7 +58,7 @@ Color3f Ray_Marching_Samp::sample(Ray3f ray,
         Float loc = t + step * samp;
 
         Float past_od = od.max();
-        od += density->D(ray(loc)) * density->sigma_t;
+        od += density->eval(ray(loc)) * density->sigma_t;
 
         if (od.max() > od_samp)
         {

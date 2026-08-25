@@ -10,39 +10,39 @@
 
 FEIGN_BEGIN()
 
-Color3f ExpTrans::surfaceSurface(Color3f tau) const
+Color3f ExpTrans::surface_surface(Color3f tau) const
 {
-    return Exp(-tau);
+    return exponential(-tau);
 }
 
-Color3f ExpTrans::surfaceMedium(Color3f tau) const
+Color3f ExpTrans::surface_medium(Color3f tau) const
 {
-    return Exp(-tau);
+    return exponential(-tau);
 }
 
-Color3f ExpTrans::mediumSurface(Color3f tau) const
+Color3f ExpTrans::medium_surface(Color3f tau) const
 {
-    return Exp(-tau);
+    return exponential(-tau);
 }
 
-Color3f ExpTrans::mediumMedium(Color3f tau) const
+Color3f ExpTrans::medium_medium(Color3f tau) const
 {
-    return Exp(-tau);
+    return exponential(-tau);
 }
 
-Float ExpTrans::sigmaBar() const
+Float ExpTrans::sigma_bar() const
 {
     return 1.0f;
 }
 
-Float ExpTrans::sampleSurface(Sampler *sampler) const
+Float ExpTrans::sample_surface(Sampler *sampler) const
 {
-    return -std::log(1.0f - sampler->next1D());
+    return -std::log(1.0f - sampler->next_1d());
 }
 
-Float ExpTrans::sampleMedium(Sampler *sampler) const
+Float ExpTrans::sample_medium(Sampler *sampler) const
 {
-    return -std::log(1.0f - sampler->next1D());
+    return -std::log(1.0f - sampler->next_1d());
 }
 
 FEIGN_END()

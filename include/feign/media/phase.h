@@ -25,7 +25,7 @@ public:
                          const Vector3f &wo,
                          Vector3f &wi) const = 0;
 
-    virtual std::string getName() const;
+    virtual std::string get_name() const;
 };
 
 class IsotropicPhase : public PhaseFunction
@@ -42,7 +42,7 @@ public:
                          const Vector3f &wo,
                          Vector3f &wi) const
     {
-        wi = WarpSpace::sqrToUniSph(sample);
+        wi = WarpSpace::sqr_to_uni_hemi(sample);
         return INV_FOURPI;
     }
 };
@@ -52,9 +52,9 @@ class HenyeyGreenstein : public PhaseFunction
 public:
     HenyeyGreenstein(Float g) : g(g) {}
 
-    Float hg(Float cosTheta, Float g) const
+    Float hg(Float cos_theta, Float g) const
     {
-        Float denom = 1.f + g * g - 2.f * g * cosTheta;
+        Float denom = 1.f + g * g - 2.f * g * cos_theta;
         denom *= std::sqrt(denom);
         return INV_FOURPI * (1.f - g * g) / denom;
     }
@@ -69,7 +69,7 @@ public:
                          Vector3f &wi) const
     {
         Float cos_theta;
-        if (std::abs(g) < Epsilon)
+        if (std::abs(g) < EPSILON)
         {
             cos_theta = 1.f - 2.f * sample[0];
         }
@@ -89,19 +89,19 @@ public:
         Vector3f v1;
         Vector3f v2;
 
-        CoordinateFrame::coordinateSystem(wo, v1, v2);
+        CoordinateFrame::coordinate_system(wo, v1, v2);
 
-        wi = CoordinateFrame::sphericalDirection(cos_theta,
-                                                 sin_theta,
-                                                 phi,
-                                                 v1,
-                                                 v2,
-                                                 -wo);
+        wi = CoordinateFrame::spherical_direction(cos_theta,
+                                                  sin_theta,
+                                                  phi,
+                                                  v1,
+                                                  v2,
+                                                  -wo);
 
         return hg(-cos_theta, g);
     }
 
-    virtual std::string getName() const { return "henyey_green"; }
+    virtual std::string get_name() const { return "henyey_green"; }
 
     Float g;
 };
@@ -124,7 +124,7 @@ public:
     {
         Float cos_theta;
 
-        if (std::abs(b) < Epsilon)
+        if (std::abs(b) < EPSILON)
         {
             cos_theta = 1.f - 2.f * sample[0];
         }
@@ -140,14 +140,14 @@ public:
         Vector3f v1;
         Vector3f v2;
 
-        CoordinateFrame::coordinateSystem(wo, v1, v2);
+        CoordinateFrame::coordinate_system(wo, v1, v2);
 
-        wi = CoordinateFrame::sphericalDirection(cos_theta,
-                                                 sin_theta,
-                                                 phi,
-                                                 v1,
-                                                 v2,
-                                                 -wo);
+        wi = CoordinateFrame::spherical_direction(cos_theta,
+                                                  sin_theta,
+                                                  phi,
+                                                  v1,
+                                                  v2,
+                                                  -wo);
 
         return eval(wo, wi);
     }
@@ -183,14 +183,14 @@ public:
         Vector3f v1;
         Vector3f v2;
 
-        CoordinateFrame::coordinateSystem(wo, v1, v2);
+        CoordinateFrame::coordinate_system(wo, v1, v2);
 
-        wi = CoordinateFrame::sphericalDirection(cos_theta,
-                                                 sin_theta,
-                                                 phi,
-                                                 v1,
-                                                 v2,
-                                                 -wo);
+        wi = CoordinateFrame::spherical_direction(cos_theta,
+                                                  sin_theta,
+                                                  phi,
+                                                  v1,
+                                                  v2,
+                                                  -wo);
 
         return eval(wo, wi);
     }
@@ -221,14 +221,14 @@ public:
         Vector3f v1;
         Vector3f v2;
 
-        CoordinateFrame::coordinateSystem(wo, v1, v2);
+        CoordinateFrame::coordinate_system(wo, v1, v2);
 
-        wi = CoordinateFrame::sphericalDirection(cos_theta,
-                                                 sin_theta,
-                                                 phi,
-                                                 v1,
-                                                 v2,
-                                                 -wo);
+        wi = CoordinateFrame::spherical_direction(cos_theta,
+                                                  sin_theta,
+                                                  phi,
+                                                  v1,
+                                                  v2,
+                                                  -wo);
 
         return eval(wo, wi);
     }

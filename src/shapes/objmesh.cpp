@@ -52,16 +52,16 @@ uint32_t ObjMesh::num_verts() const
     return vs.size();
 }
 
-float ObjMesh::surfaceArea() const
+float ObjMesh::surface_area() const
 {
     return sa;
 }
 
 Float ObjMesh::surface_area(int index) const
 {
-    uint32_t i0 = tris[index].vsInds(0);
-    uint32_t i1 = tris[index].vsInds(1);
-    uint32_t i2 = tris[index].vsInds(2);
+    uint32_t i0 = tris[index].vs_inds(0);
+    uint32_t i1 = tris[index].vs_inds(1);
+    uint32_t i2 = tris[index].vs_inds(2);
 
     Point3f p0 = vs[i0];
     Point3f p1 = vs[i1];
@@ -77,7 +77,7 @@ float ObjMesh::pdf(uint32_t index) const
     return 0.f;
 }
 
-void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
+void ObjMesh::add_shape_to_scene(RTCScene scene, RTCDevice device)
 {
     // TODO: modify this to store vertices as e_Vertex objects to save
     //       computation.
@@ -107,19 +107,19 @@ void ObjMesh::addShapeToScene(RTCScene scene, RTCDevice device)
 
     for (int i = 0; i < tris.size(); ++i)
     {
-        triangles[i].v0 = tris[i].vsInds(0);
-        triangles[i].v1 = tris[i].vsInds(1);
-        triangles[i].v2 = tris[i].vsInds(2);
+        triangles[i].v0 = tris[i].vs_inds(0);
+        triangles[i].v1 = tris[i].vs_inds(1);
+        triangles[i].v2 = tris[i].vs_inds(2);
     }
 
     rtcCommitGeometry(e_mesh);
-    geomID = rtcAttachGeometry(scene, e_mesh);
+    geom_id = rtcAttachGeometry(scene, e_mesh);
     rtcReleaseGeometry(e_mesh);
 }
 
 // TODO: need to create a converter for obj's created from Maya to the renderer
 // TODO: implement a better parser
-void ObjMesh::parseFromFile(const std::string &filename)
+void ObjMesh::parse_from_file(const std::string &filename)
 {
     if (filename.empty())
         return;
@@ -139,10 +139,10 @@ void ObjMesh::parseFromFile(const std::string &filename)
         throw new FeignRendererException(filename);
     }
 
-    std::string lineStr;
-    while (getline(ifs, lineStr))
+    std::string line_str;
+    while (getline(ifs, line_str))
     {
-        std::istringstream line(lineStr);
+        std::istringstream line(line_str);
 
         std::string token;
         line >> token;
@@ -240,31 +240,31 @@ void ObjMesh::parseFromFile(const std::string &filename)
     }
 }
 
-void ObjMesh::infoDump()
+void ObjMesh::info_dump()
 {
     std::cout << "Number of Verts: " << vs.size() << std::endl;
     std::cout << "Number of Triangles: " << tris.size() << std::endl;
 
-    bbox.infoDump();
+    bbox.info_dump();
 
     LOG("post dump");
 }
 
-uint32_t ObjMesh::primitiveCount() const
+uint32_t ObjMesh::primitive_count() const
 {
     return tris.size();
 }
 
-BBox3f ObjMesh::boundingBox() const
+BBox3f ObjMesh::bounding_box() const
 {
     return bbox;
 }
 
-BBox3f ObjMesh::boundingBox(uint32_t tri) const
+BBox3f ObjMesh::bounding_box(uint32_t tri) const
 {
-    uint32_t i0 = tris[tri].vsInds(0);
-    uint32_t i1 = tris[tri].vsInds(1);
-    uint32_t i2 = tris[tri].vsInds(2);
+    uint32_t i0 = tris[tri].vs_inds(0);
+    uint32_t i1 = tris[tri].vs_inds(1);
+    uint32_t i2 = tris[tri].vs_inds(2);
 
     Point3f p0 = vs[i0];
     Point3f p1 = vs[i1];
@@ -296,9 +296,9 @@ Point3f ObjMesh::centroid() const
 
 Point3f ObjMesh::centroid(uint32_t tri) const
 {
-    uint32_t i0 = tris[tri].vsInds(0);
-    uint32_t i1 = tris[tri].vsInds(1);
-    uint32_t i2 = tris[tri].vsInds(2);
+    uint32_t i0 = tris[tri].vs_inds(0);
+    uint32_t i1 = tris[tri].vs_inds(1);
+    uint32_t i2 = tris[tri].vs_inds(2);
 
     Point3f p0 = vs[i0];
     Point3f p1 = vs[i1];
@@ -307,16 +307,15 @@ Point3f ObjMesh::centroid(uint32_t tri) const
     return (p0 + p1 + p2) * (1.0 / 3.0);
 }
 
-void ObjMesh::preProcess(bool requires_processing)
+void ObjMesh::pre_process(bool requires_processing)
 {
-    // LOG("hiya");
     // TODO: make these tasks multithreaded ???
-    parseFromFile(filename);
+    parse_from_file(filename);
 
     // apply the geometry shader to the mesh
-    if (geomShader->shader && geomShader->shader->isValid(OBJ_MESH))
+    if (geom_shader->shader && geom_shader->shader->is_valid(OBJ_MESH))
     {
-        geomShader->shader->evaluate((void *)this);
+        geom_shader->shader->evaluate((void *)this);
     }
 
     center = compute_centroid();
@@ -368,9 +367,9 @@ bool ObjMesh::intersect(const Ray3f &scene_ray, Intersection &its) const
 // out here for reference if need be later
 bool ObjMesh::intersect(uint32_t face, const Ray3f &ray, Intersection &its) const
 {
-    uint32_t i0 = tris[face].vsInds(0);
-    uint32_t i1 = tris[face].vsInds(1);
-    uint32_t i2 = tris[face].vsInds(2);
+    uint32_t i0 = tris[face].vs_inds(0);
+    uint32_t i1 = tris[face].vs_inds(1);
+    uint32_t i2 = tris[face].vs_inds(2);
 
     const Point3f p0 = vs[i0];
     const Point3f p1 = vs[i1];
@@ -388,11 +387,11 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f &ray, Intersection &its) cons
         return false;
     }
 
-    float invDet = 1.f / det;
+    float inv_det = 1.f / det;
 
     Vector3f tvec = ray.origin - p0;
 
-    its.uv[0] = (tvec % pvec) * invDet;
+    its.uv[0] = (tvec % pvec) * inv_det;
 
     if (its.uv[0] < 0.0 || its.uv[0] > 1.0)
     {
@@ -401,27 +400,27 @@ bool ObjMesh::intersect(uint32_t face, const Ray3f &ray, Intersection &its) cons
 
     Vector3f qvec = tvec ^ edge1;
 
-    its.uv[1] = (ray.dir % qvec) * invDet;
+    its.uv[1] = (ray.dir % qvec) * inv_det;
 
     if (its.uv[1] < 0.0 || its.uv[1] > 1.0)
     {
         return false;
     }
 
-    its.t = (edge2 % qvec) * invDet;
+    its.t = (edge2 % qvec) * inv_det;
 
     return its.t >= ray.near && its.t <= ray.far;
 }
 
-void ObjMesh::completeIntersectionInfo(Intersection &its) const
+void ObjMesh::complete_intersection_info(Intersection &its) const
 {
     Vec3f bary(1.0 - its.uv(0) - its.uv(1), its.uv(0), its.uv(1));
 
     its.bary = Point3f(bary);
 
-    uint32_t i0_vs = tris[its.f].vsInds(0);
-    uint32_t i1_vs = tris[its.f].vsInds(1);
-    uint32_t i2_vs = tris[its.f].vsInds(2);
+    uint32_t i0_vs = tris[its.f].vs_inds(0);
+    uint32_t i1_vs = tris[its.f].vs_inds(1);
+    uint32_t i2_vs = tris[its.f].vs_inds(2);
 
     Point3f p0 = vs[i0_vs];
     Point3f p1 = vs[i1_vs];
@@ -433,9 +432,9 @@ void ObjMesh::completeIntersectionInfo(Intersection &its) const
     // compute mesh texture coordinates
     if (uvs.size() > 0)
     {
-        uint32_t i0_uvs = tris[its.f].uvsInds(0);
-        uint32_t i1_uvs = tris[its.f].uvsInds(1);
-        uint32_t i2_uvs = tris[its.f].uvsInds(2);
+        uint32_t i0_uvs = tris[its.f].uvs_inds(0);
+        uint32_t i1_uvs = tris[its.f].uvs_inds(1);
+        uint32_t i2_uvs = tris[its.f].uvs_inds(2);
 
         its.uv = uvs[i0_uvs] * bary(0) + uvs[i1_uvs] * bary(1) + uvs[i2_uvs] * bary(2);
     }
@@ -446,9 +445,9 @@ void ObjMesh::completeIntersectionInfo(Intersection &its) const
     // compute the normals
     if (ns.size() > 0)
     {
-        uint32_t i0_ns = tris[its.f].nsInds(0);
-        uint32_t i1_ns = tris[its.f].nsInds(1);
-        uint32_t i2_ns = tris[its.f].nsInds(2);
+        uint32_t i0_ns = tris[its.f].ns_inds(0);
+        uint32_t i1_ns = tris[its.f].ns_inds(1);
+        uint32_t i2_ns = tris[its.f].ns_inds(2);
 
         its.s_frame = CoordinateFrame((ns[i0_ns] * bary(0) +
                                        ns[i1_ns] * bary(1) +
@@ -461,13 +460,13 @@ void ObjMesh::completeIntersectionInfo(Intersection &its) const
     }
 }
 
-const std::vector<Triangle> &ObjMesh::getTris() const { return tris; }
-const std::vector<Point3f> &ObjMesh::getVerts() const { return vs; }
-const std::vector<Normal3f> &ObjMesh::getNorms() const { return ns; }
-const std::vector<Vec2f> &ObjMesh::getUVs() const { return uvs; }
+const std::vector<Triangle> &ObjMesh::get_tris() const { return tris; }
+const std::vector<Point3f> &ObjMesh::get_verts() const { return vs; }
+const std::vector<Normal3f> &ObjMesh::get_norms() const { return ns; }
+const std::vector<Vec2f> &ObjMesh::get_uvs() const { return uvs; }
 
-void ObjMesh::setVerts(std::vector<Point3f> &param) { vs = param; }
-void ObjMesh::setNorms(std::vector<Normal3f> &param) { ns = param; }
-void ObjMesh::setUVs(std::vector<Vec2f> &param) { uvs = param; }
+void ObjMesh::set_verts(std::vector<Point3f> &param) { vs = param; }
+void ObjMesh::set_norms(std::vector<Normal3f> &param) { ns = param; }
+void ObjMesh::set_uvs(std::vector<Vec2f> &param) { uvs = param; }
 
 FEIGN_END()

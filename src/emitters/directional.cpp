@@ -47,7 +47,7 @@ Color3f DirectionalEmitter::sample_ray(EmitterQuery &rec,
 Color3f DirectionalEmitter::evaluate(EmitterQuery &rec) const
 {
     // if wi is roughly == light dir return the radiance
-    if ((light_dir - rec.wi).sqrNorm() < Epsilon)
+    if ((light_dir - rec.wi).sqr_norm() < EPSILON)
         return radiance;
 
     return COLOR_BLACK;

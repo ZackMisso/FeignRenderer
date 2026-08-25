@@ -47,13 +47,13 @@ Color3f DistantEmitter::sample_ray(EmitterQuery &rec,
     throw new NotImplementedException("emitter distant sample ray");
 }
 
-void DistantEmitter::preProcess()
+void DistantEmitter::pre_process()
 {
     // throw new NotImplementedException("emitter distant ");
     // does nothing for now
 }
 
-Point3f DistantEmitter::getCenter() const
+Point3f DistantEmitter::get_center() const
 {
     throw new NotImplementedException("distant get center");
 

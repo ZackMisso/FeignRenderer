@@ -24,7 +24,7 @@ DirectionalMeshEmitter::~DirectionalMeshEmitter()
     delete sa_pdf;
 }
 
-void DirectionalMeshEmitter::preProcess()
+void DirectionalMeshEmitter::pre_process()
 {
     if (!mesh)
     {
@@ -32,9 +32,9 @@ void DirectionalMeshEmitter::preProcess()
     }
 
     // calculate the pdf from the mesh
-    sa_pdf = new DiscretePDF1D(mesh->mesh->primitiveCount());
+    sa_pdf = new DiscretePDF1D(mesh->mesh->primitive_count());
 
-    for (int i = 0; i < mesh->mesh->primitiveCount(); ++i)
+    for (int i = 0; i < mesh->mesh->primitive_count(); ++i)
     {
         sa_pdf->cdf[i + 1] = sa_pdf->cdf[i] + mesh->mesh->surface_area(i);
     }
@@ -54,8 +54,6 @@ Color3f DirectionalMeshEmitter::sample_nee(EmitterQuery &rec,
     // zero.
 
     rec.wi = -light_dir;
-    // LOG("dir: ");
-    // LOG(light_dir);
     if (pdf)
         *pdf = 1.0;
 
@@ -80,11 +78,11 @@ Color3f DirectionalMeshEmitter::sample_ray(EmitterQuery &rec,
 Color3f DirectionalMeshEmitter::evaluate(EmitterQuery &rec) const
 {
     // if wi is roughly == light dir return the radiance
-    if (-rec.wi[2] < Epsilon)
+    if (-rec.wi[2] < EPSILON)
         return Color3f(0.f);
     return intensity;
 
-    if ((light_dir - rec.wi).sqrNorm() < Epsilon)
+    if ((light_dir - rec.wi).sqr_norm() < EPSILON)
     {
         return intensity;
     }
@@ -92,12 +90,12 @@ Color3f DirectionalMeshEmitter::evaluate(EmitterQuery &rec) const
     return COLOR_BLACK;
 }
 
-void DirectionalMeshEmitter::setMeshNode(MeshNode *node)
+void DirectionalMeshEmitter::set_mesh_node(MeshNode *node)
 {
     mesh = node;
 }
 
-Point3f DirectionalMeshEmitter::getCenter() const
+Point3f DirectionalMeshEmitter::get_center() const
 {
     return mesh->mesh->centroid();
 }

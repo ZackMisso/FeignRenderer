@@ -16,30 +16,30 @@ DavisTrans::DavisTrans(Float h, Float c)
     beta = 2.0f * clamp(h, 0.0f, 1.0f) - 1.0f;
 }
 
-Float DavisTrans::computeAlpha(Float tau) const
+Float DavisTrans::compute_alpha(Float tau) const
 {
     return std::pow(tau, 1.f - beta) / (std::pow(c, 1.f + beta));
 }
 
-Color3f DavisTrans::surfaceSurface(Color3f tau) const
+Color3f DavisTrans::surface_surface(Color3f tau) const
 {
     Float t = tau[0];
     if (t < 1e-4f)
         return Color3f(1.0f);
 
-    Float alpha = computeAlpha(t);
+    Float alpha = compute_alpha(t);
     Float Tr = std::pow(1.0f + t / alpha, -alpha);
 
     return Color3f(std::isnan(Tr) ? 0 : Tr);
 }
 
-Color3f DavisTrans::surfaceMedium(Color3f tau) const
+Color3f DavisTrans::surface_medium(Color3f tau) const
 {
     Float t = tau[0];
     if (t < 1e-4f)
         return Color3f(1.0f);
 
-    Float alpha = computeAlpha(t);
+    Float alpha = compute_alpha(t);
     Float base = 1.0f + t / alpha;
 
     Float trSurface = std::pow(base, -alpha);
@@ -49,18 +49,18 @@ Color3f DavisTrans::surfaceMedium(Color3f tau) const
     return Color3f(std::isnan(Tr) ? 0 : Tr);
 }
 
-Color3f DavisTrans::mediumSurface(Color3f tau) const
+Color3f DavisTrans::medium_surface(Color3f tau) const
 {
-    return surfaceMedium(tau);
+    return surface_medium(tau);
 }
 
-Color3f DavisTrans::mediumMedium(Color3f tau) const
+Color3f DavisTrans::medium_medium(Color3f tau) const
 {
     Float t = tau[0];
     if (t < 1e-4f)
         return Color3f(1.0f);
 
-    Float alpha = computeAlpha(t);
+    Float alpha = compute_alpha(t);
     Float base = 1.0f + t / alpha;
     Float logBase = std::log(base);
     Float trSurface = std::pow(base, -alpha);
@@ -74,16 +74,16 @@ Color3f DavisTrans::mediumMedium(Color3f tau) const
     return Color3f(std::isnan(Tr) ? 0 : Tr);
 }
 
-Float DavisTrans::sigmaBar() const
+Float DavisTrans::sigma_bar() const
 {
     return 1.0f;
 }
 
-Float DavisTrans::sampleSurface(Sampler *sampler) const
+Float DavisTrans::sample_surface(Sampler *sampler) const
 {
-    Float xi = sampler->next1D();
+    Float xi = sampler->next_1d();
     auto cdf = [this](float tau)
-    { return 1.0f - surfaceSurface(tau)[0]; };
+    { return 1.0f - surface_surface(tau)[0]; };
     Float step = 1e6;
     Float result = step * 2;
 
@@ -99,11 +99,11 @@ Float DavisTrans::sampleSurface(Sampler *sampler) const
     return result;
 }
 
-Float DavisTrans::sampleMedium(Sampler *sampler) const
+Float DavisTrans::sample_medium(Sampler *sampler) const
 {
-    Float xi = sampler->next1D();
+    Float xi = sampler->next_1d();
     auto cdf = [this](float tau)
-    { return 1.0f - mediumSurface(tau)[0]; };
+    { return 1.0f - medium_surface(tau)[0]; };
     Float step = 1e6;
     Float result = step * 2;
 

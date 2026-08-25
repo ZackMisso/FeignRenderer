@@ -17,7 +17,7 @@ BoxFilter::BoxFilter() : ReconstructionFilter()
 
 BoxFilter::BoxFilter(Vec2f size) : ReconstructionFilter(size) {}
 
-void BoxFilter::preProcess()
+void BoxFilter::pre_process()
 {
     // does nothing
 }

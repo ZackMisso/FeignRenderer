@@ -15,7 +15,7 @@
 
 FEIGN_BEGIN()
 
-void UnitTestData::logReport() const
+void UnitTestData::log_report() const
 {
     // TODO
 }
@@ -37,20 +37,20 @@ std::string zero_padded_num(int num)
 bool UnitTestManager::run_test(int index)
 {
     std::string path = "test_" + zero_padded_num(index) + ".json";
-    UnitTestData testLog = UnitTestData(path);
+    UnitTestData test_log = UnitTestData(path);
     LOG("evaluating test: " + path);
 
     if (reference_run)
     {
-        replace_reference(testLog);
+        replace_reference(test_log);
     }
     else
     {
-        evaluate_unit_test(testLog);
-        testLog.logReport();
+        evaluate_unit_test(test_log);
+        test_log.log_report();
     }
 
-    return testLog.does_it_fail();
+    return test_log.does_it_fail();
 }
 
 bool UnitTestManager::run_all_tests()
@@ -81,27 +81,28 @@ bool UnitTestManager::run_all_tests()
     for (int i = 0; i < paths.size(); ++i)
     {
         LOG("RUNNING TEST: " + std::to_string(i));
-        UnitTestData testLog = UnitTestData(paths[i], "../scenes/unit_tests/scenes/", names[i]);
+        UnitTestData test_log = UnitTestData(paths[i], "../scenes/unit_tests/scenes/", names[i]);
 
         if (reference_run)
         {
-            replace_reference(testLog);
+            replace_reference(test_log);
         }
         else
         {
-            #if RECORD
+#if RECORD
             ClockerResults avg_timings = ClockerResults();
-            for (int k = 0; k < NUM_TESTS_PER_RECORD; ++k) {
-            #endif
+            for (int k = 0; k < NUM_TESTS_PER_RECORD; ++k)
+            {
+#endif
 
-            evaluate_unit_test(testLog);
-            testLog.logReport();
-            if (testLog.does_it_fail())
-                passes = false;
-            
-            #if RECORD
-            avg_timings += testLog.clockings;
-            testLog.clockings = ClockerResults();
+                evaluate_unit_test(test_log);
+                test_log.log_report();
+                if (test_log.does_it_fail())
+                    passes = false;
+
+#if RECORD
+                avg_timings += testLog.clockings;
+                testLog.clockings = ClockerResults();
             }
 
             // LOG("before avg:");
@@ -109,16 +110,16 @@ bool UnitTestManager::run_all_tests()
             avg_timings *= 1.0f / float(NUM_TESTS_PER_RECORD);
             // LOG("after avg:");
             avg_timings.print_results();
-            testLog.clockings = avg_timings;
+            test_log.clockings = avg_timings;
 
             // if record is enabled, we want to append the average
             // clockings to the test's permanent record.
-            UnitTestSiteAssembler::append_to_test_records(testLog);
-            #endif
+            UnitTestSiteAssembler::append_to_test_records(test_log);
+#endif
         }
 
         // TODO: autogenerate comparision webpage
-        UnitTestSiteAssembler::create_test_html_page(testLog);
+        UnitTestSiteAssembler::create_test_html_page(test_log);
     }
 
     UnitTestSiteAssembler::create_global_html_page();

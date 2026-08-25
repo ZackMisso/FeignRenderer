@@ -16,20 +16,20 @@ FEIGN_BEGIN()
 Phong::Phong(Color3f kd, Float ks, Float exponent)
     : BSDF(), kd(kd), ks(ks), exponent(exponent)
 {
-    ks *= 1.f - kd.maxValue();
+    ks *= 1.f - kd.max_value();
 }
 
 // TODO: the speed of this could probably be improved
 void Phong::sample(MaterialClosure &closure) const
 {
-    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+    if (CoordinateFrame::cos_theta(closure.wi) <= 0)
     {
         closure.albedo = COLOR_BLACK;
         closure.pdf = 0.f;
         return;
     }
 
-    Point2f sample = closure.sampler->next2D();
+    Point2f sample = closure.sampler->next_2d();
 
     if (sample(0) < ks)
     {
@@ -39,7 +39,7 @@ void Phong::sample(MaterialClosure &closure) const
            to a direction on a cosine-weighted hemisphere */
         Vector3f wr = Vector3f(0.f, 0.f, 2.f * closure.wi(2)) - closure.wi;
         CoordinateFrame frame(wr);
-        Vector3f val = frame.toWorld(WarpSpace::sqrToCosPowHemi(sample, exponent));
+        Vector3f val = frame.to_world(WarpSpace::sqr_to_cos_pow_hemi(sample, exponent));
 
         closure.wo = val;
 
@@ -53,7 +53,7 @@ void Phong::sample(MaterialClosure &closure) const
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
-        closure.wo = WarpSpace::sqrToCosHemi(sample);
+        closure.wo = WarpSpace::sqr_to_cos_hemi(sample);
 
         closure.is_specular = false;
     }
@@ -63,17 +63,17 @@ void Phong::sample(MaterialClosure &closure) const
 
     Vector3f wr = Vector3f(0.f, 0.f, 2.f * closure.wi(2)) - closure.wi;
     CoordinateFrame frame(wr);
-    Vector3f val = frame.toLocal(closure.wo);
+    Vector3f val = frame.to_local(closure.wo);
 
-    Float dotProd = std::max(wr % closure.wo, Epsilon);
+    Float dot_prod = std::max(wr % closure.wo, EPSILON);
 
-    float diffPdf = (1.f - ks) * WarpSpace::sqrToCosHemiPdf(closure.wo);
+    float diff_pdf = (1.f - ks) * WarpSpace::sqr_to_cos_hemi_pdf(closure.wo);
     // I forget, what is this 1.f / 4 * cos term again?
-    float specPdf = (ks)*WarpSpace::sqrToCosPowHemiPdf(val, exponent); // * (1.f / (4.f * dotProd));
+    float spec_pdf = (ks)*WarpSpace::sqr_to_cos_pow_hemi_pdf(val, exponent); // * (1.f / (4.f * dotProd));
 
-    closure.pdf = diffPdf + specPdf;
+    closure.pdf = diff_pdf + spec_pdf;
     closure.albedo = kd * INV_PI +
-                     ks * (exponent + 2.f) * INV_TWOPI * powf(dotProd, exponent);
+                     ks * (exponent + 2.f) * INV_TWOPI * powf(dot_prod, exponent);
 }
 
 void Phong::evaluate(MaterialClosure &closure) const

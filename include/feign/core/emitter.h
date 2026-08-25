@@ -69,28 +69,28 @@ public:
     //       on if the ray is going from the camera->emitter or emitter->camera.
     virtual Color3f evaluate(EmitterQuery &rec) const = 0;
 
-    virtual bool isSpatial() const = 0;
-    virtual Point3f getCenter() const = 0;
+    virtual bool is_spatial() const = 0;
+    virtual Point3f get_center() const = 0;
 
     // TODO: this method currently exists for supporting the directional mesh
     //       emitter, but really it appears more of a hack than anything. Need
     //       to figure out a better way of doing this without this unnecessary
     //       functionality.
     //
-    // this method is currently used to indicate wbether or not an emitter needs
+    // this method is currently used to indicate whether or not an emitter needs
     // an additional visibility check after sampling it for next event estimation.
     // this is used for emitters which only emit line in singular directions where
     // sampling any random direction would typically result in a rejected sample.
-    virtual bool requiresInitialVisibilityCheck() const { return false; }
+    virtual bool requires_initial_visibility_check() const { return false; }
 
-    virtual bool isEnvironmentOnlyEmitter() const { return false; }
-    virtual bool isEnvironmentEmitter() const { return false; }
+    virtual bool is_environment_only_emitter() const { return false; }
+    virtual bool is_environment_emitter() const { return false; }
 
-    virtual void preProcess() {}
+    virtual void pre_process() {}
 
     // this is bad design, figure out a better way of supporting
     // mesh emitters
-    virtual void setMeshNode(MeshNode *node) {}
+    virtual void set_mesh_node(MeshNode *node) {}
 
     // if a ray hits an emitter, then that emitter has a mesh. If that emitter is
     // hit and also has a BSDF, then the emitter should not be sampled during
@@ -99,7 +99,7 @@ public:
     // algorithms. For this to work, mesh emitters need to be able to expose their
     // meshes to verify whether or not the intersection is actually with the
     // emitter to begin with.
-    virtual MeshNode *getMeshNode() { return nullptr; }
+    virtual MeshNode *get_mesh_node() { return nullptr; }
 };
 /////////////////////////////////////////////////
 
@@ -126,10 +126,10 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual Point3f getCenter() const;
+    virtual Point3f get_center() const;
 
-    virtual bool isSpatial() const { return false; }
-    virtual void preProcess();
+    virtual bool is_spatial() const { return false; }
+    virtual void pre_process();
 
 protected:
 };
@@ -167,8 +167,8 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual bool isSpatial() const { return false; }
-    virtual Point3f getCenter() const { return Point3f(0.f); }
+    virtual bool is_spatial() const { return false; }
+    virtual Point3f get_center() const { return Point3f(0.f); }
 
 protected:
     Vector3f light_dir;
@@ -219,8 +219,8 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual bool isSpatial() const { return true; }
-    virtual Point3f getCenter() const;
+    virtual bool is_spatial() const { return true; }
+    virtual Point3f get_center() const;
 
 protected:
     Point3f light_pos;
@@ -264,10 +264,10 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual void preProcess();
+    virtual void pre_process();
 
-    virtual bool isSpatial() const { return true; }
-    virtual Point3f getCenter() const;
+    virtual bool is_spatial() const { return true; }
+    virtual Point3f get_center() const;
 
 protected:
     Color3f I; // TODO: this is actually storing power
@@ -312,8 +312,8 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual bool isSpatial() const { return false; }
-    virtual Point3f getCenter() const { return Point3f(0.f); }
+    virtual bool is_spatial() const { return false; }
+    virtual Point3f get_center() const { return Point3f(0.f); }
 
 protected:
     Color3f top;
@@ -353,14 +353,14 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual void setMeshNode(MeshNode *node);
+    virtual void set_mesh_node(MeshNode *node);
 
-    virtual void preProcess();
+    virtual void pre_process();
 
-    virtual bool isSpatial() const { return true; }
-    virtual Point3f getCenter() const;
+    virtual bool is_spatial() const { return true; }
+    virtual Point3f get_center() const;
 
-    virtual MeshNode *getMeshNode() { return mesh; }
+    virtual MeshNode *get_mesh_node() { return mesh; }
 
 protected:
     MeshNode *mesh;
@@ -405,14 +405,14 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual void setMeshNode(MeshNode *node);
-    virtual void preProcess();
+    virtual void set_mesh_node(MeshNode *node);
+    virtual void pre_process();
 
-    virtual bool isSpatial() const { return true; }
-    virtual bool requiresInitialVisibilityCheck() const { return true; }
-    virtual Point3f getCenter() const;
+    virtual bool is_spatial() const { return true; }
+    virtual bool requires_initial_visibility_check() const { return true; }
+    virtual Point3f get_center() const;
 
-    virtual MeshNode *getMeshNode() { return mesh; }
+    virtual MeshNode *get_mesh_node() { return mesh; }
 
 protected:
     MeshNode *mesh;
@@ -456,13 +456,13 @@ public:
 
     virtual Color3f evaluate(EmitterQuery &rec) const;
 
-    virtual bool isSpatial() const { return false; }
-    virtual bool requiresInitialVisibilityCheck() const { return false; }
-    virtual bool isEnvironmentOnlyEmitter() const { return true; }
-    virtual bool isEnvironmentEmitter() const { return true; }
-    virtual Point3f getCenter() const { return Point3f(0.f); }
+    virtual bool is_spatial() const { return false; }
+    virtual bool requires_initial_visibility_check() const { return false; }
+    virtual bool is_environment_only_emitter() const { return true; }
+    virtual bool is_environment_emitter() const { return true; }
+    virtual Point3f get_center() const { return Point3f(0.f); }
 
-    virtual void preProcess();
+    virtual void pre_process();
 
 protected:
     TextureNode *texture;
@@ -478,18 +478,18 @@ struct EmitterNode : public Node
 public:
     EmitterNode()
         : emitter(nullptr),
-          objectNode(nullptr) {}
+          object_node(nullptr) {}
     EmitterNode(std::string name)
         : Node(name),
           emitter(nullptr),
-          objectNode(nullptr) {}
+          object_node(nullptr) {}
     EmitterNode(Emitter *emitter)
         : emitter(emitter),
-          objectNode(nullptr) {}
+          object_node(nullptr) {}
 
     ~EmitterNode() { delete emitter; }
 
-    ObjectNode *objectNode;
+    ObjectNode *object_node;
     Emitter *emitter;
 };
 /////////////////////////////////////////////////

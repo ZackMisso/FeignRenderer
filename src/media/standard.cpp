@@ -31,14 +31,14 @@ Media::Media(TransmittanceEstimatorNode *trans_node,
     sigma_t = abs + scat;
 }
 
-void Media::preProcess()
+void Media::pre_process()
 {
     sampling->sampling->density = density->density;
     sampling->sampling->trans_func = trans_func->trans_func;
     trans_est->trans_est->density = density->density;
     trans_est->trans_est->trans_func = trans_func->trans_func;
     density->density->sigma_t = sigma_t;
-    density->density->preProcess();
+    density->density->pre_process();
 }
 
 Color3f Media::sample(Ray3f world_ray,
@@ -59,7 +59,7 @@ Color3f Media::sample(Ray3f world_ray,
                                                   sampler,
                                                   closure);
 
-    if (closure.handleScatter())
+    if (closure.handle_scatter())
         return sca_coeff / (sigma_t)*samp_val;
 
     // TODO: this may be incorrect when non-transmittance based sampling gets

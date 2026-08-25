@@ -32,13 +32,13 @@ void PhotonArray::clear()
     delete[] photons;
 }
 
-bool PhotonArray::nearPhoton(Point3f pt, Float radius) const
+bool PhotonArray::near_photon(Point3f pt, Float radius) const
 {
     Float square_radius = radius * radius;
 
     for (int i = 0; i < num_photons; ++i)
     {
-        Float dist = (pt - photons[i].pos).sqrNorm();
+        Float dist = (pt - photons[i].pos).sqr_norm();
         if (dist < radius)
             return true;
     }
@@ -54,12 +54,12 @@ void PhotonArray::eval(MaterialClosure &closure,
     Float inv_area = 1.f / (M_PI * sqr_radius);
     for (int i = 0; i < num_photons; ++i)
     {
-        if ((pt - photons[i].pos).sqrNorm() < sqr_radius)
+        if ((pt - photons[i].pos).sqr_norm() < sqr_radius)
         {
             Color3f pwr_div_area = photons[i].power * inv_area;
 
             // evaluate the material
-            closure.wo = closure.its->toLocal(photons[i].dir);
+            closure.wo = closure.its->to_local(photons[i].dir);
             // closure.wi = photons[i].dir;
             closure.albedo = COLOR_BLACK;
             shader->evaluate_mat_only(closure);
@@ -70,12 +70,12 @@ void PhotonArray::eval(MaterialClosure &closure,
     }
 }
 
-void PhotonArray::maybeAddPhoton(std::vector<std::pair<Float, int>> &closest_k,
-                                 const Point3f &pt,
-                                 int k,
-                                 int photon) const
+void PhotonArray::maybe_add_photon(std::vector<std::pair<Float, int>> &closest_k,
+                                   const Point3f &pt,
+                                   int k,
+                                   int photon) const
 {
-    Float dist = (pt - photons[photon].pos).sqrNorm();
+    Float dist = (pt - photons[photon].pos).sqr_norm();
 
     if (!closest_k.size())
     {
@@ -114,7 +114,7 @@ void PhotonArray::eval(MaterialClosure &closure,
 
     for (int i = 0; i < num_photons; ++i)
     {
-        maybeAddPhoton(closest_k, pt, k_photons, i);
+        maybe_add_photon(closest_k, pt, k_photons, i);
     }
 
     Float inv_area = 1.f / (M_PI * closest_k[k_photons - 1].first);
@@ -123,14 +123,16 @@ void PhotonArray::eval(MaterialClosure &closure,
     {
         // debug logic
         if (closest_k[i].first > closest_k[k_photons - 1].first)
+        {
             assert(false);
+        }
 
         int index = closest_k[i].second;
 
         Color3f pwr_div_area = photons[index].power * inv_area;
 
         // evaluate the material
-        closure.wo = closure.its->toLocal(photons[index].dir);
+        closure.wo = closure.its->to_local(photons[index].dir);
         // if (std::abs(closure.wo.sqrNorm() - 1.0) > Epsilon)
         // {
         //     LOG("norm: " + STR(closure.wo.sqrNorm()));

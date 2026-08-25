@@ -23,7 +23,7 @@ Color3f Trans_RayMarching::transmittance(const Ray3f &ray,
     Float min_t = closure.t_min;
     Float max_t = closure.t_max;
     Float t = min_t;
-    Float samp = sampler->next1D();
+    Float samp = sampler->next_1d();
     Color3f od = 0.0;
 
     while (t < max_t)
@@ -31,7 +31,7 @@ Color3f Trans_RayMarching::transmittance(const Ray3f &ray,
         Float step = std::min(step_size, max_t - t);
         Float loc = t + step * samp;
 
-        od += density->D(ray(loc)) * density->sigma_t;
+        od += density->eval(ray(loc)) * density->sigma_t;
 
         t += step_size;
     }
@@ -43,7 +43,7 @@ Color3f Trans_RayMarching::transmittance(const Ray3f &ray,
     Float min_t = closure.t_min;
     Float max_t = closure.t_max;
     Float t = min_t;
-    Float samp = sampler->next1D();
+    Float samp = sampler->next_1d();
     Color3f od = 0.0;
 
     while (t < max_t)
@@ -51,12 +51,12 @@ Color3f Trans_RayMarching::transmittance(const Ray3f &ray,
         Float step = std::min(step_size, max_t - t);
         Float loc = t + step * samp;
 
-        od += density->D(ray(loc)) * density->sigma_t;
+        od += density->eval(ray(loc)) * density->sigma_t;
 
         t += step_size;
     }
 
-    return Exp(-od);
+    return exponential(-od);
 #endif
 }
 

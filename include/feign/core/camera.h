@@ -27,20 +27,20 @@ public:
     // takes in a film and apperture sample
     // calculates a generated ray according to the samples
     // returns an importance to weight the generated ray
-    virtual Color3f sampleRay(Ray3f &ray,
-                              const Point2f &filmSamp,
-                              const Point2f &appSamp) const = 0;
+    virtual Color3f sample_ray(Ray3f &ray,
+                               const Point2f &film_samp,
+                               const Point2f &app_samp) const = 0;
 
-    virtual void preProcess() {}
+    virtual void pre_process() {}
 
-    Vec2i getFilmSize() const { return filmSize; }
-    void setFilmSize(Vec2i param) { filmSize = param; }
+    Vec2i get_film_size() const { return film_size; }
+    void set_film_size(Vec2i param) { film_size = param; }
 
-    void setCameraToWorld(const Transform &param) { cameraToWorld = param; }
+    void set_camera_to_world(const Transform &param) { camera_to_world = param; }
 
 protected:
-    Transform cameraToWorld;
-    Vec2i filmSize;
+    Transform camera_to_world;
+    Vec2i film_size;
 };
 /////////////////////////////////////////////////
 
@@ -82,8 +82,8 @@ public:
         Vec2i image_res;
     };
 
-    Perspective(Float aperatureRadius,
-                Float focalDistance,
+    Perspective(Float aperature_radius,
+                Float focal_distance,
                 Float fov,
                 Float near,
                 Float far,
@@ -92,23 +92,23 @@ public:
 
     ~Perspective() {}
 
-    virtual void preProcess();
+    virtual void pre_process();
 
-    virtual Color3f sampleRay(Ray3f &ray,
-                              const Point2f &filmSamp,
-                              const Point2f &appSamp) const;
+    virtual Color3f sample_ray(Ray3f &ray,
+                               const Point2f &film_samp,
+                               const Point2f &app_samp) const;
 
     void print() const;
 
-    void setTransform(const Transform &transform)
+    void set_transform(const Transform &transform)
     {
-        sampleToCamera = transform;
+        sample_to_camera = transform;
     }
 
 protected:
-    Transform sampleToCamera;
-    Float aperatureRadius;
-    Float focalDistance;
+    Transform sample_to_camera;
+    Float aperature_radius;
+    Float focal_distance;
     Float fov;
     Float near;
     Float far;
@@ -124,11 +124,11 @@ public:
     Orthographic();
     ~Orthographic() {}
 
-    virtual void preProcess();
+    virtual void pre_process();
 
-    virtual Color3f sampleRay(Ray3f &ray,
-                              const Point2f &filmSamp,
-                              const Point2f &appSamp) const;
+    virtual Color3f sample_ray(Ray3f &ray,
+                               const Point2f &film_samp,
+                               const Point2f &app_samp) const;
 };
 /////////////////////////////////////////////////
 

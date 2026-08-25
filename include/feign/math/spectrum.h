@@ -12,8 +12,10 @@
 
 FEIGN_BEGIN()
 
+// TODO: redo all of this
+
 // TODO: convert these to spectrum once spectrums are implemented
-static inline Color3f Min(const Color3f &a, Float b)
+static inline Color3f min(const Color3f &a, Float b)
 {
     Color3f result;
     for (int i = 0; i < 3; ++i)
@@ -21,7 +23,7 @@ static inline Color3f Min(const Color3f &a, Float b)
     return result;
 }
 
-static inline Color3f Max(const Color3f &a, Float b)
+static inline Color3f max(const Color3f &a, Float b)
 {
     Color3f result;
     for (int i = 0; i < 3; ++i)
@@ -29,7 +31,7 @@ static inline Color3f Max(const Color3f &a, Float b)
     return result;
 }
 
-static inline Color3f Step(Float edge, const Color3f &x)
+static inline Color3f step(Float edge, const Color3f &x)
 {
     Color3f result;
     for (int i = 0; i < 3; ++i)
@@ -37,7 +39,7 @@ static inline Color3f Step(Float edge, const Color3f &x)
     return result;
 }
 
-static inline Color3f Step(const Color3f &edge, Float x)
+static inline Color3f step(const Color3f &edge, Float x)
 {
     Color3f result;
     for (int i = 0; i < 3; ++i)
@@ -45,7 +47,7 @@ static inline Color3f Step(const Color3f &edge, Float x)
     return result;
 }
 
-static inline Color3f Boxcar(const Color3f &x, Float a, Float b)
+static inline Color3f boxcar(const Color3f &x, Float a, Float b)
 {
     Color3f result;
     for (int i = 0; i < 3; ++i)
@@ -53,7 +55,7 @@ static inline Color3f Boxcar(const Color3f &x, Float a, Float b)
     return result;
 }
 
-static inline Float Sum(const Color3f &x)
+static inline Float sum(const Color3f &x)
 {
     Float result = x(0);
     for (int i = 1; i < 3; ++i)
@@ -61,9 +63,9 @@ static inline Float Sum(const Color3f &x)
     return result;
 }
 
-static inline Float Avg(const Color3f &x)
+static inline Float avg(const Color3f &x)
 {
-    return Sum(x) / 3.0;
+    return sum(x) / 3.0;
 }
 
 // static inline Color3f Exp(const Color3f &a)

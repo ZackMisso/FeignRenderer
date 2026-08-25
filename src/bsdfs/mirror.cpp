@@ -17,7 +17,7 @@ Mirror::Mirror(Color3f albedo)
 
 void Mirror::sample(MaterialClosure &closure) const
 {
-    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+    if (CoordinateFrame::cos_theta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f);
         closure.pdf = 0.f;
@@ -40,7 +40,7 @@ void Mirror::sample(MaterialClosure &closure) const
 
 void Mirror::evaluate(MaterialClosure &closure) const
 {
-    if (CoordinateFrame::cosTheta(closure.wi) <= 0)
+    if (CoordinateFrame::cos_theta(closure.wi) <= 0)
     {
         closure.albedo = Color3f(0.f);
     }

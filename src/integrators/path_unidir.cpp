@@ -16,11 +16,11 @@ Path_Unidirectional_Integrator::Path_Unidirectional_Integrator(FilterNode *filte
                                                                Integrator::Params *params)
     : Integrator(filter, params) {}
 
-void Path_Unidirectional_Integrator::preProcess(const Scene *scene, Sampler *sampler)
+void Path_Unidirectional_Integrator::pre_process(const Scene *scene, Sampler *sampler)
 {
     CLOCKER_START_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 
-    Integrator::preProcess(scene, sampler);
+    Integrator::pre_process(scene, sampler);
 
     CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_PREPROCESS)
 }
@@ -42,7 +42,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
 
     for (int bounces = 0; bounces < max_bounces; ++bounces)
     {
-        if (beta.isZero())
+        if (beta.is_zero())
             break;
 
         CLOCKER_START_ONE(ClockerType::INTEGRATOR_INTERSECT)
@@ -52,7 +52,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
         if (!scene->intersect_non_null(ray, its))
         {
             CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_INTERSECT)
-            
+
             Li += beta * scene->env_emission(ray);
             break;
         }
@@ -61,11 +61,11 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                                    ClockerType::SHADER_SURFACE,
                                    ClockerType::INTEGRATOR_INTERSECT)
 
-        const MaterialShader *shader = scene->getShapeMaterialShader(its);
+        const MaterialShader *shader = scene->get_shape_material_shader(its);
 
         closure.its = &its;
         closure.ray = &ray;
-        closure.wi = its.toLocal(-ray.dir);
+        closure.wi = its.to_local(-ray.dir);
         closure.emission = COLOR_BLACK;
         closure.nee = COLOR_BLACK;
         closure.albedo = COLOR_BLACK;
@@ -86,10 +86,10 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                                      ClockerType::SHADER_SURFACE,
                                      ClockerType::SHADER)
 
-        Float rr_prob = std::min(beta.maxValue(), ONE);
+        Float rr_prob = std::min(beta.max_value(), ONE);
 
         // random termination
-        if (sampler->next1D() > rr_prob)
+        if (sampler->next_1d() > rr_prob)
         {
             Li += beta * (closure.emission + closure.nee);
 
@@ -104,7 +104,7 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                                      ClockerType::INTEGRATOR_RR)
 
         // sample the next path
-        closure.wi = its.toLocal(-ray.dir);
+        closure.wi = its.to_local(-ray.dir);
         shader->sample(closure);
 
         if (closure.pdf == ZERO)
@@ -124,19 +124,19 @@ Color3f Path_Unidirectional_Integrator::Li(const Scene *scene,
                                      ClockerType::SHADER)
 
         ray = Ray3f(its.p,
-                    its.toWorld(closure.wo),
-                    Epsilon,
+                    its.to_world(closure.wo),
+                    EPSILON,
                     std::numeric_limits<Float>::infinity(),
                     ray.depth + 1);
 
-        Float cosTerm = its.s_frame.n % ray.dir;
-        if (cosTerm < ZERO)
-            cosTerm = -cosTerm;
+        Float cos_term = its.s_frame.n % ray.dir;
+        if (cos_term < ZERO)
+            cos_term = -cos_term;
         if (closure.is_specular)
-            cosTerm = ONE;
+            cos_term = ONE;
 
         Li += beta * (closure.nee + closure.emission);
-        beta *= closure.albedo * cosTerm / (closure.pdf * rr_prob);
+        beta *= closure.albedo * cos_term / (closure.pdf * rr_prob);
 
         CLOCKER_STOP_ONE(ClockerType::INTEGRATOR_EVAL)
     }

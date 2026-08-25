@@ -67,10 +67,10 @@ typedef double Float;
 #define TWO 2.0
 #define FOUR 4.0
 #define PMF_MIN 0.01
-#define Epsilon 1e-3
-#define EPS_VEC_X Vector3f(Epsilon * 1.0, 0.0, 0.0)
-#define EPS_VEC_Y Vector3f(0.0, Epsilon * 1.0, 0.0)
-#define EPS_VEC_Z Vector3f(0.0, 0.0, Epsilon * 1.0)
+#define EPSILON 1e-3
+#define EPS_VEC_X Vector3f(EPSILON * 1.0, 0.0, 0.0)
+#define EPS_VEC_Y Vector3f(0.0, EPSILON * 1.0, 0.0)
+#define EPS_VEC_Z Vector3f(0.0, 0.0, EPSILON * 1.0)
 #define PI 3.14159265358979323846
 #define INV_PI 0.31830988618379067154
 #define INV_TWOPI 0.15915494309189533577
@@ -84,10 +84,10 @@ typedef float Float;
 #define TWO 2.f
 #define FOUR 4.f
 #define PMF_MIN 0.01f
-#define Epsilon 1e-3f
-#define EPS_VEC_X Vector3f(Epsilon * 1.f, 0.f, 0.f)
-#define EPS_VEC_Y Vector3f(0.f, Epsilon * 1.f, 0.f)
-#define EPS_VEC_Z Vector3f(0.f, 0.f, Epsilon * 1.f)
+#define EPSILON 1e-3f
+#define EPS_VEC_X Vector3f(EPSILON * 1.f, 0.f, 0.f)
+#define EPS_VEC_Y Vector3f(0.f, EPSILON * 1.f, 0.f)
+#define EPS_VEC_Z Vector3f(0.f, 0.f, EPSILON * 1.f)
 #define PI 3.14159265358979323846f
 #define INV_PI 0.31830988618379067154f
 #define INV_TWOPI 0.15915494309189533577f
@@ -131,7 +131,7 @@ enum MeshType
 
 typedef imedit::Image Imagef;
 
-inline Float degToRad(Float value)
+inline Float deg_to_rad(Float value)
 {
     return value * (M_PI / 180.0);
 }
@@ -174,8 +174,8 @@ inline Float fresnel(Float cos_theta,
                      Float ext_ior,
                      Float int_ior)
 {
-    Float etaI = ext_ior;
-    Float etaT = int_ior;
+    Float eta_i = ext_ior;
+    Float eta_t = int_ior;
 
     if (ext_ior == int_ior)
     {
@@ -186,41 +186,41 @@ inline Float fresnel(Float cos_theta,
        at the inside of the object */
     if (cos_theta < 0.0f)
     {
-        std::swap(etaI, etaT);
+        std::swap(eta_i, eta_t);
         cos_theta = -cos_theta;
     }
 
     /* Using Snell's law, calculate the squared sine of the
        angle between the normal and the transmitted ray */
-    Float eta = etaI / etaT;
-    Float sinThetaTSqr = eta * eta * (1.f - cos_theta * cos_theta);
+    Float eta = eta_i / eta_t;
+    Float sin_theta_t_sqr = eta * eta * (1.f - cos_theta * cos_theta);
 
-    if (sinThetaTSqr > 1.0f)
+    if (sin_theta_t_sqr > ONE)
     {
-        return 1.0f; /* Total internal reflection! */
+        return ONE; /* Total internal reflection! */
     }
 
-    Float cosThetaT = std::sqrt(1.0f - sinThetaTSqr);
+    Float cos_theta_t = std::sqrt(1.0f - sin_theta_t_sqr);
 
-    Float Rs = (etaI * cos_theta - etaT * cos_theta) / (etaI * cos_theta + etaT * cos_theta);
-    Float Rp = (etaT * cos_theta - etaI * cos_theta) / (etaT * cos_theta + etaI * cos_theta);
+    Float rs = (eta_i * cos_theta - eta_t * cos_theta) / (eta_i * cos_theta + eta_t * cos_theta);
+    Float rp = (eta_t * cos_theta - eta_i * cos_theta) / (eta_t * cos_theta + eta_i * cos_theta);
 
-    return (Rs * Rs + Rp * Rp) / 2.0f;
+    return (rs * rs + rp * rp) / TWO;
 }
 
 inline Float interp_value(int index, int flip)
 {
     if (index > flip)
     {
-        return 1.f - Float(index - flip) / Float(flip);
+        return ONE - Float(index - flip) / Float(flip);
     }
 
-    return 1.f - Float(flip - index) / Float(flip);
+    return ONE - Float(flip - index) / Float(flip);
 }
 
 inline Float interp(Float x, Float y, Float proxy)
 {
-    return x * (1.0 - proxy) + proxy * y;
+    return x * (ONE - proxy) + proxy * y;
 }
 
 inline Float clamp(Float proxy, Float min, Float max)
@@ -235,13 +235,14 @@ inline Float clamp(Float proxy, Float min, Float max)
 inline Float sign(Float val)
 {
     if (val < 0.0)
-        return -1.0;
-    return 1.0;
+        return -ONE;
+    return ONE;
 }
 
+// TODO: why is this capitalized... should I make all global methods all cappitalized?? Decisions for later
 inline Float SQRT(Float val)
 {
-    if (val < Epsilon)
+    if (val < EPSILON)
         return 0.0;
     return std::sqrt(val);
 }

@@ -45,13 +45,13 @@ Transform Transform::operator*(const Transform &other) const
 
 Vector3f Transform::operator*(const Vector3f &other) const
 {
-    return mat.topLeftCorner() * other;
+    return mat.top_left_corner() * other;
 }
 
 Normal3f Transform::operator*(const Normal3f &other) const
 {
     // ! is transpose
-    return !(inv.topLeftCorner()) * other;
+    return !(inv.top_left_corner()) * other;
 }
 
 Point3f Transform::operator*(const Point3f &other) const
@@ -90,12 +90,12 @@ void Transform::print() const
     std::cout << std::endl;
 }
 
-const Matrix4f &Transform::getMatrix() const
+const Matrix4f &Transform::get_matrix() const
 {
     return mat;
 }
 
-const Matrix4f &Transform::getInverse() const
+const Matrix4f &Transform::get_inverse() const
 {
     return inv;
 }

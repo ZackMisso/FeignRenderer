@@ -27,20 +27,20 @@ Color3f Trans_RatioTracking::transmittance(const Ray3f &ray,
     throw new NotSupportedException("ratio tracking does not work for non-classical media");
     return 0.f;
 #else
-    Float tMin = closure.t_min;
-    Float tMax = closure.t_max;
+    Float t_min = closure.t_min;
+    Float t_max = closure.t_max;
 
-    Float t = tMin;
+    Float t = t_min;
     Color3f tr = Color3f(1.0);
 
     while (true)
     {
-        t -= log(1.f - sampler->next1D()) / maj;
+        t -= log(1.f - sampler->next_1d()) / maj;
 
-        if (t >= tMax)
+        if (t >= t_max)
             break;
 
-        Color3f ext = density->D(ray(t)) * density->sigma_t;
+        Color3f ext = density->eval(ray(t)) * density->sigma_t;
         ext = ext.min(maj); // for now disallow non bounding majoranst by
                             // clamping
         tr *= (Color3f(maj) - ext) / maj;
